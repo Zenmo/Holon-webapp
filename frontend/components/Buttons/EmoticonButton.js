@@ -88,14 +88,12 @@ const ButtonContext = createContext();
 export default function EmoticonButton({
   children,
   variant = "thumbsdown",
-  id = "defaultId",
   ...rest
 }) {
   const svg = variants[variant] || variants.heart;
   return (
     <button
       className="group aspect-square h-20 w-20 rounded-full border-2 border-holon-slated-blue-300 hover:border-white focus:border-white"
-      id={`${id}`}
       {...rest}
     >
       {svg}

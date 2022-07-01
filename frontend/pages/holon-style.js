@@ -1,10 +1,8 @@
 import { Fragment } from "react";
 
-import Head from "next/head";
-import Button from "../components/Button";
-import HolonButton from "../components/HolonButton";
+import HolonButton from "../components/Buttons/HolonButton";
 import InputElement from "../components/InputElement";
-import EmoticonButton from "../components/EmoticonButton";
+import EmoticonButton from "../components/Buttons/EmoticonButton";
 
 export default function HolonStyle() {
   return (
@@ -21,10 +19,10 @@ export default function HolonStyle() {
           <div className="container flex flex-col items-center gap-3 lg:flex-row">
             <HolonButton variant="darkmode"> this is a dark button </HolonButton>
             <HolonButton variant="darkmode"> cookies of the dark side </HolonButton>
-            <EmoticonButton variant="heart" id="love-button"></EmoticonButton>
-            <EmoticonButton variant="thumbsup" id="positive-button"></EmoticonButton>
-            <EmoticonButton variant="even" id="even-button"></EmoticonButton>
-            <EmoticonButton variant="thumbsdown" id="negative-button"></EmoticonButton>
+            <EmoticonButton variant="heart"></EmoticonButton>
+            <EmoticonButton variant="thumbsup"></EmoticonButton>
+            <EmoticonButton variant="even"></EmoticonButton>
+            <EmoticonButton variant="thumbsdown"></EmoticonButton>
           </div>
           {/* Start of 2 row */}
           <div className="container flex flex-col items-center gap-3 lg:flex-row">
