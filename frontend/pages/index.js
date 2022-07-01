@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import Scenarios from "../components/Scenarios";
 
 function Card({ children, href }) {
   return (
@@ -24,7 +25,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex h-screen flex-1 flex-col items-center justify-center py-6">
+      <main className="">
+        <hr />
+
+        <hr />
+        <Scenarios locked />
+        <hr />
         <h1 className="text-6xl">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
