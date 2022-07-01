@@ -29,7 +29,7 @@ function Scenarios({ locked }) {
 
     useEffect(() => {
         setUncalculatedScenario(true)
-    }, [heatpump, evadoptation, solarpanels, cooporation,heatnetwork, legal, local]);
+    }, [heatpump, evadoptation, solarpanels, cooporation, heatnetwork, legal, local]);
 
     async function triggercalculate(e) {
         e.preventDefault()
@@ -70,77 +70,74 @@ function Scenarios({ locked }) {
     return (
         <React.Fragment>
             <div className="container mx-auto">
-                <h2 className="text-2xl">Twee keer slimmer</h2>
-                <div className="flex flex-row">
-                    <div className="basis-1/3">
-                        <form className="px-2" >
-                            <h3 className="text-xl" >Resultaten</h3>
-                            <fieldset disabled={locked}>
-                                <ScenarioSlider inputid="heatpump" value={heatpump} updatevalue={setHeatpumps} />
-                                <ScenarioSlider inputid="evadoptation" value={evadoptation} updatevalue={setEvadoptation} />
-                                <ScenarioSlider inputid="solarpanels" value={solarpanels} updatevalue={setSolarpanels} />
+                <div className={locked ? 'border-8 border-cyan-500 p-2' : 'p-2 border-transparent border-8'}>
+                    <h2 className="text-2xl">Twee keer slimmer</h2>
+                    <div className="flex flex-row">
+                        <div className="basis-1/3">
+                            <form className="px-2" >
+                                <h3 className="text-xl" >Resultaten</h3>
+                                <fieldset disabled={locked}>
+                                    <ScenarioSlider inputid="heatpump" value={heatpump} updatevalue={setHeatpumps} />
+                                    <ScenarioSlider inputid="evadoptation" value={evadoptation} updatevalue={setEvadoptation} />
+                                    <ScenarioSlider inputid="solarpanels" value={solarpanels} updatevalue={setSolarpanels} />
 
-                                <Scenarioswitch off="nee" on="ja" label="Warmtenetwerk" inputid="heatnetwork" value={heatnetwork} updatevalue={setHeatnetwork} />
-                                <div className="flex flex-row">
-                                    <select onChange={(e) => setCooperation(e.target.value)} value={cooporation}>
-                                        <option value="">Maak keuze</option>
-                                        <option value="optie 1">Optie 1</option>
-                                        <option value="optie 2">Optie 2</option>
-                                        <option value="optie 3">Optie 3</option>
-                                    </select>
-                                </div>
-
-                                <h5>Juridisch</h5>
-                                <div className="flex flex-col">
-
-                                    <label htmlFor="scenariolegal1">
-                                        <input type="radio" name="scenariolegal" id="scenariolegal1" value="legal 1" onChange={(e) => setLegal(e.target.value)} checked={legal === 'legal 1'} />
-                                        <span>Waarde 1</span>
-                                    </label>
-                                    <label htmlFor="scenariolegal2">
-                                        <input type="radio" name="scenariolegal" id="scenariolegal2" value="legal 2" onChange={(e) => setLegal(e.target.value)} checked={legal === 'legal 2'} />
-                                        <span>value 2</span>
-                                    </label>
-                                    <label htmlFor="scenariolegal3">
-                                        <input type="radio" name="scenariolegal" id="scenariolegal3" value="legal 3" onChange={(e) => setLegal(e.target.value)} checked={legal === 'legal 3'} />
-                                        <span>value 3</span>
-                                    </label>
-                                </div>
-                            </fieldset>
-
-                        </form>
-
-                    </div>
-                    <div className="basis-2/3">
-                        <Scenarioresults
-                            reliability={reliability}
-                            energyconsumption={energyconsumption}
-                            affordability={affordability}
-                            selfsufficient={selfsufficient}
-                            local={local}
-                            setLocal={setLocal}
-                        >
-                            <React.Fragment>
-                                {(uncalculatedScenario == true || loading) &&
-                                    <div className="absolute inset-0 flex items-center justify-center bg-sky-500/50 z-10">
-                                        {loading ? <p>Loading...</p> : (
-                                            <Button onClick={(e) => triggercalculate(e)}>Recalculate</Button>
-                                        )}
+                                    <Scenarioswitch off="nee" on="ja" label="Warmtenetwerk" inputid="heatnetwork" value={heatnetwork} updatevalue={setHeatnetwork} />
+                                    <div className="flex flex-row">
+                                        <select onChange={(e) => setCooperation(e.target.value)} value={cooporation}>
+                                            <option value="">Maak keuze</option>
+                                            <option value="optie 1">Optie 1</option>
+                                            <option value="optie 2">Optie 2</option>
+                                            <option value="optie 3">Optie 3</option>
+                                        </select>
                                     </div>
-                                }
-                            </React.Fragment>
 
-                        </Scenarioresults>
+                                    <h5>Juridisch</h5>
+                                    <div className="flex flex-col">
+
+                                        <label htmlFor="scenariolegal1">
+                                            <input type="radio" name="scenariolegal" id="scenariolegal1" value="legal 1" onChange={(e) => setLegal(e.target.value)} checked={legal === 'legal 1'} />
+                                            <span>Waarde 1</span>
+                                        </label>
+                                        <label htmlFor="scenariolegal2">
+                                            <input type="radio" name="scenariolegal" id="scenariolegal2" value="legal 2" onChange={(e) => setLegal(e.target.value)} checked={legal === 'legal 2'} />
+                                            <span>value 2</span>
+                                        </label>
+                                        <label htmlFor="scenariolegal3">
+                                            <input type="radio" name="scenariolegal" id="scenariolegal3" value="legal 3" onChange={(e) => setLegal(e.target.value)} checked={legal === 'legal 3'} />
+                                            <span>value 3</span>
+                                        </label>
+                                    </div>
+                                </fieldset>
+
+                            </form>
+
+                        </div>
+                        <div className="basis-2/3">
+                            <Scenarioresults
+                                reliability={reliability}
+                                energyconsumption={energyconsumption}
+                                affordability={affordability}
+                                selfsufficient={selfsufficient}
+                                local={local}
+                                setLocal={setLocal}
+                            >
+                                <React.Fragment>
+                                    {(uncalculatedScenario == true || loading) &&
+                                        <div className="absolute inset-0 flex items-center justify-center bg-sky-500/50 z-10">
+                                            {loading ? <p>Loading...</p> : (
+                                                <Button onClick={(e) => triggercalculate(e)}>Recalculate</Button>
+                                            )}
+                                        </div>
+                                    }
+                                </React.Fragment>
+
+                            </Scenarioresults>
+
+                        </div>
 
                     </div>
-
                 </div>
             </div>
-
-
-
-
-
 
         </React.Fragment>
     );
