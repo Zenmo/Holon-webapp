@@ -14,8 +14,8 @@ services:
       - static:/app/backend/static
     ports:
       - 8000:8000
-    # env_file:
-    #   - ./backend/.env
+    env_file:
+      - ./backend/.env.local
 
   db:
     image: postgres:13-alpine
@@ -41,6 +41,18 @@ services:
       - /app/frontend/node_modules
     ports:
       - 3000:3000
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: holontool@root.com
+      PGADMIN_DEFAULT_PASSWORD: password123
+      # PGADMIN_LISTEN_ADDRESS: [::]
+    ports:
+      - 5050:80
 
 volumes:
   static:

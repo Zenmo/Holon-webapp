@@ -11,6 +11,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update &&\
     apt-get install
 RUN apt install -y netcat
+RUN apt install -y libpq-dev gcc
 
 # install dependencies
 RUN pip install --upgrade pip setuptools wheel

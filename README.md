@@ -4,6 +4,11 @@ Prototype of the Holon web application
 
 ## First setup / Start the application
 
+First copy the .env.example to .env.local. You don't have to change anything inside
+the .env file.
+
+- note: If you decide to make some changes to the .env files, restart the docker containers.
+
 ```
 docker-compose up -d
 ```
@@ -16,7 +21,7 @@ frontend: localhost:3000
 backend: localhost:8000
 ```
 
-For the frontend Prettier and EsLint is used. Make sure you installed there extenstions in your VSCode.
+For the frontend Prettier and EsLint is used. Make sure you installed these extenstions in your VSCode.
 
 ```
 Name: ESLint
