@@ -37,7 +37,7 @@ services:
       dockerfile: Dockerfile
     command: npm run dev
     volumes:
-      - ./frontend:/frontend
+      - ./frontend:/app/frontend
       - node_modules:/frontend/node_modules
     ports:
       - 3000:3000

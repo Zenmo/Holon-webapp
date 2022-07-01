@@ -34,3 +34,13 @@ Publisher: Prettier
 VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 
 ```
+
+## Configure stuff inside the container
+
+If you want for example do an Django migration, you have to that inside of the container
+
+docker-compose exec [container_name] [command]
+
+```
+docker-compose exec backend python manage.py migrate
+```

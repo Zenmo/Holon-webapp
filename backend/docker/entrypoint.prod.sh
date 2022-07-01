@@ -11,7 +11,7 @@ then
     echo "PostgreSQL started"
 fi
 
-mkdir -p /var/log/ramingstool/
+mkdir -p /var/log/holontool/
 mkdir -p /home/backups/
 
 python manage.py makemigrations

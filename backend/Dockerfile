@@ -2,7 +2,7 @@
 FROM python:3.9-slim-bullseye
 
 # set work directory
-WORKDIR /backend/app
+WORKDIR /app/backend
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,9 +16,6 @@ RUN apt install -y netcat
 RUN pip install --upgrade pip setuptools wheel
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
-
-# copy project
-COPY . .
 
 # run entrypoint.sh
 ENTRYPOINT ["/app/backend/docker/entrypoint.sh"]
