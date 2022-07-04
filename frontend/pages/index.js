@@ -26,7 +26,7 @@ export default function Home() {
       </Head>
 
       <main className="flex h-screen flex-1 flex-col items-center justify-center py-6">
-        <Instructionvideo />
+
         <h1 className="text-6xl">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -85,6 +85,7 @@ export default function Home() {
           </Card>
         </div>
       </main>
+      <Instructionvideo />
 
       <footer className="mb-3 text-lg">
         <a
