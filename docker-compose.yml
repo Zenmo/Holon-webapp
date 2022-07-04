@@ -23,7 +23,6 @@ services:
       - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      - ./backend/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
