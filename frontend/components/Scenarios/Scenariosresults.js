@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "../Button";
 import Scenarioresultitem from "./Scenarioresultitem";
 import Scenarioswitch from "./Scenarioswitch";
 

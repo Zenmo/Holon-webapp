@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import Head from "next/head";
-import Button from "../components/Button";
+import Button from "../components/Buttons/Button";
 
 export default function TailwindExample() {
   return (

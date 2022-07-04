@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Button from "./Button";
+import Button from "../components/Buttons/Button";
 import ScenarioSlider from "./Scenarios/Scenarioslider";
 import Scenarioresults from "./Scenarios/Scenariosresults";
 import Scenarioswitch from "./Scenarios/Scenarioswitch";
+import HolonButton from "../components/Buttons/HolonButton";
 
 function Scenarios(props) {
 
@@ -53,8 +54,8 @@ function Scenarios(props) {
             setUncalculatedScenario(false)
 
             setReliability(Math.floor(Math.random() * 100))
-            setEnergyconsumption(Math.floor(Math.random() * 100))
-            setAffordability(Math.floor(Math.random() * 100))
+            setEnergyconsumption(Math.floor(Math.random() * 10000))
+            setAffordability(Math.floor(Math.random() * 10000))
             setSelfsufficient(Math.floor(Math.random() * 100))
         }, 5000);
 
@@ -79,8 +80,8 @@ function Scenarios(props) {
                                         <ScenarioSlider inputid="solarpanels" value={solarpanels} updatevalue={setSolarpanels} />
 
                                         <Scenarioswitch off="nee" on="ja" label="Warmtenetwerk" inputid="heatnetwork" value={heatnetwork} updatevalue={setHeatnetwork} />
-                                        <div className="flex flex-row basis-full mb-2 border mt-2">
-                                            <select className="shadow-[4px_4px_0_0]  w-full p-2" onChange={(e) => setCooperation(e.target.value)} value={cooporation}>
+                                        <div className="flex flex-row basis-full mb-2  mt-2">
+                                            <select className="border rounded-lg shadow-[4px_4px_0_0] text-holon-blue-900 w-full p-2" onChange={(e) => setCooperation(e.target.value)} value={cooporation}>
                                                 <option value="">Maak keuze</option>
                                                 <option value="optie 1">Optie 1</option>
                                                 <option value="optie 2">Optie 2</option>
@@ -124,8 +125,8 @@ function Scenarios(props) {
                                     <React.Fragment>
                                         {(uncalculatedScenario == true || loading) &&
                                             <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
-                                                {loading ? <p>Loading...</p> : (
-                                                    <Button onClick={(e) => triggercalculate(e)}>Recalculate</Button>
+                                                {loading ? <p>Laden...</p> : (
+                                                    <HolonButton variant="darkblue" onClick={(e) => triggercalculate(e)}>Herbereken</HolonButton>
                                                 )}
                                             </div>
                                         }
