@@ -10,7 +10,7 @@
   },
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
   "eslint.validate": [
       "javascript"
   ],
