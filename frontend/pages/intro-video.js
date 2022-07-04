@@ -5,7 +5,7 @@ import IntroductionVideo from "../components/IntroductionVideo";
 export default function IntroductionVideoBlock() {
   return (
     <Fragment>
-      <div className="py-10">
+      <div>
         <IntroductionVideo />
       </div>
     </Fragment>
