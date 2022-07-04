@@ -3,7 +3,7 @@ import React from "react";
 function ScenarioSlider({ inputid, value, updatevalue }) {
 
     return (
-        <div className="flex flex-row justify-between items-center  gap-2">
+        <div className="flex flex-row justify-between items-center gap-2 mb-2">
 
             <label htmlFor={`scenario${inputid}slider`} className="flex">{inputid}</label>
             <div className="flex flex-row justify-between items-center gap-2">

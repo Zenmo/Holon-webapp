@@ -29,7 +29,13 @@ export default function Home() {
         <hr />
 
         <hr />
-        <Scenarios locked />
+        <Scenarios
+          locked
+          solarpanels="8"
+          heatnetwork="true"
+          legal="legal 3"
+
+          />
         <hr />
         <h1 className="text-6xl">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
