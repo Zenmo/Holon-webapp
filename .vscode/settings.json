@@ -1,3 +1,28 @@
 {
-    "python.formatting.provider": "black"
+  "editor.formatOnSave": true,
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--line-length", "100"],
+  "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "eslint.validate": [
+      "javascript"
+  ],
+  "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "python.linting.pylintArgs": [
+      "--load-plugins=pylint_django"
+  ],
+  "[python]": {
+  }
 }
