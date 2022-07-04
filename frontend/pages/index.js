@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import Instructionvideo from "../components/Introductionvideo";
+import IntroductionVideo from "../components/IntroductionVideo";
 
 function Card({ children, href }) {
   return (
@@ -26,7 +26,6 @@ export default function Home() {
       </Head>
 
       <main className="flex h-screen flex-1 flex-col items-center justify-center py-6">
-
         <h1 className="text-6xl">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -85,7 +84,7 @@ export default function Home() {
           </Card>
         </div>
       </main>
-      <Instructionvideo />
+      <IntroductionVideo />
 
       <footer className="mb-3 text-lg">
         <a
