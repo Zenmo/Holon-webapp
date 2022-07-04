@@ -5,7 +5,12 @@ Prototype of the Holon web application
 ## First setup / Start the application
 
 First copy the .env.example to .env.local. You don't have to change anything inside
-the .env file.
+the .env file:
+
+```bash
+cp frontend/.env.example frontend/.env.local
+cp backend/.env.example backend/.env.local
+```
 
 - note: If you decide to make some changes to the .env files, restart the docker containers.
 
