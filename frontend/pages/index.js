@@ -30,7 +30,6 @@ export default function Home() {
 
         <hr />
         <Scenarios
-          locked
           solarpanels="8"
           heatnetwork="true"
           legal="legal 3"

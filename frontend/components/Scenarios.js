@@ -28,6 +28,10 @@ function Scenarios(props) {
     const [selfsufficient, setSelfsufficient] = useState(0);
 
     useEffect(() => {
+        setUncalculatedScenario(true)
+    }, [heatpump, evadoptation, solarpanels, cooporation, heatnetwork, legal, local]);
+
+    useEffect(() => {
         props.heatpump && setHeatpump(props.heatpump)
         props.evadoptation && setEvadoptation(props.evadoptation)
         props.solarpanels && setSolarpanels(props.solarpanels)
@@ -35,9 +39,7 @@ function Scenarios(props) {
 
         props.cooporation && setCooperation(props.cooporation)
         props.legal && setLegal(props.legal)
-
-        setUncalculatedScenario(true)
-    }, [heatpump, evadoptation, solarpanels, cooporation, heatnetwork, legal, local]);
+    }, []);
 
     async function triggercalculate(e) {
         e.preventDefault()
@@ -48,7 +50,7 @@ function Scenarios(props) {
         const timer = setTimeout(() => {
             console.log('timeout')
             setLoading(false),
-                setUncalculatedScenario(false)
+            setUncalculatedScenario(false)
 
             setReliability(Math.floor(Math.random() * 100))
             setEnergyconsumption(Math.floor(Math.random() * 100))
@@ -59,31 +61,17 @@ function Scenarios(props) {
 
 
         return () => clearTimeout(timer);
-
-        // const request = {}
-        // await Calculate(request)
-        //     .then((data) => {
-        //         setLoading(true)
-        //         setUncalculatedScenario(false)
-
-
-        //     }).catch((err) => {
-        //         setLoading(false)
-        //         setUncalculatedScenario(false)
-        //         console.log('error', err)
-        //     });
-
     }
 
     return (
         <React.Fragment>
             <div className="container mx-auto">
                 <div className={props.locked ? 'border-8 border-cyan-500 p-2' : 'p-2 border-transparent border-8'}>
-                    <h2 className="text-2xl px-2">Twee keer slimmer</h2>
-                    <div className="flex flex-row">
-                        <div className="basis-1/3 px-2">
+                    <h2 className="text-2xl">Twee keer slimmer</h2>
+                    <div className="flex flex-col md:flex-row">
+                        <div className="basis-full md:basis-1/3 pr-4">
                             <form className="" >
-                                <h3 className="text-xl" >Resultaten</h3>
+                                <h3 className="text-xl mb-4" >Instellingen</h3>
                                 <fieldset disabled={props.locked} className={props.locked && `cursor-not-allowed`}>
                                     <div className={props.locked && `pointer-events-none`}>
                                         <ScenarioSlider inputid="heatpump" value={heatpump} updatevalue={setHeatpump} />
@@ -91,8 +79,8 @@ function Scenarios(props) {
                                         <ScenarioSlider inputid="solarpanels" value={solarpanels} updatevalue={setSolarpanels} />
 
                                         <Scenarioswitch off="nee" on="ja" label="Warmtenetwerk" inputid="heatnetwork" value={heatnetwork} updatevalue={setHeatnetwork} />
-                                        <div className="flex flex-row mb-2">
-                                            <select onChange={(e) => setCooperation(e.target.value)} value={cooporation}>
+                                        <div className="flex flex-row basis-full mb-2 border mt-2">
+                                            <select className="shadow-[4px_4px_0_0]  w-full p-2" onChange={(e) => setCooperation(e.target.value)} value={cooporation}>
                                                 <option value="">Maak keuze</option>
                                                 <option value="optie 1">Optie 1</option>
                                                 <option value="optie 2">Optie 2</option>
@@ -122,7 +110,8 @@ function Scenarios(props) {
                             </form>
 
                         </div>
-                        <div className="basis-2/3 px-2">
+                        <div class="w-[4px] bg-slate-300"></div>
+                        <div className="basis-full md:basis-2/3 pl-4">
                             <Scenarioresults
                                 reliability={reliability}
                                 energyconsumption={energyconsumption}
@@ -134,7 +123,7 @@ function Scenarios(props) {
                                 {!props.locked &&
                                     <React.Fragment>
                                         {(uncalculatedScenario == true || loading) &&
-                                            <div className="absolute inset-0 flex items-center justify-center bg-sky-500/50 z-10">
+                                            <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
                                                 {loading ? <p>Loading...</p> : (
                                                     <Button onClick={(e) => triggercalculate(e)}>Recalculate</Button>
                                                 )}
