@@ -21,7 +21,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from holon.viewsets import UpdateRegisterViewSet
+from holon.viewsets import UpdateRegisterViewSet, RatingViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -38,6 +38,7 @@ schema_view = get_schema_view(
 
 router = routers.SimpleRouter()
 router.register(r'update-registrations', UpdateRegisterViewSet)
+router.register(r'rating', RatingViewSet)
 
 if settings.DEBUG:
     urlpatterns = [
