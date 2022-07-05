@@ -1,37 +1,11 @@
-import { forwardRef, useReducer, useRef } from "react";
+import { useReducer, useRef } from "react";
 import PropTypes from "prop-types";
 
 import { MailIcon } from "@heroicons/react/outline";
 
 import ButtonLoadingIcon from "./ButtonLoadingIcon";
 import HolonButton from "../Buttons/HolonButton";
-
-/**
- * Contains a label and input field. Inputs where `required` is not truthy will have "Optional"
- * added to the label.
- */
-// function Input({ label, ...inputProps }) {
-const Input = forwardRef(({ label, ...inputProps }, ref) => (
-  <label className="block pb-3">
-    <span className="block items-baseline pb-1 text-base">
-      <span className="font-semibold">{label}</span>
-      {!inputProps.required && (
-        <span className="ml-3 text-sm text-holon-slated-blue-300">optioneel</span>
-      )}
-    </span>
-    <input
-      {...inputProps}
-      ref={ref}
-      className="w-full rounded-md border-2 border-white bg-transparent p-2 text-base shadow-inner outline-none transition focus:bg-holon-blue-500/50 disabled:opacity-50"
-    />
-  </label>
-));
-
-Input.displayName = "Input";
-
-Input.propTypes = {
-  label: PropTypes.string.isRequired,
-};
+import Input from "./Input";
 
 /**
  * Submit button for the form sets its style and text based on the state of the form.
@@ -62,24 +36,24 @@ SubmitButton.propTypes = {
 function reducer(state, action) {
   switch (action.type) {
     case "fetch":
-      return { status: "pending" };
+      return { status: "pending", errors: {} };
     case "resolve":
-      return { status: "success" };
+      return { status: "success", errors: {} };
     case "reject":
-      return { status: "failed" };
+      return { status: "failed", errors: action.errors || {} };
     default:
       return state;
   }
 }
 
 export default function SubscriptionForm() {
-  const [state, dispatch] = useReducer(reducer, { status: "initial" });
+  const [state, dispatch] = useReducer(reducer, { status: "initial", errors: {} });
 
   const nameRef = useRef();
   const emailRef = useRef();
   const companyRef = useRef();
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
 
     dispatch({ type: "fetch" });
@@ -90,24 +64,34 @@ export default function SubscriptionForm() {
       company: companyRef.current.value,
     };
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/update-registrations/`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(payload),
-    })
-      .then(() => dispatch({ type: "resolve" }))
-      .catch(() => dispatch({ type: "reject" }));
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/update-registrations/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+
+      const json = response.json();
+
+      if (response.status >= 400 && response.status < 500) {
+        dispatch({ type: "reject", errors: json });
+      } else {
+        dispatch({ type: "resolve" });
+      }
+    } catch {
+      dispatch({ type: "reject" });
+    }
   };
 
   const areInputsDisabled = state.status === "pending" || state.status === "success";
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="flex flex-wrap items-center pb-6 md:flex-nowrap">
-        <div className="px-6 pb-3 text-center text-2xl leading-relaxed md:w-1/2 md:pb-0">
+      <div className="flex flex-wrap items-start pb-6 md:flex-nowrap">
+        <div className="px-6 pt-1 pb-3 text-center text-2xl leading-relaxed md:w-1/2 md:pb-0">
           We houden je graag op de hoogte van verdere ontwikkelingen. Af en toe zullen we je vragen
           te vertellen wat je van het project tot dan toe vindt.
         </div>
@@ -119,6 +103,7 @@ export default function SubscriptionForm() {
             required
             disabled={areInputsDisabled}
             ref={nameRef}
+            errors={state.errors.name}
           />
           <Input
             label="E-mailadres"
@@ -127,6 +112,7 @@ export default function SubscriptionForm() {
             required
             disabled={areInputsDisabled}
             ref={emailRef}
+            errors={state.errors.email}
           />
           <Input
             label="Bedrijf/Instelling"
@@ -134,6 +120,7 @@ export default function SubscriptionForm() {
             name="company"
             disabled={areInputsDisabled}
             ref={companyRef}
+            errors={state.errors.company}
           />
         </div>
       </div>
