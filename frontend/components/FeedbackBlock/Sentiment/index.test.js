@@ -44,7 +44,7 @@ describe("Sentiment", () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
 
       const sentData = JSON.parse(global.fetch.mock.calls[0][1].body);
-      expect(sentData).toEqual({ rating: "heart" });
+      expect(sentData).toEqual({ rating: "HEART" });
     });
   });
 });
