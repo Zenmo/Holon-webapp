@@ -6,6 +6,6 @@ WORKDIR /app/frontend
 
 # install app dependencies
 COPY package.json ./
-# COPY package-lock.json ./
+COPY package-lock.json ./
 
 RUN npm install

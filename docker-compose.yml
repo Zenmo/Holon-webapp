@@ -34,7 +34,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    command: yarn dev
+    command: npm run dev
     volumes:
       - ./frontend:/app/frontend
       - node_modules:/app/frontend/node_modules
