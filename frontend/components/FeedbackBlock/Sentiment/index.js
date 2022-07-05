@@ -13,13 +13,13 @@ export default function Sentiment() {
 
     setChoice(selected);
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/update-ratings/`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/rating/`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify({ rating: selected }),
+      body: JSON.stringify({ rating: selected.toUpperCase() }),
     })
       .then(() => {})
       .catch(() => {});
