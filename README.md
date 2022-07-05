@@ -49,3 +49,14 @@ docker-compose exec [container_name] [command]
 ```
 docker-compose exec backend python manage.py migrate
 ```
+
+## Admin
+
+To see the data that is saved in the database, you can take a look in the admin.
+To do so, you have to create a local superuseraccount:
+
+```
+docker-compose exec backend python manage.py createsuperuser
+```
+
+After finishing all the steps, you can login on localhost:8000/admin
