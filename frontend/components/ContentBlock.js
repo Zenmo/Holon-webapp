@@ -16,7 +16,7 @@ function ContentBlock(content) {
 
     return (
         
-        <div className={`snap-start w-screen h-screen + ${bgColor} flex justify-center items-center`} id={id}>
+        <div className={`snap-start h-screen + ${bgColor} flex justify-center items-center`} id={id}>
             <p className="text-lg">Er is hier een voorbeeldtekst met een 
             <Link href={linkname}> link
             </Link></p>
