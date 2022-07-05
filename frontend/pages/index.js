@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import IntroductionVideo from "../components/IntroductionVideo";
 
 import ContentBlock from "../components/ContentBlock";
 
@@ -36,6 +37,7 @@ export default function Home() {
       <ContentBlock colorClass="bg-red-400" id="red" linkname="#rose">
       </ContentBlock>      
       </main>
+      <IntroductionVideo />
 
       
     </div>
