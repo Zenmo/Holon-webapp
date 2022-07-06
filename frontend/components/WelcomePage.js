@@ -1,7 +1,7 @@
 import React from 'react';
-import Link from 'next/link'; 
+import Link from 'next/link';
 
-import HolonButton from './Buttons/HolonButton';  
+import HolonButton from './Buttons/HolonButton';
 
 export default function WelcomePage() {
     return (
@@ -23,13 +23,13 @@ export default function WelcomePage() {
                 </div>
             </div>
             <div className="mx-24 my-16 h-11 flex justify-between">
-                <img src="/Logos/zenmo_logo.png" ></img>
-                <img src="/Logos/tno_logo.png" ></img>
-                <img src="/Logos/WB_logo.png" ></img>
-                <img src="/Logos/quintel_logo.png" ></img>
+                <img alt="Logo Zenmo" src="/Logos/zenmo_logo.png" ></img>
+                <img alt="Logo TNO" src="/Logos/tno_logo.png" ></img>
+                <img alt="Logo Witteveen+Bos" src="/Logos/WB_logo.png" ></img>
+                <img alt="Logo Quintel" src="/Logos/quintel_logo.png" ></img>
             </div>
         </div>
-       
+
 
 
     )

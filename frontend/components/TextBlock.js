@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 
 export default function TextBlock(content) {
 
@@ -13,43 +13,43 @@ export default function TextBlock(content) {
 
     const texts = {
         default: {
-            title: "Title of this textblock", 
+            title: "Title of this textblock",
             pText: "The paragraph text of this textblock"
         },
         hoeDoen: {
             title: "Het moet anders",
-            pText: "Om aan internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. \n Daardoor is de productie weersafhankelijk en meer kleinschalig. Het energiesysteem verandert ingrijpend. \n Met holonen kunnen we het energiesysteem op een nieuwe manier organiseren. Holontool.nl maakt het mogelijk om dit te onderzoeken. Binnen deze demonstratie laten we dit zien aan de hand van twee voorbeeldbuurten. In de beginsituatie heeft de ene buurt een warmtenet, de andere buurt CV-ketels. We beginnen met een referentiecase om de huidige situatie inzichtelijk te krijgen. Vervolgens kijken we wat er gebeurt als de bewoners van deze case samen holonen gaan vormen, en onderling energie uitwisselen." 
+            pText: "Om aan internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. \n Daardoor is de productie weersafhankelijk en meer kleinschalig. Het energiesysteem verandert ingrijpend. \n Met holonen kunnen we het energiesysteem op een nieuwe manier organiseren. Holontool.nl maakt het mogelijk om dit te onderzoeken. Binnen deze demonstratie laten we dit zien aan de hand van twee voorbeeldbuurten. In de beginsituatie heeft de ene buurt een warmtenet, de andere buurt CV-ketels. We beginnen met een referentiecase om de huidige situatie inzichtelijk te krijgen. Vervolgens kijken we wat er gebeurt als de bewoners van deze case samen holonen gaan vormen, en onderling energie uitwisselen."
         },
         slimmerSamenwerken: {
-            title: "Wind", 
+            title: "Wind",
             pText: "Wind coöperatie content. Hiërarchie en anarchie zijn de uitersten. Ergens in het midden ligt een oplossing die het beste van beide samenbrengt tot een gebalanceerd systeem. "
         },
         warmte: {
-            title: "Ook warmte speelt een rol", 
+            title: "Ook warmte speelt een rol",
             pText: "Warmtenet content. Hiërarchie en anarchie zijn de uitersten. Ergens in het midden ligt een oplossing die het beste van beide samenbrengt tot een gebalanceerd systeem."
         },
         tweeKeerSlimmer: {
-            title: "Twee keer slimmer", 
+            title: "Twee keer slimmer",
             pText: "Wind coöperatie EN warmtenet content. Hiërarchie en anarchie zijn de uitersten. Ergens in het midden ligt een oplossing die het beste van beide samenbrengt tot een gebalanceerd systeem."
         },
         afsluiter: {
-            title: "Afsluiter en uitfluiter", 
-            pText: "Hiërarchie en anarchie zijn de uitersten. Ergens in het midden ligt een oplossing die het beste van beide samenbrengt tot een gebalanceerd systeem", 
+            title: "Afsluiter en uitfluiter",
+            pText: "Hiërarchie en anarchie zijn de uitersten. Ergens in het midden ligt een oplossing die het beste van beide samenbrengt tot een gebalanceerd systeem",
         }
     }
 
     function createParagraphs(texts) {
-        const paragraphs = texts.split('\n').map(str => <p className="mt-4">{str}</p>);
-        return paragraphs;  
-    }; 
+        const paragraphs = texts.split('\n').map((str, index) => <p key={index} className="mt-4">{str}</p>);
+        return paragraphs;
+    };
 
     return (
         <div className={`m-10 h-screen w-screen flex ${flexValue}`}>
             <div className={`w-3/4 flex flex-col border-solid ${borderColor} ${stylingRight}`}>
-                <h2 className={`mt-24 pb-3 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>{texts[value]['title']}</h2>
-                <div className='mt-10 w-2/4 text-lg'>{createParagraphs(texts[value]['pText'])}</div> 
-                <div className="mt-24 ">
-                {extraContent}
+                <h2 className={`mt-24 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>{texts[value]['title']}</h2>
+                <div className='mt-10 w-2/4 text-lg'>{createParagraphs(texts[value]['pText'])}</div>
+                <div className="mt-24 flex">
+                    {extraContent}
                 </div>
             </div>
         </div>

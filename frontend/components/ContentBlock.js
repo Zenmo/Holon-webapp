@@ -1,20 +1,18 @@
-import React, { Children } from "react";
-import Link from 'next/link'; 
+import React from "react";
 
 function ContentBlock(content) {
 
-    let id = (content.id) ? content.id : ""; 
+    let id = (content.id) ? content.id : "";
 
-    let bgColor = (content.colorClass) ? content.colorClass : ""; 
-    let linkname = (content.linkname) ? content.linkname : ""; 
-    let contentOfBlock = (content.children) ? content.children : ""; 
+    let bgColor = (content.colorClass) ? content.colorClass : "";
+    let contentOfBlock = (content.children) ? content.children : "";
 
     return (
-        
+
         <div className={`snap-start h-screen + ${bgColor} flex justify-center items-center`} id={id}>
-            {contentOfBlock} 
+            {contentOfBlock}
         </div>
     )
-}; 
+};
 
-export default ContentBlock; 
+export default ContentBlock;
