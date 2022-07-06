@@ -8,6 +8,7 @@ import HolonStyle from "./holon-style";
 import TextBlock from "../components/TextBlock";
 import WelcomePage from "../components/WelcomePage";
 import ContentBlock from "../components/ContentBlock";
+import HolonButton from '../components/Buttons/HolonButton';  
 
 function Card({ children, href }) {
   return (
@@ -54,6 +55,12 @@ export default function Home() {
       </ContentBlock>
       <ContentBlock>
         <TextBlock value="tweeKeerSlimmer" borderColor="border-holon-gold-600" right="true"> 
+        </TextBlock>
+      </ContentBlock>
+      <ContentBlock>
+        <TextBlock  value="afsluiter" underlineTitle="true" colorUnderline="decoration-holon-slated-blue-300">
+          <HolonButton variant="blue">Naar het open model</HolonButton>
+          <HolonButton variant="blue">Op de hoogte blijven</HolonButton>
         </TextBlock>
       </ContentBlock>
       <ContentBlock colorClass="bg-split-white-blue">
