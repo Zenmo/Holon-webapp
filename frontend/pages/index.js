@@ -4,6 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import Scenarios from "../components/Scenarios";
+import IntroductionVideo from "../components/IntroductionVideo";
 
 function Card({ children, href }) {
   return (
@@ -98,6 +99,7 @@ export default function Home() {
           </Card>
         </div>
       </main>
+      <IntroductionVideo />
 
       <footer className="mb-3 text-lg">
         <a
