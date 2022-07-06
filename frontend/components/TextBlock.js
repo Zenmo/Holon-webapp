@@ -7,7 +7,7 @@ export default function TextBlock(content) {
     let value = (content.value) ? content.value : "default";   
     let borderColor = (content.borderColor) ? content.borderColor : "border-white"; 
     let extraContent = (content.children) ? content.children : ""; 
-    let underlineTitle = (content.underlineTitle) ? "underline decoration-[16px] underline-offset-[-2px]" : ""; 
+    let underlineTitle = (content.underlineTitle) ? "shadow-blue" : ""; 
     let colorUnderline = (content.colorUnderline) ? content.colorUnderline : ""; 
 
 
@@ -46,7 +46,7 @@ export default function TextBlock(content) {
     return (
         <div className={`m-10 h-screen w-screen flex ${flexValue}`}>
             <div className={`w-3/4 flex flex-col border-solid ${borderColor} ${stylingRight}`}>
-                <h2 className={`mt-24 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>{texts[value]['title']}</h2>
+                <h2 className={`mt-24 pb-3 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>{texts[value]['title']}</h2>
                 <div className='mt-10 w-2/4 text-lg'>{createParagraphs(texts[value]['pText'])}</div> 
                 <div className="mt-24 ">
                 {extraContent}

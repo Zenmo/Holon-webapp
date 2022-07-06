@@ -42,7 +42,7 @@ export default function Home() {
       <ContentBlock colorClass="bg-split-blue-white">
       </ContentBlock>
       <ContentBlock>
-        <TextBlock  value="hoeDoen" borderColor="border-holon-slated-blue-300"> 
+        <TextBlock  value="hoeDoen" borderColor="border-holon-slated-blue-300" id="start"> 
         </TextBlock>
       </ContentBlock>
       <ContentBlock>
