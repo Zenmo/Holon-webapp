@@ -67,9 +67,6 @@ export default function Home() {
       </ContentBlock>
         
       </main>
-      
-
-      
     </div>
   );
 }
