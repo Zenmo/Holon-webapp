@@ -16,13 +16,14 @@ function Scenarioresults(props) {
                 <div className="flex flex-wrap flex-row  gap-2 flex-nowrap">
                     <div className="basis-full lg:basis-1/2 ">
                         <h4>Technisch</h4>
-                        <Scenarioresultitem tooltip="Lorem ipsum tooltip" label="Betrouwbaarheid" unit="%" value={props.reliability} />
-                        <Scenarioresultitem label="Betaalbaarheid" unit="&euro;" value={props.affordability} />
+                        <Scenarioresultitem tooltip="Lorem ipsum tooltip" label="Betrouwbaarheid" unit="%" value={props.reliability} local={props.local} />
+
+                        <Scenarioresultitem label="Betaalbaarheid" unit="&euro;" value={props.affordability}  local={props.local}/>
                     </div>
                     <div className="basis-full lg:basis-1/2">
                         <h4>Financieel</h4>
-                        <Scenarioresultitem label="Energieverbruik" unit="MWh" value={props.energyconsumption} />
-                        <Scenarioresultitem label="Zelfvoorzienend" unit="%" value={props.selfsufficient} />
+                        <Scenarioresultitem label="Energieverbruik" unit="MWh" value={props.energyconsumption} local={props.local} />
+                        <Scenarioresultitem label="Zelfvoorzienend" unit="%" value={props.selfsufficient} local={props.local} />
                     </div>
                 </div>
                 <div className="flex flex-wrap flex-row gap-2 flex-nowrap">
