@@ -73,7 +73,7 @@ function Scenarios(props) {
     return (
         <React.Fragment>
             <div className="container mx-auto">
-                <div className={props.locked ? 'border-8 border-cyan-500 p-2' : 'p-2 border-transparent border-8'}>
+                <div className={props.locked ? 'border-8 border-holon-blue-500 p-2' : 'p-2 border-transparent border-8'}>
                     <h2 className="text-2xl">Twee keer slimmer</h2>
                     <div className="flex flex-col md:flex-row">
                         <div className="basis-full md:basis-1/3 pr-4">
