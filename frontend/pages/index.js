@@ -18,6 +18,9 @@ function Card({ children, href }) {
 }
 
 export default function Home() {
+
+  const neighbourhood1 = { heatpump: "8", evadoptation: "32", solarpanels: "8", heatnetwork: false }
+  const neighbourhood2 = { heatpump: "18", evadoptation: "2", solarpanels: "80", heatnetwork: true }
   return (
     <div className="px-2">
       <Head>
@@ -30,15 +33,11 @@ export default function Home() {
         <hr />
 
         <hr />
-        <Scenarios
-          locked
-          heatpump="8"
-          evadoptation="32"
-          solarpanels="8"
-          heatnetwork={false}
-          cooporation="1"
-          legal="legal 3"
 
+        <Scenarios
+          neighbourhood1={neighbourhood1}
+          neighbourhood2={neighbourhood2}
+          windholon={true}
         />
         <hr />
         <h1 className="text-6xl">
