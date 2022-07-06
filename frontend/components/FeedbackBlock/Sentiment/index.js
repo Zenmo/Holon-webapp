@@ -1,27 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { RadioGroup } from "@headlessui/react";
 import EmoticonButton from "./EmoticonButton";
 
 export default function Sentiment() {
-  const [choice, setChoice] = useState();
+  const [choice, setChoice] = useState(null);
+
+  useEffect(() => {
+    setChoice(localStorage.getItem("holon_sentiment_value") || null)
+  })
 
   const onChange = (selected) => {
     if (!selected) {
       return;
     }
 
-    setChoice(selected);
+    let method = "POST"
+    let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/rating/`
+    if (localStorage.getItem("holon_sentiment_value") && localStorage.getItem("holon_sentiment_id")) {
+      method = "PUT"
+      url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/rating/${localStorage.getItem("holon_sentiment_id")}/`
+    }
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/rating/`, {
+    fetch(url, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "POST",
+      method: method,
       body: JSON.stringify({ rating: selected.toUpperCase() }),
     })
-      .then(() => {})
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+      })
+      .then(json => {
+        localStorage.setItem("holon_sentiment_value", (json.rating).toLowerCase())
+        localStorage.setItem("holon_sentiment_id", json.id)
+      })
+      .then(() => setChoice(selected))
       .catch(() => {});
   };
 
