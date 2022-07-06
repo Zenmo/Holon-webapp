@@ -12,7 +12,7 @@ export default function TextBlock(content) {
             pText: "The paragraph text of this textblock"
         },
         hoeDoen: {
-            title: "Hoe gaat dat nu test?",
+            title: "Hoe doen we dat nu?",
             pText: "Hiërarchie en anarchie zijn de uitersten. Ergens in het midden ligt een oplossing die het beste van beide samenbrengt tot een gebalanceerd systeem."
         },
         slimmerSamenwerken: {
@@ -31,7 +31,7 @@ export default function TextBlock(content) {
 
     return (
         <div className={`m-10 h-screen w-screen flex ${flexValue}`}>
-            <div className={`w-3/4 flex flex-col border-solid border-${content.borderColor} ${stylingRight}`}>
+            <div className={`w-3/4 flex flex-col border-solid ${content.borderColor} ${stylingRight}`}>
                 <h2 className='mt-24 text-6xl font-semibold'>{texts[value]['title']}</h2>
                 <p className='mt-10 w-2/4 text-lg'>{texts[value]['pText']}</p> 
             </div>

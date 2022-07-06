@@ -1,9 +1,6 @@
 import React, { Children } from "react";
 import Link from 'next/link'; 
 
-
-
-
 function ContentBlock(content) {
 
     let id = (content.id) ? content.id : ""; 

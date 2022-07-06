@@ -1,12 +1,12 @@
 import { Fragment } from "react";
-
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+
 import IntroductionVideo from "../components/Introductionvideo";
 import HolonStyle from "./holon-style";
-import TextBlock from "../components/textBlock";
-
+import TextBlock from "../components/TextBlock";
+import WelcomePage from "../components/WelcomePage";
 import ContentBlock from "../components/ContentBlock";
 
 function Card({ children, href }) {
@@ -30,6 +30,9 @@ export default function Home() {
       </Head>
 
       <main className="snap-y snap-mandatory h-screen overflow-y-auto">
+      <ContentBlock>
+        <WelcomePage></WelcomePage>
+      </ContentBlock>
       <ContentBlock colorClass="bg-split-white-blue">
       </ContentBlock>
       <ContentBlock colorClass="bg-holon-blue-900" id="introVideo">
@@ -38,29 +41,24 @@ export default function Home() {
       <ContentBlock colorClass="bg-split-blue-white">
       </ContentBlock>
       <ContentBlock>
-        <TextBlock  value="hoeDoen" borderColor="holon-slated-blue-300"> 
+        <TextBlock  value="hoeDoen" borderColor="border-holon-slated-blue-300"> 
         </TextBlock>
       </ContentBlock>
       <ContentBlock>
-        <TextBlock value="slimmerSamenwerken" borderColor="holon-gold-200" right="true"> 
+        <TextBlock value="slimmerSamenwerken" borderColor="border-holon-gold-200" right="true"> 
         </TextBlock>
       </ContentBlock>
       <ContentBlock>
-        <TextBlock value="warmte" borderColor="holon-blue-900"> 
+        <TextBlock value="warmte" borderColor="border-holon-blue-900"> 
         </TextBlock>
       </ContentBlock>
       <ContentBlock>
-        <TextBlock value="tweeKeerSlimmer" borderColor="holon-grey-300" right="true"> 
+        <TextBlock value="tweeKeerSlimmer" borderColor="border-holon-gold-600" right="true"> 
         </TextBlock>
       </ContentBlock>
       <ContentBlock colorClass="bg-split-white-blue">
       </ContentBlock>
-      
-      <ContentBlock colorClass="bg-cyan-400" id="blue" linkname="#purple">
-      <p className="text-lg">Er is hier een voorbeeldtekst met een 
-    <Link href="#introVideo"> link
-    </Link></p>
-      </ContentBlock>   
+        
       </main>
       
 
