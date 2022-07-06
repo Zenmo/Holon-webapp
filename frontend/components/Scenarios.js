@@ -42,7 +42,9 @@ function Scenarios(props) {
         props.cooporation && setCooperation(props.cooporation)
         props.legal && setLegal(props.legal)
 
-        props.locked && triggercalculate()
+        // start calculating when all ingredients are there to calculate
+        props.heatpump && props.evadoptation && props.solarpanels && props.heatnetwork !== undefined && props.cooporation && props.legal &&
+            triggercalculate()
     }, []);
 
     async function triggercalculate(e) {

@@ -30,9 +30,12 @@ export default function Home() {
 
         <hr />
         <Scenarios
+          locked
+          heatpump="8"
+          evadoptation="32"
           solarpanels="8"
-          heatpump="32"
-          heatnetwork="true"
+          heatnetwork={false}
+          cooporation="1"
           legal="legal 3"
 
         />
