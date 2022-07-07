@@ -13,8 +13,8 @@ function Tooltip({ tooltipMessage, result = false, children }) {
     <div className="group relative flex flex-col items-center">
       {children}
       {visualRepresentation}
-      <div className="absolute bottom-[100%] flex hidden min-w-[8rem] flex-col items-center group-hover:flex">
-        <span className="whitespace-no-wrap z-100 relative rounded-md bg-gray-600 p-2 text-xs leading-none text-white shadow-lg">
+      <div className="absolute bottom-[100%] flex hidden min-w-[20rem] flex-col items-center group-hover:flex">
+        <span className="relative z-50 rounded-md border-2 border-holon-blue-900 bg-white p-2 px-10 py-2 text-base leading-none text-holon-blue-900 shadow-lg">
           {tooltipMessage}
         </span>
         <div className="-mt-2 h-3 w-3 rotate-45 bg-gray-600"></div>

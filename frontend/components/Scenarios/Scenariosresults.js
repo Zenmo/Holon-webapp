@@ -2,8 +2,6 @@ import React from "react";
 import ScenarioResultItem from "./ScenarioResultItem";
 import ScenarioSwitch from "./ScenarioSwitch";
 
-import resultScale from "./resultScale";
-
 function ScenarioResults(props) {
   return (
     <React.Fragment>
@@ -74,7 +72,7 @@ function ScenarioResults(props) {
             messageLocal="Het aandeel lokaal duurzaam opgewekte energie.   Het verschilt met zelfvoorziening is dat voor het aandeel duurzaamheid de   gelijktijdigheid van opwek en consumptie niet van belang is. De energie wordt   als het ware ‘gesaldeerd’."
           />
         </div>
-        <div className="flex flex-row flex-wrap flex-nowrap gap-2">
+        <div className="flex flex-row flex-nowrap gap-2">
           <div className="basis-full lg:basis-1/2">
             <h4 className="my-4 basis-full border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">
               Sociaal
