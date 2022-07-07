@@ -12,15 +12,23 @@ const variants = {
 
 const ButtonContext = createContext();
 
-export default function Button({ children, className, variant = "darkmode", ...rest }) {
+export default function Button({
+  children,
+  className,
+  tag = "button",
+  variant = "darkmode",
+  ...rest
+}) {
+  const Tag = tag;
   const colorClasses = variants[variant] || variants.darkmode;
+
   return (
-    <button
-      className={`${className} ${colorClasses} relative m-2 w-72 rounded-md border-2 p-3 font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
+    <Tag
+      className={`${className} ${colorClasses} relative m-2 w-72 rounded-md border-2 p-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
       {...rest}
     >
       <ButtonContext.Provider value={variant}>{children}</ButtonContext.Provider>
-    </button>
+    </Tag>
   );
 }
 
