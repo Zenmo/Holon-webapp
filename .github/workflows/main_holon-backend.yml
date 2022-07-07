@@ -7,7 +7,7 @@ name: Build and deploy Python app to Azure Web App - holon-backend
 on:
   push:
     branches:
-      - 20-create-deployment-branch-with-actions
+      - deployment
   workflow_dispatch:
 
 defaults:
