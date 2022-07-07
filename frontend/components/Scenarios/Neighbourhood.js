@@ -9,7 +9,9 @@ function Neighbourhood(props) {
 
   return (
     <div>
-      <h4 className="text-lg">Buurt {props.neighbourhoodID}</h4>
+      <h4 className="my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-lg font-light">
+        Buurt {props.neighbourhoodID}
+      </h4>
       <ScenarioSlider
         neighbourhoodID={props.neighbourhoodID}
         disabled={props.locked}

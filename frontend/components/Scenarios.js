@@ -127,7 +127,9 @@ function Scenarios(props) {
                         setNeighbourhood={setNeighbourhood2}
                       />
                     )}
-                    <h5 className="text-lg">Juridisch</h5>
+                    <h4 className="my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-lg font-light">
+                      Juridisch
+                    </h4>
 
                     <div className="flex flex-col">
                       <label htmlFor="heatholon" className="mb-2 flex flex-row items-center gap-2">
