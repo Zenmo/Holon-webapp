@@ -29,11 +29,7 @@ function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, 
           max="100"
         />
         <span>%</span>
-        <Tooltip tooltipMessage="Some description">
-          <span className="block h-[1rem] w-[1rem] rounded-full border bg-green-300 text-center leading-[1rem]">
-            i
-          </span>
-        </Tooltip>
+        <Tooltip tooltipMessage="Some description"></Tooltip>
       </div>
     </div>
   );

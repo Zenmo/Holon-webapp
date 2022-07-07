@@ -30,11 +30,7 @@ function Scenarioswitch({ locked, neighbourhoodID, inputid, value, updatevalue, 
         </span>
         <small>{on}</small>
       </label>
-      <Tooltip tooltipMessage="Some description">
-        <span className="block h-[1rem] w-[1rem] rounded-full border bg-green-300 text-center leading-[1rem]">
-          i
-        </span>
-      </Tooltip>
+      <Tooltip tooltipMessage="Some description"></Tooltip>
     </div>
   );
 }

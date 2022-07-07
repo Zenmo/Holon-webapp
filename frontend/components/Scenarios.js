@@ -110,7 +110,7 @@ function Scenarios(props) {
                   disabled={props.locked || loading}
                   className={props.locked && `cursor-pointer`}
                 >
-                  <div className={props.locked && `pointer-events-none`}>
+                  <div className={props.locked && ``}>
                     {neighbourhood1 && (
                       <Neighbourhood
                         neighbourhoodID="A"
@@ -139,11 +139,7 @@ function Scenarios(props) {
                           checked={heatholon}
                         />
                         <span className="mr-auto">Warmteholon</span>
-                        <Tooltip tooltipMessage="Some description">
-                          <span className="block h-[1rem] w-[1rem] rounded-full border bg-green-300 text-center leading-[1rem]">
-                            i
-                          </span>
-                        </Tooltip>
+                        <Tooltip tooltipMessage="Some description"></Tooltip>
                       </label>
                       <label htmlFor="windholon" className="mb-2 flex flex-row items-center gap-2">
                         <input
@@ -154,11 +150,7 @@ function Scenarios(props) {
                           checked={windholon}
                         />
                         <span className="mr-auto">Windholon</span>
-                        <Tooltip tooltipMessage="Some description">
-                          <span className="block h-[1rem] w-[1rem] rounded-full border bg-green-300 text-center leading-[1rem]">
-                            i
-                          </span>
-                        </Tooltip>
+                        <Tooltip tooltipMessage="Some description"></Tooltip>
                       </label>
                     </div>
                   </div>
