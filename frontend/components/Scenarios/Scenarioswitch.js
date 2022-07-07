@@ -1,27 +1,38 @@
 import React from "react";
 import Tooltip from "./Tooltip";
 
-function Scenarioswitch({ locked, neighbourhoodID, inputid, value, updatevalue, on, off, label }) {
+function Scenarioswitch({
+  locked,
+  neighbourhoodID,
+  inputid,
+  value,
+  updatevalue,
+  on,
+  off,
+  label,
+  scenarioid,
+  message,
+}) {
   return (
     <div className="flex flex-row items-center justify-end gap-2">
       <label
-        htmlFor={`scenario${inputid}slider${neighbourhoodID}`}
+        htmlFor={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
         className="mr-auto cursor-pointer text-sm"
       >
         {label}
       </label>
 
       <label
-        htmlFor={`scenario${inputid}slider${neighbourhoodID}`}
+        htmlFor={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
         className="flex items-center gap-1"
       >
         <small>{off}</small>
-        <span className=" relative mx-1 cursor-not-allowed">
+        <span className={` relative mx-1 ${locked && "cursor-not-allowed"}`}>
           <input
             disabled={locked}
             type="checkbox"
             value=""
-            id={`scenario${inputid}switch${neighbourhoodID}`}
+            id={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
             className="peer sr-only"
             onChange={(e) => updatevalue(inputid, e.target.checked)}
             checked={value}
@@ -30,7 +41,7 @@ function Scenarioswitch({ locked, neighbourhoodID, inputid, value, updatevalue, 
         </span>
         <small>{on}</small>
       </label>
-      <Tooltip tooltipMessage="Some description"></Tooltip>
+      <Tooltip tooltipMessage={message}></Tooltip>
     </div>
   );
 }

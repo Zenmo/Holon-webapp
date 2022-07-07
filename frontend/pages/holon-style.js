@@ -12,8 +12,8 @@ export default function HolonStyle() {
           Demo of <a href="">holontool.nl</a> styling!
         </h1>
 
-         {/* Start of dark section*/}
-         <div className="mt-10 w-full bg-holon-blue-900 p-6 text-white lg:w-8/12 ">
+        {/* Start of dark section*/}
+        <div className="mt-10 w-full bg-holon-blue-900 p-6 text-white lg:w-8/12 ">
           <span className="m-3 text-lg font-bold">Dark theme</span>
 
           {/* Start of 1 row */}
@@ -29,7 +29,7 @@ export default function HolonStyle() {
           <div className="container flex flex-col items-center gap-3 lg:flex-row">
             <HolonButton variant="darkmode">Test</HolonButton>
             <InputElement
-            variant="outline"
+              variant="outline"
               label="email"
               placeholder="j.j.jansen@hetnet.nl"
               id="email"
@@ -66,12 +66,13 @@ export default function HolonStyle() {
           {/* Start of 2 row */}
           <div className="container flex flex-col items-center gap-3 lg:flex-row">
             <HolonButton variant="blue">Test</HolonButton>
+            <InputElement placeholder="j.j.jansen@hetnet.nl" type="email" id="email"></InputElement>
             <InputElement
-              placeholder="j.j.jansen@hetnet.nl"
-              type="email"
-              id="email"
+              variant="outline"
+              label="naam"
+              placeholder="Jan Jansen"
+              id="name"
             ></InputElement>
-            <InputElement variant="outline" label="naam" placeholder="Jan Jansen" id="name"></InputElement>
 
             <InputElement
               label="bedrijf"

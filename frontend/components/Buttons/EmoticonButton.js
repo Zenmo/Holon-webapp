@@ -85,11 +85,7 @@ const variants = {
 
 const ButtonContext = createContext();
 
-export default function EmoticonButton({
-  children,
-  variant = "thumbsdown",
-  ...rest
-}) {
+export default function EmoticonButton({ children, variant = "thumbsdown", ...rest }) {
   const svg = variants[variant] || variants.heart;
   return (
     <button

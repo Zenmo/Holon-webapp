@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 
-const holonshadow = 'shadow-[4px_4px_0_0] border';
+const holonshadow = "shadow-[4px_4px_0_0] border";
 
 const variants = {
   default:
@@ -11,8 +11,7 @@ const variants = {
     "bg-emerald-600 text-white ring-emerald-500/10 hover:bg-emerald-500 hover:text-white focus-visible:ring-emerald-700/30 focus-visible:ring-offset-1 active:bg-emerald-600 active:ring-emerald-500/20",
   danger:
     "bg-red-600 text-white ring-red-500/10 hover:bg-red-500 hover:text-white focus-visible:ring-red-700/30 focus-visible:ring-offset-1 active:bg-red-600 active:ring-red-500/20",
-  holon__ghost:
-    `bg-transparent ${holonshadow}`,
+  holon__ghost: `bg-transparent ${holonshadow}`,
 };
 
 const iconVariants = {
@@ -21,9 +20,6 @@ const iconVariants = {
   success: "text-emerald-200",
   danger: "text-red-200",
 };
-
-
-
 
 const ButtonContext = createContext();
 

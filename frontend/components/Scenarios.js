@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Button from "../components/Buttons/Button";
-import ScenarioSlider from "./Scenarios/Scenarioslider";
 import Scenarioresults from "./Scenarios/Scenariosresults";
-import Scenarioswitch from "./Scenarios/Scenarioswitch";
 import HolonButton from "../components/Buttons/HolonButton";
 import Loader from "./Scenarios/Loader";
 import Neighbourhood from "./Scenarios/Neighbourhood";
@@ -53,29 +50,48 @@ function Scenarios(props) {
       setLoading(false);
       setUncalculatedScenario(false);
 
-      setReliability({
-        national: Math.floor(Math.random() * 100),
-        local: Math.floor(Math.random() * 100),
-      });
-      setEnergyconsumption({
-        national: Math.floor(Math.random() * 10000),
-        local: Math.floor(Math.random() * 10000),
-      });
-      setAffordability({
-        national: Math.floor(Math.random() * 10000),
-        local: Math.floor(Math.random() * 10000),
-      });
-      setSelfsufficient({
-        national: Math.floor(Math.random() * 100),
-        local: Math.floor(Math.random() * 100),
-      });
-    }, 5000);
+      props.calculationresults
+        ? (setReliability({
+            national: props.calculationresults.national.reliability,
+            local: props.calculationresults.local.reliability,
+          }),
+          setEnergyconsumption({
+            national: props.calculationresults.national.energyconsumption,
+            local: props.calculationresults.local.energyconsumption,
+          }),
+          setAffordability({
+            national: props.calculationresults.national.affordability,
+            local: props.calculationresults.local.affordability,
+          }),
+          setSelfsufficient({
+            national: props.calculationresults.national.selfsufficient,
+            local: props.calculationresults.local.selfsufficient,
+          }))
+        : (setReliability({
+            national: Math.floor(Math.random() * 100),
+            local: Math.floor(Math.random() * 100),
+          }),
+          setEnergyconsumption({
+            national: Math.floor(Math.random() * 10000),
+            local: Math.floor(Math.random() * 10000),
+          }),
+          setAffordability({
+            national: Math.floor(Math.random() * 10000),
+            local: Math.floor(Math.random() * 10000),
+          }),
+          setSelfsufficient({
+            national: Math.floor(Math.random() * 100),
+            local: Math.floor(Math.random() * 100),
+          }));
+    }, 2000);
 
     return () => clearTimeout(timer);
   }
 
   function updateLocal(arg1, arg2) {
-    setLocal(arg2);
+    if (arg1 == "local") {
+      setLocal(arg2);
+    }
   }
   return (
     <React.Fragment>
@@ -120,6 +136,7 @@ function Scenarios(props) {
                         locked={props.locked}
                         neighbourhood={neighbourhood1}
                         setNeighbourhood={setNeighbourhood1}
+                        scenarioid={props.scenarioid}
                       />
                     )}
                     {neighbourhood2 && (
@@ -128,6 +145,7 @@ function Scenarios(props) {
                         locked={props.locked}
                         neighbourhood={neighbourhood2}
                         setNeighbourhood={setNeighbourhood2}
+                        scenarioid={props.scenarioid}
                       />
                     )}
                     <h4 className="my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-lg font-light">
@@ -135,27 +153,33 @@ function Scenarios(props) {
                     </h4>
 
                     <div className="flex flex-col">
-                      <label htmlFor="heatholon" className="mb-2 flex flex-row items-center gap-2">
+                      <label
+                        htmlFor={`heatholon${props.scenarioid}`}
+                        className="mb-2 flex flex-row items-center gap-2"
+                      >
                         <input
                           type="checkbox"
                           name="heatholon"
-                          id="heatholon"
+                          id={`heatholon${props.scenarioid}`}
                           onChange={(e) => setHeatholon(e.target.checked)}
                           checked={heatholon}
                         />
                         <span className="mr-auto">Warmteholon</span>
-                        <Tooltip tooltipMessage="Some description"></Tooltip>
+                        <Tooltip tooltipMessage=" De warmteholon is de coöperatie van   buurtbewoners die aangesloten zijn op het warmtenet. Zij worden eigenaar van   het warmtenet en regelen de centrale aansturing. Deze aansturing zorgt ervoor   dat de overschotten zonne-energie van de holon leden gebruikt worden om de   warmtepomp aan te zetten en buffer te vullen, en in combinatie met de   windholon ook die overschotten te gebruiken."></Tooltip>
                       </label>
-                      <label htmlFor="windholon" className="mb-2 flex flex-row items-center gap-2">
+                      <label
+                        htmlFor={`windholon${props.scenarioid}`}
+                        className="mb-2 flex flex-row items-center gap-2"
+                      >
                         <input
                           type="checkbox"
                           name="windholon"
-                          id="windholon"
+                          id={`windholon${props.scenarioid}`}
                           onChange={(e) => setWindholon(e.target.checked)}
                           checked={windholon}
                         />
                         <span className="mr-auto">Windholon</span>
-                        <Tooltip tooltipMessage="Some description"></Tooltip>
+                        <Tooltip tooltipMessage="De windholon is de coöperatie van buurtbewoners   die samen gaat investeren in een windturbine. Om deze te mogen bouwen in een   gebied met transportschaarste moeten de leden hun verbruik afstemmen op de   opwek van de windturbine. Hiermee ontlasten ze het HS/MS-station waar de   windturbine op aangesloten is."></Tooltip>
                       </label>
                     </div>
                   </div>
@@ -165,11 +189,14 @@ function Scenarios(props) {
             <div className="w-[4px] bg-slate-300"></div>
             <div className="basis-full pl-4 md:basis-2/3">
               <Scenarioresults
+                scenarioid={props.scenarioid}
                 reliability={reliability}
                 selfconsumption={selfconsumption}
                 affordability={affordability}
                 renewability={renewability}
                 local={local}
+                heatholon={heatholon}
+                windholon={windholon}
                 setLocal={updateLocal}
                 borderColor={props.borderColor}
               >
