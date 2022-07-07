@@ -88,14 +88,18 @@ describe("Button", () => {
   });
 
   describe("rendering an Icon outside of a button", () => {
+    afterAll(jest.restoreAllMocks);
+
     it("throws an error", () => {
+      jest.spyOn(console, "error").mockImplementation(() => jest.fn());
+
       expect(() => {
         render(
           <Button.Icon>
             <div>Something</div>
           </Button.Icon>
         );
-      }).toThrow(/must be used within a Button/);
+      }).toThrow();
     });
   });
 });
