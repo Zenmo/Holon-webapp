@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 export default function InputElement({ children, label = "defaultLabel", ...inputProps }) {
   return (
     <div className="flex flex-col">
@@ -12,3 +14,11 @@ export default function InputElement({ children, label = "defaultLabel", ...inpu
     </div>
   );
 }
+
+InputElement.propTypes = {
+  children: PropTypes.node.isRequired,
+  placeholder: PropTypes.string,
+  id: PropTypes.string,
+  label: PropTypes.string,
+  required: PropTypes.bool,
+};
