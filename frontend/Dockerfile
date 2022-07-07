@@ -6,6 +6,6 @@ WORKDIR /app/frontend
 
 # install app dependencies
 COPY package.json ./
-COPY yarn.lock ./
+COPY package-lock.json ./
 
 RUN yarn
