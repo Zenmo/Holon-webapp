@@ -5,7 +5,6 @@ function Scenarioresultitem({
   label,
   unit,
   value,
-  tooltip,
   local,
   invert,
   messageLocal,
