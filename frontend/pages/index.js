@@ -58,11 +58,16 @@ export default function Home() {
               heatnetwork: true,
             }}
             calculationresults={{
-              local: { reliability: 100, affordability: 2420, sustainable: 7, selfsufficient: 58 },
+              local: {
+                reliability: 100,
+                affordability: 2420,
+                energyconsumption: 7,
+                selfsufficient: 58,
+              },
               national: {
                 reliability: 100,
                 affordability: 2420,
-                sustainable: 7,
+                energyconsumption: 7,
                 selfsufficient: 58,
               },
             }}
@@ -95,11 +100,16 @@ export default function Home() {
             }}
             windholon={true}
             calculationresults={{
-              local: { reliability: 0, affordability: 2062, sustainable: 16, selfsufficient: 49 },
+              local: {
+                reliability: 0,
+                affordability: 2062,
+                energyconsumption: 16,
+                selfsufficient: 49,
+              },
               national: {
                 reliability: 0,
                 affordability: 2062,
-                sustainable: 16,
+                energyconsumption: 16,
                 selfsufficient: 49,
               },
             }}
@@ -127,11 +137,16 @@ export default function Home() {
             }}
             heatholon={true}
             calculationresults={{
-              local: { reliability: 100, affordability: 2218, sustainable: 14, selfsufficient: 85 },
+              local: {
+                reliability: 100,
+                affordability: 2218,
+                energyconsumption: 14,
+                selfsufficient: 85,
+              },
               national: {
                 reliability: 100,
                 affordability: 2218,
-                sustainable: 14,
+                energyconsumption: 14,
                 selfsufficient: 85,
               },
             }}
@@ -165,11 +180,16 @@ export default function Home() {
             windholon={true}
             heatholon={true}
             calculationresults={{
-              local: { reliability: 100, affordability: 1802, sustainable: 32, selfsufficient: 91 },
+              local: {
+                reliability: 100,
+                affordability: 1802,
+                energyconsumption: 32,
+                selfsufficient: 91,
+              },
               national: {
                 reliability: 100,
                 affordability: 1802,
-                sustainable: 32,
+                energyconsumption: 32,
                 selfsufficient: 91,
               },
             }}
