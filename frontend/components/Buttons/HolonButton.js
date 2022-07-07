@@ -15,11 +15,10 @@ const ButtonContext = createContext();
 export default function Button({
   children,
   className,
-  tag = "button",
+  tag: Tag = "button",
   variant = "darkmode",
   ...rest
 }) {
-  const Tag = tag;
   const colorClasses = variants[variant] || variants.darkmode;
 
   return (
@@ -35,6 +34,7 @@ export default function Button({
 Button.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  tag: PropTypes.elementType,
   variant: PropTypes.oneOf(Object.keys(variants)),
 };
 
