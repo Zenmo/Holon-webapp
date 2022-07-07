@@ -1,5 +1,6 @@
 import React from "react";
 import Tooltip from "./Tooltip";
+import { resultScale } from "./resultScale";
 
 function ScenarioResultItem({
   label,
@@ -10,6 +11,7 @@ function ScenarioResultItem({
   messageLocal,
   messageNl,
   minvalue,
+  maxvalue = 100,
 }) {
   function perc2color(minvalue, maxvalue, value) {
     var percentage = 0;
@@ -41,8 +43,28 @@ function ScenarioResultItem({
     var h = r * 0x10000 + g * 0x100 + b * 0x1;
     return "#" + ("000000" + h.toString(16)).slice(-6);
   }
+  function per2colorArray(minvalue, maxvalue, value, invert) {
+    var percentage = 0;
 
-  const maxvalue = unit == "%" ? 100 : 10000;
+    if (value <= minvalue) {
+      percentage = 0;
+    } else if (value >= maxvalue) {
+      percentage = 100;
+    } else {
+      percentage = ((value - minvalue) / (maxvalue - minvalue)) * 100;
+    }
+
+    if (invert) {
+      percentage = 100 - percentage;
+    }
+
+    percentage = parseInt(percentage);
+    var color = resultScale[percentage];
+    console.log(`${percentage} ${color}`);
+
+    return color;
+  }
+
   const inputvalue = parseFloat(local ? value.local : value.national);
 
   return (
@@ -52,7 +74,7 @@ function ScenarioResultItem({
         <span className="relative ml-auto">
           <Tooltip tooltipMessage={local ? messageLocal : messageNl} result={true}>
             <output
-              style={{ backgroundColor: perc2color(minvalue, maxvalue, inputvalue, invert) }}
+              style={{ backgroundColor: per2colorArray(minvalue, maxvalue, inputvalue, invert) }}
               className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center leading-[4.5rem] shadow-[2px_2px_0_0]`}
             >
               {inputvalue}

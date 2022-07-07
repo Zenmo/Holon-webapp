@@ -52,14 +52,14 @@ export default function Home() {
               local: {
                 reliability: 100,
                 affordability: 2420,
-                energyconsumption: 7,
-                selfsufficient: 58,
+                renewability: 7,
+                selfconsumption: 58,
               },
               national: {
                 reliability: 100,
                 affordability: 2420,
-                energyconsumption: 7,
-                selfsufficient: 58,
+                renewability: 7,
+                selfconsumption: 58,
               },
             }}
           />
@@ -85,14 +85,14 @@ export default function Home() {
               local: {
                 reliability: 0,
                 affordability: 2062,
-                energyconsumption: 16,
-                selfsufficient: 49,
+                renewability: 16,
+                selfconsumption: 49,
               },
               national: {
                 reliability: 0,
                 affordability: 2062,
-                energyconsumption: 16,
-                selfsufficient: 49,
+                renewability: 16,
+                selfconsumption: 49,
               },
             }}
           />
@@ -113,14 +113,14 @@ export default function Home() {
               local: {
                 reliability: 100,
                 affordability: 2218,
-                energyconsumption: 14,
-                selfsufficient: 85,
+                renewability: 14,
+                selfconsumption: 85,
               },
               national: {
                 reliability: 100,
                 affordability: 2218,
-                energyconsumption: 14,
-                selfsufficient: 85,
+                renewability: 14,
+                selfconsumption: 85,
               },
             }}
           />
@@ -147,14 +147,14 @@ export default function Home() {
               local: {
                 reliability: 100,
                 affordability: 1802,
-                energyconsumption: 32,
-                selfsufficient: 91,
+                renewability: 32,
+                selfconsumption: 91,
               },
               national: {
                 reliability: 100,
                 affordability: 1802,
-                energyconsumption: 32,
-                selfsufficient: 91,
+                renewability: 32,
+                selfconsumption: 91,
               },
             }}
           />

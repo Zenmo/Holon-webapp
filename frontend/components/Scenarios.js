@@ -19,9 +19,9 @@ function Scenarios(props) {
   const [local, setLocal] = useState(true);
 
   const [reliability, setReliability] = useState(0);
-  const [selfconsumption, setEnergyconsumption] = useState(0);
+  const [selfconsumption, setSelfconsumption] = useState(0);
   const [affordability, setAffordability] = useState(0);
-  const [renewability, setSelfsufficient] = useState(0);
+  const [renewability, setRenewability] = useState(0);
 
   useEffect(() => {
     setUncalculatedScenario(true);
@@ -55,23 +55,23 @@ function Scenarios(props) {
             national: props.calculationresults.national.reliability,
             local: props.calculationresults.local.reliability,
           }),
-          setEnergyconsumption({
-            national: props.calculationresults.national.energyconsumption,
-            local: props.calculationresults.local.energyconsumption,
+          setSelfconsumption({
+            national: props.calculationresults.national.selfconsumption,
+            local: props.calculationresults.local.selfconsumption,
           }),
           setAffordability({
             national: props.calculationresults.national.affordability,
             local: props.calculationresults.local.affordability,
           }),
-          setSelfsufficient({
-            national: props.calculationresults.national.selfsufficient,
-            local: props.calculationresults.local.selfsufficient,
+          setRenewability({
+            national: props.calculationresults.national.renewability,
+            local: props.calculationresults.local.renewability,
           }))
         : (setReliability({
             national: Math.floor(Math.random() * 100),
             local: Math.floor(Math.random() * 100),
           }),
-          setEnergyconsumption({
+          setSelfconsumption({
             national: Math.floor(Math.random() * 10000),
             local: Math.floor(Math.random() * 10000),
           }),
@@ -79,7 +79,7 @@ function Scenarios(props) {
             national: Math.floor(Math.random() * 10000),
             local: Math.floor(Math.random() * 10000),
           }),
-          setSelfsufficient({
+          setRenewability({
             national: Math.floor(Math.random() * 100),
             local: Math.floor(Math.random() * 100),
           }));

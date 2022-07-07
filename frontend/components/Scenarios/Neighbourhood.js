@@ -24,7 +24,7 @@ function Neighbourhood(props) {
       <ScenarioSlider
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.evadoptation.label}
-        value={props.neighbourhood.evadoptation.label}
+        value={props.neighbourhood.evadoptation.value}
         disabled={props.locked}
         inputid="evadoptation"
         updatevalue={updateValue}
