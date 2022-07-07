@@ -1,6 +1,7 @@
 import Head from "next/head";
 
 import ContentBlock from "../components/ContentBlock";
+import FeedbackBlock from "../components/FeedbackBlock";
 import HolonButton from "../components/Buttons/HolonButton";
 import IntroductionVideo from "../components/Introductionvideo";
 import TextBlock from "../components/TextBlock";
@@ -59,6 +60,9 @@ export default function Home() {
           </TextBlock>
         </ContentBlock>
         <ContentBlock colorClass="bg-split-white-blue"></ContentBlock>
+        <ContentBlock colorClass="bg-holon-blue-900">
+          <FeedbackBlock />
+        </ContentBlock>
       </main>
     </div>
   );
