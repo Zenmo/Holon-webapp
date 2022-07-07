@@ -8,12 +8,12 @@ export default function WelcomePage() {
     <div className="flex-col items-start">
       <div className="flex flex-col items-center justify-center">
         <h1 className="mx-6 pb-3 text-center text-6xl font-semibold shadow-golden">Welkom!</h1>
-        <p className="mt-8 text-lg">HOLON en de kunst van het Loslaten</p>
+        <p className="mt-8 text-2xl">HOLON en de kunst van het Loslaten</p>
       </div>
       <div className="mt-4 flex justify-center">
         <div className="m-8 w-1/3">
           <h2 className="pb-3 text-6xl shadow-golden">Energietransitie</h2>
-          <p className="my-8 w-4/5">
+          <p className="my-8 text-xl">
             We hebben nu een centraal gestuurd energiesysteem. Dat is aan het veranderen. Hoe ziet
             het energiesysteem van de toekomst eruit?
           </p>
@@ -23,7 +23,7 @@ export default function WelcomePage() {
         </div>
         <div className="m-8 w-1/3">
           <h2 className="pb-3 text-6xl shadow-blue">Russisch gas</h2>
-          <p className="my-8 w-4/5">
+          <p className="my-8 text-xl">
             We willen snel een alternatief voor aardgas uit Rusland. Welke mogelijkheden zijn er
             binnen Europa en wat is de rol van Nederland?
           </p>
@@ -32,7 +32,7 @@ export default function WelcomePage() {
           </HolonButton>
         </div>
       </div>
-      <div className="mx-24 my-16 flex h-11 justify-between">
+      <div className="absolute bottom-0 mx-16 my-10 flex h-11 justify-between">
         <img alt="Logo Zenmo" src="/Logos/zenmo_logo.png"></img>
         <img alt="Logo TNO" src="/Logos/tno_logo.png"></img>
         <img alt="Logo Witteveen+Bos" src="/Logos/WB_logo.png"></img>
