@@ -10,7 +10,7 @@ export default function IntroductionVideo() {
           <iframe
             className="aspect-video w-full border-2 border-white"
             title="vimeo-player"
-            src="https://player.vimeo.com/video/371077995?loop=1&amp;byline=0&amp;title=0&amp;dnt=1"
+            src="https://player.vimeo.com/video/727346453?loop=1&amp;byline=0&amp;title=0&amp;dnt=1"
           ></iframe>
           <p className="absolute right-full top-[12rem] mr-[1rem] w-[200px] rotate-[-6deg] text-lg italic">
             In deze korte video leggen we de basis van holarchie aan de hand van praktische
@@ -22,8 +22,8 @@ export default function IntroductionVideo() {
         </div>
         <h3 className="mb-[2rem] text-center text-2xl italic">Hebben we je interesse?</h3>
         <div className="flex gap-[1rem]">
-          <HolonButton variant="darkmode">Aan de gang</HolonButton>
-          <HolonButton variant="darkmode">Hou me op de hoogte</HolonButton>
+          <HolonButton tag="a" href="#start" variant="darkmode">Aan de gang</HolonButton>
+          <HolonButton tag="a" href="" variant="darkmode">Hou me op de hoogte</HolonButton>
         </div>
       </div>
     </div>
