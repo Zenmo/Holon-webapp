@@ -1,18 +1,9 @@
-import { render, screen, fireEvent, prettyDOM } from "@testing-library/react";
+import { render, screen, fireEvent, prettyDOM, waitFor } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 import Sentiment from ".";
 
 describe("Sentiment", () => {
-  beforeEach(() => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve({}),
-      })
-    );
-  });
-
-  afterEach(jest.restoreAllMocks);
-
   it("renders with no option selected", () => {
     render(<Sentiment />);
 
@@ -25,26 +16,42 @@ describe("Sentiment", () => {
     });
   });
 
-  it("allows selecting an option", () => {
-    const screen = render(<Sentiment />);
-    const radios = screen.queryAllByRole("radio");
-
-    fireEvent.click(radios[0]);
-
-    expect(radios).toHaveLength(4);
-    expect(radios[0].getAttribute("aria-checked")).toEqual("true");
-  });
-
   describe("when submitting a sentiment", () => {
-    it("sends data to the API", () => {
-      render(<Sentiment />);
+    beforeEach(() => {
+      fetchMock.mockResponse(JSON.stringify({ id: 1, rating: "HEART" }));
+    });
 
-      fireEvent.click(screen.getAllByRole("radio")[0]);
+    afterEach(() => {
+      fetchMock.mockRestore();
+    });
 
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+    it("allows selecting an option", async () => {
+      const screen = render(<Sentiment />);
+      const radios = screen.queryAllByRole("radio");
+
+      await act(async () => {
+        return await fireEvent.click(radios[0]);
+      });
+
+      await waitFor(() => {
+        expect(radios[0].getAttribute("aria-checked")).toEqual("true");
+      });
+    });
+
+    it("sends data to the API", async () => {
+      const screen = render(<Sentiment />);
+      const radios = screen.queryAllByRole("radio");
+
+      await act(async () => {
+        return await fireEvent.click(radios[1]);
+      });
+
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
 
       const sentData = JSON.parse(global.fetch.mock.calls[0][1].body);
-      expect(sentData).toEqual({ rating: "HEART" });
+      expect(sentData).toEqual({ rating: "THUMBSUP" });
     });
   });
 });

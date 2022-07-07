@@ -9,6 +9,8 @@ async function completeForm({ name, email, company }) {
   const companyEl = screen.getByLabelText(/Bedrijf/);
   const submitEl = screen.getByRole("button");
 
+  fetchMock.mockResponse(JSON.stringify({ name, company, email }));
+
   return await act(async () => {
     fireEvent.change(nameEl, { target: { value: name } });
     fireEvent.change(emailEl, { target: { value: email } });
@@ -19,17 +21,13 @@ async function completeForm({ name, email, company }) {
 }
 
 describe("SubscriptionForm", () => {
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    fetchMock.mockRestore();
+  });
 
   describe("with a name and e-mail", () => {
     beforeEach(() => {
       render(<SubscriptionForm />);
-
-      global.fetch = jest.fn(() =>
-        Promise.resolve({
-          json: () => Promise.resolve({}),
-        })
-      );
     });
 
     it("submits the data to an API endpoint", async () => {

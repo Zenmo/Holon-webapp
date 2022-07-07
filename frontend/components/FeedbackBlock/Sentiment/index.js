@@ -10,13 +10,14 @@ export default function Sentiment() {
     setChoice(localStorage.getItem("holon_sentiment_value") || null);
   }, []);
 
-  const onChange = (selected) => {
+  const onChange = async (selected) => {
     if (!selected) {
       return;
     }
 
     let method = "POST";
     let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/rating/`;
+
     if (
       localStorage.getItem("holon_sentiment_value") &&
       localStorage.getItem("holon_sentiment_id")
@@ -27,26 +28,29 @@ export default function Sentiment() {
       )}/`;
     }
 
-    fetch(url, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: method,
-      body: JSON.stringify({ rating: selected.toUpperCase() }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("HTTP error " + response.status);
-        }
-        return response.json();
-      })
-      .then((json) => {
-        localStorage.setItem("holon_sentiment_value", json.rating.toLowerCase());
-        localStorage.setItem("holon_sentiment_id", json.id);
-      })
-      .then(() => setChoice(selected))
-      .catch(() => {});
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: method,
+        body: JSON.stringify({ rating: selected.toUpperCase() }),
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+      }
+
+      const json = await response.json();
+
+      localStorage.setItem("holon_sentiment_value", json.rating.toLowerCase());
+      localStorage.setItem("holon_sentiment_id", json.id);
+
+      setChoice(selected);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
