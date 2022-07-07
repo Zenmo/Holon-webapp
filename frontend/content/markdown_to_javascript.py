@@ -20,3 +20,17 @@ dd = df.to_dict()
 import json
 
 print(json.dumps(dd, indent=4))
+
+
+#%%
+import pandas as pd
+
+df = pd.read_clipboard(header=None).set_index(0)
+
+df = df.set_index(1, append=True)
+
+df = df.unstack()
+
+df.columns = df.columns.droplevel(0)
+
+df.to_dict()
