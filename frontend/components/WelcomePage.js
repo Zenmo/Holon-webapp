@@ -42,11 +42,19 @@ export default function WelcomePage() {
           </HolonButton>
         </div>
       </div>
-      <div className="mx-24 my-16 flex h-11 justify-between">
-        <Image alt="Logo Zenmo" src={zenmoLogo} />
-        <Image alt="Logo TNO" src={tnoLogo} />
-        <Image alt="Logo Witteveen+Bos" src={wbLogo} />
-        <Image alt="Logo Quintel" src={quintelLogo} />
+      <div className="mx-24 my-16 flex h-11 flex-wrap items-center justify-between">
+        <div className="w-1/2 px-8 lg:w-1/4">
+          <Image alt="Logo Zenmo" src={zenmoLogo} />
+        </div>
+        <div className="w-1/2 px-8 lg:w-1/4">
+          <Image alt="Logo TNO" src={tnoLogo} />
+        </div>
+        <div className="w-1/2 px-8 lg:w-1/4">
+          <Image alt="Logo Witteveen+Bos" src={wbLogo} />
+        </div>
+        <div className="w-1/2 px-8 lg:w-1/4">
+          <Image alt="Logo Quintel" src={quintelLogo} />
+        </div>
       </div>
     </div>
   );
