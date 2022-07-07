@@ -5,7 +5,12 @@ Prototype of the Holon web application
 ## First setup / Start the application
 
 First copy the .env.example to .env.local. You don't have to change anything inside
-the .env file.
+the .env file:
+
+```bash
+cp frontend/.env.example frontend/.env.local
+cp backend/.env.example backend/.env.local
+```
 
 - note: If you decide to make some changes to the .env files, restart the docker containers.
 
@@ -49,3 +54,14 @@ docker-compose exec [container_name] [command]
 ```
 docker-compose exec backend python manage.py migrate
 ```
+
+## Admin
+
+To see the data that is saved in the database, you can take a look in the admin.
+To do so, you have to create a local superuseraccount:
+
+```
+docker-compose exec backend python manage.py createsuperuser
+```
+
+After finishing all the steps, you can login on localhost:8000/admin
