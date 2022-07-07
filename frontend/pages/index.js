@@ -1,31 +1,14 @@
-import { Fragment } from "react";
 import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
 import Scenarios from "../components/Scenarios";
 import IntroductionVideo from "../components/IntroductionVideo";
 
-import HolonStyle from "./holon-style";
 import TextBlock from "../components/TextBlock";
 import WelcomePage from "../components/WelcomePage";
 import ContentBlock from "../components/ContentBlock";
 import HolonButton from '../components/Buttons/HolonButton';
 
-function Card({ children, href }) {
-  return (
-    <a
-      href={href}
-      className="align-left m-3 max-w-xs rounded-md border p-5 text-black no-underline transition"
-    >
-      {children}
-    </a>
-  );
-}
-
 export default function Home() {
 
-  const neighbourhood1 = { heatpump: "8", evadoptation: "32", solarpanels: "8", heatnetwork: false }
-  const neighbourhood2 = { heatpump: "18", evadoptation: "2", solarpanels: "80", heatnetwork: true }
   return (
     <div >
       <Head>
@@ -51,11 +34,15 @@ export default function Home() {
         </ContentBlock>
         <ContentBlock>
           <Scenarios
+            scenarioid="1"
             locked
             borderColor="border-holon-slated-blue-300"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
-            windholon={true}
+            neighbourhood1={{ heatpump: "0", evadoptation: "70", solarpanels: "40", heatnetwork: false }}
+            neighbourhood2={{ heatpump: "0", evadoptation: "70", solarpanels: "80", heatnetwork: true }}
+            calculationresults={{
+              local: { reliability: 100, affordability: 2420, sustainable: 7, selfsufficient: 58 },
+              national: { reliability: 100, affordability: 2420, sustainable: 7, selfsufficient: 58 }
+            }}
           />
         </ContentBlock>
         <ContentBlock>
@@ -64,12 +51,17 @@ export default function Home() {
         </ContentBlock>
         <ContentBlock>
           <Scenarios
+            scenarioid="2"
             locked
             right="true"
             borderColor="border-holon-gold-200"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
+            neighbourhood1={{ heatpump: "0", evadoptation: "70", solarpanels: "40", heatnetwork: false }}
+            neighbourhood2={{ heatpump: "0", evadoptation: "70", solarpanels: "80", heatnetwork: true }}
             windholon={true}
+            calculationresults={{
+              local: { reliability: 0, affordability: 2062, sustainable: 16, selfsufficient: 49 },
+              national: { reliability: 0, affordability: 2062, sustainable: 16, selfsufficient: 49 }
+            }}
           />
         </ContentBlock>
         <ContentBlock>
@@ -78,11 +70,16 @@ export default function Home() {
         </ContentBlock>
         <ContentBlock>
           <Scenarios
+            scenarioid="3"
             locked
             borderColor="border-holon-blue-900"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
-            windholon={true}
+            neighbourhood1={{ heatpump: "0", evadoptation: "70", solarpanels: "40", heatnetwork: false }}
+            neighbourhood2={{ heatpump: "0", evadoptation: "70", solarpanels: "80", heatnetwork: true }}
+            heatholon={true}
+            calculationresults={{
+              local: { reliability: 100, affordability: 2218, sustainable: 14, selfsufficient: 85 },
+              national: { reliability: 100, affordability: 2218, sustainable: 14, selfsufficient: 85 }
+            }}
           />
         </ContentBlock>
         <ContentBlock>
@@ -91,12 +88,18 @@ export default function Home() {
         </ContentBlock>
         <ContentBlock>
           <Scenarios
+            scenarioid="4"
             locked
             borderColor="border-holon-gold-600"
             right="true"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
+            neighbourhood1={{ heatpump: "0", evadoptation: "70", solarpanels: "40", heatnetwork: false }}
+            neighbourhood2={{ heatpump: "0", evadoptation: "70", solarpanels: "80", heatnetwork: true }}
             windholon={true}
+            heatholon={true}
+            calculationresults={{
+              local: { reliability: 100, affordability: 1802, sustainable: 32, selfsufficient: 91 },
+              national: { reliability: 100, affordability: 1802, sustainable: 32, selfsufficient: 91 }
+            }}
           />
         </ContentBlock>
         <ContentBlock>
@@ -107,9 +110,10 @@ export default function Home() {
         </ContentBlock>
         <ContentBlock>
           <Scenarios
+            scenarioid="5"
 
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
+            neighbourhood1={{ heatpump: "0", evadoptation: "70", solarpanels: "40", heatnetwork: false }}
+            neighbourhood2={{ heatpump: "0", evadoptation: "70", solarpanels: "80", heatnetwork: true }}
             windholon={true}
           />
         </ContentBlock>
