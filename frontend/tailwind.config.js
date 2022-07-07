@@ -31,6 +31,8 @@ module.exports = {
         "holon-white-hover": "0.1rem 0.05rem white",
         "holon-blue": "0.3rem 0.15rem #051E3F",
         "holon-blue-hover": "0.1rem 0.05rem #051E3F",
+        'golden': 'inset 0 -25px 0px 0px #F3E7C5',
+        'blue': 'inset 0 -25px 0px 0px #AEC2E6',
       },
     },
   },
