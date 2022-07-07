@@ -22,46 +22,46 @@ holon_instellingen = {
 };
 
 scenario_results = {
-  Scenario1: {
-    Betrouwbaarheid: "+",
-    Betaalbaarheid: 2420,
-    Duurzaamheid: 7,
-    Zelfconsumptie: 58,
+  scenario1: {
+    betrouwbaarheid: "+",
+    betaalbaarheid: 2420,
+    duurzaamheid: 7,
+    zelfconsumptie: 58,
   },
-  Scenario2: {
-    Betrouwbaarheid: "-",
-    Betaalbaarheid: 2062,
-    Duurzaamheid: 16,
-    Zelfconsumptie: 49,
+  scenario2: {
+    betrouwbaarheid: "-",
+    betaalbaarheid: 2062,
+    duurzaamheid: 16,
+    zelfconsumptie: 49,
   },
-  Scenario3: {
-    Betrouwbaarheid: "+",
-    Betaalbaarheid: 2218,
-    Duurzaamheid: 14,
-    Zelfconsumptie: 85,
+  scenario3: {
+    betrouwbaarheid: "+",
+    betaalbaarheid: 2218,
+    duurzaamheid: 14,
+    zelfconsumptie: 85,
   },
-  Scenario4: {
-    Betrouwbaarheid: "+",
-    Betaalbaarheid: 1802,
-    Duurzaamheid: 32,
-    Zelfconsumptie: 91,
+  scenario4: {
+    betrouwbaarheid: "+",
+    betaalbaarheid: 1802,
+    duurzaamheid: 32,
+    zelfconsumptie: 91,
   },
 };
 
 kpi_kleurschaal = {
-  Betrouwbaarheid: {
+  betrouwbaarheid: {
     ondergrens: "-",
     bovengrens: "+",
   },
-  Betaalbaarheid: {
+  betaalbaarheid: {
     ondergrens: 2400,
     bovengrens: 1800,
   },
-  Duurzaamheid: {
+  duurzaamheid: {
     ondergrens: 10,
     bovengrens: 50,
   },
-  Zelfconsumptie: {
+  zelfconsumptie: {
     ondergrens: 40,
     bovengrens: 90,
   },
