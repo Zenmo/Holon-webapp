@@ -2,7 +2,6 @@ import React from "react";
 import Tooltip from "./Tooltip";
 
 function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, label }) {
-  console.log(neighbourhoodID);
   return (
     <div className="mb-2 flex flex-row items-center justify-between gap-2">
       <label htmlFor={`scenario${(inputid, neighbourhoodID)}slider`} className="flex">

@@ -22,9 +22,9 @@ function Scenarios(props) {
   const [local, setLocal] = useState(true);
 
   const [reliability, setReliability] = useState(0);
-  const [energyconsumption, setEnergyconsumption] = useState(0);
+  const [selfconsumption, setEnergyconsumption] = useState(0);
   const [affordability, setAffordability] = useState(0);
-  const [selfsufficient, setSelfsufficient] = useState(0);
+  const [renewability, setSelfsufficient] = useState(0);
 
   useEffect(() => {
     setUncalculatedScenario(true);
@@ -77,7 +77,6 @@ function Scenarios(props) {
   function updateLocal(arg1, arg2) {
     setLocal(arg2);
   }
-  console.log(props.scenarioTitle);
   return (
     <React.Fragment>
       {props.locked && (
@@ -167,11 +166,12 @@ function Scenarios(props) {
             <div className="basis-full pl-4 md:basis-2/3">
               <Scenarioresults
                 reliability={reliability}
-                energyconsumption={energyconsumption}
+                selfconsumption={selfconsumption}
                 affordability={affordability}
-                selfsufficient={selfsufficient}
+                renewability={renewability}
                 local={local}
                 setLocal={updateLocal}
+                borderColor={props.borderColor}
               >
                 {props.locked && loading && (
                   <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">

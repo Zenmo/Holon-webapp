@@ -24,7 +24,7 @@ function Scenarioresultitem({ label, unit, value, tooltip, local }) {
 
   return (
     <React.Fragment>
-      <div className="mb-2 flex flex-wrap items-center justify-between">
+      <div className="mb-2 flex basis-6/12 flex-nowrap items-center justify-between py-1">
         <h3 className="text-xl">{label}</h3>
         {inpuvalue > 0 && (
           <span className="relative ml-auto">
@@ -32,7 +32,7 @@ function Scenarioresultitem({ label, unit, value, tooltip, local }) {
               <Tooltip tooltipMessage={tooltip} result={true}>
                 <output
                   style={{ backgroundColor: perc2color((inpuvalue / maxvalue) * 100) }}
-                  className={`block h-[3rem] w-[3rem] rounded-full border text-center leading-[3rem] shadow-[2px_2px_0_0]`}
+                  className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center leading-[4.5rem] shadow-[2px_2px_0_0]`}
                 >
                   {inpuvalue}
                 </output>
@@ -40,14 +40,14 @@ function Scenarioresultitem({ label, unit, value, tooltip, local }) {
             ) : (
               <output
                 style={{ backgroundColor: perc2color((inpuvalue / maxvalue) * 100) }}
-                className={`block h-[3rem] w-[3rem] rounded-full  border border text-center leading-[3rem] shadow-[2px_2px_0_0]`}
+                className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center leading-[4.5rem] shadow-[2px_2px_0_0]`}
               >
                 {inpuvalue}
               </output>
             )}
           </span>
         )}
-        <span className="ml-2 w-[40px] italic">{unit}</span>
+        <span className="ml-2 mr-5 w-[40px] text-lg font-medium italic">{unit}</span>
       </div>
     </React.Fragment>
   );
