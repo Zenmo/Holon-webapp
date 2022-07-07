@@ -66,7 +66,7 @@ function Scenarioresults(props) {
               maxvalue="50"
               label="Duurzaamheid"
               unit="%"
-              value={props.sustainable}
+              value={props.energyconsumption}
               local={props.local}
               messageNl="	et aandeel lokaal duurzaam opgewekte energie.   Het verschilt met zelfvoorziening is dat voor het aandeel duurzaamheid de   gelijktijdigheid van opwek en consumptie niet van belang is. De energie wordt   als het ware ‘gesaldeerd’."
               messageLocal="Het aandeel lokaal duurzaam opgewekte energie.   Het verschilt met zelfvoorziening is dat voor het aandeel duurzaamheid de   gelijktijdigheid van opwek en consumptie niet van belang is. De energie wordt   als het ware ‘gesaldeerd’."

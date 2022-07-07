@@ -2,15 +2,15 @@ import React from "react";
 import Tooltip from "./Tooltip";
 
 function Scenarioresultitem({
-  minvalue,
-  maxvalue,
   label,
   unit,
   value,
+  tooltip,
   local,
   invert,
   messageLocal,
   messageNl,
+  minvalue,
 }) {
   function perc2color(minvalue, maxvalue, value) {
     var percentage = 0;
@@ -43,28 +43,24 @@ function Scenarioresultitem({
     return "#" + ("000000" + h.toString(16)).slice(-6);
   }
 
-  // const maxvalue = unit == '%' ? 100 : 10000
+  const maxvalue = unit == "%" ? 100 : 10000;
   const inputvalue = parseFloat(local ? value.local : value.national);
 
   return (
     <React.Fragment>
       <div className="mb-2 flex flex-wrap items-center justify-between">
         <h3 className="text-xl">{label}</h3>
-        {inputvalue >= 0 && (
-          <span className="relative ml-auto">
-            <Tooltip tooltipMessage={local ? messageLocal : messageNl}>
-              <output
-                style={{ backgroundColor: perc2color(minvalue, maxvalue, inputvalue, invert) }}
-                className={`block h-[3rem] w-[3rem] rounded-full border text-center leading-[3rem] shadow-[2px_2px_0_0]`}
-              >
-                {inputvalue}
-              </output>
-              <sup className="absolute right-0 top-0 block h-[1rem] w-[1rem] rounded-full border bg-green-300 text-center leading-[1rem]">
-                i
-              </sup>
-            </Tooltip>
-          </span>
-        )}
+        <span className="relative ml-auto">
+          <Tooltip tooltipMessage={local ? messageLocal : messageNl} result={true}>
+            <output
+              style={{ backgroundColor: perc2color(minvalue, maxvalue, inputvalue, invert) }}
+              className={`block h-[3rem] w-[3rem] rounded-full border text-center leading-[3rem] shadow-[2px_2px_0_0]`}
+            >
+              {inputvalue}
+            </output>
+          </Tooltip>
+        </span>
+
         <span className="ml-2 w-[40px] italic">{unit}</span>
       </div>
     </React.Fragment>

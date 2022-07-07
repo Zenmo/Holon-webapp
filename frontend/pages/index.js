@@ -8,6 +8,18 @@ import ContentBlock from "../components/ContentBlock";
 import HolonButton from "../components/Buttons/HolonButton";
 
 export default function Home() {
+  const neighbourhood1 = {
+    heatpump: { value: "0", label: "Warmtepompen" },
+    evadoptation: { value: "70", label: "Elektrische auto's" },
+    solarpanels: { value: "40", label: "Zonnepanelen" },
+    heatnetwork: { value: false, label: "Warmtenet" },
+  };
+  const neighbourhood2 = {
+    heatpump: { value: "0", label: "Warmtepompen" },
+    evadoptation: { value: "70", label: "Elektrische auto's" },
+    solarpanels: { value: "60", label: "Zonnepanelen" },
+    heatnetwork: { value: true, label: "Warmtenet" },
+  };
   return (
     <div>
       <Head>
@@ -188,6 +200,8 @@ export default function Home() {
               solarpanels: "80",
               heatnetwork: true,
             }}
+            // neighbourhood1={neighbourhood1}
+            // neighbourhood2={neighbourhood2}
             windholon={true}
           />
         </ContentBlock>

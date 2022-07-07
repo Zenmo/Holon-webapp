@@ -11,6 +11,7 @@ function Neighbourhood(props) {
     <div>
       <h4 className="text-lg">Buurt {props.label}</h4>
       <ScenarioSlider
+        neighbourhoodID={props.neighbourhoodID}
         text="warmtepompen"
         label={props.label}
         disabled={props.locked}
@@ -20,6 +21,7 @@ function Neighbourhood(props) {
         message="Het percentage van de huizen in de buurt die een elektrische warmtepomp hebben,"
       />
       <ScenarioSlider
+        neighbourhoodID={props.neighbourhoodID}
         text="Elektrische auto's"
         label={props.label}
         disabled={props.locked}
@@ -29,6 +31,7 @@ function Neighbourhood(props) {
         message="Het percentage van de auto's in de buurt dat elektrisch is."
       />
       <ScenarioSlider
+        neighbourhoodID={props.neighbourhoodID}
         text="Zonnepanelen"
         label={props.label}
         disabled={props.locked}
@@ -38,6 +41,7 @@ function Neighbourhood(props) {
         message="Het percentage van de huizen in de buurt die zonnepanelen heeft."
       />
       <Scenarioswitch
+        neighbourhoodID={props.neighbourhoodID}
         text="Warmtenet"
         label={props.label}
         disabled={props.locked}

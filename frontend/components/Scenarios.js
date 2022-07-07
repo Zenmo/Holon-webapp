@@ -19,7 +19,7 @@ function Scenarios(props) {
   const [local, setLocal] = useState(true);
 
   const [reliability, setReliability] = useState(0);
-  const [sustainable, setSustainable] = useState(0);
+  const [energyconsumption, setEnergyconsumption] = useState(0);
   const [affordability, setAffordability] = useState(0);
   const [selfsufficient, setSelfsufficient] = useState(0);
 
@@ -55,9 +55,9 @@ function Scenarios(props) {
             national: props.calculationresults.national.reliability,
             local: props.calculationresults.local.reliability,
           }),
-          setSustainable({
-            national: props.calculationresults.national.sustainable,
-            local: props.calculationresults.local.sustainable,
+          setEnergyconsumption({
+            national: props.calculationresults.national.energyconsumption,
+            local: props.calculationresults.local.energyconsumption,
           }),
           setAffordability({
             national: props.calculationresults.national.affordability,
@@ -71,7 +71,7 @@ function Scenarios(props) {
             national: Math.floor(Math.random() * 100),
             local: Math.floor(Math.random() * 100),
           }),
-          setSustainable({
+          setEnergyconsumption({
             national: Math.floor(Math.random() * 10000),
             local: Math.floor(Math.random() * 10000),
           }),
@@ -113,7 +113,7 @@ function Scenarios(props) {
         <div
           className={
             props.locked
-              ? `${props.borderColor} border-8 border-solid bg-white p-2`
+              ? `${props.borderColor} border-[0.75rem] border-solid bg-white p-2`
               : "border-8 border-transparent p-2"
           }
         >
@@ -124,28 +124,30 @@ function Scenarios(props) {
                 <h3 className="mb-4 text-xl">Instellingen</h3>
                 <fieldset
                   disabled={props.locked || loading}
-                  className={props.locked && `cursor-not-allowed`}
+                  className={props.locked && `cursor-pointer`}
                 >
-                  <div>
+                  <div className={props.locked && ``}>
                     {neighbourhood1 && (
                       <Neighbourhood
-                        scenarioid={props.scenarioid}
-                        label="1"
+                        neighbourhoodID="A"
                         locked={props.locked}
                         neighbourhood={neighbourhood1}
                         setNeighbourhood={setNeighbourhood1}
+                        scenarioid={props.scenarioid}
                       />
                     )}
                     {neighbourhood2 && (
                       <Neighbourhood
-                        scenarioid={props.scenarioid}
-                        label="2"
+                        neighbourhoodID="B"
                         locked={props.locked}
                         neighbourhood={neighbourhood2}
                         setNeighbourhood={setNeighbourhood2}
+                        scenarioid={props.scenarioid}
                       />
                     )}
-                    <h5 className="text-lg">Juridisch</h5>
+                    <h4 className="my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-lg font-light">
+                      Juridisch
+                    </h4>
 
                     <div className="flex flex-col">
                       <label
@@ -160,11 +162,7 @@ function Scenarios(props) {
                           checked={heatholon}
                         />
                         <span className="mr-auto">Warmteholon</span>
-                        <Tooltip tooltipMessage=" De warmteholon is de coöperatie van   buurtbewoners die aangesloten zijn op het warmtenet. Zij worden eigenaar van   het warmtenet en regelen de centrale aansturing. Deze aansturing zorgt ervoor   dat de overschotten zonne-energie van de holon leden gebruikt worden om de   warmtepomp aan te zetten en buffer te vullen, en in combinatie met de   windholon ook die overschotten te gebruiken.">
-                          <span className="block h-[1rem] w-[1rem] rounded-full border bg-green-300 text-center leading-[1rem]">
-                            i
-                          </span>
-                        </Tooltip>
+                        <Tooltip tooltipMessage=" De warmteholon is de coöperatie van   buurtbewoners die aangesloten zijn op het warmtenet. Zij worden eigenaar van   het warmtenet en regelen de centrale aansturing. Deze aansturing zorgt ervoor   dat de overschotten zonne-energie van de holon leden gebruikt worden om de   warmtepomp aan te zetten en buffer te vullen, en in combinatie met de   windholon ook die overschotten te gebruiken."></Tooltip>
                       </label>
                       <label
                         htmlFor={`windholon${props.scenarioid}`}
@@ -178,11 +176,7 @@ function Scenarios(props) {
                           checked={windholon}
                         />
                         <span className="mr-auto">Windholon</span>
-                        <Tooltip tooltipMessage="De windholon is de coöperatie van buurtbewoners   die samen gaat investeren in een windturbine. Om deze te mogen bouwen in een   gebied met transportschaarste moeten de leden hun verbruik afstemmen op de   opwek van de windturbine. Hiermee ontlasten ze het HS/MS-station waar de   windturbine op aangesloten is.">
-                          <span className="block h-[1rem] w-[1rem] rounded-full border bg-green-300 text-center leading-[1rem]">
-                            i
-                          </span>
-                        </Tooltip>
+                        <Tooltip tooltipMessage="De windholon is de coöperatie van buurtbewoners   die samen gaat investeren in een windturbine. Om deze te mogen bouwen in een   gebied met transportschaarste moeten de leden hun verbruik afstemmen op de   opwek van de windturbine. Hiermee ontlasten ze het HS/MS-station waar de   windturbine op aangesloten is."></Tooltip>
                       </label>
                     </div>
                   </div>
@@ -194,7 +188,7 @@ function Scenarios(props) {
               <Scenarioresults
                 scenarioid={props.scenarioid}
                 reliability={reliability}
-                sustainable={sustainable}
+                energyconsumption={energyconsumption}
                 affordability={affordability}
                 selfsufficient={selfsufficient}
                 local={local}
