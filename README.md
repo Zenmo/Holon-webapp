@@ -65,3 +65,24 @@ docker-compose exec backend python manage.py createsuperuser
 ```
 
 After finishing all the steps, you can login on localhost:8000/admin
+
+
+## Deployment
+
+Deployment is automatically done with GitHub actions to the Azure portal, the following mapping between code and azure is done:
+
+- frontend: Azure Static Web App named 'holon-nextjs-frontend'
+- backend: Azure App Service named 'holon-backend'
+
+For Github the following variables are configured:
+
+- AZUREAPPSERVICE_PUBLISHPROFILE_C1BA75B35DEF43759E17CDB9F366E04C: The publish profile from the Azure App Service
+- AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_WATER_049BE5703: The API token from the Azure Static Web App
+- NEXT_PUBLIC_BACKEND_URL: The url for the deployed backend on Azure App
+
+In Azure the following variables are configured for the App Service:
+
+- DBHOST: Azure PostgreSQL host name
+- DBNAME: Database name
+- DBPASS: Database password
+- DBUSER: Database user name
