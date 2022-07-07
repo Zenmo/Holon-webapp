@@ -2,10 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
-  images: {
-    loader: 'imgix',
-    path: 'https://holontool.nl',
-    domains: ['holontool.nl']
+  experimental: {
+    images: {
+        unoptimized: true
+    }
   }
 };
 
