@@ -1,5 +1,5 @@
-import ScenarioSlider from "./Scenarioslider";
-import Scenarioswitch from "./Scenarioswitch";
+import ScenarioSlider from "./ScenarioSlider";
+import Scenarioswitch from "./ScenarioSwitch";
 
 function Neighbourhood(props) {
   function updateValue(property, value) {

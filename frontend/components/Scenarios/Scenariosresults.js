@@ -1,8 +1,8 @@
 import React from "react";
-import Scenarioresultitem from "./Scenarioresultitem";
-import Scenarioswitch from "./Scenarioswitch";
+import ScenarioResultItem from "./ScenarioResultItem";
+import ScenarioSwitch from "./ScenarioSwitch";
 
-function Scenarioresults(props) {
+function ScenarioResults(props) {
   return (
     <React.Fragment>
       <div className="relative flex flex-col">
@@ -14,7 +14,7 @@ function Scenarioresults(props) {
           >
             Resultaten
           </h3>
-          <Scenarioswitch
+          <ScenarioSwitch
             message="Het lokale schaalniveau laat de resultaten van   de beschreven case met twee voorbeeldbuurten zien. Het nationale schaalniveau   is een aggregatie van de indicatoren naar nationaal niveau door de buurten te   vermenigvuldigen met het aantal huizen in Nederland."
             text=""
             off="Nationaal"
@@ -30,7 +30,7 @@ function Scenarioresults(props) {
           <h4 className="my-4 basis-full border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">
             Indicatoren
           </h4>
-          <Scenarioresultitem
+          <ScenarioResultItem
             minvalue="0"
             maxvalue="100"
             label="Betrouwbaarheid"
@@ -40,7 +40,7 @@ function Scenarioresults(props) {
             messageNl="Betrouwbaarheid wordt bepaald door overbelasting van het laagspanningsnet. Bij een negatieve indicatie wordt het net regelmatig overbelast, bij een positieve indicatie is dit geen probleem."
             messageLocal="Betrouwbaarheid wordt bepaald door overbelasting   van het elektriciteitsnet. Bij een negatieve indicatie wordt het net   regelmatig overbelast, bij een positieve indicatie is dit geen probleem."
           />
-          <Scenarioresultitem
+          <ScenarioResultItem
             minvalue="1800"
             maxvalue="2400"
             invert
@@ -51,7 +51,7 @@ function Scenarioresults(props) {
             messageNl="De betaalbaarheid zijn de totale energiekosten van   alle huishouden per jaar bij elkaar. Hierbij worden autobrandstoffen,   aardgas, warmte en elektriciteit meegenomen. Van de duurzame bronnen die   gebouwd worden in de buurten wordt de LCOE genomen zodat investeringen ook   meetellen in de kosten. De overige elektriciteit gaat op basis van   marktprijzen."
             messageLocal="De betaalbaarheid zijn de energiekosten per   huishouden per jaar. Hierbij worden autobrandstoffen, aardgas, warmte en   elektriciteit meegenomen. Van de duurzame bronnen die gebouwd worden in de   buurten wordt de LCOE genomen zodat investeringen ook meetellen in de kosten.   De overige elektriciteit gaat op basis van marktprijzen."
           />
-          <Scenarioresultitem
+          <ScenarioResultItem
             minvalue="40"
             maxvalue="90"
             label="Zelfconsumptie"
@@ -61,7 +61,7 @@ function Scenarioresults(props) {
             messageNl="Zelfconsumptie is het aandeel van de lokaal   opgewekte energie die ook gelijktijdig lokaal gebruikt wordt. Een hoge   zelfconsumptie is nodig om netcongestie tegen te gaan door pieken in lokale   (duurzame) opwek."
             messageLocal="Zelfconsumptie is het aandeel van de lokaal   opgewekte energie die ook gelijktijdig lokaal gebruikt wordt. Een hoge   zelfconsumptie is nodig om netcongestie tegen te gaan door pieken in lokale   (duurzame) opwek. "
           />
-          <Scenarioresultitem
+          <ScenarioResultItem
             minvalue="10"
             maxvalue="50"
             label="Duurzaamheid"
@@ -126,4 +126,4 @@ function Scenarioresults(props) {
   );
 }
 
-export default Scenarioresults;
+export default ScenarioResults;

@@ -1,7 +1,7 @@
 import React from "react";
 import Tooltip from "./Tooltip";
 
-function Scenarioresultitem({
+function ScenarioResultItem({
   label,
   unit,
   value,
@@ -66,4 +66,4 @@ function Scenarioresultitem({
   );
 }
 
-export default Scenarioresultitem;
+export default ScenarioResultItem;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Scenarioresults from "./Scenarios/Scenariosresults";
+import ScenarioResults from "./Scenarios/ScenariosResults";
 import HolonButton from "../components/Buttons/HolonButton";
 import Loader from "./Scenarios/Loader";
 import Neighbourhood from "./Scenarios/Neighbourhood";
@@ -188,7 +188,7 @@ function Scenarios(props) {
             </div>
             <div className="w-[4px] bg-slate-300"></div>
             <div className="basis-full pl-4 md:basis-2/3">
-              <Scenarioresults
+              <ScenarioResults
                 scenarioid={props.scenarioid}
                 reliability={reliability}
                 selfconsumption={selfconsumption}
@@ -220,7 +220,7 @@ function Scenarios(props) {
                     )}
                   </React.Fragment>
                 )}
-              </Scenarioresults>
+              </ScenarioResults>
             </div>
           </div>
         </div>

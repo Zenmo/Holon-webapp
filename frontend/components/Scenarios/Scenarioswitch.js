@@ -1,7 +1,7 @@
 import React from "react";
 import Tooltip from "./Tooltip";
 
-function Scenarioswitch({
+function ScenarioSwitch({
   locked,
   neighbourhoodID,
   inputid,
@@ -46,4 +46,4 @@ function Scenarioswitch({
   );
 }
 
-export default Scenarioswitch;
+export default ScenarioSwitch;
