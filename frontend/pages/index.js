@@ -58,6 +58,7 @@ export default function Home() {
         <ContentBlock>
           <Scenarios
             locked
+            scenarioTitle="Het moet anders"
             borderColor="border-holon-slated-blue-300"
             neighbourhood1={neighbourhood1}
             neighbourhood2={neighbourhood2}
@@ -74,6 +75,7 @@ export default function Home() {
         <ContentBlock>
           <Scenarios
             locked
+            scenarioTitle="De windcoöperatie"
             right="true"
             borderColor="border-holon-gold-200"
             neighbourhood1={neighbourhood1}
@@ -87,6 +89,7 @@ export default function Home() {
         <ContentBlock>
           <Scenarios
             locked
+            scenarioTitle="Ook warmte een rol"
             borderColor="border-holon-blue-900"
             neighbourhood1={neighbourhood1}
             neighbourhood2={neighbourhood2}
@@ -103,6 +106,7 @@ export default function Home() {
         <ContentBlock>
           <Scenarios
             locked
+            scenarioTitle="Twee keer slimmer"
             borderColor="border-holon-gold-600"
             right="true"
             neighbourhood1={neighbourhood1}

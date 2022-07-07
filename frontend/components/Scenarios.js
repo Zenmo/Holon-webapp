@@ -77,7 +77,7 @@ function Scenarios(props) {
   function updateLocal(arg1, arg2) {
     setLocal(arg2);
   }
-
+  console.log(props.scenarioTitle);
   return (
     <React.Fragment>
       {props.locked && (
@@ -101,11 +101,15 @@ function Scenarios(props) {
               : "border-8 border-transparent p-2"
           }
         >
-          <h2 className="text-2xl">Twee keer slimmer</h2>
+          <h2 className="mb-4 text-5xl">{props.scenarioTitle}</h2>
           <div className="flex flex-col md:flex-row">
             <div className="basis-full pr-4 md:basis-1/3">
               <form className="">
-                <h3 className="mb-4 text-xl">Instellingen</h3>
+                <h3
+                  className={`${props.borderColor} mb-4 border-l-[0.75rem] pl-3 text-2xl font-medium italic`}
+                >
+                  uitgangspunten
+                </h3>
                 <fieldset
                   disabled={props.locked || loading}
                   className={props.locked && `cursor-pointer`}
@@ -128,7 +132,7 @@ function Scenarios(props) {
                       />
                     )}
                     <h4 className="my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-lg font-light">
-                      Juridisch
+                      Holonen
                     </h4>
 
                     <div className="flex flex-col">
