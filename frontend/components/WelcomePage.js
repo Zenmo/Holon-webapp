@@ -1,7 +1,12 @@
 import React from "react";
-import Link from "next/link";
+import Image from "next/image";
 
 import HolonButton from "./Buttons/HolonButton";
+
+import quintelLogo from "../public/Logos/quintel_logo.png";
+import tnoLogo from "../public/Logos/tno_logo.png";
+import wbLogo from "../public/Logos/WB_logo.png";
+import zenmoLogo from "../public/Logos/zenmo_logo.png";
 
 export default function WelcomePage() {
   return (
@@ -38,10 +43,10 @@ export default function WelcomePage() {
         </div>
       </div>
       <div className="mx-24 my-16 flex h-11 justify-between">
-        <img alt="Logo Zenmo" src="/Logos/zenmo_logo.png"></img>
-        <img alt="Logo TNO" src="/Logos/tno_logo.png"></img>
-        <img alt="Logo Witteveen+Bos" src="/Logos/WB_logo.png"></img>
-        <img alt="Logo Quintel" src="/Logos/quintel_logo.png"></img>
+        <Image alt="Logo Zenmo" src={zenmoLogo} />
+        <Image alt="Logo TNO" src={tnoLogo} />
+        <Image alt="Logo Witteveen+Bos" src={wbLogo} />
+        <Image alt="Logo Quintel" src={quintelLogo} />
       </div>
     </div>
   );
