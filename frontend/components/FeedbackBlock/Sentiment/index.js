@@ -8,7 +8,7 @@ export default function Sentiment() {
 
   useEffect(() => {
     setChoice(localStorage.getItem("holon_sentiment_value") || null);
-  });
+  }, []);
 
   const onChange = (selected) => {
     if (!selected) {
