@@ -46,18 +46,8 @@ export default function Home() {
             locked
             scenarioTitle="Het moet anders"
             borderColor="border-holon-slated-blue-300"
-            neighbourhood1={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "40",
-              heatnetwork: false,
-            }}
-            neighbourhood2={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "80",
-              heatnetwork: true,
-            }}
+            neighbourhood1={neighbourhood1}
+            neighbourhood2={neighbourhood2}
             calculationresults={{
               local: {
                 reliability: 100,
@@ -88,18 +78,8 @@ export default function Home() {
             scenarioTitle="De windcoöperatie"
             right="true"
             borderColor="border-holon-gold-200"
-            neighbourhood1={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "40",
-              heatnetwork: false,
-            }}
-            neighbourhood2={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "80",
-              heatnetwork: true,
-            }}
+            neighbourhood1={neighbourhood1}
+            neighbourhood2={neighbourhood2}
             windholon={true}
             calculationresults={{
               local: {
@@ -126,18 +106,8 @@ export default function Home() {
             locked
             scenarioTitle="Ook warmte een rol"
             borderColor="border-holon-blue-900"
-            neighbourhood1={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "40",
-              heatnetwork: false,
-            }}
-            neighbourhood2={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "80",
-              heatnetwork: true,
-            }}
+            neighbourhood1={neighbourhood1}
+            neighbourhood2={neighbourhood2}
             heatholon={true}
             calculationresults={{
               local: {
@@ -169,18 +139,8 @@ export default function Home() {
             scenarioTitle="Twee keer slimmer"
             borderColor="border-holon-gold-600"
             right="true"
-            neighbourhood1={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "40",
-              heatnetwork: false,
-            }}
-            neighbourhood2={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "80",
-              heatnetwork: true,
-            }}
+            neighbourhood1={neighbourhood1}
+            neighbourhood2={neighbourhood2}
             windholon={true}
             heatholon={true}
             calculationresults={{
@@ -212,18 +172,8 @@ export default function Home() {
         <ContentBlock>
           <Scenarios
             scenarioid="5"
-            neighbourhood1={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "40",
-              heatnetwork: false,
-            }}
-            neighbourhood2={{
-              heatpump: "0",
-              evadoptation: "70",
-              solarpanels: "80",
-              heatnetwork: true,
-            }}
+            neighbourhood1={neighbourhood1}
+            neighbourhood2={neighbourhood2}
             // neighbourhood1={neighbourhood1}
             // neighbourhood2={neighbourhood2}
             windholon={true}

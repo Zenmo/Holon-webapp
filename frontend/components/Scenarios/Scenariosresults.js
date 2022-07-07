@@ -74,7 +74,9 @@ function ScenarioResults(props) {
         </div>
         <div className="flex flex-row flex-wrap flex-nowrap gap-2">
           <div className="basis-full lg:basis-1/2">
-            <h4 className="text-lg">Sociaal</h4>
+            <h4 className="my-4 basis-full border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">
+              Sociaal
+            </h4>
             {props.windholon && props.heatholon ? (
               <p>
                 De sociale cohesie in de buurt is vrij laag en lokaal eigenaarschap van collectieve
@@ -97,7 +99,9 @@ function ScenarioResults(props) {
             )}
           </div>
           <div className="basis-full lg:basis-1/2">
-            <h4 className="text-lg">Juridisch</h4>
+            <h4 className="my-4 basis-full border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">
+              Juridisch
+            </h4>
             {props.windholon && props.heatholon ? (
               <p>
                 Het systeem loopt tegen zijn grenzen aan. In deze beginsituatie is er nog geen
