@@ -9,7 +9,7 @@ function ContentBlock(content) {
 
     return (
 
-        <div className={`snap-start h-screen + ${bgColor} flex justify-center items-center`} id={id}>
+        <div className={`snap-start h-screen ${bgColor} flex justify-center items-center relative`} id={id}>
             {contentOfBlock}
         </div>
     )
