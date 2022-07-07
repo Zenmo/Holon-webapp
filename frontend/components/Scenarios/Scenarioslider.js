@@ -14,7 +14,7 @@ function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, 
           type="range"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}
-          className="w-50 h-1 cursor-pointer appearance-none bg-black dark:bg-gray-700 "
+          className="w-50 h-1 cursor-not-allowed appearance-none bg-black dark:bg-gray-700 "
           min="0"
           max="100"
         />
@@ -24,7 +24,7 @@ function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, 
           type="number"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}
-          className="w-16 rounded-sm border-2 border-holon-blue-900 bg-white p-1 text-right text-holon-blue-900 shadow-holon-blue placeholder:font-light placeholder:italic placeholder:text-holon-slated-blue-300 disabled:text-slate-500"
+          className="w-16 cursor-not-allowed rounded-sm border-2 border-holon-blue-900 bg-white p-1 text-right text-holon-blue-900 shadow-holon-blue placeholder:font-light placeholder:italic placeholder:text-holon-slated-blue-300 disabled:text-slate-500"
           min="0"
           max="100"
         />

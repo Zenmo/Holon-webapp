@@ -16,7 +16,7 @@ function Scenarioswitch({ locked, neighbourhoodID, inputid, value, updatevalue, 
         className="flex items-center gap-1"
       >
         <small>{off}</small>
-        <span className=" relative mx-1">
+        <span className=" relative mx-1 cursor-not-allowed">
           <input
             disabled={locked}
             type="checkbox"
