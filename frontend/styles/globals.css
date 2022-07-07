@@ -15,16 +15,12 @@ body {
   scroll-behavior: smooth; 
 }
 
+a {
+  display: block; 
+}
+
 @layer base {
   body {
     @apply text-sm;
-  }
-
-  a {
-    @apply text-blue-600 no-underline;
-  }
-
-  a:hover {
-    @apply text-blue-700 underline underline-offset-1;
   }
 }

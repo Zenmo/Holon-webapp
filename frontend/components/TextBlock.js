@@ -2,13 +2,13 @@ import React from 'react';
 
 export default function TextBlock(content) {
 
-    let stylingRight = (content.right) ? "items-end text-right mr-24 border-r-8 pr-5" : "border-l-8 ml-24 pl-5";
-    let flexValue = (content.right) ? "justify-end" : "";
-    let value = (content.value) ? content.value : "default";
-    let borderColor = (content.borderColor) ? content.borderColor : "border-white";
-    let extraContent = (content.children) ? content.children : "";
-    let underlineTitle = (content.underlineTitle) ? "underline decoration-[16px] underline-offset-[-2px]" : "";
-    let colorUnderline = (content.colorUnderline) ? content.colorUnderline : "";
+    let stylingRight = (content.right) ? "items-end text-right mr-24 border-r-8 pr-5" : "border-l-8 ml-24 pl-5"; 
+    let flexValue = (content.right) ? "justify-end" : ""; 
+    let value = (content.value) ? content.value : "default";   
+    let borderColor = (content.borderColor) ? content.borderColor : "border-white"; 
+    let extraContent = (content.children) ? content.children : ""; 
+    let underlineTitle = (content.underlineTitle) ? "shadow-blue" : ""; 
+    let colorUnderline = (content.colorUnderline) ? content.colorUnderline : ""; 
 
 
     const texts = {
@@ -48,7 +48,7 @@ export default function TextBlock(content) {
             <div className={`w-3/4 flex flex-col border-solid ${borderColor} ${stylingRight}`}>
                 <h2 className={`mt-24 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>{texts[value]['title']}</h2>
                 <div className='mt-10 w-2/4 text-lg'>{createParagraphs(texts[value]['pText'])}</div>
-                <div className="mt-24 ">
+                <div className="mt-24 flex">
                     {extraContent}
                 </div>
             </div>
