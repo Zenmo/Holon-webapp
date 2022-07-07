@@ -74,7 +74,7 @@ export default function SubscriptionForm() {
         body: JSON.stringify(payload),
       });
 
-      const json = response.json();
+      const json = await response.json();
 
       if (response.status >= 400 && response.status < 500) {
         dispatch({ type: "reject", errors: json });
