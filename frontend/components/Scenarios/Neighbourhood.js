@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import ScenarioSlider from "./ScenarioSlider";
-import ScenarioSwitch from "./ScenarioSwitch";
+import ScenarioSlider from "./Scenarioslider";
+import ScenarioSwitch from "./Scenarioswitch";
 
 function Neighbourhood(props) {
   function updateValue(property, inputvalue) {

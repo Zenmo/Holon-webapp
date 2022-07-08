@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
-import ScenarioResults from "./Scenarios/ScenariosResults";
+import ScenarioResults from "./Scenarios/ScenarioResults";
 import HolonButton from "../components/Buttons/HolonButton";
 import Loader from "./Scenarios/Loader";
 import Neighbourhood from "./Scenarios/Neighbourhood";
