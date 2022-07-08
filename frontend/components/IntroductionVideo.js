@@ -6,7 +6,7 @@ export default function IntroductionVideo() {
     <div className="min-h-screen bg-holon-blue-900 text-white">
       <div className="mx-auto max-w-[600px]">
         <div className="relative mb-[2rem]">
-          <h2 className="mb-3 pt-[8rem] text-3xl font-bold">Introductie holarchie</h2>
+          <h2 className="mb-3 pt-[8rem] text-3xl font-bold">Introductie holontool.nl</h2>
           <iframe
             className="aspect-video w-full border-2 border-white"
             title="vimeo-player"
