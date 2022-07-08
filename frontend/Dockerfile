@@ -8,4 +8,4 @@ WORKDIR /app/frontend
 COPY package.json ./
 COPY package-lock.json ./
 
-RUN yarn
+RUN npm install
