@@ -13,7 +13,7 @@ function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, 
           type="range"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}
-          className={`w-50 h-1 ${
+          className={`h-1 w-3/5 ${
             locked && "cursor-not-allowed"
           } appearance-none bg-black dark:bg-gray-700 `}
           min="0"
