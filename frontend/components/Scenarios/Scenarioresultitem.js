@@ -60,7 +60,6 @@ function ScenarioResultItem({
 
     percentage = parseInt(percentage);
     var color = resultScale[percentage];
-    console.log(`${percentage} ${color}`);
 
     return color;
   }
@@ -75,6 +74,10 @@ function ScenarioResultItem({
       } else if (inputvalue == 0) {
         inputvalue = "\u2718";
       }
+    }
+
+    if (isNaN(inputvalue)) {
+      inputvalue = "";
     }
     return inputvalue;
   }
