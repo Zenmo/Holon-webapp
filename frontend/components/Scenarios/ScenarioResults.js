@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ScenarioResultItem from "./ScenarioResultItem";
+import ScenarioResultItem from "./Scenarioresultitem";
 import ScenarioSwitch from "./Scenarioswitch";
 
 function ScenarioResults(props) {
