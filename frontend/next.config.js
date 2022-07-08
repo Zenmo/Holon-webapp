@@ -4,9 +4,13 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     images: {
-        unoptimized: true
-    }
-  }
+      unoptimized: true,
+    },
+  },
+  i18n: {
+    locales: ["nl"],
+    defaultLocale: "nl",
+  },
 };
 
 module.exports = nextConfig;

@@ -14,6 +14,7 @@ function Neighbourhood(props) {
         Buurt {props.neighbourhoodID}
       </h4>
       <ScenarioSlider
+        scenarioid={props.scenarioid}
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.heatpump.label}
         value={props.neighbourhood.heatpump.value}
@@ -23,6 +24,7 @@ function Neighbourhood(props) {
         message="Het percentage van de huizen in de buurt die een elektrische warmtepomp hebben,"
       />
       <ScenarioSlider
+        scenarioid={props.scenarioid}
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.evadoptation.label}
         value={props.neighbourhood.evadoptation.value}
@@ -32,6 +34,7 @@ function Neighbourhood(props) {
         message="Het percentage van de auto's in de buurt dat elektrisch is."
       />
       <ScenarioSlider
+        scenarioid={props.scenarioid}
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.solarpanels.label}
         value={props.neighbourhood.solarpanels.value}
