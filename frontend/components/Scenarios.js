@@ -154,7 +154,7 @@ function Scenarios(props) {
                       Holonen
                     </h4>
 
-                    <div className="ml-6 flex flex-col gap-4">
+                    <div className="ml-20 mb-4 flex flex-col gap-4">
                       <label
                         htmlFor={`heatholon${props.scenarioid}`}
                         className="flex flex-row items-center gap-4"
