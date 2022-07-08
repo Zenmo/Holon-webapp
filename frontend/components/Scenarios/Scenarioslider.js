@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Tooltip from "./Tooltip";
 
 function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, label, message }) {
@@ -39,3 +40,16 @@ function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, 
 }
 
 export default ScenarioSlider;
+
+ScenarioSlider.propTypes = {
+  locked: PropTypes.bool,
+  neighbourhoodID: PropTypes.string,
+  inputid: PropTypes.string,
+  value: PropTypes.bool,
+  updatevalue: PropTypes.func,
+  on: PropTypes.string,
+  off: PropTypes.string,
+  label: PropTypes.string,
+  scenarioid: PropTypes.string,
+  message: PropTypes.string,
+};

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import ScenarioSlider from "./ScenarioSlider";
 import ScenarioSwitch from "./ScenarioSwitch";
 
@@ -55,3 +56,28 @@ function Neighbourhood(props) {
   );
 }
 export default Neighbourhood;
+
+Neighbourhood.propTypes = {
+  neighbourhood: PropTypes.shape({
+    heatpump: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    evadoptation: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    solarpanels: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    heatnetwork: PropTypes.shape({
+      value: PropTypes.bool,
+      label: PropTypes.string,
+    }),
+  }),
+  neighbourhoodID: PropTypes.string,
+  locked: PropTypes.bool,
+  setNeighbourhood: PropTypes.func,
+  scenarioid: PropTypes.string,
+};

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Tooltip from "./Tooltip";
 import { resultScale } from "./resultScale";
 
@@ -105,3 +106,30 @@ function ScenarioResultItem({
 }
 
 export default ScenarioResultItem;
+
+ScenarioResultItem.propTypes = {
+  children: PropTypes.object,
+  local: PropTypes.object,
+  borderColor: PropTypes.string,
+  scenarioid: PropTypes.string,
+  reliability: PropTypes.number,
+  affordability: PropTypes.number,
+  renewability: PropTypes.number,
+  selfconsumption: PropTypes.number,
+  setLocal: PropTypes.func,
+  windholon: PropTypes.bool,
+  heatholon: PropTypes.bool,
+
+  label: PropTypes.string,
+  unit: PropTypes.string,
+  value: PropTypes.object,
+  local: PropTypes.shape({
+    local: PropTypes.string,
+    national: PropTypes.string,
+  }),
+  invert: PropTypes.bool,
+  messageLocal: PropTypes.string,
+  messageNl: PropTypes.string,
+  minvalue: PropTypes.string,
+  maxvalue: PropTypes.string,
+};

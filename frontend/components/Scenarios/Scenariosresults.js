@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ScenarioResultItem from "./ScenarioResultItem";
 import ScenarioSwitch from "./ScenarioSwitch";
 
@@ -139,3 +140,18 @@ function ScenarioResults(props) {
 }
 
 export default ScenarioResults;
+
+ScenarioResults.propTypes = {
+  children: PropTypes.object,
+  local: PropTypes.object,
+  borderColor: PropTypes.string,
+  scenarioid: PropTypes.string,
+  reliability: PropTypes.number,
+  affordability: PropTypes.number,
+  renewability: PropTypes.number,
+  selfconsumption: PropTypes.number,
+  setLocal: PropTypes.func,
+  windholon: PropTypes.bool,
+  heatholon: PropTypes.bool,
+  right: PropTypes.string,
+};

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import ScenarioResults from "./Scenarios/ScenariosResults";
 import HolonButton from "../components/Buttons/HolonButton";
@@ -234,3 +235,64 @@ function Scenarios(props) {
 }
 
 export default Scenarios;
+
+Scenarios.propTypes = {
+  scenarioid: PropTypes.string,
+  locked: PropTypes.bool,
+  scenarioTitle: PropTypes.string,
+  borderColor: PropTypes.string,
+
+  neighbourhood1: PropTypes.shape({
+    heatpump: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    evadoptation: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    solarpanels: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    heatnetwork: PropTypes.shape({
+      value: PropTypes.bool,
+      label: PropTypes.string,
+    }),
+  }),
+  neighbourhood2: PropTypes.shape({
+    heatpump: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    evadoptation: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    solarpanels: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+    heatnetwork: PropTypes.shape({
+      value: PropTypes.bool,
+      label: PropTypes.string,
+    }),
+  }),
+  calculationresults: PropTypes.shape({
+    local: PropTypes.shape({
+      reliability: PropTypes.number,
+      affordability: PropTypes.number,
+      renewability: PropTypes.number,
+      selfconsumption: PropTypes.number,
+    }),
+    national: PropTypes.shape({
+      reliability: PropTypes.number,
+      affordability: PropTypes.number,
+      renewability: PropTypes.number,
+      selfconsumption: PropTypes.number,
+    }),
+  }),
+  windholon: PropTypes.bool,
+  heatholon: PropTypes.bool,
+  right: PropTypes.string,
+};

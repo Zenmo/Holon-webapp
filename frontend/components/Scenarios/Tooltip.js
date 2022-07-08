@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 function Tooltip({ tooltipMessage, result = false, children }) {
   const visualRepresentation = result ? (
     <span className="absolute right-0 top-0 block h-[1rem] w-[1rem] rounded-full border-2 border-holon-blue-900 bg-white text-center text-xs font-bold leading-[1rem] text-holon-blue-500 shadow-holon-blue-900">
@@ -23,3 +24,10 @@ function Tooltip({ tooltipMessage, result = false, children }) {
   );
 }
 export default Tooltip;
+
+Tooltip.propTypes = {
+  tooltipMessage: PropTypes.string,
+  result: PropTypes.bool,
+
+  children: PropTypes.object,
+};
