@@ -12,7 +12,7 @@ function ScenarioResults(props) {
           <h3
             className={`${props.borderColor} mb-4 border-l-[0.75rem] pl-3 text-2xl font-medium italic`}
           >
-            Resultaten
+            resultaten
           </h3>
           <ScenarioSwitch
             message="Het lokale schaalniveau laat de resultaten van   de beschreven case met twee voorbeeldbuurten zien. Het nationale schaalniveau   is een aggregatie van de indicatoren naar nationaal niveau door de buurten te   vermenigvuldigen met het aantal huizen in Nederland."

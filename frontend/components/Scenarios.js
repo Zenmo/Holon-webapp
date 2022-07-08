@@ -116,7 +116,9 @@ function Scenarios(props) {
               : "border-8 border-transparent p-2"
           }
         >
-          <h2 className="mb-4 text-5xl">{props.scenarioTitle}</h2>
+          <h2 className="mb-6 ml-6 text-5xl font-semibold text-holon-blue-900">
+            {props.scenarioTitle}
+          </h2>
           <div className="flex flex-col md:flex-row">
             <div className="basis-full pr-4 md:basis-1/3">
               <form className="">
@@ -152,10 +154,10 @@ function Scenarios(props) {
                       Holonen
                     </h4>
 
-                    <div className="flex flex-col">
+                    <div className="ml-6 flex flex-col gap-4">
                       <label
                         htmlFor={`heatholon${props.scenarioid}`}
-                        className="mb-2 flex flex-row items-center gap-2"
+                        className="flex flex-row items-center gap-4"
                       >
                         <input
                           type="checkbox"
@@ -163,13 +165,14 @@ function Scenarios(props) {
                           id={`heatholon${props.scenarioid}`}
                           onChange={(e) => setHeatholon(e.target.checked)}
                           checked={heatholon}
+                          className="h-5 w-5 appearance-none rounded-none border-2 border-holon-blue-900 from-inherit bg-contain bg-center shadow-[4px_4px_0_0] checked:bg-holon-blue-500"
                         />
                         <span className="mr-auto">Warmteholon</span>
                         <Tooltip tooltipMessage=" De warmteholon is de coöperatie van   buurtbewoners die aangesloten zijn op het warmtenet. Zij worden eigenaar van   het warmtenet en regelen de centrale aansturing. Deze aansturing zorgt ervoor   dat de overschotten zonne-energie van de holon leden gebruikt worden om de   warmtepomp aan te zetten en buffer te vullen, en in combinatie met de   windholon ook die overschotten te gebruiken."></Tooltip>
                       </label>
                       <label
                         htmlFor={`windholon${props.scenarioid}`}
-                        className="mb-2 flex flex-row items-center gap-2"
+                        className="flex flex-row items-center gap-4"
                       >
                         <input
                           type="checkbox"
@@ -177,6 +180,7 @@ function Scenarios(props) {
                           id={`windholon${props.scenarioid}`}
                           onChange={(e) => setWindholon(e.target.checked)}
                           checked={windholon}
+                          className="h-5 w-5 appearance-none rounded-none border-2 border-holon-blue-900 from-inherit bg-contain bg-center shadow-[4px_4px_0_0] checked:bg-holon-blue-500"
                         />
                         <span className="mr-auto">Windholon</span>
                         <Tooltip tooltipMessage="De windholon is de coöperatie van buurtbewoners   die samen gaat investeren in een windturbine. Om deze te mogen bouwen in een   gebied met transportschaarste moeten de leden hun verbruik afstemmen op de   opwek van de windturbine. Hiermee ontlasten ze het HS/MS-station waar de   windturbine op aangesloten is."></Tooltip>

@@ -22,6 +22,7 @@ function ScenarioSwitch({
         {label}
       </label>
 
+      <Tooltip tooltipMessage={message}></Tooltip>
       <label
         htmlFor={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
         className="flex items-center gap-1"
@@ -41,7 +42,6 @@ function ScenarioSwitch({
         </span>
         <small>{on}</small>
       </label>
-      <Tooltip tooltipMessage={message}></Tooltip>
     </div>
   );
 }
