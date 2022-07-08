@@ -34,7 +34,7 @@ export default function WelcomePage() {
           </p>
           <HolonButton
             tag="a"
-            href="https://holon-gas.netlify.app/"
+            href="https://gas.holontool.nl/"
             target="_blank"
             variant="darkblue"
           >
