@@ -25,7 +25,7 @@ export default function IntroductionVideo() {
           <HolonButton tag="a" href="#start" variant="darkmode">
             Aan de gang
           </HolonButton>
-          <HolonButton tag="a" href="" variant="darkmode">
+          <HolonButton tag="a" href="#feedback" variant="darkmode">
             Hou me op de hoogte
           </HolonButton>
         </div>
