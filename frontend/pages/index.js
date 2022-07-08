@@ -46,8 +46,18 @@ export default function Home() {
             locked
             scenarioTitle="Het moet anders"
             borderColor="border-holon-slated-blue-300"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
+            neighbourhood1={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatnetwork: { value: false, label: "Warmtenet" },
+            }}
+            neighbourhood2={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatnetwork: { value: true, label: "Warmtenet" },
+            }}
             calculationresults={{
               local: {
                 reliability: 100,
@@ -78,8 +88,18 @@ export default function Home() {
             scenarioTitle="De windcoöperatie"
             right="true"
             borderColor="border-holon-gold-200"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
+            neighbourhood1={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatnetwork: { value: false, label: "Warmtenet" },
+            }}
+            neighbourhood2={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatnetwork: { value: true, label: "Warmtenet" },
+            }}
             windholon={true}
             calculationresults={{
               local: {
@@ -106,8 +126,18 @@ export default function Home() {
             locked
             scenarioTitle="Ook warmte een rol"
             borderColor="border-holon-blue-900"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
+            neighbourhood1={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatnetwork: { value: false, label: "Warmtenet" },
+            }}
+            neighbourhood2={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatnetwork: { value: true, label: "Warmtenet" },
+            }}
             heatholon={true}
             calculationresults={{
               local: {
@@ -139,8 +169,18 @@ export default function Home() {
             scenarioTitle="Twee keer slimmer"
             borderColor="border-holon-gold-600"
             right="true"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
+            neighbourhood1={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatnetwork: { value: false, label: "Warmtenet" },
+            }}
+            neighbourhood2={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatnetwork: { value: true, label: "Warmtenet" },
+            }}
             windholon={true}
             heatholon={true}
             calculationresults={{
@@ -172,10 +212,18 @@ export default function Home() {
         <ContentBlock>
           <Scenarios
             scenarioid="5"
-            neighbourhood1={neighbourhood1}
-            neighbourhood2={neighbourhood2}
-            // neighbourhood1={neighbourhood1}
-            // neighbourhood2={neighbourhood2}
+            neighbourhood1={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatnetwork: { value: false, label: "Warmtenet" },
+            }}
+            neighbourhood2={{
+              heatpump: { value: "0", label: "Warmtepompen" },
+              evadoptation: { value: "70", label: "Elektrische auto's" },
+              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatnetwork: { value: true, label: "Warmtenet" },
+            }}
             windholon={true}
           />
         </ContentBlock>
