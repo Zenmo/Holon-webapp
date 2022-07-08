@@ -67,18 +67,19 @@ function ScenarioResultItem({
   const inputvalue = parseFloat(local ? value.local : value.national);
 
   function inputValueAltRepr(inputvalue) {
-    // Checks if the inputvalue should actually be a plus or minus sign
-    if (unit == " ") {
-      if (inputvalue == 100) {
-        inputvalue = "\u2713";
-      } else if (inputvalue == 0) {
-        inputvalue = "\u2718";
-      }
-    }
-
     if (isNaN(inputvalue)) {
       inputvalue = "";
     }
+
+    // Checks if the inputvalue should actually be a plus or minus sign
+    if (unit == " ") {
+      if (inputvalue == 100) {
+        inputvalue = "✔";
+      } else if (inputvalue == 0) {
+        inputvalue = "✗";
+      }
+    }
+
     return inputvalue;
   }
 
