@@ -38,7 +38,7 @@ export default function Home() {
           <IntroductionVideo />
         </ContentBlock>
         <ContentBlock colorClass="bg-split-blue-white"></ContentBlock>
-        <ContentBlock>
+        <ContentBlock  id="start">
           <TextBlock value="hoeDoen" borderColor="border-holon-slated-blue-300"></TextBlock>
         </ContentBlock>
         <ContentBlock>
@@ -206,11 +206,11 @@ export default function Home() {
             underlineTitle="true"
             colorUnderline="decoration-holon-slated-blue-300"
           >
-            <HolonButton variant="blue">Naar het open model</HolonButton>
-            <HolonButton variant="blue">Op de hoogte blijven</HolonButton>
+            <HolonButton tag="a" href="#openModel" variant="blue">Naar het open model</HolonButton>
+            <HolonButton tag="a" href="#feedback" variant="blue">Op de hoogte blijven</HolonButton>
           </TextBlock>
         </ContentBlock>
-        <ContentBlock>
+        <ContentBlock id="openModel">
           <Scenarios
             scenarioid="5"
             neighbourhood1={{
@@ -229,7 +229,7 @@ export default function Home() {
           />
         </ContentBlock>
         <ContentBlock colorClass="bg-split-white-blue"></ContentBlock>
-        <ContentBlock colorClass="bg-holon-blue-900">
+        <ContentBlock colorClass="bg-holon-blue-900" id="feedback">
           <FeedbackBlock />
         </ContentBlock>
       </main>
