@@ -67,6 +67,18 @@ function ScenarioResultItem({
 
   const inputvalue = parseFloat(local ? value.local : value.national);
 
+  function inputValueAltRepr(inputvalue) {
+    // Checks if the inputvalue should actually be a plus or minus sign
+    if (unit == " ") {
+      if (inputvalue == 100) {
+        inputvalue = "\u2713";
+      } else if (inputvalue == 0) {
+        inputvalue = "\u2718";
+      }
+    }
+    return inputvalue;
+  }
+
   return (
     <React.Fragment>
       <div className="mb-2 flex basis-6/12 flex-nowrap items-center justify-between py-1">
@@ -75,9 +87,9 @@ function ScenarioResultItem({
           <Tooltip tooltipMessage={local ? messageLocal : messageNl} result={true}>
             <output
               style={{ backgroundColor: per2colorArray(minvalue, maxvalue, inputvalue, invert) }}
-              className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center leading-[4.5rem] shadow-[2px_2px_0_0]`}
+              className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center text-lg font-medium italic leading-[4.5rem] shadow-[2px_2px_0_0]`}
             >
-              {inputvalue}
+              {inputValueAltRepr(inputvalue)}
             </output>
           </Tooltip>
         </span>

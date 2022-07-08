@@ -34,7 +34,7 @@ function ScenarioResults(props) {
             minvalue="0"
             maxvalue="100"
             label="Betrouwbaarheid"
-            unit="%"
+            unit=" " // if " " is supplied the result will be displayed as either + at 100 or - at 0
             value={props.reliability}
             local={props.local}
             messageNl="Betrouwbaarheid wordt bepaald door overbelasting van het laagspanningsnet. Bij een negatieve indicatie wordt het net regelmatig overbelast, bij een positieve indicatie is dit geen probleem."
@@ -55,7 +55,7 @@ function ScenarioResults(props) {
             maxvalue="2600"
             invert
             label="Betaalbaarheid"
-            unit="&euro;"
+            unit="&euro;/hh/j"
             value={props.affordability}
             local={props.local}
             messageNl="De betaalbaarheid zijn de totale energiekosten van   alle huishouden per jaar bij elkaar. Hierbij worden autobrandstoffen,   aardgas, warmte en elektriciteit meegenomen. Van de duurzame bronnen die   gebouwd worden in de buurten wordt de LCOE genomen zodat investeringen ook   meetellen in de kosten. De overige elektriciteit gaat op basis van   marktprijzen."
@@ -63,7 +63,7 @@ function ScenarioResults(props) {
           />
           <ScenarioResultItem
             minvalue="10"
-            maxvalue="50"
+            maxvalue="35"
             label="Duurzaamheid"
             unit="%"
             value={props.renewability}
