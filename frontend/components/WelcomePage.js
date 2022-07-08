@@ -13,7 +13,7 @@ export default function WelcomePage() {
     <div className="flex-col items-start">
       <div className="flex flex-col items-center justify-center">
         <h1 className="mx-6 pb-3 text-center text-6xl font-semibold shadow-golden">Welkom!</h1>
-        <p className="mt-8 text-lg">HOLON en de kunst van het Loslaten</p>
+        <p className="mt-8 text-lg">HOLON en de kunst van het loslaten</p>
       </div>
       <div className="mt-4 flex justify-center">
         <div className="m-8 w-1/3">
