@@ -37,7 +37,7 @@ services:
     command: npm run dev
     volumes:
       - ./frontend:/app/frontend
-      - /app/frontend/node_modules
+      - node_modules:/app/frontend/node_modules
     ports:
       - 3000:3000
 
@@ -56,3 +56,4 @@ services:
 volumes:
   static:
   postgres_data:
+  node_modules:

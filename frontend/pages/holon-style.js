@@ -2,7 +2,7 @@ import { Fragment } from "react";
 
 import HolonButton from "../components/Buttons/HolonButton";
 import InputElement from "../components/InputElement";
-import EmoticonButton from "../components/Buttons/EmoticonButton";
+import EmoticonButton from "../components/FeedbackBlock/Sentiment/EmoticonButton";
 
 export default function HolonStyle() {
   return (
@@ -11,6 +11,7 @@ export default function HolonStyle() {
         <h1 className="mt-6 text-center text-6xl font-semibold lg:text-left">
           Demo of <a href="">holontool.nl</a> styling!
         </h1>
+
         {/* Start of dark section*/}
         <div className="mt-10 w-full bg-holon-blue-900 p-6 text-white lg:w-8/12 ">
           <span className="m-3 text-lg font-bold">Dark theme</span>
@@ -28,9 +29,11 @@ export default function HolonStyle() {
           <div className="container flex flex-col items-center gap-3 lg:flex-row">
             <HolonButton variant="darkmode">Test</HolonButton>
             <InputElement
+              variant="outline"
               label="email"
               placeholder="j.j.jansen@hetnet.nl"
               id="email"
+              type="email"
             ></InputElement>
             <InputElement label="naam" placeholder="Jan Jansen" id="name"></InputElement>
 
@@ -50,6 +53,34 @@ export default function HolonStyle() {
             <HolonButton variant="gold">Test me like a daddy</HolonButton>
             <HolonButton variant="blue">Hello is you there?</HolonButton>
             <HolonButton variant="darkblue">This is my life</HolonButton>
+          </div>
+          {/* Start of 1 row */}
+          <div className="container flex flex-col items-center gap-3 lg:flex-row">
+            <HolonButton variant="blue"> this is a dark button </HolonButton>
+            <HolonButton variant="blue"> cookies of the dark side </HolonButton>
+            <EmoticonButton variant="heart"></EmoticonButton>
+            <EmoticonButton variant="thumbsup"></EmoticonButton>
+            <EmoticonButton variant="even"></EmoticonButton>
+            <EmoticonButton variant="thumbsdown"></EmoticonButton>
+          </div>
+          {/* Start of 2 row */}
+          <div className="container flex flex-col items-center gap-3 lg:flex-row">
+            <HolonButton variant="blue">Test</HolonButton>
+            <InputElement placeholder="j.j.jansen@hetnet.nl" type="email" id="email"></InputElement>
+            <InputElement
+              variant="outline"
+              label="naam"
+              placeholder="Jan Jansen"
+              id="name"
+            ></InputElement>
+
+            <InputElement
+              label="bedrijf"
+              type="text"
+              placeholder="Grootschtroom BV"
+              id="organisation"
+              required={false}
+            ></InputElement>
           </div>
         </div>
       </main>

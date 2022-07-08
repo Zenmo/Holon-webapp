@@ -1,18 +1,19 @@
 import React from "react";
 
 function ContentBlock(content) {
+  let id = content.id ? content.id : "";
 
-    let id = (content.id) ? content.id : "";
+  let bgColor = content.colorClass ? content.colorClass : "";
+  let contentOfBlock = content.children ? content.children : "";
 
-    let bgColor = (content.colorClass) ? content.colorClass : "";
-    let contentOfBlock = (content.children) ? content.children : "";
-
-    return (
-
-        <div className={`snap-start h-screen + ${bgColor} flex justify-center items-center`} id={id}>
-            {contentOfBlock}
-        </div>
-    )
-};
+  return (
+    <div
+      className={`min-h-screen snap-start ${bgColor} relative flex items-center justify-center`}
+      id={id}
+    >
+      {contentOfBlock}
+    </div>
+  );
+}
 
 export default ContentBlock;
