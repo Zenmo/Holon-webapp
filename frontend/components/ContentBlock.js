@@ -7,7 +7,10 @@ function ContentBlock(content) {
   let contentOfBlock = content.children ? content.children : "";
 
   return (
-    <div className={`min-h-screen snap-start ${bgColor} flex items-center justify-center`} id={id}>
+    <div
+      className={`min-h-screen snap-start ${bgColor} relative flex items-center justify-center`}
+      id={id}
+    >
       {contentOfBlock}
     </div>
   );
