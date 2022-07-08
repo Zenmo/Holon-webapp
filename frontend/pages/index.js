@@ -229,6 +229,9 @@ export default function Home() {
           />
         </ContentBlock>
         <ContentBlock colorClass="bg-split-white-blue"></ContentBlock>
+        <ContentBlock colorClass="bg-holon-blue-900">
+          <FeedbackBlock />
+        </ContentBlock>
       </main>
     </div>
   );
