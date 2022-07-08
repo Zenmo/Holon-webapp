@@ -22,8 +22,12 @@ export default function IntroductionVideo() {
         </div>
         <h3 className="mb-[2rem] text-center text-2xl italic">Hebben we je interesse?</h3>
         <div className="flex gap-[1rem]">
-          <HolonButton tag="a" href="#start" variant="darkmode">Aan de gang</HolonButton>
-          <HolonButton tag="a" href="" variant="darkmode">Hou me op de hoogte</HolonButton>
+          <HolonButton tag="a" href="#start" variant="darkmode">
+            Aan de gang
+          </HolonButton>
+          <HolonButton tag="a" href="" variant="darkmode">
+            Hou me op de hoogte
+          </HolonButton>
         </div>
       </div>
     </div>
