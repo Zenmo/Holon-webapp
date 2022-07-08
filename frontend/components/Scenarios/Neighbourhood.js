@@ -1,10 +1,10 @@
 import ScenarioSlider from "./ScenarioSlider";
-import Scenarioswitch from "./ScenarioSwitch";
+import ScenarioSwitch from "./ScenarioSwitch";
 
 function Neighbourhood(props) {
-  function updateValue(property, value) {
-    props.neighbourhood[property] = value;
-    props.setNeighbourhood({ ...props.neighbourhood, property: value });
+  function updateValue(property, inputvalue) {
+    props.neighbourhood[property].value = inputvalue;
+    props.setNeighbourhood({ ...props.neighbourhood, property: props.neighbourhood[property] });
   }
 
   return (
@@ -39,7 +39,7 @@ function Neighbourhood(props) {
         updatevalue={updateValue}
         message="Het percentage van de huizen in de buurt die zonnepanelen heeft."
       />
-      <Scenarioswitch
+      <ScenarioSwitch
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.heatnetwork.label}
         value={props.neighbourhood.heatnetwork.value}
