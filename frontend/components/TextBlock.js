@@ -53,7 +53,7 @@ export default function TextBlock(content) {
   }
 
   return (
-    <div className={`m-10 flex h-screen w-screen ${flexValue}`}>
+    <div className={`mx-10 flex h-screen w-screen ${flexValue}`}>
       <div className={`flex w-3/4 flex-col border-solid ${borderColor} ${stylingRight}`}>
         <h2 className={`mt-24 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>
           {texts[value]["title"]}

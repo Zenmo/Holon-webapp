@@ -2,7 +2,7 @@ import { Fragment } from "react";
 
 import HolonButton from "../components/Buttons/HolonButton";
 import InputElement from "../components/InputElement";
-import EmoticonButton from "../components/Buttons/EmoticonButton";
+import EmoticonButton from "../components/FeedbackBlock/Sentiment/EmoticonButton";
 
 export default function HolonStyle() {
   return (

@@ -8,7 +8,7 @@ function ContentBlock(content) {
 
   return (
     <div
-      className={`h-screen snap-start ${bgColor} relative flex items-center justify-center`}
+      className={`min-h-screen snap-start ${bgColor} relative flex items-center justify-center`}
       id={id}
     >
       {contentOfBlock}

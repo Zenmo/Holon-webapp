@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from "react";
+import PropTypes from "prop-types";
 
 const holonshadow = "shadow-[4px_4px_0_0] border";
 
@@ -38,6 +39,11 @@ export default function Button({ children, variant = "default", ...rest }) {
     </button>
   );
 }
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  variant: PropTypes.oneOf(Object.keys(variants)),
+};
 
 /**
  * Hook which provides access to the button variant.

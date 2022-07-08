@@ -1,11 +1,12 @@
 import Head from "next/head";
 import Scenarios from "../components/Scenarios";
-import IntroductionVideo from "../components/IntroductionVideo";
 
+import ContentBlock from "../components/ContentBlock";
+import FeedbackBlock from "../components/FeedbackBlock";
+import HolonButton from "../components/Buttons/HolonButton";
+import IntroductionVideo from "../components/IntroductionVideo";
 import TextBlock from "../components/TextBlock";
 import WelcomePage from "../components/WelcomePage";
-import ContentBlock from "../components/ContentBlock";
-import HolonButton from "../components/Buttons/HolonButton";
 
 export default function Home() {
   const neighbourhood1 = {
