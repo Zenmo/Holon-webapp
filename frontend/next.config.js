@@ -7,10 +7,6 @@ const nextConfig = {
       unoptimized: true,
     },
   },
-  i18n: {
-    locales: ["nl"],
-    defaultLocale: "nl",
-  },
 };
 
 module.exports = nextConfig;
