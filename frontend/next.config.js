@@ -4,9 +4,9 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     images: {
-        unoptimized: true
-    }
-  }
+      unoptimized: true,
+    },
+  },
 };
 
 module.exports = nextConfig;

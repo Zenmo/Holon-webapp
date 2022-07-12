@@ -18,7 +18,7 @@ export default function WelcomePage() {
       </div>
       <div className="mt-4 flex justify-center">
         <div className="m-8 w-1/3">
-          <h2 className="pb-3 text-4xl lg:text-5xl xl:text-6xl shadow-golden">Energietransitie</h2>
+          <h2 className="pb-3 text-4xl shadow-golden lg:text-5xl xl:text-6xl">Energietransitie</h2>
           <p className="my-8 w-4/5">
             We hebben nu een centraal gestuurd energiesysteem. Dat is aan het veranderen. Hoe ziet
             het energiesysteem van de toekomst eruit?
@@ -28,7 +28,7 @@ export default function WelcomePage() {
           </HolonButton>
         </div>
         <div className="m-8 w-1/3">
-          <h2 className="pb-3 text-4xl lg:text-5xl xl:text-6xl shadow-blue">Russisch gas</h2>
+          <h2 className="pb-3 text-4xl shadow-blue lg:text-5xl xl:text-6xl">Russisch gas</h2>
           <p className="my-8 w-4/5">
             We willen snel een alternatief voor aardgas uit Rusland. Welke mogelijkheden zijn er
             binnen Europa en wat is de rol van Nederland?
@@ -37,6 +37,7 @@ export default function WelcomePage() {
             tag="a"
             href="https://gas.holontool.nl/"
             target="_blank"
+            rel="noreferrer noopener"
             variant="darkblue"
           >
             Naar de tool
