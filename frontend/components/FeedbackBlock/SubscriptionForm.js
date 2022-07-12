@@ -1,5 +1,6 @@
 import { useReducer, useRef } from "react";
 import PropTypes from "prop-types";
+import Link from "next/link"; 
 
 import { MailIcon } from "@heroicons/react/outline";
 
@@ -124,7 +125,8 @@ export default function SubscriptionForm() {
           />
         </div>
       </div>
-      <div className="flex w-full justify-center pb-16">
+      <div className="flex flex-col w-full justify-center items-center pb-16">
+        <p className="text-center">Door het indienen van deze informatie stemt u in met onze <Link href="/privacy"><a>privacyverklaring</a></Link></p>
         <SubmitButton status={state.status} />
       </div>
       <p className="flex w-full justify-center text-base">
