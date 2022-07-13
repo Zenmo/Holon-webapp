@@ -13,7 +13,7 @@ Kamer van Koophandel:
  Zenmo B.V.
  nummer: 71609113
 
- Contact inzake privacy: [david@zenmo.com](mailto:david@zenmo.com)
+ Contact inzake privacy: [privacy@holontool.nl](mailto:privacy@holontool.nl)
 
 In deze verklaring vertellen we je hoe we met je gegevens omgaan.
 
