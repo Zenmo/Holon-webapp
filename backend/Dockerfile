@@ -14,12 +14,14 @@ RUN apt install -y netcat
 RUN apt install -y libpq-dev gcc
 
 # install dependencies
+
 RUN pip install --upgrade pip setuptools wheel
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-# copy project
+
 COPY . .
+RUN chmod +x /app/backend/docker/entrypoint.sh
 
 # run entrypoint.sh
 ENTRYPOINT ["/app/backend/docker/entrypoint.sh"]
