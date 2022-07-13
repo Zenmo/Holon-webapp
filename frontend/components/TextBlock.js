@@ -19,7 +19,7 @@ export default function TextBlock(content) {
     hoeDoen: {
       title: "Het moet anders",
       pText:
-        "Om aan internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. Daardoor wordt de productie weersafhankelijk en meer kleinschalig. Het energiesysteem verandert ingrijpend. Met holonen kunnen we het energiesysteem op een nieuwe manier organiseren, waar deelnemers ook zelf verantwoordelijkheden hebben. \nHolontool.nl maakt het mogelijk om dit te onderzoeken. Deze demo laat aan de hand van twee voorbeeldbuurten zien wat er gebeurt als de bewoners van deze buurten samen holonen gaan vormen.\nIn de beginsituatie heeft buurt A een traditioneel warmtenet en buurt B CV-ketels. Veel bewoners hebben bovendien zonnepanelen en een elektrische auto. Scroll verder om de uitgangspunten en resultaten van de beginsituatie te bekijken.",
+        "Om aan internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. Met meer lokale autonomie kunnen we draagvlak vergroten en knelpunten als een overbelast elektriciteitsnet aanpakken. Wij laten ons daarbij inspireren door het concept holarchie. \nHolontool.nl maakt het mogelijk om dit te onderzoeken. Deze demo laat aan de hand van twee voorbeeldbuurten zien wat er gebeurt als de bewoners van deze buurten samen een zogenaamde holon vormen: een semi-autonoom energiesysteem. Zo kunnen ze bijvoorbeeld meer duurzame energie inzetten en toch de netbelasting verlagen.\nIn de beginsituatie heeft buurt A een traditioneel warmtenet en buurt B CV-ketels. Veel bewoners hebben bovendien zonnepanelen en een elektrische auto. Scroll verder om de uitgangspunten en resultaten van de beginsituatie te bekijken.",
     },
     slimmerSamenwerken: {
       title: "De windcoöperatie",
@@ -27,9 +27,9 @@ export default function TextBlock(content) {
         "De buurtbewoners willen meer duurzame energie opwekken. Hiervoor hebben zij een energiecoöperatie gevormd en investeren ze in een windturbine. Wegens transportschaarste op het hoogspanningsnet krijgen ze geen aansluiting op het elektriciteitsnet.\nAls oplossing wil de windcoöperatie lokale flexibiliteit inzetten zodat de productie van de windturbine zo veel mogelijk meteen lokaal gebruikt wordt. De buurtbewoners bekijken of ze de transformator kunnen ontlasten door hun elektrische auto's te laden wanneer er een overschot windenergie is.",
     },
     warmte: {
-      title: "Ook warmte een rol",
+      title: "De rol van warmte",
       pText:
-        "Het warmtenet van buurt B wordt in de beginsituatie verwarmd met een gasketel. De buurtbewoners willen graag van het gas af. Dit realiseren ze door met elkaar een coöperatie te vormen en het warmtenet over te nemen. De centrale gasketel wordt vervangen door een warmtepomp. Ter ondersteuning van deze nieuwe techniek plaatsen de bewoners ook een piekketel en een warmtebuffer.\nDe bewoners willen hun warmtevraag zo duurzaam en lokaal mogelijk voldoen met hun eigen zonnepanelen. Daarvoor gebruiken de bewoners een slimme centrale aansturing. Deze zet alle lokaal overtollige zonne-energie in om de warmtebuffer te vullen met de warmtepomp.",
+        "Het warmtenet van buurt B wordt in de beginsituatie verwarmd met een gasketel. De buurtbewoners willen graag van het gas af. Ze vomen een coöperatie die het warmtenet overneemt en vervangen de centrale gasketel door een warmtepomp. Ter ondersteuning van deze nieuwe techniek plaatsen de bewoners ook een warmtebuffer.\nDe bewoners willen hun warmtevraag zo duurzaam en lokaal mogelijk voldoen met hun eigen zonnepanelen. Daarvoor gebruiken de bewoners een slimme centrale aansturing. Deze zet alle lokaal overtollige zonne-energie in om de warmtebuffer te vullen met de warmtepomp en bij extreme zonnepieken met directe elektrische verwarming.",
     },
     tweeKeerSlimmer: {
       title: "Twee keer slimmer",
@@ -39,7 +39,7 @@ export default function TextBlock(content) {
     afsluiter: {
       title: "Het kan anders",
       pText:
-        "Slim samenwerken in en tussen holonen kan helpen. De netten worden minder belast en er is meer ruimte voor lokaal eigenaarschap en energiecoöperaties.\nEchter, het creëren van een holon heeft vele uitdagingen. Van technische aansturing tot juridische mogelijkheden.\nOpen het model om hier zelf mee te spelen of laat je email achter en blijf op de hoogte.",
+        "Slim samenwerken in en tussen holonen kan helpen. De netten worden minder belast en er is meer ruimte voor lokaal eigenaarschap en energiecoöperaties.\nEchter, het creëren van een holon heeft vele uitdagingen. Niet alleen technisch maar ook juridisch, sociaal en economisch. \nOpen het model om hier zelf mee te spelen of laat je email achter en blijf op de hoogte.",
     },
   };
 
