@@ -1,5 +1,7 @@
 #%%
 import anylogiccloudclient
+from anylogiccloudclient.client.inputs import Inputs
+from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from anylogiccloudclient.client.cloud_client import CloudClient
 
 client = CloudClient(
@@ -19,7 +21,7 @@ outputs = modelrun.get_outputs_and_run_if_absent()
 
 
 def set_inputs(
-    inputs: anylogiccloudclient.client.inputs.Inputs,
+    inputs: Inputs,
     neighbourhood1: dict,
     neighbourhood2: dict,
     heatholon: bool,
@@ -69,7 +71,7 @@ def round_or_unknown(name: str) -> str:
     return safe_value
 
 
-def get_results(outputs: anylogiccloudclient.client.single_run_outputs.SingleRunOutputs) -> dict:
+def get_results(outputs: SingleRunOutputs) -> dict:
 
     results = {"local": {}, "national": {}}
     for name in outputs.names():
