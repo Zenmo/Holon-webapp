@@ -13,12 +13,12 @@ export default function WelcomePage() {
     <div className="flex-col items-start">
       <div className="flex flex-col items-center justify-center">
         <h1 className="mx-6 pb-3 text-center text-6xl font-semibold shadow-golden">Welkom!</h1>
-        <p className="mt-8 text-lg">HOLON en de kunst van het loslaten</p>
+        <p className="mt-8 text-xl">HOLON en de kunst van het loslaten</p>
       </div>
       <div className="mt-4 flex justify-center">
         <div className="m-8 w-1/3">
           <h2 className="pb-3 text-4xl shadow-golden lg:text-5xl xl:text-6xl">Energietransitie</h2>
-          <p className="my-8 w-4/5">
+          <p className="my-8 w-4/5 text-lg">
             We hebben nu een centraal gestuurd energiesysteem. Dat is aan het veranderen. Hoe ziet
             het energiesysteem van de toekomst eruit?
           </p>
@@ -28,7 +28,7 @@ export default function WelcomePage() {
         </div>
         <div className="m-8 w-1/3">
           <h2 className="pb-3 text-4xl shadow-blue lg:text-5xl xl:text-6xl">Russisch gas</h2>
-          <p className="my-8 w-4/5">
+          <p className="my-8 w-4/5 text-lg">
             We willen snel een alternatief voor aardgas uit Rusland. Welke mogelijkheden zijn er
             binnen Europa en wat is de rol van Nederland?
           </p>
