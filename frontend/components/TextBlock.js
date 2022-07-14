@@ -52,11 +52,26 @@ export default function TextBlock(content) {
   };
 
   const images = {
-    hoeDoen: overview,
-    slimmerSamenwerken: expansionproblem_w_wind,
-    warmte: heatholon,
-    tweeKeerSlimmer: animation,
-    afsluiter: netherlandspuzzle,
+    hoeDoen: {
+      img: overview, 
+      alt: "schematisch overzicht huidig energiesysteem",
+    },
+    slimmerSamenwerken: {
+      img: expansionproblem_w_wind,
+      alt: "schematisch overzicht probleem en mogelijkheden windcoöperatie",
+    },
+    warmte: {
+      img:  heatholon, 
+      alt: "schematisch overzicht mogelijkheden warmte", 
+    },
+    tweeKeerSlimmer: {
+      img: animation, 
+      alt: "schematisch overzicht samenkomst warmte- en windholon",
+    },
+    afsluiter:{
+      img:  netherlandspuzzle, 
+      alt: "Nederland en de puzzel van holonen",
+    },
   };
 
   function createParagraphs(texts) {
@@ -80,7 +95,7 @@ export default function TextBlock(content) {
             <div className="mt-24 flex">{extraContent}</div>
           </div>
           <div className="w-7/12 p-10">
-            <Image src={images[value]} />
+            <Image src={images[value].img} alt={images[value].alt} />
           </div>
         </div>
       </div>
