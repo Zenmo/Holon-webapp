@@ -1,13 +1,9 @@
 import React from "react";
-import Image from "next/image";
-
-import expansionproblem from "../public/imgs/Expansion Problem Windholon.svg";
 
 export default function TextBlock(content) {
   let stylingRight = content.right
     ? "items-end text-right mr-24 border-r-8 pr-5"
     : "border-l-8 ml-24 pl-5";
-  let imageTextFlex = content.right ? "flex-row-reverse" : "flex-row";
   let flexValue = content.right ? "justify-end" : "";
   let value = content.value ? content.value : "default";
   let borderColor = content.borderColor ? content.borderColor : "border-white";
@@ -58,16 +54,12 @@ export default function TextBlock(content) {
 
   return (
     <div className={`mx-10 flex h-screen w-screen ${flexValue}`}>
-      <div className={`flex w-10/12 flex-col border-solid ${borderColor} ${stylingRight}`}>
+      <div className={`flex w-3/4 flex-col border-solid ${borderColor} ${stylingRight}`}>
         <h2 className={`mt-24 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>
           {texts[value]["title"]}
         </h2>
-        <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
-          <div className="w-1/2 text-lg">{createParagraphs(texts[value]["pText"])}</div>
-          <div className="mt-10 w-1/2">
-            <Image src={expansionproblem} />
-          </div>
-        </div>
+        <div className="mt-10 w-2/4 text-lg">{createParagraphs(texts[value]["pText"])}</div>
+        <div className="mt-24 flex">{extraContent}</div>
       </div>
     </div>
   );
