@@ -35,8 +35,27 @@ function Scenarios(props) {
     props.heatholon && setHeatholon(props.heatholon);
     props.windholon && setWindholon(props.windholon);
 
-    // start calculating when all ingredients are there to calculate
-    props.neighbourhood1 && props.neighbourhood2 && triggercalculate();
+    props.calculationresults
+      ? (setReliability({
+          national: props.calculationresults.national.reliability,
+          local: props.calculationresults.local.reliability,
+        }),
+        props.calculationresults &&
+          setSelfconsumption({
+            national: props.calculationresults.national.selfconsumption,
+            local: props.calculationresults.local.selfconsumption,
+          }),
+        props.calculationresults &&
+          setAffordability({
+            national: props.calculationresults.national.affordability,
+            local: props.calculationresults.local.affordability,
+          }),
+        props.calculationresults &&
+          setRenewability({
+            national: props.calculationresults.national.renewability,
+            local: props.calculationresults.local.renewability,
+          }))
+      : triggercalculate();
   }, []);
 
   async function triggercalculate(e) {
@@ -47,46 +66,58 @@ function Scenarios(props) {
 
     setLoading(true);
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-      setUncalculatedScenario(false);
+    //object with data to push to the api
+    const data = {
+      neighbourhood1: {
+        evadoptation: neighbourhood1
+          ? neighbourhood1.evadoptation.value
+          : props.neighbourhood1.evadoptation.value,
+        solarpanels: neighbourhood1
+          ? neighbourhood1.solarpanels.value
+          : props.neighbourhood1.solarpanels.value,
+      },
+      neighbourhood2: {
+        evadoptation: neighbourhood2
+          ? neighbourhood2.evadoptation.value
+          : props.neighbourhood2.evadoptation.value,
+        solarpanels: neighbourhood2
+          ? neighbourhood2.solarpanels.value
+          : props.neighbourhood2.solarpanels.value,
+      },
+      heatholon: heatholon,
+      windholon: windholon,
+    };
 
-      props.calculationresults
-        ? (setReliability({
-            national: props.calculationresults.national.reliability,
-            local: props.calculationresults.local.reliability,
-          }),
-          setSelfconsumption({
-            national: props.calculationresults.national.selfconsumption,
-            local: props.calculationresults.local.selfconsumption,
-          }),
-          setAffordability({
-            national: props.calculationresults.national.affordability,
-            local: props.calculationresults.local.affordability,
-          }),
-          setRenewability({
-            national: props.calculationresults.national.renewability,
-            local: props.calculationresults.local.renewability,
-          }))
-        : (setReliability({
-            national: Math.floor(Math.random() * 100),
-            local: Math.floor(Math.random() * 100),
-          }),
-          setSelfconsumption({
-            national: Math.floor(Math.random() * 10000),
-            local: Math.floor(Math.random() * 10000),
-          }),
-          setAffordability({
-            national: Math.floor(Math.random() * 10000),
-            local: Math.floor(Math.random() * 10000),
-          }),
-          setRenewability({
-            national: Math.floor(Math.random() * 100),
-            local: Math.floor(Math.random() * 100),
-          }));
-    }, 2000);
+    fetch("/calculations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        //update values with response data, something like this
 
-    return () => clearTimeout(timer);
+        // setReliability({
+        //   national: res.data.national.reliability,
+        //   local: res.data.local.reliability,
+        // }),
+        // setSelfconsumption({
+        //   national: res.data.national.selfconsumption,
+        //   local: res.data.local.selfconsumption,
+        // }),
+        // setAffordability({
+        //   national: res.data.national.affordability,
+        //   local: res.data.local.affordability,
+        // }),
+        // setRenewability({
+        //   national: res.data.national.renewability,
+        //   local: res.data.local.renewability,
+        // });
+        setLoading(false);
+        setUncalculatedScenario(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function updateLocal(arg1, arg2) {
