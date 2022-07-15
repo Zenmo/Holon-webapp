@@ -17,11 +17,11 @@ def set_inputs(
     windholon: bool,
 ) -> dict:
     TRANLATES_INPUTS = {
-        "P buurt A evs": neighbourhood1["evadoptation"],
-        "P_buurtA_warmtepompen": neighbourhood1["heatpumps"],
-        "P buurt A pv": neighbourhood1["solarpanels"],
-        "P buurt B evs": neighbourhood2["evadoptation"],
-        "P buurt B pv": neighbourhood2["solarpanels"],
+        "P buurt A evs": int(neighbourhood1["evadoptation"]),
+        "P_buurtA_warmtepompen": int(neighbourhood1["heatpumps"]),
+        "P buurt A pv": int(neighbourhood1["solarpanels"]),
+        "P buurt B evs": int(neighbourhood2["evadoptation"]),
+        "P buurt B pv": int(neighbourhood2["solarpanels"]),
         "P warmte holon": heatholon,
         "P wind holon": windholon,
     }

@@ -75,6 +75,9 @@ function Scenarios(props) {
         solarpanels: neighbourhood1
           ? neighbourhood1.solarpanels.value
           : props.neighbourhood1.solarpanels.value,
+        heatpumps: neighbourhood1
+          ? neighbourhood1.heatpump.value
+          : props.neighbourhood1.heatpump.value,
       },
       neighbourhood2: {
         evadoptation: neighbourhood2
@@ -88,30 +91,32 @@ function Scenarios(props) {
       windholon: windholon,
     };
 
-    fetch("/calculations", {
-      method: "POST",
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/calculation/`, {
       headers: { "Content-Type": "application/json" },
+      method: "POST",
       body: JSON.stringify(data),
     })
-      .then((res) => {
+      .then((response) => response.json())
+      .then((data) => {
         //update values with response data, something like this
 
-        // setReliability({
-        //   national: res.data.national.reliability,
-        //   local: res.data.local.reliability,
-        // }),
-        // setSelfconsumption({
-        //   national: res.data.national.selfconsumption,
-        //   local: res.data.local.selfconsumption,
-        // }),
-        // setAffordability({
-        //   national: res.data.national.affordability,
-        //   local: res.data.local.affordability,
-        // }),
-        // setRenewability({
-        //   national: res.data.national.renewability,
-        //   local: res.data.local.renewability,
-        // });
+        console.log(data);
+        setReliability({
+          national: data.national.reliability,
+          local: data.local.reliability,
+        }),
+          setSelfconsumption({
+            national: data.national.selfconsumption,
+            local: data.local.selfconsumption,
+          }),
+          setAffordability({
+            national: data.national.affordability,
+            local: data.local.affordability,
+          }),
+          setRenewability({
+            national: data.national.renewability,
+            local: data.local.renewability,
+          });
         setLoading(false);
         setUncalculatedScenario(false);
       })
