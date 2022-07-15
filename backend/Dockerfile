@@ -22,8 +22,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 RUN chmod +x /app/backend/docker/entrypoint.sh
-RUN sed -i 's/\r$//' /app/backend/docker/entrypoint.sh  && \  
-    chmod +x /app/backend/docker/entrypoint.sh
 
 
 # run entrypoint.sh
