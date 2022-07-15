@@ -125,7 +125,7 @@ export default function Home() {
           <Scenarios
             scenarioid="3"
             locked
-            scenarioTitle="Ook warmte een rol"
+            scenarioTitle="De rol van warmte"
             borderColor="border-holon-blue-900"
             neighbourhood1={{
               heatpump: { value: "0", label: "Warmtepompen" },
