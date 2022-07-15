@@ -44,7 +44,7 @@ def map_anylogickey_to_api_key(al_key: str) -> str:
     return al_key
 
 
-def round_or_unknown(name: str) -> str:
+def round_or_unknown(outputs: SingleRunOutputs, name: str) -> str:
 
     # for now betrouwbaarheid should remain unknown
     if "betrouwbaarheid" in name:
@@ -62,9 +62,9 @@ def get_results(outputs: SingleRunOutputs) -> dict:
     for name in outputs.names():
 
         if "lokaal" in name:
-            results["local"].update({map_anylogickey_to_api_key(name): round_or_unknown(name)})
+            results["local"].update({map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)})
         if "nationaal" in name:
-            results["national"].update({map_anylogickey_to_api_key(name): round_or_unknown(name)})
+            results["national"].update({map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)})
 
     return results
 
