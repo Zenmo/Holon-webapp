@@ -8,6 +8,7 @@ import os
 # Intended for Holon buurt model, experiment version 9
 # https://cloud.anylogic.com/model/e67557cd-da4c-46c0-997b-2c61bd7470bc?mode=SETTINGS&tab=GENERAL
 
+
 def set_inputs(
     inputs: Inputs,
     neighbourhood1: dict,
@@ -66,20 +67,21 @@ def get_results(outputs: SingleRunOutputs) -> dict:
     for name in outputs.names():
 
         if "lokaal" in name:
-            results["local"].update({map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)})
+            results["local"].update(
+                {map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)}
+            )
         if "nationaal" in name:
-            results["national"].update({map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)})
+            results["national"].update(
+                {map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)}
+            )
 
     return results
 
 
 def handle_request(request: dict) -> dict:
     "Convience method to handle the requested data"
-    
 
-    client = CloudClient(
-        os.environ.get("AL_API_KEY")
-    )
+    client = CloudClient(os.environ.get("AL_API_KEY"))
 
     model = client.get_model_by_name("Holon buurt model")
     version = client.get_latest_model_version(model)
@@ -101,4 +103,25 @@ def handle_request(request: dict) -> dict:
     return results
 
 
+MOCK_RESULTS = {
+    "local": {
+        "affordability": "5817",
+        "reliability": "?",
+        "renewability": "5",
+        "selfconsumption": "60",
+    },
+    "national": {
+        "affordability": "5817",
+        "reliability": "?",
+        "renewability": "5",
+        "selfconsumption": "60",
+    },
+}
 
+
+MOCK_REQUEST = {
+    "neighbourhood1": {"evadoptation": 70, "solarpanels": 40, "heatpumps": 0},
+    "neighbourhood2": {"evadoptation": 70, "solarpanels": 60},
+    "heatholon": False,
+    "windholon": False,
+}
