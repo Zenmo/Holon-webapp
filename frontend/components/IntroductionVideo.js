@@ -10,7 +10,7 @@ export default function IntroductionVideo() {
           <iframe
             className="aspect-video w-full border-2 border-white"
             title="vimeo-player"
-            src="https://player.vimeo.com/video/727346453?loop=1&amp;byline=0&amp;title=0&amp;dnt=1"
+            src="https://player.vimeo.com/video/727346453?&amp;byline=0&amp;title=0&amp;dnt=1"
           ></iframe>
           <p className="absolute right-full top-[12rem] mr-[1rem] w-[200px] rotate-[-6deg] text-lg italic">
             Met holonen kun je het energiesysteem op een nieuwe manier organiseren. In deze
