@@ -40,10 +40,6 @@ a {
   opacity: 1;
 }
 
-.slider:disabled {
-  background-color: lightgrey;
-}
-
 .slider::-webkit-slider-thumb {
   width: 8px;
   height: 25px;
