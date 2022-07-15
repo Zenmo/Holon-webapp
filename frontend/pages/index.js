@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Scenarios from "../components/Scenarios";
+import Script from "next/script";
 
 import ContentBlock from "../components/ContentBlock";
 import FeedbackBlock from "../components/FeedbackBlock";
@@ -30,6 +31,20 @@ export default function Home() {
       </Head>
 
       <main className="h-screen snap-y snap-mandatory overflow-y-auto">
+        {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-EHMXV36KJV"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-EHMXV36KJV');
+        `}
+        </Script>
         <ContentBlock>
           <WelcomePage></WelcomePage>
         </ContentBlock>
