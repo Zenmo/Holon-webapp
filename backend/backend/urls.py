@@ -33,6 +33,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("calculation/", calculationView),
 ]
+
 if settings.DEBUG:
     from drf_yasg.views import get_schema_view
     from drf_yasg import openapi

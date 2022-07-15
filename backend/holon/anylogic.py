@@ -2,7 +2,11 @@
 from anylogiccloudclient.client.inputs import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from anylogiccloudclient.client.cloud_client import CloudClient
+import os
 
+
+# Intended for Holon buurt model, experiment version 9
+# https://cloud.anylogic.com/model/e67557cd-da4c-46c0-997b-2c61bd7470bc?mode=SETTINGS&tab=GENERAL
 
 def set_inputs(
     inputs: Inputs,
@@ -69,11 +73,13 @@ def get_results(outputs: SingleRunOutputs) -> dict:
     return results
 
 
-def handle_request(request):
+def handle_request(request: dict) -> dict:
+    "Convience method to handle the requested data"
+    
 
     client = CloudClient(
-        "f105b75c-4265-4c79-ab36-a9d6e7532fc0"
-    )  # key is included in .env but docker doesn't work for me rn
+        os.environ.get("AL_API_KEY")
+    )
 
     model = client.get_model_by_name("Holon buurt model")
     version = client.get_latest_model_version(model)
@@ -95,9 +101,4 @@ def handle_request(request):
     return results
 
 
-MOCK_REQUEST = {
-    "neighbourhood1": {"evadoptation": 70, "solarpanels": 40, "heatpumps": 0},
-    "neighbourhood2": {"evadoptation": 70, "solarpanels": 60},
-    "heatholon": False,
-    "windholon": False,
-}
+
