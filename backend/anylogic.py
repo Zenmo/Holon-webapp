@@ -1,23 +1,7 @@
 #%%
-import anylogiccloudclient
 from anylogiccloudclient.client.inputs import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from anylogiccloudclient.client.cloud_client import CloudClient
-
-client = CloudClient(
-    "f105b75c-4265-4c79-ab36-a9d6e7532fc0"
-)  # key is included in .env but docker doesn't work for me rn
-
-model = client.get_model_by_name("Holon buurt model")
-version = client.get_latest_model_version(model)
-inputs = client.create_inputs_from_experiment(version, "Experiment")
-
-
-modelrun = client.create_simulation(inputs)
-outputs = modelrun.get_outputs_and_run_if_absent()
-
-
-#%%
 
 
 def set_inputs(
@@ -29,6 +13,7 @@ def set_inputs(
 ) -> dict:
     TRANLATES_INPUTS = {
         "P buurt A evs": neighbourhood1["evadoptation"],
+        "P_buurtA_warmtepompen": neighbourhood1["heatpumps"],
         "P buurt A pv": neighbourhood1["solarpanels"],
         "P buurt B evs": neighbourhood2["evadoptation"],
         "P buurt B pv": neighbourhood2["solarpanels"],
@@ -66,7 +51,7 @@ def round_or_unknown(name: str) -> str:
         safe_value = "?"
     else:
         value = outputs.value(name)
-        safe_value = str(int(float(value)))  # weird type converts to round number
+        safe_value = "{:.0f}".format(float(value))  # weird type converts to round number
 
     return safe_value
 
@@ -110,12 +95,9 @@ def handle_request(request):
     return results
 
 
-mock_request = {
-    "neighbourhood1": {"evadoptation": 70, "solarpanels": 50},
-    "neighbourhood2": {"evadoptation": 70, "solarpanels": 50},
-    "heatholon": True,
+MOCK_REQUEST = {
+    "neighbourhood1": {"evadoptation": 70, "solarpanels": 40, "heatpumps": 0},
+    "neighbourhood2": {"evadoptation": 70, "solarpanels": 60},
+    "heatholon": False,
     "windholon": False,
 }
-
-
-results = handle_request(mock_request)

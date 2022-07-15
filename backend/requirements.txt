@@ -29,3 +29,4 @@ typing_extensions==4.2.0
 uritemplate==4.1.1
 urllib3==1.26.9
 whitenoise
+jsonfield==3.1.0
