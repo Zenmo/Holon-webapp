@@ -26,7 +26,7 @@ function ScenarioSlider({
           disabled={locked}
           className={`h-1 w-3/5 ${
             locked && "cursor-not-allowed"
-          } appearance-none bg-black dark:bg-gray-700 `}
+          } slider appearance-none disabled:bg-holon-grey-300`}
           min="0"
           max="100"
         />
