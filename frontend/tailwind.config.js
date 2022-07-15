@@ -4,6 +4,7 @@ module.exports = {
   safelist: [
     {
       pattern: /order-/,
+      variants: ["sm"],
     },
   ],
   theme: {
