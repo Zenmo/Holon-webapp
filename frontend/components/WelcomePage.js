@@ -19,8 +19,9 @@ export default function WelcomePage() {
         <div className="m-8 w-1/3">
           <h2 className="pb-3 text-4xl shadow-golden lg:text-5xl xl:text-6xl">Energietransitie</h2>
           <p className="my-8 w-4/5">
-            We hebben nu een centraal gestuurd energiesysteem. Dat is aan het veranderen. Hoe ziet
-            het energiesysteem van de toekomst eruit?
+            We hebben nu een centraal gestuurd energiesysteem. Holontool.nl geeft inzicht in hoe we
+            kunnen overstappen op een systeem met meer lokale autonomie dat optimaal ruimte biedt
+            aan duurzame energie.
           </p>
           <HolonButton tag="a" variant="gold" href="#introVideo">
             Vertel me meer!
@@ -39,7 +40,7 @@ export default function WelcomePage() {
             rel="noreferrer noopener"
             variant="darkblue"
           >
-            Naar de tool
+            Meer over Russisch gas
           </HolonButton>
         </div>
       </div>

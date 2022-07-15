@@ -1,7 +1,7 @@
 import React from 'react'; 
 
 import ContentBlock from '../components/ContentBlock'; 
-import PrivacyMarkdown from '../content/privacy_page.md'; 
+import PrivacyMarkdown from '../public/mdfiles/privacy_page.md'; 
 
 
 export default function PrivacyStatement(){
