@@ -13,8 +13,7 @@ export default function IntroductionVideo() {
             src="https://player.vimeo.com/video/727346453?&amp;byline=0&amp;title=0&amp;dnt=1"
           ></iframe>
           <p className="absolute right-full top-[12rem] mr-[1rem] w-[200px] rotate-[-6deg] text-lg italic">
-            Met holonen kun je het energiesysteem op een nieuwe manier organiseren. In deze
-            introductievideo leggen we uit hoe dat werkt.
+            Wij zoeken beleidsmakers geinteresseerd in lokale autonomie. Deze video licht het toe.
             <i className="text-normal absolute top-full right-[1rem]  text-[5rem] not-italic leading-[5rem]">
               ⤷
             </i>
@@ -26,7 +25,7 @@ export default function IntroductionVideo() {
             Naar de demo
           </HolonButton>
           <HolonButton tag="a" href="#feedback" variant="darkmode">
-            Hou me op de hoogte
+            Hou me alleen op de hoogte
           </HolonButton>
         </div>
       </div>

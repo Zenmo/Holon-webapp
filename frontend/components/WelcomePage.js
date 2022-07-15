@@ -79,8 +79,9 @@ export default function WelcomePage() {
         </div>
         <Block flexOrder={2}>
           <ContentColumn header="Energietransitie">
-            We hebben nu een centraal gestuurd energiesysteem. Dat is aan het veranderen. Hoe ziet
-            het energiesysteem van de toekomst eruit?
+            We hebben nu een centraal gestuurd energiesysteem. Holontool.nl geeft inzicht in hoe we
+            kunnen overstappen op een systeem met meer lokale autonomie dat optimaal ruimte biedt
+            aan duurzame energie.
           </ContentColumn>
         </Block>
         <Block flexOrder={3} mobileFlexOrder={4} className="pt-16 sm:pt-0">
@@ -108,7 +109,7 @@ export default function WelcomePage() {
             variant="darkblue"
             className="mx-auto text-base md:mx-0"
           >
-            Naar de tool
+            Meer over Russisch gas
           </HolonButton>
         </Block>
       </div>
