@@ -23,7 +23,7 @@ export default function Button({
 
   return (
     <Tag
-      className={`${className} ${colorClasses} relative m-2 w-72 rounded-md border-2 p-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
+      className={`${className} ${colorClasses} relative w-72 rounded-md border-2 p-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
       {...rest}
     >
       <ButtonContext.Provider value={variant}>{children}</ButtonContext.Provider>
