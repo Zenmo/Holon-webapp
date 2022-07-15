@@ -53,7 +53,7 @@ export default function TextBlock(content) {
 
   const images = {
     hoeDoen: {
-      img: overview, 
+      img: overview,
       alt: "schematisch overzicht huidig energiesysteem",
     },
     slimmerSamenwerken: {
@@ -61,16 +61,16 @@ export default function TextBlock(content) {
       alt: "schematisch overzicht probleem en mogelijkheden windcoöperatie",
     },
     warmte: {
-      img:  heatholon, 
-      alt: "schematisch overzicht mogelijkheden warmte", 
+      img: heatholon,
+      alt: "schematisch overzicht mogelijkheden slim samenwerken met warmte",
     },
     tweeKeerSlimmer: {
-      img: animation, 
-      alt: "schematisch overzicht samenkomst warmte- en windholon",
+      img: animation,
+      alt: "schematisch overzicht samenkomst warmte- en windcoorporatie",
     },
-    afsluiter:{
-      img:  netherlandspuzzle, 
-      alt: "Nederland en de puzzel van holonen",
+    afsluiter: {
+      img: netherlandspuzzle,
+      alt: "Nederland en de puzzel van lokale autonomie",
     },
   };
 
