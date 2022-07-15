@@ -1,9 +1,17 @@
 import React from "react";
+import Image from "next/image";
+
+import overview from "../public/imgs/Overview.svg";
+import expansionproblem_w_wind from "../public/imgs/Expansion Problem Windholon.svg";
+import heatholon from "../public/imgs/Warmteholon.svg";
+import animation from "../public/imgs/Sprint-6-Case-animation.gif";
+import netherlandspuzzle from "../public/imgs/Nederland met Holonen.svg";
 
 export default function TextBlock(content) {
   let stylingRight = content.right
     ? "items-end text-right mr-24 border-r-8 pr-5"
     : "border-l-8 ml-24 pl-5";
+  let imageTextFlex = content.right ? "flex-row-reverse" : "flex-row";
   let flexValue = content.right ? "justify-end" : "";
   let value = content.value ? content.value : "default";
   let borderColor = content.borderColor ? content.borderColor : "border-white";
@@ -43,6 +51,29 @@ export default function TextBlock(content) {
     },
   };
 
+  const images = {
+    hoeDoen: {
+      img: overview,
+      alt: "schematisch overzicht huidig energiesysteem",
+    },
+    slimmerSamenwerken: {
+      img: expansionproblem_w_wind,
+      alt: "schematisch overzicht probleem en mogelijkheden windcoöperatie",
+    },
+    warmte: {
+      img: heatholon,
+      alt: "schematisch overzicht mogelijkheden slim samenwerken met warmte",
+    },
+    tweeKeerSlimmer: {
+      img: animation,
+      alt: "schematisch overzicht samenkomst warmte- en windcoorporatie",
+    },
+    afsluiter: {
+      img: netherlandspuzzle,
+      alt: "Nederland en de puzzel van lokale autonomie",
+    },
+  };
+
   function createParagraphs(texts) {
     const paragraphs = texts.split("\n").map((str, index) => (
       <p key={index} className="mt-4">
@@ -54,12 +85,19 @@ export default function TextBlock(content) {
 
   return (
     <div className={`mx-10 flex h-screen w-screen ${flexValue}`}>
-      <div className={`flex w-3/4 flex-col border-solid ${borderColor} ${stylingRight}`}>
+      <div className={`flex w-full flex-col border-solid ${borderColor} ${stylingRight}`}>
         <h2 className={`mt-24 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>
           {texts[value]["title"]}
         </h2>
-        <div className="mt-10 w-2/4 text-lg">{createParagraphs(texts[value]["pText"])}</div>
-        <div className="mt-24 flex">{extraContent}</div>
+        <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
+          <div className="flex w-5/12 flex-col">
+            <div className="text-lg">{createParagraphs(texts[value]["pText"])}</div>
+            <div className="mt-24 flex">{extraContent}</div>
+          </div>
+          <div className="w-7/12 p-10">
+            <Image src={images[value].img} alt={images[value].alt} />
+          </div>
+        </div>
       </div>
     </div>
   );
