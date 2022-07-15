@@ -40,6 +40,10 @@ a {
   opacity: 1;
 }
 
+.slider:disabled {
+  background-color: lightgrey;
+}
+
 .slider::-webkit-slider-thumb {
   width: 8px;
   height: 25px;
@@ -53,6 +57,10 @@ a {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
   cursor: pointer;
+}
+
+.slider:disabled::-webkit-slider-thumb {
+  background-color: grey;
 }
 
 .slider::-moz-range-thumb {
