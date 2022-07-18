@@ -5,6 +5,7 @@ import HolonButton from "../components/Buttons/HolonButton";
 import Neighbourhood from "./Scenarios/Neighbourhood";
 import Tooltip from "./Scenarios/Tooltip";
 import ProgressBar from "./Scenarios/ProgressBar";
+import Loader from "./Scenarios/Loader";
 
 function Scenarios(props) {
   const [loading, setLoading] = useState(false);
