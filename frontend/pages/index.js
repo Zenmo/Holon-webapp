@@ -38,7 +38,7 @@ export default function Home() {
           <IntroductionVideo />
         </ContentBlock>
         <ContentBlock colorClass="bg-split-blue-white"></ContentBlock>
-        <ContentBlock  id="start">
+        <ContentBlock id="start">
           <TextBlock value="hoeDoen" borderColor="border-holon-slated-blue-300"></TextBlock>
         </ContentBlock>
         <ContentBlock>
@@ -125,7 +125,7 @@ export default function Home() {
           <Scenarios
             scenarioid="3"
             locked
-            scenarioTitle="Ook warmte een rol"
+            scenarioTitle="De rol van warmte"
             borderColor="border-holon-blue-900"
             neighbourhood1={{
               heatpump: { value: "0", label: "Warmtepompen" },
@@ -206,8 +206,12 @@ export default function Home() {
             underlineTitle="true"
             colorUnderline="decoration-holon-slated-blue-300"
           >
-            <HolonButton tag="a" href="#openModel" variant="blue">Naar het open model</HolonButton>
-            <HolonButton tag="a" href="#feedback" variant="blue">Op de hoogte blijven</HolonButton>
+            <HolonButton tag="a" href="#openModel" variant="blue">
+              Naar het open model
+            </HolonButton>
+            <HolonButton tag="a" href="#feedback" variant="blue">
+              Op de hoogte blijven
+            </HolonButton>
           </TextBlock>
         </ContentBlock>
         <ContentBlock id="openModel">

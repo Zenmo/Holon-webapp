@@ -2,15 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 import Tooltip from "./Tooltip";
 
-function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, label, message }) {
+function ScenarioSlider({
+  neighbourhoodID,
+  locked,
+  inputid,
+  value,
+  updatevalue,
+  label,
+  message,
+  scenarioid,
+}) {
   return (
     <div className="mb-2 flex flex-row items-center justify-between gap-2">
-      <label htmlFor={`scenario${(inputid, neighbourhoodID)}slider`} className="flex">
+      <label htmlFor={`scenario${inputid}${neighbourhoodID}${scenarioid}slider`} className="flex">
         {label}
       </label>
       <div className="flex flex-row items-center justify-between gap-2">
         <input
-          id={`scenario${(inputid, neighbourhoodID)}slider`}
+          id={`scenario${inputid}${neighbourhoodID}${scenarioid}slider`}
           type="range"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}
@@ -21,8 +30,9 @@ function ScenarioSlider({ neighbourhoodID, locked, inputid, value, updatevalue, 
           max="100"
         />
         <input
+          aria-label={`${label} input`}
           disabled={locked}
-          id={`scenario${inputid}number`}
+          id={`scenario${inputid}${neighbourhoodID}${scenarioid}number`}
           type="number"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}

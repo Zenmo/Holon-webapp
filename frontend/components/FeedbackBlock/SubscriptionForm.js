@@ -124,8 +124,14 @@ export default function SubscriptionForm() {
           />
         </div>
       </div>
-      <div className="flex w-full justify-center pb-16">
+      <div className="flex w-full flex-col items-center justify-center pb-16">
         <SubmitButton status={state.status} />
+        <p className="mt-6 text-center text-xs">
+          Met het indienen van deze informatie stem je in met onze&nbsp;
+          <a className="inline underline" href="/privacy" target="_blank" rel="noreferrer noopener">
+            privacyverklaring
+          </a>
+        </p>
       </div>
       <p className="flex w-full justify-center text-base">
         <a

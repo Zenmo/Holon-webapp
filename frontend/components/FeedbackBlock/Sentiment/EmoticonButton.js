@@ -79,6 +79,7 @@ export default function EmoticonButton({ children, checked, variant = "thumbsdow
   return (
     <button
       {...rest}
+      aria-label={variant}
       className={`aspect-square h-20 w-20 rounded-full border-2 transition hover:border-white hover:text-white focus:border-white focus:text-white ${colors}`}
     >
       {svg}
