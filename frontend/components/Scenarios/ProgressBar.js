@@ -2,22 +2,6 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Loader from "./Loader";
 
-const useCountdown = (targetDate) => {
-  const countDownDate = new Date(targetDate).getTime();
-
-  const [countDown, setCountDown] = useState(countDownDate - new Date().getTime());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCountDown(countDownDate - new Date().getTime());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [countDownDate]);
-
-  return getReturnValues(countDown);
-};
-
 function ProgressBar({ duration, label }) {
   const [progress, setProgress] = useState(0);
 
@@ -59,5 +43,10 @@ function ProgressBar({ duration, label }) {
     </div>
   );
 }
+
+ProgressBar.propTypes = {
+  duration: PropTypes.number,
+  label: PropTypes.string,
+};
 
 export default ProgressBar;
