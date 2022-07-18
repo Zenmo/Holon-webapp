@@ -6,6 +6,7 @@ import Loader from "./Scenarios/Loader";
 import Neighbourhood from "./Scenarios/Neighbourhood";
 import Tooltip from "./Scenarios/Tooltip";
 import ProgressBar from "./Scenarios/ProgressBar";
+import Loader from "./Scenarios/Loader";
 
 function Scenarios({
   neighbourhood1: initialNeighbourhood1,
