@@ -8,7 +8,6 @@ function ProgressBar({ duration, label }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(progress + 1);
-      console.log(progress);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -16,7 +15,6 @@ function ProgressBar({ duration, label }) {
 
   function determineProgress(i, duration) {
     var currentProgress = Math.round((i / duration) * 100);
-    console.log(currentProgress);
     if (currentProgress > 100) {
       currentProgress = 100;
     }
