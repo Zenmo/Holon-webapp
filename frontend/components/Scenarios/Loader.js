@@ -2,7 +2,7 @@ function Loader() {
   return (
     <svg
       role="status"
-      className="mr-2 h-8 w-8 animate-spin fill-holon-blue-900 text-gray-200 dark:text-gray-600"
+      className="mr-2 h-8 w-8 animate-spin fill-holon-blue-900 text-holon-slated-blue-300"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

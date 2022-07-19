@@ -23,6 +23,7 @@ function ScenarioSlider({
           type="range"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}
+          disabled={locked}
           className={`h-1 w-3/5 ${
             locked && "cursor-not-allowed "
           } slider appearance-none disabled:bg-holon-grey-300`}
