@@ -85,14 +85,14 @@ export default function TextBlock(content) {
 
   return (
     <div className={`mx-10 flex min-h-screen w-screen ${flexValue}`}>
-      <div className={`flex w-3/4 flex-col border-solid ${borderColor} ${stylingRight}`}>
+      <div className={`flex w-full flex-col border-solid ${borderColor} ${stylingRight}`}>
         <h2 className={`mt-24 text-6xl font-semibold ${underlineTitle} ${colorUnderline}`}>
           {texts[value]["title"]}
         </h2>
         <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
           <div className="flex w-5/12 flex-col">
             <div className="text-lg">{createParagraphs(texts[value]["pText"])}</div>
-            <div className="mt-24 flex">{extraContent}</div>
+            <div className="mt-24 flex gap-4">{extraContent}</div>
           </div>
           <div className="w-7/12 p-10">
             <Image src={images[value].img} alt={images[value].alt} />
