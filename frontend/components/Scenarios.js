@@ -12,7 +12,7 @@ function Scenarios({
   neighbourhood2: initialNeighbourhood2,
   heatholon: initialHeatholon = false,
   windholon: initialWindholon = false,
-  calculationresults,
+  calculationresults: initialCalculationResults,
   right,
   borderColor,
   scenarioid,
@@ -41,8 +41,10 @@ function Scenarios({
   }, [neighbourhood1, neighbourhood2, heatholon, windholon]);
 
   useEffect(() => {
-    calculationresults ? convertCalculationResultsToState(calculationresults) : triggercalculate();
-  }, []);
+    initialCalculationResults
+      ? convertCalculationResultsToState(initialCalculationResults)
+      : triggercalculate();
+  }, [initialCalculationResults]);
 
   function convertCalculationResultsToState(calculationResults) {
     setReliability({
@@ -116,7 +118,7 @@ function Scenarios({
       });
   }
   return (
-    <form onSubmit={submitForm} className="">
+    <React.Fragment>
       {locked && (
         <div className="absolute h-full w-full">
           <div className={` absolute mx-10 flex h-[50vh] px-24  ${right ? "right-[0]" : ""} `}>
@@ -135,7 +137,7 @@ function Scenarios({
           }
         >
           <h2 className="mb-6 ml-6 text-5xl font-semibold text-holon-blue-900">{scenarioTitle}</h2>
-          <div className="flex flex-col md:flex-row">
+          <form onSubmit={submitForm} className="flex flex-col md:flex-row">
             <div className="basis-full pr-4 md:basis-1/3">
               <h3
                 className={`${borderColor} mb-4 border-l-[0.75rem] pl-3 text-2xl font-medium italic`}
@@ -237,10 +239,10 @@ function Scenarios({
                 )}
               </ScenarioResults>
             </div>
-          </div>
+          </form>
         </div>
       </div>
-    </form>
+    </React.Fragment>
   );
 }
 
