@@ -4,7 +4,7 @@ import Scenarios from "../components/Scenarios";
 import ContentBlock from "../components/ContentBlock";
 import FeedbackBlock from "../components/FeedbackBlock";
 import HolonButton from "../components/Buttons/HolonButton";
-import IntroductionVideo from "../components/IntroductionVideo";
+import IntroductionVideo from "../components/IntroductionVideo/IntroductionVideo";
 import TextBlock from "../components/TextBlock";
 import WelcomePage from "../components/WelcomePage";
 

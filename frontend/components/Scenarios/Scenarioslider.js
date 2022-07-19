@@ -19,6 +19,7 @@ function ScenarioSlider({
       </label>
       <div className="flex flex-row items-center justify-between gap-2">
         <input
+          data-testid="scenarioslider"
           id={`scenario${inputid}${neighbourhoodID}${scenarioid}slider`}
           type="range"
           onChange={(e) => updatevalue(inputid, e.target.value)}
@@ -30,6 +31,7 @@ function ScenarioSlider({
           max="100"
         />
         <input
+          data-testid="scenariosliderinput"
           aria-label={`${label} input`}
           disabled={locked}
           id={`scenario${inputid}${neighbourhoodID}${scenarioid}number`}
@@ -55,7 +57,7 @@ ScenarioSlider.propTypes = {
   locked: PropTypes.bool,
   neighbourhoodID: PropTypes.string,
   inputid: PropTypes.string,
-  value: PropTypes.bool,
+  value: PropTypes.number,
   updatevalue: PropTypes.func,
   on: PropTypes.string,
   off: PropTypes.string,
