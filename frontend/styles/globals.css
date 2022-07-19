@@ -77,3 +77,6 @@ a {
 .slider:disabled::-moz-range-thumb {
   background-color: grey;
 }
+
+input::-moz {
+}

@@ -5,7 +5,6 @@ import HolonButton from "../components/Buttons/HolonButton";
 import Loader from "./Scenarios/Loader";
 import Neighbourhood from "./Scenarios/Neighbourhood";
 import Tooltip from "./Scenarios/Tooltip";
-
 function Scenarios(props) {
   const [loading, setLoading] = useState(false);
 
@@ -166,7 +165,7 @@ function Scenarios(props) {
                           id={`heatholon${props.scenarioid}`}
                           onChange={(e) => setHeatholon(e.target.checked)}
                           checked={heatholon}
-                          className="h-5 w-5 rounded-none border-2 border-holon-blue-900 from-inherit bg-center shadow-[4px_4px_0_0] accent-holon-blue-500"
+                          className="flex h-5 w-5 appearance-none items-center justify-center rounded-none border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white shadow-[4px_4px_0_0] shadow-black checked:bg-holon-blue-500 after:checked:content-['✔'] disabled:border-holon-grey-300 disabled:shadow-gray-500 disabled:checked:bg-holon-grey-300"
                         />
                         <span className="mr-auto">Warmteholon</span>
                         <Tooltip tooltipMessage=" De warmteholon is de coöperatie van   buurtbewoners die aangesloten zijn op het warmtenet. Zij worden eigenaar van   het warmtenet en regelen de centrale aansturing. Deze aansturing zorgt ervoor   dat de overschotten zonne-energie van de holon leden gebruikt worden om de   warmtepomp aan te zetten en buffer te vullen, en in combinatie met de   windholon ook die overschotten te gebruiken."></Tooltip>
@@ -181,7 +180,7 @@ function Scenarios(props) {
                           id={`windholon${props.scenarioid}`}
                           onChange={(e) => setWindholon(e.target.checked)}
                           checked={windholon}
-                          className="h-5 w-5 rounded-none border-2 border-holon-blue-900 from-inherit bg-center shadow-[4px_4px_0_0] accent-holon-blue-500"
+                          className="flex h-5 w-5 appearance-none items-center justify-center rounded-none border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white shadow-[4px_4px_0_0] shadow-black checked:bg-holon-blue-500 after:checked:content-['✔'] disabled:border-holon-grey-300 disabled:shadow-gray-500 disabled:checked:bg-holon-grey-300"
                         />
                         <span className="mr-auto">Windholon</span>
                         <Tooltip tooltipMessage="De windholon is de coöperatie van buurtbewoners   die samen gaat investeren in een windturbine. Om deze te mogen bouwen in een   gebied met transportschaarste moeten de leden hun verbruik afstemmen op de   opwek van de windturbine. Hiermee ontlasten ze het HS/MS-station waar de   windturbine op aangesloten is."></Tooltip>
