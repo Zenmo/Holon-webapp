@@ -73,3 +73,7 @@ a {
     var(--tw-shadow);
   cursor: pointer;
 }
+
+.slider:disabled::-moz-range-thumb {
+  background-color: grey;
+}
