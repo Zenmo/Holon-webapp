@@ -47,34 +47,30 @@ function Scenarios(props) {
 
     setLoading(true);
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-      setUncalculatedScenario(false);
+    setLoading(false);
+    setUncalculatedScenario(false);
 
-      props.calculationresults
-        ? (setReliability(props.calculationresults.reliability),
-          setSelfconsumption(props.calculationresults.selfconsumption),
-          setAffordability(props.calculationresults.affordability),
-          setRenewability(props.calculationresults.renewability))
-        : (setReliability({
-            national: Math.floor(Math.random() * 100),
-            local: Math.floor(Math.random() * 100),
-          }),
-          setSelfconsumption({
-            national: Math.floor(Math.random() * 10000),
-            local: Math.floor(Math.random() * 10000),
-          }),
-          setAffordability({
-            national: Math.floor(Math.random() * 10000),
-            local: Math.floor(Math.random() * 10000),
-          }),
-          setRenewability({
-            national: Math.floor(Math.random() * 100),
-            local: Math.floor(Math.random() * 100),
-          }));
-    }, 2000);
-
-    return () => clearTimeout(timer);
+    props.calculationresults
+      ? (setReliability(props.calculationresults.reliability),
+        setSelfconsumption(props.calculationresults.selfconsumption),
+        setAffordability(props.calculationresults.affordability),
+        setRenewability(props.calculationresults.renewability))
+      : (setReliability({
+          national: Math.floor(Math.random() * 100),
+          local: Math.floor(Math.random() * 100),
+        }),
+        setSelfconsumption({
+          national: Math.floor(Math.random() * 10000),
+          local: Math.floor(Math.random() * 10000),
+        }),
+        setAffordability({
+          national: Math.floor(Math.random() * 10000),
+          local: Math.floor(Math.random() * 10000),
+        }),
+        setRenewability({
+          national: Math.floor(Math.random() * 100),
+          local: Math.floor(Math.random() * 100),
+        }));
   }
 
   function updateLocal(arg1, arg2) {
@@ -152,6 +148,7 @@ function Scenarios(props) {
                         <input
                           type="checkbox"
                           name="heatholon"
+                          data-testid={`heatholon${props.scenarioid}`}
                           id={`heatholon${props.scenarioid}`}
                           onChange={(e) => setHeatholon(e.target.checked)}
                           checked={heatholon}
@@ -167,6 +164,7 @@ function Scenarios(props) {
                         <input
                           type="checkbox"
                           name="windholon"
+                          data-testid={`windholon${props.scenarioid}`}
                           id={`windholon${props.scenarioid}`}
                           onChange={(e) => setWindholon(e.target.checked)}
                           checked={windholon}

@@ -30,6 +30,7 @@ function ScenarioSwitch({
         <small>{off}</small>
         <span className={` relative mx-1 ${locked && "cursor-not-allowed"}`}>
           <input
+            data-testid={`scenarioswitch${inputid}${neighbourhoodID}${scenarioid}`}
             disabled={locked}
             type="checkbox"
             value=""

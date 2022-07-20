@@ -19,7 +19,7 @@ function ScenarioSlider({
       </label>
       <div className="flex flex-row items-center justify-between gap-2">
         <input
-          data-testid="scenarioslider"
+          data-testid={`scenarioslider${inputid}${neighbourhoodID}${scenarioid}`}
           id={`scenario${inputid}${neighbourhoodID}${scenarioid}slider`}
           type="range"
           onChange={(e) => updatevalue(inputid, e.target.value)}
