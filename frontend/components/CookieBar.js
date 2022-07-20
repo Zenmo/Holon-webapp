@@ -1,10 +1,23 @@
-import CookieConsent from "react-cookie-consent";
+import { useEffect } from "react";
 import Image from "next/image";
-import Holonbutton from "../components/Buttons/HolonButton";
+
+import CookieConsent, { getCookieConsentValue, Cookies } from "react-cookie-consent";
+import { initGA } from "../util/gtag";
 
 import cookieImg from "../public/imgs/cookie.png";
 
 function CookieBar() {
+  const handleAcceptCookie = () => {
+    initGA();
+  };
+
+  useEffect(() => {
+    const isConsent = getCookieConsentValue();
+    if (isConsent === "true") {
+      handleAcceptCookie();
+    }
+  }, []);
+
   return (
     <CookieConsent
       location="bottom"
@@ -34,6 +47,7 @@ function CookieBar() {
         border: "1px solid #051E3F",
         borderRadius: "5px",
       }}
+      onAccept={handleAcceptCookie}
     >
       <div className="w-72">
         <Image alt="cookie image" src={cookieImg} height={60} width={145} />
