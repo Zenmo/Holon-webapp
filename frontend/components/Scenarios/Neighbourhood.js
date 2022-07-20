@@ -4,7 +4,8 @@ import ScenarioSwitch from "./Scenarioswitch";
 
 function Neighbourhood(props) {
   function updateValue(property, inputvalue) {
-    props.neighbourhood[property].value = parseInt(inputvalue);
+    props.neighbourhood[property].value =
+      typeof inputvalue == "boolean" ? inputvalue : parseInt(inputvalue);
     props.setNeighbourhood({ ...props.neighbourhood, property: props.neighbourhood[property] });
   }
 

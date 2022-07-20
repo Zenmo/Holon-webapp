@@ -14,27 +14,24 @@ function ScenarioSwitch({
   scenarioid,
   message,
 }) {
+  const switchid = neighbourhoodID
+    ? `scenarioswitch${inputid}${neighbourhoodID}${scenarioid}`
+    : `scenarioswitch${inputid}${scenarioid}`;
   return (
     <div className="flex flex-row items-center justify-end gap-2">
-      <label
-        htmlFor={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
-        className="mr-auto cursor-pointer text-sm"
-      >
+      <label htmlFor={switchid} className="mr-auto cursor-pointer text-sm">
         {label}
       </label>
 
-      <label
-        htmlFor={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
-        className="flex items-center gap-1"
-      >
+      <label htmlFor={switchid} className="flex items-center gap-1">
         <small>{off}</small>
         <span className={` relative mx-1 ${locked && "cursor-not-allowed"}`}>
           <input
-            data-testid={`scenarioswitch${inputid}${neighbourhoodID}${scenarioid}`}
+            data-testid={switchid}
             disabled={locked}
             type="checkbox"
             value=""
-            id={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
+            id={switchid}
             className="peer sr-only"
             onChange={(e) => updatevalue(inputid, e.target.checked)}
             checked={value}

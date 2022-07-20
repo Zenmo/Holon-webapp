@@ -12,15 +12,16 @@ function ScenarioSlider({
   message,
   scenarioid,
 }) {
+  const sliderid = `scenarioslider${inputid}${neighbourhoodID}${scenarioid}`;
   return (
     <div className="mb-2 flex flex-row items-center justify-between gap-2">
-      <label htmlFor={`scenario${inputid}${neighbourhoodID}${scenarioid}slider`} className="flex">
+      <label htmlFor={sliderid} className="flex">
         {label}
       </label>
       <div className="flex flex-row items-center justify-between gap-2">
         <input
-          data-testid={`scenarioslider${inputid}${neighbourhoodID}${scenarioid}`}
-          id={`scenario${inputid}${neighbourhoodID}${scenarioid}slider`}
+          data-testid={sliderid}
+          id={sliderid}
           type="range"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}
@@ -34,7 +35,7 @@ function ScenarioSlider({
           data-testid="scenariosliderinput"
           aria-label={`${label} input`}
           disabled={locked}
-          id={`scenario${inputid}${neighbourhoodID}${scenarioid}number`}
+          id={`${sliderid}number`}
           type="number"
           onChange={(e) => updatevalue(inputid, e.target.value)}
           value={value}
