@@ -19,7 +19,7 @@ function Neighbourhood(props) {
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.heatpump.label}
         value={props.neighbourhood.heatpump.value}
-        disabled={props.locked}
+        locked={props.neighbourhoodID == "B" || props.locked ? true : false}
         inputid="heatpump"
         updatevalue={updateValue}
         message="Het percentage van de huizen in de buurt die een elektrische warmtepomp hebben,"
@@ -29,7 +29,7 @@ function Neighbourhood(props) {
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.evadoptation.label}
         value={props.neighbourhood.evadoptation.value}
-        disabled={props.locked}
+        locked={props.locked}
         inputid="evadoptation"
         updatevalue={updateValue}
         message="Het percentage van de auto's in de buurt dat elektrisch is."
@@ -39,7 +39,7 @@ function Neighbourhood(props) {
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.solarpanels.label}
         value={props.neighbourhood.solarpanels.value}
-        disabled={props.locked}
+        locked={props.locked}
         inputid="solarpanels"
         updatevalue={updateValue}
         message="Het percentage van de huizen in de buurt die zonnepanelen heeft."
@@ -48,7 +48,7 @@ function Neighbourhood(props) {
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.heatnetwork.label}
         value={props.neighbourhood.heatnetwork.value}
-        disabled={props.locked}
+        locked={true}
         off="nee"
         on="ja"
         scenarioid={props.scenarioid}

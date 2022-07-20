@@ -145,6 +145,9 @@ describe("Scenario", () => {
         />
       );
     });
+    it("is not locked", () => {
+      expect(screen.getByTestId("scenariofieldset")).not.toBeDisabled();
+    });
     it("updates legal and social texts when changing Holons", async () => {
       expect(screen.getByTestId("legalText")).toHaveTextContent("Flexibele tarieven voor");
       expect(screen.getByTestId("socialText")).toHaveTextContent(
@@ -166,12 +169,12 @@ describe("Scenario", () => {
     it("wants to recalculate after an input changed", async () => {
       fireEvent.click(screen.getByRole("button"));
       expect(screen.queryByText("Herbereken")).not.toBeInTheDocument();
-      fireEvent.change(screen.getByTestId("scenariosliderheatpumpA2"), { target: { value: 50 } });
+      fireEvent.change(screen.getByTestId("scenariosliderheatpumpA2"), { target: { value: 88 } });
       expect(screen.queryByText("Herbereken")).toBeInTheDocument();
     });
     it("submits the data to an API endpoint", async () => {
-      //await recalculate();
-      //expect(global.fetch).toHaveBeenCalledTimes(1);
+      await recalculate();
+      expect(global.fetch).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -22,6 +22,7 @@ from rest_framework import permissions
 
 from holon.viewsets import UpdateRegisterViewSet, RatingViewSet
 
+from holon.views import calculationView
 
 router = routers.SimpleRouter()
 router.register(r"update-registrations", UpdateRegisterViewSet)
@@ -30,7 +31,9 @@ router.register(r"rating", RatingViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("admin/", admin.site.urls),
+    path("calculation/", calculationView),
 ]
+
 if settings.DEBUG:
     from drf_yasg.views import get_schema_view
     from drf_yasg import openapi
