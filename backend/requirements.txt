@@ -29,3 +29,4 @@ typing_extensions==4.2.0
 uritemplate==4.1.1
 urllib3==1.26.9
 whitenoise
+https://cloud.anylogic.com/files/api-8.5.0/clients/anylogiccloudclient-8.5.0-py3-none-any.whl#egg=anylogiccloudclient

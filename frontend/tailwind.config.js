@@ -1,8 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}", 
-    "./components/**/*.{js,ts,jsx,tsx}"
+  content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  safelist: [
+    {
+      pattern: /order-/,
+      variants: ["sm"],
+    },
   ],
   theme: {
     extend: {
@@ -16,11 +19,11 @@ module.exports = {
         "holon-slated-blue-300": "#AEC2E6",
       },
       backgroundImage: {
-        'split-white-blue': "linear-gradient(-18deg, #051E3F 40% , white 30%)", 
-        'split-blue-white': "linear-gradient(-18deg, white 45%, #051E3F 40%)",
+        "split-white-blue": "linear-gradient(-18deg, #051E3F 40% , white 30%)",
+        "split-blue-white": "linear-gradient(-18deg, white 45%, #051E3F 40%)",
       },
       borderWidth: {
-        "8": "24px",
+        8: "24px",
       },
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
@@ -34,12 +37,10 @@ module.exports = {
         "holon-white-hover": "0.1rem 0.05rem white",
         "holon-blue": "0.3rem 0.15rem #051E3F",
         "holon-blue-hover": "0.1rem 0.05rem #051E3F",
-        'golden': 'inset 0 -25px 0px 0px #F3E7C5',
-        'blue': 'inset 0 -25px 0px 0px #AEC2E6',
+        golden: "inset 0 -25px 0px 0px #F3E7C5",
+        blue: "inset 0 -25px 0px 0px #AEC2E6",
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography')
-  ],
+  plugins: [require("@tailwindcss/typography")],
 };

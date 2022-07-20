@@ -1,23 +1,12 @@
 #%%
-import anylogiccloudclient
 from anylogiccloudclient.client.inputs import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from anylogiccloudclient.client.cloud_client import CloudClient
-
-client = CloudClient(
-    "f105b75c-4265-4c79-ab36-a9d6e7532fc0"
-)  # key is included in .env but docker doesn't work for me rn
-
-model = client.get_model_by_name("Holon buurt model")
-version = client.get_latest_model_version(model)
-inputs = client.create_inputs_from_experiment(version, "Experiment")
+import os
 
 
-modelrun = client.create_simulation(inputs)
-outputs = modelrun.get_outputs_and_run_if_absent()
-
-
-#%%
+# Intended for Holon buurt model, experiment version 9
+# https://cloud.anylogic.com/model/e67557cd-da4c-46c0-997b-2c61bd7470bc?mode=SETTINGS&tab=GENERAL
 
 
 def set_inputs(
@@ -28,10 +17,11 @@ def set_inputs(
     windholon: bool,
 ) -> dict:
     TRANLATES_INPUTS = {
-        "P buurt A evs": neighbourhood1["evadoptation"],
-        "P buurt A pv": neighbourhood1["solarpanels"],
-        "P buurt B evs": neighbourhood2["evadoptation"],
-        "P buurt B pv": neighbourhood2["solarpanels"],
+        "P buurt A evs": int(neighbourhood1["evadoptation"]),
+        "P_buurtA_warmtepompen": int(neighbourhood1["heatpumps"]),
+        "P buurt A pv": int(neighbourhood1["solarpanels"]),
+        "P buurt B evs": int(neighbourhood2["evadoptation"]),
+        "P buurt B pv": int(neighbourhood2["solarpanels"]),
         "P warmte holon": heatholon,
         "P wind holon": windholon,
     }
@@ -59,14 +49,14 @@ def map_anylogickey_to_api_key(al_key: str) -> str:
     return al_key
 
 
-def round_or_unknown(name: str) -> str:
+def round_or_unknown(outputs: SingleRunOutputs, name: str) -> str:
 
     # for now betrouwbaarheid should remain unknown
     if "betrouwbaarheid" in name:
         safe_value = "?"
     else:
         value = outputs.value(name)
-        safe_value = str(int(float(value)))  # weird type converts to round number
+        safe_value = "{:.0f}".format(float(value))  # weird type converts to round number
 
     return safe_value
 
@@ -77,18 +67,21 @@ def get_results(outputs: SingleRunOutputs) -> dict:
     for name in outputs.names():
 
         if "lokaal" in name:
-            results["local"].update({map_anylogickey_to_api_key(name): round_or_unknown(name)})
+            results["local"].update(
+                {map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)}
+            )
         if "nationaal" in name:
-            results["national"].update({map_anylogickey_to_api_key(name): round_or_unknown(name)})
+            results["national"].update(
+                {map_anylogickey_to_api_key(name): round_or_unknown(outputs, name)}
+            )
 
     return results
 
 
-def handle_request(request):
+def handle_request(request: dict) -> dict:
+    "Convience method to handle the requested data"
 
-    client = CloudClient(
-        "f105b75c-4265-4c79-ab36-a9d6e7532fc0"
-    )  # key is included in .env but docker doesn't work for me rn
+    client = CloudClient(os.environ.get("AL_API_KEY"))
 
     model = client.get_model_by_name("Holon buurt model")
     version = client.get_latest_model_version(model)
@@ -110,12 +103,25 @@ def handle_request(request):
     return results
 
 
-mock_request = {
-    "neighbourhood1": {"evadoptation": 70, "solarpanels": 50},
-    "neighbourhood2": {"evadoptation": 70, "solarpanels": 50},
-    "heatholon": True,
-    "windholon": False,
+MOCK_RESULTS = {
+    "local": {
+        "affordability": "5817",
+        "reliability": "?",
+        "renewability": "5",
+        "selfconsumption": "60",
+    },
+    "national": {
+        "affordability": "5817",
+        "reliability": "?",
+        "renewability": "5",
+        "selfconsumption": "60",
+    },
 }
 
 
-results = handle_request(mock_request)
+MOCK_REQUEST = {
+    "neighbourhood1": {"evadoptation": 70, "solarpanels": 40, "heatpumps": 0},
+    "neighbourhood2": {"evadoptation": 70, "solarpanels": 60},
+    "heatholon": False,
+    "windholon": False,
+}
