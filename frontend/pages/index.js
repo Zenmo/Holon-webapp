@@ -8,6 +8,7 @@ import HolonButton from "../components/Buttons/HolonButton";
 import IntroductionVideo from "../components/IntroductionVideo";
 import TextBlock from "../components/TextBlock";
 import WelcomePage from "../components/WelcomePage";
+import CookieBar from "../components/CookieBar";
 
 export default function Home() {
   const neighbourhood1 = {
@@ -251,6 +252,7 @@ export default function Home() {
         <ContentBlock colorClass="bg-holon-blue-900" id="feedback">
           <FeedbackBlock />
         </ContentBlock>
+        <CookieBar></CookieBar>
       </main>
     </div>
   );
