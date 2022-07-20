@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Scenarios from "../components/Scenarios";
+import Scenarios from "../components/Scenarios/Scenarios";
 
 import ContentBlock from "../components/ContentBlock";
 import FeedbackBlock from "../components/FeedbackBlock";
@@ -9,18 +9,6 @@ import TextBlock from "../components/TextBlock";
 import WelcomePage from "../components/WelcomePage";
 
 export default function Home() {
-  const neighbourhood1 = {
-    heatpump: { value: "0", label: "Warmtepompen" },
-    evadoptation: { value: "70", label: "Elektrische auto's" },
-    solarpanels: { value: "40", label: "Zonnepanelen" },
-    heatnetwork: { value: false, label: "Warmtenet" },
-  };
-  const neighbourhood2 = {
-    heatpump: { value: "0", label: "Warmtepompen" },
-    evadoptation: { value: "70", label: "Elektrische auto's" },
-    solarpanels: { value: "60", label: "Zonnepanelen" },
-    heatnetwork: { value: true, label: "Warmtenet" },
-  };
   return (
     <div>
       <Head>
@@ -48,29 +36,33 @@ export default function Home() {
             scenarioTitle="Het moet anders"
             borderColor="border-holon-slated-blue-300"
             neighbourhood1={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 40, label: "Zonnepanelen" },
               heatnetwork: { value: false, label: "Warmtenet" },
             }}
             neighbourhood2={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 60, label: "Zonnepanelen" },
               heatnetwork: { value: true, label: "Warmtenet" },
             }}
             calculationresults={{
-              local: {
-                reliability: 100,
-                affordability: 2420,
-                renewability: 7,
-                selfconsumption: 58,
+              reliability: {
+                local: 100,
+                national: 100,
               },
-              national: {
-                reliability: 100,
-                affordability: 2420,
-                renewability: 7,
-                selfconsumption: 58,
+              affordability: {
+                local: 2420,
+                national: 2420,
+              },
+              renewability: {
+                local: 7,
+                national: 7,
+              },
+              selfconsumption: {
+                local: 58,
+                national: 58,
               },
             }}
           />
@@ -90,30 +82,34 @@ export default function Home() {
             right="true"
             borderColor="border-holon-gold-200"
             neighbourhood1={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 40, label: "Zonnepanelen" },
               heatnetwork: { value: false, label: "Warmtenet" },
             }}
             neighbourhood2={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 60, label: "Zonnepanelen" },
               heatnetwork: { value: true, label: "Warmtenet" },
             }}
             windholon={true}
             calculationresults={{
-              local: {
-                reliability: 0,
-                affordability: 2062,
-                renewability: 16,
-                selfconsumption: 49,
+              reliability: {
+                local: 0,
+                national: 0,
               },
-              national: {
-                reliability: 0,
-                affordability: 2062,
-                renewability: 16,
-                selfconsumption: 49,
+              affordability: {
+                local: 2062,
+                national: 2062,
+              },
+              renewability: {
+                local: 16,
+                national: 16,
+              },
+              selfconsumption: {
+                local: 49,
+                national: 49,
               },
             }}
           />
@@ -128,30 +124,34 @@ export default function Home() {
             scenarioTitle="De rol van warmte"
             borderColor="border-holon-blue-900"
             neighbourhood1={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 40, label: "Zonnepanelen" },
               heatnetwork: { value: false, label: "Warmtenet" },
             }}
             neighbourhood2={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 60, label: "Zonnepanelen" },
               heatnetwork: { value: true, label: "Warmtenet" },
             }}
             heatholon={true}
             calculationresults={{
-              local: {
-                reliability: 100,
-                affordability: 2218,
-                renewability: 14,
-                selfconsumption: 85,
+              reliability: {
+                local: 100,
+                national: 100,
               },
-              national: {
-                reliability: 100,
-                affordability: 2218,
-                renewability: 14,
-                selfconsumption: 85,
+              affordability: {
+                local: 2218,
+                national: 2218,
+              },
+              renewability: {
+                local: 14,
+                national: 14,
+              },
+              selfconsumption: {
+                local: 85,
+                national: 85,
               },
             }}
           />
@@ -171,31 +171,35 @@ export default function Home() {
             borderColor="border-holon-gold-600"
             right="true"
             neighbourhood1={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 40, label: "Zonnepanelen" },
               heatnetwork: { value: false, label: "Warmtenet" },
             }}
             neighbourhood2={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 60, label: "Zonnepanelen" },
               heatnetwork: { value: true, label: "Warmtenet" },
             }}
             windholon={true}
             heatholon={true}
             calculationresults={{
-              local: {
-                reliability: 100,
-                affordability: 1802,
-                renewability: 32,
-                selfconsumption: 91,
+              reliability: {
+                local: 100,
+                national: 100,
               },
-              national: {
-                reliability: 100,
-                affordability: 1802,
-                renewability: 32,
-                selfconsumption: 91,
+              affordability: {
+                local: 1082,
+                national: 1082,
+              },
+              renewability: {
+                local: 32,
+                national: 32,
+              },
+              selfconsumption: {
+                local: 91,
+                national: 91,
               },
             }}
           />
@@ -218,15 +222,15 @@ export default function Home() {
           <Scenarios
             scenarioid="5"
             neighbourhood1={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "40", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 40, label: "Zonnepanelen" },
               heatnetwork: { value: false, label: "Warmtenet" },
             }}
             neighbourhood2={{
-              heatpump: { value: "0", label: "Warmtepompen" },
-              evadoptation: { value: "70", label: "Elektrische auto's" },
-              solarpanels: { value: "60", label: "Zonnepanelen" },
+              heatpump: { value: 0, label: "Warmtepompen" },
+              evadoptation: { value: 70, label: "Elektrische auto's" },
+              solarpanels: { value: 60, label: "Zonnepanelen" },
               heatnetwork: { value: true, label: "Warmtenet" },
             }}
             windholon={true}

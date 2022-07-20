@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
-import ScenarioResults from "./Scenarios/ScenarioResults";
-import HolonButton from "../components/Buttons/HolonButton";
-import Loader from "./Scenarios/Loader";
-import Neighbourhood from "./Scenarios/Neighbourhood";
-import Tooltip from "./Scenarios/Tooltip";
+import ScenarioResults from "./ScenarioResults";
+import HolonButton from "../Buttons/HolonButton";
+import Loader from "./Loader";
+import Neighbourhood from "./Neighbourhood";
+import Tooltip from "./Tooltip";
 
 function Scenarios(props) {
   const [loading, setLoading] = useState(false);
@@ -19,10 +19,10 @@ function Scenarios(props) {
 
   const [local, setLocal] = useState(true);
 
-  const [reliability, setReliability] = useState(0);
-  const [selfconsumption, setSelfconsumption] = useState(0);
-  const [affordability, setAffordability] = useState(0);
-  const [renewability, setRenewability] = useState(0);
+  const [reliability, setReliability] = useState({});
+  const [selfconsumption, setSelfconsumption] = useState({});
+  const [affordability, setAffordability] = useState({});
+  const [renewability, setRenewability] = useState({});
 
   useEffect(() => {
     setUncalculatedScenario(true);
@@ -52,22 +52,10 @@ function Scenarios(props) {
       setUncalculatedScenario(false);
 
       props.calculationresults
-        ? (setReliability({
-            national: props.calculationresults.national.reliability,
-            local: props.calculationresults.local.reliability,
-          }),
-          setSelfconsumption({
-            national: props.calculationresults.national.selfconsumption,
-            local: props.calculationresults.local.selfconsumption,
-          }),
-          setAffordability({
-            national: props.calculationresults.national.affordability,
-            local: props.calculationresults.local.affordability,
-          }),
-          setRenewability({
-            national: props.calculationresults.national.renewability,
-            local: props.calculationresults.local.renewability,
-          }))
+        ? (setReliability(props.calculationresults.reliability),
+          setSelfconsumption(props.calculationresults.selfconsumption),
+          setAffordability(props.calculationresults.affordability),
+          setRenewability(props.calculationresults.renewability))
         : (setReliability({
             national: Math.floor(Math.random() * 100),
             local: Math.floor(Math.random() * 100),
@@ -129,6 +117,7 @@ function Scenarios(props) {
                   uitgangspunten
                 </h3>
                 <fieldset
+                  data-testid="scenariofieldset"
                   disabled={props.locked || loading}
                   className={props.locked && `cursor-pointer`}
                 >
@@ -244,15 +233,15 @@ Scenarios.propTypes = {
 
   neighbourhood1: PropTypes.shape({
     heatpump: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     evadoptation: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     solarpanels: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     heatnetwork: PropTypes.shape({
@@ -262,15 +251,15 @@ Scenarios.propTypes = {
   }),
   neighbourhood2: PropTypes.shape({
     heatpump: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     evadoptation: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     solarpanels: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     heatnetwork: PropTypes.shape({
@@ -279,17 +268,21 @@ Scenarios.propTypes = {
     }),
   }),
   calculationresults: PropTypes.shape({
-    local: PropTypes.shape({
-      reliability: PropTypes.number,
-      affordability: PropTypes.number,
-      renewability: PropTypes.number,
-      selfconsumption: PropTypes.number,
+    reliability: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
     }),
-    national: PropTypes.shape({
-      reliability: PropTypes.number,
-      affordability: PropTypes.number,
-      renewability: PropTypes.number,
-      selfconsumption: PropTypes.number,
+    affordability: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
+    }),
+    renewability: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
+    }),
+    selfconsumption: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
     }),
   }),
   windholon: PropTypes.bool,

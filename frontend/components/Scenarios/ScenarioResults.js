@@ -32,8 +32,8 @@ function ScenarioResults(props) {
             Indicatoren
           </h4>
           <ScenarioResultItem
-            minvalue="0"
-            maxvalue="100"
+            minvalue={0}
+            maxvalue={100}
             label="Betrouwbaarheid"
             unit=" " // if " " is supplied the result will be displayed as either + at 100 or - at 0
             value={props.reliability}
@@ -42,8 +42,8 @@ function ScenarioResults(props) {
             messageLocal="Betrouwbaarheid wordt bepaald door overbelasting   van het elektriciteitsnet. Bij een negatieve indicatie wordt het net   regelmatig overbelast, bij een positieve indicatie is dit geen probleem."
           />
           <ScenarioResultItem
-            minvalue="50"
-            maxvalue="90"
+            minvalue={50}
+            maxvalue={90}
             label="Zelfconsumptie"
             unit="%"
             value={props.selfconsumption}
@@ -52,8 +52,8 @@ function ScenarioResults(props) {
             messageLocal="Zelfconsumptie is het aandeel van de lokaal   opgewekte energie die ook gelijktijdig lokaal gebruikt wordt. Een hoge   zelfconsumptie is nodig om netcongestie tegen te gaan door pieken in lokale   (duurzame) opwek. "
           />
           <ScenarioResultItem
-            minvalue="1900"
-            maxvalue="2600"
+            minvalue={1900}
+            maxvalue={2600}
             invert
             label="Betaalbaarheid"
             unit="&euro;/hh/j"
@@ -63,8 +63,8 @@ function ScenarioResults(props) {
             messageLocal="De betaalbaarheid zijn de energiekosten per   huishouden per jaar. Hierbij worden autobrandstoffen, aardgas, warmte en   elektriciteit meegenomen. Van de duurzame bronnen die gebouwd worden in de   buurten wordt de LCOE genomen zodat investeringen ook meetellen in de kosten.   De overige elektriciteit gaat op basis van marktprijzen."
           />
           <ScenarioResultItem
-            minvalue="10"
-            maxvalue="35"
+            minvalue={10}
+            maxvalue={35}
             label="Duurzaamheid"
             unit="%"
             value={props.renewability}
@@ -142,14 +142,26 @@ function ScenarioResults(props) {
 export default ScenarioResults;
 
 ScenarioResults.propTypes = {
-  children: PropTypes.object,
-  local: PropTypes.object,
+  children: PropTypes.array,
+  local: PropTypes.bool,
   borderColor: PropTypes.string,
   scenarioid: PropTypes.string,
-  reliability: PropTypes.number,
-  affordability: PropTypes.number,
-  renewability: PropTypes.number,
-  selfconsumption: PropTypes.number,
+  reliability: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
+  affordability: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
+  renewability: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
+  selfconsumption: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
   setLocal: PropTypes.func,
   windholon: PropTypes.bool,
   heatholon: PropTypes.bool,

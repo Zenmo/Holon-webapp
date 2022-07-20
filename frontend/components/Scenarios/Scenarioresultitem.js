@@ -109,27 +109,22 @@ export default ScenarioResultItem;
 
 ScenarioResultItem.propTypes = {
   children: PropTypes.object,
-  local: PropTypes.object,
   borderColor: PropTypes.string,
   scenarioid: PropTypes.string,
-  reliability: PropTypes.number,
-  affordability: PropTypes.number,
-  renewability: PropTypes.number,
-  selfconsumption: PropTypes.number,
   setLocal: PropTypes.func,
   windholon: PropTypes.bool,
   heatholon: PropTypes.bool,
 
   label: PropTypes.string,
   unit: PropTypes.string,
-  value: PropTypes.object,
-  local: PropTypes.shape({
-    local: PropTypes.string,
-    national: PropTypes.string,
+  value: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
   }),
+  local: PropTypes.bool,
   invert: PropTypes.bool,
   messageLocal: PropTypes.string,
   messageNl: PropTypes.string,
-  minvalue: PropTypes.string,
-  maxvalue: PropTypes.string,
+  minvalue: PropTypes.number,
+  maxvalue: PropTypes.number,
 };

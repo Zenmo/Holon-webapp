@@ -4,7 +4,7 @@ import ScenarioSwitch from "./Scenarioswitch";
 
 function Neighbourhood(props) {
   function updateValue(property, inputvalue) {
-    props.neighbourhood[property].value = inputvalue;
+    props.neighbourhood[property].value = parseInt(inputvalue);
     props.setNeighbourhood({ ...props.neighbourhood, property: props.neighbourhood[property] });
   }
 
@@ -63,15 +63,15 @@ export default Neighbourhood;
 Neighbourhood.propTypes = {
   neighbourhood: PropTypes.shape({
     heatpump: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     evadoptation: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     solarpanels: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     heatnetwork: PropTypes.shape({
