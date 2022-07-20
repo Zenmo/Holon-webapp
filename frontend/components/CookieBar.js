@@ -24,33 +24,14 @@ function CookieBar() {
       buttonText="accepteren"
       enableDeclineButton="true"
       declineButtonText="weigeren"
-      style={{
-        background: "white",
-        height: "10rem",
-        width: "80%",
-        color: "black",
-        margin: "0 10% 7% 10%",
-        border: "1px solid black",
-        borderRadius: "5px",
-      }}
-      buttonStyle={{
-        color: "white",
-        backgroundColor: "#23549F",
-        width: "18rem",
-        border: "1px solid #051E3F",
-        borderRadius: "5px",
-      }}
-      declineButtonStyle={{
-        backgroundColor: "white",
-        color: "black",
-        width: "18rem",
-        border: "1px solid #051E3F",
-        borderRadius: "5px",
-      }}
+      disableStyles={true}
+      containerClasses="bg-white flex flex-col lg:flex-row items-center lg:items-baseline justify-center fixed  h-1/5 lg:h-1/6 w-4/5 mx-[10%] mb-[7%] border border-black rounded shadow-holon-blue"
+      buttonClasses="text-white bg-holon-blue-500 border-holon-blue-900 shadow-holon-blue hover:bg-holon-blue-900 active:shadow-holon-blue-hover relative m-2 w-40 xl:w-52 rounded-md border-2 p-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y"
+      declineButtonClasses="bg-holon-gold-200 border-holon-blue-900 shadow-holon-blue hover:bg-holon-gold-600 active:shadow-holon-blue-hover relative m-2 w-40 xl:w-52 rounded-md border-2 p-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y"
       onAccept={handleAcceptCookie}
     >
-      <div className="w-72">
-        <Image alt="cookie image" src={cookieImg} height={60} width={145} />
+      <div className="relative flex items-center justify-center">
+        <Image alt="cookie image" src={cookieImg} width={245} height={100} />
       </div>
       <div>
         Deze website maakt gebruik van cookies. Lees{" "}
