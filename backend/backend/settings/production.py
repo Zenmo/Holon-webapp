@@ -1,11 +1,17 @@
 from .base import *
 
-ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]] if "WEBSITE_HOSTNAME" in os.environ else []
+ALLOWED_HOSTS = (
+    "holontool.nl" + [os.environ["WEBSITE_HOSTNAME"]] if "WEBSITE_HOSTNAME" in os.environ else []
+)
 CSRF_TRUSTED_ORIGINS = (
-    ["https://" + os.environ["WEBSITE_HOSTNAME"]] if "WEBSITE_HOSTNAME" in os.environ else []
+    "https://holontool.nl" + ["https://" + os.environ["WEBSITE_HOSTNAME"]]
+    if "WEBSITE_HOSTNAME" in os.environ
+    else []
 )
 CORS_ALLOWED_ORIGINS = (
-    ["https://" + os.environ["WEBSITE_HOSTNAME"]] if "WEBSITE_HOSTNAME" in os.environ else []
+    "https://holontool.nl" + ["https://" + os.environ["WEBSITE_HOSTNAME"]]
+    if "WEBSITE_HOSTNAME" in os.environ
+    else []
 )
 
 DEBUG = False
