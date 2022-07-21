@@ -31,10 +31,6 @@ export default function Home() {
       </Head>
 
       <main className="h-screen snap-y snap-mandatory overflow-y-auto">
-        <ContentBlock>
-          <WelcomePage></WelcomePage>
-        </ContentBlock>
-        <ContentBlock colorClass="bg-split-white-blue"></ContentBlock>
         <ContentBlock colorClass="bg-holon-blue-900" id="introVideo">
           <IntroductionVideo />
         </ContentBlock>
