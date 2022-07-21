@@ -56,7 +56,7 @@ function ScenarioSwitch({
 export default ScenarioSwitch;
 
 ScenarioSwitch.propTypes = {
-  disabled: PropTypes.bool,
+  locked: PropTypes.bool,
   neighbourhoodID: PropTypes.string,
   inputid: PropTypes.string,
   value: PropTypes.bool,
