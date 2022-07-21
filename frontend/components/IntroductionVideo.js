@@ -19,7 +19,7 @@ export default function IntroductionVideo() {
             </i>
           </p>
         </div>
-        <h3 className="mb-[2rem] text-center text-2xl italic">Wil je mee doen?</h3>
+        <h3 className="mb-[2rem] text-center text-2xl italic">Wil je meedoen?</h3>
         <div className="flex gap-[1rem]">
           <HolonButton tag="a" href="#start" variant="darkmode">
             Naar de demo
