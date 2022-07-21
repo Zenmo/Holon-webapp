@@ -20,13 +20,18 @@ export default function IntroductionVideo() {
             </i>
           </p>
         </div>
-        <h3 className="mb-[2rem] text-center text-2xl italic">Wil je meer weten?</h3>
+        <h3 className="mb-[2rem] text-center text-2xl italic">Wil je meedoen?</h3>
         <div className="flex gap-[1rem]">
           <HolonButton tag="a" href="#start" variant="darkmode">
             Naar de demo
           </HolonButton>
-          <HolonButton tag="a" href="#feedback" variant="darkmode">
-            Hou me alleen op de hoogte
+          <HolonButton
+            tag="a"
+            href="https://nl.surveymonkey.com/r/RYK7SRL"
+            variant="darkmode"
+            target="_blank"
+          >
+            Naar de enquête
           </HolonButton>
         </div>
       </div>
