@@ -24,8 +24,13 @@ export default function IntroductionVideo() {
           <HolonButton tag="a" href="#start" variant="darkmode">
             Naar de demo
           </HolonButton>
-          <HolonButton tag="a" href="#feedback" variant="darkmode">
-            Hou me alleen op de hoogte
+          <HolonButton
+            tag="a"
+            href="https://nl.surveymonkey.com/r/RYK7SRL"
+            variant="darkmode"
+            target="_blank"
+          >
+            Naar de enquête
           </HolonButton>
         </div>
       </div>
