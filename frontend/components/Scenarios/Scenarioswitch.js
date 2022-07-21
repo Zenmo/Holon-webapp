@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Tooltip from "./Tooltip";
 
 function ScenarioSwitch({
-  disabled,
+  locked,
   neighbourhoodID,
   inputid,
   value,
@@ -28,9 +28,9 @@ function ScenarioSwitch({
         className="flex items-center gap-1"
       >
         <small>{off}</small>
-        <span className={` relative mx-1 ${disabled && "cursor-not-allowed"}`}>
+        <span className={` relative mx-1 ${locked && "cursor-not-allowed"}`}>
           <input
-            disabled={disabled}
+            disabled={locked}
             type="checkbox"
             value=""
             id={`scenario${inputid}switch${neighbourhoodID}${scenarioid}`}
@@ -40,7 +40,7 @@ function ScenarioSwitch({
           />
           <div
             className={`h-[30px] w-16 rounded-sm border-2 border-holon-blue-900 p-1 text-holon-blue-900 shadow-[4px_4px_0_0] ${
-              disabled
+              locked
                 ? "border-gray-500 text-slate-500 shadow-gray-500 after:border-gray-500 after:bg-holon-grey-300"
                 : "after:bg-holon-blue-500"
             }  after:absolute after:top-[4px] after:left-[2px]  after:h-[1.3rem] after:w-5 after:rounded-sm after:border-2 after:border-holon-blue-900 after:shadow-[2px_2px_0_0] after:transition-all after:content-['']  peer-checked:after:left-[-2px] peer-checked:after:translate-x-[200%]  peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300`}
