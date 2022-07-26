@@ -8,7 +8,7 @@ function Inbreng() {
   return (
     <div>
       <h1>This page is not available</h1>
-      <p>You are redirecting to Surveymonkey</p>
+      <p>You are redirected to Surveymonkey</p>
     </div>
   );
 }
