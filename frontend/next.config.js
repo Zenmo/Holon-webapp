@@ -12,12 +12,11 @@ const nextConfig = {
       unoptimized: true,
     },
   },
-  async redirects() {
+  async rewrites() {
     return [
       {
         source: "/inbreng",
         destination: "https://nl.surveymonkey.com/r/RYK7SRL",
-        permanent: true,
       },
     ];
   },
