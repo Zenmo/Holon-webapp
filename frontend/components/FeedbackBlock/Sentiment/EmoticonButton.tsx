@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from "react";
-import PropTypes from "prop-types";
 
 const variants = {
   heart: (
@@ -50,17 +49,7 @@ const variants = {
       fill="currentColor"
     >
       <g>
-        <line
-          stroke="currentColor"
-          strokeWidth="6"
-          strokeLinecap="undefined"
-          strokeLinejoin="undefined"
-          y2="45"
-          x2="48"
-          y1="45"
-          x1="8"
-          fill="none"
-        />
+        <line stroke="currentColor" strokeWidth="6" y2="45" x2="48" y1="45" x1="8" fill="none" />
         <ellipse ry="8" rx="8" id="svg_9" cy="19" cx="42" />
         <ellipse ry="8" rx="8" id="svg_9" cy="19" cx="15" />
       </g>
@@ -68,9 +57,20 @@ const variants = {
   ),
 };
 
-const ButtonContext = createContext();
+const ButtonContext = createContext<keyof typeof variants>("heart");
 
-export default function EmoticonButton({ children, checked, variant = "thumbsdown", ...rest }) {
+interface Props {
+  children?: React.ReactNode;
+  checked: boolean;
+  variant: keyof typeof variants;
+}
+
+export default function EmoticonButton({
+  children,
+  checked,
+  variant = "thumbsdown",
+  ...rest
+}: Props) {
   const svg = variants[variant] || variants.heart;
   const colors = checked
     ? "text-gray-100 border-gray-100 bg-holon-blue-500"
@@ -87,12 +87,6 @@ export default function EmoticonButton({ children, checked, variant = "thumbsdow
     </button>
   );
 }
-
-EmoticonButton.propTypes = {
-  children: PropTypes.node,
-  checked: PropTypes.bool,
-  variant: PropTypes.oneOf(Object.keys(variants)),
-};
 
 /**
  * Hook which provides access to the button variant.

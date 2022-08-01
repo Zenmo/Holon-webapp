@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import PropTypes from "prop-types";
 
-function ErrorMessages({ messages }) {
+function ErrorMessages({ messages }: { messages: string[] }) {
   return (
     <div className="-mb-1 pt-1 text-red-400" role="alert">
       {messages.join(", ")}
@@ -13,12 +13,17 @@ ErrorMessages.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
+type Props = {
+  label: string;
+  errors?: string[];
+} & React.InputHTMLAttributes<HTMLInputElement>;
+
 /**
  * Contains a label and input field. Inputs where `required` is not truthy will have "Optional"
  * added to the label.
  */
 // function Input({ label, ...inputProps }) {
-const Input = forwardRef(({ label, errors, ...inputProps }, ref) => (
+const Input = forwardRef<HTMLInputElement, Props>(({ label, errors, ...inputProps }, ref) => (
   <label className="block pb-3">
     <span className="block items-baseline pb-1 text-base">
       <span className="font-semibold">{label}</span>
@@ -36,10 +41,5 @@ const Input = forwardRef(({ label, errors, ...inputProps }, ref) => (
 ));
 
 Input.displayName = "Input";
-
-Input.propTypes = {
-  label: PropTypes.string.isRequired,
-  errors: PropTypes.arrayOf(PropTypes.string),
-};
 
 export default Input;

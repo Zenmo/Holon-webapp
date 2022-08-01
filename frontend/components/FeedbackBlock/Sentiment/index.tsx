@@ -4,13 +4,13 @@ import { RadioGroup } from "@headlessui/react";
 import EmoticonButton from "./EmoticonButton";
 
 export default function Sentiment() {
-  const [choice, setChoice] = useState(null);
+  const [choice, setChoice] = useState<string | null>(null);
 
   useEffect(() => {
-    setChoice(localStorage.getItem("holon_sentiment_value") || null);
+    setChoice(localStorage.getItem("holon_sentiment_value"));
   }, []);
 
-  const onChange = async (selected) => {
+  const onChange = async (selected: string) => {
     if (!selected) {
       return;
     }

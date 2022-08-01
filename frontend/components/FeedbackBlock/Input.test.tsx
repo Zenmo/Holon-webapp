@@ -25,7 +25,14 @@ describe("Input", () => {
     });
 
     it("renders the errors", () => {
-      expect(screen.queryByRole("alert", { text: "Error one Error two" })).toBeInTheDocument();
+      const alert = screen.queryByRole("alert");
+
+      expect(alert).toBeInTheDocument();
+
+      if (alert) {
+        expect(alert.innerHTML).toContain("Error one");
+        expect(alert.innerHTML).toContain("Error two");
+      }
     });
   });
 });

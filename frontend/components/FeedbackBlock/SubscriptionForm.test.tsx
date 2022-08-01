@@ -1,9 +1,19 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
+import fetchMock from "jest-fetch-mock";
+
 import SubscriptionForm from "./SubscriptionForm";
 
-async function completeForm({ name, email, company }) {
+async function completeForm({
+  name,
+  email,
+  company,
+}: {
+  name: string;
+  email: string;
+  company?: string;
+}) {
   const nameEl = screen.getByLabelText("Naam");
   const emailEl = screen.getByLabelText("E-mailadres");
   const companyEl = screen.getByLabelText(/Bedrijf/);

@@ -1,5 +1,4 @@
-import { useReducer, useRef } from "react";
-import PropTypes from "prop-types";
+import React, { useReducer, useRef } from "react";
 
 import { MailIcon } from "@heroicons/react/outline";
 
@@ -7,13 +6,27 @@ import ButtonLoadingIcon from "./ButtonLoadingIcon";
 import HolonButton from "../Buttons/HolonButton";
 import Input from "./Input";
 
+interface State {
+  status: "idle" | "loading" | "success" | "error";
+  errors: Record<string, string[]>;
+}
+
+type Action =
+  | {
+      type: "fetch" | "resolve";
+    }
+  | {
+      type: "reject";
+      errors?: Record<string, string[]>;
+    };
+
 /**
  * Submit button for the form sets its style and text based on the state of the form.
  */
-function SubmitButton({ status, ...buttonProps }) {
-  let content = "Bevestig";
+function SubmitButton({ status }: { status: State["status"] }) {
+  let content: React.ReactNode = "Bevestig";
 
-  if (status === "pending") {
+  if (status === "loading") {
     content = <ButtonLoadingIcon />;
   } else if (status === "success") {
     content = "Met dank!";
@@ -22,41 +35,41 @@ function SubmitButton({ status, ...buttonProps }) {
   return (
     <HolonButton
       className="flex h-12 items-center justify-center text-lg"
-      disabled={status === "pending" || status === "success"}
+      disabled={status === "loading" || status === "success"}
     >
       {content}
     </HolonButton>
   );
 }
 
-SubmitButton.propTypes = {
-  status: PropTypes.oneOf(["initial", "pending", "success", "failed"]).isRequired,
-};
-
-function reducer(state, action) {
+function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "fetch":
-      return { status: "pending", errors: {} };
+      return { status: "loading", errors: {} };
     case "resolve":
       return { status: "success", errors: {} };
     case "reject":
-      return { status: "failed", errors: action.errors || {} };
+      return { status: "error", errors: action.errors || {} };
     default:
       return state;
   }
 }
 
 export default function SubscriptionForm() {
-  const [state, dispatch] = useReducer(reducer, { status: "initial", errors: {} });
+  const [state, dispatch] = useReducer(reducer, { status: "idle", errors: {} });
 
-  const nameRef = useRef();
-  const emailRef = useRef();
-  const companyRef = useRef();
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const companyRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     dispatch({ type: "fetch" });
+
+    if (!nameRef.current || !emailRef.current || !companyRef.current) {
+      return;
+    }
 
     const payload = {
       name: nameRef.current.value,
@@ -86,7 +99,7 @@ export default function SubscriptionForm() {
     }
   };
 
-  const areInputsDisabled = state.status === "pending" || state.status === "success";
+  const areInputsDisabled = state.status === "loading" || state.status === "success";
 
   return (
     <form onSubmit={onSubmit}>
