@@ -12,15 +12,6 @@ const nextConfig = {
       unoptimized: true,
     },
   },
-  async redirects() {
-    return [
-      {
-        source: "/inbreng",
-        destination: "https://nl.surveymonkey.com/r/RYK7SRL",
-        permanent: true,
-      },
-    ];
-  },
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 };
 
