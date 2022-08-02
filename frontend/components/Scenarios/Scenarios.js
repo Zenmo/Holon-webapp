@@ -75,7 +75,7 @@ function Scenarios({
       },
       renewability: {
         local: parseFloat(data.local.renewability),
-        national: parseFloat(data.national.renewability,
+        national: parseFloat(data.national.renewability),
       },
     };
     return convertedFormatData;

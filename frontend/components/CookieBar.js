@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 import Image from "next/image";
 import CookieConsent, { getCookieConsentValue, Cookies } from "react-cookie-consent";
 
@@ -44,3 +45,7 @@ function CookieBar({ onAccept }) {
 }
 
 export default CookieBar;
+
+CookieBar.propTypes = {
+  onAccept: PropTypes.func,
+};

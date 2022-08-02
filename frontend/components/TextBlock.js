@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import PropTypes from "prop-types";
 
 import overview from "../public/imgs/Overview.svg";
 import expansionproblem_w_wind from "../public/imgs/Expansion Problem Windholon.svg";
@@ -111,3 +112,12 @@ export default function TextBlock(props) {
     </div>
   );
 }
+
+TextBlock.propTypes = {
+  children: PropTypes.node,
+  right: PropTypes.bool,
+  value: PropTypes.string,
+  borderColor: PropTypes.string,
+  underlineTitleBlue: PropTypes.string,
+  underlineTitleGolden: PropTypes.string,
+};
