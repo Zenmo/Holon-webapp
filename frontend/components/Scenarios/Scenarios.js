@@ -110,23 +110,21 @@ function Scenarios({
       heatholon: heatholon,
       windholon: windholon,
     };
-    console.log(data);
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/calculation/`, {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        //update values with response data, something like this
-        convertCalculationResultsToState(convertFormatting(data));
-        setLoading(false);
-        setUncalculatedScenario(false);
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/calculation/`, {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(data),
       });
+
+      //update values with response data, something like this
+      convertCalculationResultsToState(convertFormatting(await response.json()));
+      setLoading(false);
+      setUncalculatedScenario(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <React.Fragment>
