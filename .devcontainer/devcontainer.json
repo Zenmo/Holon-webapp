@@ -22,7 +22,7 @@
 				"editor.insertSpaces": true,
 				"editor.tabSize": 4,
 				"python.defaultInterpreterPath": "/usr/local/bin/python",
-				"python.languageServer": "Pylance",		
+				"python.languageServer": "Pylance",
 				"python.linting.enabled": true,
 				"python.linting.pylintEnabled": true,
 				"python.linting.pylintArgs": [
@@ -38,7 +38,7 @@
 				"python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
 				"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
 				"python.testing.pytestPath": "/usr/local/py-utils/bin/pytest",
-				"python.testing.pytestEnabled":true,
+				"python.testing.pytestEnabled": true,
 				"files.associations": {
 					"*.css": "tailwindcss"
 				},
@@ -58,7 +58,8 @@
 				"ms-python.vscode-pylance",
 				"esbenp.prettier-vscode",
 				"dbaeumer.vscode-eslint",
-				"wix.vscode-import-cost"		
+				"wix.vscode-import-cost",
+				"bradlc.vscode-tailwindcss"
 			]
 		}
 	},
@@ -68,9 +69,18 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "pip install --user -r requirements.txt",
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"forwardPorts": [8000, 5000, 5432, 6379, 3000],
-	"remoteUser": "vscode",
+	"forwardPorts": [
+		8000,
+		5000,
+		5432,
+		6379,
+		3000
+	],
+	"remoteUser": "root",
 	"features": {
 		"git": "os-provided"
-	}
+	},
+	"postCreateCommand": [
+		"bash","./.devcontainer/init.sh"
+	]
 }
