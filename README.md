@@ -4,29 +4,33 @@ Prototype of the Holon web application
 
 ## First setup / Start the application
 
-First copy the .env.example to .env.local. You don't have to change anything inside
+First copy the .env.example to .env in the .devcontainer folder You don't have to change anything inside
 the .env file:
 
 ```bash
-cp frontend/.env.example frontend/.env.local
-cp backend/.env.example backend/.env.local
+cp .devcontainer/.env.example .devcontainer/.env
 ```
 
-- note: If you decide to make some changes to the .env files, restart the docker containers.
+- note: If you decide to make some changes to the .env files, rebuild the devcontainer
 
 ```
-docker-compose up -d
+Ctrl-Shift-P > Remote-Containers: Rebuild Container
 ```
 
-Everything should be build automatically.
-After everything is done, the envoriments are available at:
+## Start Dev Container
+
+Visual Studio Code will detect that you are working in a Dev Container, click Reopen in Container to start the Dev container.
+After you reopend visual studio code in a devcontainer you are ready to start the backend and frontend, run the following commands in two seperate terminals:
 
 ```
-frontend: localhost:3000
-backend: localhost:8000
+cd frontend
+npm run dev
+
+cd backend
+python mangage.py runserver
 ```
 
-For the frontend Prettier and EsLint is used. Make sure you installed these extenstions in your VSCode.
+For the frontend Prettier and EsLint is used. Make sure you installed these extenstions in your VSCode. These extensions are automatically installed in the dev container:
 
 ```
 Name: ESLint
@@ -47,12 +51,11 @@ VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.
 
 ## Configure stuff inside the container
 
-If you want for example do an Django migration, you have to that inside of the container
-
-docker-compose exec [container_name] [command]
+If you want for example do an Django migration, you can just run any command from the terminal in the correct folder, for example:
 
 ```
-docker-compose exec backend python manage.py migrate
+cd backend
+backend python manage.py makemigrations
 ```
 
 ## Admin
@@ -61,11 +64,11 @@ To see the data that is saved in the database, you can take a look in the admin.
 To do so, you have to create a local superuseraccount:
 
 ```
-docker-compose exec backend python manage.py createsuperuser
+cd backend
+python manage.py createsuperuser
 ```
 
 After finishing all the steps, you can login on localhost:8000/admin
-
 
 ## Deployment
 
