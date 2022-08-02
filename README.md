@@ -19,15 +19,14 @@ Ctrl-Shift-P > Remote-Containers: Rebuild Container
 
 ## Start Dev Container
 
-Visual Studio Code will detect that you are working in a Dev Container, click Reopen in Container to start the Dev container.
-After you reopend visual studio code in a devcontainer you are ready to start the backend and frontend, run the following commands in two seperate terminals:
+Visual Studio Code will detect that you are working in a Dev Container, click "Reopen in Container" to start the Dev container. After you reopen visual studio code in a devcontainer you are ready to start the backend and frontend, run the following commands in two seperate terminals:
 
 ```
 cd frontend
 npm run dev
 
 cd backend
-python mangage.py runserver
+python manage.py runserver
 ```
 
 For the frontend Prettier and EsLint is used. Make sure you installed these extenstions in your VSCode. These extensions are automatically installed in the dev container:
