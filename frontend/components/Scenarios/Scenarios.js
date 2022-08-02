@@ -58,6 +58,28 @@ function Scenarios({
       setLocal(arg2);
     }
   }
+
+  function convertFormatting(data) {
+    const convertedFormatData = {
+      reliability: {
+        local: parseFloat(data.local.reliability),
+        national: parseFloat(data.national.reliability),
+      },
+      selfconsumption: {
+        local: parseFloat(data.local.selfconsumption),
+        national: parseFloat(data.national.selfconsumption),
+      },
+      affordability: {
+        local: parseFloat(data.local.affordability),
+        national: parseFloat(data.national.affordability),
+      },
+      renewability: {
+        local: parseFloat(data.local.renewability),
+        national: parseFloat(data.national.renewability,
+      },
+    };
+    return convertedFormatData;
+  }
   const submitForm = (e) => {
     e.preventDefault();
     triggercalculate();
@@ -98,7 +120,7 @@ function Scenarios({
       .then((response) => response.json())
       .then((data) => {
         //update values with response data, something like this
-        convertCalculationResultsToState(data);
+        convertCalculationResultsToState(convertFormatting(data));
         setLoading(false);
         setUncalculatedScenario(false);
       })

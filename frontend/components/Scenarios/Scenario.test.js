@@ -6,7 +6,22 @@ import Scenarios from "./Scenarios";
 async function recalculate() {
   const submitEl = screen.getByRole("button");
 
-  fetchMock.mockResponse();
+  fetchMock.mockResponse(
+    JSON.stringify({
+      local: {
+        reliability: 100,
+        affordability: 2420,
+        renewability: 7,
+        selfconsumption: 58,
+      },
+      national: {
+        reliability: 100,
+        affordability: 2420,
+        renewability: 7,
+        selfconsumption: 58,
+      },
+    })
+  );
 
   return await act(async () => {
     fireEvent.click(submitEl);
@@ -174,7 +189,10 @@ describe("Scenario", () => {
     });
     it("submits the data to an API endpoint", async () => {
       await recalculate();
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+    });
+    it("correctly renders the response", async () => {
+      expect(screen.getByTestId("resultZelfconsumptie")).toHaveTextContent("58");
     });
   });
 });
