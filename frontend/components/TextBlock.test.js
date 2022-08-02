@@ -23,7 +23,7 @@ describe("correct styling", () => {
       <TextBlock
         value="warmte"
         right="true"
-        underlineTitle="true"
+        underlineTitleBlue="true"
         colorUnderline="decoration-holon-gold-600"
         borderColor="border-holon-gold-600"
       ></TextBlock>
@@ -34,9 +34,6 @@ describe("correct styling", () => {
   });
   it("title is underlined", () => {
     expect(screen.getByRole("heading", { level: 2 }).classList.contains("shadow-blue")).toBe(true);
-  });
-  it("is underlined in the correct color", () => {
-    expect(screen.getByRole("heading", { level: 2 })).toHaveStyle("text-decoration-color: #C89D28");
   });
   it("has a border", () => {
     expect(screen.getByTestId("outlined-block").classList.contains("border-solid")).toBe(true);

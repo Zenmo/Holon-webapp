@@ -1,6 +1,7 @@
 import Head from "next/head";
-import Scenarios from "../components/Scenarios/Scenarios";
 
+import { initGA } from "../util/gtag";
+import Scenarios from "../components/Scenarios/Scenarios";
 import ContentBlock from "../components/ContentBlock";
 import FeedbackBlock from "../components/FeedbackBlock";
 import HolonButton from "../components/Buttons/HolonButton";
@@ -10,6 +11,10 @@ import WelcomePage from "../components/WelcomePage";
 import CookieBar from "../components/CookieBar";
 
 export default function Home() {
+  const handleAcceptCookie = () => {
+    initGA();
+  };
+
   return (
     <div>
       <Head>
@@ -202,11 +207,7 @@ export default function Home() {
           />
         </ContentBlock>
         <ContentBlock>
-          <TextBlock
-            value="afsluiter"
-            underlineTitle="true"
-            colorUnderline="decoration-holon-slated-blue-300"
-          >
+          <TextBlock value="afsluiter" underlineTitleBlue="true">
             <HolonButton tag="a" href="#openModel" variant="blue">
               Naar het open model
             </HolonButton>
@@ -237,7 +238,7 @@ export default function Home() {
         <ContentBlock colorClass="bg-holon-blue-900" id="feedback">
           <FeedbackBlock />
         </ContentBlock>
-        <CookieBar></CookieBar>
+        <CookieBar onAccept={handleAcceptCookie}></CookieBar>
       </main>
     </div>
   );
