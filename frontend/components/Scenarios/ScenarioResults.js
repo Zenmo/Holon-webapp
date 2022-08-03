@@ -32,8 +32,8 @@ function ScenarioResults(props) {
             Indicatoren
           </h4>
           <ScenarioResultItem
-            minvalue="0"
-            maxvalue="100"
+            minvalue={0}
+            maxvalue={100}
             label="Betrouwbaarheid"
             unit=" " // if " " is supplied the result will be displayed as either + at 100 or - at 0
             value={props.reliability}
@@ -42,8 +42,8 @@ function ScenarioResults(props) {
             messageLocal="Betrouwbaarheid wordt bepaald door overbelasting   van het elektriciteitsnet. Bij een negatieve indicatie wordt het net   regelmatig overbelast, bij een positieve indicatie is dit geen probleem."
           />
           <ScenarioResultItem
-            minvalue="50"
-            maxvalue="90"
+            minvalue={50}
+            maxvalue={90}
             label="Zelfconsumptie"
             unit="%"
             value={props.selfconsumption}
@@ -52,8 +52,8 @@ function ScenarioResults(props) {
             messageLocal="Zelfconsumptie is het aandeel van de lokaal   opgewekte energie die ook gelijktijdig lokaal gebruikt wordt. Een hoge   zelfconsumptie is nodig om netcongestie tegen te gaan door pieken in lokale   (duurzame) opwek. "
           />
           <ScenarioResultItem
-            minvalue="1900"
-            maxvalue="2600"
+            minvalue={1900}
+            maxvalue={2600}
             invert
             label="Betaalbaarheid"
             unit="&euro;/hh/j"
@@ -63,8 +63,8 @@ function ScenarioResults(props) {
             messageLocal="De betaalbaarheid zijn de energiekosten per   huishouden per jaar. Hierbij worden autobrandstoffen, aardgas, warmte en   elektriciteit meegenomen. Van de duurzame bronnen die gebouwd worden in de   buurten wordt de LCOE genomen zodat investeringen ook meetellen in de kosten.   De overige elektriciteit gaat op basis van marktprijzen."
           />
           <ScenarioResultItem
-            minvalue="10"
-            maxvalue="35"
+            minvalue={10}
+            maxvalue={35}
             label="Duurzaamheid"
             unit="%"
             value={props.renewability}
@@ -79,25 +79,25 @@ function ScenarioResults(props) {
               Sociaal
             </h4>
             {props.windholon && props.heatholon ? (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="socialText" className="text-lg font-light italic text-gray-800">
                 Er wordt een combinatie van twee holonen gevormd. Dit is technisch efficiënt maar
                 vraagt wel meer afstemming bewoners in de twee buurten. Individuele en collectieve
                 belangen moeten hierbij op elkaar afgestemd zijn.
               </p>
             ) : props.windholon ? (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="socialText" className="text-lg font-light italic text-gray-800">
                 De buurtbewoners ervaren lokaal eigenaarschap, verdelen de kosten en baten van de
                 windturbine eerlijk, en steunen de ruimtelijke inpassing. Wel moet voor genoeg
                 vermogen de coöperatie flink groeien met leden die hun auto’s slim kunnen laden.
               </p>
             ) : props.heatholon ? (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="socialText" className="text-lg font-light italic text-gray-800">
                 De bewoners voldoen aan hun wens om van het gas af te gaan, en creëren lokaal
                 eigenaarschap over het net. Door de piekketel en warmtebuffer zijn de bewoners
                 gerustgesteld over de betrouwbaarheid van het systeem.
               </p>
             ) : (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="socialText" className="text-lg font-light italic text-gray-800">
                 De sociale cohesie in de buurt is vrij laag en lokaal eigenaarschap van collectieve
                 duurzame technieken is vrijwel afwezig.
               </p>
@@ -108,25 +108,25 @@ function ScenarioResults(props) {
               Juridisch
             </h4>
             {props.windholon && props.heatholon ? (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="legalText" className="text-lg font-light italic text-gray-800">
                 Samen produceren, samen opslaan en productie en gebruik op elkaar afstemmen is
                 juridisch complex. Niet alles is nu mogelijk of kan alleen onder bepaalde
                 voorwaarden. Het systeem zal hierop aangepast moeten worden.
               </p>
             ) : props.windholon ? (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="legalText" className="text-lg font-light italic text-gray-800">
                 Flexibele tarieven voor het netwerk kunnen congestie voorkomen. Het netwerk
                 ontlasten met slim laden in de nabijheid is juridisch complex. Nieuwe afspraken en
                 regelingen zijn nodig om deze situatie aantrekkelijk te maken
               </p>
             ) : props.heatholon ? (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="legalText" className="text-lg font-light italic text-gray-800">
                 Juridisch kan het lastig zijn om vraag en aanbod van elektriciteit en warmte lokaal
                 af te stemmen. Samen opslaan van elektriciteit of het toepassen van spitstarieven in
                 netten of voor warmte is nog niet voldoende geregeld.{" "}
               </p>
             ) : (
-              <p className="text-lg font-light italic text-gray-800">
+              <p data-testid="legalText" className="text-lg font-light italic text-gray-800">
                 Het systeem loopt tegen zijn grenzen aan. In deze beginsituatie is er nog geen
                 afstemming van lokale opwek en verbruik. Op dit moment mag dat meestal ook niet.
                 Voor een efficiënt lokaal systeem zijn nieuwe regels nodig.
@@ -142,14 +142,26 @@ function ScenarioResults(props) {
 export default ScenarioResults;
 
 ScenarioResults.propTypes = {
-  children: PropTypes.object,
-  local: PropTypes.object,
+  children: PropTypes.array,
+  local: PropTypes.bool,
   borderColor: PropTypes.string,
   scenarioid: PropTypes.string,
-  reliability: PropTypes.number,
-  affordability: PropTypes.number,
-  renewability: PropTypes.number,
-  selfconsumption: PropTypes.number,
+  reliability: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
+  affordability: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
+  renewability: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
+  selfconsumption: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
+  }),
   setLocal: PropTypes.func,
   windholon: PropTypes.bool,
   heatholon: PropTypes.bool,

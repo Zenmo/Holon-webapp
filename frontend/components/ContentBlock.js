@@ -10,6 +10,7 @@ function ContentBlock(content) {
     <div
       className={`min-h-screen snap-start ${bgColor} relative flex items-center justify-center`}
       id={id}
+      data-testid="content-block"
     >
       {contentOfBlock}
     </div>

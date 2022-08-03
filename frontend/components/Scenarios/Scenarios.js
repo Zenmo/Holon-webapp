@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
-import ScenarioResults from "./Scenarios/ScenarioResults";
-import HolonButton from "../components/Buttons/HolonButton";
-import Loader from "./Scenarios/Loader";
-import Neighbourhood from "./Scenarios/Neighbourhood";
-import Tooltip from "./Scenarios/Tooltip";
-import ProgressBar from "./Scenarios/ProgressBar";
+import ScenarioResults from "./ScenarioResults";
+import HolonButton from "../Buttons/HolonButton";
+import Loader from "./Loader";
+import Neighbourhood from "./Neighbourhood";
+import Tooltip from "./Tooltip";
+import ProgressBar from "./ProgressBar";
 
 function Scenarios({
   neighbourhood1: initialNeighbourhood1,
@@ -31,10 +31,10 @@ function Scenarios({
 
   const [local, setLocal] = useState(true);
 
-  const [reliability, setReliability] = useState(0);
-  const [selfconsumption, setSelfconsumption] = useState(0);
-  const [affordability, setAffordability] = useState(0);
-  const [renewability, setRenewability] = useState(0);
+  const [reliability, setReliability] = useState({});
+  const [selfconsumption, setSelfconsumption] = useState({});
+  const [affordability, setAffordability] = useState({});
+  const [renewability, setRenewability] = useState({});
 
   useEffect(() => {
     setUncalculatedScenario(true);
@@ -47,28 +47,38 @@ function Scenarios({
   }, [initialCalculationResults]);
 
   function convertCalculationResultsToState(calculationResults) {
-    setReliability({
-      national: calculationResults.national.reliability,
-      local: calculationResults.local.reliability,
-    });
-    setSelfconsumption({
-      national: calculationResults.national.selfconsumption,
-      local: calculationResults.local.selfconsumption,
-    });
-    setAffordability({
-      national: calculationResults.national.affordability,
-      local: calculationResults.local.affordability,
-    });
-    setRenewability({
-      national: calculationResults.national.renewability,
-      local: calculationResults.local.renewability,
-    });
+    setReliability(calculationResults.reliability);
+    setSelfconsumption(calculationResults.selfconsumption);
+    setAffordability(calculationResults.affordability);
+    setRenewability(calculationResults.renewability);
   }
 
   function updateLocal(arg1, arg2) {
     if (arg1 == "local") {
       setLocal(arg2);
     }
+  }
+
+  function convertFormatting(data) {
+    const convertedFormatData = {
+      reliability: {
+        local: parseFloat(data.local.reliability),
+        national: parseFloat(data.national.reliability),
+      },
+      selfconsumption: {
+        local: parseFloat(data.local.selfconsumption),
+        national: parseFloat(data.national.selfconsumption),
+      },
+      affordability: {
+        local: parseFloat(data.local.affordability),
+        national: parseFloat(data.national.affordability),
+      },
+      renewability: {
+        local: parseFloat(data.local.renewability),
+        national: parseFloat(data.national.renewability),
+      },
+    };
+    return convertedFormatData;
   }
   const submitForm = (e) => {
     e.preventDefault();
@@ -101,21 +111,20 @@ function Scenarios({
       windholon: windholon,
     };
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/calculation/`, {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        //update values with response data, something like this
-        convertCalculationResultsToState(data);
-        setLoading(false);
-        setUncalculatedScenario(false);
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/calculation/`, {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(data),
       });
+
+      //update values with response data, something like this
+      convertCalculationResultsToState(convertFormatting(await response.json()));
+      setLoading(false);
+      setUncalculatedScenario(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <React.Fragment>
@@ -144,7 +153,11 @@ function Scenarios({
               >
                 uitgangspunten
               </h3>
-              <fieldset disabled={locked || loading} className={locked && `cursor-pointer`}>
+              <fieldset
+                data-testid="scenariofieldset"
+                disabled={locked || loading}
+                className={locked && `cursor-pointer`}
+              >
                 <div className={locked && ``}>
                   {neighbourhood1 && (
                     <Neighbourhood
@@ -177,6 +190,7 @@ function Scenarios({
                         type="checkbox"
                         name="heatholon"
                         id={`heatholon${scenarioid}`}
+                        data-testid={`heatholon${scenarioid}`}
                         onChange={(e) => setHeatholon(e.target.checked)}
                         checked={heatholon}
                         className="flex h-5 w-5 appearance-none items-center justify-center rounded-none border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white shadow-[4px_4px_0_0] shadow-black checked:bg-holon-blue-500 after:checked:content-['✔'] disabled:border-holon-grey-300 disabled:shadow-gray-500 disabled:checked:bg-holon-grey-300"
@@ -192,6 +206,7 @@ function Scenarios({
                         type="checkbox"
                         name="windholon"
                         id={`windholon${scenarioid}`}
+                        data-testid={`windholon${scenarioid}`}
                         onChange={(e) => setWindholon(e.target.checked)}
                         checked={windholon}
                         className="flex h-5 w-5 appearance-none items-center justify-center rounded-none border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white shadow-[4px_4px_0_0] shadow-black checked:bg-holon-blue-500 after:checked:content-['✔'] disabled:border-holon-grey-300 disabled:shadow-gray-500 disabled:checked:bg-holon-grey-300"
@@ -256,15 +271,15 @@ Scenarios.propTypes = {
 
   neighbourhood1: PropTypes.shape({
     heatpump: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     evadoptation: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     solarpanels: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     heatnetwork: PropTypes.shape({
@@ -274,15 +289,15 @@ Scenarios.propTypes = {
   }),
   neighbourhood2: PropTypes.shape({
     heatpump: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     evadoptation: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     solarpanels: PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
       label: PropTypes.string,
     }),
     heatnetwork: PropTypes.shape({
@@ -291,17 +306,21 @@ Scenarios.propTypes = {
     }),
   }),
   calculationresults: PropTypes.shape({
-    local: PropTypes.shape({
-      reliability: PropTypes.number,
-      affordability: PropTypes.number,
-      renewability: PropTypes.number,
-      selfconsumption: PropTypes.number,
+    reliability: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
     }),
-    national: PropTypes.shape({
-      reliability: PropTypes.number,
-      affordability: PropTypes.number,
-      renewability: PropTypes.number,
-      selfconsumption: PropTypes.number,
+    affordability: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
+    }),
+    renewability: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
+    }),
+    selfconsumption: PropTypes.shape({
+      local: PropTypes.number,
+      national: PropTypes.number,
     }),
   }),
   windholon: PropTypes.bool,

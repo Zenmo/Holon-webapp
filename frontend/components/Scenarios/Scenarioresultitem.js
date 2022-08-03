@@ -91,6 +91,7 @@ function ScenarioResultItem({
         <span className="relative ml-auto">
           <Tooltip tooltipMessage={local === true ? messageLocal : messageNl} result={true}>
             <output
+              data-testid={`result${label}`}
               style={{ backgroundColor: per2colorArray(minvalue, maxvalue, inputvalue, invert) }}
               className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center text-lg font-medium italic leading-[4.5rem] shadow-[2px_2px_0_0]`}
             >
@@ -109,27 +110,22 @@ export default ScenarioResultItem;
 
 ScenarioResultItem.propTypes = {
   children: PropTypes.object,
-  local: PropTypes.object,
   borderColor: PropTypes.string,
   scenarioid: PropTypes.string,
-  reliability: PropTypes.number,
-  affordability: PropTypes.number,
-  renewability: PropTypes.number,
-  selfconsumption: PropTypes.number,
   setLocal: PropTypes.func,
   windholon: PropTypes.bool,
   heatholon: PropTypes.bool,
 
   label: PropTypes.string,
   unit: PropTypes.string,
-  value: PropTypes.object,
-  local: PropTypes.shape({
-    local: PropTypes.string,
-    national: PropTypes.string,
+  value: PropTypes.shape({
+    local: PropTypes.number,
+    national: PropTypes.number,
   }),
+  local: PropTypes.bool,
   invert: PropTypes.bool,
   messageLocal: PropTypes.string,
   messageNl: PropTypes.string,
-  minvalue: PropTypes.string,
-  maxvalue: PropTypes.string,
+  minvalue: PropTypes.number,
+  maxvalue: PropTypes.number,
 };

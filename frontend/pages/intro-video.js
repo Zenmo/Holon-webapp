@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-import IntroductionVideo from "../components/IntroductionVideo";
+import IntroductionVideo from "../components/IntroductionVideo/IntroductionVideo";
 
 export default function IntroductionVideoBlock() {
   return (
