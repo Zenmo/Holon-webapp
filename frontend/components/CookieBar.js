@@ -6,13 +6,6 @@ import CookieConsent, { getCookieConsentValue, Cookies } from "react-cookie-cons
 import cookieImg from "../public/imgs/cookie.png";
 
 function CookieBar({ onAccept }) {
-  useEffect((onAccept) => {
-    const isConsent = getCookieConsentValue();
-    if (isConsent === "true") {
-      onAccept;
-    }
-  }, []);
-
   return (
     <CookieConsent
       location="bottom"

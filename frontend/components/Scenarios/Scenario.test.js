@@ -79,33 +79,39 @@ describe("Scenario", () => {
     it("is locked", () => {
       expect(screen.getByTestId("scenariofieldset")).toBeDisabled();
     });
+
     it("is shows the title", () => {
       expect(screen.getByText("The title of the scenario")).toBeInTheDocument();
     });
+
     it("shows the correct values in neighbourhood A", () => {
       expect(screen.getByTestId("scenariosliderheatpumpA1", { value: 45 })).toBeInTheDocument();
       expect(screen.getByTestId("scenariosliderevadoptationA1", { value: 70 })).toBeInTheDocument();
       expect(screen.getByTestId("scenarioslidersolarpanelsA1", { value: 40 })).toBeInTheDocument();
       expect(screen.getByTestId("scenarioswitchheatnetworkA1")).not.toBeChecked();
     });
+
     it("shows the correct values in neighbourhood B", () => {
       expect(screen.getByTestId("scenariosliderheatpumpB1", { value: 45 })).toBeInTheDocument();
       expect(screen.getByTestId("scenariosliderevadoptationB1", { value: 70 })).toBeInTheDocument();
       expect(screen.getByTestId("scenarioslidersolarpanelsB1", { value: 40 })).toBeInTheDocument();
       expect(screen.getByTestId("scenarioswitchheatnetworkB1")).toBeChecked();
     });
+
     it("shows the correct value for heatholon", async () => {
       expect(screen.getByTestId("heatholon1")).not.toBeChecked();
 
       await act(async () => fireEvent.click(screen.getByTestId("heatholon1")));
       expect(screen.getByTestId("heatholon1")).toBeChecked();
     });
+
     it("shows the correct value for windholon", async () => {
       expect(screen.getByTestId("windholon1")).toBeChecked();
 
       await act(async () => fireEvent.click(screen.getByTestId("windholon1")));
       expect(screen.getByTestId("heatholon1")).not.toBeChecked();
     });
+
     it("shows the correct scenarioresults", () => {
       expect(screen.getByTestId("resultBetrouwbaarheid")).toHaveTextContent("✔");
       expect(screen.getByTestId("resultBetaalbaarheid")).toHaveTextContent("2420");
@@ -164,9 +170,11 @@ describe("Scenario", () => {
         />
       );
     });
+
     it("is not locked", () => {
       expect(screen.getByTestId("scenariofieldset")).not.toBeDisabled();
     });
+
     it("updates legal and social texts when changing Holons", async () => {
       expect(screen.getByTestId("legalText")).toHaveTextContent("Flexibele tarieven voor");
       expect(screen.getByTestId("socialText")).toHaveTextContent(
@@ -178,13 +186,16 @@ describe("Scenario", () => {
         "De buurtbewoners ervaren lokaal eigenaarschap"
       );
     });
+
     it("shows reacalculate button", () => {
       expect(screen.queryByText("Herbereken")).toBeInTheDocument();
     });
+
     it("hides reacalculate button afer clicking it", async () => {
       await act(async () => fireEvent.click(screen.getByRole("button")));
       expect(screen.queryByText("Herbereken")).not.toBeInTheDocument();
     });
+
     it("wants to recalculate after an input changed", async () => {
       await act(async () => fireEvent.click(screen.getByRole("button")));
       expect(screen.queryByText("Herbereken")).not.toBeInTheDocument();
@@ -194,10 +205,12 @@ describe("Scenario", () => {
       );
       expect(screen.queryByText("Herbereken")).toBeInTheDocument();
     });
+
     it("submits the data to an API endpoint", async () => {
       await recalculate();
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
+
     it("correctly renders the response", async () => {
       expect(screen.getByTestId("resultZelfconsumptie")).toHaveTextContent("58");
     });

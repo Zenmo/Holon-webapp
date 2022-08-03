@@ -14,7 +14,7 @@ describe("with correct styling", () => {
     render(<ContentBlock colorClass="bg-split-blue-white" />);
     const contentBlock = screen.getByTestId("content-block");
 
-    expect(contentBlock.classList.contains("bg-split-blue-white")).toBe(true);
+    expect(contentBlock).toHaveClass("bg-split-blue-white");
   });
 });
 
