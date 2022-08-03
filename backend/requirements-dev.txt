@@ -1,2 +1,2 @@
-black==22.6.0
+-r requirements.txt
 drf-yasg==1.20.0
