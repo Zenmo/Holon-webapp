@@ -15,6 +15,11 @@ describe("text block", () => {
     expect(screen.getByText("De rol van warmte")).toBeInTheDocument();
   });
 
+  it("divides texts into seperate paragraphs", async () => {
+    const items = await screen.getAllByTestId("p");
+    expect(items).toHaveLength(2);
+  });
+
   it("contains an image", () => {
     expect(screen.getByRole("img")).toBeInTheDocument();
   });

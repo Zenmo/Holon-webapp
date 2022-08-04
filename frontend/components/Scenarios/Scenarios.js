@@ -130,7 +130,7 @@ function Scenarios({
     <React.Fragment>
       {locked && (
         <div className="absolute h-full w-full">
-          <div className={` absolute mx-10 flex h-[50vh] px-24  ${right ? "right-[0]" : ""} `}>
+          <div className={` absolute mx-10 flex h-[50vh] px-24  ${right ? "right-0" : ""} `}>
             <div
               className={`border-solid  ${borderColor} ${right ? "border-r-8" : "border-l-8"} `}
             ></div>
@@ -156,7 +156,7 @@ function Scenarios({
               <fieldset
                 data-testid="scenariofieldset"
                 disabled={locked || loading}
-                className={locked && `cursor-pointer`}
+                className={locked ? `cursor-pointer` : ""}
               >
                 <div className={locked && ``}>
                   {neighbourhood1 && (

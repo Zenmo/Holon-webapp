@@ -1,12 +1,17 @@
 import PropTypes from "prop-types";
-import ScenarioSlider from "./Scenarioslider";
-import ScenarioSwitch from "./Scenarioswitch";
+import ScenarioSlider from "./ScenarioSlider";
+import ScenarioSwitch from "./ScenarioSwitch";
 
 function Neighbourhood(props) {
   function updateValue(property, inputvalue) {
-    props.neighbourhood[property].value =
-      typeof inputvalue == "boolean" ? inputvalue : parseInt(inputvalue);
-    props.setNeighbourhood({ ...props.neighbourhood, property: props.neighbourhood[property] });
+    const propertyValue = typeof inputvalue == "boolean" ? inputvalue : parseInt(inputvalue);
+    props.neighbourhood[property].value = props.setNeighbourhood({
+      ...props.neighbourhood,
+      [property]: {
+        ...props.neighbourhood[property],
+        value: propertyValue,
+      },
+    });
   }
 
   return (

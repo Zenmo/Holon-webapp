@@ -1,26 +1,11 @@
-import React from "react";
-import Image from "next/image";
-import PropTypes from "prop-types";
+import overview from "../../public/imgs/Overview.svg";
+import expansionproblem_w_wind from "../../public/imgs/Expansion Problem Windholon.svg";
+import heatholon from "../../public/imgs/Warmteholon.svg";
+import animation from "../../public/imgs/Sprint-6-Case-animation.gif";
+import netherlandspuzzle from "../../public/imgs/Nederland met Holonen.svg";
 
-import overview from "../public/imgs/Overview.svg";
-import expansionproblem_w_wind from "../public/imgs/Expansion Problem Windholon.svg";
-import heatholon from "../public/imgs/Warmteholon.svg";
-import animation from "../public/imgs/Sprint-6-Case-animation.gif";
-import netherlandspuzzle from "../public/imgs/Nederland met Holonen.svg";
-
-export default function TextBlock(props) {
-  let stylingRight = props.right
-    ? "items-end text-right mr-24 border-r-8 pr-5"
-    : "border-l-8 ml-24 pl-5";
-  let imageTextFlex = props.right ? "flex-row-reverse" : "flex-row";
-  let flexValue = props.right ? "justify-end" : "";
-  let value = props.value ? props.value : "default";
-  let borderColor = props.borderColor ? props.borderColor : "border-white";
-  let extraContent = props.children ? props.children : "";
-  let underlineTitleBlue = props.underlineTitleBlue ? "shadow-blue" : "";
-  let underlineTitleGolden = props.underlineTitleGolden ? props.underlineTitleGolden : "";
-
-  const texts = {
+export const ContentTextBlocks = {
+  texts: {
     default: {
       title: "Title of this textblock",
       pText: "The paragraph text of this textblock",
@@ -50,9 +35,8 @@ export default function TextBlock(props) {
       pText:
         "Slim samenwerken in en tussen holonen kan helpen. De netten worden minder belast en er is meer ruimte voor lokaal eigenaarschap en energiecoöperaties.\nEchter, het creëren van een holon heeft vele uitdagingen. Niet alleen technisch maar ook juridisch, sociaal en economisch. \nOpen het model om hier zelf mee te spelen of laat je email achter en blijf op de hoogte.",
     },
-  };
-
-  const images = {
+  },
+  images: {
     default: {
       img: "",
       alt: "",
@@ -77,47 +61,5 @@ export default function TextBlock(props) {
       img: netherlandspuzzle,
       alt: "Nederland en de puzzel van lokale autonomie",
     },
-  };
-
-  function createParagraphs(texts) {
-    const paragraphs = texts.split("\n").map((str, index) => (
-      <p key={index} className="mt-4">
-        {str}
-      </p>
-    ));
-    return paragraphs;
-  }
-
-  return (
-    <div className={`mx-10 flex min-h-screen w-screen ${flexValue}`} data-testid="text-block">
-      <div
-        className={`flex w-full flex-col border-solid ${borderColor} ${stylingRight}`}
-        data-testid="outlined-block"
-      >
-        <h2
-          className={`mt-24 text-6xl font-semibold ${underlineTitleBlue} ${underlineTitleGolden}`}
-        >
-          {texts[value]["title"]}
-        </h2>
-        <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
-          <div className="flex w-5/12 flex-col">
-            <div className="text-lg">{createParagraphs(texts[value]["pText"])}</div>
-            <div className="mt-24 flex gap-4">{extraContent}</div>
-          </div>
-          <div className="w-7/12 p-10">
-            <Image src={images[value].img} alt={images[value].alt} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-TextBlock.propTypes = {
-  children: PropTypes.node,
-  right: PropTypes.bool,
-  value: PropTypes.string,
-  borderColor: PropTypes.string,
-  underlineTitleBlue: PropTypes.string,
-  underlineTitleGolden: PropTypes.string,
+  },
 };

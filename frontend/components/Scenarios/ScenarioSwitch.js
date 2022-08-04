@@ -25,7 +25,7 @@ function ScenarioSwitch({
 
       <label htmlFor={switchid} className="flex items-center gap-1">
         <small>{off}</small>
-        <span className={` relative mx-1 ${locked && "cursor-not-allowed"}`}>
+        <span className={` relative mx-1 ${locked ? "cursor-not-allowed" : ""}`}>
           <input
             data-testid={switchid}
             disabled={locked}
