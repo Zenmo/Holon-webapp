@@ -176,15 +176,17 @@ describe("Scenario", () => {
     });
 
     it("updates legal and social texts when changing Holons", async () => {
-      expect(screen.getByTestId("legalText")).toHaveTextContent("Flexibele tarieven voor");
-      expect(screen.getByTestId("socialText")).toHaveTextContent(
-        "De buurtbewoners ervaren lokaal eigenaarschap"
-      );
+      expect(screen.queryByText(/Flexibele tarieven voor/)).toBeInTheDocument();
+      expect(
+        screen.queryByText(/De buurtbewoners ervaren lokaal eigenaarschap/)
+      ).toBeInTheDocument();
+
       await act(async () => fireEvent.click(screen.getByTestId("windholon2")));
-      expect(screen.getByTestId("legalText")).not.toHaveTextContent("Flexibele tarieven voor");
-      expect(screen.getByTestId("socialText")).not.toHaveTextContent(
-        "De buurtbewoners ervaren lokaal eigenaarschap"
-      );
+
+      expect(screen.queryByText(/Flexibele tarieven voor/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/De buurtbewoners ervaren lokaal eigenaarschap/)
+      ).not.toBeInTheDocument();
     });
 
     it("shows reacalculate button", () => {
