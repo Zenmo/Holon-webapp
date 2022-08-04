@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function ContentBlock(props) {
   let id = props.id ? props.id : "";
@@ -17,3 +18,9 @@ function ContentBlock(props) {
 }
 
 export default ContentBlock;
+
+ContentBlock.propTypes = {
+  children: PropTypes.node,
+  colorClass: PropTypes.string,
+  id: PropTypes.string,
+};

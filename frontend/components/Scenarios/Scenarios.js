@@ -44,7 +44,7 @@ function Scenarios({
     initialcalculationResults
       ? convertcalculationResultsToState(initialcalculationResults)
       : triggerCalculate();
-  }, [initialcalculationResults]);
+  }, [initialcalculationResults, triggerCalculate]);
 
   function convertcalculationResultsToState(calculationResults) {
     setReliability(calculationResults.reliability);
