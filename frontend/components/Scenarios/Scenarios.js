@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import ScenarioResults from "./ScenarioResults";
 import HolonButton from "../Buttons/HolonButton";
 import Loader from "./Loader";
@@ -35,6 +35,48 @@ function Scenarios({
   const [selfconsumption, setSelfconsumption] = useState({});
   const [affordability, setAffordability] = useState({});
   const [renewability, setRenewability] = useState({});
+
+  const triggerCalculate = useCallback(async () => {
+    setLoading(true);
+
+    //object with data to push to the api
+    const data = {
+      neighbourhood1: {
+        evadoptation: neighbourhood1
+          ? neighbourhood1.evadoptation.value
+          : neighbourhood1.evadoptation.value,
+        solarpanels: neighbourhood1
+          ? neighbourhood1.solarpanels.value
+          : neighbourhood1.solarpanels.value,
+        heatpumps: neighbourhood1 ? neighbourhood1.heatpump.value : neighbourhood1.heatpump.value,
+      },
+      neighbourhood2: {
+        evadoptation: neighbourhood2
+          ? neighbourhood2.evadoptation.value
+          : neighbourhood2.evadoptation.value,
+        solarpanels: neighbourhood2
+          ? neighbourhood2.solarpanels.value
+          : neighbourhood2.solarpanels.value,
+      },
+      heatholon: heatholon,
+      windholon: windholon,
+    };
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/calculation/`, {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      //update values with response data, something like this
+      convertcalculationResultsToState(convertFormatting(await response.json()));
+      setLoading(false);
+      setUncalculatedScenario(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [heatholon, windholon, neighbourhood1, neighbourhood2]);
 
   useEffect(() => {
     setUncalculatedScenario(true);
@@ -85,47 +127,6 @@ function Scenarios({
     triggerCalculate();
   };
 
-  async function triggerCalculate() {
-    setLoading(true);
-
-    //object with data to push to the api
-    const data = {
-      neighbourhood1: {
-        evadoptation: neighbourhood1
-          ? neighbourhood1.evadoptation.value
-          : neighbourhood1.evadoptation.value,
-        solarpanels: neighbourhood1
-          ? neighbourhood1.solarpanels.value
-          : neighbourhood1.solarpanels.value,
-        heatpumps: neighbourhood1 ? neighbourhood1.heatpump.value : neighbourhood1.heatpump.value,
-      },
-      neighbourhood2: {
-        evadoptation: neighbourhood2
-          ? neighbourhood2.evadoptation.value
-          : neighbourhood2.evadoptation.value,
-        solarpanels: neighbourhood2
-          ? neighbourhood2.solarpanels.value
-          : neighbourhood2.solarpanels.value,
-      },
-      heatholon: heatholon,
-      windholon: windholon,
-    };
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/calculation/`, {
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-
-      //update values with response data, something like this
-      convertcalculationResultsToState(convertFormatting(await response.json()));
-      setLoading(false);
-      setUncalculatedScenario(false);
-    } catch (error) {
-      console.error(error);
-    }
-  }
   return (
     <React.Fragment>
       {locked && (
