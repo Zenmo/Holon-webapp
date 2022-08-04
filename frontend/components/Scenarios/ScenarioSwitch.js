@@ -5,18 +5,18 @@ import Tooltip from "./Tooltip";
 function ScenarioSwitch({
   locked,
   neighbourhoodID,
-  inputid,
+  inputId,
   value,
-  updatevalue,
+  updateValue,
   on,
   off,
   label,
-  scenarioid,
+  scenarioId,
   message,
 }) {
   const switchid = neighbourhoodID
-    ? `scenarioswitch${inputid}${neighbourhoodID}${scenarioid}`
-    : `scenarioswitch${inputid}${scenarioid}`;
+    ? `scenarioswitch${inputId}${neighbourhoodID}${scenarioId}`
+    : `scenarioswitch${inputId}${scenarioId}`;
   return (
     <div className="flex flex-row items-center justify-end gap-2">
       <label htmlFor={switchid} className="mr-auto cursor-pointer text-sm">
@@ -33,7 +33,7 @@ function ScenarioSwitch({
             value=""
             id={switchid}
             className="peer sr-only"
-            onChange={(e) => updatevalue(inputid, e.target.checked)}
+            onChange={(e) => updateValue(inputId, e.target.checked)}
             checked={value}
           />
           <div
@@ -56,12 +56,12 @@ export default ScenarioSwitch;
 ScenarioSwitch.propTypes = {
   locked: PropTypes.bool,
   neighbourhoodID: PropTypes.string,
-  inputid: PropTypes.string,
+  inputId: PropTypes.string,
   value: PropTypes.bool,
-  updatevalue: PropTypes.func,
+  updateValue: PropTypes.func,
   on: PropTypes.string,
   off: PropTypes.string,
   label: PropTypes.string,
-  scenarioid: PropTypes.string,
+  scenarioId: PropTypes.string,
   message: PropTypes.string,
 };

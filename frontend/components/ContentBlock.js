@@ -1,10 +1,9 @@
 import React from "react";
 
-function ContentBlock(content) {
-  let id = content.id ? content.id : "";
-
-  let bgColor = content.colorClass ? content.colorClass : "";
-  let contentOfBlock = content.children ? content.children : "";
+function ContentBlock(props) {
+  let id = props.id ? props.id : "";
+  let bgColor = props.colorClass ? props.colorClass : "";
+  let contentOfBlock = props.children ? props.children : "";
 
   return (
     <div

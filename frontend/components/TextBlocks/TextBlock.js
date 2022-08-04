@@ -26,20 +26,17 @@ export default function TextBlock(props) {
         <h2
           className={`mt-24 text-6xl font-semibold ${underlineTitleBlue} ${underlineTitleGolden}`}
         >
-          {ContentTextBlocks.texts[value].title}
+          {ContentTextBlocks[value].title}
         </h2>
         <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
           <div className="flex w-5/12 flex-col">
             <div className="text-lg">
-              <CreateParagraphs texts={ContentTextBlocks.texts[value].pText} />
+              <CreateParagraphs texts={ContentTextBlocks[value].pText} />
             </div>
             <div className="mt-24 flex gap-4">{extraContent}</div>
           </div>
           <div className="w-7/12 p-10">
-            <Image
-              src={ContentTextBlocks.images[value].img}
-              alt={ContentTextBlocks.images[value].alt}
-            />
+            <Image src={ContentTextBlocks[value].img} alt={ContentTextBlocks[value].alt} />
           </div>
         </div>
       </div>
