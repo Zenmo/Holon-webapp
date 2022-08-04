@@ -12,7 +12,7 @@ function Scenarios({
   neighbourhood2: initialNeighbourhood2,
   heatholon: initialHeatholon = false,
   windholon: initialWindholon = false,
-  calculationResults: initialcalculationResults,
+  calculationResults: initialCalculationResults,
   right,
   borderColor,
   scenarioId,
@@ -70,7 +70,7 @@ function Scenarios({
       });
 
       //update values with response data, something like this
-      convertcalculationResultsToState(convertFormatting(await response.json()));
+      convertCalculationResultsToState(convertFormatting(await response.json()));
       setLoading(false);
       setUncalculatedScenario(false);
     } catch (error) {
@@ -83,12 +83,12 @@ function Scenarios({
   }, [neighbourhood1, neighbourhood2, heatholon, windholon]);
 
   useEffect(() => {
-    initialcalculationResults
-      ? convertcalculationResultsToState(initialcalculationResults)
+    initialCalculationResults
+      ? convertCalculationResultsToState(initialCalculationResults)
       : triggerCalculate();
-  }, [initialcalculationResults, triggerCalculate]);
+  }, [initialCalculationResults, triggerCalculate]);
 
-  function convertcalculationResultsToState(calculationResults) {
+  function convertCalculationResultsToState(calculationResults) {
     setReliability(calculationResults.reliability);
     setSelfconsumption(calculationResults.selfconsumption);
     setAffordability(calculationResults.affordability);
