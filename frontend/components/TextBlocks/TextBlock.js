@@ -3,7 +3,7 @@ import Image from "next/image";
 import PropTypes from "prop-types";
 
 import { contentTextBlocks } from "./contentTextBlocks.js";
-import CreateParagraphs from "./CreateParagraphs";
+import Paragraphs from "./Paragraphs";
 
 export default function TextBlock(props) {
   let stylingRight = props.right
@@ -31,7 +31,7 @@ export default function TextBlock(props) {
         <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
           <div className="flex w-5/12 flex-col">
             <div className="text-lg">
-              <CreateParagraphs texts={contentTextBlocks[value].pText} />
+              <Paragraphs texts={contentTextBlocks[value].pText} />
             </div>
             <div className="mt-24 flex gap-4">{extraContent}</div>
           </div>
