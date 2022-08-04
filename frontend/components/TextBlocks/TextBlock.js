@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import PropTypes from "prop-types";
 
-import { ContentTextBlocks } from "./ContentTextBlocks.js";
+import { contentTextBlocks } from "./contentTextBlocks.js";
 import CreateParagraphs from "./CreateParagraphs";
 
 export default function TextBlock(props) {
@@ -26,17 +26,17 @@ export default function TextBlock(props) {
         <h2
           className={`mt-24 text-6xl font-semibold ${underlineTitleBlue} ${underlineTitleGolden}`}
         >
-          {ContentTextBlocks[value].title}
+          {contentTextBlocks[value].title}
         </h2>
         <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
           <div className="flex w-5/12 flex-col">
             <div className="text-lg">
-              <CreateParagraphs texts={ContentTextBlocks[value].pText} />
+              <CreateParagraphs texts={contentTextBlocks[value].pText} />
             </div>
             <div className="mt-24 flex gap-4">{extraContent}</div>
           </div>
           <div className="w-7/12 p-10">
-            <Image src={ContentTextBlocks[value].img} alt={ContentTextBlocks[value].alt} />
+            <Image src={contentTextBlocks[value].img} alt={contentTextBlocks[value].alt} />
           </div>
         </div>
       </div>

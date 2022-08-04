@@ -4,7 +4,7 @@ import heatholon from "../../public/imgs/Warmteholon.svg";
 import animation from "../../public/imgs/Sprint-6-Case-animation.gif";
 import netherlandsPuzzle from "../../public/imgs/Nederland met Holonen.svg";
 
-export const ContentTextBlocks = {
+export const contentTextBlocks = {
   default: {
     title: "Title of this textblock",
     pText: "The paragraph text of this textblock",
