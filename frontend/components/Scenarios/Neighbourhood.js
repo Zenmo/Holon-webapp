@@ -1,12 +1,17 @@
 import PropTypes from "prop-types";
-import ScenarioSlider from "./Scenarioslider";
-import ScenarioSwitch from "./Scenarioswitch";
+import ScenarioSlider from "./ScenarioSlider";
+import ScenarioSwitch from "./ScenarioSwitch";
 
 function Neighbourhood(props) {
-  function updateValue(property, inputvalue) {
-    props.neighbourhood[property].value =
-      typeof inputvalue == "boolean" ? inputvalue : parseInt(inputvalue);
-    props.setNeighbourhood({ ...props.neighbourhood, property: props.neighbourhood[property] });
+  function updateValue(property, inputValue) {
+    const propertyValue = typeof inputValue == "boolean" ? inputValue : parseInt(inputValue);
+    props.setNeighbourhood({
+      ...props.neighbourhood,
+      [property]: {
+        ...props.neighbourhood[property],
+        value: propertyValue,
+      },
+    });
   }
 
   return (
@@ -15,33 +20,33 @@ function Neighbourhood(props) {
         Buurt {props.neighbourhoodID}
       </h4>
       <ScenarioSlider
-        scenarioid={props.scenarioid}
+        scenarioId={props.scenarioId}
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.heatpump.label}
         value={props.neighbourhood.heatpump.value}
         locked={props.neighbourhoodID == "B" || props.locked ? true : false}
-        inputid="heatpump"
-        updatevalue={updateValue}
+        inputId="heatpump"
+        updateValue={updateValue}
         message="Het percentage van de huizen in de buurt die een elektrische warmtepomp hebben,"
       />
       <ScenarioSlider
-        scenarioid={props.scenarioid}
+        scenarioId={props.scenarioId}
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.evadoptation.label}
         value={props.neighbourhood.evadoptation.value}
         locked={props.locked}
-        inputid="evadoptation"
-        updatevalue={updateValue}
+        inputId="evadoptation"
+        updateValue={updateValue}
         message="Het percentage van de auto's in de buurt dat elektrisch is."
       />
       <ScenarioSlider
-        scenarioid={props.scenarioid}
+        scenarioId={props.scenarioId}
         neighbourhoodID={props.neighbourhoodID}
         label={props.neighbourhood.solarpanels.label}
         value={props.neighbourhood.solarpanels.value}
         locked={props.locked}
-        inputid="solarpanels"
-        updatevalue={updateValue}
+        inputId="solarpanels"
+        updateValue={updateValue}
         message="Het percentage van de huizen in de buurt die zonnepanelen heeft."
       />
       <ScenarioSwitch
@@ -51,9 +56,9 @@ function Neighbourhood(props) {
         locked={true}
         off="nee"
         on="ja"
-        scenarioid={props.scenarioid}
-        inputid="heatnetwork"
-        updatevalue={updateValue}
+        scenarioId={props.scenarioId}
+        inputId="heatnetwork"
+        updateValue={updateValue}
         message="Als deze slider aangevinkt staat zijn alle   huizen in de buurt aangesloten op een warmtenet. Het is een   midden-temperatuur warmtenet. In de beginsituatie is de bron een gasketel. In   de warmteholon situatie is de bron een warmtepomp met elektrische piekboiler,   en een warmtebuffer die demand-response en seizoensopslag van warmte mogelijk   maakt.   "
       />
     </div>
@@ -83,5 +88,5 @@ Neighbourhood.propTypes = {
   neighbourhoodID: PropTypes.string,
   locked: PropTypes.bool,
   setNeighbourhood: PropTypes.func,
-  scenarioid: PropTypes.string,
+  scenarioId: PropTypes.string,
 };

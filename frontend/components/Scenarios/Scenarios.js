@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import ScenarioResults from "./ScenarioResults";
 import HolonButton from "../Buttons/HolonButton";
 import Loader from "./Loader";
@@ -12,10 +12,10 @@ function Scenarios({
   neighbourhood2: initialNeighbourhood2,
   heatholon: initialHeatholon = false,
   windholon: initialWindholon = false,
-  calculationresults: initialCalculationResults,
+  calculationResults: initialCalculationResults,
   right,
   borderColor,
-  scenarioid,
+  scenarioId,
   locked,
   scenarioTitle,
 }) {
@@ -36,56 +36,7 @@ function Scenarios({
   const [affordability, setAffordability] = useState({});
   const [renewability, setRenewability] = useState({});
 
-  useEffect(() => {
-    setUncalculatedScenario(true);
-  }, [neighbourhood1, neighbourhood2, heatholon, windholon]);
-
-  useEffect(() => {
-    initialCalculationResults
-      ? convertCalculationResultsToState(initialCalculationResults)
-      : triggercalculate();
-  }, [initialCalculationResults]);
-
-  function convertCalculationResultsToState(calculationResults) {
-    setReliability(calculationResults.reliability);
-    setSelfconsumption(calculationResults.selfconsumption);
-    setAffordability(calculationResults.affordability);
-    setRenewability(calculationResults.renewability);
-  }
-
-  function updateLocal(arg1, arg2) {
-    if (arg1 == "local") {
-      setLocal(arg2);
-    }
-  }
-
-  function convertFormatting(data) {
-    const convertedFormatData = {
-      reliability: {
-        local: parseFloat(data.local.reliability),
-        national: parseFloat(data.national.reliability),
-      },
-      selfconsumption: {
-        local: parseFloat(data.local.selfconsumption),
-        national: parseFloat(data.national.selfconsumption),
-      },
-      affordability: {
-        local: parseFloat(data.local.affordability),
-        national: parseFloat(data.national.affordability),
-      },
-      renewability: {
-        local: parseFloat(data.local.renewability),
-        national: parseFloat(data.national.renewability),
-      },
-    };
-    return convertedFormatData;
-  }
-  const submitForm = (e) => {
-    e.preventDefault();
-    triggercalculate();
-  };
-
-  async function triggercalculate() {
+  const triggerCalculate = useCallback(async () => {
     setLoading(true);
 
     //object with data to push to the api
@@ -125,12 +76,62 @@ function Scenarios({
     } catch (error) {
       console.error(error);
     }
+  }, [heatholon, windholon, neighbourhood1, neighbourhood2]);
+
+  useEffect(() => {
+    setUncalculatedScenario(true);
+  }, [neighbourhood1, neighbourhood2, heatholon, windholon]);
+
+  useEffect(() => {
+    initialCalculationResults
+      ? convertCalculationResultsToState(initialCalculationResults)
+      : triggerCalculate();
+  }, [initialCalculationResults, triggerCalculate]);
+
+  function convertCalculationResultsToState(calculationResults) {
+    setReliability(calculationResults.reliability);
+    setSelfconsumption(calculationResults.selfconsumption);
+    setAffordability(calculationResults.affordability);
+    setRenewability(calculationResults.renewability);
   }
+
+  function updateLocal(arg1, arg2) {
+    if (arg1 == "local") {
+      setLocal(arg2);
+    }
+  }
+
+  function convertFormatting(data) {
+    const convertedFormatData = {
+      reliability: {
+        local: parseFloat(data.local.reliability),
+        national: parseFloat(data.national.reliability),
+      },
+      selfconsumption: {
+        local: parseFloat(data.local.selfconsumption),
+        national: parseFloat(data.national.selfconsumption),
+      },
+      affordability: {
+        local: parseFloat(data.local.affordability),
+        national: parseFloat(data.national.affordability),
+      },
+      renewability: {
+        local: parseFloat(data.local.renewability),
+        national: parseFloat(data.national.renewability),
+      },
+    };
+    return convertedFormatData;
+  }
+  const submitForm = (e) => {
+    e.preventDefault();
+    triggerCalculate();
+  };
+
   return (
     <React.Fragment>
       {locked && (
         <div className="absolute h-full w-full">
-          <div className={` absolute mx-10 flex h-[50vh] px-24  ${right ? "right-[0]" : ""} `}>
+          <div className={` absolute mx-10 flex h-[50vh] px-24  ${right ? "right-0" : ""} `}>
             <div
               className={`border-solid  ${borderColor} ${right ? "border-r-8" : "border-l-8"} `}
             ></div>
@@ -156,7 +157,7 @@ function Scenarios({
               <fieldset
                 data-testid="scenariofieldset"
                 disabled={locked || loading}
-                className={locked && `cursor-pointer`}
+                className={locked ? `cursor-pointer` : ""}
               >
                 <div className={locked && ``}>
                   {neighbourhood1 && (
@@ -165,7 +166,7 @@ function Scenarios({
                       locked={locked}
                       neighbourhood={neighbourhood1}
                       setNeighbourhood={setNeighbourhood1}
-                      scenarioid={scenarioid}
+                      scenarioId={scenarioId}
                     />
                   )}
                   {neighbourhood2 && (
@@ -174,7 +175,7 @@ function Scenarios({
                       locked={locked}
                       neighbourhood={neighbourhood2}
                       setNeighbourhood={setNeighbourhood2}
-                      scenarioid={scenarioid}
+                      scenarioId={scenarioId}
                     />
                   )}
                   <h4 className="my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-lg font-light">
@@ -183,14 +184,14 @@ function Scenarios({
 
                   <div className="ml-20 mb-4 flex flex-col gap-4">
                     <label
-                      htmlFor={`heatholon${scenarioid}`}
+                      htmlFor={`heatholon${scenarioId}`}
                       className="flex flex-row items-center gap-4"
                     >
                       <input
                         type="checkbox"
                         name="heatholon"
-                        id={`heatholon${scenarioid}`}
-                        data-testid={`heatholon${scenarioid}`}
+                        id={`heatholon${scenarioId}`}
+                        data-testid={`heatholon${scenarioId}`}
                         onChange={(e) => setHeatholon(e.target.checked)}
                         checked={heatholon}
                         className="flex h-5 w-5 appearance-none items-center justify-center rounded-none border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white shadow-[4px_4px_0_0] shadow-black checked:bg-holon-blue-500 after:checked:content-['✔'] disabled:border-holon-grey-300 disabled:shadow-gray-500 disabled:checked:bg-holon-grey-300"
@@ -199,14 +200,14 @@ function Scenarios({
                       <Tooltip tooltipMessage=" De warmteholon is de coöperatie van   buurtbewoners die aangesloten zijn op het warmtenet. Zij worden eigenaar van   het warmtenet en regelen de centrale aansturing. Deze aansturing zorgt ervoor   dat de overschotten zonne-energie van de holon leden gebruikt worden om de   warmtepomp aan te zetten en buffer te vullen, en in combinatie met de   windholon ook die overschotten te gebruiken."></Tooltip>
                     </label>
                     <label
-                      htmlFor={`windholon${scenarioid}`}
+                      htmlFor={`windholon${scenarioId}`}
                       className="flex flex-row items-center gap-4"
                     >
                       <input
                         type="checkbox"
                         name="windholon"
-                        id={`windholon${scenarioid}`}
-                        data-testid={`windholon${scenarioid}`}
+                        id={`windholon${scenarioId}`}
+                        data-testid={`windholon${scenarioId}`}
                         onChange={(e) => setWindholon(e.target.checked)}
                         checked={windholon}
                         className="flex h-5 w-5 appearance-none items-center justify-center rounded-none border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white shadow-[4px_4px_0_0] shadow-black checked:bg-holon-blue-500 after:checked:content-['✔'] disabled:border-holon-grey-300 disabled:shadow-gray-500 disabled:checked:bg-holon-grey-300"
@@ -221,7 +222,7 @@ function Scenarios({
             <div className="w-[4px] bg-slate-300"></div>
             <div className="basis-full pl-4 md:basis-2/3">
               <ScenarioResults
-                scenarioid={scenarioid}
+                scenarioId={scenarioId}
                 reliability={reliability}
                 selfconsumption={selfconsumption}
                 affordability={affordability}
@@ -264,7 +265,7 @@ function Scenarios({
 export default Scenarios;
 
 Scenarios.propTypes = {
-  scenarioid: PropTypes.string,
+  scenarioId: PropTypes.string,
   locked: PropTypes.bool,
   scenarioTitle: PropTypes.string,
   borderColor: PropTypes.string,
@@ -305,7 +306,7 @@ Scenarios.propTypes = {
       label: PropTypes.string,
     }),
   }),
-  calculationresults: PropTypes.shape({
+  calculationResults: PropTypes.shape({
     reliability: PropTypes.shape({
       local: PropTypes.number,
       national: PropTypes.number,

@@ -37,7 +37,7 @@ describe("Scenario", () => {
     beforeEach(() => {
       render(
         <Scenarios
-          scenarioid="1"
+          scenarioId="1"
           locked
           scenarioTitle="The title of the scenario"
           borderColor="border-holon-slated-blue-300"
@@ -54,7 +54,7 @@ describe("Scenario", () => {
             heatnetwork: { value: true, label: "Warmtenet" },
           }}
           windholon={true}
-          calculationresults={{
+          calculationResults={{
             reliability: {
               local: 100,
               national: 0,
@@ -133,7 +133,7 @@ describe("Scenario", () => {
     beforeEach(() => {
       render(
         <Scenarios
-          scenarioid="2"
+          scenarioId="2"
           scenarioTitle="The title of the scenario"
           borderColor="border-holon-slated-blue-300"
           neighbourhood1={{
@@ -149,7 +149,7 @@ describe("Scenario", () => {
             heatnetwork: { value: true, label: "Warmtenet" },
           }}
           windholon={true}
-          calculationresults={{
+          calculationResults={{
             reliability: {
               local: 100,
               national: 0,
@@ -176,15 +176,17 @@ describe("Scenario", () => {
     });
 
     it("updates legal and social texts when changing Holons", async () => {
-      expect(screen.getByTestId("legalText")).toHaveTextContent("Flexibele tarieven voor");
-      expect(screen.getByTestId("socialText")).toHaveTextContent(
-        "De buurtbewoners ervaren lokaal eigenaarschap"
-      );
+      expect(screen.queryByText(/Flexibele tarieven voor/)).toBeInTheDocument();
+      expect(
+        screen.queryByText(/De buurtbewoners ervaren lokaal eigenaarschap/)
+      ).toBeInTheDocument();
+
       await act(async () => fireEvent.click(screen.getByTestId("windholon2")));
-      expect(screen.getByTestId("legalText")).not.toHaveTextContent("Flexibele tarieven voor");
-      expect(screen.getByTestId("socialText")).not.toHaveTextContent(
-        "De buurtbewoners ervaren lokaal eigenaarschap"
-      );
+
+      expect(screen.queryByText(/Flexibele tarieven voor/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/De buurtbewoners ervaren lokaal eigenaarschap/)
+      ).not.toBeInTheDocument();
     });
 
     it("shows reacalculate button", () => {

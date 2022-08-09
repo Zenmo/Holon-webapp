@@ -1,10 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-function ContentBlock(content) {
-  let id = content.id ? content.id : "";
-
-  let bgColor = content.colorClass ? content.colorClass : "";
-  let contentOfBlock = content.children ? content.children : "";
+function ContentBlock(props) {
+  let id = props.id ? props.id : "";
+  let bgColor = props.colorClass ? props.colorClass : "";
+  let contentOfBlock = props.children ? props.children : "";
 
   return (
     <div
@@ -18,3 +18,9 @@ function ContentBlock(content) {
 }
 
 export default ContentBlock;
+
+ContentBlock.propTypes = {
+  children: PropTypes.node,
+  colorClass: PropTypes.string,
+  id: PropTypes.string,
+};

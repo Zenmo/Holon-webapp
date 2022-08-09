@@ -65,23 +65,23 @@ function ScenarioResultItem({
     return color;
   }
 
-  const inputvalue = parseFloat(local ? value.local : value.national);
+  const inputValue = parseFloat(local ? value.local : value.national);
 
-  function inputValueAltRepr(inputvalue) {
-    if (isNaN(inputvalue)) {
-      inputvalue = "";
+  function inputValueAltRepr(inputValue) {
+    if (isNaN(inputValue)) {
+      inputValue = "";
     }
 
-    // Checks if the inputvalue should actually be a plus or minus sign
+    // Checks if the inputValue should actually be a plus or minus sign
     if (unit == " ") {
-      if (inputvalue == 100) {
-        inputvalue = "✔";
-      } else if (inputvalue == 0) {
-        inputvalue = "✗";
+      if (inputValue == 100) {
+        inputValue = "✔";
+      } else if (inputValue == 0) {
+        inputValue = "✗";
       }
     }
 
-    return inputvalue;
+    return inputValue;
   }
 
   return (
@@ -92,10 +92,10 @@ function ScenarioResultItem({
           <Tooltip tooltipMessage={local === true ? messageLocal : messageNl} result={true}>
             <output
               data-testid={`result${label}`}
-              style={{ backgroundColor: per2colorArray(minvalue, maxvalue, inputvalue, invert) }}
+              style={{ backgroundColor: per2colorArray(minvalue, maxvalue, inputValue, invert) }}
               className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center text-lg font-medium italic leading-[4.5rem] shadow-[2px_2px_0_0]`}
             >
-              {inputValueAltRepr(inputvalue)}
+              {inputValueAltRepr(inputValue)}
             </output>
           </Tooltip>
         </span>
@@ -111,7 +111,7 @@ export default ScenarioResultItem;
 ScenarioResultItem.propTypes = {
   children: PropTypes.object,
   borderColor: PropTypes.string,
-  scenarioid: PropTypes.string,
+  scenarioId: PropTypes.string,
   setLocal: PropTypes.func,
   windholon: PropTypes.bool,
   heatholon: PropTypes.bool,
