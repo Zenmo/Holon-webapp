@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 
-const withMDX = require("@next/mdx")({
+import remarkGfm from "remark-gfm";
+import remarkPrism from "remark-prism";
+
+import configureMDX from "@next/mdx";
+
+const withMDX = configureMDX({
+  options: {
+    remarkPlugins: [remarkGfm, remarkPrism],
+  },
   extension: /\.mdx?$/,
 });
 
@@ -15,4 +23,4 @@ const nextConfig = {
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 };
 
-module.exports = withMDX(nextConfig);
+export default withMDX(nextConfig);
