@@ -1,8 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
 import Tooltip from "./Tooltip";
 
-function ScenarioSlider({
+interface Props {
+  locked?: boolean;
+  neighbourhoodID: string;
+  inputId: string;
+  value: number;
+  updateValue: (id: string, value: string) => void;
+  label: string;
+  scenarioId: string;
+  message: string;
+}
+
+export default function ScenarioSlider({
   neighbourhoodID,
   locked,
   inputId,
@@ -11,7 +20,7 @@ function ScenarioSlider({
   label,
   message,
   scenarioId,
-}) {
+}: Props) {
   const sliderid = `scenarioslider${inputId}${neighbourhoodID}${scenarioId}`;
   return (
     <div className="mb-2 flex flex-row items-center justify-between gap-2">
@@ -52,18 +61,3 @@ function ScenarioSlider({
     </div>
   );
 }
-
-export default ScenarioSlider;
-
-ScenarioSlider.propTypes = {
-  locked: PropTypes.bool,
-  neighbourhoodID: PropTypes.string,
-  inputId: PropTypes.string,
-  value: PropTypes.number,
-  updateValue: PropTypes.func,
-  on: PropTypes.string,
-  off: PropTypes.string,
-  label: PropTypes.string,
-  scenarioId: PropTypes.string,
-  message: PropTypes.string,
-};

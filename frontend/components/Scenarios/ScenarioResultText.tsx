@@ -1,6 +1,3 @@
-import React from "react";
-import PropTypes from "prop-types";
-
 const texts = {
   windHolon: {
     social:
@@ -28,7 +25,17 @@ const texts = {
   },
 };
 
-function selectText(windholon, heatholon, textType) {
+interface Props {
+  windholon: boolean;
+  heatholon: boolean;
+  textType: "social" | "legal";
+}
+
+function selectText(
+  windholon: Props["windholon"],
+  heatholon: Props["heatholon"],
+  textType: Props["textType"]
+) {
   let textToDisplay;
 
   if (windholon && heatholon) {
@@ -43,18 +50,10 @@ function selectText(windholon, heatholon, textType) {
   return textToDisplay;
 }
 
-function ScenarioResultText({ windholon, heatholon, textType }) {
+export default function ScenarioResultText({ windholon, heatholon, textType }: Props) {
   return (
     <p data-testid="legalText" className="text-lg font-light italic text-gray-800">
       {selectText(windholon, heatholon, textType)}
     </p>
   );
 }
-
-ScenarioResultText.propTypes = {
-  windholon: PropTypes.bool,
-  heatholon: PropTypes.bool,
-  textType: PropTypes.string,
-};
-
-export default ScenarioResultText;

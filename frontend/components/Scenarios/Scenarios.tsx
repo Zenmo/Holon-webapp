@@ -1,5 +1,4 @@
-import PropTypes from "prop-types";
-import React, { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import ScenarioResults from "./ScenarioResults";
 import HolonButton from "../Buttons/HolonButton";
 import Loader from "./Loader";
@@ -7,18 +6,44 @@ import Neighbourhood from "./Neighbourhood";
 import Tooltip from "./Tooltip";
 import ProgressBar from "./ProgressBar";
 
-function Scenarios({
+import {
+  CalculationResponseData,
+  Neighbourhood as NeighbourhoodData,
+  SubjectResult,
+} from "./types";
+
+type CalculationResults = {
+  reliability: SubjectResult;
+  affordability: SubjectResult;
+  renewability: SubjectResult;
+  selfconsumption: SubjectResult;
+};
+
+type Props = {
+  borderColor?: string;
+  calculationResults: CalculationResults;
+  heatholon?: boolean;
+  locked?: boolean;
+  neighbourhood1: NeighbourhoodData;
+  neighbourhood2: NeighbourhoodData;
+  right?: boolean;
+  scenarioId: string;
+  scenarioTitle?: string;
+  windholon?: boolean;
+};
+
+export default function Scenarios({
+  borderColor,
+  calculationResults: initialCalculationResults,
+  heatholon: initialHeatholon = false,
+  locked = false,
   neighbourhood1: initialNeighbourhood1,
   neighbourhood2: initialNeighbourhood2,
-  heatholon: initialHeatholon = false,
-  windholon: initialWindholon = false,
-  calculationResults: initialCalculationResults,
-  right,
-  borderColor,
+  right = false,
   scenarioId,
-  locked,
   scenarioTitle,
-}) {
+  windholon: initialWindholon = false,
+}: Props) {
   const [loading, setLoading] = useState(false);
 
   const [uncalculatedScenario, setUncalculatedScenario] = useState(false);
@@ -31,10 +56,10 @@ function Scenarios({
 
   const [local, setLocal] = useState(true);
 
-  const [reliability, setReliability] = useState({});
-  const [selfconsumption, setSelfconsumption] = useState({});
-  const [affordability, setAffordability] = useState({});
-  const [renewability, setRenewability] = useState({});
+  const [reliability, setReliability] = useState(initialCalculationResults.reliability);
+  const [selfconsumption, setSelfconsumption] = useState(initialCalculationResults.selfconsumption);
+  const [affordability, setAffordability] = useState(initialCalculationResults.affordability);
+  const [renewability, setRenewability] = useState(initialCalculationResults.renewability);
 
   const triggerCalculate = useCallback(async () => {
     setLoading(true);
@@ -42,21 +67,13 @@ function Scenarios({
     //object with data to push to the api
     const data = {
       neighbourhood1: {
-        evadoptation: neighbourhood1
-          ? neighbourhood1.evadoptation.value
-          : neighbourhood1.evadoptation.value,
-        solarpanels: neighbourhood1
-          ? neighbourhood1.solarpanels.value
-          : neighbourhood1.solarpanels.value,
-        heatpumps: neighbourhood1 ? neighbourhood1.heatpump.value : neighbourhood1.heatpump.value,
+        evadoptation: neighbourhood1.evadoptation.value,
+        solarpanels: neighbourhood1.solarpanels.value,
+        heatpumps: neighbourhood1.heatpump.value,
       },
       neighbourhood2: {
-        evadoptation: neighbourhood2
-          ? neighbourhood2.evadoptation.value
-          : neighbourhood2.evadoptation.value,
-        solarpanels: neighbourhood2
-          ? neighbourhood2.solarpanels.value
-          : neighbourhood2.solarpanels.value,
+        evadoptation: neighbourhood2.evadoptation.value,
+        solarpanels: neighbourhood2.solarpanels.value,
       },
       heatholon: heatholon,
       windholon: windholon,
@@ -88,21 +105,21 @@ function Scenarios({
       : triggerCalculate();
   }, [initialCalculationResults, triggerCalculate]);
 
-  function convertCalculationResultsToState(calculationResults) {
+  function convertCalculationResultsToState(calculationResults: CalculationResults) {
     setReliability(calculationResults.reliability);
     setSelfconsumption(calculationResults.selfconsumption);
     setAffordability(calculationResults.affordability);
     setRenewability(calculationResults.renewability);
   }
 
-  function updateLocal(arg1, arg2) {
+  function updateLocal(arg1: string, arg2: boolean) {
     if (arg1 == "local") {
       setLocal(arg2);
     }
   }
 
-  function convertFormatting(data) {
-    const convertedFormatData = {
+  function convertFormatting(data: CalculationResponseData) {
+    return {
       reliability: {
         local: parseFloat(data.local.reliability),
         national: parseFloat(data.national.reliability),
@@ -120,15 +137,15 @@ function Scenarios({
         national: parseFloat(data.national.renewability),
       },
     };
-    return convertedFormatData;
   }
-  const submitForm = (e) => {
+
+  function submitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     triggerCalculate();
-  };
+  }
 
   return (
-    <React.Fragment>
+    <>
       {locked && (
         <div className="absolute h-full w-full">
           <div className={` absolute mx-10 flex h-[50vh] px-24  ${right ? "right-0" : ""} `}>
@@ -146,7 +163,11 @@ function Scenarios({
               : "border-8 border-transparent p-2"
           }
         >
-          <h2 className="mb-6 ml-6 text-5xl font-semibold text-holon-blue-900">{scenarioTitle}</h2>
+          {scenarioTitle ? (
+            <h2 className="mb-6 ml-6 text-5xl font-semibold text-holon-blue-900">
+              {scenarioTitle}
+            </h2>
+          ) : null}
           <form onSubmit={submitForm} className="flex flex-col md:flex-row">
             <div className="basis-full pr-4 md:basis-1/3">
               <h3
@@ -159,7 +180,7 @@ function Scenarios({
                 disabled={locked || loading}
                 className={locked ? `cursor-pointer` : ""}
               >
-                <div className={locked && ``}>
+                <div>
                   {neighbourhood1 && (
                     <Neighbourhood
                       neighbourhoodID="A"
@@ -239,7 +260,7 @@ function Scenarios({
                   </div>
                 )}
                 {!locked && (
-                  <React.Fragment>
+                  <>
                     {(uncalculatedScenario == true || loading) && (
                       <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
                         {loading ? (
@@ -251,80 +272,13 @@ function Scenarios({
                         )}
                       </div>
                     )}
-                  </React.Fragment>
+                  </>
                 )}
               </ScenarioResults>
             </div>
           </form>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
-
-export default Scenarios;
-
-Scenarios.propTypes = {
-  scenarioId: PropTypes.string,
-  locked: PropTypes.bool,
-  scenarioTitle: PropTypes.string,
-  borderColor: PropTypes.string,
-
-  neighbourhood1: PropTypes.shape({
-    heatpump: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    evadoptation: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    solarpanels: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    heatnetwork: PropTypes.shape({
-      value: PropTypes.bool,
-      label: PropTypes.string,
-    }),
-  }),
-  neighbourhood2: PropTypes.shape({
-    heatpump: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    evadoptation: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    solarpanels: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    heatnetwork: PropTypes.shape({
-      value: PropTypes.bool,
-      label: PropTypes.string,
-    }),
-  }),
-  calculationResults: PropTypes.shape({
-    reliability: PropTypes.shape({
-      local: PropTypes.number,
-      national: PropTypes.number,
-    }),
-    affordability: PropTypes.shape({
-      local: PropTypes.number,
-      national: PropTypes.number,
-    }),
-    renewability: PropTypes.shape({
-      local: PropTypes.number,
-      national: PropTypes.number,
-    }),
-    selfconsumption: PropTypes.shape({
-      local: PropTypes.number,
-      national: PropTypes.number,
-    }),
-  }),
-  windholon: PropTypes.bool,
-  heatholon: PropTypes.bool,
-  right: PropTypes.string,
-};

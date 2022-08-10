@@ -1,8 +1,19 @@
-import React from "react";
-import PropTypes from "prop-types";
 import Tooltip from "./Tooltip";
 
-function ScenarioSwitch({
+interface Props {
+  inputId: string;
+  label: string;
+  locked?: boolean;
+  message: string;
+  neighbourhoodID?: string;
+  off: string;
+  on: string;
+  scenarioId: string;
+  updateValue: (id: string, checked: boolean) => void;
+  value: boolean;
+}
+
+export default function ScenarioSwitch({
   locked,
   neighbourhoodID,
   inputId,
@@ -13,7 +24,7 @@ function ScenarioSwitch({
   label,
   scenarioId,
   message,
-}) {
+}: Props) {
   const switchid = neighbourhoodID
     ? `scenarioswitch${inputId}${neighbourhoodID}${scenarioId}`
     : `scenarioswitch${inputId}${scenarioId}`;
@@ -50,18 +61,3 @@ function ScenarioSwitch({
     </div>
   );
 }
-
-export default ScenarioSwitch;
-
-ScenarioSwitch.propTypes = {
-  locked: PropTypes.bool,
-  neighbourhoodID: PropTypes.string,
-  inputId: PropTypes.string,
-  value: PropTypes.bool,
-  updateValue: PropTypes.func,
-  on: PropTypes.string,
-  off: PropTypes.string,
-  label: PropTypes.string,
-  scenarioId: PropTypes.string,
-  message: PropTypes.string,
-};

@@ -1,12 +1,26 @@
-import React from "react";
-import PropTypes from "prop-types";
 import ScenarioResultItem from "./ScenarioResultItem";
 import ScenarioSwitch from "./ScenarioSwitch";
 import ScenarioResultText from "./ScenarioResultText";
 
-function ScenarioResults(props) {
+import { SubjectResult } from "./types";
+
+type Props = React.PropsWithChildren<{
+  affordability: SubjectResult;
+  borderColor?: string;
+  heatholon: boolean;
+  local: boolean;
+  reliability: SubjectResult;
+  renewability: SubjectResult;
+  right?: string;
+  scenarioId: string;
+  selfconsumption: SubjectResult;
+  setLocal: React.ComponentProps<typeof ScenarioSwitch>["updateValue"];
+  windholon: boolean;
+}>;
+
+export default function ScenarioResults(props: Props) {
   return (
-    <React.Fragment>
+    <>
       <div className="relative flex flex-col">
         {props.children}
 
@@ -18,7 +32,6 @@ function ScenarioResults(props) {
           </h3>
           <ScenarioSwitch
             message="Het lokale schaalniveau laat de resultaten van   de beschreven case met twee voorbeeldbuurten zien. Het nationale schaalniveau   is een aggregatie van de indicatoren naar nationaal niveau door de buurten te   vermenigvuldigen met het aantal huizen in Nederland."
-            text=""
             off="Nationaal"
             on="Lokaal"
             label=""
@@ -80,8 +93,8 @@ function ScenarioResults(props) {
               Sociaal
             </h4>
             <ScenarioResultText
-              windholon={props.windholon && props.windholon}
-              heatholon={props.heatholon && props.heatholon}
+              windholon={props.windholon}
+              heatholon={props.heatholon}
               textType="social"
             />
           </div>
@@ -90,42 +103,13 @@ function ScenarioResults(props) {
               Juridisch
             </h4>
             <ScenarioResultText
-              windholon={props.windholon && props.windholon}
-              heatholon={props.heatholon && props.heatholon}
+              windholon={props.windholon}
+              heatholon={props.heatholon}
               textType="legal"
             />
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
-
-export default ScenarioResults;
-
-ScenarioResults.propTypes = {
-  children: PropTypes.array,
-  local: PropTypes.bool,
-  borderColor: PropTypes.string,
-  scenarioId: PropTypes.string,
-  reliability: PropTypes.shape({
-    local: PropTypes.number,
-    national: PropTypes.number,
-  }),
-  affordability: PropTypes.shape({
-    local: PropTypes.number,
-    national: PropTypes.number,
-  }),
-  renewability: PropTypes.shape({
-    local: PropTypes.number,
-    national: PropTypes.number,
-  }),
-  selfconsumption: PropTypes.shape({
-    local: PropTypes.number,
-    national: PropTypes.number,
-  }),
-  setLocal: PropTypes.func,
-  windholon: PropTypes.bool,
-  heatholon: PropTypes.bool,
-  right: PropTypes.string,
-};

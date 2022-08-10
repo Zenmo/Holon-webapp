@@ -1,4 +1,4 @@
-function Loader() {
+export default function Loader() {
   return (
     <svg
       role="status"
@@ -18,4 +18,3 @@ function Loader() {
     </svg>
   );
 }
-export default Loader;

@@ -79,7 +79,7 @@ export default function Home() {
             scenarioId="2"
             locked
             scenarioTitle="De windcoöperatie"
-            right="true"
+            right
             borderColor="border-holon-gold-200"
             neighbourhood1={{
               heatpump: { value: 0, label: "Warmtepompen" },
@@ -137,7 +137,7 @@ export default function Home() {
               solarpanels: { value: 60, label: "Zonnepanelen" },
               heatnetwork: { value: true, label: "Warmtenet" },
             }}
-            heatholon={true}
+            heatholon
             calculationResults={{
               reliability: {
                 local: 100,
@@ -173,7 +173,7 @@ export default function Home() {
             locked
             scenarioTitle="Twee keer slimmer"
             borderColor="border-holon-gold-600"
-            right="true"
+            right
             neighbourhood1={{
               heatpump: { value: 0, label: "Warmtepompen" },
               evadoptation: { value: 70, label: "Elektrische auto's" },
@@ -210,7 +210,7 @@ export default function Home() {
         </ContentBlock>
 
         <ContentBlock>
-          <TextBlock value="afsluiter" underlineTitleBlue="true">
+          <TextBlock value="afsluiter" underlineTitleBlue>
             <HolonButton tag="a" href="#openModel" variant="blue">
               Naar het open model
             </HolonButton>
@@ -236,6 +236,12 @@ export default function Home() {
               heatnetwork: { value: true, label: "Warmtenet" },
             }}
             windholon={true}
+            calculationResults={{
+              reliability: {},
+              affordability: {},
+              renewability: {},
+              selfconsumption: {},
+            }}
           />
         </ContentBlock>
 

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Loader from "./Loader";
 
-function ProgressBar({ duration, label }) {
+const determineProgress = (progress: number, duration: number) =>
+  Math.max(Math.round((progress / duration) * 100), 100);
+
+export default function ProgressBar({ duration, label }: { duration: number; label: string }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -12,14 +14,6 @@ function ProgressBar({ duration, label }) {
 
     return () => clearInterval(interval);
   });
-
-  function determineProgress(i, duration) {
-    let currentProgress = Math.round((i / duration) * 100);
-    if (currentProgress > 100) {
-      currentProgress = 100;
-    }
-    return currentProgress;
-  }
 
   return (
     <div className="rounded-lg border border-holon-blue-900 bg-white p-4 shadow-holon-blue">
@@ -41,10 +35,3 @@ function ProgressBar({ duration, label }) {
     </div>
   );
 }
-
-ProgressBar.propTypes = {
-  duration: PropTypes.number,
-  label: PropTypes.string,
-};
-
-export default ProgressBar;

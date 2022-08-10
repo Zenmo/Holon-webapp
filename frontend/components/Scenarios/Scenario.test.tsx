@@ -85,30 +85,36 @@ describe("Scenario", () => {
     });
 
     it("shows the correct values in neighbourhood A", () => {
-      expect(screen.getByTestId("scenariosliderheatpumpA1", { value: 45 })).toBeInTheDocument();
-      expect(screen.getByTestId("scenariosliderevadoptationA1", { value: 70 })).toBeInTheDocument();
-      expect(screen.getByTestId("scenarioslidersolarpanelsA1", { value: 40 })).toBeInTheDocument();
-      expect(screen.getByTestId("scenarioswitchheatnetworkA1")).not.toBeChecked();
+      expect(screen.getByTestId<HTMLInputElement>("scenariosliderheatpumpA1").value).toBe("45");
+      expect(screen.getByTestId<HTMLInputElement>("scenariosliderevadoptationA1").value).toBe("70");
+      expect(screen.getByTestId<HTMLInputElement>("scenarioslidersolarpanelsA1").value).toBe("40");
+      expect(screen.getByTestId<HTMLInputElement>("scenarioswitchheatnetworkA1")).not.toBeChecked();
     });
 
     it("shows the correct values in neighbourhood B", () => {
-      expect(screen.getByTestId("scenariosliderheatpumpB1", { value: 45 })).toBeInTheDocument();
-      expect(screen.getByTestId("scenariosliderevadoptationB1", { value: 70 })).toBeInTheDocument();
-      expect(screen.getByTestId("scenarioslidersolarpanelsB1", { value: 40 })).toBeInTheDocument();
-      expect(screen.getByTestId("scenarioswitchheatnetworkB1")).toBeChecked();
+      expect(screen.getByTestId<HTMLInputElement>("scenariosliderheatpumpB1").value).toBe("0");
+      expect(screen.getByTestId<HTMLInputElement>("scenariosliderevadoptationB1").value).toBe("70");
+      expect(screen.getByTestId<HTMLInputElement>("scenarioslidersolarpanelsB1").value).toBe("60");
+      expect(screen.getByTestId<HTMLInputElement>("scenarioswitchheatnetworkB1")).toBeChecked();
     });
 
     it("shows the correct value for heatholon", async () => {
       expect(screen.getByTestId("heatholon1")).not.toBeChecked();
 
-      await act(async () => fireEvent.click(screen.getByTestId("heatholon1")));
+      await act(async () => {
+        fireEvent.click(screen.getByTestId("heatholon1"));
+      });
+
       expect(screen.getByTestId("heatholon1")).toBeChecked();
     });
 
     it("shows the correct value for windholon", async () => {
       expect(screen.getByTestId("windholon1")).toBeChecked();
 
-      await act(async () => fireEvent.click(screen.getByTestId("windholon1")));
+      await act(async () => {
+        fireEvent.click(screen.getByTestId("windholon1"));
+      });
+
       expect(screen.getByTestId("heatholon1")).not.toBeChecked();
     });
 
@@ -120,7 +126,9 @@ describe("Scenario", () => {
     });
 
     it("scenarioresults change when switching from Local to National ", async () => {
-      await act(async () => fireEvent.click(screen.getByTestId("scenarioswitchlocal1")));
+      await act(async () => {
+        fireEvent.click(screen.getByTestId("scenarioswitchlocal1"));
+      });
 
       expect(screen.getByTestId("resultBetrouwbaarheid")).toHaveTextContent("✗");
       expect(screen.getByTestId("resultBetaalbaarheid")).toHaveTextContent("4220");
@@ -181,7 +189,9 @@ describe("Scenario", () => {
         screen.queryByText(/De buurtbewoners ervaren lokaal eigenaarschap/)
       ).toBeInTheDocument();
 
-      await act(async () => fireEvent.click(screen.getByTestId("windholon2")));
+      await act(async () => {
+        fireEvent.click(screen.getByTestId("windholon2"));
+      });
 
       expect(screen.queryByText(/Flexibele tarieven voor/)).not.toBeInTheDocument();
       expect(
@@ -194,17 +204,24 @@ describe("Scenario", () => {
     });
 
     it("hides reacalculate button afer clicking it", async () => {
-      await act(async () => fireEvent.click(screen.getByRole("button")));
+      await act(async () => {
+        fireEvent.click(screen.getByRole("button"));
+      });
+
       expect(screen.queryByText("Herbereken")).not.toBeInTheDocument();
     });
 
     it("wants to recalculate after an input changed", async () => {
-      await act(async () => fireEvent.click(screen.getByRole("button")));
+      await act(async () => {
+        fireEvent.click(screen.getByRole("button"));
+      });
+
       expect(screen.queryByText("Herbereken")).not.toBeInTheDocument();
 
-      await act(async () =>
-        fireEvent.change(screen.getByTestId("scenariosliderheatpumpA2"), { target: { value: 88 } })
-      );
+      await act(async () => {
+        fireEvent.change(screen.getByTestId("scenariosliderheatpumpA2"), { target: { value: 88 } });
+      });
+
       expect(screen.queryByText("Herbereken")).toBeInTheDocument();
     });
 

@@ -1,14 +1,24 @@
-import PropTypes from "prop-types";
 import ScenarioSlider from "./ScenarioSlider";
 import ScenarioSwitch from "./ScenarioSwitch";
 
-function Neighbourhood(props) {
-  function updateValue(property, inputValue) {
+import type { Neighbourhood as NeighbourhoodData } from "./types";
+
+type Props = {
+  neighbourhood: NeighbourhoodData;
+  neighbourhoodID: string;
+  locked: boolean;
+  setNeighbourhood: (neighbourhood: NeighbourhoodData) => void;
+  scenarioId: string;
+};
+
+export default function Neighbourhood(props: Props) {
+  function updateValue(property: string, inputValue: string | boolean) {
     const propertyValue = typeof inputValue == "boolean" ? inputValue : parseInt(inputValue);
+
     props.setNeighbourhood({
       ...props.neighbourhood,
       [property]: {
-        ...props.neighbourhood[property],
+        ...props.neighbourhood[property as keyof NeighbourhoodData],
         value: propertyValue,
       },
     });
@@ -64,29 +74,3 @@ function Neighbourhood(props) {
     </div>
   );
 }
-export default Neighbourhood;
-
-Neighbourhood.propTypes = {
-  neighbourhood: PropTypes.shape({
-    heatpump: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    evadoptation: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    solarpanels: PropTypes.shape({
-      value: PropTypes.number,
-      label: PropTypes.string,
-    }),
-    heatnetwork: PropTypes.shape({
-      value: PropTypes.bool,
-      label: PropTypes.string,
-    }),
-  }),
-  neighbourhoodID: PropTypes.string,
-  locked: PropTypes.bool,
-  setNeighbourhood: PropTypes.func,
-  scenarioId: PropTypes.string,
-};
