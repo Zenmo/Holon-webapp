@@ -31,8 +31,7 @@ describe("correct styling", () => {
       <TextBlock
         value="warmte"
         right={true}
-        underlineTitleBlue="true"
-        colorUnderline="decoration-holon-gold-600"
+        underlineTitleBlue
         borderColor="border-holon-gold-600"
       ></TextBlock>
     );
