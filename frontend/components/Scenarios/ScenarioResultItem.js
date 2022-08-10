@@ -15,7 +15,7 @@ function ScenarioResultItem({
   maxvalue = 100,
 }) {
   function per2colorArray(minvalue, maxvalue, value, invert) {
-    var percentage = 0;
+    let percentage = 0;
 
     if (value <= minvalue) {
       percentage = 0;
@@ -30,7 +30,7 @@ function ScenarioResultItem({
     }
 
     percentage = parseInt(percentage);
-    var color = resultScale[percentage];
+    const color = resultScale[percentage];
 
     return color;
   }

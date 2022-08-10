@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function ContentBlock(props) {
-  let id = props.id ? props.id : "";
-  let bgColor = props.colorClass ? props.colorClass : "";
-  let contentOfBlock = props.children ? props.children : "";
+  const id = props.id ?? "";
+  const bgColor = props.colorClass ?? "";
+  const contentOfBlock = props.children ?? "";
 
   return (
     <div

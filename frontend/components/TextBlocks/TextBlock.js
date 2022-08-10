@@ -6,16 +6,16 @@ import { contentTextBlocks } from "./contentTextBlocks.js";
 import Paragraphs from "./Paragraphs";
 
 export default function TextBlock(props) {
-  let stylingRight = props.right
+  const stylingRight = props.right
     ? "items-end text-right mr-24 border-r-8 pr-5"
     : "border-l-8 ml-24 pl-5";
-  let imageTextFlex = props.right ? "flex-row-reverse" : "flex-row";
-  let flexValue = props.right ? "justify-end" : "";
-  let value = props.value ? props.value : "default";
-  let borderColor = props.borderColor ? props.borderColor : "border-white";
-  let extraContent = props.children ? props.children : "";
-  let underlineTitleBlue = props.underlineTitleBlue ? "shadow-blue" : "";
-  let underlineTitleGolden = props.underlineTitleGolden ? props.underlineTitleGolden : "";
+  const imageTextFlex = props.right ? "flex-row-reverse" : "flex-row";
+  const flexValue = props.right ? "justify-end" : "";
+  const value = props.value ? props.value : "default";
+  const borderColor = props.borderColor ? props.borderColor : "border-white";
+  const extraContent = props.children ? props.children : "";
+  const underlineTitleBlue = props.underlineTitleBlue ? "shadow-blue" : "";
+  const underlineTitleGolden = props.underlineTitleGolden ? props.underlineTitleGolden : "";
 
   return (
     <div className={`mx-10 flex min-h-screen w-screen ${flexValue}`} data-testid="text-block">

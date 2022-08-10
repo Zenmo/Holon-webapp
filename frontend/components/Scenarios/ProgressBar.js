@@ -14,7 +14,7 @@ function ProgressBar({ duration, label }) {
   });
 
   function determineProgress(i, duration) {
-    var currentProgress = Math.round((i / duration) * 100);
+    let currentProgress = Math.round((i / duration) * 100);
     if (currentProgress > 100) {
       currentProgress = 100;
     }
