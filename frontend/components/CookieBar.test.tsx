@@ -23,7 +23,7 @@ describe("Cookiebar", () => {
 
 describe("does not show after choice", () => {
   it("will not show when page is rendered again", () => {
-    render(<CookieBar />);
+    render(<CookieBar onAccept={() => undefined} />);
 
     expect(screen.queryByText("Accept cookies")).not.toBeInTheDocument();
   });

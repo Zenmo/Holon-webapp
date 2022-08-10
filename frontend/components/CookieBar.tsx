@@ -1,15 +1,14 @@
-import PropTypes from "prop-types";
 import Image from "next/image";
 import CookieConsent from "react-cookie-consent";
 
 import cookieImg from "../public/imgs/cookie.png";
 
-function CookieBar({ onAccept }) {
+export default function CookieBar({ onAccept }: { onAccept: () => void }) {
   return (
     <CookieConsent
       location="bottom"
       buttonText="accepteren"
-      enableDeclineButton="true"
+      enableDeclineButton
       declineButtonText="weigeren"
       disableStyles={true}
       containerClasses="bg-white flex flex-col xl:flex-row items-center xl:items-baseline justify-center fixed w-4/5 mx-[10%] mb-[7%] border border-black rounded shadow-holon-blue pb-4 z-50"
@@ -35,9 +34,3 @@ function CookieBar({ onAccept }) {
     </CookieConsent>
   );
 }
-
-export default CookieBar;
-
-CookieBar.propTypes = {
-  onAccept: PropTypes.func,
-};
