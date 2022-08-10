@@ -30,7 +30,7 @@ describe("Sentiment", () => {
       const radios = screen.queryAllByRole("radio");
 
       await act(async () => {
-        return await fireEvent.click(radios[0]);
+        fireEvent.click(radios[0]);
       });
 
       await waitFor(() => {
@@ -43,15 +43,20 @@ describe("Sentiment", () => {
       const radios = screen.queryAllByRole("radio");
 
       await act(async () => {
-        return await fireEvent.click(radios[1]);
+        await fireEvent.click(radios[1]);
       });
 
       await waitFor(() => {
         expect(global.fetch).toHaveBeenCalledTimes(1);
       });
 
-      const sentData = JSON.parse(global.fetch.mock.calls[0][1].body);
-      expect(sentData).toEqual({ rating: "THUMBSUP" });
+      expect(fetchMock.mock.calls.length).toBe(1);
+      expect(fetchMock.mock.calls[0].length).toBe(2);
+
+      if (fetchMock.mock.calls?.[0]?.[1]) {
+        const sentData = JSON.parse(`${fetchMock.mock.calls[0][1].body}`);
+        expect(sentData).toEqual({ rating: "THUMBSUP" });
+      }
     });
   });
 });
