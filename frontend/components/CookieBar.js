@@ -1,7 +1,6 @@
-import { useEffect } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
-import CookieConsent, { getCookieConsentValue, Cookies } from "react-cookie-consent";
+import CookieConsent from "react-cookie-consent";
 
 import cookieImg from "../public/imgs/cookie.png";
 

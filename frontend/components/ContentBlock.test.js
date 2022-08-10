@@ -1,4 +1,4 @@
-import { getByTestId, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 import ContentBlock from "./ContentBlock";
 
@@ -26,7 +26,6 @@ describe("with content", () => {
       </ContentBlock>
     );
 
-    const childBlock = screen.getByTestId("child");
     expect(screen.getByTestId("child")).toBeInTheDocument();
   });
 });

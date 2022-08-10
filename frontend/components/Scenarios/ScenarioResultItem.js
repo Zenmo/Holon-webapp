@@ -14,36 +14,6 @@ function ScenarioResultItem({
   minvalue,
   maxvalue = 100,
 }) {
-  function perc2color(minvalue, maxvalue, value) {
-    var percentage = 0;
-
-    if (value <= minvalue) {
-      percentage = 0;
-    } else if (value >= maxvalue) {
-      percentage = 100;
-    } else {
-      percentage = ((value - minvalue) / (maxvalue - minvalue)) * 100;
-    }
-
-    if (invert) {
-      percentage = 100 - percentage;
-    }
-
-    // var percentage = perc < 100 ? perc : 100
-
-    var r,
-      g,
-      b = 0;
-    if (percentage < 50) {
-      r = 255;
-      g = Math.round(5.1 * percentage);
-    } else {
-      g = 255;
-      r = Math.round(510 - 5.1 * percentage);
-    }
-    var h = r * 0x10000 + g * 0x100 + b * 0x1;
-    return "#" + ("000000" + h.toString(16)).slice(-6);
-  }
   function per2colorArray(minvalue, maxvalue, value, invert) {
     var percentage = 0;
 

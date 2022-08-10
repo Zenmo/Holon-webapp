@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export default function InputElement({ children, label = "defaultLabel", ...inputProps }) {
+export default function InputElement({ label = "defaultLabel", ...inputProps }) {
   return (
     <div className="flex flex-col">
       <label className="ml-1 font-bold italic">

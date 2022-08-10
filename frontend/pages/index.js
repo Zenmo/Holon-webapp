@@ -1,13 +1,11 @@
 import Head from "next/head";
 
-import { initGA } from "../util/gtag";
 import Scenarios from "../components/Scenarios/Scenarios";
 import ContentBlock from "../components/ContentBlock";
 import FeedbackBlock from "../components/FeedbackBlock";
 import HolonButton from "../components/Buttons/HolonButton";
 import IntroductionVideo from "../components/IntroductionVideo/IntroductionVideo";
 import TextBlock from "../components/TextBlocks/TextBlock";
-import WelcomePage from "../components/WelcomePage";
 
 export default function Home() {
   return (
