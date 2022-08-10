@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
+type Props = { label: string } & React.ComponentProps<"input">;
 
-export default function InputElement({ label = "defaultLabel", ...inputProps }) {
+export default function InputElement({ label = "defaultLabel", ...inputProps }: Props) {
   return (
     <div className="flex flex-col">
       <label className="ml-1 font-bold italic">
@@ -14,11 +14,3 @@ export default function InputElement({ label = "defaultLabel", ...inputProps }) 
     </div>
   );
 }
-
-InputElement.propTypes = {
-  children: PropTypes.node.isRequired,
-  placeholder: PropTypes.string,
-  id: PropTypes.string,
-  label: PropTypes.string,
-  required: PropTypes.bool,
-};
