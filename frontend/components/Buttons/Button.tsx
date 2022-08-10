@@ -1,9 +1,15 @@
 import React, { createContext, useContext } from "react";
-import PropTypes from "prop-types";
+
+type ButtonVariant = "default" | "primary" | "success" | "danger" | "holon__ghost";
+
+type Props = {
+  children: React.ReactNode;
+  variant?: ButtonVariant;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const holonshadow = "shadow-[4px_4px_0_0] border";
 
-const variants = {
+const variants: Record<ButtonVariant, string> = {
   default:
     "bg-white text-gray-700 ring-gray-700/10 hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-blue-500 active:bg-gray-100 active:ring-gray-700/20",
   primary:
@@ -15,19 +21,20 @@ const variants = {
   holon__ghost: `bg-transparent ${holonshadow}`,
 };
 
-const iconVariants = {
+const iconVariants: Record<ButtonVariant, string> = {
+  danger: "text-red-200",
   default: "text-gray-400",
+  holon__ghost: "text-gray-200",
   primary: "text-blue-200",
   success: "text-emerald-200",
-  danger: "text-red-200",
 };
 
-const ButtonContext = createContext();
+const ButtonContext = createContext<ButtonVariant | undefined>(undefined);
 
 /**
  * An example Button component with color variants.
  */
-export default function Button({ children, variant = "default", ...rest }) {
+export default function Button({ children, variant = "default", ...rest }: Props) {
   const colorClasses = variants[variant] || variants.default;
 
   return (
@@ -39,11 +46,6 @@ export default function Button({ children, variant = "default", ...rest }) {
     </button>
   );
 }
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  variant: PropTypes.oneOf(Object.keys(variants)),
-};
 
 /**
  * Hook which provides access to the button variant.
@@ -58,14 +60,28 @@ export function useButtonContext() {
   return context;
 }
 
+interface IconProps {
+  children: React.ReactNode;
+}
+
 /**
  * Clones the children adding color classes to match the parent button.
  */
-Button.Icon = function ButtonIcon({ children }) {
+Button.Icon = function ButtonIcon({ children }: IconProps) {
   const variant = useButtonContext();
   const variantClasses = iconVariants[variant] || iconVariants.default;
 
-  return React.Children.map(children, (child) =>
-    React.cloneElement(child, { className: `${child.props.className} mr-2 ${variantClasses}` })
+  return (
+    <>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child, {
+            className: `${child.props.className} mr-2 ${variantClasses}`,
+          });
+        }
+
+        return null;
+      })}
+    </>
   );
 };

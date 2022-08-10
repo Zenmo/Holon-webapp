@@ -1,5 +1,13 @@
 import React, { createContext, useContext } from "react";
-import PropTypes from "prop-types";
+
+type ButtonVariant = keyof typeof variants;
+
+type Props<T extends React.ElementType> = {
+  children: React.ReactNode;
+  className?: string;
+  tag?: React.ElementType;
+  variant?: ButtonVariant;
+} & React.ComponentPropsWithoutRef<T>;
 
 const variants = {
   darkmode:
@@ -10,15 +18,15 @@ const variants = {
     "text-white bg-holon-blue-500 border-holon-blue-900 shadow-holon-blue hover:bg-holon-blue-900 active:shadow-holon-blue-hover",
 };
 
-const ButtonContext = createContext();
+const ButtonContext = createContext<ButtonVariant | undefined>(undefined);
 
-export default function Button({
+export default function Button<T extends React.ElementType>({
   children,
   className,
   tag: Tag = "button",
   variant = "darkmode",
   ...rest
-}) {
+}: Props<T>) {
   const colorClasses = variants[variant] || variants.darkmode;
 
   return (
@@ -30,13 +38,6 @@ export default function Button({
     </Tag>
   );
 }
-
-Button.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  tag: PropTypes.elementType,
-  variant: PropTypes.oneOf(Object.keys(variants)),
-};
 
 /**
  * Hook which provides access to the button variant.
