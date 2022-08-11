@@ -56,7 +56,9 @@ def round_or_unknown(outputs: SingleRunOutputs, name: str) -> str:
         safe_value = "?"
     else:
         value = outputs.value(name)
-        safe_value = "{:.0f}".format(float(value))  # weird type converts to round number
+        safe_value = "{:.0f}".format(
+            float(value)
+        )  # weird type converts to round number
 
     return safe_value
 
