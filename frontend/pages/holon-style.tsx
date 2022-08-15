@@ -1,12 +1,10 @@
-import { Fragment } from "react";
-
 import HolonButton from "../components/Buttons/HolonButton";
 import InputElement from "../components/InputElement";
 import EmoticonButton from "../components/FeedbackBlock/Sentiment/EmoticonButton";
 
 export default function HolonStyle() {
   return (
-    <Fragment>
+    <>
       <main className="flex flex-col items-center justify-center py-6">
         <h1 className="mt-6 text-center text-6xl font-semibold lg:text-left">
           Demo of <a href="">holontool.nl</a> styling!
@@ -29,7 +27,6 @@ export default function HolonStyle() {
           <div className="container flex flex-col items-center gap-3 lg:flex-row">
             <HolonButton variant="darkmode">Test</HolonButton>
             <InputElement
-              variant="outline"
               label="email"
               placeholder="j.j.jansen@hetnet.nl"
               id="email"
@@ -66,14 +63,13 @@ export default function HolonStyle() {
           {/* Start of 2 row */}
           <div className="container flex flex-col items-center gap-3 lg:flex-row">
             <HolonButton variant="blue">Test</HolonButton>
-            <InputElement placeholder="j.j.jansen@hetnet.nl" type="email" id="email"></InputElement>
             <InputElement
-              variant="outline"
-              label="naam"
-              placeholder="Jan Jansen"
-              id="name"
+              label="Email"
+              placeholder="j.j.jansen@hetnet.nl"
+              type="email"
+              id="email"
             ></InputElement>
-
+            <InputElement label="naam" placeholder="Jan Jansen" id="name"></InputElement>
             <InputElement
               label="bedrijf"
               type="text"
@@ -84,6 +80,6 @@ export default function HolonStyle() {
           </div>
         </div>
       </main>
-    </Fragment>
+    </>
   );
 }

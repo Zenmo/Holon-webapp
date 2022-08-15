@@ -61,13 +61,13 @@ const ButtonContext = createContext<keyof typeof variants>("heart");
 
 interface Props {
   children?: React.ReactNode;
-  checked: boolean;
+  checked?: boolean;
   variant: keyof typeof variants;
 }
 
 export default function EmoticonButton({
   children,
-  checked,
+  checked = false,
   variant = "thumbsdown",
   ...rest
 }: Props) {
