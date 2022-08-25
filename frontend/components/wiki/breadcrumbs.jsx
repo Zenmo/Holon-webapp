@@ -1,6 +1,5 @@
 import Link from "next/link";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Breadcrumbs(props) {
   const [breadcrumbs, setBreadcrumbs] = useState([]);
@@ -20,7 +19,7 @@ export default function Breadcrumbs(props) {
       : setBreadcrumbs(breadcrumbarray);
   }
   return (
-    <nav className="mb-8 flex flex-row justify-center bg-holon-gold-600 py-2">
+    <nav className="flex flex-row justify-center py-2">
       <ul className="container flex flex-row justify-start gap-3">
         <li>
           <Link href="/wiki/">Holon</Link>
@@ -29,14 +28,22 @@ export default function Breadcrumbs(props) {
           const url = !breadcrumbitem.url
             ? ""
             : breadcrumbitem.url.indexOf("index.mdx") > 0
-            ? breadcrumbitem.url.replace(/\index\.mdx$/, "")
+            ? " > " + breadcrumbitem.url.replace(/\index\.mdx$/, "")
             : breadcrumbitem.url.replace(/\.mdx$/, "");
           return (
             <li key={index}>
               {url ? (
-                <Link href={"/wiki/" + url}>{breadcrumbitem.name}</Link>
+                <Link href={"/wiki/" + url}>
+                  <span>
+                    <span className="mr-3 text-gray-600">{"/"}</span>
+                    {breadcrumbitem.name}
+                  </span>
+                </Link>
               ) : (
-                <span>{breadcrumbitem}</span>
+                <span>
+                  <span className="mr-3 text-gray-600">{"/"}</span>
+                  <span className="font-bold text-holon-gold-600">{breadcrumbitem}</span>
+                </span>
               )}
             </li>
           );
