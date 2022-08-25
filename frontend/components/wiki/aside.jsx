@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
+import React, { Fragment } from "react";
 
 function Document({ item }) {
   const url =
@@ -48,11 +48,8 @@ Folder.propTypes = {
 
 export default function Aside({ posts }) {
   return (
-    <aside className="min-w-[250px] ">
-      <h4 className="my-4 basis-full border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">
-        Menu
-      </h4>
-      <div className="bg-holon-gold-200">
+    <aside className="mx-3 mt-10">
+      <div className="">
         {posts.map((item, index) =>
           item.children.length < 1 ? (
             <Document key={index} item={item} />

@@ -1,0 +1,42 @@
+# My MDX page
+
+Cupcake ipsum dolor sit amet toffee liquorice marshmallow. Bonbon chocolate bar biscuit marshmallow
+danish lollipop cookie icing. Pudding powder cupcake wafer wafer donut tootsie roll cotton candy
+tootsie roll. Ice cream danish powder oat cake lollipop oat cake topping.
+
+Cupcake cheesecake caramels candy canes cotton candy sweet. Pastry tiramisu chocolate candy caramels
+cupcake dessert jelly apple pie. Pastry tart jujubes muffin tootsie roll tiramisu sweet roll. Chupa
+chups dessert halvah ice cream sweet roll muffin oat cake.
+
+This is a list in markdown:
+
+- One
+- Two
+- Three
+
+> This is a quote
+
+And some code:
+
+```ts
+const withMDX = require("@next/mdx")({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [require("remark-prism")],
+  },
+});
+
+module.exports = withMDX({
+  pageExtensions: ["js", "jsx", "mdx"],
+});
+```
+
+An image from the `/public` dir:
+
+![](/imgs/cookie.png)
+
+| Time  | Value |
+| ----- | ----- |
+| 00:00 | 0     |
+| 01:00 | 1     |
+| 02:00 | 2     |
