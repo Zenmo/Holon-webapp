@@ -1,6 +1,6 @@
 import Link from "next/link";
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React from "react";
 
 function Document({ item }) {
   const url =

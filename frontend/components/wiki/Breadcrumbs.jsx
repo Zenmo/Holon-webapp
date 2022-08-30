@@ -4,19 +4,19 @@ import React, { useEffect, useState } from "react";
 export default function Breadcrumbs(props) {
   const [breadcrumbs, setBreadcrumbs] = useState([]);
 
-  const breadcrumbarray = [];
+  const breadcrumbArray = [];
 
   useEffect(() => {
     breadcrumb(props.posts, 1);
-  }, [props.currentpage]);
+  }, [props.currentPage]);
 
   function breadcrumb(items, i) {
-    const selectedPost = items.find((post) => post.name == props.currentpage.split("/")[i]);
+    const selectedPost = items.find((post) => post.name == props.currentPage.split("/")[i]);
     selectedPost
-      ? (breadcrumbarray.push(selectedPost), breadcrumb(selectedPost.children, parseInt(i + 1)))
-      : items.find((post) => post.name.replace(/\.mdx$/, "") == props.currentpage.split("/")[i])
-      ? (breadcrumbarray.push(props.currentpage.split("/")[i]), setBreadcrumbs(breadcrumbarray))
-      : setBreadcrumbs(breadcrumbarray);
+      ? (breadcrumbArray.push(selectedPost), breadcrumb(selectedPost.children, parseInt(i + 1)))
+      : items.find((post) => post.name.replace(/\.mdx$/, "") == props.currentPage.split("/")[i])
+      ? (breadcrumbArray.push(props.currentPage.split("/")[i]), setBreadcrumbs(breadcrumbArray))
+      : setBreadcrumbs(breadcrumbArray);
   }
   return (
     <nav className="flex flex-row justify-center py-2">
@@ -48,7 +48,6 @@ export default function Breadcrumbs(props) {
             </li>
           );
         })}
-        <li></li>
       </ul>
     </nav>
   );

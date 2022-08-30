@@ -1,17 +1,14 @@
-import { BookOpenIcon } from "@heroicons/react/solid";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import Aside from "../components/wiki/aside";
-import Breadcrumbs from "../components/wiki/breadcrumbs";
+import { useRouter } from "next/router";
+import React from "react";
+import { BookOpenIcon } from "@heroicons/react/solid";
+import Aside from "../components/wiki/Aside";
+import Breadcrumbs from "../components/wiki/Breadcrumbs";
 import { posts } from "../components/wiki/getAllPosts";
 
 export default function DocsLayout({ children }) {
-  const [currentpage, setCurrentpage] = useState("");
-
-  useEffect(() => {
-    // Client-side-only code
-    setCurrentpage(window.location.pathname.slice(5, -1));
-  });
+  const { pathname } = useRouter();
+  const currentPage = pathname.slice(5, -1);
 
   return (
     <React.Fragment>
@@ -27,12 +24,12 @@ export default function DocsLayout({ children }) {
 
         <div className="flex min-h-[92vh] w-full flex-row">
           <div className="bottom-0 flex w-3/12 flex-col overflow-hidden border-2 border-gray-200">
-            {posts && <Aside currentpage={currentpage} posts={posts} />}
+            {posts && <Aside currentPage={currentPage} posts={posts} />}
           </div>
 
           <main className="h-[92vh] w-9/12 overflow-auto">
             <div className="border-b-2 border-gray-200 py-3 pl-10">
-              {posts && <Breadcrumbs currentpage={currentpage} posts={posts} />}
+              {posts && <Breadcrumbs currentPage={currentPage} posts={posts} />}
             </div>
             <article className="prose mt-5 ml-10 mb-16">{children}</article>
           </main>
