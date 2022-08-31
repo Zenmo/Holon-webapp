@@ -1,42 +1,44 @@
 import Link from "next/link";
 import PropTypes from "prop-types";
 import React from "react";
+import { useRouter } from "next/router";
 
 export default function Breadcrumbs(props) {
-  const breadcrumbPath = props.currentPage.split("/");
-  const breadcrumbarray = [];
+  const { pathname } = useRouter();
+  const currentPage = pathname.slice(6);
+  const breadcrumbPath = currentPage.split("/");
 
-  function BreadcrumbItem({ breadcrumbitem }) {
+  const breadcrumbArray = [];
+
+  function BreadcrumbItem({ listItem }) {
     return (
       <React.Fragment>
         <span className="">&#8250;</span>
         <li className="flex">
-          <Link
-            href={"/wiki/" + breadcrumbitem.url.replace(/\index.mdx$/, "").replace(/\.mdx$/, "")}
-          >
-            {breadcrumbitem.name.replace(/\.mdx$/, "")}
+          <Link href={"/wiki/" + listItem.url.replace(/\index.mdx$/, "").replace(/\.mdx$/, "")}>
+            {listItem.name.replace(/\.mdx$/, "")}
           </Link>
         </li>
       </React.Fragment>
     );
   }
   BreadcrumbItem.propTypes = {
-    breadcrumbitem: PropTypes.shape({
+    listItem: PropTypes.shape({
       name: PropTypes.string,
       url: PropTypes.string,
     }),
   };
 
   function breadcrumblist(item, childs, index) {
-    const breadcrumbitem = childs.find((child) => child.name.replace(/\.mdx$/, "") == item);
-    if (breadcrumbitem) {
+    const selectedItem = childs.find((child) => child.name.replace(/\.mdx$/, "") == item);
+    if (selectedItem) {
       // add item to the list, and go one level deeper
-      breadcrumbarray.push(breadcrumbitem);
-      return breadcrumblist(breadcrumbPath[index + 1], breadcrumbitem.children, index + 1);
+      breadcrumbArray.push(selectedItem);
+      return breadcrumblist(breadcrumbPath[index + 1], selectedItem.children, index + 1);
     } else {
       //no more children, end of tree
-      return breadcrumbarray.map((breadcrumbitem, index) => (
-        <BreadcrumbItem breadcrumbitem={breadcrumbitem} key={index} />
+      return breadcrumbArray.map((breadcrumbItem, index) => (
+        <BreadcrumbItem listItem={breadcrumbItem} key={index} />
       ));
     }
   }
@@ -54,7 +56,6 @@ export default function Breadcrumbs(props) {
 }
 
 Breadcrumbs.propTypes = {
-  currentPage: PropTypes.string,
   posts: PropTypes.array,
 
   item: PropTypes.shape({

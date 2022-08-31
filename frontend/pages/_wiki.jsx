@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { useRouter } from "next/router";
 import React from "react";
 import { BookOpenIcon } from "@heroicons/react/solid";
 import Aside from "../components/wiki/Aside";
@@ -7,11 +6,6 @@ import Breadcrumbs from "../components/wiki/Breadcrumbs";
 import { posts } from "../components/wiki/getAllPosts";
 
 export default function DocsLayout({ children }) {
-  const { pathname } = useRouter();
-  const currentPage = pathname.slice(6);
-
-  console.log(currentPage);
-
   return (
     <React.Fragment>
       <div className="min-h-screen min-w-full">
@@ -26,12 +20,12 @@ export default function DocsLayout({ children }) {
 
         <div className="flex min-h-[92vh] w-full flex-row">
           <div className="bottom-0 flex w-3/12 flex-col overflow-hidden border-2 border-gray-200">
-            {posts && <Aside currentPage={currentPage} posts={posts} />}
+            {posts && <Aside posts={posts} />}
           </div>
 
           <main className="h-[92vh] w-9/12 overflow-auto">
             <div className="border-b-2 border-gray-200 py-3 pl-10">
-              {posts && <Breadcrumbs currentPage={currentPage} posts={posts} />}
+              {posts && <Breadcrumbs posts={posts} />}
             </div>
             <article className="prose mt-5 ml-10 mb-16">{children}</article>
           </main>
