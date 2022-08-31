@@ -1,56 +1,65 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import React from "react";
 
 export default function Breadcrumbs(props) {
-  const [breadcrumbs, setBreadcrumbs] = useState([]);
+  const breadcrumbPath = props.currentPage.split("/");
+  const breadcrumbarray = [];
 
-  const breadcrumbArray = [];
-
-  useEffect(() => {
-    breadcrumb(props.posts, 1);
-  }, [props.currentPage]);
-
-  function breadcrumb(items, i) {
-    const selectedPost = items.find((post) => post.name == props.currentPage.split("/")[i]);
-    selectedPost
-      ? (breadcrumbArray.push(selectedPost), breadcrumb(selectedPost.children, parseInt(i + 1)))
-      : items.find((post) => post.name.replace(/\.mdx$/, "") == props.currentPage.split("/")[i])
-      ? (breadcrumbArray.push(props.currentPage.split("/")[i]), setBreadcrumbs(breadcrumbArray))
-      : setBreadcrumbs(breadcrumbArray);
+  function BreadcrumbItem({ breadcrumbitem }) {
+    return (
+      <React.Fragment>
+        <span className="">&#8250;</span>
+        <li className="flex">
+          <Link
+            href={"/wiki/" + breadcrumbitem.url.replace(/\index.mdx$/, "").replace(/\.mdx$/, "")}
+          >
+            {breadcrumbitem.name.replace(/\.mdx$/, "")}
+          </Link>
+        </li>
+      </React.Fragment>
+    );
   }
+  BreadcrumbItem.propTypes = {
+    breadcrumbitem: PropTypes.shape({
+      name: PropTypes.string,
+      url: PropTypes.string,
+    }),
+  };
+
+  function breadcrumblist(item, childs, index) {
+    const breadcrumbitem = childs.find((child) => child.name.replace(/\.mdx$/, "") == item);
+    if (breadcrumbitem) {
+      // add item to the list, and go one level deeper
+      breadcrumbarray.push(breadcrumbitem);
+      return breadcrumblist(breadcrumbPath[index + 1], breadcrumbitem.children, index + 1);
+    } else {
+      //no more children, end of tree
+      return breadcrumbarray.map((breadcrumbitem, index) => (
+        <BreadcrumbItem breadcrumbitem={breadcrumbitem} key={index} />
+      ));
+    }
+  }
+
   return (
     <nav className="flex flex-row justify-center py-2">
       <ul className="container flex flex-row justify-start gap-3">
         <li>
           <Link href="/wiki/">Holon</Link>
         </li>
-        {breadcrumbs.map((breadcrumbitem, index) => {
-          const url = !breadcrumbitem.url
-            ? ""
-            : breadcrumbitem.url.indexOf("index.mdx") > 0
-            ? " > " + breadcrumbitem.url.replace(/\index\.mdx$/, "")
-            : breadcrumbitem.url.replace(/\.mdx$/, "");
-          return (
-            <li key={index}>
-              {url ? (
-                <Link href={"/wiki/" + url}>
-                  <span>
-                    <span className="mr-3 text-gray-600">{"/"}</span>
-                    {breadcrumbitem.name}
-                  </span>
-                </Link>
-              ) : (
-                <span>
-                  <span className="mr-3 text-gray-600">{"/"}</span>
-                  <span className="font-bold text-holon-gold-600">{breadcrumbitem}</span>
-                </span>
-              )}
-            </li>
-          );
-        })}
+        {breadcrumblist(breadcrumbPath[0], props.posts, 0)}
       </ul>
     </nav>
   );
 }
 
-Breadcrumbs.propTypes = {};
+Breadcrumbs.propTypes = {
+  currentPage: PropTypes.string,
+  posts: PropTypes.array,
+
+  item: PropTypes.shape({
+    name: PropTypes.string,
+    url: PropTypes.string,
+  }),
+  childs: PropTypes.array,
+};

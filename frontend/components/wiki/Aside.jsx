@@ -10,18 +10,15 @@ function Document({ item }) {
   const name = item.name.replace(/\.mdx$/, "");
   return (
     <Link href={"/wiki/" + url}>
-      <span
-        className={
-          "block cursor-pointer bg-inherit px-4 pt-1 pb-3 " + (item.active && "italic underline")
-        }
-      >
-        {name}
-      </span>
+      <span className={"block cursor-pointer bg-inherit px-4 pt-1 pb-3 "}>{name}</span>
     </Link>
   );
 }
 Document.propTypes = {
-  children: PropTypes.any,
+  item: PropTypes.shape({
+    name: PropTypes.string,
+    url: PropTypes.string,
+  }),
 };
 
 function Folder({ item }) {
@@ -43,7 +40,10 @@ function Folder({ item }) {
   );
 }
 Folder.propTypes = {
-  children: PropTypes.any,
+  item: PropTypes.shape({
+    name: PropTypes.string,
+    children: PropTypes.any,
+  }),
 };
 
 export default function Aside({ posts }) {
@@ -62,4 +62,6 @@ export default function Aside({ posts }) {
   );
 }
 
-Aside.propTypes = {};
+Aside.propTypes = {
+  posts: PropTypes.any,
+};

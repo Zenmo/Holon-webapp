@@ -8,7 +8,9 @@ import { posts } from "../components/wiki/getAllPosts";
 
 export default function DocsLayout({ children }) {
   const { pathname } = useRouter();
-  const currentPage = pathname.slice(5, -1);
+  const currentPage = pathname.slice(6);
+
+  console.log(currentPage);
 
   return (
     <React.Fragment>
