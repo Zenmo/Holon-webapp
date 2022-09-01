@@ -1,9 +1,27 @@
+import json
 import os
+from unittest import mock
 from unittest.mock import patch
+from rest_framework.test import APITestCase
 from django.test import TestCase
-from .anylogic import MOCK_REQUEST, MOCK_RESULTS, handle_request, map_anylogickey_to_api_key
+from .anylogic import (
+    MOCK_REQUEST,
+    MOCK_RESULTS,
+    handle_request,
+    map_anylogickey_to_api_key,
+)
 
-# Create your tests here.
+
+def mock_handle_request():
+    return MOCK_RESULTS
+
+
+class AnyLogicAPIViewTestCase(APITestCase):
+    @mock.patch("holon.anylogic.handle_request", mock_handle_request)
+    def test_request(self):
+        response = self.client.post("/calculation/", MOCK_REQUEST, format="json")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response.data, MOCK_RESULTS)
 
 
 class AnyLogicTestCase(TestCase):
