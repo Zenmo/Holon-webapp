@@ -6,7 +6,7 @@ function importAll(r) {
     fileName
       .substr(2)
       .split("/")
-      .reduce((r, name, i, a) => {
+      .reduce((r, name) => {
         if (!r[name]) {
           // check for spaces in the title
           if (name.indexOf(" ") >= 0) {
