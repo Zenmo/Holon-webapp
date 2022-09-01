@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useRouter } from "next/router";
@@ -37,10 +37,12 @@ function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <WrapperComponent>
-      <Component {...pageProps} />
+    <Fragment>
+      <WrapperComponent>
+        <Component {...pageProps} />
+      </WrapperComponent>
       <CookieBar onAccept={initGA} />
-    </WrapperComponent>
+    </Fragment>
   );
 }
 

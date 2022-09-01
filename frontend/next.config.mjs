@@ -8,6 +8,7 @@ import configureMDX from "@next/mdx";
 const withMDX = configureMDX({
   options: {
     remarkPlugins: [remarkGfm, remarkPrism],
+    providerImportSource: "@mdx-js/react",
   },
   extension: /\.mdx?$/,
 });

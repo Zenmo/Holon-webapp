@@ -3,12 +3,13 @@ import React from "react";
 import { BookOpenIcon } from "@heroicons/react/solid";
 import Aside from "../components/wiki/Aside";
 import Breadcrumbs from "../components/wiki/Breadcrumbs";
+import Article from "../components/wiki/Article";
 import { posts } from "../components/wiki/getAllPosts";
 
 export default function DocsLayout({ children }) {
   return (
     <React.Fragment>
-      <div className="min-h-screen min-w-full">
+      <div className="flex min-h-screen min-w-full flex-col">
         <header className="flex h-[8vh] flex-row justify-start overflow-hidden bg-holon-blue-900 align-middle">
           <div className="flex w-3/12 justify-center justify-items-center">
             <a href="/wiki/" className="flex flex-row">
@@ -17,17 +18,18 @@ export default function DocsLayout({ children }) {
             </a>
           </div>
         </header>
-
-        <div className="flex min-h-[92vh] w-full flex-row">
-          <div className="bottom-0 flex w-3/12 flex-col overflow-hidden border-2 border-gray-200">
+        <div className="flex w-full flex-1 flex-row">
+          <div className="flex w-3/12 flex-col border-r-2 border-gray-200">
             {posts && <Aside posts={posts} />}
           </div>
 
-          <main className="h-[92vh] w-9/12 overflow-auto">
+          <main className="flex flex-1 flex-col">
             <div className="border-b-2 border-gray-200 py-3 pl-10">
               {posts && <Breadcrumbs posts={posts} />}
             </div>
-            <article className="prose mt-5 ml-10 mb-16">{children}</article>
+            <div className="flex flex-1 flex-row justify-between">
+              <Article article={children}></Article>
+            </div>
           </main>
         </div>
       </div>

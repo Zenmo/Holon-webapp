@@ -48,7 +48,7 @@ Folder.propTypes = {
 
 export default function Aside({ posts }) {
   return (
-    <aside className="mx-3 mt-10">
+    <aside className=" sticky top-0 mx-3 mt-5">
       <div className="">
         {posts.map((item, index) =>
           item.children.length < 1 ? (

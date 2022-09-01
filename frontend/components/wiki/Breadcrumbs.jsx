@@ -29,12 +29,12 @@ export default function Breadcrumbs(props) {
     }),
   };
 
-  function breadcrumblist(item, childs, index) {
+  function breadcrumblist(item, childs, level) {
     const selectedItem = childs.find((child) => child.name.replace(/\.mdx$/, "") == item);
     if (selectedItem) {
       // add item to the list, and go one level deeper
       breadcrumbArray.push(selectedItem);
-      return breadcrumblist(breadcrumbPath[index + 1], selectedItem.children, index + 1);
+      return breadcrumblist(breadcrumbPath[level + 1], selectedItem.children, level + 1);
     } else {
       //no more children, end of tree
       return breadcrumbArray.map((breadcrumbItem, index) => (
