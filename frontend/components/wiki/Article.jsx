@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 import { MDXProvider } from "@mdx-js/react";
+import PropTypes from "prop-types";
+import React, { Fragment } from "react";
 
 const articleComponents = {
   h1: (props) => <h1 id={"h1-" + encodeURIComponent(props.children)} {...props} />,
@@ -83,7 +83,7 @@ export default function Article({ article }) {
       <nav className=" mx-3 w-1/4 border-l-2 border-gray-200">
         <div className="sticky top-0 mx-3 pt-5 ">
           <h3 className="px-4 pt-1 pb-3">
-            <strong>On this page</strong>
+            <strong>Inhoudsopgave</strong>
           </h3>
           <div className="wiki-context-menu">
             <MDXProvider components={sidecomponents}>{article}</MDXProvider>
