@@ -12,12 +12,12 @@ from .anylogic import (
 )
 
 
-def mock_handle_request():
+def mock_handle_request(data):
     return MOCK_RESULTS
 
 
 class AnyLogicAPIViewTestCase(APITestCase):
-    @mock.patch("holon.anylogic.handle_request", mock_handle_request)
+    @mock.patch("holon.views.handle_request", mock_handle_request)
     def test_request(self):
         response = self.client.post("/calculation/", MOCK_REQUEST, format="json")
         self.assertEqual(200, response.status_code)
