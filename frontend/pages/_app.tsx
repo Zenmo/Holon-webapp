@@ -14,22 +14,6 @@ import "@fontsource/inter/variable.css";
 
 import WikiLayout from "./_wiki";
 
-/**
- * Wraps /docs pages in the DocsLayout component. Other pages are rendered without changes.
- */
-function WrapperComponent({ children }) {
-  const router = useRouter();
-
-  if (router.pathname.startsWith("/wiki")) {
-    return <WikiLayout>{children}</WikiLayout>;
-  }
-
-  return <>{children}</>;
-}
-
-WrapperComponent.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 function MyApp<T extends React.ElementType>({
   Component,
@@ -42,11 +26,19 @@ function MyApp<T extends React.ElementType>({
     getCookieConsentValue() === "true" && initGA();
   }, []);
 
+  const router = useRouter();
+
   return (
     <Fragment>
-      <WrapperComponent>
+
+      {router.pathname.startsWith("/wiki") ? (
+
+        <WikiLayout>
+          <Component {...pageProps} />
+        </WikiLayout>
+      ):(
         <Component {...pageProps} />
-      </WrapperComponent>
+      )}
       <CookieBar onAccept={initGA} />
     </Fragment>
   );
