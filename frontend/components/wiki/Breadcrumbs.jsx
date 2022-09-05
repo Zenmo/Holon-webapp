@@ -61,10 +61,4 @@ export default function Breadcrumbs(props) {
 
 Breadcrumbs.propTypes = {
   posts: PropTypes.array,
-
-  item: PropTypes.shape({
-    name: PropTypes.string,
-    url: PropTypes.string,
-  }),
-  childs: PropTypes.array,
 };
