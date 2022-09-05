@@ -7,20 +7,46 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('holon', '0001_initial'),
+        ("holon", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Rating',
+            name="Rating",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('datetime', models.DateTimeField(blank=True, default=django.utils.timezone.now, help_text='The date and time when the rating is done')),
-                ('rating', models.CharField(choices=[('HEART', 'heart'), ('THUMBSUP', 'thumbsup'), ('NEUTRAL', 'neutral'), ('THUMBSDOWN', 'thumbsdown')], max_length=20)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "datetime",
+                    models.DateTimeField(
+                        blank=True,
+                        default=django.utils.timezone.now,
+                        help_text="The date and time when the rating is done",
+                    ),
+                ),
+                (
+                    "rating",
+                    models.CharField(
+                        choices=[
+                            ("HEART", "heart"),
+                            ("THUMBSUP", "thumbsup"),
+                            ("NEUTRAL", "neutral"),
+                            ("THUMBSDOWN", "thumbsdown"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
             ],
         ),
         migrations.RemoveField(
-            model_name='updateregister',
-            name='rating',
+            model_name="updateregister",
+            name="rating",
         ),
     ]
