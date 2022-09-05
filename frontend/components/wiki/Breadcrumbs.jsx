@@ -3,31 +3,35 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useRouter } from "next/router";
 
+function BreadcrumbItem({ listItem }) {
+  return (
+    <React.Fragment>
+      <span className="">&#8250;</span>
+      <li className="flex">
+        {listItem.url ? (
+          <Link href={"/wiki/" + listItem.url.replace(/\index.mdx$/, "").replace(/\.mdx$/, "")}>
+            {listItem.name.replace(/\.mdx$/, "")}
+          </Link>
+        ) : (
+          <span>{listItem.name.replace(/\.mdx$/, "")}</span>
+        )}
+      </li>
+    </React.Fragment>
+  );
+}
+BreadcrumbItem.propTypes = {
+  listItem: PropTypes.shape({
+    name: PropTypes.string,
+    url: PropTypes.string,
+  }),
+};
+
 export default function Breadcrumbs(props) {
   const { pathname } = useRouter();
   const currentPage = pathname.slice(6);
   const breadcrumbPath = currentPage.split("/");
 
   const breadcrumbArray = [];
-
-  function BreadcrumbItem({ listItem }) {
-    return (
-      <React.Fragment>
-        <span className="">&#8250;</span>
-        <li className="flex">
-          <Link href={"/wiki/" + listItem.url.replace(/\index.mdx$/, "").replace(/\.mdx$/, "")}>
-            {listItem.name.replace(/\.mdx$/, "")}
-          </Link>
-        </li>
-      </React.Fragment>
-    );
-  }
-  BreadcrumbItem.propTypes = {
-    listItem: PropTypes.shape({
-      name: PropTypes.string,
-      url: PropTypes.string,
-    }),
-  };
 
   function breadcrumblist(item, childs, level) {
     const selectedItem = childs.find((child) => child.name.replace(/\.mdx$/, "") == item);
@@ -45,7 +49,7 @@ export default function Breadcrumbs(props) {
 
   return (
     <nav className="flex flex-row justify-center py-2">
-      <ul className="container flex flex-row justify-start gap-3">
+      <ul className="wiki-breadcrumbs container flex flex-row justify-start gap-3">
         <li>
           <Link href="/wiki/">Holon</Link>
         </li>

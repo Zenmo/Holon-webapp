@@ -90,3 +90,6 @@ input::-moz {
 .wiki-context-menu .wiki-context-menu-link:before {
   content: "› ";
 }
+.wiki-breadcrumbs a {
+  text-decoration: underline;
+}
