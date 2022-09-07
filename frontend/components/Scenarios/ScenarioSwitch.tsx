@@ -48,11 +48,11 @@ export default function ScenarioSwitch({
             checked={value}
           />
           <div
-            className={`h-[30px] w-16 rounded-sm border-2 p-1 shadow-[4px_4px_0_0] ${
+            className={`h-3.5 w-8 rounded-sm border-2 p-1 shadow-[4px_4px_0_0] sm:h-[30px] sm:w-16 ${
               locked
                 ? "border-gray-500 text-slate-500 shadow-gray-500 after:border-gray-500 after:bg-holon-grey-300"
                 : "border-holon-blue-900 text-holon-blue-900 after:border-holon-blue-900 after:bg-holon-blue-500 "
-            }  after:absolute after:top-[4px] after:left-[2px]  after:h-[1.3rem] after:w-5 after:rounded-sm after:border-2 after:shadow-[2px_2px_0_0] after:transition-all after:content-['']  peer-checked:after:left-[-2px] peer-checked:after:translate-x-[200%]  peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300`}
+            }  after:absolute after:top-[2px] after:left-[2px] after:h-[0.6rem] after:w-[0.6rem] after:rounded-sm after:border-2  after:shadow-[2px_2px_0_0] after:transition-all after:content-[''] peer-checked:after:left-[-1px] peer-checked:after:translate-x-[200%] peer-focus:outline-none peer-focus:ring-4  peer-focus:ring-blue-300 sm:after:top-[4px]  sm:after:left-[2px] sm:after:h-[1.3rem] sm:after:w-5`}
           ></div>
         </span>
         <small>{on}</small>

@@ -1,6 +1,7 @@
 import ScenarioResultItem from "./ScenarioResultItem";
 import ScenarioSwitch from "./ScenarioSwitch";
 import ScenarioResultText from "./ScenarioResultText";
+import Collapsible from "./Collapsible";
 
 import { SubjectResult } from "./types";
 
@@ -89,24 +90,22 @@ export default function ScenarioResults(props: Props) {
         </div>
         <div className="flex flex-row flex-nowrap gap-2">
           <div className="basis-full lg:basis-1/2">
-            <h4 className="my-4 basis-full border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">
-              Sociaal
-            </h4>
-            <ScenarioResultText
-              windholon={props.windholon}
-              heatholon={props.heatholon}
-              textType="social"
-            />
+            <Collapsible label="Sociaal">
+              <ScenarioResultText
+                windholon={props.windholon}
+                heatholon={props.heatholon}
+                textType="social"
+              />
+            </Collapsible>
           </div>
           <div className="basis-full lg:basis-1/2">
-            <h4 className="my-4 basis-full border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">
-              Juridisch
-            </h4>
-            <ScenarioResultText
-              windholon={props.windholon}
-              heatholon={props.heatholon}
-              textType="legal"
-            />
+            <Collapsible label="Juridisch">
+              <ScenarioResultText
+                windholon={props.windholon}
+                heatholon={props.heatholon}
+                textType="legal"
+              />
+            </Collapsible>
           </div>
         </div>
       </div>
