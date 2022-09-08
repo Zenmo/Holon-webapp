@@ -4,9 +4,7 @@ from rest_framework import viewsets, mixins
 
 # ViewSets define the view behavior.
 class RatingViewSet(
-    mixins.CreateModelMixin, 
-    mixins.UpdateModelMixin, 
-    viewsets.GenericViewSet
+    mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
