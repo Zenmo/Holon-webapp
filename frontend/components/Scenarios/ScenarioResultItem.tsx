@@ -65,21 +65,26 @@ export default function ScenarioResultItem({
 
   return (
     <>
-      <div className="mb-2 flex basis-6/12 flex-nowrap items-center justify-between py-1">
-        <h3 className="text-xl">{label}</h3>
-        <span className="relative ml-auto">
+      <div className="mb-2 flex basis-6/12 flex-nowrap items-center justify-between py-1 flex-col  lg:flex-row lg:justify-start lg:gap-2 xl:justify-between">
+        <h3 className="text-xs md:text-sm lg:text-base xl:text-lg">{label}</h3>
+        <div className="flex flex-row justify-around items-center mt-2 xl:w-[150px] xl:justify-start" >
+        <span className="relative">
           <Tooltip tooltipMessage={local === true ? messageLocal : messageNl} result={true}>
             <output
               data-testid={`result${label}`}
               style={{ backgroundColor: per2colorArray(minvalue, maxvalue, inputValue, invert) }}
-              className={`block h-[4.5rem] w-[4.5rem] rounded-full border-2 border-holon-blue-900 text-center text-lg font-medium italic leading-[4.5rem] shadow-[2px_2px_0_0]`}
+              className={`block h-8 w-8 rounded-full border-2 border-holon-blue-900 text-center text-[0.6rem] font-medium italic leading-6 shadow-[2px_2px_0_0] sm:text-xs sm:leading-7 md:h-12 md:w-12 md:text-sm md:leading-10 lg:h-[3.5rem] lg:w-[3.5rem] lg:text-base lg:leading-[3.5rem] xl:text-lg xl:leading-[4rem] xl:h-[4rem] xl:w-[4rem]`}
             >
               {inputValueAltRepr(inputValue, unit)}
             </output>
           </Tooltip>
         </span>
-
-        <span className="ml-2 mr-5 w-[40px] text-lg font-medium italic">{unit}</span>
+        {unit.trim() &&
+        <span className="ml-2 text-xs font-medium italic sm:text-sm md:text-base lg:text-lg">
+          {unit}
+        </span>
+}
+        </div>
       </div>
     </>
   );

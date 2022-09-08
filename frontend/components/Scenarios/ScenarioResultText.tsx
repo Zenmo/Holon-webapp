@@ -52,7 +52,10 @@ function selectText(
 
 export default function ScenarioResultText({ windholon, heatholon, textType }: Props) {
   return (
-    <p data-testid="legalText" className="text-lg font-light italic text-gray-800">
+    <p
+      data-testid="legalText"
+      className="text-sm font-light italic text-gray-800 sm:text-base md:text-lg"
+    >
       {selectText(windholon, heatholon, textType)}
     </p>
   );
