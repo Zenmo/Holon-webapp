@@ -13,8 +13,8 @@ type Props = React.PropsWithChildren<{
 
 export default function TextBlock(props: Props) {
   const stylingRight = props.right
-    ? "items-end text-right mr-24 border-r-8 pr-5"
-    : "border-l-8 ml-24 pl-5";
+    ? "items-end text-right lg:mr-24 border-r-8 pr-5"
+    : "border-l-8 lg:ml-24 pl-5";
   const imageTextFlex = props.right ? "flex-row-reverse" : "flex-row";
   const flexValue = props.right ? "justify-end" : "";
   const value = props.value ? props.value : "default";
@@ -27,17 +27,21 @@ export default function TextBlock(props: Props) {
         className={`flex w-full flex-col border-solid ${borderColor} ${stylingRight}`}
         data-testid="outlined-block"
       >
-        <h2 className={`mt-24 text-6xl font-semibold ${underlineTitleBlue}`}>
+        <h2
+          className={`mt-6 text-3xl font-semibold sm:text-4xl lg:mt-24 lg:text-5xl ${underlineTitleBlue}`}
+        >
           {contentTextBlocks[value].title}
         </h2>
-        <div className={`mt-10 flex ${imageTextFlex} gap-20 align-middle`}>
-          <div className="flex w-5/12 flex-col">
-            <div className="text-lg">
+        <div className={`mt-4 lg:mt-10 lg:flex ${imageTextFlex} gap-20 align-middle`}>
+          <div className="flex w-full flex-col lg:w-5/12">
+            <div className="text-sm md:text-base lg:text-lg">
               <Paragraphs texts={contentTextBlocks[value].pText} />
             </div>
-            <div className="mt-24 flex gap-4">{props.children}</div>
+            <div className="my-4 flex flex-col items-center gap-4 sm:flex-row lg:mt-24">
+              {props.children}
+            </div>
           </div>
-          <div className="w-7/12 p-10">
+          <div className="w-full p-2 lg:w-7/12 lg:p-10">
             <Image src={contentTextBlocks[value].img} alt={contentTextBlocks[value].alt} />
           </div>
         </div>

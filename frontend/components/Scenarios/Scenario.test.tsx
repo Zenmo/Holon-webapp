@@ -135,6 +135,20 @@ describe("Scenario", () => {
       expect(screen.getByTestId("resultDuurzaamheid")).toHaveTextContent("70");
       expect(screen.getByTestId("resultZelfconsumptie")).toHaveTextContent("85");
     });
+
+    it("shows elements collapsed in mobile view", () => {
+      window.resizeTo = jest.fn();
+      window.resizeTo(375, 667);
+      expect(screen.getByTestId("Holonen")).toBeInTheDocument();
+      expect(screen.getByTestId("section-Holonen")).toHaveClass("hidden");
+    });
+
+    it("elements can be expanded in mobile view", async () => {
+      await act(async () => {
+        fireEvent.click(screen.getByTestId("Holonen"));
+      });
+      expect(screen.getByTestId("section-Holonen")).toHaveClass("flex");
+    });
   });
 
   describe("unlocked version", () => {
