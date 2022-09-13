@@ -164,7 +164,7 @@ export default function Scenarios({
           }
         >
           {scenarioTitle ? (
-            <h2 className="mb-6 ml-6 text-5xl font-semibold text-holon-blue-900">
+            <h2 className="mb-6 mt-3 ml-6 text-5xl font-semibold text-holon-blue-900">
               {scenarioTitle}
             </h2>
           ) : null}
