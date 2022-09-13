@@ -103,8 +103,8 @@ export default function SubscriptionForm() {
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="flex flex-wrap items-start pb-6 md:flex-nowrap">
-        <div className="px-6 pt-1 pb-3 text-center text-2xl leading-relaxed md:w-1/2 md:pb-0">
+      <div className="flex flex-col flex-wrap items-center pb-6 md:flex-row md:flex-nowrap md:items-start">
+        <div className="px-6 pt-1 pb-3 text-center text-xl leading-relaxed sm:text-2xl md:w-1/2 md:pb-0">
           We houden je graag op de hoogte van verdere ontwikkelingen. Af en toe zullen we je vragen
           te vertellen wat je van het project tot dan toe vindt.
         </div>
@@ -137,7 +137,7 @@ export default function SubscriptionForm() {
           />
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center pb-16">
+      <div className="flex w-full flex-col items-center justify-center pb-10 sm:pb-16">
         <SubmitButton status={state.status} />
         <p className="mt-6 text-center text-xs">
           Met het indienen van deze informatie stem je in met onze&nbsp;

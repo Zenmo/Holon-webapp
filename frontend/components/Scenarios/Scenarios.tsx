@@ -5,6 +5,7 @@ import Loader from "./Loader";
 import Neighbourhood from "./Neighbourhood";
 import Tooltip from "./Tooltip";
 import ProgressBar from "./ProgressBar";
+import Collapsible from "./Collapsible";
 
 import {
   CalculationResponseData,
@@ -155,7 +156,7 @@ export default function Scenarios({
           </div>
         </div>
       )}
-      <div className="z-10 mx-auto px-24">
+      <div className="z-10 mx-auto px-10 md:px-24">
         <div
           className={
             locked
@@ -164,14 +165,14 @@ export default function Scenarios({
           }
         >
           {scenarioTitle ? (
-            <h2 className="mb-6 mt-3 ml-6 text-5xl font-semibold text-holon-blue-900">
+            <h2 className="mb-4 mt-3 ml-6 text-5xl font-semibold text-holon-blue-900">
               {scenarioTitle}
             </h2>
           ) : null}
           <form onSubmit={submitForm} className="flex flex-col md:flex-row">
             <div className="basis-full pr-4 md:basis-1/3">
               <h3
-                className={`${borderColor} mb-4 border-l-[0.75rem] pl-3 text-2xl font-medium italic`}
+                className={`${borderColor} mb-2 border-l-[0.75rem] pl-3 text-2xl font-medium italic`}
               >
                 uitgangspunten
               </h3>
@@ -199,11 +200,7 @@ export default function Scenarios({
                       scenarioId={scenarioId}
                     />
                   )}
-                  <h4 className="my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-lg font-light">
-                    Holonen
-                  </h4>
-
-                  <div className="ml-20 mb-4 flex flex-col gap-4">
+                  <Collapsible label="Holonen">
                     <label
                       htmlFor={`heatholon${scenarioId}`}
                       className="flex flex-row items-center gap-4"
@@ -236,12 +233,13 @@ export default function Scenarios({
                       <span className="mr-auto">Windholon</span>
                       <Tooltip tooltipMessage="De windholon is de coöperatie van buurtbewoners   die samen gaat investeren in een windturbine. Om deze te mogen bouwen in een   gebied met transportschaarste moeten de leden hun verbruik afstemmen op de   opwek van de windturbine. Hiermee ontlasten ze het HS/MS-station waar de   windturbine op aangesloten is."></Tooltip>
                     </label>
-                  </div>
+                  </Collapsible>
                 </div>
               </fieldset>
             </div>
+
             <div className="w-[4px] bg-slate-300"></div>
-            <div className="basis-full pl-4 md:basis-2/3">
+            <div className="basis-full md:basis-2/3 md:pl-4">
               <ScenarioResults
                 scenarioId={scenarioId}
                 reliability={reliability}

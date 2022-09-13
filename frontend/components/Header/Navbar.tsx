@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
-import { MenuAlt3Icon } from "@heroicons/react/outline";
+import { MenuIcon } from "@heroicons/react/outline";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,7 +13,7 @@ export default function Navbar() {
     <div className="relative flex w-full flex-col items-end justify-end sm:flex-row">
       <div className="mx-4 flex h-8 w-8 items-center sm:hidden">
         <button id="header__toggler" onClick={handleClick} className="w-full">
-          <MenuAlt3Icon></MenuAlt3Icon>
+          <MenuIcon></MenuIcon>
         </button>
       </div>
 

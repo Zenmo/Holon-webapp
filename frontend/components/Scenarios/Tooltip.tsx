@@ -5,7 +5,7 @@ type Props = React.PropsWithChildren<{
 
 export default function Tooltip({ tooltipMessage, result = false, children }: Props) {
   const visualRepresentation = result ? (
-    <span className="absolute right-0 top-0 block h-4 w-4 rounded-full border-2 border-holon-blue-900 bg-white text-center text-xs font-bold leading-4 text-holon-blue-500 shadow-holon-blue-900">
+    <span className="absolute top-[-10px] right-[-5px] block h-4 w-4 rounded-full border-2 border-holon-blue-900 bg-white text-center text-xs font-bold leading-4 text-holon-blue-500 shadow-holon-blue-900 md:right-0 md:top-0">
       i
     </span>
   ) : (

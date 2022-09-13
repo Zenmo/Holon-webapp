@@ -54,7 +54,11 @@ export default function Sentiment() {
   };
 
   return (
-    <RadioGroup value={choice} onChange={onChange} className="relative flex gap-6 pt-12 pb-24">
+    <RadioGroup
+      value={choice}
+      onChange={onChange}
+      className="relative flex gap-6 pt-12 pb-8 sm:pb-24"
+    >
       <RadioGroup.Label className="sr-only">What did you think?</RadioGroup.Label>
       <RadioGroup.Option value="heart">
         {({ checked }) => <EmoticonButton variant="heart" checked={checked} />}

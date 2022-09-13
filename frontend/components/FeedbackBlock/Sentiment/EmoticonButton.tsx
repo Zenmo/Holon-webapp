@@ -80,7 +80,7 @@ export default function EmoticonButton({
     <button
       {...rest}
       aria-label={variant}
-      className={`aspect-square h-20 w-20 rounded-full border-2 transition hover:border-white hover:text-white focus:border-white focus:text-white ${colors}`}
+      className={`aspect-square h-16 w-16 rounded-full border-2 transition hover:border-white hover:text-white focus:border-white focus:text-white sm:h-20 sm:w-20 ${colors}`}
     >
       {svg}
       <ButtonContext.Provider value={variant}>{children}</ButtonContext.Provider>
