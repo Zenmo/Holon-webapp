@@ -16,7 +16,7 @@ export default function Collapsible({ children, label }: Props) {
   return (
     <div className="container">
       <h4
-        className={`toggle relative my-4 mt-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light `}
+        className={`toggle relative my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light `}
         onClick={toggleSection}
         data-testid={label}
       >
