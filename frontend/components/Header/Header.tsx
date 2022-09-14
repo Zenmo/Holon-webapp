@@ -14,7 +14,7 @@ export default function Header() {
       </div>
 
       <span className="ml-4 text-left text-lg font-semibold ">Holon</span>
-      <Navbar></Navbar>
+      <Navbar />
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function Home() {
       </Head>
 
       <main className="h-screen snap-y snap-mandatory overflow-y-auto">
-        <Header></Header>
+        <Header />
         <ContentBlock colorClass="bg-holon-blue-900" id="introVideo">
           <IntroductionVideo />
         </ContentBlock>

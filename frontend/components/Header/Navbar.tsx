@@ -13,7 +13,7 @@ export default function Navbar() {
     <div className="relative flex w-full flex-col items-end justify-end sm:flex-row">
       <div className="mx-4 flex h-8 w-8 items-center sm:hidden">
         <button id="header__toggler" onClick={handleClick} className="w-full">
-          <MenuIcon></MenuIcon>
+          <MenuIcon />
         </button>
       </div>
 
