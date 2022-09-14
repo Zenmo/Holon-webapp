@@ -28,11 +28,11 @@ export default function TextBlock(props: Props) {
         data-testid="outlined-block"
       >
         <h2
-          className={`mt-6 text-3xl font-semibold sm:text-4xl lg:mt-24 lg:text-5xl ${underlineTitleBlue}`}
+          className={`mt-8 text-3xl font-semibold sm:text-4xl lg:mt-24 lg:text-5xl ${underlineTitleBlue}`}
         >
           {contentTextBlocks[value].title}
         </h2>
-        <div className={`mt-4 lg:mt-10 lg:flex ${imageTextFlex} gap-20 align-middle`}>
+        <div className={`mt-2 lg:mt-10 lg:flex ${imageTextFlex} gap-20 align-middle`}>
           <div className="flex w-full flex-col lg:w-5/12">
             <div className="text-sm md:text-base lg:text-lg">
               <Paragraphs texts={contentTextBlocks[value].pText} />

@@ -1,5 +1,6 @@
 import Head from "next/head";
 
+import Header from "../components/Header/Header";
 import Scenarios from "../components/Scenarios/Scenarios";
 import ContentBlock from "../components/ContentBlock";
 import FeedbackBlock from "../components/FeedbackBlock";
@@ -17,6 +18,7 @@ export default function Home() {
       </Head>
 
       <main className="h-screen snap-y snap-mandatory overflow-y-auto">
+        <Header />
         <ContentBlock colorClass="bg-holon-blue-900" id="introVideo">
           <IntroductionVideo />
         </ContentBlock>
