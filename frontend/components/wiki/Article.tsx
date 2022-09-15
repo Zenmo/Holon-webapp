@@ -3,16 +3,16 @@ import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 
 const articleComponents = {
-  h1: (props: Item) => <h1 id={"h1-" + encodeURIComponent(props.children)} {...props} />,
-  h2: (props: Item) => <h2 id={"h2-" + encodeURIComponent(props.children)} {...props} />,
-  h3: (props: Item) => <h2 id={"h3-" + encodeURIComponent(props.children)} {...props} />,
-  h4: (props: Item) => <h2 id={"h4-" + encodeURIComponent(props.children)} {...props} />,
-  h5: (props: Item) => <h2 id={"h5-" + encodeURIComponent(props.children)} {...props} />,
-  h6: (props: Item) => <h2 id={"h6-" + encodeURIComponent(props.children)} {...props} />,
+  h1: (props: IMDXItem) => <h1 id={"h1-" + encodeURIComponent(props.children)} {...props} />,
+  h2: (props: IMDXItem) => <h2 id={"h2-" + encodeURIComponent(props.children)} {...props} />,
+  h3: (props: IMDXItem) => <h2 id={"h3-" + encodeURIComponent(props.children)} {...props} />,
+  h4: (props: IMDXItem) => <h2 id={"h4-" + encodeURIComponent(props.children)} {...props} />,
+  h5: (props: IMDXItem) => <h2 id={"h5-" + encodeURIComponent(props.children)} {...props} />,
+  h6: (props: IMDXItem) => <h2 id={"h6-" + encodeURIComponent(props.children)} {...props} />,
 };
 
 const sidecomponents = {
-  h1: (props: Item) =>
+  h1: (props: IMDXItem) =>
     typeof typeof props.children !== "object" && (
       <a
         className="wiki-context-menu-link px-4 pt-1 pb-3"
@@ -20,7 +20,7 @@ const sidecomponents = {
         {...props}
       />
     ),
-  h2: (props: Item) =>
+  h2: (props: IMDXItem) =>
     typeof props.children !== "object" && (
       <a
         className="wiki-context-menu-link px-4 pt-1 pb-3"
@@ -28,7 +28,7 @@ const sidecomponents = {
         {...props}
       />
     ),
-  h3: (props: Item) =>
+  h3: (props: IMDXItem) =>
     typeof props.children !== "object" && (
       <a
         className="wiki-context-menu-link px-4 pt-1 pb-3"
@@ -36,7 +36,7 @@ const sidecomponents = {
         {...props}
       />
     ),
-  h4: (props: Item) =>
+  h4: (props: IMDXItem) =>
     typeof props.children !== "object" && (
       <a
         className="wiki-context-menu-link px-4 pt-1 pb-3"
@@ -44,7 +44,7 @@ const sidecomponents = {
         {...props}
       />
     ),
-  h5: (props: Item) =>
+  h5: (props: IMDXItem) =>
     typeof props.children !== "object" && (
       <a
         className="wiki-context-menu-link px-4 pt-1 pb-3"
@@ -52,7 +52,7 @@ const sidecomponents = {
         {...props}
       />
     ),
-  h6: (props: Item) =>
+  h6: (props: IMDXItem) =>
     typeof props.children !== "object" && (
       <a
         className="wiki-context-menu-link px-4 pt-1 pb-3"
@@ -73,15 +73,15 @@ const sidecomponents = {
   blockquote: () => null,
   section: () => null,
 };
-interface Item {
+interface IMDXItem {
   children: string;
 }
 
-interface Props {
+interface IArticle {
   article?: React.ReactNode;
 }
 
-export default function Article({ article }: Props) {
+export default function Article({ article }: IArticle) {
   return (
     <Fragment>
       <MDXProvider components={articleComponents}>
