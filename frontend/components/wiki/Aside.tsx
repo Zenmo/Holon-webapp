@@ -2,32 +2,32 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import React from "react";
 
-interface Props {
-    posts: IPostItem[];
+interface IPosts {
+  posts: IPostItem[];
 }
 
 interface IPostItem {
-    name: string,
-    url: string,
-    children: IPostItem[],
+  name: string;
+  url: string;
+  children: IPostItem[];
 }
 
 interface IFolderItem {
-    folderItem: {
-        name: string,
-        children: IPostItem[],
-    }
+  folderItem: {
+    name: string;
+    children: IPostItem[];
+  };
 }
 
 interface IDocumentItem {
-    docItem: {
-        name: string,
-        url: string,
-    }
+  docItem: {
+    name: string;
+    url: string;
+  };
 }
-function Document({ docItem }:IDocumentItem) {
+function Document({ docItem }: IDocumentItem) {
   const url =
-  docItem.url.indexOf("index.mdx") > 0
+    docItem.url.indexOf("index.mdx") > 0
       ? docItem.url.replace(/\index\.mdx$/, "")
       : docItem.url.replace(/\.mdx$/, "");
   const name = docItem.name.replace(/\.mdx$/, "");
@@ -44,49 +44,49 @@ Document.propTypes = {
   }),
 };
 
-function Folder({ folderItem }:IFolderItem) {
-    return (
-        <details open className="order-1 p-0 ">
-        <summary className="text-md cursor-pointer bg-inherit py-3 px-4">
-            <strong>{folderItem.name}</strong>
-        </summary>
-        <div className="flex flex-col pl-4">
-            {folderItem.children.map((child, index) =>
-            child.children.length < 1 ? (
-                <Document key={index} docItem={child} />
-            ) : (
-                <Folder key={index} folderItem={child} />
-            )
-            )}
-        </div>
-        </details>
-    );
+function Folder({ folderItem }: IFolderItem) {
+  return (
+    <details open className="order-1 p-0 ">
+      <summary className="text-md cursor-pointer bg-inherit py-3 px-4">
+        <strong>{folderItem.name}</strong>
+      </summary>
+      <div className="flex flex-col pl-4">
+        {folderItem.children.map((child, index) =>
+          child.children.length < 1 ? (
+            <Document key={index} docItem={child} />
+          ) : (
+            <Folder key={index} folderItem={child} />
+          )
+        )}
+      </div>
+    </details>
+  );
 }
 Folder.propTypes = {
-    folderItem: PropTypes.shape({
+  folderItem: PropTypes.shape({
     name: PropTypes.string,
     children: PropTypes.any,
   }),
 };
 
-function Aside({ posts }:Props) {
-    return (
-        <aside className=" sticky top-0 mx-3 mt-5">
-            <div className="">
-                {posts && posts.map((item, index) =>
-                item.children.length < 1 ? (
-                    <Document key={index} docItem={item} />
-                ) : (
-                    <Folder key={index} folderItem={item} />
-                )
-                )}
-            </div>
-        </aside>
-    )
-
+function Aside({ posts }: IPosts) {
+  return (
+    <aside className=" sticky top-0 mx-3 mt-5">
+      <div className="">
+        {posts &&
+          posts.map((item, index) =>
+            item.children.length < 1 ? (
+              <Document key={index} docItem={item} />
+            ) : (
+              <Folder key={index} folderItem={item} />
+            )
+          )}
+      </div>
+    </aside>
+  );
 }
 
-export default Aside
+export default Aside;
 
 Aside.propTypes = {
   posts: PropTypes.any,
