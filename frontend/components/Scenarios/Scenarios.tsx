@@ -165,14 +165,14 @@ export default function Scenarios({
           }
         >
           {scenarioTitle ? (
-            <h2 className="mb-6 ml-6 text-3xl font-semibold text-holon-blue-900 sm:text-4xl lg:text-5xl">
+            <h2 className="mb-4 mt-3 ml-6 text-5xl font-semibold text-holon-blue-900">
               {scenarioTitle}
             </h2>
           ) : null}
           <form onSubmit={submitForm} className="flex flex-col md:flex-row">
             <div className="basis-full pr-4 md:basis-1/3">
               <h3
-                className={`${borderColor} mb-4 border-l-[0.75rem] pl-3 text-2xl font-medium italic`}
+                className={`${borderColor} mb-2 border-l-[0.75rem] pl-3 text-2xl font-medium italic`}
               >
                 uitgangspunten
               </h3>
