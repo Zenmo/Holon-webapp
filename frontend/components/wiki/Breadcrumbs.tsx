@@ -2,24 +2,24 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import React from "react";
 
-interface IBreadcrumbs {
+interface BreadcrumbsProps {
   path: Array<string>;
-  posts: IPostItem[];
+  posts: PostItemProps[];
 }
 
-interface IPostItem {
+interface PostItemProps {
   name: string;
   url: string;
-  children: IPostItem[];
+  children: PostItemProps[];
 }
 
-interface IBreadcrumbItem {
+interface BreadcrumbItemProps {
   listItem: {
     name: string;
     url: string;
   };
 }
-function BreadcrumbItem({ listItem }: IBreadcrumbItem) {
+function BreadcrumbItem({ listItem }: BreadcrumbItemProps) {
   return (
     <li className="flex">
       {listItem.url.length ? (
@@ -39,10 +39,10 @@ BreadcrumbItem.propTypes = {
   }),
 };
 
-function Breadcrumbs({ posts, path }: IBreadcrumbs) {
-  const breadcrumbArray: IPostItem[] = [];
+function Breadcrumbs({ posts, path }: BreadcrumbsProps) {
+  const breadcrumbArray: PostItemProps[] = [];
 
-  function breadcrumbList(path: Array<string>, posts: IPostItem[], level: number): JSX.Element {
+  function breadcrumbList(path: Array<string>, posts: PostItemProps[], level: number): JSX.Element {
     const selectedItem = posts.find((child) => child.name.replace(/\.mdx$/, "") == path[level]);
 
     if (selectedItem) {

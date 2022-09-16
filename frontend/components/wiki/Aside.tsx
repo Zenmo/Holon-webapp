@@ -2,30 +2,30 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import React from "react";
 
-interface IPosts {
-  posts: IPostItem[];
+interface PostsProps {
+  posts: PostItemProps[];
 }
 
-interface IPostItem {
+interface PostItemProps {
   name: string;
   url: string;
-  children: IPostItem[];
+  children: PostItemProps[];
 }
 
-interface IFolderItem {
+interface FolderItemProps {
   folderItem: {
     name: string;
-    children: IPostItem[];
+    children: PostItemProps[];
   };
 }
 
-interface IDocumentItem {
+interface DocumentItemProps {
   docItem: {
     name: string;
     url: string;
   };
 }
-function Document({ docItem }: IDocumentItem) {
+function Document({ docItem }: DocumentItemProps) {
   const url =
     docItem.url.indexOf("index.mdx") > 0
       ? docItem.url.replace(/\index\.mdx$/, "")
@@ -44,7 +44,7 @@ Document.propTypes = {
   }),
 };
 
-function Folder({ folderItem }: IFolderItem) {
+function Folder({ folderItem }: FolderItemProps) {
   return (
     <details open className="order-1 p-0 ">
       <summary className="text-md cursor-pointer bg-inherit py-3 px-4">
@@ -69,7 +69,7 @@ Folder.propTypes = {
   }),
 };
 
-function Aside({ posts }: IPosts) {
+function Aside({ posts }: PostsProps) {
   return (
     <aside className=" sticky top-0 mx-3 mt-5">
       <div className="">
