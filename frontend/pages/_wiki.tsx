@@ -10,7 +10,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-function DocsLayout({ children }: Props) {
+function WikiLayout({ children }: Props) {
   const { pathname } = useRouter();
   const currentPage = pathname.slice(6);
   const breadcrumbPath = currentPage.split("/");
@@ -43,8 +43,8 @@ function DocsLayout({ children }: Props) {
   );
 }
 
-export default DocsLayout;
+export default WikiLayout;
 
-DocsLayout.propTypes = {
+WikiLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
