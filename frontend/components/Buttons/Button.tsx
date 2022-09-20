@@ -75,7 +75,7 @@ Button.Icon = function ButtonIcon({ children }: IconProps) {
     <>
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
-          return React.cloneElement(child, {
+          return React.cloneElement(child as React.ReactElement, {
             className: `${child.props.className} mr-2 ${variantClasses}`,
           });
         }
