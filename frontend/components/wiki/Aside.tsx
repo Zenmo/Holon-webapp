@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-interface PostsProps {
+interface Props {
   posts: PostItemProps[];
 }
 
@@ -24,6 +24,7 @@ interface DocumentItemProps {
     url: string;
   };
 }
+
 function Document({ docItem }: DocumentItemProps) {
   const url =
     docItem.url.indexOf("index.mdx") > 0
@@ -56,7 +57,7 @@ function Folder({ folderItem }: FolderItemProps) {
   );
 }
 
-function Aside({ posts }: PostsProps) {
+function Aside({ posts }: Props) {
   return (
     <aside className=" sticky top-0 mx-3 mt-5">
       <div className="">

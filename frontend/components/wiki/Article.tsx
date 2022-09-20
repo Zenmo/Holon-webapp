@@ -83,11 +83,11 @@ const sideComponents: Record<string, (p: MDXItemProps) => React.ReactElement | n
   section: () => null,
 };
 
-interface ArticleProps {
+interface Props {
   article?: React.ReactNode;
 }
 
-export default function Article({ article }: ArticleProps) {
+export default function Article({ article }: Props) {
   return (
     <>
       <MDXProvider components={articleComponents}>

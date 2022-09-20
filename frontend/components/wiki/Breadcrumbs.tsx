@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-interface BreadcrumbsProps {
+interface Props {
   path: Array<string>;
   posts: PostItemProps[];
 }
@@ -32,7 +32,7 @@ function BreadcrumbItem({ listItem }: BreadcrumbItemProps) {
   );
 }
 
-function Breadcrumbs({ posts, path }: BreadcrumbsProps) {
+function Breadcrumbs({ posts, path }: Props) {
   const breadcrumbArray: PostItemProps[] = [];
 
   function breadcrumbList(path: Array<string>, posts: PostItemProps[], level: number): JSX.Element {
