@@ -1,5 +1,4 @@
 import Link from "next/link";
-import PropTypes from "prop-types";
 import React from "react";
 
 interface PostsProps {
@@ -37,12 +36,6 @@ function Document({ docItem }: DocumentItemProps) {
     </Link>
   );
 }
-Document.propTypes = {
-  docItem: PropTypes.shape({
-    name: PropTypes.string,
-    url: PropTypes.string,
-  }),
-};
 
 function Folder({ folderItem }: FolderItemProps) {
   return (
@@ -62,12 +55,6 @@ function Folder({ folderItem }: FolderItemProps) {
     </details>
   );
 }
-Folder.propTypes = {
-  folderItem: PropTypes.shape({
-    name: PropTypes.string,
-    children: PropTypes.any,
-  }),
-};
 
 function Aside({ posts }: PostsProps) {
   return (
@@ -87,7 +74,3 @@ function Aside({ posts }: PostsProps) {
 }
 
 export default Aside;
-
-Aside.propTypes = {
-  posts: PropTypes.any,
-};

@@ -1,5 +1,4 @@
-import React,{Fragment, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { Fragment, useEffect } from "react";
 
 import { useRouter } from "next/router";
 
@@ -13,7 +12,6 @@ import "../styles/prism-ghcolors.css";
 import "@fontsource/inter/variable.css";
 
 import WikiLayout from "./_wiki";
-
 
 function MyApp<T extends React.ElementType>({
   Component,
@@ -30,13 +28,11 @@ function MyApp<T extends React.ElementType>({
 
   return (
     <Fragment>
-
       {router.pathname.startsWith("/wiki") ? (
-
         <WikiLayout>
           <Component {...pageProps} />
         </WikiLayout>
-      ):(
+      ) : (
         <Component {...pageProps} />
       )}
       <CookieBar onAccept={initGA} />
@@ -45,8 +41,3 @@ function MyApp<T extends React.ElementType>({
 }
 
 export default MyApp;
-
-MyApp.propTypes = {
-  Component: PropTypes.func,
-  pageProps: PropTypes.object,
-};

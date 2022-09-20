@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React from "react";
 import { BookOpenIcon } from "@heroicons/react/solid";
 import Aside from "../components/wiki/Aside";
@@ -44,7 +43,3 @@ function WikiLayout({ children }: Props) {
 }
 
 export default WikiLayout;
-
-WikiLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};

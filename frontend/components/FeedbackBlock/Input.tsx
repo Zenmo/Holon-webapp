@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-import PropTypes from "prop-types";
 
 function ErrorMessages({ messages }: { messages: string[] }) {
   return (
@@ -8,10 +7,6 @@ function ErrorMessages({ messages }: { messages: string[] }) {
     </div>
   );
 }
-
-ErrorMessages.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
 
 type Props = {
   label: string;

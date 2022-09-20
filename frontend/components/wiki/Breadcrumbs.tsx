@@ -1,5 +1,4 @@
 import Link from "next/link";
-import PropTypes from "prop-types";
 import React from "react";
 
 interface BreadcrumbsProps {
@@ -32,12 +31,6 @@ function BreadcrumbItem({ listItem }: BreadcrumbItemProps) {
     </li>
   );
 }
-BreadcrumbItem.propTypes = {
-  listItem: PropTypes.shape({
-    name: PropTypes.string,
-    url: PropTypes.string,
-  }),
-};
 
 function Breadcrumbs({ posts, path }: BreadcrumbsProps) {
   const breadcrumbArray: PostItemProps[] = [];
@@ -75,9 +68,5 @@ function Breadcrumbs({ posts, path }: BreadcrumbsProps) {
     </nav>
   );
 }
-export default Breadcrumbs;
 
-Breadcrumbs.propTypes = {
-  posts: PropTypes.array,
-  path: PropTypes.string,
-};
+export default Breadcrumbs;
