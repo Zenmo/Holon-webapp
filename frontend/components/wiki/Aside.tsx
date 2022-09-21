@@ -59,17 +59,15 @@ function Folder({ folderItem }: FolderItemProps) {
 
 function Aside({ posts }: Props) {
   return (
-    <aside className=" sticky top-0 mx-3 mt-5">
-      <div className="">
-        {posts &&
-          posts.map((item, index) =>
-            item.children.length < 1 ? (
-              <Document key={index} docItem={item} />
-            ) : (
-              <Folder key={index} folderItem={item} />
-            )
-          )}
-      </div>
+    <aside className="sticky top-0 mx-3 mt-5">
+      {posts &&
+        posts.map((item, index) =>
+          item.children.length < 1 ? (
+            <Document key={index} docItem={item} />
+          ) : (
+            <Folder key={index} folderItem={item} />
+          )
+        )}
     </aside>
   );
 }
