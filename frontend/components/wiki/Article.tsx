@@ -1,4 +1,5 @@
 import { MDXProvider } from "@mdx-js/react";
+import Head from "next/head";
 
 const toSlug = (str: string) => {
   return str
@@ -90,6 +91,11 @@ interface Props {
 export default function Article({ article }: Props) {
   return (
     <>
+      <Head>
+        <title>HOLON en de kunst van het Loslaten</title>
+        <meta name="description" content="HOLON en de kunst van het Loslaten" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <MDXProvider components={articleComponents}>
         <article className="prose mt-5 ml-10 mb-16 w-3/4">{article}</article>
       </MDXProvider>
