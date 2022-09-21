@@ -1,12 +1,17 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { Fragment, useEffect } from "react";
+
+import { useRouter } from "next/router";
 
 import { getCookieConsentValue } from "react-cookie-consent";
 import { initGA } from "../util/gtag";
 import CookieBar from "../components/CookieBar";
 
 import "../styles/globals.css";
+import "../styles/prism-ghcolors.css";
+
 import "@fontsource/inter/variable.css";
+
+import WikiLayout from "./_wiki";
 
 function MyApp<T extends React.ElementType>({
   Component,
@@ -19,17 +24,20 @@ function MyApp<T extends React.ElementType>({
     getCookieConsentValue() === "true" && initGA();
   }, []);
 
+  const router = useRouter();
+
   return (
-    <>
-      <Component {...pageProps} />
+    <Fragment>
+      {router.pathname.startsWith("/wiki") ? (
+        <WikiLayout>
+          <Component {...pageProps} />
+        </WikiLayout>
+      ) : (
+        <Component {...pageProps} />
+      )}
       <CookieBar onAccept={initGA} />
-    </>
+    </Fragment>
   );
 }
 
 export default MyApp;
-
-MyApp.propTypes = {
-  Component: PropTypes.func,
-  pageProps: PropTypes.object,
-};

@@ -80,3 +80,16 @@ a {
 
 input::-moz {
 }
+/* hide all elements except for hyperlinks in the table of contents */
+.wiki-context-menu * {
+  display: none;
+}
+.wiki-context-menu .wiki-context-menu-link {
+  display: inherit;
+}
+.wiki-context-menu .wiki-context-menu-link:before {
+  content: "› ";
+}
+.wiki-breadcrumbs a {
+  text-decoration: underline;
+}
