@@ -34,6 +34,15 @@ module.exports = {
         golden: "inset 0 -25px 0px 0px #F3E7C5",
         blue: "inset 0 -25px 0px 0px #AEC2E6",
       },
+      keyframes: {
+        appear: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+      },
+      animation: {
+        "appear-quick": "appear 1s ease-in",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
