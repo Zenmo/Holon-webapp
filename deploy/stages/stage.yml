@@ -1,0 +1,8 @@
+webservers:
+  hosts:
+    stage1:
+      ansible_user: deploy
+      ansible_port: 22
+      ansible_host: stage.holontool.nl
+      domain: stage.holontool.nl
+      stage_name: stage
