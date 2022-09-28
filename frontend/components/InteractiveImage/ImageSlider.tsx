@@ -2,7 +2,8 @@ interface Props {
   locked?: boolean;
   inputId: string;
   value: number;
-  updateLayers: (value: string) => void;
+  setValue: (value: number) => void;
+  updateLayers: (value: string, setValue: (value: number) => void) => void;
   label: string;
   step: number;
   min: number;
@@ -14,6 +15,7 @@ export default function ImageSlider({
   locked,
   inputId,
   value,
+  setValue,
   updateLayers,
   step,
   min,
@@ -22,7 +24,7 @@ export default function ImageSlider({
   type,
 }: Props) {
   return (
-    <div className="mb-2 flex flex-row items-center justify-between gap-2">
+    <div className="my-4 flex flex-row items-center justify-between gap-2">
       <label htmlFor={inputId} className="flex">
         {label}
       </label>
@@ -32,7 +34,7 @@ export default function ImageSlider({
           id="zonnepanelen_test"
           value={value}
           disabled={locked}
-          onChange={(e) => updateLayers(e.target.value)}
+          onChange={(e) => updateLayers(e.target.value, setValue)}
           className={`h-1 w-3/5 ${
             locked ? "cursor-not-allowed" : ""
           } slider appearance-none disabled:bg-holon-grey-300`}

@@ -39,9 +39,24 @@ module.exports = {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        fallDown: {
+          "0%": { transform: "translateY(-5rem)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        riseUp: {
+          "0%": { transform: "translateY(0rem)", opacity: "1" },
+          "100%": { transform: "translateY(-5rem)", opacity: "0" },
+        },
+        spinWindmill: {
+          "0%": { transform: "rotate(0deg)", "transform-origin": "42.5% 61.266%" },
+          "100%": { transform: "rotate(360deg)", "transform-origin": "42.5% 61.266%" },
+        },
       },
       animation: {
         "appear-quick": "appear 1s ease-in",
+        fallDown: "fallDown 1s ease-in",
+        riseUp: "riseUp 1s ease-in",
+        spinWindmill: "spinWindmill 4s linear infinite",
       },
     },
   },
