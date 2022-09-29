@@ -64,7 +64,7 @@ const BasePage = ({ children, seo, wagtailUserbar }) => {
                 )}
             </Head>
             <div className="BasePage">{children}</div>
-            {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}
+            {/* {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />} */}
         </>
     );
 };
