@@ -1,9 +1,31 @@
 {
-    "python.testing.pytestArgs": [
-        ".",
-        "--reuse-db"
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length", "100"],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    // "files.associations": {
+    //   "*.css": "tailwindcss"
+    // },
+    "eslint.validate": ["javascript"],
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django",
+        "--disable=C0115"
     ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.nosetestsEnabled": false,
-    "python.testing.pytestEnabled": true
+    "[python]": {},
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true
 }
