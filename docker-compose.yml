@@ -4,7 +4,7 @@ services:
     image: nginx:alpine
     working_dir: /app
     ports:
-      - "8081:80"
+      - "8000:80"
       - "8082:443"
     depends_on:
       - python
@@ -16,10 +16,25 @@ services:
       - "./src/static:/app/static"
     environment:
       - PYTHON_HOST=http://python
+      - NEXT_HOST=http://next
       - MEDIA_REMOTE_DOMAIN=holontool.nl
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  next:
+    image: holon_nextjs
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/frontend/node_modules
+      - /usr/src/frontend/.next
+    depends_on:
+      - web
 
   python:
-    image: frojd/holon_wagtail_python
+    image: holon_wagtail_python
     build: ./src
     volumes:
       - "./src:/app"

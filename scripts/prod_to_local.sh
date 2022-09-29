@@ -4,7 +4,7 @@
 set -e
 
 readonly DB_WAIT_TIME=20  # Arbitrary timeout value for making sure the db is ready
-readonly LOCAL_DOMAIN=holontool.nl.test:8081
+readonly LOCAL_DOMAIN=holontool.nl.test:8000
 readonly SSH_HOST=deploy@holontool.nl
 readonly REMOTE_MEDIA_PATH=/mnt/persist/www/holon_wagtail/shared/media
 

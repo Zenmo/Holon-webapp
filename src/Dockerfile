@@ -1,5 +1,4 @@
 FROM python:3.8-slim
-MAINTAINER Frojd
 LABEL version="v0.0.0"
 
 ENV PYTHONUNBUFFERED=1 \
@@ -10,10 +9,10 @@ ENV PYTHONUNBUFFERED=1 \
     MEDIA_PATH=/app/media \
     STATIC_PATH=/app/static \
     REQUIREMENTS=local.txt \
-    DATABASE_USER=postgres \
-    DATABASE_PASSWORD=postgres \
-    DATABASE_NAME=postgres \
-    DATABASE_HOST=db \
+    DB_USER=postgres \
+    DB_PASSWORD=postgres \
+    DB_NAME=postgres \
+    DB_HOST=db \
     PYTHONPATH="${PYTHONPATH}:/app"
 
 WORKDIR /app
