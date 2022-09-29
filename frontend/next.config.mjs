@@ -9,6 +9,14 @@ let nextConfig = {
   productionBrowserSourceMaps: true,
   basePath,
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+  async rewrites() {
+    return [
+      {
+        source: "/wt/static/:path*",
+        destination: "http://localhost:8000/wt/static/:path*", // Proxy to Backend
+      },
+    ];
+  },
 };
 
 const withSvgr = (nextConfig = {}) => {
