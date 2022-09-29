@@ -57,3 +57,4 @@ htmlcov
 
 # Mypy
 .mypy_cache
+.devcontainer/.env
