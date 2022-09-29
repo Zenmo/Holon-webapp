@@ -1,8 +1,0 @@
-webservers:
-  hosts:
-    prod1:
-      ansible_user: deploy
-      ansible_port: 22
-      ansible_host: holontool.nl
-      domain: holontool.nl
-      stage_name: prod

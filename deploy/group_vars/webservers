@@ -1,8 +1,0 @@
----
-python_version: python3
-ansistrano_deploy_to: /mnt/persist/www/holon_wagtail
-database_name: holon_wagtail
-database_user: holon_wagtail
-project_slug: holon_wagtail
-domain_stage: stage.holontool.nl
-domain_prod: holontool.nl
