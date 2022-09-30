@@ -11,6 +11,8 @@ import "../styles/prism-ghcolors.css";
 
 import "@fontsource/inter/variable.css";
 
+import "../styles/interactive-image.css";
+
 import WikiLayout from "./_wiki";
 
 function MyApp<T extends React.ElementType>({

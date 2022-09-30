@@ -1,79 +1,16 @@
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 
 import ImageSlider from "./ImageSlider";
 import ImgFlatSolar from "./ImgFlatSolar";
 
 export default function InteractiveImage() {
-  const [zonnepanelen, setZonnepanelen] = useState(0);
+  const [solarpanels, setSolarpanels] = useState(0);
   const [windmills, setWindmills] = useState(0);
   const [windForce, setWindForce] = useState(3);
-  const [windForceAnimation, setWindForceAnimation] = useState("animate-spin-slow");
-
-  const prevNumSolar: undefined | number = usePrevious<number>(zonnepanelen);
-  const prevNumWind: undefined | number = usePrevious<number>(windmills);
-
-  let layersSolar: Element[] = [];
-  let layersWind: Element[] = [];
 
   function updateLayers(value: string, setValue: (newValue: number) => void) {
     const newValue: number = parseInt(value);
     setValue(newValue);
-  }
-
-  function usePrevious<T>(value: T): ReturnType<typeof useRef<T>>["current"] {
-    const ref = useRef<T>();
-    useEffect(() => {
-      ref.current = value;
-    }, [value]);
-    return ref.current;
-  }
-
-  useEffect(() => {
-    layersSolar = Array.from(document.getElementsByClassName("solarpanelBlock"));
-    layersWind = Array.from(document.getElementsByClassName("windmill"));
-    showLayers(prevNumSolar, zonnepanelen, layersSolar);
-    showLayers(prevNumWind, windmills, layersWind);
-    showWindForce(windForce);
-  });
-
-  function showLayers(prevAmount: undefined | number, newAmount: number, layers: Element[]) {
-    if (prevAmount === undefined) {
-      return;
-    } else {
-      const difference = Math.sign(newAmount - prevAmount);
-
-      //to add -> if slider value is more than available in array breaks now
-      if (difference === 0) {
-        return;
-      } else if (difference === 1) {
-        for (let i = 0; i < newAmount; i++) {
-          layers[i].classList.remove("animate-riseUp");
-          layers[i].classList.replace("opacity-0", "animate-fallDown");
-        }
-      } else if (difference === -1) {
-        for (let i = layers.length - 1; i >= newAmount; i--) {
-          if (layers[i].classList.contains("animate-fallDown")) {
-            layers[i].classList.replace("animate-fallDown", "animate-riseUp");
-            layers[i].classList.add("opacity-0");
-          }
-        }
-      }
-    }
-  }
-
-  function showWindForce(force: number) {
-    if (force === 0) {
-      setWindForceAnimation("");
-    } else if (force === 3) {
-      setWindForceAnimation("animate-spin-slow");
-    } else if (force === 6) {
-      setWindForceAnimation("animate-spin-regular");
-    } else if (force === 9) {
-      setWindForceAnimation("animate-spin-quick");
-    } else if (force === 12) {
-      setWindForceAnimation("animate-spin-fast");
-    }
-    return windForceAnimation;
   }
 
   return (
@@ -86,8 +23,8 @@ export default function InteractiveImage() {
           </p>
           <ImageSlider
             inputId="zonnepanelen_flat"
-            value={zonnepanelen}
-            setValue={setZonnepanelen}
+            value={solarpanels}
+            setValue={setSolarpanels}
             min={0}
             max={6}
             step={1}
@@ -122,8 +59,13 @@ export default function InteractiveImage() {
             type="range"
           ></ImageSlider>
         </div>
-        <div className=" ml-20 flex w-2/3 flex-col">
-          <ImgFlatSolar windForceAnimation={windForceAnimation}></ImgFlatSolar>
+        <div
+          className=" ml-20 flex w-2/3 flex-col"
+          data-solarpanels={solarpanels}
+          data-windmills={windmills}
+          data-windforce={windForce}
+        >
+          <ImgFlatSolar></ImgFlatSolar>
         </div>
       </div>
     </div>
