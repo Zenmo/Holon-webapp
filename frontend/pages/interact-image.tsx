@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import Link from "next/link";
-
 import InteractiveImage from "../components/InteractiveImage/InteractiveImage";
 
 function InteractImage() {

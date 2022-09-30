@@ -21,7 +21,7 @@ export default function InteractiveImage() {
   }
 
   function usePrevious<T>(value: T): T {
-    const ref: any = useRef<T>();
+    const ref: unknown = useRef<T>();
     useEffect(() => {
       ref.current = value;
     }, [value]); // Only re-run if value changes
