@@ -17,6 +17,7 @@
         "test:ci": "npx jest --ci --runInBand --reporters=default --reporters=jest-junit"
     },
     "dependencies": {
+        "@heroicons/react": "^2.0.11",
         "@types/react": "^18.0.15",
         "classnames": "^2.3.1",
         "i18next": "^21.8.5",
@@ -55,9 +56,11 @@
         "@svgr/webpack": "^6.2.1",
         "@swc/core": "^1.2.196",
         "@swc/jest": "^0.2.21",
+        "@tailwindcss/typography": "^0.5.7",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^13.3.0",
         "@testing-library/user-event": "^14.2.0",
+        "autoprefixer": "^10.4.7",
         "babel-loader": "^8.2.5",
         "babel-plugin-transform-dynamic-import": "^2.1.0",
         "commander": "^9.4.0",
@@ -70,6 +73,7 @@
         "jest": "^28.1.0",
         "jest-junit": "^13.2.0",
         "jest-next-dynamic": "^1.0.1",
+        "postcss": "^8.4.14",
         "prettier": "^2.7.1",
         "pretty-quick": "^3.1.3",
         "style-loader": "^3.3.1",
