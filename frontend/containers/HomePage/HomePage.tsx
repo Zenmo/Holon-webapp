@@ -2,13 +2,13 @@ import React from "react";
 
 import PropTypes from "prop-types";
 import { basePageWrap } from "../BasePage";
-import Hero from "../../components/Hero";
+import Header from "../../components/Header/Header";
 import s from "./HomePage.module.css";
 
 const HomePage = ({ title }) => {
   return (
     <div className={s.Container}>
-      <Hero title={title} />
+      <Header />
     </div>
   );
 };
