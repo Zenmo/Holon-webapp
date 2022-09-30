@@ -1,4 +1,0 @@
-User-agent: *
-Sitemap: http://holontool.nl/wt/sitemap.xml
-Disallow: /wt/admin/
-Disallow: /wt//cms/

@@ -8,27 +8,27 @@
  * See: https://www.i18next.com/ for more information
  */
 
-import i18next from 'i18next';
+import i18next from "i18next";
 
-import en from './translations/en.json';
-import sv from './translations/sv.json';
+import en from "./translations/en.json";
+import nl from "./translations/nl.json";
 
 i18next.init({
-    languages: ['en', 'sv'],
-    fallbackLng: ['en'],
-    resources: {
-        en: {
-            translation: en,
-        },
-        sv: {
-            translation: sv,
-        },
+  languages: ["nl", "en"],
+  fallbackLng: ["nl"],
+  resources: {
+    nl: {
+      translation: nl,
     },
+    en: {
+      translation: en,
+    },
+  },
 });
 
 // Update this to reflect what language your page should use
 const lang = () => {
-    return 'en';
+  return "en";
 };
 
 i18next.changeLanguage(lang());
