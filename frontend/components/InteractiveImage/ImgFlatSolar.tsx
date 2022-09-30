@@ -1,6 +1,6 @@
 export default function ImgFlatSolar() {
   return (
-    <div className="relative h-5/6">
+    <div className="relative">
       <img
         id="background"
         src="/imgs/Achtergrond_zonder.png"
@@ -12,42 +12,42 @@ export default function ImgFlatSolar() {
         <img
           id="solarpanel1"
           src="/imgs/flat_solarpanels_block.png"
-          className="solarpanelBlock absolute top-[46.5%] left-[52%] w-[10%]"
+          className="solarpanelBlock absolute top-[46.5%] left-[62.4%] w-[12%]"
           alt="solarpanel1"
         ></img>
         <img
           id="solarpanel2"
           src="/imgs/flat_solarpanels_block.png"
-          className="solarpanelBlock absolute top-[43.8%] left-[57%] w-[10%]"
+          className="solarpanelBlock absolute top-[43.8%] left-[68.4%] w-[12%]"
           alt="solarpanel1"
         ></img>
         <img
           id="solarpanel3"
           src="/imgs/flat_solarpanels_block.png"
-          className="solarpanelBlock absolute top-[44.3%] left-[51%] w-[10%]"
+          className="solarpanelBlock absolute top-[44.3%] left-[61.2%] w-[12%]"
           alt="solarpanel1"
         ></img>
         <img
           id="solarpanel4"
           src="/imgs/flat_solarpanels_block.png"
-          className="solarpanelBlock absolute top-[42.9%] left-[53.5%] w-[10%]"
+          className="solarpanelBlock absolute top-[42.9%] left-[64.2%] w-[12%]"
           alt="solarpanel1"
         ></img>
         <img
           id="solarpanel5"
           src="/imgs/flat_solarpanels_block.png"
-          className="solarpanelBlock absolute top-[43.7%] left-[47.4%] w-[10%]"
+          className="solarpanelBlock absolute top-[43.7%] left-[56.88%] w-[12%]"
           alt="solarpanel1"
         ></img>
         <img
           id="solarpanel6"
           src="/imgs/flat_solarpanels_block.png"
-          className="solarpanelBlock absolute top-[40.8%] left-[52.3%] w-[10%]"
+          className="solarpanelBlock absolute top-[40.8%] left-[62.76%] w-[12%]"
           alt="solarpanel1"
         ></img>
       </div>
       <div className="position-static">
-        <div className="windmill absolute top-[64%] left-[5%] w-[20%]">
+        <div className="windmill absolute top-[64%] left-[6%] w-[20%]">
           <img
             id="windmill-pole1"
             src="/imgs/flat_windmill_pole.png"
@@ -61,7 +61,7 @@ export default function ImgFlatSolar() {
             alt="windmill1"
           ></img>
         </div>
-        <div className="windmill absolute top-[69%] left-[7.5%] w-[20%]">
+        <div className="windmill absolute top-[69%] left-[9%] w-[20%]">
           <img
             id="windmill-pole2"
             src="/imgs/flat_windmill_pole.png"
@@ -76,7 +76,7 @@ export default function ImgFlatSolar() {
           ></img>
         </div>
 
-        <div className="windmill absolute top-[71%] left-[13%] w-[20%]">
+        <div className="windmill absolute top-[71%] left-[15.6%] w-[20%]">
           <img
             id="windmill-pole3"
             src="/imgs/flat_windmill_pole.png"

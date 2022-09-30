@@ -15,8 +15,8 @@ export default function InteractiveImage() {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="flex flex-row">
-        <div className="mx-8 mt-8 flex w-1/3 flex-col">
+      <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col p-8 lg:w-1/2">
           <h2 className=" mt-8 text-2xl font-bold">Flat Holon Interactie</h2>
           <p className="mt-8 text-base">
             Bepaal hier hoeveel zonnepanelen je op het dak van de flat plaatst.{" "}
@@ -60,7 +60,7 @@ export default function InteractiveImage() {
           ></ImageSlider>
         </div>
         <div
-          className=" ml-20 flex w-2/3 flex-col"
+          className=" flex flex-col p-8 lg:w-1/2"
           data-solarpanels={solarpanels}
           data-windmills={windmills}
           data-windforce={windForce}
