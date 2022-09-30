@@ -37,7 +37,7 @@ export default function ImageSlider({
           onChange={(e) => updateLayers(e.target.value, setValue)}
           className={`h-1 w-3/5 ${
             locked ? "cursor-not-allowed" : ""
-          } slider appearance-none disabled:bg-holon-grey-300`}
+          } slider interactImg appearance-none disabled:bg-holon-grey-300`}
           step={step}
           min={min}
           max={max}

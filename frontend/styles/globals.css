@@ -78,6 +78,20 @@ a {
   background-color: grey;
 }
 
+.interactImg {
+  background-color: #484848;
+}
+
+.interactImg::-webkit-slider-thumb {
+  background-color: #239023;
+  border-color: #484848;
+}
+
+.interactImg::-moz-range-thumb {
+  background-color: #239023;
+  border-color: #484848;
+}
+
 input::-moz {
 }
 /* hide all elements except for hyperlinks in the table of contents */

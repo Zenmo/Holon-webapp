@@ -1,4 +1,4 @@
-export default function ImgFlatSolar() {
+export default function ImgFlatSolar({ windForceAnimation }: { windForceAnimation: string }) {
   return (
     <div className="relative h-5/6">
       <img
@@ -54,8 +54,8 @@ export default function ImgFlatSolar() {
         ></img>
         <img
           id="windmill-blades1"
-          src="/imgs/Picture4.png"
-          className="windmillBlades animate-spinWindmil absolute top-[-47.5%] left-[9%] w-[80%]"
+          src="/imgs/flat_windmill_blades.png"
+          className={`windmillBlades absolute top-[-40%] left-[0%] w-[80%] ${windForceAnimation}`}
           alt="windmill1"
         ></img>
       </div>
@@ -69,8 +69,8 @@ export default function ImgFlatSolar() {
         ></img>
         <img
           id="windmill-blades2"
-          src="/imgs/windmill_blades.png"
-          className="windmillBlades absolute top-0 left-0 w-[80%]"
+          src="/imgs/flat_windmill_blades.png"
+          className={`windmillBlades absolute top-[-40%] left-[0%] w-[80%] ${windForceAnimation}`}
           alt="windmill2"
         ></img>
       </div>
@@ -84,8 +84,8 @@ export default function ImgFlatSolar() {
         ></img>
         <img
           id="windmill-blades3"
-          src="/imgs/windmill_blades.png"
-          className="windmillBlades absolute top-0 left-0 w-[80%]"
+          src="/imgs/flat_windmill_blades.png"
+          className={`windmillBlades absolute top-[-40%] left-[0%] w-[80%] ${windForceAnimation}`}
           alt="windmill2"
         ></img>
       </div>

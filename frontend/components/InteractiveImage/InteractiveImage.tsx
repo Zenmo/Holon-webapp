@@ -6,9 +6,12 @@ import ImgFlatSolar from "./ImgFlatSolar";
 export default function InteractiveImage() {
   const [zonnepanelen, setZonnepanelen] = useState(0);
   const [windmills, setWindmills] = useState(0);
+  const [windForce, setWindForce] = useState(3);
+  const [windForceAnimation, setWindForceAnimation] = useState("animate-spin-slow");
 
   const prevNumSolar: number = usePrevious<number>(zonnepanelen);
   const prevNumWind: number = usePrevious<number>(windmills);
+
   let layersSolar: Element[] = [];
   let layersWind: Element[] = [];
 
@@ -31,6 +34,7 @@ export default function InteractiveImage() {
     layersWind = Array.from(document.getElementsByClassName("windmill"));
     showLayers(prevNumSolar, zonnepanelen, layersSolar);
     showLayers(prevNumWind, windmills, layersWind);
+    showWindForce(windForce);
   });
 
   function showLayers(prevAmount: number, newAmount: number, layers: Element[]) {
@@ -52,6 +56,21 @@ export default function InteractiveImage() {
         }
       }
     }
+  }
+
+  function showWindForce(force: number) {
+    if (force === 0) {
+      setWindForceAnimation("");
+    } else if (force === 3) {
+      setWindForceAnimation("animate-spin-slow");
+    } else if (force === 6) {
+      setWindForceAnimation("animate-spin-regular");
+    } else if (force === 9) {
+      setWindForceAnimation("animate-spin-quick");
+    } else if (force === 12) {
+      setWindForceAnimation("animate-spin-fast");
+    }
+    return windForceAnimation;
   }
 
   return (
@@ -87,9 +106,21 @@ export default function InteractiveImage() {
             updateLayers={updateLayers}
             type="range"
           ></ImageSlider>
+          <p className="mt-8 text-base">Bepaal hier hoe hard de wind waait. </p>
+          <ImageSlider
+            inputId="windForce_flat"
+            value={windForce}
+            setValue={setWindForce}
+            min={0}
+            max={12}
+            step={3}
+            label="Windkracht"
+            updateLayers={updateLayers}
+            type="range"
+          ></ImageSlider>
         </div>
         <div className=" ml-20 flex w-2/3 flex-col">
-          <ImgFlatSolar></ImgFlatSolar>
+          <ImgFlatSolar windForceAnimation={windForceAnimation}></ImgFlatSolar>
         </div>
       </div>
     </div>
