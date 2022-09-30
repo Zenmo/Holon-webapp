@@ -73,8 +73,8 @@
     npm i
     npm run dev
     ```
-8. Visit your site on: [https://holontool.nl.test:8081](https://holontool.nl.test:8081)
-    - ...or login to [https://holontool.nl.test:8081/wt/cms](https://holontool.nl.test:8081/wt/cms) (Username: `admin` and password: `admin`)
+8. Visit your site on: [https://holontool.nl.test:8000](https://holontool.nl.test:8000)
+    - ...or login to [https://holontool.nl.test:8000/wt/cms](https://holontool.nl.test:8000/wt/cms) (Username: `admin` and password: `admin`)
 
 
 ## Where to go from here?
