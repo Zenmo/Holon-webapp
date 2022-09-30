@@ -9,8 +9,8 @@ export default function InteractiveImage() {
   const [windForce, setWindForce] = useState(3);
   const [windForceAnimation, setWindForceAnimation] = useState("animate-spin-slow");
 
-  const prevNumSolar: number = usePrevious<number>(zonnepanelen);
-  const prevNumWind: number = usePrevious<number>(windmills);
+  const prevNumSolar: undefined | number = usePrevious<number>(zonnepanelen);
+  const prevNumWind: undefined | number = usePrevious<number>(windmills);
 
   let layersSolar: Element[] = [];
   let layersWind: Element[] = [];
@@ -20,12 +20,11 @@ export default function InteractiveImage() {
     setValue(newValue);
   }
 
-  function usePrevious<T>(value: T): T {
-    const ref: unknown = useRef<T>();
+  function usePrevious<T>(value: T): ReturnType<typeof useRef<T>>["current"] {
+    const ref = useRef<T>();
     useEffect(() => {
       ref.current = value;
-    }, [value]); // Only re-run if value changes
-    // Return previous value (happens before update in useEffect above)
+    }, [value]);
     return ref.current;
   }
 
@@ -37,22 +36,26 @@ export default function InteractiveImage() {
     showWindForce(windForce);
   });
 
-  function showLayers(prevAmount: number, newAmount: number, layers: Element[]) {
-    const difference = Math.sign(newAmount - prevAmount);
-
-    //to add -> if slider value is more than available in array breaks now
-    if (difference === 0) {
+  function showLayers(prevAmount: undefined | number, newAmount: number, layers: Element[]) {
+    if (prevAmount === undefined) {
       return;
-    } else if (difference === 1) {
-      for (let i = 0; i < newAmount; i++) {
-        layers[i].classList.remove("animate-riseUp");
-        layers[i].classList.replace("opacity-0", "animate-fallDown");
-      }
-    } else if (difference === -1) {
-      for (let i = layers.length - 1; i >= newAmount; i--) {
-        if (layers[i].classList.contains("animate-fallDown")) {
-          layers[i].classList.replace("animate-fallDown", "animate-riseUp");
-          layers[i].classList.add("opacity-0");
+    } else {
+      const difference = Math.sign(newAmount - prevAmount);
+
+      //to add -> if slider value is more than available in array breaks now
+      if (difference === 0) {
+        return;
+      } else if (difference === 1) {
+        for (let i = 0; i < newAmount; i++) {
+          layers[i].classList.remove("animate-riseUp");
+          layers[i].classList.replace("opacity-0", "animate-fallDown");
+        }
+      } else if (difference === -1) {
+        for (let i = layers.length - 1; i >= newAmount; i--) {
+          if (layers[i].classList.contains("animate-fallDown")) {
+            layers[i].classList.replace("animate-fallDown", "animate-riseUp");
+            layers[i].classList.add("opacity-0");
+          }
         }
       }
     }
