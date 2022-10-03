@@ -8,4 +8,5 @@ export default {
   PasswordProtectedPage: dynamic(() => import("./PasswordProtectedPage")),
   PureHtmlPage: dynamic(() => import("./PureHtmlPage")),
   AboutPage: dynamic(() => import("./AboutPage")),
+  WikiPage: dynamic(() => import("./WikiPage")),
 };
