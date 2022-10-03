@@ -14,7 +14,7 @@ APP_VERSION = "0.1.0"
 SECRET_KEY = get_env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # This is when debug is off, else django wont allow you to visit the site
 ALLOWED_HOSTS = get_env("ALLOWED_HOSTS").split(",")

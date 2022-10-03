@@ -1,10 +1,15 @@
+import { useEffect } from "react";
 import React from "react";
 
 // import i18n from '../../i18n';
 // import PropTypes from 'prop-types';
 import styles from "./WikiPage.module.css";
 
-const WikiPage = () => {
+const WikiPage = ({ richText }) => {
+  useEffect(() => {
+    console.log("hello");
+    console.log(richText);
+  }, []);
   return (
     <div className="flex min-h-screen min-w-full flex-col">
       <header className="flex h-[8vh] flex-row justify-start overflow-hidden bg-holon-blue-900 align-middle">
@@ -24,7 +29,7 @@ const WikiPage = () => {
 
         <main className="flex flex-1 flex-col">
           <div className="border-b-2 border-gray-200 py-3 pl-10">
-            sidebar
+            breadcrumb
             {/* {posts && <Breadcrumbs path={breadcrumbPath} posts={posts} />} */}
           </div>
           <div className="flex flex-1 flex-row justify-between">
