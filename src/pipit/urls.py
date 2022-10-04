@@ -34,12 +34,8 @@ if settings.DEBUG:
             default_views.permission_denied,
             kwargs={"exception": Exception("Permission Denied")},
         ),  # NOQA
-        path(
-            "wt/404/", handler404, kwargs={"exception": Exception("Page not Found")}
-        ),  # NOQA
-        path(
-            "wt/500/", handler500, kwargs={"exception": Exception("Internal error")}
-        ),  # NOQA
+        path("wt/404/", handler404, kwargs={"exception": Exception("Page not Found")}),  # NOQA
+        path("wt/500/", handler500, kwargs={"exception": Exception("Internal error")}),  # NOQA
     ]
 
     if "debug_toolbar" in settings.INSTALLED_APPS:
