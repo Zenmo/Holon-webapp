@@ -22,7 +22,8 @@ export default function InteractiveImage() {
             Bepaal hier hoeveel zonnepanelen je op het dak van de flat plaatst.{" "}
           </p>
           <ImageSlider
-            inputId="zonnepanelen_flat"
+            inputId="solarPanels_flat"
+            datatestid="solarpanelSlider"
             value={solarpanels}
             setValue={setSolarpanels}
             min={0}
@@ -37,6 +38,7 @@ export default function InteractiveImage() {
           </p>
           <ImageSlider
             inputId="windmills_flat"
+            datatestid="windmillSlider"
             value={windmills}
             setValue={setWindmills}
             min={0}
@@ -49,6 +51,7 @@ export default function InteractiveImage() {
           <p className="mt-8 text-base">Bepaal hier hoe hard de wind waait. </p>
           <ImageSlider
             inputId="windForce_flat"
+            datatestid="windforceSlider"
             value={windForce}
             setValue={setWindForce}
             min={0}
@@ -60,6 +63,7 @@ export default function InteractiveImage() {
           ></ImageSlider>
         </div>
         <div
+          id="dataDiv"
           className=" flex flex-col p-8 lg:w-1/2"
           data-solarpanels={solarpanels}
           data-windmills={windmills}

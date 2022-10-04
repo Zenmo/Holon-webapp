@@ -1,6 +1,7 @@
 interface Props {
   locked?: boolean;
   inputId: string;
+  datatestid: string;
   value: number;
   setValue: (value: number) => void;
   updateLayers: (value: string, setValue: (value: number) => void) => void;
@@ -14,6 +15,7 @@ interface Props {
 export default function ImageSlider({
   locked,
   inputId,
+  datatestid,
   value,
   setValue,
   updateLayers,
@@ -30,8 +32,7 @@ export default function ImageSlider({
       </label>
       <div className="flex flex-row items-center justify-between gap-2">
         <input
-          data-testid="1test"
-          id="zonnepanelen_test"
+          data-testid={datatestid}
           value={value}
           disabled={locked}
           onChange={(e) => updateLayers(e.target.value, setValue)}
