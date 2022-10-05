@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import React from "react";
+import { basePageWrap } from "../BasePage";
+import RawHtml from "components/RawHtml";
 
 // import i18n from '../../i18n';
 // import PropTypes from 'prop-types';
@@ -32,9 +34,8 @@ const WikiPage = ({ richText }) => {
             breadcrumb
             {/* {posts && <Breadcrumbs path={breadcrumbPath} posts={posts} />} */}
           </div>
-          <div className="flex flex-1 flex-row justify-between">
-            Article
-            {/* <Article article={children}></Article> */}
+          <div className="p-3 flex flex-1 flex-row justify-between">
+            <RawHtml html={richText} />
           </div>
         </main>
       </div>
@@ -42,4 +43,4 @@ const WikiPage = ({ richText }) => {
   );
 };
 
-export default WikiPage;
+export default basePageWrap(WikiPage);
