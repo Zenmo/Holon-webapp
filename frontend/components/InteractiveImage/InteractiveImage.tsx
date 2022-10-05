@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import ImageSlider from "./ImageSlider";
-import ImgFlatSolar from "./ImgFlatSolar";
+import ImgFlatSolar from "./ImageElements/ImgFlatSolar";
 
 export default function InteractiveImage() {
   const [solarpanels, setSolarpanels] = useState(0);

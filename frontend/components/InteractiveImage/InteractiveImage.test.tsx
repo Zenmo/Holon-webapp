@@ -8,8 +8,10 @@ describe("Interactive Image", () => {
     render(<InteractiveImage />);
   });
 
-  it("contains an image", () => {
+  it("contains the expected image elements", () => {
     expect(screen.getByTestId<HTMLElement>("background")).toBeInTheDocument();
+    expect(screen.getByTestId<HTMLElement>("solarpanel1")).toBeInTheDocument();
+    expect(screen.getByTestId<HTMLElement>("windmill1")).toBeInTheDocument();
   });
 
   it("shows no solar panels when image is rendered first time", () => {
