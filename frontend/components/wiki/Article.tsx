@@ -1,95 +1,54 @@
-import { MDXProvider } from "@mdx-js/react";
 import Head from "next/head";
 import RawHtml from "../RawHtml";
-
-const toSlug = (str: string) => {
-  return str
-    .toString()
-    .toLowerCase()
-    .replace(/[^a-z0-9 -]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-};
-
-interface MDXItemProps {
-  children: string;
-}
-
-const articleComponents: Record<string, (p: MDXItemProps) => React.ReactElement> = {
-  h1: (props: MDXItemProps) => <h1 id={toSlug(props.children)} {...props} />,
-  h2: (props: MDXItemProps) => <h2 id={toSlug(props.children)} {...props} />,
-  h3: (props: MDXItemProps) => <h3 id={toSlug(props.children)} {...props} />,
-  h4: (props: MDXItemProps) => <h4 id={toSlug(props.children)} {...props} />,
-  h5: (props: MDXItemProps) => <h5 id={toSlug(props.children)} {...props} />,
-  h6: (props: MDXItemProps) => <h6 id={toSlug(props.children)} {...props} />,
-};
-
-const sideComponents: Record<string, (p: MDXItemProps) => React.ReactElement | null> = {
-  h1: (props: MDXItemProps) =>
-    typeof typeof props.children === "string" ? (
-      <a
-        className="wiki-context-menu-link px-4 pt-1 pb-3"
-        href={`#${toSlug(props.children)}`}
-        {...props}
-      />
-    ) : (
-      <></>
-    ),
-  h2: (props: MDXItemProps) =>
-    typeof props.children === "string" ? (
-      <a
-        className="wiki-context-menu-link px-4 pt-1 pb-3"
-        href={`#${toSlug(props.children)}`}
-        {...props}
-      />
-    ) : null,
-  h3: (props: MDXItemProps) =>
-    typeof props.children === "string" ? (
-      <a
-        className="wiki-context-menu-link px-4 pt-1 pb-3"
-        href={`#${toSlug(props.children)}`}
-        {...props}
-      />
-    ) : null,
-  h4: (props: MDXItemProps) =>
-    typeof props.children === "string" ? (
-      <a
-        className="wiki-context-menu-link px-4 pt-1 pb-3"
-        href={`#${toSlug(props.children)}`}
-        {...props}
-      />
-    ) : null,
-  h5: (props: MDXItemProps) =>
-    typeof props.children === "string" ? (
-      <a href={`#${toSlug(props.children)}`} {...props} />
-    ) : null,
-  h6: (props: MDXItemProps) =>
-    typeof props.children === "string" ? (
-      <a
-        className="wiki-context-menu-link px-4 pt-1 pb-3"
-        href={`#${encodeURIComponent(props.children)}`}
-        {...props}
-      />
-    ) : null,
-
-  //ignore all other tags
-  p: () => null,
-  code: () => null,
-  span: () => null,
-  ul: () => null,
-  ol: () => null,
-  hr: () => null,
-  div: () => null,
-  table: () => null,
-  blockquote: () => null,
-  section: () => null,
-};
+import { unified } from "unified";
+import rehypeParse from "rehype-parse";
+import rehypeStringify from "rehype-stringify";
+import { visit } from "unist-util-visit";
+import { useEffect, useState } from "react";
+import parameterize from "parameterize";
 
 interface Props {
   article?: React.ReactNode;
 }
 
 export default function Article({ article }: Props) {
+  const [content, setContent] = useState(article);
+  const [tableOfContents, setTableOfContents] = useState([]);
+
+  useEffect(() => {
+    const toc = [];
+    const content = unified()
+      .use(rehypeParse, {
+        fragment: true,
+      })
+      .use(() => {
+        return tree => {
+          visit(tree, "element", node => {
+            if (node.tagName == "h2" || node.tagName == "h3") {
+              if (node.children[0].value !== undefined) {
+                const id = parameterize(node.children[0].value);
+                node.properties.id = id;
+                toc.push({
+                  id,
+                  title: node.children[0].value,
+                });
+                setTableOfContents(toc);
+              } else {
+                console.log(
+                  "error: node h2/h3 can not be found. check if headings are not strong or italic..."
+                );
+              }
+            }
+          });
+        };
+      })
+      .use(rehypeStringify)
+      .processSync(article)
+      .toString();
+
+    setContent(content);
+  }, [article]);
+
   return (
     <>
       <Head>
@@ -99,7 +58,7 @@ export default function Article({ article }: Props) {
       </Head>
 
       <article className="prose mt-5 ml-10 mb-16 w-3/4">
-        <RawHtml html={article} />
+        <RawHtml html={content} />
       </article>
 
       <nav className=" mx-3 w-1/4 border-l-2 border-gray-200">
@@ -107,7 +66,19 @@ export default function Article({ article }: Props) {
           <h3 className="px-4 pt-1 pb-3">
             <strong>Inhoudsopgave</strong>
           </h3>
-          <div className="wiki-context-menu">{article}</div>
+          <div className="wiki-context-menu">
+            <ul>
+              {tableOfContents.map((item, index) => {
+                return (
+                  <li key={index}>
+                    <a className="wiki-context-menu-link px-4 pt-1 pb-3" href={`#${item.id}`}>
+                      {item.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </nav>
     </>
