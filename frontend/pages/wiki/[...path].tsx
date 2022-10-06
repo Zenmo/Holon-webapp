@@ -4,12 +4,12 @@ import LazyContainers from "../../containers/LazyContainers";
 
 const isProd = process.env.NODE_ENV === "production";
 
-export default function CatchAllPage({ componentName, componentProps }) {
-  const Component = LazyContainers[componentName];
+export default function CatchAllPage({ pageData, allPages }) {
+  const Component = LazyContainers[pageData.componentName];
   if (!Component) {
-    return <h1>Component {componentName} not found</h1>;
+    return <h1>Component {pageData.componentName} not found</h1>;
   }
-  return <Component {...componentProps} />;
+  return <Component {...pageData.componentProps} allPages={allPages} />;
 }
 
 // For SSG
@@ -18,8 +18,9 @@ export async function getStaticProps({ params, preview, previewData }) {
   let path = params.path || [];
   path = path.join("/");
 
+  const { json: allWikiPages } = await getAllPages({ type: "main.WikiPage" });
   const { json: pageData } = await getPage(path);
-  return { props: pageData };
+  return { props: { pageData: pageData, allPages: allWikiPages } };
 }
 
 export async function getStaticPaths() {
