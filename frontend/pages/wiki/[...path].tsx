@@ -1,5 +1,4 @@
-import querystring from "querystring";
-import { getPage, getRedirect, getAllPages, WagtailApiResponseError } from "../../api/wagtail";
+import { getPage, getAllPages } from "../../api/wagtail";
 import LazyContainers from "../../containers/LazyContainers";
 
 const isProd = process.env.NODE_ENV === "production";
