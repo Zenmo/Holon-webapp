@@ -1,19 +1,33 @@
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { basePageWrap } from "../BasePage";
 import Aside from "@/components/wiki/Aside";
 import Article from "@/components/wiki/Article";
+import Breadcrumbs from "@/components/wiki/Breadcrumbs";
 
-// import i18n from '../../i18n';
-// import PropTypes from 'prop-types';
-import styles from "./WikiPage.module.css";
+interface WikiPageProps {
+  title: string;
+  relativeUrl: string;
+  children: WikiPageProps[];
+}
 
-const WikiPage = ({ richText, allPages }) => {
-  const [wikiPostsHierarchy, setWikiPostsHierarchy] = useState([]);
+interface WikiContainerProps {
+  richText: string;
+  allPages: {
+    items: WikiPageProps[];
+    meta: { totalCount: number };
+  };
+}
 
-  useEffect(() => {
-    const urls = allPages.items;
-    console.log(urls);
+const WikiPage = ({ richText, allPages }: WikiContainerProps) => {
+  const router = useRouter();
+  const { path } = router.query;
+
+  const [wikiPostsHierarchy, setWikiPostsHierarchy] = useState<any[]>([]);
+  const [pages, setPages] = useState<WikiPageProps[]>([]);
+
+  const createWikiPostsHierarchy = (items: Array<WikiPageProps>) => {
+    const urls = items;
     const tableDataNested = [];
     const prefixmap = new Map();
     for (const url of urls) {
@@ -34,9 +48,13 @@ const WikiPage = ({ richText, allPages }) => {
       }
       prefixmap.set(address, url); // store as potential parent in any case
     }
+    return tableDataNested;
+  };
 
-    setWikiPostsHierarchy(tableDataNested);
-  }, []);
+  useEffect(() => {
+    setWikiPostsHierarchy(createWikiPostsHierarchy(allPages.items));
+    setPages(allPages.items);
+  }, [allPages]);
 
   return (
     <div className="flex min-h-screen min-w-full flex-col">
@@ -51,13 +69,12 @@ const WikiPage = ({ richText, allPages }) => {
       </header>
       <div className="flex w-full flex-1 flex-row">
         <div className="flex w-3/12 flex-col border-r-2 border-gray-200">
-          {allPages.items && <Aside posts={wikiPostsHierarchy} />}
+          {pages && <Aside posts={wikiPostsHierarchy} />}
         </div>
 
         <main className="flex flex-1 flex-col">
           <div className="border-b-2 border-gray-200 py-3 pl-10">
-            breadcrumb
-            {/* {posts && <Breadcrumbs path={breadcrumbPath} posts={posts} />} */}
+            {allPages.items && <Breadcrumbs path={path} posts={pages} />}
           </div>
           <div className="p-3 flex flex-1 flex-row justify-between">
             <Article article={richText}></Article>

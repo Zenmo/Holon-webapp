@@ -2,31 +2,30 @@ import Link from "next/link";
 import React from "react";
 
 interface Props {
-  path: Array<string>;
+  path: string[];
   posts: PostItemProps[];
 }
 
 interface PostItemProps {
-  name: string;
-  url: string;
+  title: string;
+  relativeUrl: string;
   children: PostItemProps[];
 }
 
 interface BreadcrumbItemProps {
   listItem: {
-    name: string;
-    url: string;
+    title: string;
+    relativeUrl: string;
   };
 }
+
 function BreadcrumbItem({ listItem }: BreadcrumbItemProps) {
   return (
     <li className="flex">
-      {listItem.url.length ? (
-        <Link href={"/wiki/" + listItem.url.replace(/\index.mdx$/, "").replace(/\.mdx$/, "")}>
-          {listItem.name.replace(/\.mdx$/, "")}
-        </Link>
+      {listItem.relativeUrl.length ? (
+        <Link href={"/wiki/" + listItem.relativeUrl}>{listItem.title}</Link>
       ) : (
-        <span>{listItem.name.replace(/\.mdx$/, "")}</span>
+        <span>{listItem.title}</span>
       )}
     </li>
   );
@@ -35,25 +34,28 @@ function BreadcrumbItem({ listItem }: BreadcrumbItemProps) {
 function Breadcrumbs({ posts, path }: Props) {
   const breadcrumbArray: PostItemProps[] = [];
 
-  function breadcrumbList(path: Array<string>, posts: PostItemProps[], level: number): JSX.Element {
-    const selectedItem = posts.find((child) => child.name.replace(/\.mdx$/, "") == path[level]);
+  console.log(typeof path);
 
-    if (selectedItem) {
-      // add item to the list, and go one level deeper
-      breadcrumbArray.push(selectedItem);
-      return breadcrumbList(path, selectedItem.children, level + 1);
-    } else {
-      //no more children, end of tree
-      return (
-        <>
-          {breadcrumbArray.map((breadcrumbItem, index) => (
-            <React.Fragment key={index}>
-              <li className="">&#8250;</li>
-              <BreadcrumbItem listItem={breadcrumbItem} />
-            </React.Fragment>
-          ))}
-        </>
-      );
+  function breadcrumbList(path: Array<string>, posts: PostItemProps[], level: number): JSX.Element {
+    if (posts !== undefined) {
+      const selectedItem = posts.find(child => child.title.toLowerCase() == path[level]);
+      if (selectedItem) {
+        // add item to the list, and go one level deeper
+        breadcrumbArray.push(selectedItem);
+        return breadcrumbList(path, selectedItem.children, level + 1);
+      } else {
+        //no more children, end of tree
+        return (
+          <>
+            {breadcrumbArray.map((breadcrumbItem, index) => (
+              <React.Fragment key={index}>
+                <li className="">&#8250;</li>
+                <BreadcrumbItem listItem={breadcrumbItem} />
+              </React.Fragment>
+            ))}
+          </>
+        );
+      }
     }
   }
 

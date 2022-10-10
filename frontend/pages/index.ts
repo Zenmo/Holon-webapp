@@ -2,4 +2,4 @@
 export { default, getServerSideProps } from './[...path]';
 
 // For SSG
-export { default, getStaticProps } from './wiki/[...path]';
+// export { default, getStaticProps } from './wiki/[...path]';
