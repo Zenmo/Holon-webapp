@@ -23,13 +23,11 @@ CACHES = {
         "TIMEOUT": 600,
         "OPTIONS": {
             "MAX_ENTRIES": 1000,
-        }
+        },
     },
 }
 
-STATICFILES_STORAGE = (
-    "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"  # NOQA
-)
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"  # NOQA
 
 # Enable caching of templates in production environment
 TEMPLATES[0]["OPTIONS"]["loaders"] = [  # type: ignore[index]
@@ -61,16 +59,16 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Sentry
-SENTRY_DSN = get_env("SENTRY_DSN")
-SENTRY_ENVIRONMENT = "prod"
+# SENTRY_DSN = get_env("SENTRY_DSN")
+# SENTRY_ENVIRONMENT = "prod"
 
-sentry_sdk.init(
-    dsn=SENTRY_DSN,
-    release=APP_VERSION,
-    environment=SENTRY_ENVIRONMENT,
-    integrations=[DjangoIntegration()],
-)
+# sentry_sdk.init(
+#     dsn=SENTRY_DSN,
+#     release=APP_VERSION,
+#     environment=SENTRY_ENVIRONMENT,
+#     integrations=[DjangoIntegration()],
+# )
 
-# Add sentry to logging
-with configure_scope() as scope:
-    scope.level = "error"
+# # Add sentry to logging
+# with configure_scope() as scope:
+#     scope.level = "error"
