@@ -1,255 +1,92 @@
 # Holon-wagtail
 
+# Holon web application prototype
 
-## Index
+Prototype of the Holon web application
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Where to go from here?](#where-to-get-from-here)
-- [Versioning](#versioning)
-- [Style Guide](#style-guide)
-- [Debugging](#debugging)
-- [Deployment](#deployment)
-- [Merge conflicts](#merge-conflicts)
-- [Git hooks](#git-hooks)
-- [FAQ](#faq)
-- [Contributing](#contributing)
-- [License](#license)
+## First setup / Start the application
 
-
-## Requirements
-
-- Python 3.8+
-- Pip
-- Virtualenv (or the package manage of your choice)
-- Node 16
-- Docker ([Install instructions](#how-do-i-install-docker-on-macoswindows))
-- [mkcert](https://github.com/FiloSottile/mkcert)
-
-
-## Installation
-
-1. Setup container .env files
-
-    ```
-    cp docker/config/python.example.env docker/config/python.env
-    ```
-
-2. Include this ip on your hosts-file
-
-    ```
-    127.0.0.1 holontool.nl.test
-    ```
-
-    On windows you can run this command to append it:
-
-    ```
-    echo 127.0.0.1 holontool.nl.test >> c:\windows\System32\drivers\etc\hosts
-    ```
-
-3. Add root cert: `mkcert -install` (if not already available)
-
-4. Generate ssl certs for local development
-    ```
-    mkcert --cert-file docker/files/certs/cert.pem --key-file docker/files/certs/cert-key.pem holontool.nl.test
-    ```
-
-5. Enable SSL in Nginx
-    ```
-    sed -i.bak 's/\#mkcert\ //g' docker/files/config/nginx.conf.template
-    rm -f docker/files/config/nginx.conf.template.bak
-    ```
-
-6. Start project
-
-    ```
-    docker-compose up
-    ```
-
-7. Install and start frontend
-    ```
-    cd frontend
-    nvm use
-    npm i
-    npm run dev
-    ```
-8. Visit your site on: [https://holontool.nl.test:8000](https://holontool.nl.test:8000)
-    - ...or login to [https://holontool.nl.test:8000/wt/cms](https://holontool.nl.test:8000/wt/cms) (Username: `admin` and password: `admin`)
-
-
-## Where to go from here?
-
-We recommend you to check out our [Getting Started Guide](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/getting-started-guide.md). Otherwise, you can read up any of the following topics:
-
-- [Frontend Developer Guide](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/frontend-developer-guide.md)
-- [Backend Developer Guide](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/backend-developer-guide.md)
-- [Provision and configure a webserver for hosting](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/provisioning-servers-for-hosting.md)
-- [Setting up deployment on CircleCI](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/setting-up-deployment-with-circleci.md)
-- [Adding Slack notifications to CircleCI](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/adding-slack-notifications-to-circleci.md)
-- [Sync data between environments](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/sync-data-between-environments.md)
-- [Running python locally](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/running-python-locally.md)
-- [Using static site generation](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/using-static-site-generation.md)
-- [Working with Wagtail's routable pages](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/working-with-wagtails-routable-pages.md)
-- [Serving custom content type data through Next.js](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/serving-custom-content-type-data-through-nextjs.md)
-- [Adding multi language support](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/adding-multi-language-support.md)
-- [Adding wagtail-2fa support](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/adding-wagtail-2fa-support.md)
-- [Adding Sentry](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/adding-sentry.md)
-- [Handling CSRF Tokens](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/handling-csrf-tokens.md)
-- [Scaffolding](https://github.com/Frojd/Wagtail-Pipit/blob/main/docs/scaffolding.md)
-
-
-## Versioning
-
-This project follows [semantic versioning](https://semver.org/).
-
-Bump version in:
-
-- src/pipit/settings/base.py `(APP_VERSION=)`
-- frontend/package.json
-- src/Dockerfile
-
-...or just use the [bump-version](#bump-version) git hook
-
-
-## Style Guide
-
-We follow the [django coding style](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/), which is based on [PEP8](https://www.python.org/dev/peps/pep-0008).
-
-
-## Debugging
-
-### VS Code
-
-This project is configured for remote debugging using VS Code with the official Python extension. Set `VS_CODE_REMOTE_DEBUG=True` in `docker/config/python.env` and restart your container to enable it.
-You should now be able to attach to the running Django server instance.
-
-[PTVSD](https://github.com/Microsoft/ptvsd) (Python Tools for Visual Studio debug server) is configured to listen for connections on port 5678.
-
-### pdb in Docker
-
-To use pdb you need to start the container with service-ports exposed instead of docker-compose up. This will create a container called `<project_prefix>_python_run_1`
-
-```
-docker-compose run --rm --service-ports python
-```
-
-
-## Git hooks
-
-We use git-hooks to streamline and automate certain functions, such as version bumping and pre hooks for code validation and tests. If you want to bypass any of them append the `--no-verify` flag (example: `git push --no-verify`)
-
-### Hook: Bump version
-
-These hooks will automatically bump the application version when using `git flow release ...`
+First copy the .env.example to .env in the .devcontainer folder You don't have to change anything inside
+the .env file:
 
 ```bash
-chmod +x $PWD/.githooks/bump-version.sh
-ln -nfs $PWD/.githooks/bump-version.sh .git/hooks/post-flow-release-start
-ln -nfs $PWD/.githooks/bump-version.sh .git/hooks/post-flow-hotfix-start
+cp .devcontainer/.env.example .devcontainer/.env
 ```
 
-On windows
+- note: If you decide to make some changes to the .env files, rebuild the devcontainer
 
 ```
-ln -nfs %cd%/.githooks/bump-version.sh .git/hooks/post-flow-release-start
-ln -nfs %cd%/.githooks/bump-version.sh .git/hooks/post-flow-hotfix-start
+Ctrl-Shift-P > Remote-Containers: Rebuild Container
 ```
 
-### Hook: Run tests pre push
+## Start Dev Container
 
-This hook will run the test suite before every push.
-
-```bash
-chmod +x $PWD/.githooks/pre-push.sh
-ln -nfs $PWD/.githooks/pre-push.sh .git/hooks/pre-push
-```
-
-### Hook: Run styleguide validation on commit
-
-```bash
-chmod +x $PWD/.githooks/pre-commit.sh
-ln -nfs $PWD/.githooks/pre-commit.sh .git/hooks/pre-commit
-```
-
-
-## FAQ
-
-<details>
-
-### How do I sync data from stage/prod?
-
-You can rebuild your application with the latest data dump by running the following
+Visual Studio Code will detect that you are working in a Dev Container, click "Reopen in Container" to start the Dev container. After you reopen visual studio code in a devcontainer you are ready to start the backend and frontend, run the following commands in two seperate terminals:
 
 ```
-./scripts/stage_to_local.sh
+cd frontend
+npm run dev
+
+cd src
+python manage.py runserver
 ```
 
-Note: This requires that you have ssh-key based access to the server.
-
-
-### How do I install Docker on MacOS/Windows?
-
-Read the instructions for [Mac OS](https://docs.docker.com/docker-for-mac/install/) or [Windows](https://docs.docker.com/docker-for-windows/install/) on docker.com.
-
-
-### How do I run the test suite locally?
+For the frontend Prettier and EsLint is used. Make sure you installed these extenstions in your VSCode. These extensions are automatically installed in the dev container:
 
 ```
-docker-compose run --rm python test
-```
+Name: ESLint
+Id: dbaeumer.vscode-eslint
+Description: Integrates ESLint JavaScript into VS Code.
+Publisher: Microsoft
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
 
+---
 
-### How do I run custom manage.py commands?
-
-To run manage.py commands in docker is pretty straightforward, instead of targetting you local machine you just target your `python` container.
-
-- Example: Create migrations
-
-```
-docker-compose exec python ./manage.py makemigrations
-```
-
-- Example: Run migrations
+Name: Prettier - Code formatter
+Id: esbenp.prettier-vscode
+Description: Code formatter using prettier
+Publisher: Prettier
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 
 ```
-docker-compose exec python ./manage.py migrate
-```
 
-We also have a manage.sh script to make running management commands easier.
+## Configure stuff inside the container
 
-```
-./scripts/manage.sh makemigrations
-```
-
-
-### How do I add new python dependencies?
-
-First update your requirements/base.txt, then rebuild your container:
+If you want for example do an Django migration, you can just run any command from the terminal in the correct folder, for example:
 
 ```
-docker-compose stop
-docker-compose up --build
+cd src
+python manage.py makemigrations
 ```
 
+## Admin
 
-### How do I install the application on the web server?
-
-This project includes a provision script that sets up anything necessary to run the application (install db, add nginx/uwsgi conf).
+To see the data that is saved in the database, you can take a look in the admin.
+To do so, you have to create a local superuseraccount:
 
 ```
-ansible-playbook provision.yml -i stages/<stage>.yml
+cd src
+python manage.py createsuperuser
 ```
 
-</details>
+After finishing all the steps, you can login on localhost:8000/admin
 
+## Deployment
 
-## Contributing
+Deployment is automatically done with GitHub actions to the Azure portal, the following mapping between code and azure is done:
 
-Want to contribute? Awesome. Just send a pull request.
+- frontend: Azure Static Web App named 'holon-nextjs-frontend'
+- backend: Azure App Service named 'holon-backend'
 
+For Github the following variables are configured:
 
-## License
+- AZUREAPPSERVICE_PUBLISHPROFILE_C1BA75B35DEF43759E17CDB9F366E04C: The publish profile from the Azure App Service
+- AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_WATER_049BE5703: The API token from the Azure Static Web App
+- NEXT_PUBLIC_BACKEND_URL: The url for the deployed backend on Azure App
 
+In Azure the following variables are configured for the App Service:
 
-Holon-wagtail is proprietary software. All rights reserved.
-
+- DBHOST: Azure PostgreSQL host name
+- DBNAME: Database name
+- DBPASS: Database password
+- DBUSER: Database user name
