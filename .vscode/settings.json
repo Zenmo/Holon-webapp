@@ -1,23 +1,41 @@
-// {
-//     "editor.formatOnSave": true,
-//     "python.formatting.provider": "black",
-//     "python.formatting.blackArgs": ["--line-length", "100"],
-//     "editor.codeActionsOnSave": {
-//         "source.fixAll.eslint": true
-//     },
-//     "editor.quickSuggestions": {
-//         "strings": true
-//     },
-//     "files.associations": {
-//         "*.css": "tailwindcss"
-//     },
-//     "eslint.validate": ["javascript"],
-//     "[javascript]": {
-//         "editor.defaultFormatter": "esbenp.prettier-vscode"
-//     },
-//     "[javascriptreact]": {
-//         "editor.defaultFormatter": "esbenp.prettier-vscode"
-//     },
-//     "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
-//     "[python]": {}
-// }
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "python.defaultInterpreterPath": "/usr/local/bin/python",
+    "python.languageServer": "Pylance",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django",
+        "--disable=django-not-configured",
+        "--django-settings-module=pipit.settings.local"
+    ],
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length", "100"],
+    "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+    "python.linting.pycodestylePath": "/usr/local/py-utils/bin/pycodestyle",
+    "python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
+    "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
+    "python.testing.pytestPath": "/usr/local/py-utils/bin/pytest",
+    "python.testing.pytestEnabled": true,
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "eslint.validate": ["javascript"],
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
