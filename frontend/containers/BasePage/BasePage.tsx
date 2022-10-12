@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import PropTypes from "prop-types";
 import dynamic from "next/dynamic";
+
+import { initGA } from "@/utils/gtag";
+import { getCookieConsentValue } from "react-cookie-consent";
+import CookieBar from "@/components/CookieBar";
 
 const WagtailUserbar = dynamic(() => import("../../components/WagtailUserbar"));
 
@@ -21,6 +25,11 @@ const BasePage = ({ children, seo, wagtailUserbar }) => {
     seoMetaRobots,
     canonicalLink,
   } = seo;
+
+  useEffect(() => {
+    getCookieConsentValue() === "true" && initGA();
+  }, []);
+
   return (
     <>
       <Head>
@@ -42,6 +51,7 @@ const BasePage = ({ children, seo, wagtailUserbar }) => {
         {!!canonicalLink && <link rel="canonical" href={canonicalLink} />}
       </Head>
       <div className="BasePage">{children}</div>
+      <CookieBar onAccept={initGA} />
       {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}
     </>
   );
