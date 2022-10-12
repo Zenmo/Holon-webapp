@@ -5,7 +5,8 @@
       "@/components/*": ["./components/*"],
       "@/containers/*": ["./containers/*"],
       "@/pages/*": ["./pages/*"],
-      "@/api/*": ["./api/*"]
+      "@/api/*": ["./api/*"],
+      "@/utils/*": ["./utils/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
