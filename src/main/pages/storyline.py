@@ -10,7 +10,7 @@ from ..blocks import TextAndMediaBlock
 
 class StorylinePage(HeadlessPreviewMixin, BasePage):
     body = StreamField(
-        [("text_and_media", TextAndMediaBlock())], null=True, blank=True, use_json_field=False
+        [("text_and_media", TextAndMediaBlock())], null=True, blank=True, use_json_field=True
     )
 
     content_panels = BasePage.content_panels + [FieldPanel("body")]
