@@ -4,7 +4,10 @@ import React from "react";
 // import PropTypes from 'prop-types';
 import styles from "./StorylinePage.module.css";
 
-const StorylinePage = () => <div className={styles["StorylinePage"]}>StorylinePage!</div>;
+const StorylinePage = props => {
+  console.log(props);
+  return <div className={styles["StorylinePage"]}>StorylinePage!</div>;
+};
 
 StorylinePage.propTypes = {};
 
