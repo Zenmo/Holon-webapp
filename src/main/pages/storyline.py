@@ -17,9 +17,12 @@ scenarios = [
 ]
 
 
+def get_sliders():
+    return [(slider.pk, slider.name) for slider in Slider.objects.all()]
+
+
 class SliderBlock(blocks.StructBlock):
-    choises = [(slider.pk, slider.name) for slider in Slider.objects.all()]
-    slider = blocks.ChoiceBlock(choices=choises)
+    slider = blocks.ChoiceBlock(choices=get_sliders)
     visible = blocks.BooleanBlock(required=False)
 
 
@@ -47,6 +50,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
             ),
         ],
         block_counts={"intro": {"min_num": 1, "max_num": 1}},
+        use_json_field=True,
     )
 
     content_panels = BasePage.content_panels + [
