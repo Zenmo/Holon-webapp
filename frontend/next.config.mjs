@@ -1,9 +1,7 @@
-import withPlugins from "next-compose-plugins";
-
 const basePath = "";
 
 let nextConfig = {
-  webpack5: true,
+  webpack: true,
   reactStrictMode: true,
   trailingSlash: true,
   productionBrowserSourceMaps: true,
@@ -36,10 +34,4 @@ const withSvgr = (nextConfig = {}) => {
 //     enabled: process.env.ANALYZE === 'true',
 // });
 
-export default withPlugins(
-  [
-    withSvgr,
-    //withBundleAnalyzer,
-  ],
-  nextConfig
-);
+export default withSvgr(nextConfig);
