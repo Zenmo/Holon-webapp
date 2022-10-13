@@ -1,0 +1,57 @@
+/*animation of image */
+.solarpanelBlock,
+.windmill {
+  opacity: 0;
+  transform: translateY(-5rem);
+  transition: all 1s ease;
+}
+[data-solarpanels="1"] .solarpanelBlock:nth-of-type(1),
+[data-solarpanels="2"] .solarpanelBlock:nth-of-type(-n + 2),
+[data-solarpanels="3"] .solarpanelBlock:nth-of-type(-n + 3),
+[data-solarpanels="4"] .solarpanelBlock:nth-of-type(-n + 4),
+[data-solarpanels="5"] .solarpanelBlock:nth-of-type(-n + 5),
+[data-solarpanels="6"] .solarpanelBlock:nth-of-type(-n + 6) {
+  opacity: 1;
+  transform: translateY(0rem);
+}
+
+[data-windmills="1"] .windmill:nth-of-type(1),
+[data-windmills="2"] .windmill:nth-of-type(-n + 2),
+[data-windmills="3"] .windmill:nth-of-type(-n + 3) {
+  opacity: 1;
+  transform: translateY(0rem);
+}
+
+.windmillBlades {
+  animation-name: spin;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+[data-windforce="3"] .windmillBlades {
+  animation-duration: 8s;
+}
+[data-windforce="6"] .windmillBlades {
+  animation-duration: 6s;
+}
+[data-windforce="9"] .windmillBlades {
+  animation-duration: 4s;
+}
+[data-windforce="12"] .windmillBlades {
+  animation-duration: 2s;
+}
+
+/*sliders*/
+.interactImg {
+  background-color: #484848;
+}
+
+.interactImg::-webkit-slider-thumb {
+  background-color: #239023;
+  border-color: #484848;
+}
+
+.interactImg::-moz-range-thumb {
+  background-color: #239023;
+  border-color: #484848;
+}
