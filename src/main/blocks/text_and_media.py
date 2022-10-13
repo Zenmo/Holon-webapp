@@ -1,5 +1,7 @@
 """ Streamfields """
 from wagtail.core import blocks
+from wagtail.embeds.blocks import EmbedBlock
+from wagtail.images.blocks import ImageChooserBlock
 
 
 class TextAndMediaBlock(blocks.StructBlock):
@@ -15,7 +17,14 @@ class TextAndMediaBlock(blocks.StructBlock):
     )
 
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
-    media = blocks.TextBlock(required=False, help_text="Put in your shareable media url")
+    media = blocks.StreamBlock(
+        [
+            ("image", ImageChooserBlock(required=False)),
+            ("video", EmbedBlock(required=False)),
+        ],
+        help_text="Choose an image or paste an embed url",
+        max_num=1,
+    )
     grid_layout = blocks.ChoiceBlock(
         required=True, choices=GRID_CHOICES, default=THREEQUARTERS_QUARTER
     )
