@@ -5,5 +5,6 @@ from . import StorylinePage
 class StorylinePageSerializer(BasePageSerializer):
     class Meta:
         model = StorylinePage
-        fields = BasePageSerializer.Meta.fields
-
+        fields = [
+            "body",
+        ] + BasePageSerializer.Meta.fields
