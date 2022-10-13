@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "customdocument",
     "main",
     "nextjs",
+    "api",
 ]
 
 MIDDLEWARE = [
