@@ -25,6 +25,20 @@ class BackgroundSelectorComponent(StructBlock):
     ], required=False)
 
 
+class ButtonComponent(StructBlock): 
+
+    button_color = BackgroundSelectorComponent()
+
+    button_size = ChoiceBlock(choices=[
+        ('', 'Default button size'),
+        ('btn-sm', 'small'),
+        ('btn-lg', 'large')
+    ], blank=True, required=False)
+
+    button_text = CharBlock(required=False)
+
+    button_hyperlink = CharBlock(required=False)
+
 class ImageComponent(StructBlock):
     image = ImageChooserBlock(required=False)
     caption = CharBlock(required=False)
@@ -60,9 +74,11 @@ class CardsBlock(StructBlock):
     ], help_text="", required=False)
 
     className = CharBlock(classname="className", required=False,
-                          help_text=("default 2 cards in single row (col-md-6), add bootstrap classes to change"))
+                          help_text=("default 2 cards in single row (col-md-6), add tailwind classes to change"))
 
     cards = ListBlock(CardComponent())
+
+    button = ButtonComponent()
 
     class Meta:
         icon = "grip"
@@ -103,9 +119,11 @@ class TextImageBlock(StructBlock):
     ], blank=True, required=False)
     text = RichTextBlock()
 
+    button = ButtonComponent()
+    
     class Meta:
         icon = 'image'
-        template = 'blocks/image_block.html'
+        template = 'blocks/text_image_block.html'
 
 class TitleBlock(StructBlock): 
     """
@@ -122,6 +140,10 @@ class TitleBlock(StructBlock):
     ], blank=True, required=False)
     text = RichTextBlock(required=False)
 
+    class Meta:
+        icon = 'image'
+        template = 'blocks/title_block.html'
+
 class TextVideoBlock(StructBlock): 
     block_background = BackgroundSelectorComponent(required=False)
     title = CharBlock(required=True)
@@ -135,6 +157,10 @@ class TextVideoBlock(StructBlock):
     text = RichTextBlock(required=False)
 
     embed_video = EmbedBlock(max_width=800, max_height=400)
+
+    class Meta:
+        icon = 'image'
+        template = 'blocks/text_video_block.html'
 
 class BaseStreamBlock(StreamBlock):
 

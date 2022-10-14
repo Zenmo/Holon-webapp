@@ -19,8 +19,8 @@ export default function TitleBlock(props: Props) {
   let Tag = props.data.value.size;
 
   return (
-    <div className={`flex flex-row w-full py-12 px-[20%] ${backgroundcolor}`}>
-      <div className={`flex flex-col ${color}`}>
+    <div className={`flex flex-row w-full h-fit py-12 px-[20%] lg:pt-16 ${backgroundcolor}`}>
+      <div className={`flex flex-col justify-start ${color}`}>
         <Tag className={`text-2xl lg:text-3xl font-semibold`}>{props.data.value.title}</Tag>
         <div
           dangerouslySetInnerHTML={{ __html: props.data.value.text }}

@@ -36,10 +36,10 @@ export default function HeroBlock(props: Props) {
   //Link in button still needs href to next section
 
   return (
-    <div className={`flex flex-row h-full ${backgroundcolor}`}>
+    <div className="flex flex-row h-full">
       <div className="flex flex-col mx-8">
-        <div className={`flex flex-col lg:flex-row`}>
-          <div className="flex flex-col p-8 lg:w-1/2 mt-16">
+        <div className={`flex flex-col lg:flex-row ${backgroundcolor}`}>
+          <div className="flex flex-col p-8 lg:w-1/2 lg:mt-16">
             <h1
               dangerouslySetInnerHTML={{ __html: props.data.value.title }}
               className={`text-5xl font-bold`}></h1>
