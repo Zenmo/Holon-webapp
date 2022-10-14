@@ -8,6 +8,10 @@ import TextBlock from "../../components/TextBlocks/TextBlock";
 import ContentBlock from "../../components/ContentBlock/ContentBlock";
 import Scenarios from "../../components/Scenarios/Scenarios";
 import FeedbackBlock from "../../components/FeedbackBlock/FeedbackBlock";
+import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
+import exampleTitleBlock from "../../components/Blocks/TitleBlock/exampleTitleBlock.json";
+import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
+import exampleHeroBlock from "../../components/Blocks/HeroBlock/exampleHeroBlock.json";
 
 const HomePage = () => {
   return (
@@ -16,6 +20,14 @@ const HomePage = () => {
 
       <ContentBlock colorClass="bg-holon-blue-900" id="introVideo">
         <IntroductionVideo />
+      </ContentBlock>
+
+      <ContentBlock>
+        <TitleBlock data={exampleTitleBlock}></TitleBlock>
+      </ContentBlock>
+
+      <ContentBlock>
+        <HeroBlock data={exampleHeroBlock}></HeroBlock>
       </ContentBlock>
 
       <ContentBlock colorClass="bg-split-blue-white"></ContentBlock>

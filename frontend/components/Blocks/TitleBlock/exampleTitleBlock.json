@@ -1,0 +1,12 @@
+{
+  "type": "title_block",
+  "value": {
+    "block_background": {
+      "select_background": "bg-violet-500"
+    },
+    "title": "The Holon homepage",
+    "size": "h3",
+    "text": "<p data-block-key=\"p859y\">This is the Holon homepage</p>"
+  },
+  "id": "78e13492-7a6c-4ef0-8666-2d70fddfc011"
+}
