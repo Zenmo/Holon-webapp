@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import faviconholon from "../../public/favicon.ico";
+import faviconholon from "../../../public/favicon.ico";
 import Navbar from "./Navbar";
 
 export default function Header() {

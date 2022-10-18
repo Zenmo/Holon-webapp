@@ -1,8 +1,8 @@
-import overview from "../../public/imgs/Overview.svg";
-import expansionProblem_w_wind from "../../public/imgs/Expansion Problem Windholon.svg";
-import heatholon from "../../public/imgs/Warmteholon.svg";
-import animation from "../../public/imgs/Sprint-6-Case-animation.gif";
-import netherlandsPuzzle from "../../public/imgs/Nederland met Holonen.svg";
+import overview from "../../../public/imgs/Overview.svg";
+import expansionProblem_w_wind from "../../../public/imgs/Expansion Problem Windholon.svg";
+import heatholon from "../../../public/imgs/Warmteholon.svg";
+import animation from "../../../public/imgs/Sprint-6-Case-animation.gif";
+import netherlandsPuzzle from "../../../public/imgs/Nederland met Holonen.svg";
 
 export const contentTextBlocks = {
   default: {
