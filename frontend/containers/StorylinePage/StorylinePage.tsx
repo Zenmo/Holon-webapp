@@ -1,28 +1,37 @@
-import React, { useState, useEffect } from "react";
-import SolarpanelsAndWindmills from "@/components/ScenariosV2/SolarpanelsAndWindmills";
+import SolarpanelsAndWindmills from "@/components/Scenarios/SolarpanelsAndWindmills";
+import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
 
 import styles from "./StorylinePage.module.css";
-import TextAndMedia from "@/components/ScenariosV2/TextAndMedia";
 
-const StorylinePage = ({ storyline }) => {
-  const [scenarioData, setScenarioData] = useState([]);
+export type Storyline = {
+  id: string;
+  type: string;
+  value: any;
+};
 
-  useEffect(() => {
-    if (storyline) {
-      const sliderArray: [] = [];
-      storyline.map(st => {
-        if (st.type === "scenario") {
-          st.value.content.map(section => {
-            if (section.type === "slider") {
-              sliderArray.push(section);
-            }
-          });
-        }
-      });
-      setScenarioData(sliderArray);
-    }
-  }, [storyline]);
+export type Scenario = {
+  id: string;
+  type: string;
+  value: { content: Slider[] };
+};
 
+export type Slider = {
+  id: string;
+  type: string;
+  value: StorylineScenario;
+};
+
+export type StorylineScenario = {
+  name: string;
+  description?: string;
+  tag: string;
+  sliderValueDefault: number;
+  sliderValueMin: number;
+  sliderValueMax: number;
+  sliderLocked: boolean;
+};
+
+const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
   return (
     <div className={styles["StorylinePage"]}>
       {storyline.map((content, _index) => {
@@ -31,17 +40,12 @@ const StorylinePage = ({ storyline }) => {
             return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;
             break;
           case "scenario":
-            return <SolarpanelsAndWindmills key={`solarwind ${_index}`} data={scenarioData} />;
+            return <SolarpanelsAndWindmills key={`solarwind ${_index}`} data={content} />;
             break;
           default:
             null;
         }
       })}
-
-      <div className="flex flex-col lg:flex-row">
-        {/* <h1>{exampledata.title}</h1>
-        <p>{exampledata.description}</p> */}
-      </div>
     </div>
   );
 };

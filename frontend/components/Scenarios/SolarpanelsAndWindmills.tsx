@@ -2,63 +2,46 @@ import { useState, useEffect } from "react";
 import ImgFlatSolar from "../InteractiveImage/ImageElements/ImgFlatSolar";
 import ImageSlider from "../InteractiveImage/ImageSlider";
 
-export type Storyline = {
-  title: string;
-  description: string;
-  body: Array<StorylineScenario>;
-};
-
-export type StorylineScenarioWrapper = {
-  id: string;
-  type: string;
-  value: StorylineScenario;
-};
-
-export type StorylineScenario = {
-  name: string;
-  description?: string;
-  tag: string;
-  sliderValueDefault: number;
-  sliderValueMin: number;
-  sliderValueMax: number;
-  sliderLocked: boolean;
-};
+import type { Scenario, Slider } from "@/containers/StorylinePage/StorylinePage";
 
 type Props = {
-  data: StorylineScenario[] | [];
+  data: Scenario;
 };
 
 export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
-  const [solarpanels, setSolarpanels] = useState(0);
-  const [solarpanelsProperties, setSolarpanelsProperties] = useState({});
-  const [windmills, setWindmills] = useState(0);
-  const [windmillsProperties, setWindmillsProperties] = useState({});
+  const [solarpanels, setSolarpanels] = useState<number>(0);
+  const [solarpanelsProperties, setSolarpanelsProperties] = useState<Slider>({});
+  const [windmills, setWindmills] = useState<number>(0);
+  const [windmillsProperties, setWindmillsProperties] = useState<Slider>({});
 
   useEffect(() => {
-    setScenarioData(scenario);
+    setScenarioData(scenario.value.content);
   }, [scenario]);
 
-  const setScenarioData = (scenarios: StorylineScenarioWrapper[]) => {
-    scenarios.map((scenario: StorylineScenarioWrapper) => {
-      switch (scenario.value.tag) {
-        case "solar":
-          setSolarpanelsProperties(scenario);
-          setSolarpanels(
-            scenario?.value.sliderValueMin && scenario?.value.sliderValueDefault
-              ? scenario?.value.sliderValueDefault
-              : 0
-          );
-          break;
-        case "windmills":
-          setWindmillsProperties(scenario);
-          setWindmills(
-            scenario?.value.sliderValueMin && scenario?.value.sliderValueDefault
-              ? scenario?.value.sliderValueDefault
-              : 0
-          );
-          break;
-        default:
-          return null;
+  const setScenarioData = (scenarios: Slider[]) => {
+    scenarios.map((scenario: Slider) => {
+      if (scenario.type === "slider") {
+        switch (scenario.value.tag) {
+          case "solar":
+            console.log(scenario);
+            setSolarpanelsProperties(scenario);
+            setSolarpanels(
+              scenario?.value.sliderValueMin && scenario?.value.sliderValueDefault
+                ? scenario?.value.sliderValueDefault
+                : 0
+            );
+            break;
+          case "windmills":
+            setWindmillsProperties(scenario);
+            setWindmills(
+              scenario?.value.sliderValueMin && scenario?.value.sliderValueDefault
+                ? scenario?.value.sliderValueDefault
+                : 0
+            );
+            break;
+          default:
+            return null;
+        }
       }
     });
   };
