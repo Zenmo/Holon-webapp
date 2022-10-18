@@ -3,7 +3,7 @@ import Windmill from "./Windmill";
 
 export default function ImgFlatSolar() {
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <img
         id="background"
         data-testid="background"
