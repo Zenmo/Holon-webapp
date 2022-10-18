@@ -70,7 +70,7 @@ export default function StorylineScenario({ storylineScenario: scenario }: Props
 
   return (
     <div className="storyline__row flex flex-col lg:flex-row">
-      <div className="flex flex-col p-8 lg:w-1/3">
+      <div className="flex flex-col p-8 lg:w-1/3 bg-slate-200">
         <ImageSlider
           inputId="zonnepanelen_flat"
           datatestid="zonnepanelen_flat"
