@@ -34,8 +34,6 @@ function BreadcrumbItem({ listItem }: BreadcrumbItemProps) {
 function Breadcrumbs({ posts, path }: Props) {
   const breadcrumbArray: PostItemProps[] = [];
 
-  console.log(typeof path);
-
   function breadcrumbList(path: Array<string>, posts: PostItemProps[], level: number): JSX.Element {
     if (posts !== undefined) {
       const selectedItem = posts.find(child => child.title.toLowerCase() == path[level]);

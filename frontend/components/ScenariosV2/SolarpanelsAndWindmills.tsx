@@ -25,10 +25,10 @@ export type StorylineScenario = {
 };
 
 type Props = {
-  storylineScenario: StorylineScenario[] | [];
+  data: StorylineScenario[] | [];
 };
 
-export default function StorylineScenario({ storylineScenario: scenario }: Props) {
+export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
   const [solarpanels, setSolarpanels] = useState(0);
   const [solarpanelsProperties, setSolarpanelsProperties] = useState({});
   const [windmills, setWindmills] = useState(0);

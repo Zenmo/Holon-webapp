@@ -1,7 +1,10 @@
 """ Streamfields """
+import re
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
+from wagtail.embeds.embeds import get_embed
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.embeds.exceptions import EmbedException
 
 
 class TextAndMediaBlock(blocks.StructBlock):
