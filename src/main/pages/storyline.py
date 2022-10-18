@@ -13,10 +13,10 @@ from ..blocks import TextAndMediaBlock, ScenarioBlock
 class StorylinePage(HeadlessPreviewMixin, BasePage):
     storyline = StreamField(
         [
-            ("intro", TextAndMediaBlock()),
-            ("section", ScenarioBlock()),
+            ("text_and_media", TextAndMediaBlock()),
+            ("scenario", ScenarioBlock()),
         ],
-        block_counts={"intro": {"min_num": 1, "max_num": 1}},
+        block_counts={"text_and_media": {"min_num": 1, "max_num": 1}, "scenario": {"min_num": 1}},
         use_json_field=True,
     )
 
