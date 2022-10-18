@@ -5,6 +5,7 @@
   transform: translateY(-5rem);
   transition: all 1s ease;
 }
+
 [data-solarpanels="1"] .solarpanelBlock:nth-of-type(1),
 [data-solarpanels="2"] .solarpanelBlock:nth-of-type(-n + 2),
 [data-solarpanels="3"] .solarpanelBlock:nth-of-type(-n + 3),
@@ -54,4 +55,13 @@
 .interactImg::-moz-range-thumb {
   background-color: #239023;
   border-color: #484848;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

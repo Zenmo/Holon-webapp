@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import StorylineScenario from "@/components/Storyline/StorylineScenario";
 
 import styles from "./StorylinePage.module.css";
-import StorylineOverview from "@/components/Storyline/StorylineOverview";
 
-const StorylinePage = ({ id, storyline }) => {
+const StorylinePage = ({ storyline }) => {
   const [scenarioData, setScenarioData] = useState([]);
 
   useEffect(() => {
@@ -31,10 +30,6 @@ const StorylinePage = ({ id, storyline }) => {
       </div>
 
       <StorylineScenario storylineScenario={scenarioData} />
-
-      {/* Temporary place to test the storyline cards */}
-      <StorylineOverview />
-      {/* / Temporary place to test the storyline cards */}
     </div>
   );
 };
