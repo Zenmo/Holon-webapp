@@ -25,7 +25,7 @@ env:
 
 on:
   push:
-    branches: [ "deployment" ]
+    branches: [ "113-wagtail-and-nextjs-are-automatically-deployed" ]
   workflow_dispatch:
 
 permissions:
