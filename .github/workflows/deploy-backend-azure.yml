@@ -63,8 +63,8 @@ jobs:
         with:
           name: python-app
           path: |
-            . 
-            !venv/
+            ./src
+            !./src/venv/
   deploy:
     permissions:
       contents: none
