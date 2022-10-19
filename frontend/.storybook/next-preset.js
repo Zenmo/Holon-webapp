@@ -43,7 +43,7 @@ module.exports = {
 
         // // Prevent storybook from handling svg
         newConfig.module.rules.find(
-            rule => rule.test.test('.svg')
+            rule => rule?.test?.test('.svg')
         ).exclude = /\.svg$/;
 
         newConfig.module.rules.push({
