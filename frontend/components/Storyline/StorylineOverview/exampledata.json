@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "total_count": 2
+  },
+  "items": [
+    {
+      "id": 8,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/8/",
+        "html_url": "http://localhost/scenarios/scenario-1/",
+        "slug": "scenario-1",
+        "first_published_at": "2022-10-12T16:05:12.092923+02:00"
+      },
+      "title": "Scenario 1",
+      "scenariotitle": "Scenariotittle",
+      "description": "<p data-block-key=\"qlp61\">asdfadsf</p>",
+      "role": "Gemeente",
+      "informationtype": "Wiki"
+    },
+    {
+      "id": 9,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/9/",
+        "html_url": "http://localhost/scenarios/scenario-2/",
+        "slug": "scenario-2",
+        "first_published_at": "2022-10-12T16:09:48.043911+02:00"
+      },
+      "title": "Scenario 2",
+      "scenariotitle": null,
+      "description": null,
+      "role": "Rijk",
+      "informationtype": "Challenges"
+    },
+    {
+      "id": 14,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/14/",
+        "html_url": "http://localhost/scenarios/scenario-3/",
+        "slug": "scenario-3",
+        "first_published_at": "2022-10-14T12:46:52.449833+02:00"
+      },
+      "title": "Scenario 3",
+      "scenariotitle": "Scenario 3",
+      "description": "<p data-block-key=\"arwlp\">Scenario 3</p>",
+      "role": "Rijk",
+      "informationtype": "Stories"
+    },
+    {
+      "id": 8,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/8/",
+        "html_url": "http://localhost/scenarios/scenario-1/",
+        "slug": "scenario-1",
+        "first_published_at": "2022-10-12T16:05:12.092923+02:00"
+      },
+      "title": "Scenario 1",
+      "scenariotitle": "Scenariotittle",
+      "description": "<p data-block-key=\"qlp61\">asdfadsf</p>",
+      "role": "Gemeente",
+      "informationtype": "Wiki"
+    },
+    {
+      "id": 9,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/9/",
+        "html_url": "http://localhost/scenarios/scenario-2/",
+        "slug": "scenario-2",
+        "first_published_at": "2022-10-12T16:09:48.043911+02:00"
+      },
+      "title": "Scenario 2",
+      "scenariotitle": null,
+      "description": null,
+      "role": "Rijk",
+      "informationtype": "Challenges"
+    },
+    {
+      "id": 14,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/14/",
+        "html_url": "http://localhost/scenarios/scenario-3/",
+        "slug": "scenario-3",
+        "first_published_at": "2022-10-14T12:46:52.449833+02:00"
+      },
+      "title": "Scenario 3",
+      "scenariotitle": "Scenario 3",
+      "description": "<p data-block-key=\"arwlp\">Scenario 3</p>",
+      "role": "Rijk",
+      "informationtype": "Stories"
+    },
+    {
+      "id": 8,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/8/",
+        "html_url": "http://localhost/scenarios/scenario-1/",
+        "slug": "scenario-1",
+        "first_published_at": "2022-10-12T16:05:12.092923+02:00"
+      },
+      "title": "Scenario 1",
+      "scenariotitle": "Scenariotittle",
+      "description": "<p data-block-key=\"qlp61\">asdfadsf</p>",
+      "role": "Gemeente",
+      "informationtype": "Wiki"
+    },
+    {
+      "id": 9,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/9/",
+        "html_url": "http://localhost/scenarios/scenario-2/",
+        "slug": "scenario-2",
+        "first_published_at": "2022-10-12T16:09:48.043911+02:00"
+      },
+      "title": "Scenario 2",
+      "scenariotitle": null,
+      "description": null,
+      "role": "Rijk",
+      "informationtype": "Challenges"
+    },
+    {
+      "id": 14,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/14/",
+        "html_url": "http://localhost/scenarios/scenario-3/",
+        "slug": "scenario-3",
+        "first_published_at": "2022-10-14T12:46:52.449833+02:00"
+      },
+      "title": "Scenario 3",
+      "scenariotitle": "Scenario 3",
+      "description": "<p data-block-key=\"arwlp\">Scenario 3</p>",
+      "role": "Rijk",
+      "informationtype": "Stories"
+    },
+    {
+      "id": 8,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/8/",
+        "html_url": "http://localhost/scenarios/scenario-1/",
+        "slug": "scenario-1",
+        "first_published_at": "2022-10-12T16:05:12.092923+02:00"
+      },
+      "title": "Scenario 1",
+      "scenariotitle": "Scenariotittle",
+      "description": "<p data-block-key=\"qlp61\">asdfadsf</p>",
+      "role": "Gemeente",
+      "informationtype": "Wiki"
+    },
+    {
+      "id": 9,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/9/",
+        "html_url": "http://localhost/scenarios/scenario-2/",
+        "slug": "scenario-2",
+        "first_published_at": "2022-10-12T16:09:48.043911+02:00"
+      },
+      "title": "Scenario 2",
+      "scenariotitle": null,
+      "description": null,
+      "role": "Rijk",
+      "informationtype": "Challenges"
+    },
+    {
+      "id": 14,
+      "meta": {
+        "type": "main.ScenarioPage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/14/",
+        "html_url": "http://localhost/scenarios/scenario-3/",
+        "slug": "scenario-3",
+        "first_published_at": "2022-10-14T12:46:52.449833+02:00"
+      },
+      "title": "Scenario 3",
+      "scenariotitle": "Scenario 3",
+      "description": "<p data-block-key=\"arwlp\">Scenario 3</p>",
+      "role": "Rijk",
+      "informationtype": "Stories"
+    }
+  ]
+}
