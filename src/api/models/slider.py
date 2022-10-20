@@ -34,18 +34,20 @@ class Slider(models.Model):
         null=True,
         help_text=_("Maximum amount of solarpanels"),
     )
-    slider_locked = models.BooleanField(
-        blank=False, null=False, default=False, help_text=_("Show locked solarpanel slider")
-    )
 
-    tag = models.CharField(choices=tags, default=CHOICE_SOLAR, max_length=50)
+    tag = models.CharField(
+        choices=tags,
+        null=True,
+        blank=True,
+        max_length=50,
+        help_text=_("Which part of the animation does this slider relate to"),
+    )
 
     panels = [
         FieldPanel("name"),
         FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
-        FieldPanel("slider_locked"),
         FieldPanel("tag"),
     ]
 
