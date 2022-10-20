@@ -27,13 +27,8 @@ interface DocumentItemProps {
 }
 
 function Document({ docItem }: DocumentItemProps) {
-  // const url =
-  //   docItem.url.indexOf("index.mdx") > 0
-  //     ? docItem.url.replace(/\index\.mdx$/, "")
-  //     : docItem.url.replace(/\.mdx$/, "");
-  // const name = docItem.name.replace(/\.mdx$/, "");
   return (
-    <Link href={"/wiki" + docItem.relativeUrl}>
+    <Link href={docItem.relativeUrl}>
       <span className={"block cursor-pointer bg-inherit px-4 pt-1 pb-3 "}>{docItem.title}</span>
     </Link>
   );
@@ -43,7 +38,7 @@ function Folder({ folderItem }: FolderItemProps) {
   return (
     <details open className="order-1 p-0 ">
       <summary className="text-md cursor-pointer bg-inherit py-3 px-4">
-        <Link href={"/wiki" + folderItem.relativeUrl}>
+        <Link href={folderItem.relativeUrl}>
           <strong>{folderItem.title}</strong>
         </Link>
       </summary>
