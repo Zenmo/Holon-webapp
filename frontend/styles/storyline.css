@@ -1,0 +1,73 @@
+.storyline__row {
+  min-height: 100vh;
+}
+
+.storyline__row p {
+  font-size: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.storyline__row__image {
+  max-height: 100vh;
+  margin: 0 auto;
+}
+.storyline__grid {
+  margin: 0 -1rem;
+}
+.storyline__griditem {
+  width: 20%;
+  padding: 1rem;
+}
+.storyline__card {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.3s ease-in;
+  height: 400px;
+  padding: 1rem;
+  animation: storylineFadeIn 0.3s ease-in forwards;
+}
+.storyline__griditem:nth-child(1) {
+  width: 40%;
+}
+
+.storyline__card[data-cardtype="Wiki"] {
+  background-color: #f1effd;
+}
+.storyline__card[data-cardtype="Wiki"] .storyline__card__icon {
+  color: blue;
+}
+.storyline__card[data-cardtype="Stories"] {
+  background-color: #fbe9f2;
+}
+.storyline__card[data-cardtype="Stories"] .storyline__card__icon {
+  color: #dc267f;
+}
+.storyline__card[data-cardtype="Challenges"] {
+  background-color: #fff7e5;
+}
+.storyline__card[data-cardtype="Challenges"] .storyline__card__icon {
+  color: #ffb000;
+}
+
+.storyline__card img {
+  filter: brightness(0.8);
+  transition: all 0.3s ease-in;
+}
+.storyline__card:hover {
+  opacity: 1;
+}
+.storyline__card:hover img {
+  transform: scale(1.1);
+  filter: brightness(1);
+}
+@keyframes storylineFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}

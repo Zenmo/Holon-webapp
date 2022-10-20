@@ -8,11 +8,13 @@ import TextBlock from "../../components/TextBlocks/TextBlock";
 import ContentBlock from "../../components/ContentBlock/ContentBlock";
 import Scenarios from "../../components/Scenarios/Scenarios";
 import FeedbackBlock from "../../components/FeedbackBlock/FeedbackBlock";
-
+import Storyline from "@/components/Storyline/Storyline";
 const HomePage = () => {
   return (
     <main className="h-screen snap-y snap-mandatory overflow-y-auto">
       <Header />
+
+      <Storyline />
 
       <ContentBlock colorClass="bg-holon-blue-900" id="introVideo">
         <IntroductionVideo />

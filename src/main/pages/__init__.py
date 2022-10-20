@@ -8,3 +8,7 @@ from .about import *  # NOQA
 from .about_serializer import *  # NOQA
 from .wiki import *  # NOQA
 from .wiki_serializer import *  # NOQA
+from .scenario import *  # NOQA
+from .scenario_serializer import *  # NOQA
+from .scenariolist import *  # NOQA
+from .scenariolist_serializer import *  # NOQA
