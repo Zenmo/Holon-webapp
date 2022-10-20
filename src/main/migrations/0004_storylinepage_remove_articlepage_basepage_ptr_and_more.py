@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import main.blocks.scenario
+import main.blocks.storyline_section
 import wagtail.blocks
 import wagtail.embeds.blocks
 import wagtail.fields
@@ -100,7 +100,7 @@ class Migration(migrations.Migration):
                                                                 (
                                                                     "slider",
                                                                     wagtail.blocks.ChoiceBlock(
-                                                                        choices=main.blocks.scenario.get_sliders
+                                                                        choices=main.blocks.storyline_section.get_sliders
                                                                     ),
                                                                 ),
                                                                 (
