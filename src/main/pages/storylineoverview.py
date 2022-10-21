@@ -25,6 +25,9 @@ class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
     serializer_class = "main.pages.StorylineOverviewPageSerializer"
 
     parent_page_types = ["main.HomePage"]
+    subpage_types = [
+        "main.StorylinePage",  # appname.ModelName
+    ]
 
     class Meta:
         verbose_name = _("StorylineOverview")

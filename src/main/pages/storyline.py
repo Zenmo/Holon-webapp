@@ -35,5 +35,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
         FieldPanel("storyline"),
     ]
 
+    parent_page_types = ["main.StorylineOverviewPage"]
+
     class Meta:
         verbose_name = _("Storyline")
