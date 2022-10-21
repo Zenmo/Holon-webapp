@@ -23,7 +23,6 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
       if (scenario.type === "slider") {
         switch (scenario.value.tag) {
           case "solar":
-            console.log(scenario);
             setSolarpanelsProperties(scenario);
             setSolarpanels(
               scenario?.value.sliderValueMin && scenario?.value.sliderValueDefault

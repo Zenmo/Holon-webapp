@@ -32,6 +32,48 @@ class TextAndMediaBlock(blocks.StructBlock):
         required=True, choices=GRID_CHOICES, default=THREEQUARTERS_QUARTER
     )
 
+    def get_api_representation(self, value, context=None):
+        """Recursively call get_api_representation on children and return as a plain dict"""
+        dict_list = []
+        if value:
+            for item in value["media"]:
+                temp_dict = {
+                    "text": value["text"].source,
+                    "media": [{"value": item.value.file.url, "id": item.id, "type": "image"}],
+                    "grid_layout": value["grid_layout"],
+                }
+                dict_list.append(temp_dict)
+        return dict_list[0]
+
     class Meta:  # NOQA
         icon = "edit"
         label = "Text and Media"
+
+        # {
+        #     "type": "text_and_media",
+        #     "value": [
+        #             {
+        #                 "value": "/wt/media/original_images/vogeltje_211.jpg",
+        #                 "id": "5ea9c5c4-4505-435a-82cf-62517e0c1afa",
+        #                 "type": "image"
+        #             }
+        #         ]
+        #     ,
+        #     "id": "9394d829-7b4a-4096-b19b-9da32954df25"
+        # },
+
+        # {
+        #     "type": "text_and_media",
+        #     "value": {
+        #         "text": "<p data-block-key=\"mubvd\">xx</p>",
+        #         "media": [
+        #             {
+        #                 "type": "image",
+        #                 "value": 1,
+        #                 "id": "5ea9c5c4-4505-435a-82cf-62517e0c1afa"
+        #             }
+        #         ],
+        #         "grid_layout": "75_25"
+        #     },
+        #     "id": "9394d829-7b4a-4096-b19b-9da32954df25"
+        # },
