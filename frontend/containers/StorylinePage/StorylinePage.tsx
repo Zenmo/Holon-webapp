@@ -39,7 +39,7 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
           case "text_and_media":
             return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;
             break;
-          case "scenario":
+          case "section":
             return <SolarpanelsAndWindmills key={`solarwind ${_index}`} data={content} />;
             break;
           default:
