@@ -4,7 +4,9 @@ import LazyContainers from "../containers/LazyContainers";
 
 const isProd = process.env.NODE_ENV === "production";
 
-export default function CatchAllPage({ componentName, componentProps }) {
+
+// TODO: Check if WIKIMENU = [] is needed ( i dont think so )
+export default function CatchAllPage({ componentName, componentProps, wikiMenu = [] }) {
   const Component = LazyContainers[componentName];
   if (!Component) {
     return <h1>Component {componentName} not found</h1>;
@@ -65,6 +67,9 @@ export async function getServerSideProps({ req, params, res }) {
     if (componentName === "StorylineOverviewPage") {
       const { json: storylines } = await getAllPages({ type: "main.StorylineOverviewPage" });
       componentProps.storylines = storylines;
+    if (componentName === "WikiPage") {
+      const { json: wikiMenu } = await getAllPages({ type: "main.WikiPage" });
+      componentProps.wikiMenu = wikiMenu;
     }
 
     return { props: { componentName, componentProps } };

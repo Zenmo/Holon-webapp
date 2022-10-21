@@ -13,8 +13,6 @@ export default function StorylineOverviewFilter({
   selectedItems,
   update,
 }: Props) {
-  console.log(selectedItems);
-
   return (
     <div className="flex w-full flex-col gap-4 mb-5">
       <h4 className="relative my-4 border-l-[0.75rem] border-b-2 border-holon-blue-900 pl-3 text-xl font-light">

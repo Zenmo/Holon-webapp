@@ -1,14 +1,15 @@
-import withPlugins from "next-compose-plugins";
-
 const basePath = "";
 
 let nextConfig = {
-  webpack5: true,
+  webpack: true,
   reactStrictMode: true,
   trailingSlash: true,
   productionBrowserSourceMaps: true,
   basePath,
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+  images: {
+    domains: ["localhost", "holontool.nl"],
+  },
   async rewrites() {
     return [
       {
@@ -36,10 +37,4 @@ const withSvgr = (nextConfig = {}) => {
 //     enabled: process.env.ANALYZE === 'true',
 // });
 
-export default withPlugins(
-  [
-    withSvgr,
-    //withBundleAnalyzer,
-  ],
-  nextConfig
-);
+export default withSvgr(nextConfig);
