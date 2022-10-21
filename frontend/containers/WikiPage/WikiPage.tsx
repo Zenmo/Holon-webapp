@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { basePageWrap } from "../BasePage";
-import Aside from "@/components/wiki/Aside";
-import Article from "@/components/wiki/Article";
-import Breadcrumbs from "@/components/wiki/Breadcrumbs";
+import Aside from "@/components/Wiki/Aside";
+import Article from "@/components/Wiki/Article";
+import Breadcrumbs from "@/components/Wiki/Breadcrumbs";
 
 interface WikiPageProps {
   title: string;
