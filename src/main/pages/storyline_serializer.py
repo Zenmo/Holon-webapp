@@ -3,8 +3,8 @@ from . import StorylinePage
 
 
 class StorylinePageSerializer(BasePageSerializer):
+    description = "test"
+
     class Meta:
         model = StorylinePage
-        fields = [
-            "storyline",
-        ] + BasePageSerializer.Meta.fields
+        fields = ["storyline"] + BasePageSerializer.Meta.fields

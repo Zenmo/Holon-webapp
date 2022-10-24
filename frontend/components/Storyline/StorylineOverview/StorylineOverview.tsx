@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
-// //http://localhost:8000/wt/api/nextjs/v1/pages/?type=main.ScenarioPage&fields=scenariotitle,description,role,informationtype&limit=10&child_of=7
-import config from "./exampledata.json";
+import { useState } from "react";
 import StorylineOverviewCard from "./StorylineOverviewCard";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
-export default function StorylineOverview() {
+export default function StorylineOverview({ storylines }) {
   //const uniqueRoles = [...new Set(config.map((item) => item.b))];
-  const roleArray = [...new Set(config.items.map(item => item.role))];
+  const roleArray = [...new Set(storylines.items.map(item => item.role))];
   const uniqueRoles = [...new Set(roleArray.reduce((o, c) => o.concat(c), []))];
 
-  const informationArray = [...new Set(config.items.map(item => item.informationtype))];
+  const informationArray = [...new Set(storylines.items.map(item => item.informationtype))];
   const uniqueInformation = [...new Set(informationArray.reduce((o, c) => o.concat(c), []))];
 
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
@@ -31,7 +29,7 @@ export default function StorylineOverview() {
     }
   };
 
-  const filteredProjects = config.items
+  const filteredProjects = storylines.items
     .filter(project =>
       selectedRoles.length > 0 ? selectedRoles.some(r => project.role.indexOf(r) >= 0) : project
     )

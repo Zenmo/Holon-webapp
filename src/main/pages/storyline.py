@@ -5,6 +5,7 @@ from wagtail import blocks
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
+from wagtail.api import APIField
 
 
 from .base import BasePage
@@ -12,6 +13,12 @@ from ..blocks import TextAndMediaBlock, StorylineSectionBlock
 
 
 class StorylinePage(HeadlessPreviewMixin, BasePage):
+    thumbnail = models.ImageField(
+        null=True,
+        blank=True,
+    )
+    description = models.TextField(null=True, blank=True, help_text="Description of the storyline")
+
     scenario = models.ForeignKey(
         "api.Scenario",
         blank=True,
@@ -30,7 +37,10 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
     )
 
     serializer_class = "main.pages.StorylinePageSerializer"
+
     content_panels = BasePage.content_panels + [
+        FieldPanel("thumbnail"),
+        FieldPanel("description"),
         FieldPanel("scenario"),
         FieldPanel("storyline"),
     ]

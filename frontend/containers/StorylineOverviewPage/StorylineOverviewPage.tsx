@@ -6,7 +6,7 @@ const StorylineOverviewPage = ({ storylines }) => {
   console.log(storylines);
   return (
     <div className={styles["StorylineOverviewPage"]}>
-      <StorylineOverview />
+      <StorylineOverview storylines={storylines} />
     </div>
   );
 };

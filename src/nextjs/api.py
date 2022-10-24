@@ -2,6 +2,8 @@ from typing import Dict, Union, cast
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.forms.models import model_to_dict
+from django.db.models.fields.files import ImageFieldFile
 from django.http import Http404, HttpResponseRedirect
 from django.middleware import csrf as csrf_middleware
 from django.shortcuts import get_object_or_404
@@ -26,14 +28,36 @@ from wagtail_headless_preview.models import PagePreview
 api_router = WagtailAPIRouter("nextjs")
 
 # Default pages functionality of WagTail
-api_router.register_endpoint("pages", PagesAPIViewSet)
+class PagesSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        resultDict = model_to_dict(instance)
+        representation = super().to_representation(instance)
+
+        for key, value in resultDict.items():
+            if isinstance(value, str):
+                representation[key] = value
+            elif isinstance(value, ImageFieldFile):
+                representation[key] = {"url": value.url, "name": value.name}
+
+        return representation
+
+
+class PagesListAPIViewSet(PagesAPIViewSet):
+    def get_serializer(self, qs, many=True):
+        return PagesSerializer(qs, many=many)
+
+
+api_router.register_endpoint("pages", PagesListAPIViewSet)
+
 
 class PageRelativeUrlListSerializer(serializers.Serializer):
-    def to_representation(self, obj):
-        return {
-            "title": obj.title,
-            "relative_url": obj.get_url(None),
-        }
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["id"] = instance.id
+        representation["title"] = instance.title
+        representation["relative_url"] = instance.get_url(None)
+
+        return representation
 
 
 class PageRelativeUrlListAPIViewSet(PagesAPIViewSet):

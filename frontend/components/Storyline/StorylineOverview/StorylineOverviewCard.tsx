@@ -1,5 +1,6 @@
 import { BoltIcon, InformationCircleIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import RawHtml from "../../RawHtml";
+import Image from "next/image";
 
 interface Props {
   key: number;
@@ -11,8 +12,10 @@ interface Props {
     role: Array<string>;
     informationtype: string;
     sector: string;
-    meta: {
-      slug: string;
+    relativeUrl: string;
+    thumbnail: {
+      name: string;
+      url: string;
     };
   };
 }
@@ -21,16 +24,18 @@ export default function StorylineOverviewCard({ project, index, key }: Props) {
   return (
     <div className="storyline__griditem">
       <a
-        href={project.meta.slug}
+        href={project.relativeUrl}
         className="storyline__card flex h-full flex-col p-2 rounded gap-2 border"
         data-cardtype={project.informationtype}
         style={{ animationDelay: index + "00ms" }}
         key={key}>
         <span className="h-1/2 overflow-hidden">
-          <img
-            alt="random image"
-            src="https://unsplash.it/600?random"
-            className="h-full w-full object-cover scale-1"
+          <Image
+            src={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.url}
+            alt={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.name}
+            width={500}
+            height={300}
+            layout="responsive"
           />
         </span>
         <span className="flex-col flex h-1/2">
@@ -47,7 +52,6 @@ export default function StorylineOverviewCard({ project, index, key }: Props) {
               ) : (
                 <BoltIcon className="mr-1 h-6 w-6 storyline__card__icon" />
               )}
-
               {project.informationtype}
             </span>
           </span>
