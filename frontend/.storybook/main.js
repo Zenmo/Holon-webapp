@@ -1,4 +1,3 @@
-const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
@@ -19,6 +18,9 @@ module.exports = {
   addons: [
     "@storybook/addon-viewport",
     "@storybook/addon-a11y",
+    {
+      name: "storybook-addon-next",
+    },
     // Add PostCSS for Tailwind.
     {
       name: "@storybook/addon-postcss",
@@ -35,15 +37,9 @@ module.exports = {
       },
     },
   ],
-  presets: [path.resolve(__dirname, "next-preset.js")],
   features: {
     babelModeV7: true,
   },
-  // webpackFinal: async (baseConfig) => {
-  //   //const nextConfig = require('../next.config.js');
-  //   // merge whatever from nextConfig into the webpack config storybook will use
-  //   return { ...baseConfig };
-  // },
   webpackFinal: async config => {
     return {
       ...config,
