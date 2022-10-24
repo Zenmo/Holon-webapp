@@ -42,9 +42,9 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build ./src -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }} -f Dockerfile.prod
+        docker build ./src -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }} -f ./src/Dockerfile.prod
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
-        docker build ./frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }} -f Dockerfile.prod
+        docker build ./frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }} -f ./frontend/Dockerfile.prod
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }}
         docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
