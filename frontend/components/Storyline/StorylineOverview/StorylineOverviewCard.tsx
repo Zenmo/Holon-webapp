@@ -29,15 +29,16 @@ export default function StorylineOverviewCard({ project, index, key }: Props) {
         data-cardtype={project.informationtype}
         style={{ animationDelay: index + "00ms" }}
         key={key}>
-        <span className="h-1/2 overflow-hidden">
-          <Image
-            src={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.url}
-            alt={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.name}
-            width={500}
-            height={300}
-            layout="responsive"
-          />
-        </span>
+        {project.thumbnail && (
+          <span className="h-1/2 overflow-hidden relative">
+            <Image
+              objectFit="cover"
+              src={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.url}
+              alt={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.name}
+              layout="fill"
+            />
+          </span>
+        )}
         <span className="flex-col flex h-1/2">
           <strong className="mb-3 block">{project.title}</strong>
           <span className="mb-3">
