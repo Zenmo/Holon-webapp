@@ -29,6 +29,13 @@ CACHES = {
 
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"  # NOQA
 
+DEFAULT_FILE_STORAGE = "backend.custom_azure.AzureMediaStorage"
+MEDIA_LOCATION = "media"
+
+AZURE_ACCOUNT_NAME = get_env("AZURE_ACCOUNT_NAME")
+AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
+MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
+
 # Enable caching of templates in production environment
 TEMPLATES[0]["OPTIONS"]["loaders"] = [  # type: ignore[index]
     (

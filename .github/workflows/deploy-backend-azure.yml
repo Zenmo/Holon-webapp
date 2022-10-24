@@ -31,12 +31,8 @@ on:
 permissions:
   contents: read
 
-defaults:
-  run:
-    working-directory: ./src
-
 jobs:
-  build-and-deploy-wagtail:
+  build-and-deploy-images:
     runs-on: ubuntu-latest
     steps:
     # checkout the repo
@@ -50,5 +46,9 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
+        docker build ./src/Dockerfile.prod -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
+        docker build ./frontend/Dockerfile.prod -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }}
+        docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}

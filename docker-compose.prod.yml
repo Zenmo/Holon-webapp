@@ -1,0 +1,53 @@
+version: "3.1"
+services:
+  web:
+    image: holonregistry.azurecr.io/nginx:production
+    build:
+      context: ./docker
+    ports:
+      - "8000:80"
+      - "8082:443"
+    depends_on:
+      - python
+    volumes:
+      - media-files:/app/media"
+      - static-files:/app/static"
+    environment:
+      - PYTHON_HOST=http://python
+      - NEXT_HOST=http://next
+      - MEDIA_REMOTE_DOMAIN=holontool.nl
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  next:
+    image: holonregistry.azurecr.io/nextjs:production
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:3000"
+    depends_on:
+      - web
+
+  python:
+    image: holonregistry.azurecr.io/wagtail:production
+    build:
+      context: ./src
+      dockerfile: Dockerfile.prod
+    volumes:
+      - static-files:/home/app/web/static
+
+volumes:
+  static-files:
+  media-files:
+  # static-files:
+  #   driver: azure_file
+  #   driver_opts:
+  #     share_name: holon-webapp-static-files
+  #     storage_account_name: holonstorage
+
+  # media-files:
+  #   driver: azure_file
+  #   driver_opts:
+  #     share_name: holon-webapp-media-files
+  #     storage_account_name: holonstorage
