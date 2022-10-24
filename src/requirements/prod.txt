@@ -2,3 +2,5 @@
 -r base.txt
 
 # Add production extra requirements here
+django-storages[azure]
+django-cors-headers==3.13.0

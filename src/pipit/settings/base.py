@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "wagtail_meta_preview",
     "wagtail_headless_preview",
     "rest_framework",
+    "corsheaders",
     # Project specific apps
     "pipit",
     "sitesettings",
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

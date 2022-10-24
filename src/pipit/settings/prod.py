@@ -12,6 +12,10 @@ DEBUG = False
 
 DATABASES["default"]["CONN_MAX_AGE"] = get_env("DATABASE_CONN_MAX_AGE", default=60)
 
+CSRF_TRUSTED_ORIGINS = [
+    get_env("DOMAIN_HOST"),
+]
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
@@ -27,9 +31,10 @@ CACHES = {
     },
 }
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"  # NOQA
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"  # NOQA
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-DEFAULT_FILE_STORAGE = "backend.custom_azure.AzureMediaStorage"
+DEFAULT_FILE_STORAGE = "pipit.storages.AzureMediaStorage"
 MEDIA_LOCATION = "media"
 
 AZURE_ACCOUNT_NAME = get_env("AZURE_ACCOUNT_NAME")

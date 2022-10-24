@@ -27,9 +27,10 @@ RUN apk update \
 RUN pip install pip --upgrade
 ADD requirements $APP_HOME/requirements
 RUN pip install -r ./requirements/prod.txt
+RUN pip install gunicorn
 
 # Copy production entrypoint
-COPY docker-entrypoint.sh $APP_HOME
+COPY docker-entrypoint.prod.sh $APP_HOME
 
 # Copy project
 COPY . $APP_HOME
@@ -41,4 +42,4 @@ RUN chown -R app:app $APP_HOME
 USER app
 
 # Run entrypoint.prod.sh
-ENTRYPOINT ["sh", "docker-entrypoint.sh", "uwsgi"]
+ENTRYPOINT ["sh", "docker-entrypoint.prod.sh", "gunicorn"]

@@ -5,13 +5,12 @@ services:
     build:
       context: ./docker
     ports:
-      - "8000:80"
-      - "8082:443"
+      - "80:80"
     depends_on:
       - python
     volumes:
-      - media-files:/app/media"
-      - static-files:/app/static"
+      - media-files:/app/media
+      - static-files:/app/static
     environment:
       - PYTHON_HOST=http://python
       - NEXT_HOST=http://next
@@ -24,8 +23,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.prod
-    ports:
-      - "3000:3000"
+    expose:
+      - 3000
     depends_on:
       - web
 
@@ -34,20 +33,20 @@ services:
     build:
       context: ./src
       dockerfile: Dockerfile.prod
+    expose:
+      - 8000
     volumes:
       - static-files:/home/app/web/static
 
 volumes:
   static-files:
-  media-files:
-  # static-files:
-  #   driver: azure_file
-  #   driver_opts:
-  #     share_name: holon-webapp-static-files
-  #     storage_account_name: holonstorage
+    driver: azure_file
+    driver_opts:
+      share_name: holon-webapp-static-files
+      storage_account_name: holonstorage
 
-  # media-files:
-  #   driver: azure_file
-  #   driver_opts:
-  #     share_name: holon-webapp-media-files
-  #     storage_account_name: holonstorage
+  media-files:
+    driver: azure_file
+    driver_opts:
+      share_name: holon-webapp-media-files
+      storage_account_name: holonstorage

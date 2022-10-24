@@ -41,6 +41,7 @@ docker-compose.override.yml
 # Environment
 src/.env
 src/.env.local
+src/.env.prod
 
 # Static folder
 src/static
