@@ -17,11 +17,7 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
-name: Build and deploy Python app to Azure Web App
-
-env:
-  AZURE_WEBAPP_NAME: wagtail         # set this to the name of your Azure Web App
-  PYTHON_VERSION: '3.9'              # set this to the Python version to use
+name: Build and push all docker images to azure registry
 
 on:
   push:
@@ -46,9 +42,9 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build ./src/Dockerfile.prod -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
+        docker build ./src -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }} Dockerfile.prod
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
-        docker build ./frontend/Dockerfile.prod -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }}
+        docker build ./frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }} Dockerfile.prod
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }}
         docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
