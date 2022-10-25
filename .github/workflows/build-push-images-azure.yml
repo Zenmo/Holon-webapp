@@ -21,7 +21,9 @@ name: Build and push all docker images to azure registry
 
 on:
   push:
-    branches: [ "113-wagtail-and-nextjs-are-automatically-deployed" ]
+    branches:
+      - main
+      - production
   workflow_dispatch:
 
 permissions:
