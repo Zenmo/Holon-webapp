@@ -6,6 +6,8 @@ from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
 
+from api.models.scenario import Scenario
+
 
 from .base import BasePage
 from ..blocks import TextAndMediaBlock, StorylineSectionBlock
@@ -13,7 +15,7 @@ from ..blocks import TextAndMediaBlock, StorylineSectionBlock
 
 class StorylinePage(HeadlessPreviewMixin, BasePage):
     scenario = models.ForeignKey(
-        "api.Scenario",
+        Scenario,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
