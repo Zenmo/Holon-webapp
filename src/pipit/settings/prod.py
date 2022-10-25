@@ -74,17 +74,31 @@ SESSION_COOKIE_SECURE = True
 # Use a secure cookie for the CSRF cookie
 CSRF_COOKIE_SECURE = True
 
-# Sentry
-# SENTRY_DSN = get_env("SENTRY_DSN")
-# SENTRY_ENVIRONMENT = "prod"
-
-# sentry_sdk.init(
-#     dsn=SENTRY_DSN,
-#     release=APP_VERSION,
-#     environment=SENTRY_ENVIRONMENT,
-#     integrations=[DjangoIntegration()],
-# )
-
-# # Add sentry to logging
-# with configure_scope() as scope:
-#     scope.level = "error"
+# Log to console to get logging output from docker
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": {
+        "verbose": {
+            "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "WARNING"),
+        },
+    },
+}
