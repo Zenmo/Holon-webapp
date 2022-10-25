@@ -4,7 +4,14 @@ from pipit.settings import get_env
 
 
 class AzureMediaStorage(AzureStorage):
-    account_name = get_env("AZURE_ACCOUNT_NAME")  # Must be replaced by your <storage_account_name>
-    account_key = get_env("AZURE_STORAGE_KEY")  # Must be replaced by your <storage_account_key>
+    account_name = get_env("AZURE_ACCOUNT_NAME")
+    account_key = get_env("AZURE_STORAGE_KEY")
     azure_container = "media"
+    expiration_secs = None
+
+
+class AzureStaticStorage(AzureStorage):
+    account_name = get_env("AZURE_ACCOUNT_NAME")
+    account_key = get_env("AZURE_STORAGE_KEY")
+    azure_container = "static"
     expiration_secs = None

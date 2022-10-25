@@ -31,14 +31,18 @@ CACHES = {
     },
 }
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"  # NOQA
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+STATICFILES_STORAGE = "pipit.storages.AzureStaticStorage"
 DEFAULT_FILE_STORAGE = "pipit.storages.AzureMediaStorage"
+
+STATIC_LOCATION = "static"
 MEDIA_LOCATION = "media"
 
 AZURE_ACCOUNT_NAME = get_env("AZURE_ACCOUNT_NAME")
 AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
+
+STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
 MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
 
 # Enable caching of templates in production environment
