@@ -30,10 +30,10 @@
   width: 40%;
 }
 
-.storyline__card[data-cardtype="Wiki"] {
+.storyline__card {
   background-color: #f1effd;
 }
-.storyline__card[data-cardtype="Wiki"] .storyline__card__icon {
+.storyline__card .storyline__card__icon {
   color: blue;
 }
 .storyline__card[data-cardtype="Stories"] {
