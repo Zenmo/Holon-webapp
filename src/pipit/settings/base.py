@@ -129,10 +129,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # NOQA
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },  # NOQA
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},  # NOQA
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},  # NOQA
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},  # NOQA
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },  # NOQA
 ]
 
 

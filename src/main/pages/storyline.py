@@ -25,7 +25,10 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
             ("text_and_media", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
         ],
-        block_counts={"text_and_media": {"min_num": 1, "max_num": 1}, "section": {"min_num": 1}},
+        block_counts={
+            "text_and_media": {"min_num": 1, "max_num": 1},
+            "section": {"min_num": 1},
+        },
         use_json_field=True,
     )
 
