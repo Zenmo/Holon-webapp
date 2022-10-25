@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="customimage",
             name="file_hash",
-            field=models.CharField(
-                blank=True, db_index=True, editable=False, max_length=40
-            ),
+            field=models.CharField(blank=True, db_index=True, editable=False, max_length=40),
         ),
     ]

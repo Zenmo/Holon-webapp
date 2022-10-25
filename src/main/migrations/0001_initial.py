@@ -88,9 +88,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "canonical_link",
-                    models.URLField(
-                        blank=True, null=True, verbose_name="Canonical link"
-                    ),
+                    models.URLField(blank=True, null=True, verbose_name="Canonical link"),
                 ),
             ],
             options={
@@ -114,9 +112,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "rich_text",
-                    wagtail.fields.RichTextField(
-                        blank=True, null=True, verbose_name="Rich text"
-                    ),
+                    wagtail.fields.RichTextField(blank=True, null=True, verbose_name="Rich text"),
                 ),
             ],
             options={
