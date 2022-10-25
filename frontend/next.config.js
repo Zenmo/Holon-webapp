@@ -37,4 +37,4 @@ const withSvgr = (nextConfig = {}) => {
 //     enabled: process.env.ANALYZE === 'true',
 // });
 
-export default withSvgr(nextConfig);
+module.exports = withSvgr(nextConfig);
