@@ -12,8 +12,27 @@ defaults:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: localhost # default host value for the database
+      POSTGRES_DB: djtesting
+      POSTGRES_PORT: 5432
+    services:
+      postgres_main:
+        image: postgres:12
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
     strategy:
       max-parallel: 4
       matrix:
@@ -28,7 +47,7 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements/prod.txt
+        pip install -r requirements/test.txt
     - name: Lint with Flake8
       uses: psf/black@stable
       with:
@@ -38,3 +57,4 @@ jobs:
         python manage.py test
       env:
         DJANGO_SETTINGS_MODULE: pipit.settings.test
+        SECRET_KEY: some-test-key-not-good-for-prod
