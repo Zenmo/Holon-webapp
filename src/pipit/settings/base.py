@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "wagtail_meta_preview",
     "wagtail_headless_preview",
     "rest_framework",
+    "corsheaders",
     # Project specific apps
     "pipit",
     "sitesettings",
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -127,10 +129,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # NOQA
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },  # NOQA
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},  # NOQA
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},  # NOQA
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},  # NOQA
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },  # NOQA
 ]
 
 

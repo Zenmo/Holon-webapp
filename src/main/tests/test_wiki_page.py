@@ -25,7 +25,13 @@ class WikiPageTest(WagtailPageTests):
         self.assertEqual("Wiki", data["component_props"]["title"])
 
     def test_that_rich_text_is_retuned(self):
-        page = WikiPageFactory.create(title="Wikipage", rich_text="This is a automated test", parent=self.root_page)
+        page = WikiPageFactory.create(
+            title="Wikipage",
+            rich_text="This is a automated test",
+            parent=self.root_page,
+        )
 
         data = page.get_component_data({})
-        self.assertEqual(data["component_props"]["rich_text"], "This is a automated test")
+        self.assertEqual(
+            data["component_props"]["rich_text"], "This is a automated test"
+        )

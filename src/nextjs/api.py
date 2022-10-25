@@ -28,6 +28,7 @@ api_router = WagtailAPIRouter("nextjs")
 # Default pages functionality of WagTail
 api_router.register_endpoint("pages", PagesAPIViewSet)
 
+
 class PageRelativeUrlListSerializer(serializers.Serializer):
     def to_representation(self, obj):
         return {
@@ -53,7 +54,9 @@ api_router.register_endpoint("page_relative_urls", PageRelativeUrlListAPIViewSet
 
 
 class PagePreviewAPIViewSet(BaseAPIViewSet):
-    known_query_parameters = PagesAPIViewSet.known_query_parameters.union(["content_type", "token"])
+    known_query_parameters = PagesAPIViewSet.known_query_parameters.union(
+        ["content_type", "token"]
+    )
 
     def listing_view(self, request):
         page = self.get_object()
@@ -99,7 +102,9 @@ class PasswordProtectedPageViewSet(BaseAPIViewSet):
 
     @method_decorator(csrf_protect)
     def detail_view(self, request, page_view_restriction_id=None, page_id=None):
-        restriction = get_object_or_404(PageViewRestriction, id=page_view_restriction_id)
+        restriction = get_object_or_404(
+            PageViewRestriction, id=page_view_restriction_id
+        )
         page = get_object_or_404(Page, id=page_id).specific
 
         post = request.data.copy()
