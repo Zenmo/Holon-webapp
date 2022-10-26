@@ -1,14 +1,21 @@
-import { render, /* screen */ } from '@testing-library/react';
-import WikiPage from './';
+import { render } from "@testing-library/react";
+import WikiPage from "./";
+import { useRouter } from "next/router";
 // import data from './WikiPage.data';
 
-describe('<WikiPage />', () => {
-    it('Renders an empty WikiPage', () => {
-        render(<WikiPage />);
-    });
+jest.mock("next/router", () => ({
+  useRouter: () => ({
+    query: { path: "wiki" },
+  }),
+}));
 
-    // it('Renders WikiPage with data', () => {
-    //     const { container } = render(<WikiPage {...data} />);
-    //     expect(container).toMatchSnapshot();
-    // });
+describe("<WikiPage />", () => {
+  it("Renders an empty WikiPage", () => {
+    render(<WikiPage />);
+  });
+
+  // it('Renders WikiPage with data', () => {
+  //     const { container } = render(<WikiPage {...data} />);
+  //     expect(container).toMatchSnapshot();
+  // });
 });
