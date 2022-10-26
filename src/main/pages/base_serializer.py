@@ -13,12 +13,8 @@ from . import BasePage
 
 
 class BasePageSerializer(serializers.ModelSerializer):
-    serializer_field_mapping = (
-        serializers.ModelSerializer.serializer_field_mapping.copy()
-    )
-    serializer_field_mapping.update(
-        {fields.StreamField: wagtail_serializers.StreamField}
-    )
+    serializer_field_mapping = serializers.ModelSerializer.serializer_field_mapping.copy()
+    serializer_field_mapping.update({fields.StreamField: wagtail_serializers.StreamField})
 
     seo = serializers.SerializerMethodField()
     site_setting = serializers.SerializerMethodField()
@@ -27,13 +23,14 @@ class BasePageSerializer(serializers.ModelSerializer):
     class Meta:
         model = BasePage
         fields: List[str] = [
+            "id",
             "title",
             "last_published_at",
             "seo_title",
             "search_description",
             "seo",
             "site_setting",
-            "wagtail_userbar",
+            # "wagtail_userbar",
         ]
 
     def get_seo(self, page):
@@ -52,7 +49,7 @@ class BasePageSerializer(serializers.ModelSerializer):
             return None
 
         html = wagtailuserbar({"request": request, "self": page})
-        html = re.sub(r'<script.+?</script>', '', html, flags=re.DOTALL)
+        html = re.sub(r"<script.+?</script>", "", html, flags=re.DOTALL)
 
         if not html:
             return None

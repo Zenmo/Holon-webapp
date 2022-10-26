@@ -21,15 +21,16 @@
         "@heroicons/react": "^2.0.11",
         "@types/react": "^18.0.15",
         "classnames": "^2.3.1",
+        "i": "^0.3.7",
         "i18next": "^21.8.5",
         "next": "12.3.0",
-        "next-compose-plugins": "^2.2.1",
         "parameterize": "^1.0.0",
         "prop-types": "^15.8.1",
         "react": "18.2.0",
         "react-cookie-consent": "^8.0.1",
         "react-dom": "18.2.0",
         "react-ga": "^3.3.1",
+        "react-player": "^2.11.0",
         "rehype-parse": "^8.0.4",
         "rehype-stringify": "^9.0.3",
         "unified": "^10.1.2",
@@ -56,6 +57,7 @@
     "devDependencies": {
         "@babel/core": "^7.17.10",
         "@storybook/addon-a11y": "^6.4.22",
+        "@storybook/addon-postcss": "^2.0.0",
         "@storybook/addon-viewport": "^6.4.22",
         "@storybook/addons": "^6.4.22",
         "@storybook/builder-webpack5": "^6.4.22",
@@ -84,7 +86,9 @@
         "postcss": "^8.4.14",
         "prettier": "^2.7.1",
         "pretty-quick": "^3.1.3",
+        "storybook-addon-next": "^1.6.9",
         "style-loader": "^3.3.1",
-        "tailwindcss": "^3.1.8"
+        "tailwindcss": "^3.1.8",
+        "tsconfig-paths-webpack-plugin": "^4.0.0"
     }
 }
