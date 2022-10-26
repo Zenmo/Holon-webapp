@@ -28,7 +28,7 @@ from wagtail_headless_preview.models import PagePreview
 api_router = WagtailAPIRouter("nextjs")
 
 # Default pages functionality of WagTail
-class PagesSerializer(serializers.Serializer):
+class PagesSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         resultDict = model_to_dict(instance)
         representation = super().to_representation(instance)
@@ -43,8 +43,12 @@ class PagesSerializer(serializers.Serializer):
 
 
 class PagesListAPIViewSet(PagesAPIViewSet):
-    def get_serializer(self, qs, many=True):
-        return PagesSerializer(qs, many=many)
+    known_query_parameters = BaseAPIViewSet.known_query_parameters.union(["type"])
+
+    def get_serializer_class(self):
+        path = self.request.GET.get("type", None)
+        if path == "main.StorylinePage":
+            return PagesSerializer(many=True)
 
 
 api_router.register_endpoint("pages", PagesListAPIViewSet)
@@ -157,7 +161,7 @@ api_router.register_endpoint("password_protected_page", PasswordProtectedPageVie
 
 
 class PageByPathAPIViewSet(BaseAPIViewSet):
-    known_query_parameters = BaseAPIViewSet.known_query_parameters.union(["html_path"])
+    known_query_parameters = BaseAPIViewSet.known_query_parameters.union(["type"])
 
     def listing_view(self, request):
         page, args, kwargs = self.get_object()

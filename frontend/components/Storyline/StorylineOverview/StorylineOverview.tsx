@@ -2,9 +2,11 @@ import { useState } from "react";
 import StorylineOverviewCard from "./StorylineOverviewCard";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
-export default function StorylineOverview({ storylines }) {
+export default function StorylineOverview({ storylines, allInformationTypes, allRoles }) {
+  console.log(storylines);
+  console.log(allInformationTypes);
   //const uniqueRoles = [...new Set(config.map((item) => item.b))];
-  const roleArray = [...new Set(storylines.items.map(item => item.role))];
+  const roleArray = [...new Set(allRoles.map(item => item.name))];
   const uniqueRoles = [...new Set(roleArray.reduce((o, c) => o.concat(c), []))];
 
   const informationArray = [...new Set(storylines.items.map(item => item.informationtype))];
@@ -30,9 +32,10 @@ export default function StorylineOverview({ storylines }) {
   };
 
   const filteredProjects = storylines.items
-    .filter(project =>
-      selectedRoles.length > 0 ? selectedRoles.some(r => project.role.indexOf(r) >= 0) : project
-    )
+    .filter(project => {
+      console.log(project);
+      selectedRoles.length > 0 ? selectedRoles.some(r => project.role.indexOf(r) >= 0) : project;
+    })
     .filter(project =>
       selectedInformation.length > 0
         ? selectedInformation.some(r => project.informationtype.indexOf(r) >= 0)
@@ -80,9 +83,9 @@ export default function StorylineOverview({ storylines }) {
         </div>
 
         <div className="flex flex-row flex-wrap storyline__grid">
-          {filteredProjects.map((project, index) => (
+          {/* {filteredProjects.map((project, index) => (
             <StorylineOverviewCard key={index} index={index} project={project} />
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
