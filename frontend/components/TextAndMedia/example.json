@@ -1,0 +1,24 @@
+{
+  "id": 7,
+  "meta": {
+    "type": "main.StorylinePage",
+    "detail_url": "http://localhost/wt/api/nextjs/v1/pages/7/",
+    "html_url": "http://localhost/test-video-pagina/",
+    "slug": "test-video-pagina",
+    "show_in_menus": true,
+    "seo_title": "",
+    "search_description": "",
+    "first_published_at": "2022-10-25T10:32:50.600359+02:00",
+    "alias_of": null,
+    "parent": {
+      "id": 3,
+      "meta": {
+        "type": "main.HomePage",
+        "detail_url": "http://localhost/wt/api/nextjs/v1/pages/3/",
+        "html_url": "http://localhost/"
+      },
+      "title": "Home Page Holon"
+    }
+  },
+  "title": "Test video pagina"
+}

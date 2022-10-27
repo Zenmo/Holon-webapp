@@ -1,26 +1,39 @@
 import React from "react";
 
 import { basePageWrap } from "../BasePage";
-import Header from "../../components/Header/Header";
-import IntroductionVideo from "../../components/IntroductionVideo/IntroductionVideo";
-import HolonButton from "../../components/Buttons/HolonButton";
-import TextBlock from "../../components/TextBlocks/TextBlock";
-import ContentBlock from "../../components/ContentBlock/ContentBlock";
-import Scenarios from "../../components/Scenarios/Scenarios";
-import FeedbackBlock from "../../components/FeedbackBlock/FeedbackBlock";
+import Header from "@/components/VersionOne/Header/Header";
+import IntroductionVideo from "@/components/VersionOne//IntroductionVideo/IntroductionVideo";
+import HolonButton from "@/components/VersionOne//Buttons/HolonButton";
+import TextBlock from "@/components/VersionOne//TextBlocks/TextBlock";
+import ContentBlock from "@/components/VersionOne//ContentBlock/ContentBlock";
+import Scenarios from "@/components/VersionOne//Scenarios/Scenarios";
+import FeedbackBlock from "@/components/VersionOne//FeedbackBlock/FeedbackBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 import exampleTitleBlock from "../../components/Blocks/TitleBlock/exampleTitleBlock.json";
 import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
 import exampleHeroBlock from "../../components/Blocks/HeroBlock/exampleHeroBlock.json";
+import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
+import example from "../../components/TextAndMedia/example.json";
 
-const HomePage = () => {
+export type Title = {
+  type: string;
+  value: {
+    block_background: {
+      select_background: string;
+    };
+    title: string;
+    size: string;
+    text: string;
+  };
+  id: string;
+};
+
+const HomePage = ({ body }: { body: Title[] }) => {
   return (
     <main className="h-screen snap-y snap-mandatory overflow-y-auto">
       <Header />
 
-      <ContentBlock colorClass="bg-holon-blue-900" id="introVideo">
-        <IntroductionVideo />
-      </ContentBlock>
+      <ContentBlock colorClass="bg-holon-blue-900" id="introVideo"></ContentBlock>
 
       <ContentBlock>
         <TitleBlock data={exampleTitleBlock}></TitleBlock>

@@ -6,8 +6,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: InterVariable, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 * {
@@ -21,7 +20,21 @@ a {
 
 @layer base {
   body {
-    @apply text-sm;
+    @apply text-sm text-holon-blue-900;
+  }
+
+  h1 {
+    @apply text-3xl lg:text-5xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl lg:text-3xl font-semibold;
+  }
+
+  h3,
+  h4,
+  h5 {
+    @apply text-2xl font-semibold;
   }
 }
 

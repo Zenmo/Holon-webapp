@@ -40,9 +40,7 @@ export default function HeroBlock(props: Props) {
       <div className="flex flex-col mx-8">
         <div className={`flex flex-col lg:flex-row ${backgroundcolor}`}>
           <div className="flex flex-col p-8 lg:w-1/2 lg:mt-16">
-            <h1
-              dangerouslySetInnerHTML={{ __html: props.data.value.title }}
-              className={`text-5xl font-bold`}></h1>
+            <h1 dangerouslySetInnerHTML={{ __html: props.data.value.title }} className={``}></h1>
             <div
               dangerouslySetInnerHTML={{ __html: props.data.value.text }}
               className={`text-3xl font-semibold mt-8 mr-8`}></div>
@@ -59,7 +57,7 @@ export default function HeroBlock(props: Props) {
 
         <div className="flex flex-row justify-center relative">
           <Link href="#start">
-            <a className="bg-violet-50 w-12 h-12 absolute top-[-7rem] rounded-full p-2">
+            <a className="bg-holon-purple-100 w-12 h-12 absolute top-[-7rem] rounded-full p-2">
               <ArrowDownIcon />
             </a>
           </Link>

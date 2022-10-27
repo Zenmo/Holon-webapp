@@ -1,30 +1,16 @@
-type Props = {
-  data: {
-    type: string;
-    value: {
-      block_background: {
-        select_background: string;
-      };
-      title: string;
-      size: string;
-      text: string;
-    };
-    id: string;
-  };
-};
+import RawHtml from "../../RawHtml/RawHtml";
 
-export default function TitleBlock(props: Props) {
-  let backgroundcolor = props.data.value.block_background.select_background;
-  let color = "";
-  let Tag = props.data.value.size;
+export default function TitleBlock({ data }) {
+  let backgroundcolor = data.value.block_background.select_background;
+  let Tag = data.value.size;
 
   return (
-    <div className={`flex flex-row w-full h-fit py-12 px-[20%] lg:pt-16 ${backgroundcolor}`}>
-      <div className={`flex flex-col justify-start ${color}`}>
-        <Tag className={`text-2xl lg:text-3xl font-semibold`}>{props.data.value.title}</Tag>
-        <div
-          dangerouslySetInnerHTML={{ __html: props.data.value.text }}
-          className="text-lg lg:text-xl"></div>
+    <div className={`flex flex-row w-full h-fit py-12 px-10 lg:px-16 lg:pt-16 ${backgroundcolor}`}>
+      <div className={`flex flex-col justify-start lg:mr-[40%]`}>
+        <Tag className={``}>{data.value.title}</Tag>
+        <div className="mt-6">
+          <RawHtml html={data.value?.text} />
+        </div>
       </div>
     </div>
   );

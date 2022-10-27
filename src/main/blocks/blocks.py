@@ -16,18 +16,13 @@ class ImageChooserBlock(DefaultImageChooserBlock):
                 'img': value.get_rendition('width-2280').attrs_dict,
             }
 
-class BackgroundSelectorComponent(StructBlock):
-    select_background = ChoiceBlock(choices=[
-        ('', 'Default color'),
-        ('bg-purple-100', 'prime color'),
-        ('bg-violet-500', 'soft color'),
-       
-    ], required=False)
-
-
 class ButtonComponent(StructBlock): 
 
-    button_color = BackgroundSelectorComponent()
+    button_style = ChoiceBlock(choices=[
+        ("", 'Default button style'), 
+        ('btn-dark', 'dark'), 
+        ('btn-light', 'light')
+    ], blank=True, required=False)
 
     button_size = ChoiceBlock(choices=[
         ('', 'Default button size'),
@@ -78,6 +73,12 @@ class CardsBlock(StructBlock):
 
     cards = ListBlock(CardComponent())
 
+    card_background = ChoiceBlock(choices=[
+        ('', 'Default color'),
+        ('bg-holon-gray-100', 'Pale gray'),
+        ('bg-holon-purple-100', 'Pale purple'),
+    ], required=False)
+
     button = ButtonComponent()
 
     class Meta:
@@ -90,11 +91,17 @@ class HeroBlock(StructBlock):
     Custom block to select include hero with title, text and image
     """
 
-    block_background = BackgroundSelectorComponent()
+    block_background = ChoiceBlock(choices=[
+        ('', 'Default color'),
+        ('bg-holon-gray-100', 'Pale gray'),
+        ('bg-holon-purple-100', 'Pale purple'),
+       
+    ], required=False)
 
     title = CharBlock(classname="title", required=True)
     text = RichTextBlock(required=True)
     image_selector = MandatoryImageComponent()
+    button = ButtonComponent()
 
 
     class Meta:
@@ -105,7 +112,7 @@ class TextImageBlock(StructBlock):
     """
     Custom block to include text with image
     """
-    block_background = BackgroundSelectorComponent()
+    
 
     image_selector = MandatoryImageComponent()
 
@@ -129,23 +136,26 @@ class TitleBlock(StructBlock):
     """
     Custom block to create title blocks
     """
-    block_background = BackgroundSelectorComponent(required=False)
+    card_background = ChoiceBlock(choices=[
+        ('', 'Default color'),
+        ('bg-holon-gray-100', 'Pale gray'),
+        ('bg-holon-purple-100', 'Pale purple'),
+    ], required=False)
+    
     title = CharBlock(required=True)
     size = ChoiceBlock(choices=[
         ('', 'Select header size'),
         ('h2', 'H2'),
         ('h3', 'H3'),
-        ('h4', 'H4'),
-        ('h5', 'H5')
     ], blank=True, required=False)
     text = RichTextBlock(required=False)
 
     class Meta:
-        icon = 'image'
+        icon = 'edit'
         template = 'blocks/title_block.html'
 
 class TextVideoBlock(StructBlock): 
-    block_background = BackgroundSelectorComponent(required=False)
+ 
     title = CharBlock(required=True)
     size = ChoiceBlock(choices=[
         ('', 'Select header size'),
@@ -162,7 +172,7 @@ class TextVideoBlock(StructBlock):
         icon = 'image'
         template = 'blocks/text_video_block.html'
 
-class BaseStreamBlock(StreamBlock):
+class HomepageBlock(StreamBlock):
 
     required = False
     title_block = TitleBlock()
@@ -170,5 +180,4 @@ class BaseStreamBlock(StreamBlock):
     text_image_block = TextImageBlock()
     card_block = CardsBlock()
     text_video_block = TextVideoBlock()
-    
-   
+
