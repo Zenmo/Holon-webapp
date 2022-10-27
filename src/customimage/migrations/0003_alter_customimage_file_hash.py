@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('customimage', '0002_customimage_file_hash'),
+        ("customimage", "0002_customimage_file_hash"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='customimage',
-            name='file_hash',
+            model_name="customimage",
+            name="file_hash",
             field=models.CharField(blank=True, db_index=True, editable=False, max_length=40),
         ),
     ]

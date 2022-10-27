@@ -12,7 +12,7 @@ export default {
 } as ComponentMeta<typeof IntroductionVideo>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof IntroductionVideo> = args => <IntroductionVideo />;
+const Template: ComponentStory<typeof IntroductionVideo> = () => <IntroductionVideo />;
 
 export const Default = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args

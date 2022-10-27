@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // //http://localhost:8000/wt/api/nextjs/v1/pages/?type=main.ScenarioPage&fields=scenariotitle,description,role,informationtype&limit=10&child_of=7
 import config from "./exampledata.json";
 import StorylineOverviewCard from "./StorylineOverviewCard";

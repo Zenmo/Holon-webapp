@@ -2,3 +2,4 @@
 -r base.txt
 
 # Add production extra requirements here
+django-storages[azure]

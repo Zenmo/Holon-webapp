@@ -1,9 +1,10 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 interface Props {
   title: string;
   name: string;
   items: Array<string>;
   selectedItems: Array<string>;
-  update: (params: any) => any;
+  update: (params) => any;
 }
 
 export default function StorylineOverviewFilter({

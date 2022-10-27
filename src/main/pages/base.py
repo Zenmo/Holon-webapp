@@ -74,8 +74,6 @@ class BasePage(EnhancedEditHandlerMixin, SeoMixin, Page):
         preview_url = (
             preview_url
             + "&"
-            + urllib.parse.urlencode({
-                "host": f"{self.get_site().hostname}:{self.get_site().port}"
-            })
+            + urllib.parse.urlencode({"host": f"{self.get_site().hostname}:{self.get_site().port}"})
         )
         return preview_url
