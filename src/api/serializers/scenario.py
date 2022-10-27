@@ -1,12 +1,12 @@
 """ Serializer for the Slider """
 from rest_framework import serializers
 
-from api.models.slider import Slider
+from api.models.scenario import Scenario
 
 
-class SliderSerializer(serializers.ModelSerializer):
+class ScenarioSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
 
     class Meta:
-        model = Slider
+        model = Scenario
         fields = ["id", "name"]

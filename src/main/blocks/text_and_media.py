@@ -35,6 +35,7 @@ class TextAndMediaBlock(blocks.StructBlock):
     def get_api_representation(self, value, context=None):
         """Recursively call get_api_representation on children and return as a plain dict"""
         dict_list = []
+        # TODO change to switch to handle image or video
         if value:
             for item in value["media"]:
                 temp_dict = {

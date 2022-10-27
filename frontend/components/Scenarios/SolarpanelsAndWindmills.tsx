@@ -3,12 +3,16 @@ import ImgFlatSolar from "../InteractiveImage/ImageElements/ImgFlatSolar";
 import ImageSlider from "../InteractiveImage/ImageSlider";
 
 import type { Scenario, Slider } from "@/containers/StorylinePage/StorylinePage";
+import { getHolonKPIs } from "@/api/holon";
 
 type Props = {
   data: Scenario;
 };
 
+const SLIDER_DELAY_MILISECONDS = 1000;
+
 export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
+  const [sliderValues, setSliderValues] = useState<{ id: number; value: number }[]>([]);
   const [solarpanels, setSolarpanels] = useState<number>(0);
   const [solarpanelsProperties, setSolarpanelsProperties] = useState<Slider>({});
   const [windmills, setWindmills] = useState<number>(0);
@@ -18,24 +22,60 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
     setScenarioData(scenario.value.content);
   }, [scenario]);
 
+  useEffect(() => {
+    console.log(sliderValues);
+    const timeout = setTimeout(() => {
+      getHolonKPIs({
+        scenario: {
+          id: 1,
+        },
+        sliders: sliderValues,
+      });
+    }, SLIDER_DELAY_MILISECONDS);
+    return () => clearTimeout(timeout);
+  }, [sliderValues]);
+
+  const updateSliderValues = (id: number, value: number) => {
+    setSliderValues(
+      [...sliderValues].map(slider => {
+        if (slider.id === id) {
+          return {
+            ...slider,
+            value: value,
+          };
+        } else return slider;
+      })
+    );
+  };
+
+  const addSliderValue = (id: number, defaultValue: number = 0) => {
+    if (sliderValues.find(slider => slider.id === id)) return;
+
+    setSliderValues([
+      ...sliderValues,
+      {
+        id: id,
+        value: defaultValue,
+      },
+    ]);
+  };
+
   const setScenarioData = (scenarios: Slider[]) => {
     scenarios.map((scenario: Slider) => {
       if (scenario.type === "slider") {
         switch (scenario.value.tag) {
           case "solar":
             setSolarpanelsProperties(scenario);
-            setSolarpanels(
+            addSliderValue(
+              scenario.value.id,
               scenario?.value.sliderValueMin && scenario?.value.sliderValueDefault
-                ? scenario?.value.sliderValueDefault
-                : 0
             );
             break;
           case "windmills":
             setWindmillsProperties(scenario);
-            setWindmills(
+            addSliderValue(
+              scenario.value.id,
               scenario?.value.sliderValueMin && scenario?.value.sliderValueDefault
-                ? scenario?.value.sliderValueDefault
-                : 0
             );
             break;
           default:
@@ -56,8 +96,8 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
         <ImageSlider
           inputId="zonnepanelen_flat"
           datatestid="zonnepanelen_flat"
-          value={solarpanels}
-          setValue={setSolarpanels}
+          value={sliderValues.solar}
+          setValue={value => updateSliderValues(1, value)}
           min={solarpanelsProperties.value?.sliderValueMin}
           max={solarpanelsProperties.value?.sliderValueMax}
           step={1}
@@ -70,8 +110,8 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
           <ImageSlider
             inputId="windmills_flat"
             datatestid="windmills_flat"
-            value={windmills}
-            setValue={setWindmills}
+            value={sliderValues.windmills}
+            setValue={value => updateSliderValues(2, value)}
             min={windmillsProperties.value?.sliderValueMin}
             max={windmillsProperties.value?.sliderValueMax}
             step={1}
@@ -84,8 +124,8 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
       </div>
       <div
         className="flex flex-col lg:w-2/3"
-        data-solarpanels={solarpanels}
-        data-windmills={windmills}
+        data-solarpanels={sliderValues.solar}
+        data-windmills={sliderValues.windmills}
         data-windforce={3}>
         <div className="storyline__row__image lg:sticky top-0 p-8">
           <ImgFlatSolar></ImgFlatSolar>

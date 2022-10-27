@@ -16,6 +16,10 @@ let nextConfig = {
         source: "/wt/static/:path*",
         destination: "http://localhost:8000/wt/static/:path*", // Proxy to Backend
       },
+      {
+        source: `${process.env.NEXT_PUBLIC_WAGTAIL_API_URL}/:path*`,
+        destination: `http://localhost:8000/${process.env.NEXT_PUBLIC_WAGTAIL_API_URL}/:path*/`, // Proxy to Backend
+      },
     ];
   },
 };

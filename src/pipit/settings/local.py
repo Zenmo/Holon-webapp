@@ -9,6 +9,8 @@ VS_CODE_REMOTE_DEBUG = get_env_bool("VS_CODE_REMOTE_DEBUG", default=False)
 DEBUG = True
 TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG  # type: ignore[index]
 
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Allow weak local passwords
