@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { BoltIcon, InformationCircleIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import RawHtml from "../RawHtml";
 
