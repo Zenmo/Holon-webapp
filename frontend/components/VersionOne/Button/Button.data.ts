@@ -1,6 +1,9 @@
-export default {
-  text: "Button text",
-  onClick: function () {
-    console.log("clicked");
-  },
-};
+function stories() {
+  return {
+    text: "Button text",
+    onClick: function () {
+      console.log("clicked");
+    },
+  }
+}
+export default stories

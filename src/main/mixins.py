@@ -35,12 +35,14 @@ class RedirectUpMixin:
 
     def serve(self, request, *args, **kwargs):
         parent = self.get_parent()
-        return JsonResponse({
-            "redirect": {
-                "destination": parent.url,
-                "is_permanent": False,
+        return JsonResponse(
+            {
+                "redirect": {
+                    "destination": parent.url,
+                    "is_permanent": False,
+                }
             }
-        })
+        )
 
 
 class SeoMixin(Page):
@@ -111,9 +113,7 @@ class SeoMixin(Page):
         help_text=_("Check to add nofollow to robots"),
     )
 
-    canonical_link = models.URLField(
-        blank=True, null=True, verbose_name=_("Canonical link")
-    )
+    canonical_link = models.URLField(blank=True, null=True, verbose_name=_("Canonical link"))
 
     promote_panels = [
         FieldPanel("slug"),
@@ -254,15 +254,11 @@ class EnhancedEditHandlerMixin:
                 tabs.append(ObjectList(getattr(cls, panel_id), heading=heading))
 
         if cls.promote_panels:
-            tabs.append(
-                ObjectList(cls.promote_panels, heading=_("SEO"), classname="seo")
-            )
+            tabs.append(ObjectList(cls.promote_panels, heading=_("SEO"), classname="seo"))
 
         if cls.settings_panels:
             tabs.append(
-                ObjectList(
-                    cls.settings_panels, heading=_("Settings"), classname="settings"
-                )
+                ObjectList(cls.settings_panels, heading=_("Settings"), classname="settings")
             )
 
         EditHandler = TabbedInterface(tabs, base_form_class=cls.base_form_class)
@@ -296,7 +292,8 @@ class ReactViewMixin(object):
     def to_dict(self, context: Dict[Any, Any]) -> Dict[str, Any]:
         serializer_cls = self.get_serializer_class()
         serializer = serializer_cls(
-            self.get_component_props(), context=context,
+            self.get_component_props(),
+            context=context,
         )
 
         return serializer.data

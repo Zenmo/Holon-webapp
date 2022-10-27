@@ -8,4 +8,3 @@ class WikiPageSerializer(BasePageSerializer):
         fields = [
             "rich_text",
         ] + BasePageSerializer.Meta.fields
-

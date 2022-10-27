@@ -1,13 +1,15 @@
-/* global module */
+import React from "react";
+import Button from "./Button";
+import data from "./Button.data";
 
-import React from 'react';
-import Button from './Button';
-import data from './Button.data';
-
-export default {
-    title: 'Components/Button',
+function stories() {
+  return {
+    title: "Components/Button",
     component: Button,
-};
+  };
+}
+
+export default stories();
 
 export const ButtonWithoutData = () => <Button />;
 export const ButtonWithData = () => <Button {...data} />;

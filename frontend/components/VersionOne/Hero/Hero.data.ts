@@ -1,3 +1,7 @@
-export default {
-  title: "Hero title",
-};
+function data() {
+  return {
+    title: "Hero Title",
+  };
+}
+
+export default data;

@@ -52,8 +52,10 @@ const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
   };
 
   useEffect(() => {
-    setWikiPostsHierarchy(createWikiPostsHierarchy(wikiMenu.items));
-    setPages(wikiMenu.items);
+    setWikiPostsHierarchy(
+      createWikiPostsHierarchy(wikiMenu?.items.length > 0 ? wikiMenu.items : [])
+    );
+    setPages(wikiMenu?.items.length > 0 ? wikiMenu.items : []);
   }, [wikiMenu]);
 
   return (

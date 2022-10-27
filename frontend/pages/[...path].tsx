@@ -4,7 +4,7 @@ import LazyContainers from "../containers/LazyContainers";
 
 const isProd = process.env.NODE_ENV === "production";
 
-export default function CatchAllPage({ componentName, componentProps, wikiMenu = [] }) {
+export default function CatchAllPage({ componentName, componentProps }) {
   const Component = LazyContainers[componentName];
   if (!Component) {
     return <h1>Component {componentName} not found</h1>;
