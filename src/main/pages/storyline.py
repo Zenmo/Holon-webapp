@@ -7,8 +7,7 @@ from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.fields import StreamField
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, PageChooserPanel, InlinePanel
-from wagtail.core.models import Page
-from wagtail.api import APIField
+from api.models.scenario import Scenario
 
 from .base import BasePage
 from ..blocks import TextAndMediaBlock, StorylineSectionBlock
@@ -60,15 +59,23 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
     roles = ParentalManyToManyField(StorylinePageRoleType, blank=True)
     information_types = ParentalManyToManyField(StorylinePageInformationType, blank=True)
 
-    thumbnail = models.ImageField(
+    thumbnail = models.ForeignKey(
+        "customimage.CustomImage",
         null=True,
-        blank=False,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
     )
+
+    @property
+    def thumbnail_rendition_url(self):
+        url = self.thumbnail.get_rendition("fill-300x186|jpegquality-80")
+        return url
 
     description = models.TextField(null=True, blank=True, help_text="Description of the storyline")
 
     scenario = models.ForeignKey(
-        "api.Scenario",
+        Scenario,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,

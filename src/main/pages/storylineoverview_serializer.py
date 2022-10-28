@@ -2,26 +2,44 @@ from .base_serializer import BasePageSerializer
 from . import StorylineOverviewPage
 from rest_framework.fields import Field
 from rest_framework import serializers
-from main.pages.storyline import StorylinePageRoleType, StorylinePageInformationType
-
-# class StorylinePageCategoriesSerializer(Field):
-#     """A custom serializer used in Wagtails v2 API."""
-
-#     def to_representation(self, categories):
-#         # logic in here
-#         return_posts = []
-#         for child in categories:
-#             post_dict = {
-#                 "name": child.name,
-#                 "slug": child.slug,
-#             }
-#             return_posts.append(post_dict)
-#         return return_posts
+from main.pages.storyline import StorylinePage, StorylinePageRoleType, StorylinePageInformationType
 
 
 class StorylineOverviewPageSerializer(BasePageSerializer):
+    all_storylines = serializers.SerializerMethodField()
     all_roles = serializers.SerializerMethodField()
     all_information_types = serializers.SerializerMethodField()
+
+    def get_all_storylines(self, page):
+        all = StorylinePage.objects.all()
+        return_all_storylines = []
+        for sl in all:
+            roles_array = []
+            roles = sl.roles.all()
+            for role in roles:
+                role_dict = {"name": role.name}
+                roles_array.append(role_dict)
+
+            it_array = []
+            information_types = sl.information_types.all()
+            for it in information_types:
+                it_dict = {"name": it.name}
+                it_array.append(it_dict)
+
+            sl_dict = {
+                "title": sl.title,
+                "description": sl.description,
+                "roles": roles_array,
+                "information_types": it_array,
+                "thumbnail": {
+                    "url": sl.thumbnail_rendition_url.url,
+                    "width": sl.thumbnail_rendition_url.width,
+                    "height": sl.thumbnail_rendition_url.height,
+                },
+            }
+
+            return_all_storylines.append(sl_dict)
+        return return_all_storylines
 
     def get_all_roles(self, page):
         all = StorylinePageRoleType.objects.all()
@@ -42,6 +60,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
     class Meta:
         model = StorylineOverviewPage
         fields = [
+            "all_storylines",
             "all_roles",
             "all_information_types",
         ] + BasePageSerializer.Meta.fields

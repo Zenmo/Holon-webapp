@@ -28,31 +28,7 @@ from wagtail_headless_preview.models import PagePreview
 api_router = WagtailAPIRouter("nextjs")
 
 # Default pages functionality of WagTail
-class PagesSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        resultDict = model_to_dict(instance)
-        representation = super().to_representation(instance)
-
-        for key, value in resultDict.items():
-            if isinstance(value, str):
-                representation[key] = value
-            elif isinstance(value, ImageFieldFile):
-                representation[key] = {"url": value.url, "name": value.name}
-
-        return representation
-
-
-class PagesListAPIViewSet(PagesAPIViewSet):
-    known_query_parameters = BaseAPIViewSet.known_query_parameters.union(["type"])
-
-    def get_serializer_class(self):
-        path = self.request.GET.get("type", None)
-        if path == "main.StorylinePage":
-            return PagesSerializer(many=True)
-
-
-api_router.register_endpoint("pages", PagesListAPIViewSet)
-
+api_router.register_endpoint("pages", PagesAPIViewSet)
 
 class PageRelativeUrlListSerializer(serializers.Serializer):
     def to_representation(self, instance):
