@@ -1,15 +1,20 @@
 from rest_framework import serializers
-from api.serializers.scenario import ScenarioSerializer
-
-from api.serializers.slider import SliderSerializer
+from api.models.scenario import Scenario
+from api.models.slider import Slider
 
 
 class SliderInputSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    slider = serializers.PrimaryKeyRelatedField(queryset=Slider.objects.all())
     value = serializers.IntegerField()
-    fields = ["id", "value"]
+
+    class Meta:
+        fields = ["slider", "value"]
+        depth = 1
 
 
 class HolonRequestSerializer(serializers.Serializer):
-    scenario = ScenarioSerializer()
+    scenario = serializers.PrimaryKeyRelatedField(queryset=Scenario.objects.all())
     sliders = SliderInputSerializer(many=True)
+
+    class Meta:
+        fields = ["scenario", "sliders"]

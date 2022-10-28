@@ -12,7 +12,7 @@ type Props = {
 const SLIDER_DELAY_MILISECONDS = 1000;
 
 export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
-  const [sliderValues, setSliderValues] = useState<{ id: number; value: number }[]>([]);
+  const [sliderValues, setSliderValues] = useState<{ slider: number; value: number }[]>([]);
   const [solarpanels, setSolarpanels] = useState<number>(0);
   const [solarpanelsProperties, setSolarpanelsProperties] = useState<Slider>({});
   const [windmills, setWindmills] = useState<number>(0);
@@ -20,15 +20,12 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
 
   useEffect(() => {
     setScenarioData(scenario.value.content);
-  }, [scenario]);
+  }, []);
 
   useEffect(() => {
-    console.log(sliderValues);
     const timeout = setTimeout(() => {
       getHolonKPIs({
-        scenario: {
-          id: 1,
-        },
+        scenario: 1,
         sliders: sliderValues,
       });
     }, SLIDER_DELAY_MILISECONDS);
@@ -37,8 +34,8 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
 
   const updateSliderValues = (id: number, value: number) => {
     setSliderValues(
-      [...sliderValues].map(slider => {
-        if (slider.id === id) {
+      sliderValues.map(slider => {
+        if (slider.slider === id) {
           return {
             ...slider,
             value: value,
@@ -49,12 +46,12 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
   };
 
   const addSliderValue = (id: number, defaultValue: number = 0) => {
-    if (sliderValues.find(slider => slider.id === id)) return;
+    if (sliderValues.find(slider => slider.slider === id)) return;
 
     setSliderValues([
       ...sliderValues,
       {
-        id: id,
+        slider: id,
         value: defaultValue,
       },
     ]);
@@ -96,7 +93,7 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
         <ImageSlider
           inputId="zonnepanelen_flat"
           datatestid="zonnepanelen_flat"
-          value={sliderValues.solar}
+          value={sliderValues.find(slider => slider.slider === 1)?.value}
           setValue={value => updateSliderValues(1, value)}
           min={solarpanelsProperties.value?.sliderValueMin}
           max={solarpanelsProperties.value?.sliderValueMax}
@@ -110,7 +107,7 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
           <ImageSlider
             inputId="windmills_flat"
             datatestid="windmills_flat"
-            value={sliderValues.windmills}
+            value={sliderValues.find(slider => slider.slider === 2)?.value}
             setValue={value => updateSliderValues(2, value)}
             min={windmillsProperties.value?.sliderValueMin}
             max={windmillsProperties.value?.sliderValueMax}
@@ -124,8 +121,8 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
       </div>
       <div
         className="flex flex-col lg:w-2/3"
-        data-solarpanels={sliderValues.solar}
-        data-windmills={sliderValues.windmills}
+        data-solarpanels={sliderValues[0]?.value}
+        data-windmills={sliderValues[1]?.value}
         data-windforce={3}>
         <div className="storyline__row__image lg:sticky top-0 p-8">
           <ImgFlatSolar></ImgFlatSolar>
