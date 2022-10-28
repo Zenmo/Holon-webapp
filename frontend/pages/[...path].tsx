@@ -62,10 +62,10 @@ export async function getServerSideProps({ req, params, res }) {
       };
     }
 
-    if (componentName === "StorylineOverviewPage") {
-      const { json: storylines } = await getAllPages({ type: "main.StorylinePage" }, null, "pages");
-      componentProps.storylines = storylines;
-    }
+    // if (componentName === "StorylineOverviewPage") {
+    //   const { json: storylines } = await getAllPages({ type: "main.StorylinePage" }, null, "pages");
+    //   componentProps.storylines = storylines;
+    // }
     if (componentName === "WikiPage") {
       const { json: wikiMenu } = await getAllPages({ type: "main.WikiPage" });
       componentProps.wikiMenu = wikiMenu;

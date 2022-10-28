@@ -1,11 +1,12 @@
 from django.utils.translation import gettext_lazy as _
-from wagtail_headless_preview.models import HeadlessPreviewMixin
 
+from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
+
 from .base import BasePage
 
-from ..blocks import StorylineOverviewBlock
+from main.blocks import StorylineOverviewBlock
 
 
 class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):

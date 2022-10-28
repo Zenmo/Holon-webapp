@@ -18,7 +18,7 @@ class BasePageSerializer(serializers.ModelSerializer):
 
     seo = serializers.SerializerMethodField()
     site_setting = serializers.SerializerMethodField()
-    wagtail_userbar = serializers.SerializerMethodField()
+    # wagtail_userbar = serializers.SerializerMethodField()
 
     class Meta:
         model = BasePage

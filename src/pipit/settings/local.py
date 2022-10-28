@@ -3,6 +3,8 @@ Write local settings here, or override base settings
 """
 from pipit.settings.base import *  # NOQA
 
+WAGTAILADMIN_BASE_URL = "http://localhost:8000"
+
 INSTALLED_APPS += ("wagtail.contrib.styleguide",)
 
 VS_CODE_REMOTE_DEBUG = get_env_bool("VS_CODE_REMOTE_DEBUG", default=False)
