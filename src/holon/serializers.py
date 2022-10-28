@@ -32,4 +32,4 @@ class HolonRequestSerializer(serializers.Serializer):
     sliders = SliderInputSerializer(many=True)
 
     class Meta:
-        fields = ["scenario", "sliders"]
+        fields = ["scenario", "scenario_tag", "sliders"]

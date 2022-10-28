@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "main",
     "nextjs",
     "api",
+    "holon",
 ]
 
 MIDDLEWARE = [
