@@ -1,0 +1,5 @@
+national_total_costs:
+  value:
+    type: query
+    data: value
+    etm_key: total_costs
