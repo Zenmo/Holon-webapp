@@ -7,3 +7,6 @@ python-dotenv==0.21
 wagtail>=4.0,<4.1
 wagtail-meta-preview
 wagtail_headless_preview==0.4
+
+# ETM-service
+https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.1/etm_service-0.1.tar.gz
