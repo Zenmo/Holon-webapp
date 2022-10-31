@@ -3,11 +3,11 @@ import Head from "next/head";
 import PropTypes from "prop-types";
 import dynamic from "next/dynamic";
 
-import { initGA } from "../../utils/gtag";
+import { initGA } from "@/utils/gtag";
 import { getCookieConsentValue } from "react-cookie-consent";
-import CookieBar from "../../components/CookieBar";
+import CookieBar from "@/components/CookieBar";
 
-const WagtailUserbar = dynamic(() => import("../../components/WagtailUserbar"));
+const WagtailUserbar = dynamic(() => import("@/components/WagtailUserbar"));
 
 const BasePage = ({ children, seo, wagtailUserbar }) => {
   const {
