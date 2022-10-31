@@ -2,3 +2,4 @@
 	path = src/holon/cloudclient
 	url = https://github.com/ZEnMo/HOLON-cloudclient.git
 	shallow = true
+	recurse = true
