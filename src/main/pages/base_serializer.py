@@ -31,6 +31,7 @@ class BasePageSerializer(serializers.ModelSerializer):
             "seo",
             "site_setting",
             "wagtail_userbar",
+            "show_in_menus",
         ]
 
     def get_seo(self, page):
