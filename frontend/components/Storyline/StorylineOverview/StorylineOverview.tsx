@@ -2,16 +2,44 @@ import { useState } from "react";
 import StorylineOverviewCard from "./StorylineOverviewCard";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
-export default function StorylineOverview({ storylines, allInformationTypes, allRoles }) {
-  console.log(storylines);
+interface Props {
+  storylines: storylineProps[];
+  allInformationTypes: [
+    {
+      name: string;
+      slug: string;
+    }
+  ];
+  allRoles: [
+    {
+      name: string;
+      slug: string;
+    }
+  ];
+}
 
-  //const uniqueRoles = [...new Set(config.map((item) => item.b))];
-  const roleArray = [...new Set(allRoles.map(item => item.name))];
-  const uniqueRoles = [...new Set(roleArray.reduce((o, c) => o.concat(c), []))];
+interface storylineProps {
+  title: string;
+  description: string;
+  slug: string;
+  roles: [
+    {
+      name: string;
+    }
+  ];
+  informationTypes: [
+    {
+      name: string;
+    }
+  ];
+  thumbnail: {
+    url: string;
+    width: number;
+    height: number;
+  };
+}
 
-  const informationArray = [...new Set(allInformationTypes.map(item => item.name))];
-  const uniqueInformation = [...new Set(informationArray.reduce((o, c) => o.concat(c), []))];
-
+export default function StorylineOverview({ storylines, allInformationTypes, allRoles }: Props) {
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedInformation, setSelectedInformation] = useState<string[]>([]);
 
@@ -31,15 +59,22 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
     }
   };
 
-  const filteredProjects = storylines;
-  // .filter(project => {
-  //   selectedRoles.length > 0 ? selectedRoles.some(r => project.role.indexOf(r) >= 0) : project;
-  // })
-  // .filter(project =>
-  //   selectedInformation.length > 0
-  //     ? selectedInformation.some(r => project.informationtype.indexOf(r) >= 0)
-  //     : project
-  // );
+  const filteredProjects =
+    storylines &&
+    storylines
+      .map(obj => ({ ...obj, xroles: [...new Set(obj.roles.map(item => item.name))] }))
+      .map(obj => ({
+        ...obj,
+        xinformationTypes: [...new Set(obj.informationTypes.map(item => item.name))],
+      }))
+      .filter(project =>
+        selectedRoles.length > 0 ? selectedRoles.some(r => project.xroles.indexOf(r) >= 0) : project
+      )
+      .filter(project =>
+        selectedInformation.length > 0
+          ? selectedInformation.some(r => project.xinformationTypes.indexOf(r) >= 0)
+          : project
+      );
 
   return (
     <div className="flex w-full flex-col lg:flex-row">
@@ -63,21 +98,21 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
         <StorylineOverviewFilter
           title="Type rol"
           name="role"
-          items={uniqueRoles}
+          items={allRoles}
           selectedItems={selectedRoles}
           update={updateRole}
         />
         <StorylineOverviewFilter
           title="Type informatie"
           name="information"
-          items={uniqueInformation}
+          items={allInformationTypes}
           selectedItems={selectedInformation}
           update={updateInformation}
         />
       </div>
       <div className="flex flex-col p-8 lg:w-2/3 xl:w-3/4">
         <div className="flex flex-row justify-between mb-2">
-          <strong>{filteredProjects.length} resultaten</strong>
+          <strong>{storylines.length} resultaten</strong>
           <strong>Sorteren placenholder</strong>
         </div>
 
