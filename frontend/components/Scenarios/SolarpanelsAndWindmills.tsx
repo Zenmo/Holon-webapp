@@ -16,7 +16,8 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
   const [solarpanels, setSolarpanels] = useState<number>(0);
   const [solarpanelsProperties, setSolarpanelsProperties] = useState<Slider>({});
   const [windmills, setWindmills] = useState<number>(0);
-  const [windmillsProperties, setWindmillsProperties] = useState<Slider>({});
+  const [windmillsProperties, setWindmillsProperties] = useState<Object>({});
+  const [kpis, setHolonKPIs] = useState<number | null>(null);
 
   useEffect(() => {
     setScenarioData(scenario.value.content);
@@ -24,9 +25,12 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      setHolonKPIs(null);
       getHolonKPIs({
         scenario: 1,
         sliders: sliderValues,
+      }).then(res => {
+        setHolonKPIs(res.etmResult.nationalTotalCosts);
       });
     }, SLIDER_DELAY_MILISECONDS);
     return () => clearTimeout(timeout);
@@ -45,7 +49,7 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
     );
   };
 
-  const addSliderValue = (id: number, defaultValue: number = 0) => {
+  const addSliderValue = (id: number, defaultValue = 0) => {
     if (sliderValues.find(slider => slider.slider === id)) return;
 
     setSliderValues([
@@ -125,6 +129,7 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
         data-windmills={sliderValues[1]?.value}
         data-windforce={3}>
         <div className="storyline__row__image lg:sticky top-0 p-8">
+          <p>Kosten: {kpis}</p>
           <ImgFlatSolar></ImgFlatSolar>
         </div>
       </div>

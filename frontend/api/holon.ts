@@ -7,9 +7,11 @@ export async function getHolonKPIs(data: {
   scenario: number;
   sliders: { slider: number; value: number }[];
 }) {
-  return await postRequest(`${NEXT_PUBLIC_API_URL}/v1/holon/`, data, {
+  const { json } = await postRequest(`${NEXT_PUBLIC_API_URL}/v1/holon/`, data, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken"),
     },
   });
+
+  return json;
 }
