@@ -95,7 +95,7 @@ export default function HeroBlock(props: Props) {
 
         <div className="flex flex-row justify-center relative">
           <Link href="#start">
-            <a className="bg-holon-purple-100 w-12 h-12 absolute rounded-full p-2 hover:bg-holon-purple-200">
+            <a className="bg-holon-purple-100 w-12 h-12 mb-4 absolute rounded-full p-2 hover:bg-holon-purple-200">
               <ArrowDownIcon />
             </a>
           </Link>
