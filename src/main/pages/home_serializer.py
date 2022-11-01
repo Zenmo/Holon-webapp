@@ -5,4 +5,4 @@ from . import HomePage
 class HomePageSerializer(BasePageSerializer):
     class Meta:
         model = HomePage
-        fields = BasePageSerializer.Meta.fields
+        fields = ["body"] + BasePageSerializer.Meta.fields

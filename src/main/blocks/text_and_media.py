@@ -2,9 +2,8 @@
 import re
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
-from wagtail.embeds.embeds import get_embed
-from wagtail.images.blocks import ImageChooserBlock 
-from wagtail.embeds.exceptions import EmbedException
+from .button import ButtonComponent
+from .holon_image_chooser import HolonImageChooserBlock
 
 
 class TextAndMediaBlock(blocks.StructBlock):
@@ -20,74 +19,40 @@ class TextAndMediaBlock(blocks.StructBlock):
     )
 
     title = blocks.CharBlock(required=True)
-    size = blocks.ChoiceBlock(choices=[
-        ('', 'Select header size'),
-        ('h2', 'H2'),
-        ('h3', 'H3'),
-        ('h4', 'H4'),
-        ('h5', 'H5')
-    ], blank=True, required=False)
+    size = blocks.ChoiceBlock(
+        choices=[
+            ("", "Select header size"),
+            ("h2", "H2"),
+            ("h3", "H3"),
+            ("h4", "H4"),
+            ("h5", "H5"),
+        ],
+        blank=True,
+        required=False,
+    )
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
     media = blocks.StreamBlock(
         [
-            ("image", ImageChooserBlock(required=False)),
+            ("image", HolonImageChooserBlock(required=False)),
             ("video", EmbedBlock(required=False)),
         ],
         help_text="Choose an image or paste an embed url",
         max_num=1,
     )
+
     alt_text = blocks.CharBlock(
-      help_text=("Fill in this alt-text only when you want to describe the image (for screenreaders and SEO)"),
-      required=False
+        help_text=(
+            "Fill in this alt-text only when you want to describe the image (for screenreaders and SEO)"
+        ),
+        required=False,
     )
 
     grid_layout = blocks.ChoiceBlock(
         required=True, choices=GRID_CHOICES, default=THREEQUARTERS_QUARTER
     )
 
-    def get_api_representation(self, value, context=None):
-        """Recursively call get_api_representation on children and return as a plain dict"""
-        dict_list = []
-        if value:
-            for item in value["media"]:
-                temp_dict = {
-                    "text": value["text"].source,
-                    "media": [{"value": item.value.file.url, "id": item.id, "type": "image", "alt_text": value["alt_text"], }],
-                    "grid_layout": value["grid_layout"],
-                    
-                }
-                dict_list.append(temp_dict)
-        return dict_list[0]
+    button = ButtonComponent()
 
     class Meta:  # NOQA
-        icon = "media"
+        icon = "image"
         label = "Text and Media"
-
-        # {
-        #     "type": "text_and_media",
-        #     "value": [
-        #             {
-        #                 "value": "/wt/media/original_images/vogeltje_211.jpg",
-        #                 "id": "5ea9c5c4-4505-435a-82cf-62517e0c1afa",
-        #                 "type": "image"
-        #             }
-        #         ]
-        #     ,
-        #     "id": "9394d829-7b4a-4096-b19b-9da32954df25"
-        # },
-
-        # {
-        #     "type": "text_and_media",
-        #     "value": {
-        #         "text": "<p data-block-key=\"mubvd\">xx</p>",
-        #         "media": [
-        #             {
-        #                 "type": "image",
-        #                 "value": 1,
-        #                 "id": "5ea9c5c4-4505-435a-82cf-62517e0c1afa"
-        #             }
-        #         ],
-        #         "grid_layout": "75_25"
-        #     },
-        #     "id": "9394d829-7b4a-4096-b19b-9da32954df25"
-        # },
