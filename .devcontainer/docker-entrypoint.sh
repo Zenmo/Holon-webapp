@@ -17,6 +17,10 @@ wait_for_db () {
   fi
 }
 
+setup_submodules () {
+  pip install -r /workspace/src/holon/cloudclient/requirements.txt
+}
+
 setup_django () {
   cd /workspace/src
 
@@ -46,5 +50,6 @@ setup_frontend () {
 wait_for_db
 setup_django
 setup_frontend
+setup_submodules
 
 exec "$@"

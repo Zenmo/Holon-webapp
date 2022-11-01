@@ -25,7 +25,6 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 COPY ./src/requirements/local.txt /tmp/pip-tmp/
 COPY ./src/requirements/test.txt /tmp/pip-tmp/
 COPY ./src/requirements/base.txt /tmp/pip-tmp/
-# COPY ./src/holon/cloudclient/requirements.txt /tmp/pip-tmp/cloudclient
 RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/local.txt \
     && rm -rf /tmp/pip-tmp
 
