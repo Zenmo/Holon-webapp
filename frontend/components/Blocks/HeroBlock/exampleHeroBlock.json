@@ -6,24 +6,15 @@
     "text": "<p data-block-key=\"keh9a\">Met meer lokale autonomie gaan we het halen!</p>",
     "media": [
       {
-        "type": "image",
-        "value": {
-          "id": 4,
-          "title": "examplepicture",
-          "img": {
-            "src": "/wt/media/images/examplepicture.width-2280.jpg",
-            "width": 500,
-            "height": 333,
-            "alt": "examplepicture"
-          }
-        },
-        "id": "209662de-97fb-45b3-964a-0e2881583671"
+        "type": "video",
+        "value": "https://www.youtube.com/watch?v=kbJcQYVtZMo",
+        "id": "43",
+        "alt_text": ""
       }
     ],
     "alt_text": "",
     "button": {
-      "button_style": "btn-dark",
-      "button_size": "btn-lg",
+      "button_style": "gold",
       "button_text": "Klik hier",
       "button_hyperlink": "www.nos.nl"
     }

@@ -3,8 +3,6 @@ import Image from "next/image";
 import RawHtml from "../RawHtml";
 import ReactPlayer from "react-player/lazy";
 import HolonButton from "../VersionOne/Buttons/HolonButton";
-import Button from "../VersionOne/Buttons/HolonButton";
-import { bodyStreamToNodeStream } from "next/dist/server/body-streams";
 
 export default function TextAndMedia({ data }) {
   type MediaItem = {
@@ -19,6 +17,9 @@ export default function TextAndMedia({ data }) {
     width: 1,
     height: 1,
   });
+
+  const backgroundcolor = data.value.background;
+  const Tag = data.value.size;
 
   useEffect(() => {
     const mediaArray: Array<MediaItem> = [];
@@ -35,11 +36,13 @@ export default function TextAndMedia({ data }) {
   return (
     <div>
       <div className="storyline__row flex flex-col lg:flex-row">
-        <div className="flex flex-col p-8 lg:w-1/3 bg-holon-pale-gray">
+        <div
+          className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 lg:w-1/3 bg-holon-pale-gray ${backgroundcolor}`}>
+          <Tag className={`mb-6`}>{data.value.title}</Tag>
           <RawHtml html={data.value?.text} />
         </div>
-        <div className="flex flex-col lg:w-2/3">
-          <div className="lg:sticky top-0 p-8">
+        <div className="flex flex-col  lg:w-2/3">
+          <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
             {mediaItems.map((mediaItem, _index) => {
               switch (mediaItem.type) {
                 case "video":
@@ -77,8 +80,7 @@ export default function TextAndMedia({ data }) {
         <div className="flex flex-row justify-center relative">
           <HolonButton
             variant={data.value.button.button_style}
-            href={data.value.button.button_hyperlink}
-            size={data.value.button.button_size}>
+            href={data.value.button.button_hyperlink}>
             {data.value.button.button_text}
           </HolonButton>
         </div>

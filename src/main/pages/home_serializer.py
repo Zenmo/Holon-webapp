@@ -1,6 +1,6 @@
 from .base_serializer import BasePageSerializer
-from . import HomePage
 
+from . import HomePage
 
 class HomePageSerializer(BasePageSerializer):
     class Meta:

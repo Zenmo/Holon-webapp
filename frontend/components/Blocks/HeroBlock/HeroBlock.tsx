@@ -1,7 +1,9 @@
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
+import HolonButton from "../../VersionOne/Buttons/HolonButton";
 
 import RawHtml from "../../RawHtml";
 import data from "@/components/VersionOne/Hero/Hero.data";
@@ -17,24 +19,15 @@ type Props = {
       text: string;
       media: [
         {
-          type: string;
-          value: {
-            id: number;
-            title: string;
-            img: {
-              src: string;
-              width: number;
-              height: number;
-              alt: string;
-            };
-          };
           id: string;
+          value: string;
+          type: string;
+          alt_text: string;
         }
       ];
       alt_text: string;
       button?: {
         button_style: string;
-        button_size: string;
         button_text: string;
         button_hyperlink: string;
       };
@@ -44,6 +37,10 @@ type Props = {
 };
 
 export default function HeroBlock(props: Props) {
+  const [imageSize, setImageSize] = useState({
+    width: 1,
+    height: 1,
+  });
   const backgroundcolor = props.data.value.block_background.select_background;
   const mediaDetails = props.data.value.media[0];
 
@@ -98,7 +95,7 @@ export default function HeroBlock(props: Props) {
 
         <div className="flex flex-row justify-center relative">
           <Link href="#start">
-            <a className="bg-holon-purple-100 w-12 h-12 absolute top-[-7rem] rounded-full p-2 hover:bg-holon-purple-200">
+            <a className="bg-holon-purple-100 w-12 h-12 absolute rounded-full p-2 hover:bg-holon-purple-200">
               <ArrowDownIcon />
             </a>
           </Link>

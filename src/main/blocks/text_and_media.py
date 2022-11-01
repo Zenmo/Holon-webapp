@@ -9,27 +9,29 @@ from .holon_image_chooser import HolonImageChooserBlock
 class TextAndMediaBlock(blocks.StructBlock):
     """Text and Media block"""
 
-    QUARTER_THREEQUARTERS = "25_75"
+    THIRD_TWOTHIRDS = "33_66"
     HALF_HALF = "50_50"
-    THREEQUARTERS_QUARTER = "75_25"
+    TWOTHIRDS_THIRD = "66_33"
     GRID_CHOICES = (
-        (QUARTER_THREEQUARTERS, "25% - 75%"),
+        (THIRD_TWOTHIRDS, "33% - 66%"),
         (HALF_HALF, "50% - 50%"),
-        (THREEQUARTERS_QUARTER, "75% - 25%"),
+        (TWOTHIRDS_THIRD, "66% - 33%"),
     )
 
-    title = blocks.CharBlock(required=True)
-    size = blocks.ChoiceBlock(
-        choices=[
-            ("", "Select header size"),
-            ("h2", "H2"),
-            ("h3", "H3"),
-            ("h4", "H4"),
-            ("h5", "H5"),
-        ],
-        blank=True,
-        required=False,
-    )
+    background = blocks.ChoiceBlock(choices=[
+        ('', 'Default color'),
+        ('bg-holon-gray-100', 'Pale gray'),
+        ('bg-holon-purple-100', 'Pale purple'),
+    ], required=False, default="")
+
+    title = blocks.CharBlock(required=True, help_text="Add your title")
+    size = blocks.ChoiceBlock(choices=[
+        ('', 'Select header size'),
+        ('h2', 'H2'),
+        ('h3', 'H3'),
+        ('h4', 'H4'),
+        ('h5', 'H5')
+    ], blank=True, required=False, default="")
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
     media = blocks.StreamBlock(
         [
@@ -48,7 +50,7 @@ class TextAndMediaBlock(blocks.StructBlock):
     )
 
     grid_layout = blocks.ChoiceBlock(
-        required=True, choices=GRID_CHOICES, default=THREEQUARTERS_QUARTER
+        required=True, choices=GRID_CHOICES, default=THIRD_TWOTHIRDS
     )
 
     button = ButtonComponent()
