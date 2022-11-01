@@ -6,7 +6,6 @@ import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import RawHtml from "../../RawHtml";
 import data from "@/components/VersionOne/Hero/Hero.data";
 
-
 type Props = {
   data: {
     type: string;
@@ -49,48 +48,52 @@ export default function HeroBlock(props: Props) {
   const mediaDetails = props.data.value.media[0];
 
   //Link in button still needs href to next section
+  const getMediaType = media => {
+    let returnValue = "";
+    switch (media.type) {
+      case "video":
+        returnValue = <ReactPlayer key={"player"} url={media.value} />;
+        break;
+      case "image":
+        returnValue = (
+          <Image
+            src={process.env.NEXT_PUBLIC_BASE_URL + "/" + media.value}
+            alt={media.alt_text}
+            layout="responsive"
+            objectFit="contain"
+            priority={true}
+            // onLoadingComplete={target => {
+            //   setImageSize({
+            //     width: target.naturalWidth,
+            //     height: target.naturalHeight,
+            //   });
+            // }}
+            width={"500"}
+            height={"500"}
+            key={"image_"}
+            className="image"
+          />
+        );
+      default:
+    }
+
+    return <div>{returnValue}</div>;
+  };
 
   return (
     <div className="flex flex-row h-full">
       <div className="flex flex-col mx-8">
         <div className={`flex flex-col lg:flex-row ${backgroundcolor}`}>
           <div className="flex flex-col p-8 lg:w-1/2 lg:mt-16">
-            <h1><RawHtml html={props.data.value.title}></RawHtml></h1>
-            <div
-
-              className={`text-3xl font-semibold mt-8 mr-8`}><RawHtml html={props.data.value.text}></RawHtml></div>
+            <h1>
+              <RawHtml html={props.data.value.title}></RawHtml>
+            </h1>
+            <div className={`text-3xl font-semibold mt-8 mr-8`}>
+              <RawHtml html={props.data.value.text}></RawHtml>
+            </div>
           </div>
 
-          <div className="flex flex-col p-8 lg:w-1/2">
-          {switch (mediaDetails.type) {
-                case "video":
-                  return <ReactPlayer key={"player" + _index} url={mediaDetails.value} />;
-                  break;
-                case "image":
-                  return (
-                    <Image
-                      src={process.env.NEXT_PUBLIC_BASE_URL + mediaDetails.value}
-                      alt={mediaDetails.alt_text}
-                      layout="responsive"
-                      objectFit="contain"
-                      priority={true}
-                      onLoadingComplete={target => {
-                        setImageSize({
-                          width: target.naturalWidth,
-                          height: target.naturalHeight,
-                        });
-                      }}
-                      width={imageSize.width}
-                      height={imageSize.height}
-                      key={"image_" + _index}
-                      className="image"
-                    />
-                  );
-                  break;
-                default:
-                  return null;
-              }}
-          </div>
+          <div className="flex flex-col p-8 lg:w-1/2">{getMediaType(mediaDetails)}</div>
         </div>
 
         <div className="flex flex-row justify-center relative">

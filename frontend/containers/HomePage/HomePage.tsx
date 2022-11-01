@@ -33,14 +33,14 @@ const HomePage = ({ body }: { body: Title[] }) => {
     <main className="h-screen snap-y snap-mandatory overflow-y-auto">
       <Header />
 
+      <ContentBlock>
+        <HeroBlock data={exampleHeroBlock}></HeroBlock>
+      </ContentBlock>
+
       <ContentBlock colorClass="bg-holon-blue-900" id="introVideo"></ContentBlock>
 
       <ContentBlock>
         <TitleBlock data={exampleTitleBlock}></TitleBlock>
-      </ContentBlock>
-
-      <ContentBlock>
-        <HeroBlock data={exampleHeroBlock}></HeroBlock>
       </ContentBlock>
 
       <ContentBlock colorClass="bg-split-blue-white"></ContentBlock>
