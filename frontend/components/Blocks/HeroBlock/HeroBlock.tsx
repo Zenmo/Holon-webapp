@@ -1,5 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
+import ReactPlayer from "react-player/lazy";
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
+
+import RawHtml from "../../RawHtml";
+import data from "@/components/VersionOne/Hero/Hero.data";
+
 
 type Props = {
   data: {
@@ -10,19 +16,28 @@ type Props = {
       };
       title: string;
       text: string;
-      image_selector: {
-        image: {
-          id: number;
-          title: string;
-          img: {
-            src: string;
-            width: number;
-            height: number;
-            alt: string;
+      media: [
+        {
+          type: string;
+          value: {
+            id: number;
+            title: string;
+            img: {
+              src: string;
+              width: number;
+              height: number;
+              alt: string;
+            };
           };
-        };
-        caption: string;
-        attribution: string;
+          id: string;
+        }
+      ];
+      alt_text: string;
+      button?: {
+        button_style: string;
+        button_size: string;
+        button_text: string;
+        button_hyperlink: string;
       };
     };
     id: string;
@@ -30,8 +45,8 @@ type Props = {
 };
 
 export default function HeroBlock(props: Props) {
-  let backgroundcolor = props.data.value.block_background.select_background;
-  let imageDetails = props.data.value.image_selector;
+  const backgroundcolor = props.data.value.block_background.select_background;
+  const mediaDetails = props.data.value.media[0];
 
   //Link in button still needs href to next section
 
@@ -40,24 +55,47 @@ export default function HeroBlock(props: Props) {
       <div className="flex flex-col mx-8">
         <div className={`flex flex-col lg:flex-row ${backgroundcolor}`}>
           <div className="flex flex-col p-8 lg:w-1/2 lg:mt-16">
-            <h1 dangerouslySetInnerHTML={{ __html: props.data.value.title }} className={``}></h1>
+            <h1><RawHtml html={props.data.value.title}></RawHtml></h1>
             <div
-              dangerouslySetInnerHTML={{ __html: props.data.value.text }}
-              className={`text-3xl font-semibold mt-8 mr-8`}></div>
+
+              className={`text-3xl font-semibold mt-8 mr-8`}><RawHtml html={props.data.value.text}></RawHtml></div>
           </div>
 
           <div className="flex flex-col p-8 lg:w-1/2">
-            <div dangerouslySetInnerHTML={{ __html: imageDetails.caption }}></div>
-            <img
-              src={imageDetails.image.img.src}
-              alt={imageDetails.attribution}
-              className={``}></img>
+          {switch (mediaDetails.type) {
+                case "video":
+                  return <ReactPlayer key={"player" + _index} url={mediaDetails.value} />;
+                  break;
+                case "image":
+                  return (
+                    <Image
+                      src={process.env.NEXT_PUBLIC_BASE_URL + mediaDetails.value}
+                      alt={mediaDetails.alt_text}
+                      layout="responsive"
+                      objectFit="contain"
+                      priority={true}
+                      onLoadingComplete={target => {
+                        setImageSize({
+                          width: target.naturalWidth,
+                          height: target.naturalHeight,
+                        });
+                      }}
+                      width={imageSize.width}
+                      height={imageSize.height}
+                      key={"image_" + _index}
+                      className="image"
+                    />
+                  );
+                  break;
+                default:
+                  return null;
+              }}
           </div>
         </div>
 
         <div className="flex flex-row justify-center relative">
           <Link href="#start">
-            <a className="bg-holon-purple-100 w-12 h-12 absolute top-[-7rem] rounded-full p-2">
+            <a className="bg-holon-purple-100 w-12 h-12 absolute top-[-7rem] rounded-full p-2 hover:bg-holon-purple-200">
               <ArrowDownIcon />
             </a>
           </Link>

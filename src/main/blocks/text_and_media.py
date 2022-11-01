@@ -19,6 +19,14 @@ class TextAndMediaBlock(blocks.StructBlock):
         (THREEQUARTERS_QUARTER, "75% - 25%"),
     )
 
+    title = blocks.CharBlock(required=True)
+    size = blocks.ChoiceBlock(choices=[
+        ('', 'Select header size'),
+        ('h2', 'H2'),
+        ('h3', 'H3'),
+        ('h4', 'H4'),
+        ('h5', 'H5')
+    ], blank=True, required=False)
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
     media = blocks.StreamBlock(
         [
@@ -52,7 +60,7 @@ class TextAndMediaBlock(blocks.StructBlock):
         return dict_list[0]
 
     class Meta:  # NOQA
-        icon = "edit"
+        icon = "media"
         label = "Text and Media"
 
         # {

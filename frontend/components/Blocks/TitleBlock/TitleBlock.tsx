@@ -1,8 +1,8 @@
 import RawHtml from "../../RawHtml/RawHtml";
 
 export default function TitleBlock({ data }) {
-  let backgroundcolor = data.value.block_background.select_background;
-  let Tag = data.value.size;
+  const backgroundcolor = data.value.background;
+  const Tag = data.value.size;
 
   return (
     <div className={`flex flex-row w-full h-fit py-12 px-10 lg:px-16 lg:pt-16 ${backgroundcolor}`}>

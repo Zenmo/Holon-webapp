@@ -1,12 +1,10 @@
 {
   "type": "title_block",
   "value": {
-    "block_background": {
-      "select_background": "bg-holon-purple-100"
-    },
+    "background": "bg-holon-gray-100",
     "title": "The Holon homepage",
     "size": "h3",
-    "text": "<p data-block-key=\"p859y\">Introductie wat zijn de challenges? Om aan de internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. Met meer lokale autonomie kunnen we draagvlak vergroten en knetlpunten als een overbelast elektriciteitsnet aanpakken. We laten ons daarbij inspireren door het concept holarchie.</p>"
+    "text": "<p data-block-key=\"p859y\">Introductie wat zijn de challenges? Om aan de internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. Met meer lokale autonomie kunnen we draagvlak vergroten en knetlpunten als een overbelast elektriciteitsnet aanpakken. We laten ons daarbij inspireren door het concept holarchie. Om aan de internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. Met meer lokale autonomie kunnen we draagvlak vergroten en knetlpunten als een overbelast elektriciteitsnet aanpakken. We laten ons daarbij inspireren door het concept holarchie. Om aan de internationale klimaatdoelen te voldoen neemt het aandeel duurzame energie toe. Met meer lokale autonomie kunnen we draagvlak vergroten en knetlpunten als een overbelast elektriciteitsnet aanpakken. We laten ons daarbij inspireren door het concept holarchie</p>"
   },
   "id": "78e13492-7a6c-4ef0-8666-2d70fddfc011"
 }

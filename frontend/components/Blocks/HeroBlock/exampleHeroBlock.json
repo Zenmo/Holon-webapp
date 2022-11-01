@@ -1,24 +1,31 @@
 {
   "type": "hero_block",
   "value": {
-    "block_background": {
-      "select_background": ""
-    },
+    "block_background": "bg-holon-purple-100",
     "title": "Hoe Holon kan bijdragen aan de klimaatdoelen",
     "text": "<p data-block-key=\"keh9a\">Met meer lokale autonomie gaan we het halen!</p>",
-    "image_selector": {
-      "image": {
-        "id": 1,
-        "title": "Achtergrond_zonder",
-        "img": {
-          "src": "/imgs/Achtergrond_zonder.png",
-          "width": 1920,
-          "height": 1920,
-          "alt": "Achtergrond_zonder"
-        }
-      },
-      "caption": "",
-      "attribution": ""
+    "media": [
+      {
+        "type": "image",
+        "value": {
+          "id": 4,
+          "title": "examplepicture",
+          "img": {
+            "src": "/wt/media/images/examplepicture.width-2280.jpg",
+            "width": 500,
+            "height": 333,
+            "alt": "examplepicture"
+          }
+        },
+        "id": "209662de-97fb-45b3-964a-0e2881583671"
+      }
+    ],
+    "alt_text": "",
+    "button": {
+      "button_style": "btn-dark",
+      "button_size": "btn-lg",
+      "button_text": "Klik hier",
+      "button_hyperlink": "www.nos.nl"
     }
   },
   "id": "d5a5fe15-ddb6-4c4c-b3fa-0d1a35d1aed5"

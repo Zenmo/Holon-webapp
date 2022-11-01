@@ -100,7 +100,19 @@ class HeroBlock(StructBlock):
 
     title = CharBlock(classname="title", required=True)
     text = RichTextBlock(required=True)
-    image_selector = MandatoryImageComponent()
+    media = StreamBlock(
+        [
+            ("image", ImageChooserBlock(required=False)),
+            ("video", EmbedBlock(required=False)),
+        ],
+        help_text="Choose an image or paste an embed url",
+        max_num=1,
+    )
+    alt_text = CharBlock(
+      help_text=("Fill in this alt-text only when you want to describe the image (for screenreaders and SEO)"),
+      required=False
+    )
+   
     button = ButtonComponent()
 
 
@@ -136,7 +148,7 @@ class TitleBlock(StructBlock):
     """
     Custom block to create title blocks
     """
-    card_background = ChoiceBlock(choices=[
+    background = ChoiceBlock(choices=[
         ('', 'Default color'),
         ('bg-holon-gray-100', 'Pale gray'),
         ('bg-holon-purple-100', 'Pale purple'),
@@ -145,32 +157,14 @@ class TitleBlock(StructBlock):
     title = CharBlock(required=True)
     size = ChoiceBlock(choices=[
         ('', 'Select header size'),
+        ('h1', 'H1'),
         ('h2', 'H2'),
-        ('h3', 'H3'),
     ], blank=True, required=False)
     text = RichTextBlock(required=False)
 
     class Meta:
-        icon = 'edit'
+        icon = 'title'
         template = 'blocks/title_block.html'
-
-class TextVideoBlock(StructBlock): 
- 
-    title = CharBlock(required=True)
-    size = ChoiceBlock(choices=[
-        ('', 'Select header size'),
-        ('h2', 'H2'),
-        ('h3', 'H3'),
-        ('h4', 'H4'),
-        ('h5', 'H5')
-    ], blank=True, required=False)
-    text = RichTextBlock(required=False)
-
-    embed_video = EmbedBlock(max_width=800, max_height=400)
-
-    class Meta:
-        icon = 'image'
-        template = 'blocks/text_video_block.html'
 
 class HomepageBlock(StreamBlock):
 
@@ -179,5 +173,5 @@ class HomepageBlock(StreamBlock):
     hero_block = HeroBlock()
     text_image_block = TextImageBlock()
     card_block = CardsBlock()
-    text_video_block = TextVideoBlock()
+    
 
