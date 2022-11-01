@@ -30,7 +30,7 @@ class BasePageSerializer(serializers.ModelSerializer):
             "search_description",
             "seo",
             "site_setting",
-            # "wagtail_userbar",
+            "wagtail_userbar",
         ]
 
     def get_seo(self, page):

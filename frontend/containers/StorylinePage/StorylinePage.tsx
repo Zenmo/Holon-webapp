@@ -35,7 +35,7 @@ export type StorylineScenario = {
 const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
   return (
     <div className={styles["StorylinePage"]}>
-      {storyline.map((content, _index) => {
+      {storyline?.map((content, _index) => {
         switch (content.type) {
           case "text_and_media":
             return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;

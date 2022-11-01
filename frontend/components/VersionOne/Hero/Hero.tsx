@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import React from "react";
 import Image from "next/image";
 import PropTypes from "prop-types";
@@ -7,7 +9,7 @@ import logo from "../../../public/img/logo.svg";
 
 const Hero = ({ title }) => (
   <div className={s.Container}>
-    <Image src={logo} width="100" height="100" className={s.Logo} />
+    <Image src={logo} width="100" height="100" className={s.Logo} alt="Holon" />
     <h1 className={s.Title}>
       <img src={"/img/white_circle.png"} alt="Logo" className={s.TitleIcon} />
       {title}

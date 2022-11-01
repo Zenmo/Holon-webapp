@@ -12,6 +12,10 @@ DEBUG = False
 
 DATABASES["default"]["CONN_MAX_AGE"] = get_env("DATABASE_CONN_MAX_AGE", default=60)
 
+CSRF_TRUSTED_ORIGINS = [
+    get_env("DOMAIN_HOST"),
+]
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
@@ -27,7 +31,19 @@ CACHES = {
     },
 }
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"  # NOQA
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STATICFILES_STORAGE = "pipit.storages.AzureStaticStorage"
+DEFAULT_FILE_STORAGE = "pipit.storages.AzureMediaStorage"
+
+STATIC_LOCATION = "static"
+MEDIA_LOCATION = "media"
+
+AZURE_ACCOUNT_NAME = get_env("AZURE_ACCOUNT_NAME")
+AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
+
+STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
+MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
 
 # Enable caching of templates in production environment
 TEMPLATES[0]["OPTIONS"]["loaders"] = [  # type: ignore[index]
@@ -58,17 +74,31 @@ SESSION_COOKIE_SECURE = True
 # Use a secure cookie for the CSRF cookie
 CSRF_COOKIE_SECURE = True
 
-# Sentry
-# SENTRY_DSN = get_env("SENTRY_DSN")
-# SENTRY_ENVIRONMENT = "prod"
-
-# sentry_sdk.init(
-#     dsn=SENTRY_DSN,
-#     release=APP_VERSION,
-#     environment=SENTRY_ENVIRONMENT,
-#     integrations=[DjangoIntegration()],
-# )
-
-# # Add sentry to logging
-# with configure_scope() as scope:
-#     scope.level = "error"
+# Log to console to get logging output from docker
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "formatters": {
+        "verbose": {
+            "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "WARNING"),
+        },
+    },
+}

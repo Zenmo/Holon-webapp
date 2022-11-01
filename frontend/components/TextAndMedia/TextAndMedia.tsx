@@ -13,7 +13,7 @@ export default function TextAndMedia({ data }) {
   const [mediaItems, setMediaItems] = useState<Array<MediaItem>>([]);
 
   useEffect(() => {
-    let mediaArray: Array<MediaItem> = [];
+    const mediaArray: Array<MediaItem> = [];
     if (data.value.media.length) {
       {
         data.value?.media.map((mediaItem: MediaItem) => {

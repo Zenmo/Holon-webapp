@@ -41,6 +41,7 @@ docker-compose.override.yml
 # Environment
 src/.env
 src/.env.local
+src/.env.prod
 
 # Static folder
 src/static
@@ -58,3 +59,4 @@ htmlcov
 # Mypy
 .mypy_cache
 .devcontainer/.env
+docker-compose.prod.local.yml
