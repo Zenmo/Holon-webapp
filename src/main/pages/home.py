@@ -9,7 +9,7 @@ from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock
 
 class HomePage(HeadlessPreviewMixin, BasePage):
 
-    body = StreamField(
+    content = StreamField(
         [
             ("title_block", TitleBlock()),
             ("hero_block", HeroBlock()),
@@ -22,7 +22,7 @@ class HomePage(HeadlessPreviewMixin, BasePage):
     )
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("body"),
+        FieldPanel("content"),
     ]
     extra_panels = BasePage.extra_panels
     serializer_class = "main.pages.HomePageSerializer"
