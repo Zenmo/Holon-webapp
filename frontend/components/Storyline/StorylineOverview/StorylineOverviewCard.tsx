@@ -32,11 +32,12 @@ interface Props {
 
 export default function StorylineOverviewCard({ project, index }: Props) {
   const router = useRouter();
+  const cssClass = index === 0 ? " lg:w-2/4 xl:w-2/5 " : " lg:w-1/4 xl:w-1/5 ";
   return (
-    <div className="storyline__griditem" data-x={project.slug}>
+    <div className={`storyline__griditem w-1/2 p-4 ${cssClass}`} data-x={project.slug}>
       <Link href={router.asPath + project.slug}>
         <span
-          className="storyline__card flex h-full flex-col p-2 rounded gap-2 border"
+          className="storyline__card flex h-full flex-col p-2 rounded gap-2 border p-4 min-h-[400px] opacity-0 hover:opacity-1"
           style={{ animationDelay: index + "00ms" }}>
           {project.thumbnail && (
             <span className="h-1/2 overflow-hidden relative">
