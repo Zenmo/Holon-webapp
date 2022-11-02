@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import ImageSlider from "../InteractiveImage/ImageSlider";
+import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import Image from "next/image";
+import RawHtml from "@/components/RawHtml/RawHtml";
 
 export default function Section({ data }) {
   const [value, setValue] = useState(0);
-  const [sliders, setSliders] = useState([]);
+  const [content, setContent] = useState([]);
   const [media, setMedia] = useState(null);
   const [imageSize, setImageSize] = useState({
     width: 1,
@@ -12,19 +13,24 @@ export default function Section({ data }) {
   });
 
   useEffect(() => {
-    const sliderArr = [];
+    const contentArr = [];
     data?.value.content.map(content => {
-      if (content.type == "slider") {
-        content.value.currentValue = content.value.sliderValueDefault;
-        sliderArr.push(content);
-      }
-
-      if (content.type == "static_image") {
-        setMedia(content);
+      switch (content.type) {
+        case "slider":
+        case "text":
+          if (content.type == "slider") {
+            content.value.currentValue = content.value.sliderValueDefault;
+          }
+          contentArr.push(content);
+          break;
+        case "static_image":
+          setMedia(content);
+          break;
+        default:
       }
     });
 
-    setSliders(sliderArr);
+    setContent(contentArr);
   }, [data]);
 
   const setSliderValue = id => {
@@ -33,7 +39,7 @@ export default function Section({ data }) {
     const currentSliderIndex = sliders.findIndex(slider => slider.id == id);
     const spreadedSliders = [...sliders];
     spreadedSliders[currentSliderIndex] = currentSlider;
-    setSliders(spreadedSliders);
+    setContent(spreadedSliders);
   };
 
   function updateLayers(value: string, _setValue: (newValue: number) => void) {
@@ -45,22 +51,27 @@ export default function Section({ data }) {
   return (
     <div className="storyline__row flex flex-col lg:flex-row">
       <div className="flex flex-col p-8 lg:w-1/3 bg-slate-200">
-        {sliders.map((slider, _index) => {
-          return (
-            <ImageSlider
-              key={`slider${_index}`}
-              inputId={`slider.value?.name${_index}`}
-              datatestid={`slider.value?.name${_index}`}
-              value={slider.value?.currentValue}
-              setValue={() => setSliderValue(slider.id)}
-              min={slider.value?.sliderValueMin}
-              max={slider.value?.sliderValueMax}
-              step={1}
-              label={slider.value?.name}
-              updateLayers={updateLayers}
-              type="range"
-              locked={slider.value?.sliderLocked}></ImageSlider>
-          );
+        {content.map((ct, _index) => {
+          if (ct.type == "slider") {
+            return (
+              <ImageSlider
+                key={`slider${_index}`}
+                inputId={`ct.value?.name${_index}`}
+                datatestid={`ct.value?.name${_index}`}
+                value={ct.value?.currentValue}
+                setValue={() => setSliderValue(ct.id)}
+                min={ct.value?.sliderValueMin}
+                max={ct.value?.sliderValueMax}
+                step={1}
+                label={ct.value?.name}
+                updateLayers={updateLayers}
+                type="range"
+                locked={ct.value?.sliderLocked}></ImageSlider>
+            );
+          }
+          if (ct.type == "text") {
+            return <RawHtml key={`text_${_index}`} html={ct.value} />;
+          }
         })}
       </div>
       <div
