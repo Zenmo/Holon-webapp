@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import FlatSolarPanels from "./FlatSolarPanels";
-import Windmill from "./Windmill";
 import Windmills from "./Windmills";
 
 export default function ImgFlatSolar() {

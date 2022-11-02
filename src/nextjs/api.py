@@ -30,6 +30,7 @@ api_router = WagtailAPIRouter("nextjs")
 # Default pages functionality of WagTail
 api_router.register_endpoint("pages", PagesAPIViewSet)
 
+
 class PageRelativeUrlListSerializer(serializers.Serializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)

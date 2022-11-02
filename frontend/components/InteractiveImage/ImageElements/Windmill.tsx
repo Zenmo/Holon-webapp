@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from "../InteractiveImage.module.css";
 
 interface Props {
-  top: string;
-  left: string;
-  width: string;
+  top?: string;
+  left?: string;
+  width?: string;
 }
 
 export default function Windmill({ top, left, width }: Props) {

@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalManyToManyField
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.fields import StreamField
 from wagtail.snippets.models import register_snippet
-from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, PageChooserPanel, InlinePanel
+from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
 from api.models.scenario import Scenario
 
 from .base import BasePage
@@ -87,7 +87,10 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
             ("text_and_media", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
         ],
-        block_counts={"text_and_media": {"min_num": 1, "max_num": 1}, "section": {"min_num": 1}},
+        block_counts={
+            "text_and_media": {"min_num": 1, "max_num": 1},
+            "section": {"min_num": 1},
+        },
         use_json_field=True,
     )
 

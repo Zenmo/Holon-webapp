@@ -1,6 +1,14 @@
 const basePath = "";
 
 let nextConfig = {
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+  output: "standalone",
   webpack: true,
   reactStrictMode: true,
   trailingSlash: true,
@@ -37,4 +45,4 @@ const withSvgr = (nextConfig = {}) => {
 //     enabled: process.env.ANALYZE === 'true',
 // });
 
-export default withSvgr(nextConfig);
+module.exports = withSvgr(nextConfig);

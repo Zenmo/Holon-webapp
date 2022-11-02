@@ -5,7 +5,6 @@ import rehypeParse from "rehype-parse";
 import rehypeStringify from "rehype-stringify";
 import { visit } from "unist-util-visit";
 import { useEffect, useState } from "react";
-import parameterize from "parameterize";
 
 interface Props {
   article?: React.ReactNode;
@@ -26,7 +25,7 @@ export default function Article({ article }: Props) {
           visit(tree, "element", node => {
             if (node.tagName == "h2" || node.tagName == "h3") {
               if (node.children[0].value !== undefined) {
-                const id = parameterize(node.children[0].value);
+                const id = encodeURI(node.children[0].value);
                 node.properties.id = id;
                 toc.push({
                   id,
