@@ -22,11 +22,22 @@ from wagtail.forms import PasswordViewRestrictionForm
 from wagtail.models import Page, PageViewRestriction, Site
 from wagtail.wagtail_hooks import require_wagtail_login
 from wagtail_headless_preview.models import PagePreview
+from wagtail.api.v2.views import BaseAPIViewSet
 
 api_router = WagtailAPIRouter("nextjs")
 
 # Default pages functionality of WagTail
-api_router.register_endpoint("pages", PagesAPIViewSet)
+class MainPagesViewSet(PagesAPIViewSet):
+    listing_default_fields = BaseAPIViewSet.listing_default_fields + [
+        "title",
+        "html_url",
+        "slug",
+        "first_published_at",
+        "show_in_menus",
+    ]
+
+
+api_router.register_endpoint("pages", MainPagesViewSet)
 
 
 class PageRelativeUrlListSerializer(serializers.Serializer):
