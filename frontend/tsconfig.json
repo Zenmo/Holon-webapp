@@ -6,7 +6,8 @@
       "@/containers/*": ["./containers/*"],
       "@/pages/*": ["./pages/*"],
       "@/api/*": ["./api/*"],
-      "@/utils/*": ["./utils/*"]
+      "@/utils/*": ["./utils/*"],
+      "@/public/*": ["./public/*"]
     },
     "target": "es5",
     "downlevelIteration": true,
