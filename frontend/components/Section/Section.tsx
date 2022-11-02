@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import ImageSlider from "../InteractiveImage/ImageSlider";
+import Image from "next/image";
 
 export default function Section({ data }) {
   const [value, setValue] = useState(0);
   const [sliders, setSliders] = useState([]);
+  const [media, setMedia] = useState(null);
+  const [imageSize, setImageSize] = useState({
+    width: 1,
+    height: 1,
+  });
 
   useEffect(() => {
     const sliderArr = [];
@@ -12,7 +18,12 @@ export default function Section({ data }) {
         content.value.currentValue = content.value.sliderValueDefault;
         sliderArr.push(content);
       }
+
+      if (content.type == "static_image") {
+        setMedia(content);
+      }
     });
+
     setSliders(sliderArr);
   }, [data]);
 
@@ -58,7 +69,26 @@ export default function Section({ data }) {
         // data-windmills={windmills}
         // data-windforce={3}
       >
-        <div className="storyline__row__image lg:sticky top-0 p-8">Hallo</div>
+        {/* TODO: Set the imagesize dynamically */}
+        <div className="storyline__row__image lg:sticky top-0 p-8">
+          {media !== null && (
+            <Image
+              src={process.env.NEXT_PUBLIC_BASE_URL + "/" + media.value.img.src}
+              alt={media.value.img.alt}
+              width={1600}
+              height={900}
+              objectFit="contain"
+              className="image"
+              priority={true}
+              onLoadingComplete={target => {
+                setImageSize({
+                  width: target.naturalWidth,
+                  height: target.naturalHeight,
+                });
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
