@@ -21,6 +21,7 @@ interface Props {
 interface storylineProps {
   title: string;
   description: string;
+  cardColor: string;
   slug: string;
   roles: [
     {
@@ -112,14 +113,16 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
       </div>
       <div className="flex flex-col p-8 lg:w-2/3 xl:w-3/4">
         <div className="flex flex-row justify-between mb-2">
-          <strong>{storylines.length} resultaten</strong>
+          <strong>{storylines && storylines.length} resultaten</strong>
           <strong>Sorteren placenholder</strong>
         </div>
 
         <div className="flex flex-row flex-wrap storyline__grid">
-          {filteredProjects.map((project, index) => (
-            <StorylineOverviewCard key={index} index={index} project={project} />
-          ))}
+          {filteredProjects &&
+            filteredProjects.length &&
+            filteredProjects.map((project, index) => (
+              <StorylineOverviewCard key={index} index={index} project={project} />
+            ))}
         </div>
       </div>
     </div>

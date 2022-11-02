@@ -82,6 +82,23 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
         related_name="+",
     )
 
+    COLOR_CHOICES = (
+        ("bg-holon-gold-200", "Gold"),
+        ("bg-holon-blue-100", "Blue"),
+        ("bg-holon-gray-100", "Gray"),
+        ("bg-holon-purple-100", "Purple"),
+        ("bg-holon-pink-100", "Pink"),
+        ("bg-holon-orange-100", "Orange"),
+    )
+
+    card_color = models.CharField(
+        max_length=20,
+        choices=COLOR_CHOICES,
+        default="green",
+        blank=True,
+        help_text="Background color in storyline overview page",
+    )
+
     storyline = StreamField(
         [
             ("text_and_media", TextAndMediaBlock()),
@@ -108,6 +125,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
         FieldPanel("description"),
         FieldPanel("scenario"),
         FieldPanel("storyline"),
+        FieldPanel("card_color"),
     ]
 
     parent_page_types = ["main.StorylineOverviewPage"]

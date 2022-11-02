@@ -20,25 +20,6 @@
   animation: storylineFadeIn 0.3s ease-in forwards;
 }
 
-.storyline__card {
-  background-color: #f1effd;
-}
-.storyline__card .storyline__card__icon {
-  color: blue;
-}
-.storyline__card[data-cardtype="Stories"] {
-  background-color: #fbe9f2;
-}
-.storyline__card[data-cardtype="Stories"] .storyline__card__icon {
-  color: #dc267f;
-}
-.storyline__card[data-cardtype="Challenges"] {
-  background-color: #fff7e5;
-}
-.storyline__card[data-cardtype="Challenges"] .storyline__card__icon {
-  color: #ffb000;
-}
-
 .storyline__card img {
   filter: brightness(0.8);
   transition: all 0.3s ease-in;

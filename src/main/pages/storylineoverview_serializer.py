@@ -29,6 +29,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
             sl_dict = {
                 "title": sl.title,
                 "description": sl.description,
+                "card_color": sl.card_color,
                 "slug": sl.slug,
                 "roles": roles_array,
                 "information_types": it_array,
