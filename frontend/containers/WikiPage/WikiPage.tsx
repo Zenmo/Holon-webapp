@@ -33,7 +33,7 @@ const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
     const prefixmap = new Map();
     for (const url of urls) {
       url.children = []; // extend node with the array
-      const lastChar = url.relativeUrl.substr(-1);
+      const lastChar = url.relativeUrl.slice(-1);
       let address = url.relativeUrl;
       if (lastChar === "/") {
         address = url.relativeUrl.slice(0, -1);
