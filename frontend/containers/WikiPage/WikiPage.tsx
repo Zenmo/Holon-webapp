@@ -78,7 +78,7 @@ const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
 
         <main className="flex flex-1 flex-col">
           <div className="border-b-2 border-gray-200 py-3 pl-10">
-            {pages && <Breadcrumbs path={path} posts={pages} />}
+            {pages && <Breadcrumbs path={path ? [path].flat() : []} posts={pages} />}
           </div>
           <div className="p-3 flex flex-1 flex-row justify-between">
             <Article article={richText}></Article>
