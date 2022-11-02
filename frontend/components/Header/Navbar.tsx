@@ -4,7 +4,7 @@ import { NavItem } from "@/api/types";
 export default function Navbar({ items }: { items: NavItem[] }) {
   return (
     <ul className="flex flex-col md:flex-row md:space-x-8 md:mt-0">
-      {items.map((item: NavItem, index) => {
+      {items?.map((item: NavItem, index) => {
         return (
           <li key={index}>
             <Link href={`/${item.slug}`}>

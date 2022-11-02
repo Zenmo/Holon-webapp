@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import Navbar from "./Navbar";
 import { NavItem } from "@/api/types";
 
@@ -12,9 +13,9 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
   return (
     <nav className="sticky top-0 z-50 bg-white py-10 px-8 rounded dark:bg-gray-900">
       <div className="flex flex-wrap justify-between items-center mx-auto">
-        <a href="/" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <span className=" text-left uppercase text-2xl font-bold text-holon-blue-900">Holon</span>
-        </a>
+        </Link>
         <button
           onClick={() => handleClick()}
           data-collapse-toggle="navbar-default"
