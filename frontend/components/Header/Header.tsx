@@ -13,7 +13,7 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
     <nav className="sticky top-0 z-50 bg-white py-10 px-8 rounded dark:bg-gray-900">
       <div className="flex flex-wrap justify-between items-center mx-auto">
         <a href="/" className="flex items-center">
-          <div className=" text-left uppercase text-2xl font-bold text-holon-blue-900">Holon</div>
+          <span className=" text-left uppercase text-2xl font-bold text-holon-blue-900">Holon</span>
         </a>
         <button
           onClick={() => handleClick()}
