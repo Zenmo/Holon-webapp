@@ -1,4 +1,5 @@
-import SolarpanelsAndWindmills from "@/components/Scenarios/SolarpanelsAndWindmills";
+// import SolarpanelsAndWindmills from "@/components/Scenarios/SolarpanelsAndWindmills";
+import Section from "@/components/Section/Section";
 import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
 
 import styles from "./StorylinePage.module.css";
@@ -40,7 +41,7 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
             return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;
             break;
           case "section":
-            return <SolarpanelsAndWindmills key={`solarwind ${_index}`} data={content} />;
+            return <Section key={`section ${_index}`} data={content} />;
             break;
           default:
             null;
