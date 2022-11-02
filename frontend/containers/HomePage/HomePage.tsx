@@ -1,14 +1,15 @@
 import React from "react";
 
 import { basePageWrap } from "../BasePage";
-import Header from "../../components/Header/Header";
-import IntroductionVideo from "../../components/IntroductionVideo/IntroductionVideo";
-import HolonButton from "../../components/Buttons/HolonButton";
-import TextBlock from "../../components/TextBlocks/TextBlock";
-import ContentBlock from "../../components/ContentBlock/ContentBlock";
-import Scenarios from "../../components/Scenarios/Scenarios";
-import FeedbackBlock from "../../components/FeedbackBlock/FeedbackBlock";
+import Header from "@/components/VersionOne/Header/Header";
+import IntroductionVideo from "@/components/VersionOne//IntroductionVideo/IntroductionVideo";
+import HolonButton from "@/components/VersionOne//Buttons/HolonButton";
+import TextBlock from "@/components/VersionOne//TextBlocks/TextBlock";
+import ContentBlock from "@/components/VersionOne//ContentBlock/ContentBlock";
+import Scenarios from "@/components/VersionOne//Scenarios/Scenarios";
+import FeedbackBlock from "@/components/VersionOne//FeedbackBlock/FeedbackBlock";
 import Storyline from "@/components/Storyline/Storyline";
+
 const HomePage = () => {
   return (
     <main className="h-screen snap-y snap-mandatory overflow-y-auto">

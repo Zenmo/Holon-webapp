@@ -1,14 +1,16 @@
-/* global module */
+import React from "react";
+import RawHtml from "./RawHtml";
 
-import React from 'react';
-import RawHtml from './RawHtml';
+import data from "./RawHtml.data";
 
-import data from './RawHtml.data';
-
-export default {
-    title: 'Components/RawHtml',
+function stories() {
+  return {
+    title: "Components/RawHtml",
     component: RawHtml,
-};
+  };
+}
+
+export default stories;
 
 export const RawHtmlWithoutData = () => <RawHtml />;
 export const RawHtmlWithData = () => <RawHtml {...data} />;

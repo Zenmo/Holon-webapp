@@ -35,8 +35,6 @@ def send_templated_email(
     else:
         html_message = None
 
-    sent = mail.send_mail(
-        subject, message, from_email, to_emails, html_message=html_message
-    )
+    sent = mail.send_mail(subject, message, from_email, to_emails, html_message=html_message)
 
     return sent == 1

@@ -25,6 +25,10 @@
   height: 400px;
   padding: 1rem;
   animation: storylineFadeIn 0.3s ease-in forwards;
+  opacity: 0.8;
+  transition: opacity 0.3s ease-in;
+  height: 400px;
+  padding: 1rem;
 }
 .storyline__griditem:nth-child(1) {
   width: 40%;

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "wagtail.documents",
     "wagtail.images",
     "wagtail.admin",
+    "wagtail.search",
     "wagtail",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     "wagtail_meta_preview",
     "wagtail_headless_preview",
     "rest_framework",
+    "corsheaders",
     # Project specific apps
     "pipit",
     "sitesettings",
@@ -59,9 +61,11 @@ INSTALLED_APPS = [
     "customdocument",
     "main",
     "nextjs",
+    "api",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

@@ -25,9 +25,7 @@ class PageByPathApiTest(WagtailPageTests):
         sub_page = BasePageFactory.create(title="Child page", parent=self.root_page)
 
         url = reverse("nextjs:page_by_path:listing")
-        response = self.client.get(
-            f"{url}?html_path={sub_page.relative_url(self.site)}"
-        )
+        response = self.client.get(f"{url}?html_path={sub_page.relative_url(self.site)}")
         self.assertEqual(response.status_code, 200)
 
     def test_missing_html_path_triggers_400_error(self):
