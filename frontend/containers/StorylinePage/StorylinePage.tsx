@@ -3,8 +3,11 @@ import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 import SolarpanelsAndWindmills from "@/components/Scenarios/SolarpanelsAndWindmills";
 import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
+import Header from "@/components/Header/Header";
+import { NavItem } from "@/api/types";
 
 import styles from "./StorylinePage.module.css";
+import React from "react";
 
 export type Storyline = {
   id: string;
@@ -34,7 +37,13 @@ export type StorylineScenario = {
   sliderLocked: boolean;
 };
 
-const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
+const StorylinePage = ({
+  storyline,
+  navigation,
+}: {
+  storyline: Storyline[];
+  navigation: NavItem[];
+}) => {
   return (
     <div className={styles["StorylinePage"]}>
       {storyline?.map((content, _index) => {
@@ -61,4 +70,4 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
   );
 };
 
-export default StorylinePage;
+export default basePageWrap(StorylinePage);

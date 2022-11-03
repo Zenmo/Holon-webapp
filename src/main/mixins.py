@@ -116,7 +116,13 @@ class SeoMixin(Page):
     canonical_link = models.URLField(blank=True, null=True, verbose_name=_("Canonical link"))
 
     promote_panels = [
-        FieldPanel("slug"),
+        MultiFieldPanel(
+            [
+                FieldPanel("slug"),
+                FieldPanel("show_in_menus"),
+            ],
+            heading=_("Site settings"),
+        ),
         GoogleFieldPreviewPanel(
             [
                 FieldPanel("seo_title"),
