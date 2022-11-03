@@ -94,7 +94,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
     card_color = models.CharField(
         max_length=20,
         choices=COLOR_CHOICES,
-        default="green",
+        default="card__bg-blue",
         blank=True,
         help_text="Background color in storyline overview page",
     )
