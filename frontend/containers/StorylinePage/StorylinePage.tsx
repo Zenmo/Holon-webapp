@@ -6,6 +6,8 @@ import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
 import Header from "@/components/Header/Header";
 import { NavItem } from "@/api/types";
 
+import { basePageWrap } from "@/containers/BasePage";
+
 import styles from "./StorylinePage.module.css";
 import React from "react";
 
