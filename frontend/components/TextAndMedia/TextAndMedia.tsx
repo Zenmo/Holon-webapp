@@ -4,10 +4,60 @@ import RawHtml from "../RawHtml";
 import ReactPlayer from "react-player/lazy";
 import HolonButton from "../VersionOne/Buttons/HolonButton";
 
-export default function TextAndMedia({ data }) {
+type Props = {
+  data: {
+    type: string;
+    value: {
+      backgroundColor: string;
+      title: string;
+      size: string;
+      text: string;
+      media: [
+        | {
+            id: string;
+            value: string;
+            type: string;
+            alt_text: string;
+          }
+        | {
+            type: string;
+            value: {
+              id: number;
+              title: string;
+              img: {
+                src: string;
+                width: number;
+                height: number;
+                alt: string;
+              };
+            };
+          }
+      ];
+      altText: string;
+      gridLayout: string;
+      button?: {
+        button_style: string;
+        button_text: string;
+        button_hyperlink: string;
+      };
+    };
+    id: string;
+  };
+};
+
+export default function TextAndMedia({ data }: Props) {
   type MediaItem = {
     id: string;
-    value: string;
+    value: {
+      id: number;
+      title: string;
+      img: {
+        src: string;
+        width: number;
+        height: number;
+        alt: string;
+      };
+    };
     type: string;
     alt_text: string;
   };
@@ -17,8 +67,12 @@ export default function TextAndMedia({ data }) {
     width: 1,
     height: 1,
   });
+  const [gridDivision, setGridDivision] = useState({
+    left: "w-1/2",
+    right: "w-1/2",
+  });
 
-  const backgroundcolor = data.value.background;
+  const backgroundcolor = data.value.backgroundColor;
   const Tag = data.value.size;
 
   useEffect(() => {
@@ -33,15 +87,35 @@ export default function TextAndMedia({ data }) {
     setMediaItems(mediaArray);
   }, [data]);
 
+  useEffect(() => {
+    if (data.value.gridLayout === "33_66") {
+      setGridDivision({
+        left: "lg:w-1/3",
+        right: "lg:w-2/3",
+      });
+    } else if (data.value.gridLayout == "50_50") {
+      setGridDivision({
+        left: "lg:w-1/2",
+        right: "lg:w-1/2",
+      });
+    } else if (data.value.gridLayout == "66_33") {
+      setGridDivision({
+        left: "lg:w-2/3",
+        right: "lg:w-1/3",
+      });
+    }
+  }, [data]);
+
   return (
     <div>
-      <div className="storyline__row flex flex-col lg:flex-row">
+      <div className={`${backgroundcolor} storyline__row flex flex-col lg:flex-row`}>
         <div
-          className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 lg:w-1/3 bg-holon-pale-gray ${backgroundcolor}`}>
+          className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 ${gridDivision.left} bg-holon-pale-gray`}>
           <Tag className={`mb-6`}>{data.value.title}</Tag>
           <RawHtml html={data.value?.text} />
         </div>
-        <div className="flex flex-col  lg:w-2/3">
+
+        <div className={`flex flex-col ${gridDivision.right}`}>
           <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
             {mediaItems.map((mediaItem, _index) => {
               switch (mediaItem.type) {
@@ -51,7 +125,7 @@ export default function TextAndMedia({ data }) {
                 case "image":
                   return (
                     <Image
-                      src={process.env.NEXT_PUBLIC_BASE_URL + mediaItem.value}
+                      src={process.env.NEXT_PUBLIC_BASE_URL + mediaItem.value.img.src}
                       alt={mediaItem.alt_text}
                       layout="responsive"
                       objectFit="contain"
@@ -76,17 +150,20 @@ export default function TextAndMedia({ data }) {
           </div>
         </div>
       </div>
-      {data.value.button ? (
-        <div className="flex flex-row justify-center relative">
-          <HolonButton
-            variant={data.value.button.button_style}
-            href={data.value.button.button_hyperlink}>
-            {data.value.button.button_text}
-          </HolonButton>
-        </div>
-      ) : (
-        ""
-      )}
     </div>
   );
+}
+
+{
+  /*{data.value.button ? (
+  <div className="flex flex-row justify-center relative">
+    <HolonButton
+      variant={data.value.button.button_style}
+      href={data.value.button.button_hyperlink}>
+      {data.value.button.button_text}
+    </HolonButton>
+  </div>
+) : (
+  ""
+)} */
 }

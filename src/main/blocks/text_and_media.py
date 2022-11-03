@@ -18,11 +18,14 @@ class TextAndMediaBlock(blocks.StructBlock):
         (TWOTHIRDS_THIRD, "66% - 33%"),
     )
 
-    background = blocks.ChoiceBlock(choices=[
-        ('', 'Default color'),
-        ('bg-holon-gray-100', 'Pale gray'),
-        ('bg-holon-purple-100', 'Pale purple'),
-    ], required=False, default="")
+    background_color = blocks.ChoiceBlock(
+        choices=[
+            ("", "Default color"),
+            ("block__bg-gray", "Pale gray"),
+            ("block__bg-gray", "Pale purple"),
+        ],
+        required=False,
+    )
 
     title = blocks.CharBlock(required=True, help_text="Add your title")
     size = blocks.ChoiceBlock(choices=[
@@ -53,7 +56,7 @@ class TextAndMediaBlock(blocks.StructBlock):
         required=True, choices=GRID_CHOICES, default=THIRD_TWOTHIRDS
     )
 
-    button = ButtonComponent()
+    #button = ButtonComponent()
 
     class Meta:  # NOQA
         icon = "image"

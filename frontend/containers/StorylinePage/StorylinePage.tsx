@@ -1,3 +1,6 @@
+import CardBlock from "@/components/Blocks/CardsBlock/CardBlock";
+import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
+import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 import SolarpanelsAndWindmills from "@/components/Scenarios/SolarpanelsAndWindmills";
 import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
 
@@ -41,6 +44,14 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
             break;
           case "section":
             return <SolarpanelsAndWindmills key={`solarwind ${_index}`} data={content} />;
+            break;
+          case "heroblock":
+            return <HeroBlock key={`heroblock ${_index}`} data={content} />;
+          case "title_block":
+            return <TitleBlock key={`titleblock ${_index}`} data={content} />;
+            break;
+          case "card_block":
+            return <CardBlock key={`cardsblock ${_index}`} data={content} />;
             break;
           default:
             null;

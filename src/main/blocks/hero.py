@@ -17,11 +17,11 @@ class HeroBlock(StructBlock):
     Custom block to select include hero with title, text and image
     """
 
-    block_background = ChoiceBlock(
+    background_color = ChoiceBlock(
         choices=[
             ("", "Default color"),
-            ("bg-holon-gray-100", "Pale gray"),
-            ("bg-holon-purple-100", "Pale purple"),
+            ("block__bg-gray", "Pale gray"),
+            ("block__bg-gray", "Pale purple"),
         ],
         required=False,
     )
@@ -43,7 +43,7 @@ class HeroBlock(StructBlock):
         required=False,
     )
 
-    button = ButtonComponent()
+    #button = ButtonComponent()
 
     class Meta:
         icon = "title"

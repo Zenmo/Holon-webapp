@@ -9,12 +9,6 @@ class ButtonComponent(StructBlock):
         required=False,
     )
 
-    button_size = ChoiceBlock(
-        choices=[("", "Default button size"), ("btn-sm", "small"), ("btn-lg", "large")],
-        blank=True,
-        required=False,
-    )
-
     button_text = CharBlock(required=False)
 
     button_hyperlink = CharBlock(required=False)

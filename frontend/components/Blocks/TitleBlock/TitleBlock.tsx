@@ -1,7 +1,20 @@
 import RawHtml from "../../RawHtml/RawHtml";
 
-export default function TitleBlock({ data }) {
-  const backgroundcolor = data.value.background;
+type Props = {
+  data: {
+    type: string;
+    value: {
+      backgroundColor: string;
+      title: string;
+      size: string;
+      text: string;
+    };
+    id: string;
+  };
+};
+
+export default function TitleBlock({ data }: Props) {
+  const backgroundcolor = data.value.backgroundColor;
   const Tag = data.value.size;
 
   return (
