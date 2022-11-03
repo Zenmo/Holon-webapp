@@ -83,12 +83,12 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
     )
 
     COLOR_CHOICES = (
-        ("bg-holon-gold-200", "Gold"),
-        ("bg-holon-blue-100", "Blue"),
-        ("bg-holon-gray-100", "Gray"),
-        ("bg-holon-purple-100", "Purple"),
-        ("bg-holon-pink-100", "Pink"),
-        ("bg-holon-orange-100", "Orange"),
+        ("card__bg-gold", "Gold"),
+        ("card__bg-blue", "Blue"),
+        ("card__bg-gray", "Gray"),
+        ("card__bg-purple", "Purple"),
+        ("card__bg-pink", "Pink"),
+        ("card__bg-orange", "Orange"),
     )
 
     card_color = models.CharField(

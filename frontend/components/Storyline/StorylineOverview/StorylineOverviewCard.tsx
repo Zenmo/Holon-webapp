@@ -38,7 +38,6 @@ export default function StorylineOverviewCard({ project, index }: Props) {
 
   return (
     <div className={`storyline__griditem w-1/2 p-4 ${cssClass} `}>
-      <span className="hidden bg-holon-gold-200 bg-holon-blue-100 bg-holon-gray-100 bg-holon-purple-100 bg-holon-pink-100 bg-holon-orange-100"></span>
       <Link href={router.asPath + project.slug}>
         <span
           className={`${project.cardColor} storyline__card flex h-full flex-col p-2 rounded gap-2 border min-h-[400px] opacity-0 hover:opacity-1`}

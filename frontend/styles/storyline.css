@@ -28,6 +28,22 @@
   transform: scale(1.1);
   filter: brightness(1);
 }
+.card__bg-gold {
+  @apply bg-holon-gold-200;
+}
+.card__bg-blue {
+  @apply bg-holon-blue-100;
+}
+.card__bg-gray {
+  @apply bg-holon-gray-100;
+}
+.card__bg-purple {
+  @apply bg-holon-purple-100;
+}
+.card__bg-pink {
+  @apply bg-holon-pink-100;
+}
+
 @keyframes storylineFadeIn {
   0% {
     opacity: 0;
