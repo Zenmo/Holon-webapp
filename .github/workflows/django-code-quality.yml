@@ -51,7 +51,7 @@ jobs:
       - name: Lint with Black
         uses: psf/black@stable
         with:
-          options: "--check --line-length 100 --exclude "^.*\b(migrations)\b.*$""
+          options: --check --line-length 100 --exclude "^.*\b(migrations)\b.*$"
       - name: Run Tests
         run: |
           python manage.py test
