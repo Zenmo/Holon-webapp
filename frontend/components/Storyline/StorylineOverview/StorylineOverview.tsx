@@ -18,7 +18,7 @@ interface Props {
   ];
 }
 
-interface storylineProps {
+interface StorylineProps {
   title: string;
   description: string;
   cardColor: string;
