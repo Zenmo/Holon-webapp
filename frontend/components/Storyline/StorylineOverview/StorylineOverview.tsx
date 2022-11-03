@@ -118,9 +118,7 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
         </div>
 
         <div className="flex flex-row flex-wrap storyline__grid">
-          {filteredProjects &&
-            filteredProjects.length &&
-            filteredProjects.map((project, index) => (
+          {filteredProjects?.map((project, index) => (
               <StorylineOverviewCard key={index} index={index} project={project} />
             ))}
         </div>
