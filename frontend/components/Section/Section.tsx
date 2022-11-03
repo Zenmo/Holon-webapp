@@ -3,27 +3,50 @@ import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import Image from "next/image";
 import RawHtml from "@/components/RawHtml/RawHtml";
 
+export type Content = {
+  id?: string;
+  type?: string;
+  value?: Slider | StaticImage | string;
+};
+
+export type Slider = {
+  id?: number;
+  name?: string;
+  currentValue?: number;
+  sliderValueDefault?: number;
+  sliderValueMax?: number;
+  sliderValueMin?: number;
+};
+
+export type StaticImage = {
+  id?: number;
+  title?: string;
+  img?: {
+    alt: string;
+    height: number;
+    width: number;
+    src: string;
+  };
+};
+
 export default function Section({ data }) {
-  const [value, setValue] = useState(0);
-  const [content, setContent] = useState([]);
-  const [media, setMedia] = useState(null);
-  const [imageSize, setImageSize] = useState({
-    width: 1,
-    height: 1,
-  });
+  const [value, setValue] = useState<number>(0);
+  const [content, setContent] = useState<Content[]>([]);
+  const [media, setMedia] = useState<StaticImage>({});
 
   useEffect(() => {
-    const contentArr = [];
-    data?.value.content.map(content => {
+    const contentArr: Content[] = [];
+    data?.value.content.map((content: Content) => {
       switch (content.type) {
         case "slider":
         case "text":
           if (content.type == "slider") {
-            content.value.currentValue = content.value.sliderValueDefault;
+            content!.value.currentValue = content.value.sliderValueDefault;
           }
           contentArr.push(content);
           break;
         case "static_image":
+          console.log(content);
           setMedia(content);
           break;
         default:
@@ -34,12 +57,14 @@ export default function Section({ data }) {
   }, [data]);
 
   const setSliderValue = id => {
-    const currentSlider = sliders.find(slider => slider.id == id);
-    currentSlider.value.currentValue = value;
-    const currentSliderIndex = sliders.findIndex(slider => slider.id == id);
-    const spreadedSliders = [...sliders];
-    spreadedSliders[currentSliderIndex] = currentSlider;
-    setContent(spreadedSliders);
+    const currentSlider = content.find(slider => slider.id == id);
+    if (currentSlider !== undefined) {
+      currentSlider.value.currentValue = value;
+      const currentSliderIndex = content.findIndex(slider => slider.id == id);
+      const spreadedSliders = [...content];
+      spreadedSliders[currentSliderIndex] = currentSlider;
+      setContent(spreadedSliders);
+    }
   };
 
   function updateLayers(value: string, _setValue: (newValue: number) => void) {
@@ -74,15 +99,10 @@ export default function Section({ data }) {
           }
         })}
       </div>
-      <div
-        className="flex flex-col lg:w-2/3"
-        // data-solarpanels={solarpanels}
-        // data-windmills={windmills}
-        // data-windforce={3}
-      >
+      <div className="flex flex-col lg:w-2/3">
         {/* TODO: Set the imagesize dynamically */}
         <div className="storyline__row__image lg:sticky top-0 p-8">
-          {media !== null && (
+          {Object.keys(media).length > 0 && (
             <Image
               src={process.env.NEXT_PUBLIC_BASE_URL + "/" + media.value.img.src}
               alt={media.value.img.alt}
@@ -91,12 +111,6 @@ export default function Section({ data }) {
               objectFit="contain"
               className="image"
               priority={true}
-              onLoadingComplete={target => {
-                setImageSize({
-                  width: target.naturalWidth,
-                  height: target.naturalHeight,
-                });
-              }}
             />
           )}
         </div>

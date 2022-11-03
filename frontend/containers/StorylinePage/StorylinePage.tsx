@@ -10,6 +10,7 @@ import React from "react";
 export type Storyline = {
   id: string;
   type: string;
+  // eslint-disable-next-line
   value: any;
 };
 
