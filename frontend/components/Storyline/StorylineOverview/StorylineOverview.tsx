@@ -3,7 +3,7 @@ import StorylineOverviewCard from "./StorylineOverviewCard";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
 interface Props {
-  storylines: storylineProps[];
+  storylines: StorylineProps[];
   allInformationTypes: [
     {
       name: string;
