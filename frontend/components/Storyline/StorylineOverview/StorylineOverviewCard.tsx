@@ -17,6 +17,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import s from "./Storyline.module.css";
+
 import { StoryLineItem as StoryLineItemData } from "./types";
 
 interface Props {
@@ -62,7 +64,7 @@ export default function StorylineOverviewCard({ project, index }: Props) {
     <div className={`storyline__griditem w-1/2 p-4 ${cssClass} `}>
       <Link href={router.asPath + project.slug}>
         <a
-          className={`${project.cardColor} storyline__card flex h-full flex-col p-2 rounded gap-2 border min-h-[400px] opacity-0 hover:opacity-1`}
+          className={`${project.cardColor} ${s.storyline__card} flex h-full flex-col p-2 rounded gap-2 border min-h-[400px] opacity-0 hover:opacity-1`}
           style={{ animationDelay: index + "00ms" }}>
           {project.thumbnail && (
             <span className="h-1/2 overflow-hidden relative">

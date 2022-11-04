@@ -89,3 +89,26 @@ input::-moz {
 .wiki-breadcrumbs a {
   text-decoration: underline;
 }
+
+.card__bg-gold {
+  @apply bg-holon-gold-200;
+}
+.card__bg-blue {
+  @apply bg-holon-blue-100;
+}
+.card__bg-gray {
+  @apply bg-holon-gray-100;
+}
+.card__bg-purple {
+  @apply bg-holon-purple-100;
+}
+.card__bg-pink {
+  @apply bg-holon-pink-100;
+}
+.card__bg-orange {
+  @apply bg-holon-orange-100;
+}
+.storyline__row p {
+  font-size: 16px;
+  margin-bottom: 1.5rem;
+}

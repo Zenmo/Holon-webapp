@@ -100,7 +100,7 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
           <strong>Sorteren placenholder</strong>
         </div>
 
-        <div className="flex flex-row flex-wrap storyline__grid">
+        <div className="flex flex-row flex-wrap mx-[-1rem]">
           {filteredProjects?.map((project, index) => (
             <StorylineOverviewCard key={index} index={index} project={project} />
           ))}
