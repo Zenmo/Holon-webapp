@@ -6,6 +6,7 @@ export default {
   NotFoundPage: dynamic(() => import("./NotFoundPage")),
   PasswordProtectedPage: dynamic(() => import("./PasswordProtectedPage")),
   PureHtmlPage: dynamic(() => import("./PureHtmlPage")),
-  StorylinePage: dynamic(() => import("./StorylinePage")),
   WikiPage: dynamic(() => import("./WikiPage")),
+  StorylinePage: dynamic(() => import("./StorylinePage")),
+  StorylineOverviewPage: dynamic(() => import ("./StorylineOverviewPage"))
 };

@@ -25,7 +25,7 @@ export default function TextAndMedia({ data }) {
   }, [data]);
 
   return (
-    <div className="storyline__row flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row min-h[100vh]">
       <div className="flex flex-col p-8 lg:w-1/3 bg-slate-200">
         <RawHtml html={data.value?.text} />
       </div>
