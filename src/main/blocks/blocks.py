@@ -13,13 +13,15 @@ from wagtail.core.blocks import (
 
 class ThemeSelectorComponent(StructBlock):
     select_theme = ChoiceBlock(
-        choices=[("", "White background"), ("primary", "Purple brackground")], required=False
+        choices=[("", "White background"), ("primary", "Purple brackground")],
+        required=False,
     )
 
 
 class ThemeSelectorComponent(StructBlock):
     select_theme = ChoiceBlock(
-        choices=[("", "White background"), ("primary", "Purple brackground")], required=False
+        choices=[("", "White background"), ("primary", "Purple brackground")],
+        required=False,
     )
 
 

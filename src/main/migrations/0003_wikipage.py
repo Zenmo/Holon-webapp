@@ -29,7 +29,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "rich_text",
-                    wagtail.fields.RichTextField(blank=True, null=True, verbose_name="Rich text"),
+                    wagtail.fields.RichTextField(
+                        blank=True, null=True, verbose_name="Rich text"
+                    ),
                 ),
             ],
             options={

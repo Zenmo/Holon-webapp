@@ -122,7 +122,9 @@ class Migration(migrations.Migration):
                 ("height", models.IntegerField(editable=False)),
                 (
                     "focal_point_key",
-                    models.CharField(blank=True, default="", editable=False, max_length=16),
+                    models.CharField(
+                        blank=True, default="", editable=False, max_length=16
+                    ),
                 ),
                 (
                     "image",

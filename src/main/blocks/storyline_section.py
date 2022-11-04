@@ -48,7 +48,9 @@ class StorylineSectionBlock(blocks.StructBlock):
             (
                 "animation",
                 blocks.ChoiceBlock(
-                    required=False, choices=ANIMATION_CHOICES, default=SOLAR_AND_WINDMILLS
+                    required=False,
+                    choices=ANIMATION_CHOICES,
+                    default=SOLAR_AND_WINDMILLS,
                 ),
             )
             # ("radiobuttons", RadioButtonBlock()),

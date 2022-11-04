@@ -14,7 +14,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="slider",
             name="slider_locked",
-            field=models.BooleanField(default=False, help_text="Show locked solarpanel slider"),
+            field=models.BooleanField(
+                default=False, help_text="Show locked solarpanel slider"
+            ),
         ),
         migrations.AddField(
             model_name="slider",

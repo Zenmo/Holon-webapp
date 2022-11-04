@@ -27,7 +27,9 @@ CACHES = {
     },
 }
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"  # NOQA
+STATICFILES_STORAGE = (
+    "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"  # NOQA
+)
 
 # Enable caching of templates in production environment
 TEMPLATES[0]["OPTIONS"]["loaders"] = [  # type: ignore[index]
