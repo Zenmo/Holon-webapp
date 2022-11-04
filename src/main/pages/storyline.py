@@ -26,9 +26,9 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
         [
             ("text_and_media", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
-            ("heroblock", HeroBlock()), 
-            ("title_block", TitleBlock()), 
-             ("card_block", CardsBlock()),
+            ("heroblock", HeroBlock()),
+            ("title_block", TitleBlock()),
+            ("card_block", CardsBlock()),
         ],
         block_counts={
             "text_and_media": {"min_num": 1},

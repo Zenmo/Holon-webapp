@@ -15,7 +15,7 @@ class AboutPage(HeadlessPreviewMixin, BasePage):
     )
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("company_name"),  
+        FieldPanel("company_name"),
     ]
 
     extra_panels = BasePage.extra_panels

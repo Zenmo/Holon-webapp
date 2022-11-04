@@ -5,22 +5,24 @@ from .button import ButtonComponent
 from .holon_image_chooser import HolonImageChooserBlock
 
 COLOR_CHOICES = (
-    ("card__bg-gold", "Gold"), 
-    ("card__bg-blue", "Blue"), 
-    ("card__bg-gray", "Gray"), 
-    ("card__bg-purple", "Purple"), 
-    ("card__bg-pink", "Pink"), 
-    ("card__bg-orange", "Orange"), 
+    ("card__bg-gold", "Gold"),
+    ("card__bg-blue", "Blue"),
+    ("card__bg-gray", "Gray"),
+    ("card__bg-purple", "Purple"),
+    ("card__bg-pink", "Pink"),
+    ("card__bg-orange", "Orange"),
 )
+
 
 class CardComponent(StructBlock):
     title = CharBlock(required=False)
     image_selector = HolonImageChooserBlock()
     text = CharBlock(required=False)
     card_background = ChoiceBlock(
-        choices= COLOR_CHOICES,
+        choices=COLOR_CHOICES,
         required=False,
     )
+
 
 class CardsBlock(StructBlock):
     """
@@ -28,8 +30,6 @@ class CardsBlock(StructBlock):
     """
 
     cards = ListBlock(CardComponent())
-
-    
 
     # button = ButtonComponent()
 

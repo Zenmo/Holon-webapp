@@ -43,7 +43,7 @@ class HeroBlock(StructBlock):
         required=False,
     )
 
-    #button = ButtonComponent()
+    # button = ButtonComponent()
 
     class Meta:
         icon = "title"

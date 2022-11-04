@@ -67,9 +67,7 @@ class Migration(migrations.Migration):
                                         ),
                                         (
                                             "text",
-                                            wagtail.blocks.RichTextBlock(
-                                                required=False
-                                            ),
+                                            wagtail.blocks.RichTextBlock(required=False),
                                         ),
                                     ]
                                 ),

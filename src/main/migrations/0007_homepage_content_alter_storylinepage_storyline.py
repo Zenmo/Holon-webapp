@@ -69,9 +69,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "title",
-                                    wagtail.blocks.CharBlock(
-                                        form_classname="title", required=True
-                                    ),
+                                    wagtail.blocks.CharBlock(form_classname="title", required=True),
                                 ),
                                 ("text", wagtail.blocks.RichTextBlock(required=True)),
                                 (
@@ -86,9 +84,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",
@@ -132,15 +128,11 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "button_text",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                             (
                                                 "button_hyperlink",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                         ]
                                     ),
@@ -203,9 +195,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",
@@ -259,15 +249,11 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "button_text",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                             (
                                                 "button_hyperlink",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                         ]
                                     ),
@@ -305,9 +291,7 @@ class Migration(migrations.Migration):
                                             [
                                                 (
                                                     "head",
-                                                    wagtail.blocks.CharBlock(
-                                                        required=False
-                                                    ),
+                                                    wagtail.blocks.CharBlock(required=False),
                                                 ),
                                                 (
                                                     "image_selector",
@@ -315,15 +299,11 @@ class Migration(migrations.Migration):
                                                 ),
                                                 (
                                                     "subtitle",
-                                                    wagtail.blocks.CharBlock(
-                                                        required=False
-                                                    ),
+                                                    wagtail.blocks.CharBlock(required=False),
                                                 ),
                                                 (
                                                     "text",
-                                                    wagtail.blocks.CharBlock(
-                                                        required=False
-                                                    ),
+                                                    wagtail.blocks.CharBlock(required=False),
                                                 ),
                                                 (
                                                     "button_text",
@@ -377,15 +357,11 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "button_text",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                             (
                                                 "button_hyperlink",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                         ]
                                     ),
@@ -460,9 +436,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",
@@ -516,15 +490,11 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "button_text",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                             (
                                                 "button_hyperlink",
-                                                wagtail.blocks.CharBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.blocks.CharBlock(required=False),
                                             ),
                                         ]
                                     ),
