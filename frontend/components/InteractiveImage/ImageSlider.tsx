@@ -2,14 +2,14 @@ interface Props {
   locked?: boolean;
   inputId: string;
   datatestid: string;
-  value: number;
+  value?: number;
   setValue: (value: number) => void;
   updateLayers: (value: string, setValue: (value: number) => void) => void;
-  label: string;
-  step: number;
-  min: number;
-  max: number;
-  type: string;
+  label?: string;
+  step?: number;
+  min?: number;
+  max?: number;
+  type?: string;
 }
 
 export default function ImageSlider({
