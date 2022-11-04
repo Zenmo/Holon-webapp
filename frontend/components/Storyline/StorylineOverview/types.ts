@@ -1,5 +1,4 @@
 export type StoryLineItem = {
-    index: number;
     project: {
       id: number;
       title: string;
