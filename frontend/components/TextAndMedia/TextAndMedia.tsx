@@ -85,17 +85,3 @@ export default function TextAndMedia({ data }: Props) {
     </div>
   );
 }
-
-{
-  /*{data.value.button ? (
-  <div className="flex flex-row justify-center relative">
-    <HolonButton
-      variant={data.value.button.button_style}
-      href={data.value.button.button_hyperlink}>
-      {data.value.button.button_text}
-    </HolonButton>
-  </div>
-) : (
-  ""
-)} */
-}
