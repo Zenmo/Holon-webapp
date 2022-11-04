@@ -17,32 +17,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { StoryLineItem as StoryLineItemData } from "./types";
+
 interface Props {
   index: number;
-  project: {
-    id: number;
-    title: string;
-    description: string;
-    cardColor: string;
-    slug: string;
-    role: [
-      {
-        name: string;
-      }
-    ];
-    informationTypes: [
-      {
-        name: string;
-        icon: string;
-      }
-    ];
-    sector: string;
-    relativeUrl: string;
-    thumbnail: {
-      name: string;
-      url: string;
-    };
-  };
+  project: StoryLineItemData;
 }
 
 function StorylineOverviewCardIcon({ icon }: { icon: string }) {

@@ -2,8 +2,10 @@ import { useState } from "react";
 import StorylineOverviewCard from "./StorylineOverviewCard";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
+import { StoryLineItem as StoryLineItemData } from "./types";
+
 interface Props {
-  storylines: StorylineProps[];
+  storylines: StoryLineItemData[];
   allInformationTypes: [
     {
       name: string;
@@ -17,29 +19,6 @@ interface Props {
     }
   ];
 }
-
-interface StorylineProps {
-  title: string;
-  description: string;
-  cardColor: string;
-  slug: string;
-  roles: [
-    {
-      name: string;
-    }
-  ];
-  informationTypes: [
-    {
-      name: string;
-    }
-  ];
-  thumbnail: {
-    url: string;
-    width: number;
-    height: number;
-  };
-}
-
 export default function StorylineOverview({ storylines, allInformationTypes, allRoles }: Props) {
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedInformation, setSelectedInformation] = useState<string[]>([]);
@@ -61,7 +40,7 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
   };
 
   function filterStorylines(
-    storylines: StorylineProps[],
+    storylines: StoryLineItemData[],
     attribute: "roles" | "informationTypes",
     selectedTags: string[]
   ) {
@@ -117,7 +96,7 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
       </div>
       <div className="flex flex-col p-8 lg:w-2/3 xl:w-3/4">
         <div className="flex flex-row justify-between mb-2">
-          <strong>{storylines && storylines.length} resultaten</strong>
+          <strong>{filteredProjects?.length} resultaten</strong>
           <strong>Sorteren placenholder</strong>
         </div>
 
