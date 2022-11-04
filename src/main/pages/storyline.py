@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django import forms
+from autoslug import AutoSlugField
 
 from modelcluster.fields import ParentalManyToManyField
 from wagtail_headless_preview.models import HeadlessPreviewMixin
@@ -15,7 +16,7 @@ from ..blocks import TextAndMediaBlock, StorylineSectionBlock
 
 class StorylinePageFilter(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=255)
+    slug = AutoSlugField(populate_from="name")
 
     class Meta:
         abstract = True
@@ -25,7 +26,6 @@ class StorylinePageFilter(models.Model):
 class StorylinePageRoleType(StorylinePageFilter):
     panels = [
         FieldPanel("name"),
-        FieldPanel("slug"),
     ]
 
     def __str__(self):
@@ -41,7 +41,6 @@ class StorylinePageRoleType(StorylinePageFilter):
 class StorylinePageInformationType(StorylinePageFilter):
     panels = [
         FieldPanel("name"),
-        FieldPanel("slug"),
     ]
 
     def __str__(self):
