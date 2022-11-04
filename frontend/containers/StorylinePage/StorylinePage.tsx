@@ -1,6 +1,5 @@
 import { basePageWrap } from "@/containers/BasePage";
-
-import SolarpanelsAndWindmills from "@/components/Scenarios/SolarpanelsAndWindmills";
+import Section from "@/components/Section/Section";
 import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
 import Header from "@/components/Header/Header";
 import { NavItem } from "@/api/types";
@@ -11,6 +10,7 @@ import React from "react";
 export type Storyline = {
   id: string;
   type: string;
+  // eslint-disable-next-line
   value: any;
 };
 
@@ -53,7 +53,7 @@ const StorylinePage = ({
               return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;
               break;
             case "section":
-              return <SolarpanelsAndWindmills key={`solarwind ${_index}`} data={content} />;
+              return <Section key={`section ${_index}`} data={content} />;
               break;
             default:
               null;

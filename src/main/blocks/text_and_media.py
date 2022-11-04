@@ -1,10 +1,8 @@
 """ Streamfields """
-import re
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.embeds.embeds import get_embed
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.embeds.exceptions import EmbedException
 
 
 class TextAndMediaBlock(blocks.StructBlock):
@@ -48,32 +46,3 @@ class TextAndMediaBlock(blocks.StructBlock):
     class Meta:  # NOQA
         icon = "edit"
         label = "Text and Media"
-
-        # {
-        #     "type": "text_and_media",
-        #     "value": [
-        #             {
-        #                 "value": "/wt/media/original_images/vogeltje_211.jpg",
-        #                 "id": "5ea9c5c4-4505-435a-82cf-62517e0c1afa",
-        #                 "type": "image"
-        #             }
-        #         ]
-        #     ,
-        #     "id": "9394d829-7b4a-4096-b19b-9da32954df25"
-        # },
-
-        # {
-        #     "type": "text_and_media",
-        #     "value": {
-        #         "text": "<p data-block-key=\"mubvd\">xx</p>",
-        #         "media": [
-        #             {
-        #                 "type": "image",
-        #                 "value": 1,
-        #                 "id": "5ea9c5c4-4505-435a-82cf-62517e0c1afa"
-        #             }
-        #         ],
-        #         "grid_layout": "75_25"
-        #     },
-        #     "id": "9394d829-7b4a-4096-b19b-9da32954df25"
-        # },
