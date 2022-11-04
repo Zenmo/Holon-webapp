@@ -7,5 +7,5 @@ class HolonImageChooserBlock(DefaultImageChooserBlock):
             return {
                 "id": value.id,
                 "title": value.title,
-                "img": value.get_rendition("width-2280").attrs_dict,
+                "img": value.get_rendition("width-1600").attrs_dict,
             }

@@ -1,8 +1,6 @@
 """ Streamfields """
-import re
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
-from .button import ButtonComponent
 from .holon_image_chooser import HolonImageChooserBlock
 
 

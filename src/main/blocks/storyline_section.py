@@ -1,9 +1,18 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
-from wagtail.core import blocks
 
 from api.models import Slider
-from api.serializers import SliderSerializer
+from wagtail.core import blocks
+from .holon_image_chooser import HolonImageChooserBlock
+
+ANIMATION_1 = "animation1"
+SOLAR_AND_WINDMILLS = "solar_and_windmills"
+ANIMATION_3 = "animation3"
+ANIMATION_CHOICES = (
+    (ANIMATION_1, "Animatie 1 (Test)"),
+    (SOLAR_AND_WINDMILLS, "Solarpanels and windmills"),
+    (ANIMATION_1, "Animatie 3 (Test)"),
+)
 
 
 def get_sliders():
@@ -35,6 +44,15 @@ class StorylineSectionBlock(blocks.StructBlock):
         [
             ("text", blocks.RichTextBlock()),
             ("slider", SliderBlock()),
+            ("static_image", HolonImageChooserBlock(required=False)),
+            (
+                "animation",
+                blocks.ChoiceBlock(
+                    required=False,
+                    choices=ANIMATION_CHOICES,
+                    default=SOLAR_AND_WINDMILLS,
+                ),
+            )
             # ("radiobuttons", RadioButtonBlock()),
         ]
     )

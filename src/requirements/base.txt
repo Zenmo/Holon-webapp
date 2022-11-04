@@ -8,3 +8,4 @@ wagtail>=4.0,<4.1
 wagtail-meta-preview
 wagtail_headless_preview==0.4
 django-cors-headers==3.13
+django-autoslug==1.9.8
