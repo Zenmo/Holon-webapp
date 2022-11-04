@@ -6,7 +6,7 @@ type Props = {
     value: {
       backgroundColor: string;
       title: string;
-      size: string;
+      size: React.ElementType;
       text: string;
     };
     id: string;

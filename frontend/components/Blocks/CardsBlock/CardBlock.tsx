@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import Card from "./Card";
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
 
 type CardItem = {
   title: string;
-  image_selector: {
+  imageSelector: {
     id: number;
     title: string;
     img: {
@@ -24,29 +23,19 @@ type CardItem = {
     };
   };
   text: string;
-  card_background: string;
+  cardBackground: string;
 };
 
-export default function CardBlock({ data }: Props) {
-  const [cardItems, setCardItems] = useState<Array<CardItem>>([]);
-
-  useEffect(() => {
-    const cardArray: Array<CardItem> = [];
-    if (data.value.cards.length) {
-      {
-        data.value?.cards.map((cardItem: CardItem) => {
-          cardArray.push(cardItem);
-        });
-      }
-    }
-    setCardItems(cardArray);
-  }, [data]);
-
+export default function CardBlock({
+  data: {
+    value: { cards },
+  },
+}: Props) {
   return (
     <div className={`flex flex-row w-full justify-center h-fit py-12 px-10 lg:px-16 lg:pt-16`}>
       <div className={`flex flex-row  flex-wrap`}>
-        {cardItems.map((cardItem, _index) => {
-          return <Card cardItem={cardItem} key={_index}></Card>;
+        {cards.map((cardItem, index) => {
+          return <Card cardItem={cardItem} key={index}></Card>;
         })}
       </div>
     </div>

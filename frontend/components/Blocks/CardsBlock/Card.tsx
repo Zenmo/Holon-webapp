@@ -3,7 +3,7 @@ import Image from "next/image";
 
 type CardItem = {
   title: string;
-  image_selector: {
+  imageSelector: {
     id: number;
     title: string;
     img: {
@@ -14,10 +14,15 @@ type CardItem = {
     };
   };
   text: string;
-  card_background: string;
+  cardBackground: string;
 };
 
-export default function Card({ cardItem, key }) {
+type Props = {
+  cardItem: CardItem;
+  key: number;
+};
+
+export default function Card({ cardItem, key }: Props) {
   const colorStyle: string = cardItem.cardBackground;
 
   return (

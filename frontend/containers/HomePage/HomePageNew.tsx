@@ -8,7 +8,7 @@ import styles from "./HomePage.module.css";
 const HomePageNew = ({ homepage }: { homepage: HomePage[] }) => {
   return (
     <div className={styles[""]}>
-      {HomePage?.map((content, _index) => {
+      {homepage?.map((content, _index) => {
         switch (content.type) {
           case "text_and_media":
             return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;
