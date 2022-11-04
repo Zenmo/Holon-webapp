@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react";
 import WikiPage from "./";
-import { useRouter } from "next/router";
 // import data from './WikiPage.data';
 
 jest.mock("next/router", () => ({
