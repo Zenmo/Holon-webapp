@@ -3,6 +3,7 @@ import StorylineOverview from "@/components/Storyline/StorylineOverview/Storylin
 import styles from "./StorylineOverviewPage.module.css";
 
 const StorylineOverviewPage = ({ allInformationTypes, allRoles, allStorylines }) => {
+  console.log(allInformationTypes);
   return (
     <div className={styles["StorylineOverviewPage"]}>
       <StorylineOverview

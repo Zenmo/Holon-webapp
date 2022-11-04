@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django import forms
+from autoslug import AutoSlugField
 
 from modelcluster.fields import ParentalManyToManyField
 from wagtail_headless_preview.models import HeadlessPreviewMixin
@@ -29,7 +30,7 @@ ICON_CHOICES = (
 
 class StorylinePageFilter(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=255)
+    slug = AutoSlugField(populate_from="name")
 
     icon = models.CharField(
         max_length=20,
@@ -47,7 +48,6 @@ class StorylinePageFilter(models.Model):
 class StorylinePageRoleType(StorylinePageFilter):
     panels = [
         FieldPanel("name"),
-        FieldPanel("slug"),
     ]
 
     def __str__(self):
@@ -63,7 +63,6 @@ class StorylinePageRoleType(StorylinePageFilter):
 class StorylinePageInformationType(StorylinePageFilter):
     panels = [
         FieldPanel("name"),
-        FieldPanel("slug"),
         FieldPanel("icon"),
     ]
 
@@ -117,7 +116,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
     card_color = models.CharField(
         max_length=20,
         choices=COLOR_CHOICES,
-        default="green",
+        default="card__bg-blue",
         blank=True,
         help_text="Background color in storyline overview page",
     )
