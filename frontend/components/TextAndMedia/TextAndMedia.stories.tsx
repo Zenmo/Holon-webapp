@@ -1,7 +1,7 @@
-import React from "react";
+// import React from "react";
 import TextAndMedia from "./TextAndMedia";
 
-import data from "./TextAndMedia.data";
+// import data from "./TextAndMedia.data";
 
 function stories() {
   return {

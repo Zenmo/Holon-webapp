@@ -1,6 +1,5 @@
 import RawHtml from "../RawHtml";
 
-import HolonButton from "../VersionOne/Buttons/HolonButton";
 import MediaContent from "@/components/MediaContent/MediaContent";
 
 type Props = {

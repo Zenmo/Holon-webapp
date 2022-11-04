@@ -1,7 +1,7 @@
-import React from "react";
+// import React from "react";
 import HeroBlock from "./HeroBlock";
 
-import data from "./HeroBlock.data";
+// import data from "./HeroBlock.data";
 
 function stories() {
   return {

@@ -1,6 +1,7 @@
-import React from "react";
+// import React from "react";
+import CardBlock from "./CardBlock";
 
-import data from "./CardBlock.data";
+// import data from "./CardBlock.data";
 
 function stories() {
   return {

@@ -1,5 +1,6 @@
-import React from "react";
-import data from "./TitleBlock.data";
+// import React from "react";
+import TitleBlock from "./TitleBlock";
+// import data from "./TitleBlock.data";
 
 function stories() {
   return {
