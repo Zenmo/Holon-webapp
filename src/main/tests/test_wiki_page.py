@@ -32,6 +32,4 @@ class WikiPageTest(WagtailPageTests):
         )
 
         data = page.get_component_data({})
-        self.assertEqual(
-            data["component_props"]["rich_text"], "This is a automated test"
-        )
+        self.assertEqual(data["component_props"]["rich_text"], "This is a automated test")

@@ -45,9 +45,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",

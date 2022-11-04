@@ -37,9 +37,7 @@ class TextAndMediaBlock(blocks.StructBlock):
             for item in value["media"]:
                 temp_dict = {
                     "text": value["text"].source,
-                    "media": [
-                        {"value": item.value.file.url, "id": item.id, "type": "image"}
-                    ],
+                    "media": [{"value": item.value.file.url, "id": item.id, "type": "image"}],
                     "grid_layout": value["grid_layout"],
                 }
                 dict_list.append(temp_dict)

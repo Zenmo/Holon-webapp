@@ -13,12 +13,8 @@ from . import BasePage
 
 
 class BasePageSerializer(serializers.ModelSerializer):
-    serializer_field_mapping = (
-        serializers.ModelSerializer.serializer_field_mapping.copy()
-    )
-    serializer_field_mapping.update(
-        {fields.StreamField: wagtail_serializers.StreamField}
-    )
+    serializer_field_mapping = serializers.ModelSerializer.serializer_field_mapping.copy()
+    serializer_field_mapping.update({fields.StreamField: wagtail_serializers.StreamField})
 
     seo = serializers.SerializerMethodField()
     site_setting = serializers.SerializerMethodField()
