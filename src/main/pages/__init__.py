@@ -6,3 +6,5 @@ from .wiki import *  # NOQA
 from .wiki_serializer import *  # NOQA
 from .storyline import *  # NOQA
 from .storyline_serializer import *  # NOQA
+from .static import *  # NOQA
+from .static_serializer import *  # NOQA
