@@ -1,4 +1,4 @@
-import { render /* screen */ } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import StorylineOverviewPage from "./";
 import data from "./StorylineOverviewPage.data";
 
@@ -7,8 +7,11 @@ describe("<StorylineOverviewPage />", () => {
     render(<StorylineOverviewPage />);
   });
 
-  it("Renders StorylineOverviewPage with data", () => {
-    const { container } = render(<StorylineOverviewPage {...data} />);
-    expect(container).toMatchSnapshot();
+  it("Renders StorylineOverviewPage with data", async () => {
+    render(<StorylineOverviewPage {...data} />);
+    const filterInput = screen.getByRole("checkbox", {
+      name: /Informatie 1/i,
+    });
+    expect(filterInput).toBeInTheDocument();
   });
 });
