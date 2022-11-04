@@ -27,8 +27,8 @@ export default function Card({ cardItem, key }: Props) {
 
   return (
     <div
-      className={`w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-h-[400px] m-8 ${colorStyle} border-solid border-2 rounded-lg`}>
-      <div className="h-1/2 overflow-hidden relative m-4">
+      className={`w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-h-[400px] m-8 ${colorStyle} border-solid border-2 rounded-lg flex flex-col`}>
+      <div className="overflow-hidden relative m-4 mb-0 flex-1 border">
         <Image
           src={process.env.NEXT_PUBLIC_BASE_URL + cardItem.imageSelector.img.src}
           alt={cardItem.imageSelector.img.alt}
@@ -38,7 +38,7 @@ export default function Card({ cardItem, key }: Props) {
           className="image"></Image>
       </div>
 
-      <span className="flex-col flex h-1/2 m-4">
+      <span className="flex-col flex m-4 flex-1 max-h:1/2 overflow-hidden">
         <strong className="mb-3 block">{cardItem.title}</strong>
         <span className="">
           <RawHtml html={cardItem.text} />
