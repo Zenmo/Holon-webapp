@@ -5,12 +5,12 @@ export type StoryLineItem = {
     description: string;
     cardColor: string;
     slug: string;
-    role: [
+    role?: [
     {
         name: string;
     }
     ];
-    informationTypes: [
+    informationTypes?: [
     {
         name: string;
         icon: string;
@@ -18,7 +18,7 @@ export type StoryLineItem = {
     ];
     sector: string;
     relativeUrl: string;
-    thumbnail: {
+    thumbnail?: {
         url: string;
         width: number;
         height: number;
