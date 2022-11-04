@@ -28,13 +28,18 @@ class TextAndMediaBlock(blocks.StructBlock):
     )
 
     title = blocks.CharBlock(required=True, help_text="Add your title")
-    size = blocks.ChoiceBlock(choices=[
-        ('', 'Select header size'),
-        ('h2', 'H2'),
-        ('h3', 'H3'),
-        ('h4', 'H4'),
-        ('h5', 'H5')
-    ], blank=True, required=False, default="")
+    size = blocks.ChoiceBlock(
+        choices=[
+            ("", "Select header size"),
+            ("h2", "H2"),
+            ("h3", "H3"),
+            ("h4", "H4"),
+            ("h5", "H5"),
+        ],
+        blank=True,
+        required=False,
+        default="",
+    )
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
     media = blocks.StreamBlock(
         [
@@ -52,11 +57,9 @@ class TextAndMediaBlock(blocks.StructBlock):
         required=False,
     )
 
-    grid_layout = blocks.ChoiceBlock(
-        required=True, choices=GRID_CHOICES, default=THIRD_TWOTHIRDS
-    )
+    grid_layout = blocks.ChoiceBlock(required=True, choices=GRID_CHOICES, default=HALF_HALF)
 
-    #button = ButtonComponent()
+    # button = ButtonComponent()
 
     class Meta:  # NOQA
         icon = "image"
