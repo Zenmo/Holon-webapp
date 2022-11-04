@@ -12,10 +12,32 @@ from api.models.scenario import Scenario
 from .base import BasePage
 from ..blocks import TextAndMediaBlock, StorylineSectionBlock
 
+ICON_CHOICES = (
+    ("book", "Book"),
+    ("bell", "Bell"),
+    ("cog", "Cog"),
+    ("folder", "Folder"),
+    ("heart", "Heart"),
+    ("info", "Info"),
+    ("lightning", "Lightning bolt"),
+    ("mapmarker", "Map marker"),
+    ("rocket", "Rocket"),
+    ("star", "Star"),
+    ("user", "User"),
+)
+
 
 class StorylinePageFilter(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=255)
+
+    icon = models.CharField(
+        max_length=20,
+        choices=ICON_CHOICES,
+        default="green",
+        blank=True,
+        help_text="Icon shown in storyline overview page",
+    )
 
     class Meta:
         abstract = True
@@ -42,6 +64,7 @@ class StorylinePageInformationType(StorylinePageFilter):
     panels = [
         FieldPanel("name"),
         FieldPanel("slug"),
+        FieldPanel("icon"),
     ]
 
     def __str__(self):
@@ -62,7 +85,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
     thumbnail = models.ForeignKey(
         "customimage.CustomImage",
         null=True,
-        blank=True,
+        blank=False,
         on_delete=models.SET_NULL,
         related_name="+",
     )

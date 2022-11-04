@@ -18,7 +18,7 @@ class StorylinePageInformationTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StorylinePageInformationType
-        fields = ["name", "slug"]
+        fields = ["name", "slug", "icon"]
 
 
 class StorylinePageSerializer(BasePageSerializer):

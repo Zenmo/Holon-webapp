@@ -60,22 +60,26 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
     }
   };
 
-  const filteredProjects =
-    storylines &&
-    storylines
-      .map(obj => ({ ...obj, xroles: [...new Set(obj.roles.map(item => item.name))] }))
-      .map(obj => ({
-        ...obj,
-        xinformationTypes: [...new Set(obj.informationTypes.map(item => item.name))],
-      }))
-      .filter(project =>
-        selectedRoles.length > 0 ? selectedRoles.some(r => project.xroles.indexOf(r) >= 0) : project
-      )
-      .filter(project =>
-        selectedInformation.length > 0
-          ? selectedInformation.some(r => project.xinformationTypes.indexOf(r) >= 0)
-          : project
-      );
+  function filterStorylines(
+    storylines: StorylineProps[],
+    attribute: "roles" | "informationTypes",
+    selectedTags: string[]
+  ) {
+    if (selectedTags.length === 0) {
+      return storylines;
+    }
+
+    return storylines.filter(storyline => {
+      const tags = storyline[attribute].map(tag => tag.name);
+      return selectedTags.some(tag => tags.includes(tag));
+    });
+  }
+
+  const filteredProjects = filterStorylines(
+    filterStorylines(storylines, "roles", selectedRoles),
+    "informationTypes",
+    selectedInformation
+  );
 
   return (
     <div className="flex w-full flex-col lg:flex-row">
@@ -119,8 +123,8 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
 
         <div className="flex flex-row flex-wrap storyline__grid">
           {filteredProjects?.map((project, index) => (
-              <StorylineOverviewCard key={index} index={index} project={project} />
-            ))}
+            <StorylineOverviewCard key={index} index={index} project={project} />
+          ))}
         </div>
       </div>
     </div>

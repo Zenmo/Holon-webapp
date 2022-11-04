@@ -43,6 +43,9 @@
 .card__bg-pink {
   @apply bg-holon-pink-100;
 }
+.card__bg-orange {
+  @apply bg-holon-orange-100;
+}
 
 @keyframes storylineFadeIn {
   0% {

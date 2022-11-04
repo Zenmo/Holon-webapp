@@ -23,7 +23,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
             it_array = []
             information_types = sl.information_types.all()
             for it in information_types:
-                it_dict = {"name": it.name}
+                it_dict = {"name": it.name, "icon": it.icon}
                 it_array.append(it_dict)
 
             sl_dict = {
@@ -47,7 +47,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
         all = StorylinePageRoleType.objects.all()
         return_all_roles = []
         for role in all:
-            role_dict = {"name": role.name, "slug": role.slug}
+            role_dict = {"name": role.name, "slug": role.slug, "icon": role.icon}
             return_all_roles.append(role_dict)
         return return_all_roles
 
@@ -55,7 +55,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
         all = StorylinePageInformationType.objects.all()
         return_all_information_types = []
         for it in all:
-            it_dict = {"name": it.name, "slug": it.slug}
+            it_dict = {"name": it.name, "slug": it.slug, "icon": it.icon}
             return_all_information_types.append(it_dict)
         return return_all_information_types
 
