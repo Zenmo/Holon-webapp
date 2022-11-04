@@ -68,9 +68,7 @@ class Migration(migrations.Migration):
                                         ),
                                         (
                                             "text",
-                                            wagtail.blocks.RichTextBlock(
-                                                required=False
-                                            ),
+                                            wagtail.blocks.RichTextBlock(required=False),
                                         ),
                                     ]
                                 ),
@@ -295,9 +293,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "title",
-                                    wagtail.blocks.CharBlock(
-                                        form_classname="title", required=True
-                                    ),
+                                    wagtail.blocks.CharBlock(form_classname="title", required=True),
                                 ),
                                 ("text", wagtail.blocks.RichTextBlock(required=True)),
                                 (
@@ -312,9 +308,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",
@@ -386,9 +380,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",
@@ -426,9 +418,7 @@ class Migration(migrations.Migration):
                                             [
                                                 (
                                                     "title",
-                                                    wagtail.blocks.CharBlock(
-                                                        required=False
-                                                    ),
+                                                    wagtail.blocks.CharBlock(required=False),
                                                 ),
                                                 (
                                                     "image_selector",
@@ -534,9 +524,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",
@@ -620,9 +608,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "title",
-                                    wagtail.blocks.CharBlock(
-                                        form_classname="title", required=True
-                                    ),
+                                    wagtail.blocks.CharBlock(form_classname="title", required=True),
                                 ),
                                 ("text", wagtail.blocks.RichTextBlock(required=True)),
                                 (
@@ -637,9 +623,7 @@ class Migration(migrations.Migration):
                                             ),
                                             (
                                                 "video",
-                                                wagtail.embeds.blocks.EmbedBlock(
-                                                    required=False
-                                                ),
+                                                wagtail.embeds.blocks.EmbedBlock(required=False),
                                             ),
                                         ],
                                         help_text="Choose an image or paste an embed url",
@@ -699,9 +683,7 @@ class Migration(migrations.Migration):
                                             [
                                                 (
                                                     "title",
-                                                    wagtail.blocks.CharBlock(
-                                                        required=False
-                                                    ),
+                                                    wagtail.blocks.CharBlock(required=False),
                                                 ),
                                                 (
                                                     "image_selector",
