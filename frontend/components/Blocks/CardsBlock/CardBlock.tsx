@@ -32,12 +32,11 @@ export default function CardBlock({
   },
 }: Props) {
   return (
-    <div className={`flex flex-row w-full justify-center h-fit py-12 px-10 lg:px-16 lg:pt-16`}>
-      <div className={`flex flex-row  flex-wrap`}>
-        {cards.map((cardItem, index) => {
-          return <Card cardItem={cardItem} key={index}></Card>;
-        })}
-      </div>
+    <div
+      className={`flex flex-row w-full justify-center h-fit py-12 px-10 lg:px-16 lg:pt-16 flex-wrap`}>
+      {cards.map((cardItem, index) => {
+        return <Card cardItem={cardItem} key={index}></Card>;
+      })}
     </div>
   );
 }
