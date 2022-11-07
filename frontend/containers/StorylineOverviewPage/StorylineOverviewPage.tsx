@@ -1,6 +1,7 @@
 import React from "react";
 import StorylineOverview from "@/components/Storyline/StorylineOverview/StorylineOverview";
 import styles from "./StorylineOverviewPage.module.css";
+import { basePageWrap } from "../BasePage";
 
 const StorylineOverviewPage = ({ allInformationTypes, allRoles, allStorylines }) => {
   return (
@@ -14,4 +15,4 @@ const StorylineOverviewPage = ({ allInformationTypes, allRoles, allStorylines })
   );
 };
 
-export default StorylineOverviewPage;
+export default basePageWrap(StorylineOverviewPage);

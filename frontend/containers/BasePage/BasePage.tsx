@@ -6,10 +6,12 @@ import dynamic from "next/dynamic";
 import { initGA } from "@/utils/gtag";
 import { getCookieConsentValue } from "react-cookie-consent";
 import CookieBar from "@/components/CookieBar";
+import Header from "@/components/Header/Header";
+import { NavItem } from "@/api/types";
 
 const WagtailUserbar = dynamic(() => import("@/components/WagtailUserbar"));
 
-const BasePage = ({ children, seo, wagtailUserbar }) => {
+const BasePage = ({ children, seo, wagtailUserbar, navigation }: { navigation: NavItem[] }) => {
   const {
     seoHtmlTitle,
     seoMetaDescription,
@@ -50,6 +52,7 @@ const BasePage = ({ children, seo, wagtailUserbar }) => {
         <meta name="robots" content={seoMetaRobots} />
         {!!canonicalLink && <link rel="canonical" href={canonicalLink} />}
       </Head>
+      <Header navigation={navigation} />
       <div className="BasePage">{children}</div>
       <CookieBar onAccept={initGA} />
       {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}

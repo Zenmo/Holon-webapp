@@ -152,6 +152,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
         FieldPanel("storyline"),
         FieldPanel("card_color"),
     ]
+    extra_panels = BasePage.extra_panels
 
     parent_page_types = ["main.StorylineOverviewPage"]
 
