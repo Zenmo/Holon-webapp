@@ -62,7 +62,7 @@ export default function MediaContent({ media }: MediaDetails) {
       case "image":
         returnValue = mediaDetail.value ? (
           <Image
-            src={process.env.NEXT_PUBLIC_BASE_URL + "/" + mediaDetail.value.img.src}
+            src={process.env.NEXT_PUBLIC_BASE_URL + mediaDetail.value.img.src}
             alt={mediaDetail.value.img.alt}
             layout="responsive"
             objectFit="contain"
