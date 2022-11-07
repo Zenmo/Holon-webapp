@@ -7,12 +7,10 @@ from .base import BasePage
 from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock
 
 
-class HomePage(HeadlessPreviewMixin, BasePage):
-
+class StaticPage(HeadlessPreviewMixin, BasePage):
     content = StreamField(
         [
             ("title_block", TitleBlock()),
-            ("hero_block", HeroBlock()),
             ("text_image_block", TextAndMediaBlock()),
             ("card_block", CardsBlock()),
         ],
@@ -25,10 +23,9 @@ class HomePage(HeadlessPreviewMixin, BasePage):
     content_panels = BasePage.content_panels + [
         FieldPanel("content"),
     ]
-    extra_panels = BasePage.extra_panels
-    serializer_class = "main.pages.HomePageSerializer"
 
-    parent_page_types = ["wagtailcore.page"]
+    extra_panels = BasePage.extra_panels
+    serializer_class = "main.pages.StaticPageSerializer"
 
     class Meta:
-        verbose_name = _("Home")
+        verbose_name = _("Static")

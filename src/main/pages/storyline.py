@@ -11,7 +11,7 @@ from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
 from api.models.scenario import Scenario
 
 from .base import BasePage
-from ..blocks import TextAndMediaBlock, StorylineSectionBlock
+from ..blocks import TextAndMediaBlock, StorylineSectionBlock, HeroBlock, TitleBlock, CardsBlock
 
 ICON_CHOICES = (
     ("book", "Book"),
@@ -125,9 +125,12 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
         [
             ("text_and_media", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
+            ("heroblock", HeroBlock()),
+            ("title_block", TitleBlock()),
+            ("card_block", CardsBlock()),
         ],
         block_counts={
-            "text_and_media": {"min_num": 1, "max_num": 1},
+            "text_and_media": {"min_num": 1},
             "section": {"min_num": 1},
         },
         use_json_field=True,

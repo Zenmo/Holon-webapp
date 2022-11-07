@@ -1,9 +1,8 @@
 from .base_serializer import BasePageSerializer
+from . import StaticPage
 
-from . import HomePage
 
-
-class HomePageSerializer(BasePageSerializer):
+class StaticPageSerializer(BasePageSerializer):
     class Meta:
-        model = HomePage
+        model = StaticPage
         fields = ["content"] + BasePageSerializer.Meta.fields

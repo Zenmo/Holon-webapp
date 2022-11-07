@@ -1,2 +1,21 @@
 .Container {
 }
+
+.Container h1,
+.Container h2,
+.Container h3,
+.Container h4,
+.Container h5,
+.Container h6,
+.Container ul,
+.Container ol,
+.Container p {
+  margin-bottom: 1rem;
+}
+.Container a {
+  display: inline-block;
+}
+.Container ul,
+.Container ol {
+  list-style: inheri;
+}

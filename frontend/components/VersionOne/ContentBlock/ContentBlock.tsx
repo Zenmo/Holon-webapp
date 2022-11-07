@@ -6,10 +6,9 @@ type Props = React.PropsWithChildren<{
 export default function ContentBlock({ id, colorClass = "", children }: Props) {
   return (
     <div
-      className={`min-h-screen snap-start ${colorClass} relative flex items-center justify-center`}
+      className={`min-h-screen snap-start ${colorClass} relative flex justify-center`}
       id={id}
-      data-testid="content-block"
-    >
+      data-testid="content-block">
       {children}
     </div>
   );

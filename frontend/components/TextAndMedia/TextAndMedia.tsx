@@ -1,57 +1,85 @@
-import { useState, useEffect } from "react";
-import Image from "next/image";
 import RawHtml from "../RawHtml";
-import ReactPlayer from "react-player/lazy";
 
-export default function TextAndMedia({ data }) {
-  type MediaItem = {
-    id: string;
-    value: string;
+import MediaContent from "@/components/MediaContent/MediaContent";
+
+type Props = {
+  data: {
     type: string;
+    value: {
+      backgroundColor: string;
+      title: string;
+      size: React.ElementType;
+      text: string;
+      media: [
+        | {
+            id: string;
+            value: string;
+            type: string;
+            alt_text: string;
+          }
+        | {
+            type: string;
+            value: {
+              id: number;
+              title: string;
+              img: {
+                src: string;
+                width: number;
+                height: number;
+                alt: string;
+              };
+            };
+          }
+      ];
+      altText: string;
+      gridLayout: string;
+      button?: {
+        button_style: string;
+        button_text: string;
+        button_hyperlink: string;
+      };
+    };
+    id: string;
   };
+};
 
-  const [mediaItems, setMediaItems] = useState<Array<MediaItem>>([]);
+export default function TextAndMedia({ data }: Props) {
+  const backgroundcolor = data.value.backgroundColor;
+  const Tag = data.value.size;
 
-  useEffect(() => {
-    const mediaArray: Array<MediaItem> = [];
-    if (data.value.media.length) {
-      {
-        data.value?.media.map((mediaItem: MediaItem) => {
-          mediaArray.push(mediaItem);
-        });
-      }
+  function getGrid(gridData: string) {
+    let left = "",
+      right = "";
+
+    if (gridData === "33_66") {
+      (left = "lg:w-1/3"), (right = "lg:w-2/3");
+    } else if (gridData == "50_50") {
+      (left = "lg:w-1/2"), (right = "lg:w-1/2");
+    } else if (gridData == "66_33") {
+      (left = "lg:w-2/3"), (right = "lg:w-1/3");
     }
-    setMediaItems(mediaArray);
-  }, [data]);
+
+    return {
+      left: left,
+      right: right,
+    };
+  }
+
+  const gridValue = getGrid(data.value.gridLayout);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h[100vh]">
-      <div className="flex flex-col p-8 lg:w-1/3 bg-slate-200">
-        <RawHtml html={data.value?.text} />
-      </div>
-      <div className="flex flex-col lg:w-2/3">
-        <div className="lg:sticky top-0 p-8">
-          {mediaItems.map((mediaItem, _index) => {
-            switch (mediaItem.type) {
-              case "video":
-                return <ReactPlayer key={"player" + _index} url={mediaItem.value} />;
-                break;
-              case "image":
-                return (
-                  <Image
-                    src={process.env.NEXT_PUBLIC_BASE_URL + mediaItem.value}
-                    alt="Alt texts todo"
-                    layout="responsive"
-                    width="768px"
-                    height="500px"
-                    key={"image_" + _index}
-                  />
-                );
-                break;
-              default:
-                return null;
-            }
-          })}
+    <div>
+      <div className={`${backgroundcolor} storyline__row flex flex-col lg:flex-row`}>
+        <div
+          className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 ${gridValue.left} bg-slate-200`}>
+          <Tag className={`mb-6`}>{data.value.title}</Tag>
+          <RawHtml html={data.value?.text} />
+        </div>
+
+        <div className={`flex flex-col ${gridValue.right}`}>
+          <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
+            <MediaContent media={data.value.media} />
+          </div>
         </div>
       </div>
     </div>

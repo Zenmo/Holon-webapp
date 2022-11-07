@@ -1,48 +1,64 @@
 """ Streamfields """
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
-from wagtail.embeds.embeds import get_embed
-from wagtail.images.blocks import ImageChooserBlock
+from .holon_image_chooser import HolonImageChooserBlock
 
 
 class TextAndMediaBlock(blocks.StructBlock):
     """Text and Media block"""
 
-    QUARTER_THREEQUARTERS = "25_75"
+    THIRD_TWOTHIRDS = "33_66"
     HALF_HALF = "50_50"
-    THREEQUARTERS_QUARTER = "75_25"
+    TWOTHIRDS_THIRD = "66_33"
     GRID_CHOICES = (
-        (QUARTER_THREEQUARTERS, "25% - 75%"),
+        (THIRD_TWOTHIRDS, "33% - 66%"),
         (HALF_HALF, "50% - 50%"),
-        (THREEQUARTERS_QUARTER, "75% - 25%"),
+        (TWOTHIRDS_THIRD, "66% - 33%"),
     )
 
+    background_color = blocks.ChoiceBlock(
+        choices=[
+            ("", "Default color"),
+            ("block__bg-gray", "Pale gray"),
+            ("block__bg-gray", "Pale purple"),
+        ],
+        required=False,
+    )
+
+    title = blocks.CharBlock(required=True, help_text="Add your title")
+    size = blocks.ChoiceBlock(
+        choices=[
+            ("", "Select header size"),
+            ("h2", "H2"),
+            ("h3", "H3"),
+            ("h4", "H4"),
+            ("h5", "H5"),
+        ],
+        blank=True,
+        required=True,
+        default="h2",
+    )
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
     media = blocks.StreamBlock(
         [
-            ("image", ImageChooserBlock(required=False)),
-            ("video", EmbedBlock(required=False)),
+            ("image", HolonImageChooserBlock(required=False)),
+            ("video", EmbedBlock(required=False, help_text="Youtube url of vimeo url")),
         ],
         help_text="Choose an image or paste an embed url",
         max_num=1,
     )
-    grid_layout = blocks.ChoiceBlock(
-        required=True, choices=GRID_CHOICES, default=THREEQUARTERS_QUARTER
+
+    alt_text = blocks.CharBlock(
+        help_text=(
+            "Fill in this alt-text only when you want to describe the image (for screenreaders and SEO)"
+        ),
+        required=False,
     )
 
-    def get_api_representation(self, value, context=None):
-        """Recursively call get_api_representation on children and return as a plain dict"""
-        dict_list = []
-        if value:
-            for item in value["media"]:
-                temp_dict = {
-                    "text": value["text"].source,
-                    "media": [{"value": item.value.file.url, "id": item.id, "type": "image"}],
-                    "grid_layout": value["grid_layout"],
-                }
-                dict_list.append(temp_dict)
-        return dict_list[0]
+    grid_layout = blocks.ChoiceBlock(required=True, choices=GRID_CHOICES, default=HALF_HALF)
+
+    # button = ButtonComponent()
 
     class Meta:  # NOQA
-        icon = "edit"
+        icon = "image"
         label = "Text and Media"
