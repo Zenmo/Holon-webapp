@@ -19,6 +19,8 @@ cp .devcontainer/.env.example .devcontainer/.env
 Ctrl-Shift-P > Remote-Containers: Rebuild Container
 ```
 
+Next do the same in the /src folder, except name it to .env.local instead of .env
+
 ## Start Dev Container
 
 Visual Studio Code will detect that you are working in a Dev Container, click "Reopen in Container" to start the Dev container. After you reopen visual studio code in a devcontainer you are ready to start the backend and frontend, run the following commands in two seperate terminals:
