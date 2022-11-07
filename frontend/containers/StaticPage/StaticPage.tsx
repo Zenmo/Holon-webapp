@@ -5,13 +5,11 @@ import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMedi
 import styles from "./StaticPage.module.css";
 import { basePageWrap } from "@/containers/BasePage";
 
-export type StaticPage = {
-  id: string;
-  type: string;
-  value: any;
-};
+import { PageProps, TextAndMediaVariant, TitleBlockVariant, CardBlockVariant } from "../types";
 
-const StaticPage = ({ content }: { content: StaticPage[] }) => {
+type Content = PageProps<TextAndMediaVariant | TitleBlockVariant | CardBlockVariant>;
+
+const StaticPage = ({ content }: { content: Content[] }) => {
   return (
     <div className={styles[""]}>
       {content?.map(contentItem => {

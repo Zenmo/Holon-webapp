@@ -6,25 +6,17 @@ import { basePageWrap } from "../BasePage";
 
 import styles from "./HomePage.module.css";
 
-type TextAndMediaVariant = {
-  type: "text_image_block";
-} & React.ComponentProps<typeof TextAndMedia>["data"];
+import {
+  PageProps,
+  TextAndMediaVariant,
+  HeroBlockVariant,
+  TitleBlockVariant,
+  CardBlockVariant,
+} from "../types";
 
-type HeroBlockVariant = {
-  type: "hero_block";
-} & React.ComponentProps<typeof HeroBlock>["data"];
-
-type TitleBlockVariant = {
-  type: "title_block";
-} & React.ComponentProps<typeof TitleBlock>["data"];
-
-type CardBlockVariant = {
-  type: "card_block";
-} & React.ComponentProps<typeof CardBlock>["data"];
-
-export type HomePageProps = {
-  id: string;
-} & (TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant);
+type HomePageProps = PageProps<
+  TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
+>;
 
 const HomePage = ({ content }: { content: HomePageProps[] }) => {
   return (
