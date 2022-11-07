@@ -1,6 +1,8 @@
 """ Streamfields """
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
+
+from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 
 
@@ -38,7 +40,7 @@ class TextAndMediaBlock(blocks.StructBlock):
         required=True,
         default="h2",
     )
-    text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
+    text = RichtextBlock(required=True, help_text="Add your text", rows=15)
     media = blocks.StreamBlock(
         [
             ("image", HolonImageChooserBlock(required=False)),

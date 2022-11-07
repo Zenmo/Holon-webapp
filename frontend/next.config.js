@@ -24,6 +24,10 @@ let nextConfig = {
         source: "/wt/static/:path*",
         destination: "http://localhost:8000/wt/static/:path*", // Proxy to Backend
       },
+      {
+        source: "/wt/media/:path*",
+        destination: "http://localhost:8000/wt/media/:path*", // Proxy to Backend
+      },
     ];
   },
 };
