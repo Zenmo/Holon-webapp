@@ -2,8 +2,9 @@ from wagtail.core.blocks import (
     StructBlock,
     CharBlock,
     ChoiceBlock,
-    RichTextBlock,
 )
+
+from main.blocks.rich_text_block import RichtextBlock
 
 
 class TitleBlock(StructBlock):
@@ -30,7 +31,7 @@ class TitleBlock(StructBlock):
         blank=True,
         required=False,
     )
-    text = RichTextBlock(required=False)
+    text = RichtextBlock(required=False)
 
     class Meta:
         icon = "title"

@@ -13,7 +13,6 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import RawHtml from "../../RawHtml";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -68,11 +67,10 @@ export default function StorylineOverviewCard({ project, index }: Props) {
           style={{ animationDelay: index + "00ms" }}>
           {project.thumbnail && (
             <span className="h-1/2 overflow-hidden relative">
-              <Image
-                objectFit="cover"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.url}
                 alt={`storyline ${project.title}`}
-                layout="fill"
               />
             </span>
           )}

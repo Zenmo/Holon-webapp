@@ -15,5 +15,8 @@ class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
         "main.StorylinePage",  # appname.ModelName
     ]
 
+    content_panels = BasePage.content_panels
+    extra_panels = BasePage.extra_panels
+
     class Meta:
         verbose_name = _("StorylineOverview")

@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 from api.models import Slider
 from wagtail.core import blocks
+
+from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 
 ANIMATION_1 = "animation1"
@@ -42,7 +44,7 @@ class StorylineSectionBlock(blocks.StructBlock):
 
     content = blocks.StreamBlock(
         [
-            ("text", blocks.RichTextBlock()),
+            ("text", RichtextBlock()),
             ("slider", SliderBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
             (
