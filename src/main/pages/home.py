@@ -30,10 +30,5 @@ class HomePage(HeadlessPreviewMixin, BasePage):
 
     parent_page_types = ["wagtailcore.page"]
 
-    subpage_types = [
-        "main.StaticPage",
-        "main.WikiPage",
-    ]
-
     class Meta:
         verbose_name = _("Home")
