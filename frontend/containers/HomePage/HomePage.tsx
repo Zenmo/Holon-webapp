@@ -6,13 +6,27 @@ import { basePageWrap } from "../BasePage";
 
 import styles from "./HomePage.module.css";
 
-export type HomePage = {
-  id: string;
-  type: string;
-  value: any;
-};
+type TextAndMediaVariant = {
+  type: "text_image_block";
+} & React.ComponentProps<typeof TextAndMedia>["data"];
 
-const HomePage = ({ content }: { content: HomePage[] }) => {
+type HeroBlockVariant = {
+  type: "hero_block";
+} & React.ComponentProps<typeof HeroBlock>["data"];
+
+type TitleBlockVariant = {
+  type: "title_block";
+} & React.ComponentProps<typeof TitleBlock>["data"];
+
+type CardBlockVariant = {
+  type: "card_block";
+} & React.ComponentProps<typeof CardBlock>["data"];
+
+export type HomePageProps = {
+  id: string;
+} & (TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant);
+
+const HomePage = ({ content }: { content: HomePageProps[] }) => {
   return (
     <div className={styles[""]}>
       {content?.map(contentItem => {
