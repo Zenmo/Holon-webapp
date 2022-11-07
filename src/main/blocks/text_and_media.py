@@ -36,7 +36,7 @@ class TextAndMediaBlock(blocks.StructBlock):
         ],
         blank=True,
         required=True,
-        default="",
+        default="h2",
     )
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
     media = blocks.StreamBlock(
