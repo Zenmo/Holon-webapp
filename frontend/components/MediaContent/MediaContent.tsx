@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import ReactPlayer from "react-player/lazy";
 
 type MediaDetails = {
@@ -27,10 +26,6 @@ type MediaDetails = {
 };
 
 export default function MediaContent({ media }: MediaDetails) {
-  const [imageSize, setImageSize] = useState({
-    width: 1,
-    height: 1,
-  });
   const [hasWindow, setHasWindow] = useState(false);
 
   // TOOO: Is this UseEffect really needed / Do after merge
@@ -61,21 +56,10 @@ export default function MediaContent({ media }: MediaDetails) {
         break;
       case "image":
         returnValue = mediaDetail.value ? (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={process.env.NEXT_PUBLIC_BASE_URL + "/" + mediaDetail.value.img.src}
             alt={mediaDetail.value.img.alt}
-            layout="responsive"
-            objectFit="contain"
-            priority={true}
-            //this shows pictures with the relative size
-            onLoadingComplete={target => {
-              setImageSize({
-                width: target.naturalWidth,
-                height: target.naturalHeight,
-              });
-            }}
-            width={imageSize.width}
-            height={imageSize.height}
             className="image"
           />
         ) : (

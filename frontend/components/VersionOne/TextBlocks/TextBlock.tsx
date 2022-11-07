@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 
 import { contentTextBlocks } from "./contentTextBlocks";
 import Paragraphs from "./Paragraphs";
@@ -25,11 +24,9 @@ export default function TextBlock(props: Props) {
     <div className={`mx-10 flex min-h-screen w-screen ${flexValue}`} data-testid="text-block">
       <div
         className={`flex w-full flex-col border-solid ${borderColor} ${stylingRight}`}
-        data-testid="outlined-block"
-      >
+        data-testid="outlined-block">
         <h2
-          className={`mt-8 text-3xl font-semibold sm:text-4xl lg:mt-24 lg:text-5xl ${underlineTitleBlue}`}
-        >
+          className={`mt-8 text-3xl font-semibold sm:text-4xl lg:mt-24 lg:text-5xl ${underlineTitleBlue}`}>
           {contentTextBlocks[value].title}
         </h2>
         <div className={`mt-2 lg:mt-10 lg:flex ${imageTextFlex} gap-20 align-middle`}>
@@ -42,7 +39,8 @@ export default function TextBlock(props: Props) {
             </div>
           </div>
           <div className="w-full p-2 lg:w-7/12 lg:p-10">
-            <Image src={contentTextBlocks[value].img} alt={contentTextBlocks[value].alt} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={contentTextBlocks[value].img} alt={contentTextBlocks[value].alt} />
           </div>
         </div>
       </div>

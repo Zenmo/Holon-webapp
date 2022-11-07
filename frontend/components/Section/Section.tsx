@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
-import Image from "next/image";
 import RawHtml from "@/components/RawHtml/RawHtml";
 
 export type Content =
@@ -114,14 +113,12 @@ export default function Section({ data }) {
         {/* TODO: Set the imagesize dynamically */}
         <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
           {Object.keys(media).length > 0 && (
-            <Image
+            /* eslint-disable @next/next/no-img-element */
+            <img
               src={process.env.NEXT_PUBLIC_BASE_URL + "/" + media.img?.src}
               alt={media.img?.alt}
               width={1600}
               height={900}
-              objectFit="contain"
-              className="image"
-              priority={true}
             />
           )}
         </div>
