@@ -86,7 +86,7 @@ export default function Section({ data }) {
 
   return (
     <div className="storyline__row flex flex-col lg:flex-row">
-      <div className="flex flex-col p-8 lg:w-1/3 bg-slate-200">
+      <div className="flex flex-col py-12 px-10 lg:px-16 lg:pt-16 lg:w-1/2 bg-slate-200">
         {content.map((ct, _index) => {
           if (ct.type === "slider") {
             return (
@@ -110,9 +110,9 @@ export default function Section({ data }) {
           }
         })}
       </div>
-      <div className="flex flex-col lg:w-2/3">
+      <div className="flex flex-col lg:w-1/2">
         {/* TODO: Set the imagesize dynamically */}
-        <div className="storyline__row__image lg:sticky top-0 p-8">
+        <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
           {Object.keys(media).length > 0 && (
             <Image
               src={process.env.NEXT_PUBLIC_BASE_URL + "/" + media.img?.src}
