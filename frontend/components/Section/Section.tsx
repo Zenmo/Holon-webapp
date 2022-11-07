@@ -115,7 +115,7 @@ export default function Section({ data }) {
           {Object.keys(media).length > 0 && (
             /* eslint-disable @next/next/no-img-element */
             <img
-              src={process.env.NEXT_PUBLIC_BASE_URL + "/" + media.img?.src}
+              src={process.env.NEXT_PUBLIC_BASE_URL + media.img?.src}
               alt={media.img?.alt}
               width={1600}
               height={900}
