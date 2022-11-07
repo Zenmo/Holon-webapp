@@ -1,12 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-const PureHtmlPage = ({ html }) => (
-    <div dangerouslySetInnerHTML={{ __html: html }} />
+const PureHtmlPage = ({ html }: { html: string }) => (
+  <div dangerouslySetInnerHTML={{ __html: html }} />
 );
-
-PureHtmlPage.propTypes = {
-    html: PropTypes.string.isRequired,
-};
 
 export default PureHtmlPage;

@@ -2,12 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
-import PropTypes from "prop-types";
 
 import s from "./Hero.module.css";
 import logo from "../../../public/img/logo.svg";
 
-const Hero = ({ title }) => (
+const Hero = ({ title }: { title: string }) => (
   <div className={s.Container}>
     <Image src={logo} width="100" height="100" className={s.Logo} alt="Holon" />
     <h1 className={s.Title}>
@@ -17,13 +16,5 @@ const Hero = ({ title }) => (
     </h1>
   </div>
 );
-
-Hero.propTypes = {
-  title: PropTypes.string.isRequired,
-};
-
-Hero.defaultProps = {
-  title: "",
-};
 
 export default Hero;
