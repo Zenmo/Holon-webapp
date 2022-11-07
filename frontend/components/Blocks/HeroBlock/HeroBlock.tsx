@@ -40,7 +40,7 @@ export default function HeroBlock({ data }: Props) {
             <h1>
               <RawHtml html={data.value.title}></RawHtml>
             </h1>
-            <div className={`text-3xl font-normal mt-8 mr-8`}>
+            <div className={`font-normal mt-8 mr-8`}>
               <RawHtml html={data.value.text}></RawHtml>
             </div>
           </div>
