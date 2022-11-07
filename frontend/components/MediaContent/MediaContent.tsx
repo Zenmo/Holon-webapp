@@ -46,7 +46,11 @@ export default function MediaContent({ media }: MediaDetails) {
       case "video":
         returnValue =
           mediaDetail.value && hasWindow ? (
-            <ReactPlayer key={`player ${mediaDetail.value.id}`} url={mediaDetail.value} />
+            <ReactPlayer
+              width="100%"
+              key={`player ${mediaDetail.value.id}`}
+              url={mediaDetail.value}
+            />
           ) : (
             ""
           );

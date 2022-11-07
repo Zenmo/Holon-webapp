@@ -42,7 +42,7 @@ class TextAndMediaBlock(blocks.StructBlock):
     media = blocks.StreamBlock(
         [
             ("image", HolonImageChooserBlock(required=False)),
-            ("video", EmbedBlock(required=False)),
+            ("video", EmbedBlock(required=False, help_text="Youtube url of vimeo url")),
         ],
         help_text="Choose an image or paste an embed url",
         max_num=1,
