@@ -24,7 +24,7 @@ const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
   const router = useRouter();
   const { path } = router.query;
 
-  const [wikiPostsHierarchy, setWikiPostsHierarchy] = useState<any[]>([]);
+  const [wikiPostsHierarchy, setWikiPostsHierarchy] = useState<WikiPageProps[]>([]);
   const [pages, setPages] = useState<WikiPageProps[]>([]);
 
   const createWikiPostsHierarchy = (items: Array<WikiPageProps>) => {
