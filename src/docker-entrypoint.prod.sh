@@ -15,6 +15,9 @@ setup_django () {
     echo Running migrations
     python manage.py migrate --noinput
     
+    echo Create dummy user if none exists
+    python manage.py create_superuser_if_none_exists --user=admin --password=admin
+    
     echo Collecting static-files
     python manage.py collectstatic --noinput
 
