@@ -35,7 +35,7 @@ class TextAndMediaBlock(blocks.StructBlock):
             ("h5", "H5"),
         ],
         blank=True,
-        required=False,
+        required=True,
         default="",
     )
     text = blocks.RichTextBlock(required=True, help_text="Add your text", rows=15)
