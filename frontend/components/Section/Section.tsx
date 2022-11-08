@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import RawHtml from "@/components/RawHtml/RawHtml";
+import Image from "next/future/image";
 
 export type Content =
   | {
@@ -32,7 +33,7 @@ export type Slider = {
 export type StaticImage = {
   id?: number;
   title?: string;
-  img?: {
+  img: {
     alt: string;
     height: number;
     width: number;
@@ -110,11 +111,9 @@ export default function Section({ data }) {
         })}
       </div>
       <div className="flex flex-col lg:w-1/2">
-        {/* TODO: Set the imagesize dynamically */}
         <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
           {Object.keys(media).length > 0 && (
-            /* eslint-disable @next/next/no-img-element */
-            <img src={media.img?.src} alt={media.img?.alt} width={1600} height={900} />
+            <Image src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
           )}
         </div>
       </div>

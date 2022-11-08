@@ -1,4 +1,6 @@
 import RawHtml from "../../RawHtml/RawHtml";
+import Image from "next/future/image";
+import s from "./CardBlock.module.css";
 
 type CardItem = {
   title: string;
@@ -28,12 +30,13 @@ export default function Card({ cardItem, key }: Props) {
     <div
       className={`w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-h-[400px] m-8 ${colorStyle} border-solid border-2 rounded-lg flex flex-col`}>
       <div className="overflow-hidden relative m-4 mb-0 flex-1 border">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={cardItem.imageSelector.img.src}
           alt={cardItem.imageSelector.img.alt}
+          width="725"
+          height="380"
+          className={s.Image}
           key={"image_" + key}
-          className="image"
         />
       </div>
 
