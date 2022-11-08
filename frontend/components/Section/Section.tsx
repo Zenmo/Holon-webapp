@@ -114,12 +114,7 @@ export default function Section({ data }) {
         <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
           {Object.keys(media).length > 0 && (
             /* eslint-disable @next/next/no-img-element */
-            <img
-              src={process.env.NEXT_PUBLIC_BASE_URL + media.img?.src}
-              alt={media.img?.alt}
-              width={1600}
-              height={900}
-            />
+            <img src={media.img?.src} alt={media.img?.alt} width={1600} height={900} />
           )}
         </div>
       </div>

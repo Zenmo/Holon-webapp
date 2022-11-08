@@ -57,11 +57,7 @@ export default function MediaContent({ media }: MediaDetails) {
       case "image":
         returnValue = mediaDetail.value ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={process.env.NEXT_PUBLIC_BASE_URL + mediaDetail.value.img.src}
-            alt={mediaDetail.value.img.alt}
-            className="image"
-          />
+          <img src={mediaDetail.value.img.src} alt={mediaDetail.value.img.alt} className="image" />
         ) : (
           ""
         );

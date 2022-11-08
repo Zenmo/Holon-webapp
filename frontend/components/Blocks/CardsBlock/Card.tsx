@@ -30,7 +30,7 @@ export default function Card({ cardItem, key }: Props) {
       <div className="overflow-hidden relative m-4 mb-0 flex-1 border">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={process.env.NEXT_PUBLIC_BASE_URL + cardItem.imageSelector.img.src}
+          src={cardItem.imageSelector.img.src}
           alt={cardItem.imageSelector.img.alt}
           key={"image_" + key}
           className="image"
