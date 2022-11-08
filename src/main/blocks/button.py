@@ -7,8 +7,15 @@ class ButtonComponent(StructBlock):
         choices=[("", "Default button style"), ("btn-dark", "dark"), ("btn-light", "light")],
         blank=True,
         required=False,
+        default="btn-dark",
     )
 
-    button_text = CharBlock(required=False)
+    button_text = CharBlock(required=True)
 
-    button_hyperlink = CharBlock(required=False)
+    button_hyperlink = CharBlock(required=True, helptext="Choose where you want the button to link to")
+
+    button_align = ChoiceBlock(
+        choices=[("", "Default button align"), ("btn-left", "left"), ("btn-center", "center")], 
+        required=False, 
+        default="btn-left",
+    )

@@ -1,5 +1,5 @@
 import RawHtml from "../RawHtml";
-
+import Button from "../Button/Button";
 import MediaContent from "@/components/MediaContent/MediaContent";
 
 type Props = {
@@ -33,18 +33,26 @@ type Props = {
       ];
       altText: string;
       gridLayout: string;
-      button?: {
-        button_style: string;
-        button_text: string;
-        button_hyperlink: string;
-      };
+      button?: Array<Button>;
     };
     id: string;
   };
 };
 
+type Button = {
+  type: string;
+  value: {
+    button_style: string;
+    button_text: string;
+    button_hyperlink: string;
+    button_align: string;
+  };
+  id: string;
+};
+
 export default function TextAndMedia({ data }: Props) {
   const backgroundcolor = data.value.backgroundColor;
+  const buttons = data.value.button ? data.value.button : [];
   const Tag = data.value.size;
 
   function getGrid(gridData: string) {
@@ -68,8 +76,8 @@ export default function TextAndMedia({ data }: Props) {
   const gridValue = getGrid(data.value.gridLayout);
 
   return (
-    <div>
-      <div className={`${backgroundcolor} storyline__row flex flex-col lg:flex-row`}>
+    <div className={`${backgroundcolor} flex flex-col`}>
+      <div className={`storyline__row flex flex-col lg:flex-row`}>
         <div
           className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 ${gridValue.left} bg-slate-200`}>
           <Tag className={`mb-6`}>{data.value.title}</Tag>
@@ -81,6 +89,18 @@ export default function TextAndMedia({ data }: Props) {
             <MediaContent media={data.value.media} />
           </div>
         </div>
+      </div>
+
+      <div>
+        {buttons.map((button, index) => {
+          return (
+            <Button
+              href="www.nos.nl"
+              key={index}
+              text={button.value.button_text}
+              align={button.value.button_align}></Button>
+          );
+        })}
       </div>
     </div>
   );
