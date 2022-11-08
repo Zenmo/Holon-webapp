@@ -3,6 +3,7 @@ import CardBlock from "@/components/Blocks/CardsBlock/CardBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
 import styles from "./StaticPage.module.css";
+import { basePageWrap } from "../BasePage";
 
 export type StaticPage = {
   id: string;
@@ -28,4 +29,4 @@ const StaticPage = ({ content }: { content: StaticPage[] }) => {
     </div>
   );
 };
-export default StaticPage;
+export default basePageWrap(StaticPage);
