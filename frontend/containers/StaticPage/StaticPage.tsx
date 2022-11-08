@@ -1,7 +1,7 @@
 import React from "react";
 import CardBlock from "@/components/Blocks/CardsBlock/CardBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
-import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
+import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMediaBlock";
 import styles from "./StaticPage.module.css";
 import { basePageWrap } from "@/containers/BasePage";
 
@@ -17,7 +17,7 @@ const StaticPage = ({ content }: { content: StaticPage[] }) => {
       {content?.map(contentItem => {
         switch (contentItem.type) {
           case "text_image_block":
-            return <TextAndMedia key={`txtmedia ${contentItem.id}`} data={contentItem} />;
+            return <TextAndMediaBlock key={`txtmedia ${contentItem.id}`} data={contentItem} />;
           case "title_block":
             return <TitleBlock key={`titleblock ${contentItem.id}`} data={contentItem} />;
           case "card_block":
