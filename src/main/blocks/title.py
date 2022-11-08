@@ -29,7 +29,7 @@ class TitleBlock(StructBlock):
             ("h2", "H2"),
         ],
         blank=True,
-        required=False,
+        required=True,
     )
     text = RichtextBlock(required=False)
 
