@@ -1,6 +1,6 @@
 import { basePageWrap } from "@/containers/BasePage";
-import Section from "@/components/Section/Section";
-import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
+import SectionBlock from "@/components/Blocks/SectionBlock/SectionBlock";
+import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMediaBlock";
 
 import styles from "./StorylinePage.module.css";
 import React from "react";
@@ -40,10 +40,10 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
       {storyline?.map((content, _index) => {
         switch (content.type) {
           case "text_and_media":
-            return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;
+            return <TextAndMediaBlock key={`txtmedia ${_index}`} data={content} />;
             break;
           case "section":
-            return <Section key={`section ${_index}`} data={content} />;
+            return <SectionBlock key={`section ${_index}`} data={content} />;
             break;
           default:
             null;
