@@ -30,7 +30,7 @@ class TitleBlock(StructBlock):
         ],
         blank=True,
         required=True,
-        default="h2"
+        default="h2",
     )
     text = RichtextBlock(required=False)
 
