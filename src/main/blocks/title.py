@@ -16,7 +16,7 @@ class TitleBlock(StructBlock):
         choices=[
             ("", "Default color"),
             ("block__bg-gray", "Pale gray"),
-            ("block__bg-gray", "Pale purple"),
+            ("block__bg-purple", "Pale purple"),
         ],
         required=False,
     )
@@ -30,6 +30,7 @@ class TitleBlock(StructBlock):
         ],
         blank=True,
         required=True,
+        default="h2"
     )
     text = RichtextBlock(required=False)
 

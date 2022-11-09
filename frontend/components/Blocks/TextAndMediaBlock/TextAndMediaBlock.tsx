@@ -64,8 +64,8 @@ export default function TextAndMediaBlock({ data }: Props) {
         </div>
 
         <div className={`flex flex-col ${gridValue.right}`}>
-          <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
-            <MediaContent media={data.value.media} />
+          <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top-0">
+            <MediaContent media={data.value.media} alt={data.value.altText} />
           </div>
         </div>
       </div>

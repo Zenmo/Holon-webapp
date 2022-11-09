@@ -11,7 +11,7 @@ type Props = {
       title: string;
       text: string;
       media: [];
-      alt_text: string;
+      altText: string;
       button?: {
         button_style: string;
         button_text: string;
@@ -46,7 +46,7 @@ export default function HeroBlock({ data }: Props) {
           </div>
 
           <div className="flex flex-col py-12 px-10 lg:px-16 lg:pt-24 lg:w-1/2">
-            <MediaContent media={data.value.media} />
+            <MediaContent media={data.value.media} alt={data.value.altText} />
           </div>
         </div>
 
