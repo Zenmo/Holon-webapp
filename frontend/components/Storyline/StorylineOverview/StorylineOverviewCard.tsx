@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import {
   BoltIcon,
   BellIcon,
@@ -15,6 +14,7 @@ import {
 import RawHtml from "../../RawHtml";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/future/image";
 
 import s from "./Storyline.module.css";
 
@@ -57,7 +57,8 @@ function StorylineOverviewCardIcon({ icon }: { icon: string }) {
 
 export default function StorylineOverviewCard({ project, index }: Props) {
   const router = useRouter();
-  const cssClass = index === 0 ? " lg:w-2/4 xl:w-2/5 " : " lg:w-1/4 xl:w-1/5 ";
+  const cssClass =
+    index === 0 ? ` lg:w-2/4 xl:w-2/5 ${s.large_card}` : ` lg:w-1/4 xl:w-1/5 ${s.medium_card}`;
 
   return (
     <div className={`storyline__griditem w-1/2 p-4 ${cssClass} `}>
@@ -67,10 +68,11 @@ export default function StorylineOverviewCard({ project, index }: Props) {
           style={{ animationDelay: index + "00ms" }}>
           {project.thumbnail && (
             <span className="h-1/2 overflow-hidden relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={process.env.NEXT_PUBLIC_BASE_URL + project.thumbnail.url}
+              <Image
+                src={project.thumbnail.url}
                 alt={`storyline ${project.title}`}
+                width="725"
+                height="380"
               />
             </span>
           )}
