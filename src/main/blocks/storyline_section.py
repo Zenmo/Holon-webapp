@@ -61,5 +61,9 @@ class StorylineSectionBlock(blocks.StructBlock):
                 ),
             )
             # ("radiobuttons", RadioButtonBlock()),
-        ]
+        ],
+        block_counts={
+            "static_image": {"max_num": 1},
+            "animation": {"max_num": 1},
+        },
     )
