@@ -34,7 +34,7 @@ export default function Card({ cardItem, key }: Props) {
           alt={cardItem.imageSelector.img.alt}
           width="725"
           height="380"
-          className={"object-fill min-h-full"}
+          className={"object-cover object-center h-full w-full object-pos max-w-none max-h-none"}
           key={"image_" + key}
         />
       </div>
