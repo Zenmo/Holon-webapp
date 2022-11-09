@@ -1,6 +1,5 @@
 import RawHtml from "../../RawHtml/RawHtml";
 import Image from "next/future/image";
-import s from "./CardBlock.module.css";
 
 type CardItem = {
   title: string;
