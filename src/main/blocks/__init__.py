@@ -5,3 +5,4 @@ from .holon_image_chooser import *  # NOQA
 from .title import *  # NOQA
 from .hero import *  # NOQA
 from .cards import *  # NOQA
+from .grid_chooser import *  # NOQA

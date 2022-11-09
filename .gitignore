@@ -43,6 +43,8 @@ src/.env
 src/.env.local
 src/.env.prod
 
+frontend/.env.local
+
 # Static folder
 src/static
 src/media

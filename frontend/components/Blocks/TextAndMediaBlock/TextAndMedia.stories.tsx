@@ -1,12 +1,12 @@
 // import React from "react";
-import TextAndMedia from "./TextAndMedia";
+import TextAndMediaBlock from "./TextAndMediaBlock";
 
 // import data from "./TextAndMedia.data";
 
 function stories() {
   return {
-    title: "Components/TextAndMedia",
-    component: TextAndMedia,
+    title: "Components/TextAndMediaBlock",
+    component: TextAndMediaBlock,
   };
 }
 
