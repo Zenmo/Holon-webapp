@@ -91,7 +91,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
 
     @property
     def thumbnail_rendition_url(self):
-        url = self.thumbnail.get_rendition("fill-300x186|jpegquality-80")
+        url = self.thumbnail.get_rendition("fill-750x380|jpegquality-80")
         return url
 
     description = models.TextField(null=True, blank=True, help_text="Description of the storyline")

@@ -5,43 +5,28 @@ from wagtail.embeds.blocks import EmbedBlock
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .button import ButtonComponent
+from .grid_chooser import GridChooserBlock
+from .background_chooser import BackgroundChooserBlock
 
 
 class TextAndMediaBlock(blocks.StructBlock):
     """Text and Media block"""
 
-    THIRD_TWOTHIRDS = "33_66"
-    HALF_HALF = "50_50"
-    TWOTHIRDS_THIRD = "66_33"
-    GRID_CHOICES = (
-        (THIRD_TWOTHIRDS, "33% - 66%"),
-        (HALF_HALF, "50% - 50%"),
-        (TWOTHIRDS_THIRD, "66% - 33%"),
-    )
+    grid_layout = GridChooserBlock(required=True)
 
-    background_color = blocks.ChoiceBlock(
-        choices=[
-            ("", "Default color"),
-            ("block__bg-gray", "Pale gray"),
-            ("block__bg-gray", "Pale purple"),
-        ],
-        required=False,
-    )
+    background = BackgroundChooserBlock()
 
-    title = blocks.CharBlock(required=True, help_text="Add your title")
-    size = blocks.ChoiceBlock(
-        choices=[
-            ("", "Select header size"),
-            ("h2", "H2"),
-            ("h3", "H3"),
-            ("h4", "H4"),
-            ("h5", "H5"),
-        ],
-        blank=True,
-        required=True,
-        default="h2",
-    )
+    # background_size = blocks.ChoiceBlock(
+    #     choices=[
+    #         ("bg__full", "Full backgroundcolor"),
+    #         ("bg__left", "Background only in left block"),
+    #     ],
+    #     default="bg__full",
+    #     required=True,
+    # )
+
     text = RichtextBlock(required=True, help_text="Add your text", rows=15)
+
     media = blocks.StreamBlock(
         [
             ("image", HolonImageChooserBlock(required=False)),
