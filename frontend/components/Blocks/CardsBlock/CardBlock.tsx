@@ -1,3 +1,4 @@
+import React from "react";
 import Card from "./Card";
 
 type Props = {
@@ -35,7 +36,11 @@ export default function CardBlock({
     <div
       className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-12 px-10 lg:px-16 lg:pt-16 gap-8`}>
       {cards.map((cardItem, index) => {
-        return <Card cardItem={cardItem} key={index}></Card>;
+        return (
+          <React.Fragment key={index}>
+            <Card cardItem={cardItem}></Card>
+          </React.Fragment>
+        );
       })}
     </div>
   );

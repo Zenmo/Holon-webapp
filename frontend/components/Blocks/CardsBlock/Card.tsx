@@ -19,10 +19,9 @@ type CardItem = {
 
 type Props = {
   cardItem: CardItem;
-  key: number;
 };
 
-export default function Card({ cardItem, key }: Props) {
+export default function Card({ cardItem }: Props) {
   const colorStyle: string = cardItem.cardBackground;
 
   return (
@@ -34,7 +33,6 @@ export default function Card({ cardItem, key }: Props) {
           width="725"
           height="380"
           className={"object-fill min-h-full"}
-          key={"image_" + key}
         />
       </div>
 
