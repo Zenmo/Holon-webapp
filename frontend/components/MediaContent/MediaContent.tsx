@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player/lazy";
 import Image from "next/future/image";
 
+interface Props {
+  media: MediaDetails;
+  alt: string;
+}
+
 type MediaDetails = {
   media: [
     | {
@@ -26,8 +31,10 @@ type MediaDetails = {
   ];
 };
 
-export default function MediaContent({ media }: MediaDetails) {
+export default function MediaContent({ media, alt }: Props) {
   const [hasWindow, setHasWindow] = useState(false);
+
+  const altText2 = alt === "" ? media[0].value.img.alt : alt;
 
   // UseEffect used for Hydration Error fix. Keep it
   useEffect(() => {
@@ -57,7 +64,7 @@ export default function MediaContent({ media }: MediaDetails) {
         return mediaDetail.value ? (
           <Image
             src={mediaDetail.value.img.src}
-            alt={mediaDetail.value.img.alt}
+            alt={altText2}
             className="image"
             width="1600"
             height="900"

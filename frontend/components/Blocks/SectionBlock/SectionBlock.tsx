@@ -136,7 +136,7 @@ export default function SectionBlock({ data }: Props) {
         })}
       </div>
       <div className={`flex flex-col ${gridValue.right}`}>
-        <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top:0">
+        <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top-0">
           {Object.keys(media).length > 0 && (
             <Image src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
           )}
