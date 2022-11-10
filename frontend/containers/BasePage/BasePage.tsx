@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Head from "next/head";
-import PropTypes from "prop-types";
 import dynamic from "next/dynamic";
 
 import { initGA } from "@/utils/gtag";
@@ -11,7 +10,30 @@ import { NavItem } from "@/api/types";
 
 const WagtailUserbar = dynamic(() => import("@/components/WagtailUserbar"));
 
-const BasePage = ({ children, seo, wagtailUserbar, navigation }: { navigation: NavItem[] }) => {
+type Props = React.PropsWithChildren<{
+  navigation: NavItem[];
+  seo?: {
+    canonicalLink?: string;
+    seoHtmlTitle?: string;
+    seoMetaDescription?: string;
+    seoMetaRobots?: string;
+    seoOgDescription?: string;
+    seoOgImage?: string;
+    seoOgTitle?: string;
+    seoOgType?: string;
+    seoOgUrl?: string;
+    seoTwitterDescription?: string;
+    seoTwitterImage?: string;
+    seoTwitterTitle?: string;
+    seoTwitterUrl?: string;
+  };
+
+  wagtailUserbar?: {
+    html: string;
+  };
+}>;
+
+const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => {
   const {
     seoHtmlTitle,
     seoMetaDescription,
@@ -58,26 +80,6 @@ const BasePage = ({ children, seo, wagtailUserbar, navigation }: { navigation: N
       {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}
     </>
   );
-};
-
-BasePage.defaultProps = {
-  seo: {},
-};
-
-BasePage.propTypes = {
-  children: PropTypes.node,
-  seo: PropTypes.shape({
-    seoHtmlTitle: PropTypes.string,
-    seoMetaDescription: PropTypes.string,
-    seoOgTitle: PropTypes.string,
-    seoOgDescription: PropTypes.string,
-    seoOgUrl: PropTypes.string,
-    seoTwitterTitle: PropTypes.string,
-    seoMetaRobots: PropTypes.string,
-  }),
-  wagtailUserbar: PropTypes.shape({
-    html: PropTypes.string,
-  }),
 };
 
 export default BasePage;

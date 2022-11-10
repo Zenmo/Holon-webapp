@@ -10,13 +10,13 @@ interface Props {
 type MediaDetails = {
   media: [
     | {
+        type: "video";
         id: string;
         value: string;
-        type: string;
         altText: string;
       }
     | {
-        type: string;
+        type: "image";
         value: {
           id: number;
           title: string;
@@ -47,22 +47,21 @@ export default function MediaContent({ media, alt }: Props) {
     return null;
   }
 
-  function showMedia(mediaDetail) {
-    let returnValue = "";
+  function showMedia(mediaDetail: MediaDetails["media"][0]) {
     switch (mediaDetail.type) {
       case "video":
-        returnValue = mediaDetail.value && hasWindow && (
+        return mediaDetail.value && hasWindow ? (
           <ReactPlayer
             width="100%"
             height="440px"
-            key={`player ${mediaDetail.value.id}`}
+            key={mediaDetail.value.id}
             url={mediaDetail.value}
             controls={true}
+            data-testid="video-player"
           />
-        );
-        break;
+        ) : null;
       case "image":
-        returnValue = mediaDetail.value && (
+        return mediaDetail.value ? (
           <Image
             src={mediaDetail.value.img.src}
             alt={altText2}
@@ -70,10 +69,12 @@ export default function MediaContent({ media, alt }: Props) {
             width="1600"
             height="900"
           />
+        ) : (
+          ""
         );
-      default:
     }
-    return returnValue;
+
+    return null;
   }
 
   // for now it is only possible to show one mediaitem (image or video).

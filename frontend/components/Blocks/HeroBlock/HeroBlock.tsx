@@ -10,8 +10,8 @@ type Props = {
       backgroundColor: string;
       title: string;
       text: string;
-      media: [];
-      altText: string;
+      media: React.ComponentProps<typeof MediaContent>["media"];
+      alt_text: string;
       button?: {
         button_style: string;
         button_text: string;
@@ -40,7 +40,7 @@ export default function HeroBlock({ data }: Props) {
             <h1>
               <RawHtml html={data.value.title}></RawHtml>
             </h1>
-            <div className={`font-normal mt-8 mr-8`}>
+            <div className={`font-normal mt-8 mr-8`} data-testid="content">
               <RawHtml html={data.value.text}></RawHtml>
             </div>
           </div>

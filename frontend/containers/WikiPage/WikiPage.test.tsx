@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import WikiPage from "./";
 // import data from './WikiPage.data';
 
@@ -8,13 +8,19 @@ jest.mock("next/router", () => ({
   }),
 }));
 
-describe("<WikiPage />", () => {
-  it("Renders an empty WikiPage", () => {
-    render(<WikiPage />);
-  });
+describe("WikiPage with simple text", () => {
+  it("renders the content", () => {
+    render(
+      <WikiPage
+        richText="Hello world"
+        wikiMenu={{
+          items: [{ relativeUrl: "/test/", title: "Test page", children: [] }],
+          meta: { totalCount: 1 },
+        }}
+      />
+    );
 
-  // it('Renders WikiPage with data', () => {
-  //     const { container } = render(<WikiPage {...data} />);
-  //     expect(container).toMatchSnapshot();
-  // });
+    expect(screen.getByText("Test page")).toBeInTheDocument();
+    expect(screen.getByText("Hello world")).toBeInTheDocument();
+  });
 });

@@ -5,12 +5,9 @@ import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMedi
 import styles from "./StorylinePage.module.css";
 import React from "react";
 
-export type Storyline = {
-  id: string;
-  type: string;
-  // eslint-disable-next-line
-  value: any;
-};
+import { PageProps, SectionVariant, TextAndMediaVariant } from "../types";
+
+type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
 export type Scenario = {
   id: string;
