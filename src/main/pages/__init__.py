@@ -10,3 +10,5 @@ from .storyline import *  # NOQA
 from .storyline_serializer import *  # NOQA
 from .static import *  # NOQA
 from .static_serializer import *  # NOQA
+from .staticterm import *  # NOQA
+from .staticterm_serializer import *  # NOQA
