@@ -17,5 +17,9 @@
 }
 .Container ul,
 .Container ol {
-  list-style: inheri;
+  list-style: inherit;
+}
+.Container a[data-introduction-text] {
+  cursor: pointer;
+  border-bottom: 1px dotted black;
 }
