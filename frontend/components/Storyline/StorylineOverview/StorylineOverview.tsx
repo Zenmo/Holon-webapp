@@ -1,17 +1,25 @@
 import { useState } from "react";
-// //http://localhost:8000/wt/api/nextjs/v1/pages/?type=main.ScenarioPage&fields=scenariotitle,description,role,informationtype&limit=10&child_of=7
-import config from "./exampledata.json";
 import StorylineOverviewCard from "./StorylineOverviewCard";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
-export default function StorylineOverview() {
-  //const uniqueRoles = [...new Set(config.map((item) => item.b))];
-  const roleArray = [...new Set(config.items.map(item => item.role))];
-  const uniqueRoles = [...new Set(roleArray.reduce((o, c) => o.concat(c), []))];
+import { StoryLineItem as StoryLineItemData } from "./types";
 
-  const informationArray = [...new Set(config.items.map(item => item.informationtype))];
-  const uniqueInformation = [...new Set(informationArray.reduce((o, c) => o.concat(c), []))];
-
+interface Props {
+  storylines: StoryLineItemData[];
+  allInformationTypes: [
+    {
+      name: string;
+      slug: string;
+    }
+  ];
+  allRoles: [
+    {
+      name: string;
+      slug: string;
+    }
+  ];
+}
+export default function StorylineOverview({ storylines, allInformationTypes, allRoles }: Props) {
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedInformation, setSelectedInformation] = useState<string[]>([]);
 
@@ -31,15 +39,26 @@ export default function StorylineOverview() {
     }
   };
 
-  const filteredProjects = config.items
-    .filter(project =>
-      selectedRoles.length > 0 ? selectedRoles.some(r => project.role.indexOf(r) >= 0) : project
-    )
-    .filter(project =>
-      selectedInformation.length > 0
-        ? selectedInformation.some(r => project.informationtype.indexOf(r) >= 0)
-        : project
-    );
+  function filterStorylines(
+    storylines: StoryLineItemData[],
+    attribute: "roles" | "informationTypes",
+    selectedTags: string[]
+  ) {
+    if (selectedTags.length === 0) {
+      return storylines;
+    }
+
+    return storylines.filter(storyline => {
+      const tags = storyline[attribute].map(tag => tag.name);
+      return selectedTags.some(tag => tags.includes(tag));
+    });
+  }
+
+  const filteredProjects = filterStorylines(
+    filterStorylines(storylines, "roles", selectedRoles),
+    "informationTypes",
+    selectedInformation
+  );
 
   return (
     <div className="flex w-full flex-col lg:flex-row">
@@ -63,34 +82,27 @@ export default function StorylineOverview() {
         <StorylineOverviewFilter
           title="Type rol"
           name="role"
-          items={uniqueRoles}
+          items={allRoles}
           selectedItems={selectedRoles}
           update={updateRole}
         />
         <StorylineOverviewFilter
           title="Type informatie"
           name="information"
-          items={uniqueInformation}
+          items={allInformationTypes}
           selectedItems={selectedInformation}
           update={updateInformation}
         />
       </div>
       <div className="flex flex-col p-8 lg:w-2/3 xl:w-3/4">
         <div className="flex flex-row justify-between mb-2">
-          <strong>{filteredProjects.length} resultaten</strong>
+          <strong>{filteredProjects?.length} resultaten</strong>
           <strong>Sorteren placenholder</strong>
         </div>
 
-        <div className="flex flex-row flex-wrap storyline__grid">
-          {filteredProjects.map((project, index) => (
-            <>
-              <StorylineOverviewCard key={index} project={project} />
-              <StorylineOverviewCard key={index} project={project} />
-              <StorylineOverviewCard key={index} project={project} />
-              <StorylineOverviewCard key={index} project={project} />
-              <StorylineOverviewCard key={index} project={project} />
-              <StorylineOverviewCard key={index} project={project} />
-            </>
+        <div className="flex flex-row flex-wrap mx-[-1rem]">
+          {filteredProjects?.map((project, index) => (
+            <StorylineOverviewCard key={index} index={index} project={project} />
           ))}
         </div>
       </div>

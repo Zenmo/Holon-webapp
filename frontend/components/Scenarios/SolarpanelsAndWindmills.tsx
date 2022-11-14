@@ -92,7 +92,7 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
   }
 
   return (
-    <div className="storyline__row flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row min-h[100vh]">
       <div className="flex flex-col p-8 lg:w-1/3 bg-slate-200">
         <ImageSlider
           inputId="zonnepanelen_flat"
@@ -128,8 +128,7 @@ export default function SolarpanelsAndWindmills({ data: scenario }: Props) {
         data-solarpanels={sliderValues[0]?.value}
         data-windmills={sliderValues[1]?.value}
         data-windforce={3}>
-        <div className="storyline__row__image lg:sticky top-0 p-8">
-          <p>Kosten: {kpis}</p>
+        <div className="lg:sticky top-0 p-8 max-h[100vh] mx-[auto]">
           <ImgFlatSolar></ImgFlatSolar>
         </div>
       </div>

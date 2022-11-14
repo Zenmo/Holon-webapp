@@ -2,6 +2,8 @@ from typing import Dict, Union, cast
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.forms.models import model_to_dict
+from django.db.models.fields.files import ImageFieldFile
 from django.http import Http404, HttpResponseRedirect
 from django.middleware import csrf as csrf_middleware
 from django.shortcuts import get_object_or_404
@@ -22,19 +24,32 @@ from wagtail.forms import PasswordViewRestrictionForm
 from wagtail.models import Page, PageViewRestriction, Site
 from wagtail.wagtail_hooks import require_wagtail_login
 from wagtail_headless_preview.models import PagePreview
+from wagtail.api.v2.views import BaseAPIViewSet
 
 api_router = WagtailAPIRouter("nextjs")
 
 # Default pages functionality of WagTail
-api_router.register_endpoint("pages", PagesAPIViewSet)
+class MainPagesViewSet(PagesAPIViewSet):
+    listing_default_fields = BaseAPIViewSet.listing_default_fields + [
+        "title",
+        "html_url",
+        "slug",
+        "first_published_at",
+        "show_in_menus",
+    ]
+
+
+api_router.register_endpoint("pages", MainPagesViewSet)
 
 
 class PageRelativeUrlListSerializer(serializers.Serializer):
-    def to_representation(self, obj):
-        return {
-            "title": obj.title,
-            "relative_url": obj.get_url(None),
-        }
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["id"] = instance.id
+        representation["title"] = instance.title
+        representation["relative_url"] = instance.get_url(None)
+
+        return representation
 
 
 class PageRelativeUrlListAPIViewSet(PagesAPIViewSet):
@@ -134,7 +149,7 @@ api_router.register_endpoint("password_protected_page", PasswordProtectedPageVie
 
 
 class PageByPathAPIViewSet(BaseAPIViewSet):
-    known_query_parameters = BaseAPIViewSet.known_query_parameters.union(["html_path"])
+    known_query_parameters = BaseAPIViewSet.known_query_parameters.union(["type"])
 
     def listing_view(self, request):
         page, args, kwargs = self.get_object()

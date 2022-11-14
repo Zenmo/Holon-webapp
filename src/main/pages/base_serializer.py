@@ -19,6 +19,7 @@ class BasePageSerializer(serializers.ModelSerializer):
     seo = serializers.SerializerMethodField()
     site_setting = serializers.SerializerMethodField()
     wagtail_userbar = serializers.SerializerMethodField()
+    navigation = serializers.SerializerMethodField()
 
     class Meta:
         model = BasePage
@@ -31,6 +32,8 @@ class BasePageSerializer(serializers.ModelSerializer):
             "seo",
             "site_setting",
             "wagtail_userbar",
+            "show_in_menus",
+            "navigation",
         ]
 
     def get_seo(self, page):
@@ -39,6 +42,18 @@ class BasePageSerializer(serializers.ModelSerializer):
     def get_site_setting(self, page):
         site_setting = SiteSetting.for_site(page.get_site())
         return SiteSettingSerializer(site_setting).data
+
+    # In table wagtailcore_page you can see more fields to add.
+    # We can add url-path later, when we creating a submenu
+    def get_navigation(self, page):
+        """Creates a navigation array"""
+        pages = BasePage.objects.filter(show_in_menus=True)
+        return_nav = []
+        for page in pages:
+            if page.depth == 3:
+                nav_dict = {"title": page.title, "slug": page.slug}
+                return_nav.append(nav_dict)
+        return return_nav
 
     def get_wagtail_userbar(self, page):
         request = self.context.get("request", None)

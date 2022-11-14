@@ -1,8 +1,7 @@
 function data() {
-    return {
-        title: 'Hero Title'
-    }
+  return {
+    title: "Hero Title",
+  };
 }
 
-
-export default data
+export default data;

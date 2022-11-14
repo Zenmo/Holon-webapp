@@ -22,8 +22,6 @@
         "@heroicons/react": "^2.0.11",
         "@types/react": "^18.0.15",
         "classnames": "^2.3.1",
-        "es-cookie": "^1.4.0",
-        "i": "^0.3.7",
         "i18next": "^21.8.5",
         "js-cookie": "^3.0.1",
         "next": "12.3.0",

@@ -1,9 +1,22 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
-from wagtail.core import blocks
 
 from api.models import Slider
-from api.serializers import SliderSerializer
+from wagtail.core import blocks
+
+from main.blocks.rich_text_block import RichtextBlock
+from .holon_image_chooser import HolonImageChooserBlock
+from .grid_chooser import GridChooserBlock
+from .background_chooser import BackgroundChooserBlock
+
+ANIMATION_1 = "animation1"
+SOLAR_AND_WINDMILLS = "solar_and_windmills"
+ANIMATION_3 = "animation3"
+ANIMATION_CHOICES = (
+    (ANIMATION_1, "Animatie 1 (Test)"),
+    (SOLAR_AND_WINDMILLS, "Solarpanels and windmills"),
+    (ANIMATION_1, "Animatie 3 (Test)"),
+)
 
 
 def get_sliders():
@@ -31,10 +44,26 @@ class SliderBlock(blocks.StructBlock):
 class StorylineSectionBlock(blocks.StructBlock):
     """Blocks for all the scenarios"""
 
+    background = BackgroundChooserBlock()
+    grid_layout = GridChooserBlock(required=True)
+
     content = blocks.StreamBlock(
         [
-            ("text", blocks.RichTextBlock()),
+            ("text", RichtextBlock()),
             ("slider", SliderBlock()),
+            ("static_image", HolonImageChooserBlock(required=False)),
+            (
+                "animation",
+                blocks.ChoiceBlock(
+                    required=False,
+                    choices=ANIMATION_CHOICES,
+                    default=SOLAR_AND_WINDMILLS,
+                ),
+            )
             # ("radiobuttons", RadioButtonBlock()),
-        ]
+        ],
+        block_counts={
+            "static_image": {"max_num": 1},
+            "animation": {"max_num": 1},
+        },
     )

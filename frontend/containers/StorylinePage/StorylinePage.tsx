@@ -1,13 +1,13 @@
-import SolarpanelsAndWindmills from "@/components/Scenarios/SolarpanelsAndWindmills";
-import TextAndMedia from "@/components/TextAndMedia/TextAndMedia";
+import { basePageWrap } from "@/containers/BasePage";
+import SectionBlock from "@/components/Blocks/SectionBlock/SectionBlock";
+import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMediaBlock";
 
 import styles from "./StorylinePage.module.css";
+import React from "react";
 
-export type Storyline = {
-  id: string;
-  type: string;
-  value: any;
-};
+import { PageProps, SectionVariant, TextAndMediaVariant } from "../types";
+
+type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
 export type Scenario = {
   id: string;
@@ -38,10 +38,10 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
       {storyline?.map((content, _index) => {
         switch (content.type) {
           case "text_and_media":
-            return <TextAndMedia key={`txtmedia ${_index}`} data={content} />;
+            return <TextAndMediaBlock key={`txtmedia ${_index}`} data={content} />;
             break;
           case "section":
-            return <SolarpanelsAndWindmills key={`solarwind ${_index}`} data={content} />;
+            return <SectionBlock key={`section ${_index}`} data={content} />;
             break;
           default:
             null;
@@ -51,4 +51,4 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
   );
 };
 
-export default StorylinePage;
+export default basePageWrap(StorylinePage);
