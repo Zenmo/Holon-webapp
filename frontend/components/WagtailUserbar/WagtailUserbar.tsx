@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 
-const WagtailUserbar = ({ html }) => {
+const WagtailUserbar = ({ html }: { html: string }) => {
     useEffect(() => {
         // This  code is copy pasted from
         // https://github.com/wagtail/wagtail/blob/19ad01ddd5d051230318a2bbfa890ac5290f295a/client/src/entrypoints/admin/userbar.js
@@ -252,10 +251,6 @@ const WagtailUserbar = ({ html }) => {
     });
 
     return <div dangerouslySetInnerHTML={{ __html: html }} />;
-};
-
-WagtailUserbar.propTypes = {
-    html: PropTypes.string.isRequired,
 };
 
 export default WagtailUserbar;

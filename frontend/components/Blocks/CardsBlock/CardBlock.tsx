@@ -1,3 +1,4 @@
+import React from "react";
 import Card from "./Card";
 import ButtonBlock from "@/components/Button/ButtonBlock";
 
@@ -61,9 +62,13 @@ export default function CardBlock({
 }: Props) {
   return (
     <div
-      className={`flex flex-row w-full justify-center h-fit py-12 px-10 lg:px-16 lg:pt-16 flex-wrap`}>
+      className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-12 px-10 lg:px-16 lg:pt-16 gap-8`}>
       {cards.map((cardItem, index) => {
-        return <Card cardItem={cardItem} key={index}></Card>;
+        return (
+          <React.Fragment key={index}>
+            <Card cardItem={cardItem}></Card>
+          </React.Fragment>
+        );
       })}
 
       {buttonBlock.length > 0 && (

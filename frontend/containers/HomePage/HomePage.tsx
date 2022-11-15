@@ -6,13 +6,19 @@ import { basePageWrap } from "../BasePage";
 
 import styles from "./HomePage.module.css";
 
-export type HomePage = {
-  id: string;
-  type: string;
-  value: any;
-};
+import {
+  PageProps,
+  TextAndMediaVariant,
+  HeroBlockVariant,
+  TitleBlockVariant,
+  CardBlockVariant,
+} from "../types";
 
-const HomePage = ({ content }: { content: HomePage[] }) => {
+type HomePageProps = PageProps<
+  TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
+>;
+
+const HomePage = ({ content }: { content: HomePageProps[] }) => {
   return (
     <div className={styles[""]}>
       {content?.map(contentItem => {

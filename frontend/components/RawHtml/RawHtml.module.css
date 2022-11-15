@@ -12,10 +12,32 @@
 .Container p {
   margin-bottom: 1rem;
 }
+.Container p,
+.Container ul,
+.Container li {
+  font-size: 1rem;
+}
 .Container a {
   display: inline-block;
+  text-decoration: underline;
 }
 .Container ul,
 .Container ol {
-  list-style: inheri;
+  padding-left: 2rem;
+}
+.Container ul {
+  list-style-type: disc;
+}
+.Container ol {
+  list-style-type: decimal;
+}
+.Container ol ol {
+  list-style-type: lower-alpha;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.Container ul ul {
+  list-style-type: circle;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }

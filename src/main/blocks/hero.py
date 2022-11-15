@@ -6,6 +6,7 @@ from wagtail.embeds.blocks import EmbedBlock
 from main.blocks.rich_text_block import RichtextBlock
 from .button import ButtonBlock
 from .holon_image_chooser import HolonImageChooserBlock
+from .background_chooser import BackgroundChooserBlock
 
 
 class HeroBlock(StructBlock):
@@ -17,7 +18,7 @@ class HeroBlock(StructBlock):
         choices=[
             ("", "Default color"),
             ("block__bg-gray", "Pale gray"),
-            ("block__bg-gray", "Pale purple"),
+            ("block__bg-purple", "Pale purple"),
         ],
         required=False,
     )
