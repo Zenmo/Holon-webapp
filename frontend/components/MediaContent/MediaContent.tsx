@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player/lazy";
-import Image from "next/future/image";
 
 interface Props {
   media: MediaDetails;
