@@ -14,10 +14,8 @@ import {
 import RawHtml from "../../RawHtml";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Image from "next/future/image";
 
 import s from "./Storyline.module.css";
-
 import { StoryLineItem as StoryLineItemData } from "./types";
 
 interface Props {
@@ -67,14 +65,13 @@ export default function StorylineOverviewCard({ project, index }: Props) {
           style={{ animationDelay: index + "00ms" }}>
           {project.thumbnail && (
             <span className="h-1/2 overflow-hidden relative">
-              <Image
+              {/* eslint-disable @next/next/no-img-element */}
+              <img
                 src={project.thumbnail.url}
                 alt={`storyline ${project.title}`}
                 width="725"
                 height="380"
-                className={
-                  "object-cover object-center h-full w-full object-pos max-w-none max-h-none"
-                }
+                className="object-cover object-center h-full w-full object-pos max-w-none max-h-none"
               />
             </span>
           )}
