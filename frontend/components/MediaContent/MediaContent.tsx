@@ -2,16 +2,21 @@ import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player/lazy";
 import Image from "next/future/image";
 
+interface Props {
+  media: MediaDetails;
+  alt: string;
+}
+
 type MediaDetails = {
   media: [
     | {
+        type: "video";
         id: string;
         value: string;
-        type: string;
         altText: string;
       }
     | {
-        type: string;
+        type: "image";
         value: {
           id: number;
           title: string;
@@ -26,8 +31,10 @@ type MediaDetails = {
   ];
 };
 
-export default function MediaContent({ media }: MediaDetails) {
+export default function MediaContent({ media, alt }: Props) {
   const [hasWindow, setHasWindow] = useState(false);
+
+  const altText2 = alt === "" ? media[0].value.img.alt : alt;
 
   // UseEffect used for Hydration Error fix. Keep it
   useEffect(() => {
@@ -40,33 +47,34 @@ export default function MediaContent({ media }: MediaDetails) {
     return null;
   }
 
-  function showMedia(mediaDetail) {
-    let returnValue = "";
+  function showMedia(mediaDetail: MediaDetails["media"][0]) {
     switch (mediaDetail.type) {
       case "video":
-        returnValue = mediaDetail.value && hasWindow && (
+        return mediaDetail.value && hasWindow ? (
           <ReactPlayer
             width="100%"
             height="440px"
-            key={`player ${mediaDetail.value.id}`}
+            key={mediaDetail.value.id}
             url={mediaDetail.value}
             controls={true}
+            data-testid="video-player"
           />
-        );
-        break;
+        ) : null;
       case "image":
-        returnValue = mediaDetail.value && (
+        return mediaDetail.value ? (
           <Image
             src={mediaDetail.value.img.src}
-            alt={mediaDetail.value.img.alt}
+            alt={altText2}
             className="image"
             width="1600"
             height="900"
           />
+        ) : (
+          ""
         );
-      default:
     }
-    return returnValue;
+
+    return null;
   }
 
   // for now it is only possible to show one mediaitem (image or video).

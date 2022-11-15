@@ -19,23 +19,20 @@ type CardItem = {
 
 type Props = {
   cardItem: CardItem;
-  key: number;
 };
 
-export default function Card({ cardItem, key }: Props) {
+export default function Card({ cardItem }: Props) {
   const colorStyle: string = cardItem.cardBackground;
 
   return (
-    <div
-      className={`w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-h-[400px] m-8 ${colorStyle} border-solid border-2 rounded-lg flex flex-col`}>
+    <div className={` min-h-[400px] ${colorStyle} border-solid border-2 rounded-lg flex flex-col`}>
       <div className="overflow-hidden relative m-4 mb-0 flex-1 border">
         <Image
           src={cardItem.imageSelector.img.src}
           alt={cardItem.imageSelector.img.alt}
           width="725"
           height="380"
-          className={"object-cover object-center h-full w-full object-pos max-w-none max-h-none"}
-          key={"image_" + key}
+          className={"object-fill min-h-full"}
         />
       </div>
 
