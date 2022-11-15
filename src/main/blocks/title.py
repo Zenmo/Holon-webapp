@@ -1,9 +1,4 @@
-from wagtail.core.blocks import (
-    StructBlock,
-    CharBlock,
-    ChoiceBlock,
-    StreamBlock
-)
+from wagtail.core.blocks import StructBlock, CharBlock, ChoiceBlock, StreamBlock
 from .button import ButtonBlock
 from main.blocks.rich_text_block import RichtextBlock
 
@@ -35,12 +30,7 @@ class TitleBlock(StructBlock):
     )
     text = RichtextBlock(required=False)
 
-    button_block = StreamBlock(
-        [
-            ("buttons", ButtonBlock(required=False))
-        ], 
-        required=False
-    )
+    button_block = StreamBlock([("buttons", ButtonBlock(required=False))], required=False)
 
     class Meta:
         icon = "title"

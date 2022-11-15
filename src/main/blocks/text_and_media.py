@@ -43,12 +43,7 @@ class TextAndMediaBlock(blocks.StructBlock):
         required=False,
     )
 
-    button_block = blocks.StreamBlock(
-        [
-            ("buttons", ButtonBlock(required=False))
-        ], 
-        required=False
-    )
+    button_block = blocks.StreamBlock([("buttons", ButtonBlock(required=False))], required=False)
 
     class Meta:  # NOQA
         icon = "image"

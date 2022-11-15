@@ -31,12 +31,7 @@ class CardsBlock(StructBlock):
 
     cards = ListBlock(CardComponent())
 
-    button_block = StreamBlock(
-        [
-            ("buttons", ButtonBlock(required=False))
-        ], 
-        required=False
-    )
+    button_block = StreamBlock([("buttons", ButtonBlock(required=False))], required=False)
 
     class Meta:
         icon = "grip"

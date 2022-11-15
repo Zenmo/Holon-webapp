@@ -40,12 +40,7 @@ class HeroBlock(StructBlock):
         required=False,
     )
 
-    button_block = StreamBlock(
-        [
-            ("buttons", ButtonBlock(required=False))
-        ], 
-        required=False
-    )
+    button_block = StreamBlock([("buttons", ButtonBlock(required=False))], required=False)
 
     class Meta:
         icon = "title"
