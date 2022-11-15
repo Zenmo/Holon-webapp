@@ -13,6 +13,26 @@ import {
   TitleBlockVariant,
   CardBlockVariant,
 } from "../types";
+import FloorPlan from "@/components/FloorPlan/FloorPlan";
+
+const floorplanconfig = [
+  "commercial",
+  "commercial",
+  "forest",
+  "industry",
+  "residential",
+  "forest",
+  "residential",
+  "industry",
+  "residential",
+  "residential",
+  "commercial",
+  "forest",
+  "residential",
+  "industry",
+  "residential",
+  "commercial",
+];
 
 type HomePageProps = PageProps<
   TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
@@ -21,6 +41,7 @@ type HomePageProps = PageProps<
 const HomePage = ({ content }: { content: HomePageProps[] }) => {
   return (
     <div className={styles[""]}>
+      <FloorPlan config={floorplanconfig} />
       {content?.map(contentItem => {
         switch (contentItem.type) {
           case "text_image_block":
