@@ -1,20 +1,24 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import s from "./RawHtml.module.css";
+import HolonButton from "../VersionOne/Buttons/HolonButton";
 import { Dialog, Transition } from "@headlessui/react";
 
 export default function RawHtml({ html }: { html: string }) {
   const [isOpen, setIsOpen] = useState(true);
   const [modalText, setModalText] = useState("");
+  const [modalLink, setModalLink] = useState("");
 
   const RawHtmlItem = useRef(null);
 
   function closeModal() {
-    setModalText("");
     setIsOpen(false);
+    setModalText("");
+    setModalLink("");
   }
 
-  function openModal({ text }: { text: string }) {
+  function openModal(text, linkUrl) {
+    setModalLink(linkUrl);
     setModalText(text);
     setIsOpen(true);
   }
@@ -28,8 +32,9 @@ export default function RawHtml({ html }: { html: string }) {
         link.addEventListener("click", function (e) {
           e.preventDefault();
 
-          const linktext = link.getAttribute("data-introduction-text");
-          openModal(linktext);
+          const linkText = link.getAttribute("data-introduction-text");
+          const linkUrl = link.getAttribute("data-page-link");
+          openModal(linkText, linkUrl);
         });
       }
     }
@@ -68,6 +73,11 @@ export default function RawHtml({ html }: { html: string }) {
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">{modalText}</p>
+                    </div>
+                    <div className="mt-4">
+                      <HolonButton tag="a" href={modalLink} variant="darkmode">
+                        Lees meer
+                      </HolonButton>
                     </div>
                     <button
                       onClick={closeModal}
