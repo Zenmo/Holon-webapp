@@ -26,8 +26,7 @@ export default function ButtonBlock({ buttons, align }: Props) {
   const alignValue = align === "btn-left" ? "justify-start" : "justify-center";
 
   return (
-    <div
-      className={`flex flex-row w-full ${alignValue} top-[-3rem] relative h-fit px-10 lg:px-16 flex-wrap `}>
+    <div className={`flex flex-row w-full ${alignValue} h-fit px-10 lg:px-16 flex-wrap `}>
       {buttons.map((button, index) => {
         return (
           <Button tag="a" details={button.value} variant={button.value.buttonStyle} key={index}>

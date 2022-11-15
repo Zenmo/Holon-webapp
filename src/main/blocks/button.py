@@ -3,6 +3,7 @@ from wagtail.core.blocks import StructBlock, CharBlock, ChoiceBlock, StreamBlock
 from .PageChooserBlock import PageChooserBlock
 
 
+
 class ButtonComponent(StructBlock):
     button_style = ChoiceBlock(
         choices=[("", "Default button style"), ("dark", "dark"), ("light", "light")],

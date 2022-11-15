@@ -1,10 +1,12 @@
 import Card from "./Card";
+import ButtonBlock from "@/components/Button/ButtonBlock";
 
 type Props = {
   data: {
     type: string;
     value: {
       cards: Array<CardItem>;
+      buttonBlock: [] | Array<Buttons>;
     };
     id: string;
   };
@@ -26,9 +28,35 @@ type CardItem = {
   cardBackground: string;
 };
 
+type Buttons = {
+  type: string;
+  value: {
+    buttonsAlign: string;
+    buttons: Array<Button>;
+  };
+  id: string;
+};
+
+type Button = {
+  type: string;
+  value: {
+    buttonStyle: "dark" | "light" | undefined;
+    buttonText: string;
+    buttonLink: [
+      {
+        type: "intern" | "extern";
+        value: number | string;
+        id: string;
+      }
+    ];
+    buttonAlign: string;
+  };
+  id: string;
+};
+
 export default function CardBlock({
   data: {
-    value: { cards },
+    value: { cards, buttonBlock },
   },
 }: Props) {
   return (
@@ -37,6 +65,12 @@ export default function CardBlock({
       {cards.map((cardItem, index) => {
         return <Card cardItem={cardItem} key={index}></Card>;
       })}
+
+      {buttonBlock.length > 0 && (
+        <ButtonBlock
+          buttons={buttonBlock[0].value.buttons}
+          align={buttonBlock[0].value.buttonsAlign}></ButtonBlock>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.core.blocks import StructBlock, CharBlock, ChoiceBlock, ListBlock
-from .button import ButtonComponent
+from wagtail.core.blocks import StructBlock, CharBlock, ChoiceBlock, ListBlock, StreamBlock
+from .button import ButtonBlock
 from .holon_image_chooser import HolonImageChooserBlock
 
 COLOR_CHOICES = (
@@ -31,7 +31,12 @@ class CardsBlock(StructBlock):
 
     cards = ListBlock(CardComponent())
 
-    # button = ButtonComponent()
+    button_block = StreamBlock(
+        [
+            ("buttons", ButtonBlock(required=False))
+        ], 
+        required=False
+    )
 
     class Meta:
         icon = "grip"
