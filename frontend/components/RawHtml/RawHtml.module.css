@@ -31,3 +31,13 @@
 .Container ol {
   list-style-type: decimal;
 }
+.Container ol ol {
+  list-style-type: lower-alpha;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.Container ul ul {
+  list-style-type: circle;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
