@@ -1,5 +1,6 @@
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import MediaContent from "@/components/MediaContent/MediaContent";
+import ButtonBlock from "@/components/Button/ButtonBlock";
 
 import RawHtml from "../../RawHtml";
 
@@ -12,14 +13,36 @@ type Props = {
       text: string;
       media: [];
       alt_text: string;
-      button?: {
-        button_style: string;
-        button_text: string;
-        button_hyperlink: string;
-      };
+      buttonBlock: [] | Array<Buttons>;
     };
     id: string;
   };
+};
+
+type Buttons = {
+  type: string;
+  value: {
+    buttonsAlign: string;
+    buttons: Array<Button>;
+  };
+  id: string;
+};
+
+type Button = {
+  type: string;
+  value: {
+    buttonStyle: "dark" | "light" | undefined;
+    buttonText: string;
+    buttonLink: [
+      {
+        type: "intern" | "extern";
+        value: number | string;
+        id: string;
+      }
+    ];
+    buttonAlign: string;
+  };
+  id: string;
 };
 
 export default function HeroBlock({ data }: Props) {
@@ -51,6 +74,12 @@ export default function HeroBlock({ data }: Props) {
         </div>
 
         <div className="flex flex-row h-16 justify-center">
+          {data.value.buttonBlock.length > 0 && (
+            <ButtonBlock
+              buttons={data.value.buttonBlock[0].value.buttons}
+              align="btn-left"></ButtonBlock>
+          )}
+
           <button
             onClick={scrollDown}
             className="bg-holon-purple-100 w-12 h-12 mb-4 absolute rounded-full p-2 hover:bg-holon-purple-200">

@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from "react";
-import { useRouter } from "next/router";
 
 type ButtonVariant = keyof typeof variants;
 
@@ -27,7 +26,12 @@ export default function Button<T extends React.ElementType>({
 }: Props<T>) {
   const colorClasses = variants[variant] || variants.dark;
 
-  let externLinkProps = {
+  let externLinkProps:
+    | boolean
+    | {
+        target: string;
+        rel: string;
+      } = {
     target: "_blank",
     rel: "noopener noreferrer",
   };
@@ -42,7 +46,7 @@ export default function Button<T extends React.ElementType>({
 
   return (
     <Tag
-      className={`${className} ${colorClasses} relative rounded border-2 px-4 py-3 m-2 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
+      className={`${className} ${colorClasses} relative rounded border-2 px-4 py-3 mr-4 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
       {...rest}
       href={details.buttonLink[0].value}
       {...externLinkProps}>
