@@ -1,16 +1,19 @@
 import RawHtml from "@/components/RawHtml";
 import MediaContent from "@/components/MediaContent/MediaContent";
+import ButtonBlock from "@/components/Button/ButtonBlock";
 import { getGrid } from "services/grid";
 
 type Props = {
   data: {
     type: string;
     value: {
+      gridLayout: {
+        grid: string;
+      };
       background: {
         color: string;
         size: string;
       };
-      title: string;
       text: string;
       media: [
         | {
@@ -34,27 +37,39 @@ type Props = {
           }
       ];
       altText: string;
-      gridLayout: string;
-      button?: Array<Button>;
+      buttonBlock: [] | Array<Buttons>;
     };
     id: string;
   };
 };
 
+type Buttons = {
+  type: string;
+  value: {
+    buttonsAlign: string;
+    buttons: Array<Button>;
+  };
+  id: string;
+};
+
 type Button = {
   type: string;
   value: {
-    button_style: string;
-    button_text: string;
-    button_hyperlink: string;
-    button_align: string;
+    buttonStyle: "dark" | "light" | undefined;
+    buttonText: string;
+    buttonLink: [
+      {
+        type: "intern" | "extern";
+        value: number | string;
+        id: string;
+      }
+    ];
+    buttonAlign: string;
   };
   id: string;
 };
 
 export default function TextAndMedia({ data }: Props) {
-  const buttons = data.value.button ? data.value.button : [];
-
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
 
@@ -66,8 +81,8 @@ export default function TextAndMedia({ data }: Props) {
   const gridValue = getGrid(data.value.gridLayout.grid);
 
   return (
-    <div>
-      <div className={`${backgroundFullcolor} storyline__row flex flex-col lg:flex-row`}>
+    <div className={`${backgroundFullcolor}`}>
+      <div className={` storyline__row flex flex-col lg:flex-row`}>
         <div
           className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 ${gridValue.left} ${backgroundLeftColor}`}>
           <RawHtml html={data.value?.text} />
@@ -80,17 +95,11 @@ export default function TextAndMedia({ data }: Props) {
         </div>
       </div>
 
-      <div>
-        {buttons.map((button, index) => {
-          return (
-            <Button
-              href="www.nos.nl"
-              key={index}
-              text={button.value.button_text}
-              align={button.value.button_align}></Button>
-          );
-        })}
-      </div>
+      {data.value.buttonBlock.length > 0 && (
+        <ButtonBlock
+          buttons={data.value.buttonBlock[0].value.buttons}
+          align={data.value.buttonBlock[0].value.buttonsAlign}></ButtonBlock>
+      )}
     </div>
   );
 }

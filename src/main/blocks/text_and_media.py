@@ -4,7 +4,7 @@ from wagtail.embeds.blocks import EmbedBlock
 
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
-from .button import ButtonComponent
+from .button import ButtonBlock
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 
@@ -43,11 +43,9 @@ class TextAndMediaBlock(blocks.StructBlock):
         required=False,
     )
 
-    grid_layout = blocks.ChoiceBlock(required=True, choices=GRID_CHOICES, default=HALF_HALF)
-
-    button = blocks.StreamBlock(
+    button_block = blocks.StreamBlock(
         [
-            ("button", ButtonComponent(required=False))
+            ("buttons", ButtonBlock(required=False))
         ], 
         required=False
     )
