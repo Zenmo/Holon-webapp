@@ -31,10 +31,11 @@ class ButtonComponent(StructBlock):
         max_num=1,
     )
 
-class ButtonBlock(StructBlock): 
+
+class ButtonBlock(StructBlock):
     buttons_align = ChoiceBlock(
-        choices=[("btn-left", "left"), ("btn-center", "center")], 
-        required=False, 
+        choices=[("btn-left", "left"), ("btn-center", "center")],
+        required=False,
         default="btn-left",
     )
 
@@ -44,6 +45,4 @@ class ButtonBlock(StructBlock):
         ],
         help_text="Add a button",
         min_num=1,
-    ) 
-
-
+    )
