@@ -1,7 +1,7 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
 
-from api.models import Slider, InteractiveInput
+from api.models import Slider, InteractiveInput, InteractiveInputOptions
 from wagtail.core import blocks
 
 from main.blocks.rich_text_block import RichtextBlock
@@ -21,6 +21,10 @@ ANIMATION_CHOICES = (
 
 def get_interactive_inputs():
     return [(ii.pk, ii.name) for ii in InteractiveInput.objects.all()]
+
+
+# def get_interactive_input_options():
+#     return [(iio.option) for iio in InteractiveInputOptions.objects.all()]
 
 
 def get_sliders():
@@ -51,7 +55,14 @@ class InteractiveInputBlock(blocks.StructBlock):
     def get_api_representation(self, value, context=None):
         if value:
             ii = InteractiveInput.objects.get(pk=value["interactive_input"])
-            return {"id": ii.id, "name": ii.name, "type": ii.type}
+            options = InteractiveInputOptions.objects.filter(page_id=1)
+
+            options_arr = []
+            for option in options:
+                option_dict = {"id": int(option.id), "option": option.option}
+                options_arr.append(option_dict)
+
+            return {"id": ii.id, "name": ii.name, "type": ii.type, "options": options_arr}
 
     class Meta:
         icon = "radio-empty"
