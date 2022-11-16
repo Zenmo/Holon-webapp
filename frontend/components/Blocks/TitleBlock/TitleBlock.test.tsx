@@ -12,6 +12,7 @@ describe("<TitleBlock />", () => {
             title: "Hello world",
             size: "h2",
             text: "Lorem ipsum",
+            buttonBlock: [],
           },
           id: "a-block",
         }}

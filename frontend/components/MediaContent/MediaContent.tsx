@@ -54,7 +54,7 @@ export default function MediaContent({ media, alt }: Props) {
           <ReactPlayer
             width="100%"
             height="440px"
-            key={mediaDetail.value.id}
+            key={mediaDetail.id}
             url={mediaDetail.value}
             controls={true}
             data-testid="video-player"
