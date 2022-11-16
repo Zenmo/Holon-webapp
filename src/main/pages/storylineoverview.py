@@ -22,7 +22,7 @@ class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
         null=True,
         use_json_field=True,
     )
-    
+
     footer = StreamField(
         [
             ("title_block", TitleBlock()),
@@ -46,7 +46,7 @@ class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
     subpage_types = [
         "main.StorylinePage",  # appname.ModelName
     ]
-    
+
     extra_panels = BasePage.extra_panels
 
     class Meta:

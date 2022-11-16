@@ -66,5 +66,5 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
             "all_roles",
             "all_information_types",
             "intro",
-            "footer"
+            "footer",
         ] + BasePageSerializer.Meta.fields
