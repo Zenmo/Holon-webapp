@@ -3,12 +3,13 @@ from rest_framework import generics, status
 from holon.cloudclient.run_cloud_experiments.scripts.run_scenario import run_scenario_endpoint
 
 from holon.serializers import HolonRequestSerializer
-from etm_service import retrieve_results
+from etm_service import retrieve_results, scale_copy_and_send
 
 from pathlib import Path
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parent / "services"
-ETM_CONFIG_FILE = "etm.config"
+ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
+ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
 SCENARIO_ID = 1647734
 SCENARIO_HOLON_NAME = "webdev_cloud_poc"
 RESULTS = ["totalElectricityImported_MWh", "totalElectricityExported_MWh"]
@@ -43,9 +44,15 @@ class HolonService(generics.CreateAPIView):
             holon_results = run_scenario_endpoint(
                 data.get("scenario").model_name, format_holon_input(value), RESULTS
             )
-            print(holon_results)
+
+            updated_etm_scenario_id = scale_copy_and_send(
+                data.get("scenario").etm_scenario_id,
+                holon_results,
+                ETM_CONFIG_PATH,
+                ETM_CONFIG_FILE_SCALING,
+            )
             etm_results = retrieve_results(
-                data.get("scenario").etm_scenario_id, ETM_CONFIG_PATH, ETM_CONFIG_FILE
+                updated_etm_scenario_id, ETM_CONFIG_PATH, ETM_CONFIG_FILE_GET_KPIS
             )
             return Response(
                 {"message": "kpis", "etm_result": etm_results, "holon_result": holon_results},

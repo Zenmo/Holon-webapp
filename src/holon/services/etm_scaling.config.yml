@@ -1,0 +1,38 @@
+# Specify the ETM keys of what to set in the ETM.
+# You can add conversions based on static values.
+# The name of the item is how it will be expected to be called when input values are given:
+#
+# <ITEM_NAME>:
+#   value:                The main value on which conversions will be done
+#     type:               Which type of ETM request is needed. Right now only 'query', 'input' and
+#                         'node_property' are supported. In the future the curves endpoint
+#                         can be added as well.
+#     data:               What data to look for / expect. For queries this can be either
+#                         'value' or 'curve'. For node properties you can specify which
+#                         property of the node is needed. The path to the property should be
+#                         separated by dots ('.'), for example:
+#                         technical.electricity_output_conversion.future
+#                         For inputs this should always be 'value'
+#     etm_key:            The key of the query to send to the ETM, or the name of the node
+#   conversion:           If a conversion is nesccesary, please specify. Currently only 'divide'
+#                         and 'multiply' are supported.
+#   convert_with_value:   When conversion is set, specify with which ETM value the item should be
+#                         converted with. E.g for 'divide' this is the value to be divided by.
+#                         This value has the same properties as the main 'value' field.
+
+name_of_solar_output_of_holon:
+  value:
+    type: input
+    data: value
+    etm_key: capacity_of_energy_power_solar_pv_solar_radiation
+  conversion: multiply
+  convert_with_value:
+    type: static
+    value: 500
+    key: scaling_factor_for_solar_pv
+
+name_of_ev_curve_output_of_holon:
+  value:
+    type: curve
+    data: curve
+    etm_key: electric_vehicle_profile_1
