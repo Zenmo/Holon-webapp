@@ -4,13 +4,16 @@ from holon.cloudclient.run_cloud_experiments.scripts.run_scenario import run_sce
 
 from holon.serializers import HolonRequestSerializer
 from etm_service import retrieve_results, scale_copy_and_send
+from holon.economic.im_sorry import calculate_total_costs
 
 from pathlib import Path
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parent / "services"
 ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
+ETM_CONFIG_FILE_COSTS = "etm_costs.config"
 ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
 SCENARIO_ID = 1647734
+COSTS_SCENARIO_ID = 2166341
 SCENARIO_HOLON_NAME = "webdev_cloud_poc"
 RESULTS = ["totalElectricityImported_MWh", "totalElectricityExported_MWh"]
 
@@ -45,17 +48,34 @@ class HolonService(generics.CreateAPIView):
                 data.get("scenario").model_name, format_holon_input(value), RESULTS
             )
 
+            # Upscaling of KPI's to national
             updated_etm_scenario_id = scale_copy_and_send(
                 data.get("scenario").etm_scenario_id,
-                holon_results,
+                holon_results[0],  # TODO: + sliders holon (merged dict)
                 ETM_CONFIG_PATH,
                 ETM_CONFIG_FILE_SCALING,
             )
             etm_results = retrieve_results(
                 updated_etm_scenario_id, ETM_CONFIG_PATH, ETM_CONFIG_FILE_GET_KPIS
             )
+
+            # Economic - total costs
+            # NOTE: inputs for the costs are queried from a different 'standard' scenario and
+            # independent of any HOLON influence. These are an excellent candidate for caching.
+            etm_costs = retrieve_results(COSTS_SCENARIO_ID, ETM_CONFIG_PATH, ETM_CONFIG_FILE_COSTS)
+            # TODO: hook into data model instead of having this empty list
+            holon_grid_connection_inputs = []
+            total_costs = calculate_total_costs(
+                etm_costs, holon_grid_connection_inputs, holon_results
+            )
+
             return Response(
-                {"message": "kpis", "etm_result": etm_results, "holon_result": holon_results},
+                {
+                    "message": "kpis",
+                    "etm_result": etm_results,
+                    "holon_result": holon_results,
+                    "total_costs": total_costs,
+                },
                 status=status.HTTP_200_OK,
             )
         else:
