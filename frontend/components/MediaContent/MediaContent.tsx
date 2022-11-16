@@ -13,7 +13,6 @@ type MediaDetails = {
         type: "video";
         id: string;
         value: string;
-        altText: string;
       }
     | {
         type: "image";
@@ -33,8 +32,7 @@ type MediaDetails = {
 
 export default function MediaContent({ media, alt }: Props) {
   const [hasWindow, setHasWindow] = useState(false);
-
-  const altText2 = alt === "" ? media[0].value.img.alt : alt;
+  const altText = alt;
 
   // UseEffect used for Hydration Error fix. Keep it
   useEffect(() => {
@@ -64,7 +62,7 @@ export default function MediaContent({ media, alt }: Props) {
         return mediaDetail.value ? (
           <Image
             src={mediaDetail.value.img.src}
-            alt={altText2}
+            alt={altText === "" ? mediaDetail.value.img.alt : altText}
             className="image"
             width="1600"
             height="900"
