@@ -1,6 +1,5 @@
-import React from "react";
-
-const sizes = [2, 3, 4];
+import React, { useState } from "react";
+import Button from "../VersionOne/Buttons/HolonButton";
 
 const tileImages = [
   "detailhandel",
@@ -10,13 +9,22 @@ const tileImages = [
   "fabriekB",
   "windmolenpark_zee",
 ];
-3;
 
 export default function FloorPlan() {
-  const size = sizes[Math.floor(Math.random() * 3)];
+  const [gridSize, setGridSize] = useState(30);
+
+  function changeGrid() {
+    //multiply with ten, to also change the grid when the value stays the same
+    setGridSize(Math.random() * 30 + 20);
+  }
+
+  const size = Math.floor(gridSize / 10);
 
   return (
     <React.Fragment>
+      <h1>Proof of concept tiles</h1>
+      <Button onClick={() => changeGrid()}>Refresh grid</Button>
+
       <div data-size={size} className="floorplan">
         {Array(Math.pow(size, 2))
           .fill(1)
@@ -27,7 +35,7 @@ export default function FloorPlan() {
                 <img
                   alt={randomImage}
                   className="floorplan__img"
-                  src={`img/tiles/${randomImage}.png`}
+                  src={`/img/tiles/${randomImage}.png`}
                 />
               </div>
             );
