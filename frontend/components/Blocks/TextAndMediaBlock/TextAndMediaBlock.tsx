@@ -15,58 +15,12 @@ type Props = {
         size: string;
       };
       text: string;
-      media: [
-        | {
-            id: string;
-            value: string;
-            type: string;
-            alt_text: string;
-          }
-        | {
-            type: string;
-            value: {
-              id: number;
-              title: string;
-              img: {
-                src: string;
-                width: number;
-                height: number;
-                alt: string;
-              };
-            };
-          }
-      ];
+      media: React.ComponentProps<typeof MediaContent>["media"];
       altText: string;
-      buttonBlock: [] | Array<Buttons>;
+      buttonBlock: React.ComponentProps<typeof ButtonBlock["buttons"]>;
     };
     id: string;
   };
-};
-
-type Buttons = {
-  type: string;
-  value: {
-    buttonsAlign: string;
-    buttons: Array<Button>;
-  };
-  id: string;
-};
-
-type Button = {
-  type: string;
-  value: {
-    buttonStyle: "dark" | "light" | undefined;
-    buttonText: string;
-    buttonLink: [
-      {
-        type: "intern" | "extern";
-        value: number | string;
-        id: string;
-      }
-    ];
-    buttonAlign: string;
-  };
-  id: string;
 };
 
 export default function TextAndMedia({ data }: Props) {

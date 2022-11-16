@@ -9,36 +9,10 @@ type Props = {
       title: string;
       size: React.ElementType;
       text: string;
-      buttonBlock: [] | Array<Buttons>;
+      buttonBlock: React.ComponentProps<typeof ButtonBlock["buttons"]>;
     };
     id: string;
   };
-};
-
-type Buttons = {
-  type: string;
-  value: {
-    buttonsAlign: string;
-    buttons: Array<Button>;
-  };
-  id: string;
-};
-
-type Button = {
-  type: string;
-  value: {
-    buttonStyle: "dark" | "light" | undefined;
-    buttonText: string;
-    buttonLink: [
-      {
-        type: "intern" | "extern";
-        value: number | string;
-        id: string;
-      }
-    ];
-    buttonAlign: string;
-  };
-  id: string;
 };
 
 export default function TitleBlock({ data }: Props) {

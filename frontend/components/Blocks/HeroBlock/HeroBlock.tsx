@@ -12,37 +12,11 @@ type Props = {
       title: string;
       text: string;
       media: React.ComponentProps<typeof MediaContent>["media"];
-      alt_text: string;
-      buttonBlock: [] | Array<Buttons>;
+      altText: string;
+      buttonBlock: React.ComponentProps<typeof ButtonBlock["buttons"]>;
     };
     id: string;
   };
-};
-
-type Buttons = {
-  type: string;
-  value: {
-    buttonsAlign: string;
-    buttons: Array<Button>;
-  };
-  id: string;
-};
-
-type Button = {
-  type: string;
-  value: {
-    buttonStyle: "dark" | "light" | undefined;
-    buttonText: string;
-    buttonLink: [
-      {
-        type: "intern" | "extern";
-        value: number | string;
-        id: string;
-      }
-    ];
-    buttonAlign: string;
-  };
-  id: string;
 };
 
 export default function HeroBlock({ data }: Props) {
