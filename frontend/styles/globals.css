@@ -161,9 +161,13 @@ input::-moz {
   bottom: 0;
   width: 100%;
 }
-/* .floorplan__tile:nth-child(5n + 1) {
-  margin-left: 125px;
-} */
+[data-size="2"] .floorplan__tile {
+  aspect-ratio: 4.23 / 1;
+}
+[data-size="3"] .floorplan__tile {
+  aspect-ratio: 4.3 / 1;
+}
+
 [data-size="2"] div:nth-child(1),
 [data-size="2"] div:nth-child(4) {
   margin-left: 25%;

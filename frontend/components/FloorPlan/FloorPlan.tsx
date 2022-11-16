@@ -14,7 +14,7 @@ export default function FloorPlan() {
   const [gridSize, setGridSize] = useState(30);
 
   function changeGrid() {
-    //multiply with ten, to also change the grid when the value stays the same
+    //multiply with 10, to also change the grid when the value stays the same
     setGridSize(Math.random() * 30 + 20);
   }
 
@@ -23,7 +23,7 @@ export default function FloorPlan() {
   return (
     <React.Fragment>
       <h1>Proof of concept tiles</h1>
-      <Button onClick={() => changeGrid()}>Refresh grid</Button>
+      <Button onClick={() => changeGrid()}>Refresh tiles</Button>
 
       <div data-size={size} className="floorplan">
         {Array(Math.pow(size, 2))
