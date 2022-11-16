@@ -1,7 +1,7 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
 
-from api.models import Slider
+from api.models import Slider, InteractiveInput
 from wagtail.core import blocks
 
 from main.blocks.rich_text_block import RichtextBlock
@@ -17,6 +17,10 @@ ANIMATION_CHOICES = (
     (SOLAR_AND_WINDMILLS, "Solarpanels and windmills"),
     (ANIMATION_1, "Animatie 3 (Test)"),
 )
+
+
+def get_interactive_inputs():
+    return [(ii.pk, ii.name) for ii in InteractiveInput.objects.all()]
 
 
 def get_sliders():
@@ -41,6 +45,18 @@ class SliderBlock(blocks.StructBlock):
             }
 
 
+class InteractiveInputBlock(blocks.StructBlock):
+    interactive_input = blocks.ChoiceBlock(choices=get_interactive_inputs)
+
+    def get_api_representation(self, value, context=None):
+        if value:
+            ii = InteractiveInput.objects.get(pk=value["interactive_input"])
+            return {"id": ii.id, "name": ii.name, "type": ii.type}
+
+    class Meta:
+        icon = "radio-empty"
+
+
 class StorylineSectionBlock(blocks.StructBlock):
     """Blocks for all the scenarios"""
 
@@ -50,6 +66,7 @@ class StorylineSectionBlock(blocks.StructBlock):
     content = blocks.StreamBlock(
         [
             ("text", RichtextBlock()),
+            ("interactive_input", InteractiveInputBlock()),
             ("slider", SliderBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
             (

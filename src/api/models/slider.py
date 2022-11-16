@@ -7,11 +7,11 @@ from django.core.validators import MinValueValidator
 # Create your models here.
 class Slider(models.Model):
     CHOICE_SOLAR = "solar"
-    COICE_WINDMILLS = "windmills"
+    CHOICE_WINDMILLS = "windmills"
 
     tags = [
         (CHOICE_SOLAR, "Solarpanels"),
-        (COICE_WINDMILLS, "Windmills"),
+        (CHOICE_WINDMILLS, "Windmills"),
     ]
 
     name = models.CharField(max_length=100)
