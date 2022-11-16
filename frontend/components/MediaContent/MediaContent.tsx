@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player/lazy";
-import Image from "next/future/image";
 
 interface Props {
   media: MediaDetails;
@@ -62,12 +61,13 @@ export default function MediaContent({ media, alt }: Props) {
         ) : null;
       case "image":
         return mediaDetail.value ? (
-          <Image
+          /* eslint-disable @next/next/no-img-element */
+          <img
             src={mediaDetail.value.img.src}
             alt={altText2}
             className="image"
             width="1600"
-            height="900"
+            height="auto"
           />
         ) : (
           ""
