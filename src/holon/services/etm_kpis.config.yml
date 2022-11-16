@@ -3,3 +3,9 @@ national_total_costs:
     type: query
     data: value
     etm_key: total_costs
+
+CO2_emissions_percentage:
+  value:
+    type: query
+    data: value
+    etm_key: dashboard_co2_emissions_versus_start_year

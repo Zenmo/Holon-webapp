@@ -20,18 +20,40 @@
 #                         converted with. E.g for 'divide' this is the value to be divided by.
 #                         This value has the same properties as the main 'value' field.
 
-name_of_solar_output_of_holon:
+name_of_holon_input_buildings_solar_panels: # deze HOLON-slidernaam moet nog worden geüpdatet, is nu nog onbekend
   value:
     type: input
     data: value
-    etm_key: capacity_of_energy_power_solar_pv_solar_radiation
-  conversion: multiply
-  convert_with_value:
-    type: static
-    value: 500
-    key: scaling_factor_for_solar_pv
+    etm_key: buildings_solar_pv_solar_radiation_market_penetration
 
-name_of_ev_curve_output_of_holon:
+# NOTE: these two sliders depend on the addition of a balancer in the etm_service
+# name_of_holon_input_eletric_trucks: # deze HOLON-slidernaam moet nog worden geüpdatet, is nu nog onbekend
+#   value:
+#     type: input
+#     data: value
+#     etm_key: transport_truck_using_electricity_share
+
+# the diesel trucks slider also has to be set, otherwise the scenario will not work right?
+# the diesel trucks have to be set to 1.0 - name_of_holon_input_eletric_trucks
+# name_of_holon_input_eletric_trucks: # deze HOLON-slidernaam moet nog worden geüpdatet, is nu nog onbekend
+#   value:
+#     type: input
+#     data: value
+#     etm_key: transport_truck_using_diesel_mix_share
+#   conversion: subtract # is this supported?
+#   convert_with_value:
+#     type: static
+#     data: 1.0
+
+# hourly profile electric trucks
+totalEHGVHourlyChargingProfile_kWh:
+  value:
+    type: curve
+    data: curve
+    etm_key: electric_trucks
+
+# hourly profile electric cars
+totalEHGVHourlyChargingProfile_kWh:
   value:
     type: curve
     data: curve

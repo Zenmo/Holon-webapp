@@ -12,9 +12,9 @@ ETM_CONFIG_PATH = Path(__file__).resolve().parent / "services"
 ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
 ETM_CONFIG_FILE_COSTS = "etm_costs.config"
 ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
-SCENARIO_ID = 1647734
+SCENARIO_ID = 1647734  # unused?
 COSTS_SCENARIO_ID = 2166341
-SCENARIO_HOLON_NAME = "webdev_cloud_poc"
+SCENARIO_HOLON_NAME = "webdev_cloud_poc"  # unused?
 RESULTS = ["totalElectricityImported_MWh", "totalElectricityExported_MWh"]
 
 
@@ -49,11 +49,13 @@ class HolonService(generics.CreateAPIView):
             )
 
             # Upscaling of KPI's to national
+            # TODO: Make sure the right holon results are sent here (as a dict) - check config for
+            # the expected keys
             updated_etm_scenario_id = scale_copy_and_send(
                 data.get("scenario").etm_scenario_id,
-                holon_results[0],  # TODO: + sliders holon (merged dict)
+                holon_results,  # TODO: + sliders holon (merged dict) {e.g. solarpanels: 30}
                 ETM_CONFIG_PATH,
-                ETM_CONFIG_FILE_SCALING,
+                ETM_CONFIG_FILE_SCALING,  # TODO: add slider names if they are known
             )
             etm_results = retrieve_results(
                 updated_etm_scenario_id, ETM_CONFIG_PATH, ETM_CONFIG_FILE_GET_KPIS
@@ -65,6 +67,8 @@ class HolonService(generics.CreateAPIView):
             etm_costs = retrieve_results(COSTS_SCENARIO_ID, ETM_CONFIG_PATH, ETM_CONFIG_FILE_COSTS)
             # TODO: hook into data model instead of having this empty list
             holon_grid_connection_inputs = []
+            # TODO: Make sure the right holon results are sent here (as a list, as I used the json
+            # output for costs as inspiration)
             total_costs = calculate_total_costs(
                 etm_costs, holon_grid_connection_inputs, holon_results
             )
