@@ -12,22 +12,18 @@ from wagtail.snippets.models import register_snippet
 # Create your models here.
 @register_snippet
 class InteractiveInput(ClusterableModel):
-    CHOICE_CHECKBOX = "checkbox"
-    CHOICE_MULTIBUTTON = "multibutton"
-    CHOICE_RADIOBUTTON = "radio"
-    CHOICE_BUTTON = "button"
+    CHOICE_SINGLESELECT = "single_select"
+    CHOICE_MULTISELECT = "multi_select"
     CHOICE_CONTINUOUS = "continuous"
     TYPE_CHOICES = (
-        (CHOICE_CHECKBOX, "Checkbox"),
-        (CHOICE_MULTIBUTTON, "Multibutton"),
-        (CHOICE_RADIOBUTTON, "Radiobutton"),
-        (CHOICE_BUTTON, "Button"),
+        (CHOICE_SINGLESELECT, "Single Select"),
+        (CHOICE_MULTISELECT, "Multi Select"),
         (CHOICE_CONTINUOUS, "Continuous (slider)"),
     )
 
     name = models.CharField(max_length=100)
     type = models.CharField(
-        max_length=12,
+        max_length=14,
         choices=TYPE_CHOICES,
         default=CHOICE_CONTINUOUS,
     )

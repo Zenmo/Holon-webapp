@@ -62,12 +62,7 @@ class InteractiveInputBlock(blocks.StructBlock):
             ii = InteractiveInput.objects.get(pk=value["interactive_input"])
 
             options_arr = []
-            if (
-                ii.type == ii.CHOICE_BUTTON
-                or ii.type == ii.CHOICE_CHECKBOX
-                or ii.type == ii.CHOICE_MULTIBUTTON
-                or ii.type == ii.CHOICE_BUTTON
-            ):
+            if ii.type == ii.CHOICE_SINGLESELECT or ii.type == ii.CHOICE_MULTISELECT:
                 options = InteractiveInputOptions.objects.filter(input_id=ii.id)
                 for option in options:
                     option_dict = {"id": int(option.id), "option": option.option}
