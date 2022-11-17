@@ -8,28 +8,14 @@ from api.models import (
     InteractiveInputContinuousValues,
 )
 from wagtail.core import blocks
-
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 
-ANIMATION_1 = "animation1"
-SOLAR_AND_WINDMILLS = "solar_and_windmills"
-ANIMATION_3 = "animation3"
-ANIMATION_CHOICES = (
-    (ANIMATION_1, "Animatie 1 (Test)"),
-    (SOLAR_AND_WINDMILLS, "Solarpanels and windmills"),
-    (ANIMATION_1, "Animatie 3 (Test)"),
-)
-
 
 def get_interactive_inputs():
     return [(ii.pk, ii.name) for ii in InteractiveInput.objects.all()]
-
-
-# def get_interactive_input_options():
-#     return [(iio.option) for iio in InteractiveInputOptions.objects.all()]
 
 
 def get_sliders():
@@ -55,12 +41,19 @@ class SliderBlock(blocks.StructBlock):
 
 
 class InteractiveInputBlock(blocks.StructBlock):
+    DISPLAY_CHECKBOXRADIO = "checkbox_radio"
+    DISPLAY_BUTTON = "button"
+    DISPLAY_CHOICES = (
+        (DISPLAY_CHECKBOXRADIO, "Show as checkboxe(s) or radiobutton(s)"),
+        (DISPLAY_BUTTON, "Show as button(s)"),
+    )
+
     interactive_input = blocks.ChoiceBlock(choices=get_interactive_inputs)
+    display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES, default=DISPLAY_CHECKBOXRADIO)
 
     def get_api_representation(self, value, context=None):
         if value:
             ii = InteractiveInput.objects.get(pk=value["interactive_input"])
-
             options_arr = []
             if ii.type == ii.CHOICE_SINGLESELECT or ii.type == ii.CHOICE_MULTISELECT:
                 options = InteractiveInputOptions.objects.filter(input_id=ii.id)
@@ -79,7 +72,14 @@ class InteractiveInputBlock(blocks.StructBlock):
                     }
                     options_arr.append(option_dict)
 
-            return {"id": ii.id, "name": ii.name, "type": ii.type, "options": options_arr}
+            return {
+                "id": ii.id,
+                "name": ii.name,
+                "type": ii.type,
+                "animation_tag": ii.animation_tag,
+                "options": options_arr,
+                "display": value["display"],
+            }
 
     class Meta:
         icon = "radio-empty"
@@ -97,18 +97,6 @@ class StorylineSectionBlock(blocks.StructBlock):
             ("interactive_input", InteractiveInputBlock()),
             ("slider", SliderBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
-            (
-                "animation",
-                blocks.ChoiceBlock(
-                    required=False,
-                    choices=ANIMATION_CHOICES,
-                    default=SOLAR_AND_WINDMILLS,
-                ),
-            )
-            # ("radiobuttons", RadioButtonBlock()),
         ],
-        block_counts={
-            "static_image": {"max_num": 1},
-            "animation": {"max_num": 1},
-        },
+        block_counts={"static_image": {"max_num": 1}},
     )

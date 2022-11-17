@@ -21,16 +21,35 @@ class InteractiveInput(ClusterableModel):
         (CHOICE_CONTINUOUS, "Continuous (slider)"),
     )
 
+    ANIMATION_NONE = "no-animation"
+    ANIMATION_TILES = "tiles"
+    ANIMATION_SOLAR_ROOF = "solarpanels-roof"
+    ANIMATION_TRANSPORT_ELECTRIFICATION = "transport-electrification"
+    ANIMATION_CHOICES = (
+        (ANIMATION_NONE, "Geen animatie"),
+        (ANIMATION_TILES, "Tegels"),
+        (ANIMATION_SOLAR_ROOF, "Solarpanels on roof"),
+        (ANIMATION_TRANSPORT_ELECTRIFICATION, "Transport electriciteit"),
+    )
+
     name = models.CharField(max_length=100)
     type = models.CharField(
         max_length=14,
         choices=TYPE_CHOICES,
         default=CHOICE_CONTINUOUS,
     )
+    animation_tag = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True,
+        choices=ANIMATION_CHOICES,
+        default=ANIMATION_NONE,
+    )
 
     panels = [
         FieldPanel("name"),
         FieldPanel("type"),
+        FieldPanel("animation_tag"),
         InlinePanel(
             "options",
             heading="Options",
