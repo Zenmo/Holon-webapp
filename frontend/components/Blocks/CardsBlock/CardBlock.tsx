@@ -1,4 +1,5 @@
 import React from "react";
+import CardProps from "./Card";
 import Card from "./Card";
 import ButtonBlock from "@/components/Button/ButtonBlock";
 
@@ -6,27 +7,11 @@ type Props = {
   data: {
     type: string;
     value: {
-      cards: Array<CardItem>;
+      cards: Array<typeof CardProps>;
       buttonBlock: React.ComponentProps<typeof ButtonBlock["buttons"]>;
     };
     id: string;
   };
-};
-
-type CardItem = {
-  title: string;
-  imageSelector: {
-    id: number;
-    title: string;
-    img: {
-      src: string;
-      width: number;
-      height: number;
-      alt: string;
-    };
-  };
-  text: string;
-  cardBackground: string;
 };
 
 export default function CardBlock({

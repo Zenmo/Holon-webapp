@@ -1,5 +1,6 @@
-import RawHtml from "../../RawHtml/RawHtml";
 import Image from "next/future/image";
+import React from "react";
+import RawHtml from "../../RawHtml/RawHtml";
 
 type CardItem = {
   title: string;
@@ -15,33 +16,80 @@ type CardItem = {
   };
   text: string;
   cardBackground: string;
+  cardLink:
+    | []
+    | [
+        {
+          type: string;
+          value: string;
+          id: string;
+        }
+      ];
 };
 
-type Props = {
+export type CardProps = {
   cardItem: CardItem;
 };
 
-export default function Card({ cardItem }: Props) {
+export default function Card({ cardItem }: CardProps) {
   const colorStyle: string = cardItem.cardBackground;
 
-  return (
-    <div className={` min-h-[400px] ${colorStyle} border-solid border-2 rounded-lg flex flex-col`}>
-      <div className="overflow-hidden relative m-4 mb-0 flex-1 border">
-        <Image
-          src={cardItem.imageSelector.img.src}
-          alt={cardItem.imageSelector.img.alt}
-          width="725"
-          height="380"
-          className="object-cover object-center h-full w-full max-w-none max-h-none"
-        />
-      </div>
+  type ConditionalWrapperProps = {
+    children: React.ReactElement;
+    condition: boolean;
+    wrapper: (children: React.ReactElement) => JSX.Element;
+  };
 
-      <span className="flex-col flex m-4 flex-1 max-h:1/2 overflow-hidden">
-        <strong className="mb-3 block">{cardItem.title}</strong>
-        <span className="">
-          <RawHtml html={cardItem.text} />
-        </span>
-      </span>
-    </div>
+  const ConditionalWrapper = ({ condition, wrapper, children }: ConditionalWrapperProps) =>
+    condition ? wrapper(children) : children;
+
+  let externLinkProps:
+    | boolean
+    | {
+        target: string;
+        rel: string;
+      } = {
+    target: "_blank",
+    rel: "noopener noreferrer",
+  };
+
+  function createLink(linkData) {
+    if (linkData.length && linkData[0].type === "intern") {
+      externLinkProps = false;
+    }
+  }
+
+  createLink(cardItem.cardLink);
+
+  return (
+    <ConditionalWrapper
+      condition={cardItem.cardLink.length > 0}
+      wrapper={children => (
+        <a href={cardItem.cardLink[0]?.value} {...externLinkProps} className="hover:brightness-110">
+          {children}
+        </a>
+      )}>
+      <React.Fragment>
+        <div
+          className={`group min-h-[400px] ${colorStyle} border-solid border-2 rounded-lg flex h-full flex-col `}>
+          <span className="overflow-hidden relative m-4 mb-0 flex-1 border">
+            <Image
+              src={cardItem.imageSelector.img.src}
+              alt={cardItem.imageSelector.img.alt}
+              width="725"
+              height="380"
+              className="object-cover object-center h-full w-full max-w-none max-h-none brightness-90 "
+            />
+          </span>
+
+          <span className="flex-col flex m-4 flex-1 max-h:1/2 overflow-hidden">
+            <strong className="mb-3 block">{cardItem.title}</strong>
+            <span className="">
+              <RawHtml html={cardItem.text} />
+            </span>
+          </span>
+        </div>
+      </React.Fragment>
+    </ConditionalWrapper>
   );
 }
