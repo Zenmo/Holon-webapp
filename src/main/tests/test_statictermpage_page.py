@@ -12,14 +12,19 @@ class StaticTermPageTest(WagtailPageTests):
         SiteFactory.create(root_page=self.root_page)
 
     def test_get_serializer_class(self):
-        page = StaticTermPageFactory.create(title="StaticTermPage", parent=self.root_page)
+        page = StaticTermPageFactory.create(
+            title="StaticTermPage", introduction="introduction", parent=self.root_page
+        )
         self.assertEqual(page.get_serializer_class(), StaticTermPageSerializer)
 
     def test_to_react_representation(self):
-        page = StaticTermPageFactory.create(title="StaticTermPage", parent=self.root_page)
+        page = StaticTermPageFactory.create(
+            title="StaticTermPage", introduction="introduction", parent=self.root_page
+        )
 
         data = page.get_component_data({})
 
         self.assertTrue("component_props" in data)
         self.assertTrue("title" in data["component_props"])
+        self.assertTrue("introduction" in data["component_props"])
         self.assertEqual("StaticTermPage", data["component_props"]["title"])
