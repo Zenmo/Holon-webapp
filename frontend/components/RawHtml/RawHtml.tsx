@@ -5,22 +5,20 @@ import HolonButton from "../VersionOne/Buttons/HolonButton";
 import { Dialog, Transition } from "@headlessui/react";
 
 export default function RawHtml({ html }: { html: string }) {
-  const [isOpen, setIsOpen] = useState(true);
-  const [modalText, setModalText] = useState("");
-  const [modalLink, setModalLink] = useState("");
+  const [modal, setModal] = useState<{ isOpen: boolean; modalText: string; modalLink: string }>({
+    isOpen: false,
+    modalText: "",
+    modalLink: "",
+  });
 
   const RawHtmlItem = useRef(null);
 
   function closeModal() {
-    setIsOpen(false);
-    setModalText("");
-    setModalLink("");
+    setModal({ isOpen: false, modalText: "", modalLink: "" });
   }
 
   function openModal(text, linkUrl) {
-    setModalLink(linkUrl);
-    setModalText(text);
-    setIsOpen(true);
+    setModal({ isOpen: true, modalText: text, modalLink: linkUrl });
   }
 
   useEffect(() => {
@@ -43,8 +41,8 @@ export default function RawHtml({ html }: { html: string }) {
   return (
     <Fragment>
       <div ref={RawHtmlItem} className={s.Container} dangerouslySetInnerHTML={{ __html: html }} />
-      {modalText && (
-        <Transition appear show={isOpen} as={Fragment}>
+      {modal.modalText && (
+        <Transition appear show={modal.isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50" onClose={closeModal}>
             <Transition.Child
               as={Fragment}
@@ -72,10 +70,10 @@ export default function RawHtml({ html }: { html: string }) {
                       Modal voor extra toelichting
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">{modalText}</p>
+                      <p className="text-sm text-gray-500">{modal.modalText}</p>
                     </div>
                     <div className="mt-4">
-                      <HolonButton tag="a" href={modalLink} variant="darkmode">
+                      <HolonButton tag="a" href={modal.modalLink} variant="darkmode">
                         Lees meer
                       </HolonButton>
                     </div>
