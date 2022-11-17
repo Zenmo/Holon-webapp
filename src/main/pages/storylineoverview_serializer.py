@@ -26,6 +26,12 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
                 it_dict = {"name": it.name, "icon": it.icon}
                 it_array.append(it_dict)
 
+            thumbnail = (
+                {"url": sl.thumbnail_rendition_url.url}
+                if sl.thumbnail_rendition_url is not None
+                else None
+            )
+
             sl_dict = {
                 "title": sl.title,
                 "description": sl.description,
@@ -33,11 +39,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
                 "slug": sl.slug,
                 "roles": roles_array,
                 "information_types": it_array,
-                "thumbnail": {
-                    "url": sl.thumbnail_rendition_url.url,
-                    "width": sl.thumbnail_rendition_url.width,
-                    "height": sl.thumbnail_rendition_url.height,
-                },
+                "thumbnail": thumbnail,
             }
 
             return_all_storylines.append(sl_dict)
