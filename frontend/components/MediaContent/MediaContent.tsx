@@ -12,7 +12,6 @@ type MediaDetails = {
         type: "video";
         id: string;
         value: string;
-        altText: string;
       }
     | {
         type: "image";
@@ -32,8 +31,6 @@ type MediaDetails = {
 
 export default function MediaContent({ media, alt }: Props) {
   const [hasWindow, setHasWindow] = useState(false);
-
-  const altText2 = alt === "" ? media[0].value.img.alt : alt;
 
   // UseEffect used for Hydration Error fix. Keep it
   useEffect(() => {
@@ -64,7 +61,7 @@ export default function MediaContent({ media, alt }: Props) {
           /* eslint-disable @next/next/no-img-element */
           <img
             src={mediaDetail.value.img.src}
-            alt={altText2}
+            alt={alt}
             className="image"
             width="1600"
             height="auto"
@@ -72,9 +69,9 @@ export default function MediaContent({ media, alt }: Props) {
         ) : (
           ""
         );
+      default:
+        return null;
     }
-
-    return null;
   }
 
   // for now it is only possible to show one mediaitem (image or video).
