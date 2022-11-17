@@ -1,7 +1,12 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
 
-from api.models import Slider, InteractiveInput, InteractiveInputOptions
+from api.models import (
+    Slider,
+    InteractiveInput,
+    InteractiveInputOptions,
+    InteractiveInputContinuousValues,
+)
 from wagtail.core import blocks
 
 from main.blocks.rich_text_block import RichtextBlock
@@ -57,20 +62,27 @@ class InteractiveInputBlock(blocks.StructBlock):
             ii = InteractiveInput.objects.get(pk=value["interactive_input"])
 
             options_arr = []
-            options = InteractiveInputOptions.objects.filter(input_id=ii.id)
             if (
                 ii.type == ii.CHOICE_BUTTON
                 or ii.type == ii.CHOICE_CHECKBOX
                 or ii.type == ii.CHOICE_MULTIBUTTON
                 or ii.type == ii.CHOICE_BUTTON
             ):
+                options = InteractiveInputOptions.objects.filter(input_id=ii.id)
                 for option in options:
                     option_dict = {"id": int(option.id), "option": option.option}
                     options_arr.append(option_dict)
 
-            # if ii.type == ii.CHOICE_CONTINUOUS:
-            #     option_dict = {"test": "Dit is een test of het werkt"}
-            #     options_arr.append(option_dict)
+            if ii.type == ii.CHOICE_CONTINUOUS:
+                options = InteractiveInputContinuousValues.objects.filter(input_id=ii.id)
+                for option in options:
+                    option_dict = {
+                        "id": int(option.id),
+                        "slider_value_default": option.slider_value_default,
+                        "slider_value_min": option.slider_value_min,
+                        "slider_value_max": option.slider_value_max,
+                    }
+                    options_arr.append(option_dict)
 
             return {"id": ii.id, "name": ii.name, "type": ii.type, "options": options_arr}
 
