@@ -81,6 +81,7 @@ export default function RawHtml({ html }: { html: string }) {
                     </div>
                     <button
                       onClick={closeModal}
+                      aria-label="Sluiten"
                       className="w-6 h-6 absolute rounded-full right-6 top-6 ">
                       <XMarkIcon />
                     </button>
