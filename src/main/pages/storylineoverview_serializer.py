@@ -11,7 +11,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
     all_information_types = serializers.SerializerMethodField()
 
     def get_all_storylines(self, page):
-        all = StorylinePage.objects.all()
+        all = StorylinePage.objects.descendant_of(page)
         return_all_storylines = []
         for sl in all:
             roles_array = []
@@ -65,4 +65,6 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
             "all_storylines",
             "all_roles",
             "all_information_types",
+            "intro",
+            "footer",
         ] + BasePageSerializer.Meta.fields

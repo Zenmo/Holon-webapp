@@ -7,12 +7,6 @@
 .storyline__card img {
   filter: brightness(0.8);
   transition: all 0.3s ease-in;
-  object-fit: cover;
-}
-
-.medium_card img {
-  object-fit: cover;
-  height: 100%;
 }
 
 .storyline__card:hover img {

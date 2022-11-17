@@ -1,5 +1,4 @@
 import RawHtml from "../../RawHtml/RawHtml";
-import Image from "next/future/image";
 
 type CardItem = {
   title: string;
@@ -27,12 +26,13 @@ export default function Card({ cardItem }: Props) {
   return (
     <div className={` min-h-[400px] ${colorStyle} border-solid border-2 rounded-lg flex flex-col`}>
       <div className="overflow-hidden relative m-4 mb-0 flex-1 border">
-        <Image
+        {/* eslint-disable @next/next/no-img-element */}
+        <img
           src={cardItem.imageSelector.img.src}
           alt={cardItem.imageSelector.img.alt}
           width="725"
           height="380"
-          className={"object-fill min-h-full"}
+          className="object-cover object-center h-full w-full max-w-none max-h-none"
         />
       </div>
 

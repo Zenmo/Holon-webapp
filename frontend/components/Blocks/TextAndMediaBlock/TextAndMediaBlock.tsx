@@ -1,51 +1,29 @@
 import RawHtml from "@/components/RawHtml";
 import MediaContent from "@/components/MediaContent/MediaContent";
+import ButtonBlock from "@/components/Button/ButtonBlock";
 import { getGrid } from "services/grid";
 
 type Props = {
   data: {
     type: string;
     value: {
+      gridLayout: {
+        grid: string;
+      };
       background: {
         color: string;
         size: string;
       };
-      title: string;
       text: string;
-      media: [
-        | {
-            id: string;
-            value: string;
-            type: string;
-            alt_text: string;
-          }
-        | {
-            type: string;
-            value: {
-              id: number;
-              title: string;
-              img: {
-                src: string;
-                width: number;
-                height: number;
-                alt: string;
-              };
-            };
-          }
-      ];
+      media: React.ComponentProps<typeof MediaContent>["media"];
       altText: string;
-      gridLayout: { grid: string };
-      button?: {
-        button_style: string;
-        button_text: string;
-        button_hyperlink: string;
-      };
+      buttonBlock: React.ComponentProps<typeof ButtonBlock["buttons"]>;
     };
     id: string;
   };
 };
 
-export default function TextAndMediaBlock({ data }: Props) {
+export default function TextAndMedia({ data }: Props) {
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
 
@@ -53,22 +31,29 @@ export default function TextAndMediaBlock({ data }: Props) {
   // Otherwise they will overlap and will the left be darker since 2 layers
   const backgroundLeftColor =
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
+
   const gridValue = getGrid(data.value.gridLayout.grid);
 
   return (
-    <div>
-      <div className={`${backgroundFullcolor} storyline__row flex flex-col lg:flex-row`}>
+    <div className={`${backgroundFullcolor}`}>
+      <div className={` storyline__row flex flex-col lg:flex-row`}>
         <div
-          className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 ${gridValue.left} ${backgroundLeftColor}`}>
+          className={`flex flex-col py-8 px-10 lg:px-16 lg:pt-16 ${gridValue.left} ${backgroundLeftColor}`}>
           <RawHtml html={data.value?.text} />
         </div>
 
         <div className={`flex flex-col ${gridValue.right}`}>
-          <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top-0">
+          <div className="lg:sticky py-8 px-10 lg:px-16 lg:pt-24 top-0">
             <MediaContent media={data.value.media} alt={data.value.altText} />
           </div>
         </div>
       </div>
+
+      {data.value.buttonBlock.length > 0 && (
+        <ButtonBlock
+          buttons={data.value.buttonBlock[0].value.buttons}
+          align={data.value.buttonBlock[0].value.buttonsAlign}></ButtonBlock>
+      )}
     </div>
   );
 }

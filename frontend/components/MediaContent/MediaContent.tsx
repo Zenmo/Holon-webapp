@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player/lazy";
-import Image from "next/future/image";
 
 interface Props {
   media: MediaDetails;
@@ -13,7 +12,6 @@ type MediaDetails = {
         type: "video";
         id: string;
         value: string;
-        altText: string;
       }
     | {
         type: "image";
@@ -34,8 +32,6 @@ type MediaDetails = {
 export default function MediaContent({ media, alt }: Props) {
   const [hasWindow, setHasWindow] = useState(false);
 
-  const altText2 = alt === "" ? media[0].value.img.alt : alt;
-
   // UseEffect used for Hydration Error fix. Keep it
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -54,7 +50,7 @@ export default function MediaContent({ media, alt }: Props) {
           <ReactPlayer
             width="100%"
             height="440px"
-            key={mediaDetail.value.id}
+            key={mediaDetail.id}
             url={mediaDetail.value}
             controls={true}
             data-testid="video-player"
@@ -62,19 +58,20 @@ export default function MediaContent({ media, alt }: Props) {
         ) : null;
       case "image":
         return mediaDetail.value ? (
-          <Image
+          /* eslint-disable @next/next/no-img-element */
+          <img
             src={mediaDetail.value.img.src}
-            alt={altText2}
+            alt={alt}
             className="image"
             width="1600"
-            height="900"
+            height="auto"
           />
         ) : (
           ""
         );
+      default:
+        return null;
     }
-
-    return null;
   }
 
   // for now it is only possible to show one mediaitem (image or video).
