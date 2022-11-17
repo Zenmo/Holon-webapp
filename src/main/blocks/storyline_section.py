@@ -55,12 +55,22 @@ class InteractiveInputBlock(blocks.StructBlock):
     def get_api_representation(self, value, context=None):
         if value:
             ii = InteractiveInput.objects.get(pk=value["interactive_input"])
-            options = InteractiveInputOptions.objects.filter(page_id=1)
 
             options_arr = []
-            for option in options:
-                option_dict = {"id": int(option.id), "option": option.option}
-                options_arr.append(option_dict)
+            options = InteractiveInputOptions.objects.filter(input_id=ii.id)
+            if (
+                ii.type == ii.CHOICE_BUTTON
+                or ii.type == ii.CHOICE_CHECKBOX
+                or ii.type == ii.CHOICE_MULTIBUTTON
+                or ii.type == ii.CHOICE_BUTTON
+            ):
+                for option in options:
+                    option_dict = {"id": int(option.id), "option": option.option}
+                    options_arr.append(option_dict)
+
+            # if ii.type == ii.CHOICE_CONTINUOUS:
+            #     option_dict = {"test": "Dit is een test of het werkt"}
+            #     options_arr.append(option_dict)
 
             return {"id": ii.id, "name": ii.name, "type": ii.type, "options": options_arr}
 
