@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import RawHtml from "@/components/RawHtml/RawHtml";
+import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import Image from "next/future/image";
 import { getGrid } from "services/grid";
 
@@ -33,6 +34,11 @@ export type Content =
       id?: string;
       type: "static_image";
       value: StaticImage;
+    }
+  | {
+      id?: string;
+      type: "interactive_input";
+      value: InteractiveInput;
     };
 
 export type Slider = {
@@ -56,6 +62,24 @@ export type StaticImage = {
   };
 };
 
+export type InteractiveInput = {
+  id?: number;
+  name?: string;
+  type?: string;
+  animationTag?: string;
+  options: InteractiveInputOptions;
+};
+export type InteractiveInputOptions =
+  | {
+      id?: number;
+      option: string;
+    }
+  | {
+      sliderValueDefault?: number;
+      sliderValueMax?: number;
+      sliderValueMin?: number;
+    };
+
 export default function SectionBlock({ data }: Props) {
   const [value, setValue] = useState<number>(0);
   const [content, setContent] = useState<Content[]>([]);
@@ -75,6 +99,7 @@ export default function SectionBlock({ data }: Props) {
     data?.value.content.map((content: Content) => {
       switch (content.type) {
         case "slider":
+        case "interactive_input":
         case "text":
           if (content.type == "slider") {
             content.value.currentValue = content.value.sliderValueDefault;
@@ -129,9 +154,12 @@ export default function SectionBlock({ data }: Props) {
                 type="range"
                 locked={ct.value.sliderLocked}></ImageSlider>
             );
-          }
-          if (ct.type == "text") {
+          } else if (ct.type === "interactive_input") {
+            return <InteractiveInputs key={`text_${_index}`} input={ct.value} />;
+          } else if (ct.type == "text") {
             return <RawHtml key={`text_${_index}`} html={ct.value} />;
+          } else {
+            return null;
           }
         })}
       </div>
