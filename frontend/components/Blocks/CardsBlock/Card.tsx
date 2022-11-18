@@ -65,20 +65,20 @@ export default function Card({ cardItem }: CardProps) {
     <ConditionalWrapper
       condition={cardItem.cardLink.length > 0}
       wrapper={children => (
-        <a href={cardItem.cardLink[0]?.value} {...externLinkProps} className="hover:brightness-110">
+        <a href={cardItem.cardLink[0]?.value} {...externLinkProps} className="group">
           {children}
         </a>
       )}>
       <React.Fragment>
-        <div
-          className={`group min-h-[400px] ${colorStyle} border-solid border-2 rounded-lg flex h-full flex-col `}>
+        <span
+          className={`min-h-[400px] ${colorStyle} border-solid border cardFadeIn rounded-lg flex h-full flex-col`}>
           <span className="overflow-hidden relative m-4 mb-0 flex-1 border">
             <Image
               src={cardItem.imageSelector.img.src}
               alt={cardItem.imageSelector.img.alt}
               width="725"
               height="380"
-              className="object-cover object-center h-full w-full max-w-none max-h-none brightness-90 "
+              className="object-cover object-center h-full w-full duration-300 max-w-none max-h-none brightness-90 ease-in group-hover:brightness-100 group-hover:scale-110"
             />
           </span>
 
@@ -88,7 +88,7 @@ export default function Card({ cardItem }: CardProps) {
               <RawHtml html={cardItem.text} />
             </span>
           </span>
-        </div>
+        </span>
       </React.Fragment>
     </ConditionalWrapper>
   );
