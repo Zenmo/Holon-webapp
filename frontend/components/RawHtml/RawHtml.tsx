@@ -5,34 +5,41 @@ import HolonButton from "../VersionOne/Buttons/HolonButton";
 import { Dialog, Transition } from "@headlessui/react";
 
 export default function RawHtml({ html }: { html: string }) {
-  const [modal, setModal] = useState<{ isOpen: boolean; modalText: string; modalLink: string }>({
+  const [modal, setModal] = useState<{
+    isOpen: boolean;
+    modalText: string;
+    modalLink: string;
+    modalTitle: string;
+  }>({
     isOpen: false,
     modalText: "",
     modalLink: "",
+    modalTitle: "",
   });
 
   const RawHtmlItem = useRef(null);
 
   function closeModal() {
-    setModal({ isOpen: false, modalText: "", modalLink: "" });
+    setModal({ isOpen: false, modalText: "", modalLink: "", modalTitle: "" });
   }
 
-  function openModal(text, linkUrl) {
-    setModal({ isOpen: true, modalText: text, modalLink: linkUrl });
+  function openModal(text: string, linkUrl: string, linkTitle: string) {
+    setModal({ isOpen: true, modalText: text, modalLink: linkUrl, modalTitle: linkTitle });
   }
 
   useEffect(() => {
-    const staticTermLinks = RawHtmlItem.current.querySelectorAll(`a[data-introduction-text]`);
+    const wikiLinks = RawHtmlItem.current.querySelectorAll(`a[data-introduction-text]`);
 
-    for (let i = 0; i < staticTermLinks.length; i++) {
-      const link = staticTermLinks[i] as HTMLElement | null;
+    for (let i = 0; i < wikiLinks.length; i++) {
+      const link = wikiLinks[i] as HTMLElement | null;
       if (link) {
         link.addEventListener("click", function (e) {
           e.preventDefault();
 
-          const linkText = link.getAttribute("data-introduction-text");
-          const linkUrl = link.getAttribute("data-page-link");
-          openModal(linkText, linkUrl);
+          const linkText = link.getAttribute("data-introduction-text") || "";
+          const linkUrl = link.getAttribute("data-page-link") || "";
+          const linkTitle = link.getAttribute("data-title") || "";
+          openModal(linkText, linkUrl, linkTitle);
         });
       }
     }
@@ -67,7 +74,7 @@ export default function RawHtml({ html }: { html: string }) {
                   leaveTo="opacity-0 scale-95">
                   <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded bg-white p-6 text-left align-middle shadow-xl transition-all">
                     <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                      Modal voor extra toelichting
+                      {modal.modalTitle}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">{modal.modalText}</p>

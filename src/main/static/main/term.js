@@ -6,7 +6,7 @@ class TermModalWorkflowSource extends window.draftail.ModalWorkflowSource {
     getChooserConfig(entity, selectedText) {
         let url = window.chooserUrls.pageChooser;
         const urlParams = {
-            page_type: "main.StaticTermPage",
+            page_type: "main.WikiPage",
             link_text: selectedText,
         };
 
