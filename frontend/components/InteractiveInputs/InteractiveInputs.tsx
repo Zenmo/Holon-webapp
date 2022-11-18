@@ -1,7 +1,5 @@
 import React from "react";
 import ImageSlider from "../InteractiveImage/ImageSlider";
-import HolonButton from "../VersionOne/Buttons/HolonButton";
-import s from "./InteractiveInputs.module.css";
 
 type Props = {
   input: {
@@ -10,6 +8,7 @@ type Props = {
     type?: string;
     animationTag?: string;
     options: InteractiveInputOptions[];
+    display: string;
   };
 };
 export type InteractiveInputOptions =
@@ -22,40 +21,59 @@ export type InteractiveInputOptions =
       slider_value_min?: number;
       slider_value_max?: number;
     };
-function InteractiveRadios({ input }: Props) {
+function InteractiveButtons({ input }: Props) {
+  const inputType = input.type === "single_select" ? "radio" : "checkbox";
+  const buttonLabelStyles =
+    "flex h-full flex-row items-center justify-center peer-checked:bg-white peer-checked:text-blue-900 peer-checked:border-blue-900 border-white text-white bg-holon-blue-900 hover:bg-holon-blue-500 relative rounded border-2 px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50";
+
   return (
-    <React.Fragment>
-      {input.options.map((radio, index) => (
-        <label
-          key={index}
-          htmlFor={input.name + radio.id}
-          className="flex flex-row items-center gap-4">
+    <div className="grid grid-cols-2 gap-2 mb-4">
+      {input.options.map((inputItem, index) => (
+        <div key={index}>
           <input
-            type="checkbox"
-            name="heatholon"
-            id={input.name + radio.id}
-            data-testid={input.name + radio.id}
+            type={inputType}
+            name={input.name}
+            id={input.name + "" + inputItem.id}
+            data-testid={input.name + inputItem.id}
             onChange={() => console.log("onchange")}
             // checked={}
-            className="flex h-5 w-5 appearance-none items-center justify-center rounded-none border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white shadow-[4px_4px_0_0] shadow-black checked:bg-holon-blue-500 after:checked:content-['✔'] disabled:border-holon-grey-300 disabled:shadow-gray-500 disabled:checked:bg-holon-grey-300"
+            className="hidden peer"
           />
-          <span className="mr-auto">{radio.option}</span>
-        </label>
+          <label key={index} htmlFor={input.name + "" + inputItem.id} className={buttonLabelStyles}>
+            <span>{inputItem.option}</span>
+          </label>
+        </div>
       ))}
-    </React.Fragment>
+    </div>
   );
 }
-function InteractiveButtons({ input }: Props) {
+function InteractiveRadios({ input }: Props) {
+  const inputType = input.type === "single_select" ? "radio" : "checkbox";
+  const cssClass =
+    input.type === "single_select"
+      ? "rounded-full after:checked:content-['●']"
+      : "rounded-none after:checked:content-['✔'] ";
+
   return (
-    <React.Fragment>
-      <div className="grid grid-cols-2 py-2 gap-2">
-        {input.options.map((radio, index) => (
-          <React.Fragment key={index}>
-            <HolonButton variant="blue">{radio.option}</HolonButton>
-          </React.Fragment>
-        ))}
-      </div>
-    </React.Fragment>
+    <div className="mb-4 font-bold text-base">
+      {input.options.map((inputItem, index) => (
+        <label
+          key={index}
+          htmlFor={input.name + inputItem.id + "input"}
+          className="flex flex-row mb-2 gap-4 ">
+          <input
+            type={inputType}
+            name={input.name}
+            id={input.name + inputItem.id + "input"}
+            data-testid={input.name + inputItem.id}
+            onChange={() => console.log("onchange")}
+            // checked={}
+            className={`${cssClass} flex h-5 w-5 appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
+          />
+          <span className="mr-auto">{inputItem.option}</span>
+        </label>
+      ))}
+    </div>
   );
 }
 
@@ -75,10 +93,10 @@ function InteractiveInputs({ input }: Props) {
           updateLayers={() => console.log("update layers")}
           type="range"
           locked={false}></ImageSlider>
-      ) : input.type === "single_select" && input.display === "button" ? (
-        <InteractiveButtons input={input} />
-      ) : input.type === "single_select" && input.display === "checkbox_radio" ? (
+      ) : input.display === "checkbox_radio" ? (
         <InteractiveRadios input={input} />
+      ) : input.display === "button" ? (
+        <InteractiveButtons input={input} />
       ) : (
         <p>Another one {input.name}</p>
       )}
