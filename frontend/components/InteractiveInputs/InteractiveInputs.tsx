@@ -78,29 +78,25 @@ function InteractiveRadios({ input }: Props) {
 }
 
 function InteractiveInputs({ input }: Props) {
-  return (
-    <React.Fragment>
-      {input.type === "continuous" ? (
-        <ImageSlider
-          inputId={input.name}
-          datatestid={input.name}
-          value={input.options[0].slider_value_default}
-          setValue={() => console.log("set value")}
-          min={input.options[0].slider_value_min}
-          max={input.options[0].slider_value_max}
-          step={1}
-          label={input.name}
-          updateLayers={() => console.log("update layers")}
-          type="range"
-          locked={false}></ImageSlider>
-      ) : input.display === "checkbox_radio" ? (
-        <InteractiveRadios input={input} />
-      ) : input.display === "button" ? (
-        <InteractiveButtons input={input} />
-      ) : (
-        <p>Another one {input.name}</p>
-      )}
-    </React.Fragment>
+  return input.type === "continuous" ? (
+    <ImageSlider
+      inputId={input.name}
+      datatestid={input.name}
+      value={input.options[0].slider_value_default}
+      setValue={() => console.log("set value")}
+      min={input.options[0].slider_value_min}
+      max={input.options[0].slider_value_max}
+      step={1}
+      label={input.name}
+      updateLayers={() => console.log("update layers")}
+      type="range"
+      locked={false}></ImageSlider>
+  ) : input.display === "checkbox_radio" ? (
+    <InteractiveRadios input={input} />
+  ) : input.display === "button" ? (
+    <InteractiveButtons input={input} />
+  ) : (
+    <p>Another one {input.name}</p>
   );
 }
 
