@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import RawHtml from "@/components/RawHtml/RawHtml";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
-import Image from "next/future/image";
 import { getGrid } from "services/grid";
 
 type Props = {
@@ -166,7 +165,8 @@ export default function SectionBlock({ data }: Props) {
       <div className={`flex flex-col ${gridValue.right}`}>
         <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top-0">
           {Object.keys(media).length > 0 && (
-            <Image src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
+            /* eslint-disable @next/next/no-img-element */
+            <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
           )}
         </div>
       </div>

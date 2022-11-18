@@ -4,7 +4,7 @@ from wagtail.core.blocks import StreamBlock, StructBlock, CharBlock, ChoiceBlock
 from wagtail.embeds.blocks import EmbedBlock
 
 from main.blocks.rich_text_block import RichtextBlock
-from .button import ButtonComponent
+from .button import ButtonBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .background_chooser import BackgroundChooserBlock
 
@@ -40,7 +40,7 @@ class HeroBlock(StructBlock):
         required=False,
     )
 
-    # button = ButtonComponent()
+    button_block = StreamBlock([("buttons", ButtonBlock(required=False))], required=False)
 
     class Meta:
         icon = "title"

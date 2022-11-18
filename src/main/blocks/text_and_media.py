@@ -4,6 +4,7 @@ from wagtail.embeds.blocks import EmbedBlock
 
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
+from .button import ButtonBlock
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 
@@ -42,7 +43,7 @@ class TextAndMediaBlock(blocks.StructBlock):
         required=False,
     )
 
-    # button = ButtonComponent()
+    button_block = blocks.StreamBlock([("buttons", ButtonBlock(required=False))], required=False)
 
     class Meta:  # NOQA
         icon = "image"
