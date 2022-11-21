@@ -12,6 +12,7 @@ export type Props = {
 export type InteractiveInputOptions = {
   id: number;
   option?: string;
+  default?: boolean;
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
@@ -58,6 +59,7 @@ function InteractiveRadios({ id, name, type, options }: Props) {
           htmlFor={id + inputItem.id + "input"}
           className="flex flex-row mb-2 gap-4 ">
           <input
+            defaultChecked={inputItem.default ? true : false}
             type={inputType}
             name={name}
             id={id + inputItem.id + "input"}
