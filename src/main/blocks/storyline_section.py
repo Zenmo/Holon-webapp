@@ -53,6 +53,11 @@ class InteractiveInputBlock(blocks.StructBlock):
 
     interactive_input = blocks.ChoiceBlock(choices=get_interactive_inputs)
     display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES, default=DISPLAY_CHECKBOXRADIO)
+    visible = blocks.BooleanBlock(required=False)
+    locked = blocks.BooleanBlock(required=False)
+    default_value = blocks.CharBlock(
+        required=False, help_text="Type the default value exactly as it's shown on the website page"
+    )
 
     def get_api_representation(self, value, context=None):
         if value:
@@ -60,8 +65,17 @@ class InteractiveInputBlock(blocks.StructBlock):
             options_arr = []
             if ii.type == ii.CHOICE_SINGLESELECT or ii.type == ii.CHOICE_MULTISELECT:
                 options = InteractiveInputOptions.objects.filter(input_id=ii.id)
+
                 for option in options:
-                    option_dict = {"id": int(option.id), "option": option.option}
+                    option_default = False
+                    if value["default_value"] is not None:
+                        if value["default_value"].lower() == option.option.lower():
+                            option_default = True
+                    option_dict = {
+                        "id": int(option.id),
+                        "option": option.option,
+                        "default": option_default,
+                    }
                     options_arr.append(option_dict)
 
             if ii.type == ii.CHOICE_CONTINUOUS:
@@ -82,6 +96,9 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "animation_tag": ii.animation_tag,
                 "options": options_arr,
                 "display": value["display"],
+                "visible": value["visible"],
+                "locked": value["locked"],
+                "default_value": value["default_value"],
             }
 
     class Meta:
