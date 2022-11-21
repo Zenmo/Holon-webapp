@@ -1,6 +1,14 @@
 import React from "react";
 import ImageSlider from "../InteractiveImage/ImageSlider";
 
+export type Props = {
+  id: number;
+  name: string;
+  type?: string;
+  options: InteractiveInputOptions[];
+  display?: string;
+};
+
 export type InteractiveInputOptions = {
   id: number;
   option?: string;
@@ -8,17 +16,7 @@ export type InteractiveInputOptions = {
   sliderValueMax?: number;
   sliderValueMin?: number;
 };
-function InteractiveButtons({
-  id,
-  name,
-  type,
-  options,
-}: {
-  id: number;
-  name: string;
-  type?: string;
-  options: InteractiveInputOptions[];
-}) {
+function InteractiveButtons({ id, name, type, options }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
 
   return (
@@ -45,17 +43,7 @@ function InteractiveButtons({
     </div>
   );
 }
-function InteractiveRadios({
-  id,
-  name,
-  type,
-  options,
-}: {
-  id: number;
-  name: string;
-  type?: string;
-  options: InteractiveInputOptions[];
-}) {
+function InteractiveRadios({ id, name, type, options }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
   const cssClass =
     type === "single_select"
@@ -85,19 +73,7 @@ function InteractiveRadios({
   );
 }
 
-function InteractiveInputs({
-  id,
-  name,
-  type,
-  options,
-  display,
-}: {
-  id: number;
-  name: string;
-  type?: string;
-  options: InteractiveInputOptions[];
-  display: string;
-}) {
+function InteractiveInputs({ id, name, type, options, display }: Props) {
   return type === "continuous" ? (
     <ImageSlider
       inputId={name}
