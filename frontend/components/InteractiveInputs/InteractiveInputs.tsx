@@ -14,9 +14,9 @@ type Props = {
 export type InteractiveInputOptions = {
   id: number;
   option?: string;
-  slider_value_default?: number;
-  slider_value_min?: number;
-  slider_value_max?: number;
+  sliderValueDefault?: number;
+  sliderValueMax?: number;
+  sliderValueMin?: number;
 };
 function InteractiveButtons({ input }: Props) {
   const inputType = input.type === "single_select" ? "radio" : "checkbox";
@@ -79,10 +79,10 @@ function InteractiveInputs({ input }: Props) {
     <ImageSlider
       inputId={input.name}
       datatestid={input.name}
-      value={input.options[0].slider_value_default}
+      value={input.options[0].sliderValueDefault}
       setValue={() => console.log("set value")}
-      min={input.options[0].slider_value_min}
-      max={input.options[0].slider_value_max}
+      min={input.options[0].sliderValueMin}
+      max={input.options[0].sliderValueMax}
       step={1}
       label={input.name}
       updateLayers={() => console.log("update layers")}
