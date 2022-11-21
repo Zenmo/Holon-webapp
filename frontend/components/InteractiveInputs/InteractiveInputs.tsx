@@ -4,23 +4,20 @@ import ImageSlider from "../InteractiveImage/ImageSlider";
 type Props = {
   input: {
     id?: number;
-    name?: string;
+    name: string;
     type?: string;
     animationTag?: string;
     options: InteractiveInputOptions[];
     display: string;
   };
 };
-export type InteractiveInputOptions =
-  | {
-      id?: number;
-      option: string;
-    }
-  | {
-      slider_value_default?: number;
-      slider_value_min?: number;
-      slider_value_max?: number;
-    };
+export type InteractiveInputOptions = {
+  id: number;
+  option?: string;
+  slider_value_default?: number;
+  slider_value_min?: number;
+  slider_value_max?: number;
+};
 function InteractiveButtons({ input }: Props) {
   const inputType = input.type === "single_select" ? "radio" : "checkbox";
   const buttonLabelStyles =
