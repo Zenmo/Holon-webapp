@@ -39,6 +39,9 @@ class SliderBlock(blocks.StructBlock):
                 "tag": slide.tag,
             }
 
+    class Meta:
+        label = _("Slider (use interactive input for new sliders)")
+
 
 class InteractiveInputBlock(blocks.StructBlock):
     DISPLAY_CHECKBOXRADIO = "checkbox_radio"
