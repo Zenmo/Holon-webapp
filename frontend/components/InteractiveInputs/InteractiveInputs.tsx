@@ -15,12 +15,14 @@ export type InteractiveInputOptions =
   | {
       id?: number;
       option: string;
+      default: boolean;
     }
   | {
       slider_value_default?: number;
       slider_value_min?: number;
       slider_value_max?: number;
     };
+
 function InteractiveButtons({ input }: Props) {
   const inputType = input.type === "single_select" ? "radio" : "checkbox";
   const buttonLabelStyles =
@@ -62,6 +64,7 @@ function InteractiveRadios({ input }: Props) {
           htmlFor={input.name + inputItem.id + "input"}
           className="flex flex-row mb-2 gap-4 ">
           <input
+            defaultChecked={inputItem.default ? true : false}
             type={inputType}
             name={input.name}
             id={input.name + inputItem.id + "input"}
