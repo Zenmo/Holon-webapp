@@ -1,16 +1,13 @@
 import React from "react";
 import ImageSlider from "../InteractiveImage/ImageSlider";
 
-export type InteractiveInputOptions =
-  | {
-      id?: number;
-      option: string;
-    }
-  | {
-      sliderValueDefault?: number;
-      sliderValueMax?: number;
-      sliderValueMin?: number;
-    };
+export type InteractiveInputOptions = {
+  id: number;
+  option?: string;
+  sliderValueDefault?: number;
+  sliderValueMax?: number;
+  sliderValueMin?: number;
+};
 function InteractiveButtons({
   id,
   name,
@@ -39,7 +36,7 @@ function InteractiveButtons({
           />
           <label
             key={index}
-            htmlFor={name + "" + inputItem.id}
+            htmlFor={id + "" + inputItem.id}
             className="flex h-full flex-row items-center justify-center peer-checked:bg-white peer-checked:text-blue-900 peer-checked:border-blue-900 border-white text-white bg-holon-blue-900 hover:bg-holon-blue-500 relative rounded border-2 px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50">
             <span>{inputItem.option}</span>
           </label>
@@ -62,7 +59,7 @@ function InteractiveRadios({
   const inputType = type === "single_select" ? "radio" : "checkbox";
   const cssClass =
     type === "single_select"
-      ? "rounded-full after:checked:content-['●']"
+      ? "rounded-full after:checked:content-['●'] after:mt-[-2px]"
       : "rounded-none after:checked:content-['✔'] ";
 
   return (
@@ -70,7 +67,7 @@ function InteractiveRadios({
       {options.map((inputItem, index) => (
         <label
           key={index}
-          htmlFor={name + inputItem.id + "input"}
+          htmlFor={id + inputItem.id + "input"}
           className="flex flex-row mb-2 gap-4 ">
           <input
             type={inputType}
