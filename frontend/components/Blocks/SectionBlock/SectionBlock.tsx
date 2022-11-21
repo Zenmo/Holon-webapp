@@ -67,17 +67,15 @@ export type InteractiveInput = {
   type?: string;
   animationTag?: string;
   options: InteractiveInputOptions;
+  display: string;
 };
-export type InteractiveInputOptions =
-  | {
-      id?: number;
-      option: string;
-    }
-  | {
-      sliderValueDefault?: number;
-      sliderValueMax?: number;
-      sliderValueMin?: number;
-    };
+export type InteractiveInputOptions = {
+  id: number;
+  option?: string;
+  sliderValueDefault?: number;
+  sliderValueMax?: number;
+  sliderValueMin?: number;
+};
 
 export default function SectionBlock({ data }: Props) {
   const [value, setValue] = useState<number>(0);
@@ -154,7 +152,7 @@ export default function SectionBlock({ data }: Props) {
                 locked={ct.value.sliderLocked}></ImageSlider>
             );
           } else if (ct.type === "interactive_input") {
-            return <InteractiveInputs key={`text_${_index}`} input={ct.value} />;
+            return <InteractiveInputs key={`text_${_index}`} {...ct.value} />;
           } else if (ct.type == "text") {
             return <RawHtml key={`text_${_index}`} html={ct.value} />;
           } else {
