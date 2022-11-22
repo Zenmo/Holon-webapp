@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import generics, status
-from holon.cloudclient.run_cloud_experiments.scripts.run_scenario import run_scenario_endpoint
+from cloudclient.scripts.run_scenario import run_scenario_endpoint
 
 from holon.serializers import HolonRequestSerializer
 from etm_service import retrieve_results, scale_copy_and_send
