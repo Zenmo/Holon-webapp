@@ -46,6 +46,15 @@ module.exports = {
         golden: "inset 0 -25px 0px 0px #F3E7C5",
         blue: "inset 0 -25px 0px 0px #AEC2E6",
       },
+      keyframes: {
+        FadeIn: {
+          "0%": { transform: "scale(0.8)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "0.8" },
+        },
+      },
+      animation: {
+        cardFadeIn: "FadeIn 0.3s ease-in forwards",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
