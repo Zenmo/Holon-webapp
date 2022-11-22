@@ -12,11 +12,15 @@ class WikiPageTest(WagtailPageTests):
         SiteFactory.create(root_page=self.root_page)
 
     def test_get_serializer_class(self):
-        page = WikiPageFactory.create(title="Wiki", parent=self.root_page)
+        page = WikiPageFactory.create(
+            title="Wiki", introduction="Introduction", parent=self.root_page
+        )
         self.assertEqual(page.get_serializer_class(), WikiPageSerializer)
 
     def test_to_react_representation(self):
-        page = WikiPageFactory.create(title="Wiki", parent=self.root_page)
+        page = WikiPageFactory.create(
+            title="Wiki", introduction="Introduction", parent=self.root_page
+        )
 
         data = page.get_component_data({})
 
@@ -27,9 +31,11 @@ class WikiPageTest(WagtailPageTests):
     def test_that_rich_text_is_retuned(self):
         page = WikiPageFactory.create(
             title="Wikipage",
+            introduction="Introduction",
             rich_text="This is a automated test",
             parent=self.root_page,
         )
 
         data = page.get_component_data({})
+        self.assertEqual(data["component_props"]["introduction"], "Introduction")
         self.assertEqual(data["component_props"]["rich_text"], "This is a automated test")
