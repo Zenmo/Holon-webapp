@@ -6,5 +6,6 @@ class WikiPageSerializer(BasePageSerializer):
     class Meta:
         model = WikiPage
         fields = [
+            "introduction",
             "rich_text",
         ] + BasePageSerializer.Meta.fields

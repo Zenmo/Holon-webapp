@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import RawHtml from "@/components/RawHtml/RawHtml";
-import Image from "next/future/image";
+import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import { getGrid } from "services/grid";
 
 type Props = {
@@ -33,6 +33,11 @@ export type Content =
       id?: string;
       type: "static_image";
       value: StaticImage;
+    }
+  | {
+      id?: string;
+      type: "interactive_input";
+      value: InteractiveInput;
     };
 
 export type Slider = {
@@ -56,6 +61,22 @@ export type StaticImage = {
   };
 };
 
+export type InteractiveInput = {
+  id?: number;
+  name?: string;
+  type?: string;
+  animationTag?: string;
+  options: InteractiveInputOptions;
+  display: string;
+};
+export type InteractiveInputOptions = {
+  id: number;
+  option?: string;
+  sliderValueDefault?: number;
+  sliderValueMax?: number;
+  sliderValueMin?: number;
+};
+
 export default function SectionBlock({ data }: Props) {
   const [value, setValue] = useState<number>(0);
   const [content, setContent] = useState<Content[]>([]);
@@ -75,6 +96,7 @@ export default function SectionBlock({ data }: Props) {
     data?.value.content.map((content: Content) => {
       switch (content.type) {
         case "slider":
+        case "interactive_input":
         case "text":
           if (content.type == "slider") {
             content.value.currentValue = content.value.sliderValueDefault;
@@ -129,16 +151,20 @@ export default function SectionBlock({ data }: Props) {
                 type="range"
                 locked={ct.value.sliderLocked}></ImageSlider>
             );
-          }
-          if (ct.type == "text") {
+          } else if (ct.type === "interactive_input") {
+            return <InteractiveInputs key={`text_${_index}`} {...ct.value} />;
+          } else if (ct.type == "text") {
             return <RawHtml key={`text_${_index}`} html={ct.value} />;
+          } else {
+            return null;
           }
         })}
       </div>
       <div className={`flex flex-col ${gridValue.right}`}>
         <div className="lg:sticky py-12 px-10 lg:px-16 lg:pt-24 top-0">
           {Object.keys(media).length > 0 && (
-            <Image src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
+            /* eslint-disable @next/next/no-img-element */
+            <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
           )}
         </div>
       </div>

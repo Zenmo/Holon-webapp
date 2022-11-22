@@ -11,7 +11,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
     all_information_types = serializers.SerializerMethodField()
 
     def get_all_storylines(self, page):
-        all = StorylinePage.objects.all()
+        all = StorylinePage.objects.descendant_of(page)
         return_all_storylines = []
         for sl in all:
             roles_array = []
@@ -26,6 +26,12 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
                 it_dict = {"name": it.name, "icon": it.icon}
                 it_array.append(it_dict)
 
+            thumbnail = (
+                {"url": sl.thumbnail_rendition_url.url}
+                if sl.thumbnail_rendition_url is not None
+                else None
+            )
+
             sl_dict = {
                 "title": sl.title,
                 "description": sl.description,
@@ -33,11 +39,7 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
                 "slug": sl.slug,
                 "roles": roles_array,
                 "information_types": it_array,
-                "thumbnail": {
-                    "url": sl.thumbnail_rendition_url.url,
-                    "width": sl.thumbnail_rendition_url.width,
-                    "height": sl.thumbnail_rendition_url.height,
-                },
+                "thumbnail": thumbnail,
             }
 
             return_all_storylines.append(sl_dict)
@@ -65,4 +67,6 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
             "all_storylines",
             "all_roles",
             "all_information_types",
+            "intro",
+            "footer",
         ] + BasePageSerializer.Meta.fields

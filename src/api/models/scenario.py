@@ -2,7 +2,6 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 
-
 # Create your models here.
 class Scenario(models.Model):
     name = models.CharField(max_length=100)

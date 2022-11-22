@@ -1,2 +1,3 @@
 from .slider import *
-from .scenario import *
+from .slider import *  # NOQA
+from .interactive_input import *  # NOQA
