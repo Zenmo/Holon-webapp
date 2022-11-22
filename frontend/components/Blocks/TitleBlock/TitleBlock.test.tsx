@@ -8,13 +8,38 @@ describe("<TitleBlock />", () => {
         data={{
           type: "unknown",
           value: {
-            backgroundColor: "bg-emerald-100",
+            backgroundColor: "block__bg-purple",
             title: "Hello world",
             size: "h2",
             text: "Lorem ipsum",
-            buttonBlock: [],
+            buttonBlock: [
+              {
+                type: "buttons",
+                value: {
+                  buttonsAlign: "btn-left",
+                  buttons: [
+                    {
+                      type: "button",
+                      value: {
+                        buttonStyle: "dark",
+                        buttonText: "xx",
+                        buttonLink: [
+                          {
+                            type: "extern",
+                            value: "http://www.test.com",
+                            id: "1",
+                          },
+                        ],
+                      },
+                      id: "2",
+                    },
+                  ],
+                },
+                id: "3",
+              },
+            ],
           },
-          id: "a-block",
+          id: "4",
         }}
       />
     );
@@ -30,6 +55,14 @@ describe("<TitleBlock />", () => {
 
   it("renders the text content", () => {
     const content = screen.getByTestId("content");
+
     expect(content).toHaveTextContent("Lorem ipsum");
+  });
+
+  it("renders a link-button", () => {
+    const link = screen.getByRole("link");
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveTextContent("xx");
+    expect(link).toHaveAttribute("href", "http://www.test.com");
   });
 });
