@@ -11,4 +11,4 @@ django-cors-headers==3.13
 django-autoslug==1.9.8
 
 # ETM-service
-https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.2.1/etm_service-0.2.tar.gz
+https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.3/etm_service-0.3.tar.gz
