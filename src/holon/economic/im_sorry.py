@@ -20,13 +20,11 @@ ETM_MAPPING = {
     ),
 }
 
-#  TODO: wat doen we nog met CO2 voor postprocessing
-
 
 def calculate_total_costs(
     etm_inputs: dict, holon_config_gridconnections: list, holon_outputs: list
 ) -> float:
-    """Caluculates the costs KPI's - if we need it they can be reported back per category as well"""
+    """Calculates the costs KPI's - if we need it they can be reported back per category as well"""
     categories = Categories()
     categories.add_connections(holon_config_gridconnections)
     categories.add_carriers_and_infra(
@@ -74,7 +72,8 @@ class Category:
         for cost_item in self.cost_items:
             for key, val in ETM_MAPPING.items():
                 if cost_item.match(*val):
-                    cost_item.set_price(etm_inputs[key])
+                    # NOTE: if etm_key is not available, we set costs to zero
+                    cost_item.set_price(etm_inputs.get(key, 0))
                     self.total_costs += cost_item.costs
                     break
 
@@ -99,6 +98,8 @@ class Categories:
     def add_connections(self, gridconnections):
         """"""
         for connection in gridconnections:
+            if not self._category_of(connection):
+                continue
             self.categories[self._category_of(connection)].add_cost_items(connection)
 
     def add_carriers_and_infra(self, holon_output):
