@@ -41,3 +41,7 @@
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.Container a[data-introduction-text] {
+  cursor: pointer;
+  border-bottom: 1px dotted black;
+}

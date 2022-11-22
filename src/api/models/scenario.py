@@ -3,7 +3,6 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 from django.core.validators import MinValueValidator
 
-
 # Create your models here.
 class Scenario(models.Model):
     name = models.CharField(max_length=100)
