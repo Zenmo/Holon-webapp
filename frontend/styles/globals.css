@@ -41,6 +41,11 @@ a {
   p {
     @apply text-base;
   }
+
+  .stretched-link::after {
+    content: "";
+    @apply z-10 absolute inset-0 bg-transparent pointer-events-auto;
+  }
 }
 
 .card__bg-gold {

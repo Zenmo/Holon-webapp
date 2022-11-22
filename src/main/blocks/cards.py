@@ -1,8 +1,16 @@
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.core.blocks import StructBlock, CharBlock, ChoiceBlock, ListBlock, StreamBlock
+from wagtail.core.blocks import (
+    StructBlock,
+    CharBlock,
+    ChoiceBlock,
+    ListBlock,
+    StreamBlock,
+    URLBlock,
+)
 from .button import ButtonBlock
 from .holon_image_chooser import HolonImageChooserBlock
+from .page_chooser_block import PageChooserBlock
 
 COLOR_CHOICES = (
     ("card__bg-gold", "Gold"),
@@ -20,6 +28,24 @@ class CardComponent(StructBlock):
     text = CharBlock(required=False, max_length=255)
     card_background = ChoiceBlock(
         choices=COLOR_CHOICES,
+        required=False,
+    )
+    card_link = StreamBlock(
+        [
+            (
+                "intern",
+                PageChooserBlock(
+                    required=False,
+                    helptext="Choose if you want the card to link to a page internally",
+                ),
+            ),
+            (
+                "extern",
+                URLBlock(required=False, helptext="Fill in if the card should link externally"),
+            ),
+        ],
+        help_text="Optional: add an internal or external link to the card",
+        max_num=1,
         required=False,
     )
 

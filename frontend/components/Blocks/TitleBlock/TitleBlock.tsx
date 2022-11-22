@@ -20,9 +20,8 @@ export default function TitleBlock({ data }: Props) {
   const Tag = data.value.size;
 
   return (
-    <div>
-      <div
-        className={`flex flex-row w-full h-fit py-12 px-10 lg:px-16 lg:pt-16 ${backgroundcolor}`}>
+    <div className={`${backgroundcolor}`}>
+      <div className={`flex flex-row w-full h-fit py-12 px-10 lg:px-16 lg:pt-16 `}>
         <div className={`flex flex-col justify-start lg:mr-[40%]`}>
           <Tag>{data.value.title}</Tag>
           <div className="mt-6" data-testid="content">
