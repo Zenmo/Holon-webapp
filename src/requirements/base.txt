@@ -10,5 +10,8 @@ wagtail_headless_preview==0.4
 django-cors-headers==3.13
 django-autoslug==1.9.8
 
+# cloudclient
+git+https://github.com/ZEnMo/HOLON-cloudclient@main#egg=cloudclient
+
 # ETM-service
 https://github.com/ZEnMo/HOLON-ETM/releases/download/0.3/etm_service-0.3.tar.gz
