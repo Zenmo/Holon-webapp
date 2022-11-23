@@ -1,35 +1,23 @@
 from rest_framework import serializers
+from api.models.interactive_input import InteractiveInput
 from api.models.scenario import Scenario
 from api.models.slider import Slider
 from django.utils.translation import gettext_lazy as _
 
 
-class SliderInputSerializer(serializers.Serializer):
-    slider = serializers.PrimaryKeyRelatedField(queryset=Slider.objects.all())
-    value = serializers.IntegerField()
-
-    def validate(self, data):
-        slider = data["slider"]
-
-        if data["value"] < slider.slider_value_min or data["value"] > slider.slider_value_max:
-            raise serializers.ValidationError(
-                {
-                    "value": [
-                        _("Slider value is out of range, min %(min)s max %(max)s")
-                        % {"min": slider.slider_value_min, "max": slider.slider_value_max}
-                    ]
-                }
-            )
-        return data
+class InteractiveElementInputSerializer(serializers.Serializer):
+    interactive_element = serializers.PrimaryKeyRelatedField(
+        queryset=InteractiveInput.objects.all()
+    )
+    value = serializers.JSONField()
 
     class Meta:
-        fields = ["slider", "value"]
+        fields = ["interactive_element"]
         depth = 1
 
 
 class HolonRequestSerializer(serializers.Serializer):
-    scenario = serializers.PrimaryKeyRelatedField(queryset=Scenario.objects.all())
-    sliders = SliderInputSerializer(many=True)
+    interactive_elements = InteractiveElementInputSerializer(many=True)
 
     class Meta:
-        fields = ["scenario", "scenario_tag", "sliders"]
+        fields = ["interactive_elements"]

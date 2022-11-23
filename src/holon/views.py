@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import generics, status
-from holon.cloudclient.run_cloud_experiments.scripts.run_scenario import run_scenario_endpoint
+
+# from scripts.run_scenario import run_scenario_endpoint
 
 from holon.serializers import HolonRequestSerializer
 from etm_service import retrieve_results, scale_copy_and_send
@@ -43,10 +44,11 @@ class HolonService(generics.CreateAPIView):
 
         if serializer.is_valid():
             data = serializer.validated_data
-            value = data.get("sliders")[0]["value"]
-            holon_results = run_scenario_endpoint(
-                data.get("scenario").model_name, format_holon_input(value), RESULTS
-            )
+            value = data.get("interactive_elements")[0]["value"]
+            holon_results = {}
+            # holon_results = run_scenario_endpoint(
+            #     data.get("scenario").model_name, format_holon_input(value), RESULTS
+            # )
 
             # Upscaling of KPI's to national
             # TODO: Make sure the right holon results are sent here (as a dict) - check config for
