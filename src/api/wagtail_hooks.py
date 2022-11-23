@@ -1,6 +1,9 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-
+from django.templatetags.static import static
+from django.utils.html import format_html
 from api.models.scenario import Scenario
+
+from wagtail.core import hooks
 
 # Deprecated since 21-11-2022
 # class SliderAdmin(ModelAdmin):
@@ -34,3 +37,9 @@ class ScenarioAdmin(ModelAdmin):
 
 
 modeladmin_register(ScenarioAdmin)
+
+
+@hooks.register("insert_global_admin_js", order=100)
+def global_admin_js():
+    """Add /static/css/custom.js to the admin."""
+    return format_html('<script src="{}"></script>', static("/js/custom.js"))

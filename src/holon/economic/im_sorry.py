@@ -12,6 +12,7 @@ ETM_MAPPING = {
     "hourly_price_of_electricity_per_mwh": ("SystemHourlyElectricity", ""),
     "price_of_natural_gas_per_mwh": ("totalMethane", ""),
     "price_of_hydrogen_per_mwh": ("totalHydrogen", ""),
+    "price_of_diesel_per_mwh": ("totalDiesel", ""),
     "electricity_grid_expansion_costs_lv_mv_trafo_per_kw": ("MSLSPeakLoadElectricity_kW", ""),
     "electricity_grid_expansion_costs_mv_hv_trafo_per_kw": ("HSMSPeakLoadElectricity_kW", ""),
     "depreciation_costs_grid_battery_per_mwh": (
@@ -86,7 +87,7 @@ class Categories:
         "infrastructure": ["HSMSPeakLoadElectricity_kW", "MSLSPeakLoadElectricity_kW"],
         "flexibility": ["totalBatteryInstalledCapacity_MWh:Grid_battery_10MWh"],
         "energy_production": ["SOLARFARM"],
-        "carriers": ["SystemHourlyElectricity", "totalMethane", "totalHydrogen"],
+        "carriers": ["SystemHourlyElectricity", "totalMethane", "totalHydrogen", "totalDiesel"],
     }
 
     def __init__(self) -> None:

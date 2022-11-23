@@ -17,7 +17,6 @@ wait_for_db () {
   fi
 }
 
-
 setup_django () {
   cd /workspace/src
 
@@ -37,6 +36,11 @@ setup_django () {
   python manage.py createcachetable
 }
 
+load_fixture_data() {
+  cd /workspace/src
+  python manage.py loaddata holon/fixtures/factor_types.json
+}
+
 setup_frontend () {
   cd /workspace/frontend
   
@@ -46,7 +50,7 @@ setup_frontend () {
 
 wait_for_db
 setup_django
+load_fixture_data
 setup_frontend
-setup_submodules
 
 exec "$@"

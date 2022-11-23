@@ -8,11 +8,6 @@ export default function InteractiveImage() {
   const [windmills, setWindmills] = useState(0);
   const [windForce, setWindForce] = useState(3);
 
-  function updateLayers(value: string, setValue: (newValue: number) => void) {
-    const newValue: number = parseInt(value);
-    setValue(newValue);
-  }
-
   return (
     <div className="flex w-full flex-col">
       <div className="flex flex-col lg:flex-row">
@@ -24,13 +19,12 @@ export default function InteractiveImage() {
           <ImageSlider
             inputId="solarPanels_flat"
             datatestid="solarpanelSlider"
-            value={solarpanels}
-            setValue={setSolarpanels}
+            defaultValue={solarpanels}
+            setValue={(id, value) => setSolarpanels(value)}
             min={0}
             max={6}
             step={1}
             label="Aantal zonnepanelen"
-            updateLayers={updateLayers}
             type="range"></ImageSlider>
           <p className="mt-8 text-base">
             Bepaal hier hoeveel windmolens je in de wijk wilt neerzetten.{" "}
@@ -38,25 +32,23 @@ export default function InteractiveImage() {
           <ImageSlider
             inputId="windmills_flat"
             datatestid="windmillSlider"
-            value={windmills}
-            setValue={setWindmills}
+            defaultValue={windmills}
+            setValue={(id, value) => setWindmills(value)}
             min={0}
             max={3}
             step={1}
             label="Aantal windmolens"
-            updateLayers={updateLayers}
             type="range"></ImageSlider>
           <p className="mt-8 text-base">Bepaal hier hoe hard de wind waait. </p>
           <ImageSlider
             inputId="windForce_flat"
             datatestid="windforceSlider"
-            value={windForce}
-            setValue={setWindForce}
+            defaultValue={windForce}
+            setValue={(id, value) => setWindForce(value)}
             min={0}
             max={12}
             step={3}
             label="Windkracht"
-            updateLayers={updateLayers}
             type="range"></ImageSlider>
         </div>
         <div

@@ -9,28 +9,28 @@ from wagtail.core.models import Orderable
 # from django.core.validators import MinValueValidator
 from wagtail.snippets.models import register_snippet
 
+CHOICE_SINGLESELECT = "single_select"
+CHOICE_MULTISELECT = "multi_select"
+CHOICE_CONTINUOUS = "continuous"
+TYPE_CHOICES = (
+    (CHOICE_SINGLESELECT, "Single Select"),
+    (CHOICE_MULTISELECT, "Multi Select"),
+    (CHOICE_CONTINUOUS, "Continuous (slider)"),
+)
+
+ANIMATION_NONE = "no-animation"
+ANIMATION_TILES = "tiles"
+ANIMATION_SOLAR_ROOF = "solarpanels-roof"
+ANIMATION_TRANSPORT_ELECTRIFICATION = "transport-electrification"
+ANIMATION_CHOICES = (
+    (ANIMATION_NONE, "Geen animatie"),
+    (ANIMATION_TILES, "Tegels"),
+    (ANIMATION_SOLAR_ROOF, "Solarpanels on roof"),
+    (ANIMATION_TRANSPORT_ELECTRIFICATION, "Transport electriciteit"),
+)
 # Create your models here.
 @register_snippet
 class InteractiveInput(ClusterableModel):
-    CHOICE_SINGLESELECT = "single_select"
-    CHOICE_MULTISELECT = "multi_select"
-    CHOICE_CONTINUOUS = "continuous"
-    TYPE_CHOICES = (
-        (CHOICE_SINGLESELECT, "Single Select"),
-        (CHOICE_MULTISELECT, "Multi Select"),
-        (CHOICE_CONTINUOUS, "Continuous (slider)"),
-    )
-
-    ANIMATION_NONE = "no-animation"
-    ANIMATION_TILES = "tiles"
-    ANIMATION_SOLAR_ROOF = "solarpanels-roof"
-    ANIMATION_TRANSPORT_ELECTRIFICATION = "transport-electrification"
-    ANIMATION_CHOICES = (
-        (ANIMATION_NONE, "Geen animatie"),
-        (ANIMATION_TILES, "Tegels"),
-        (ANIMATION_SOLAR_ROOF, "Solarpanels on roof"),
-        (ANIMATION_TRANSPORT_ELECTRIFICATION, "Transport electriciteit"),
-    )
 
     name = models.CharField(max_length=100)
     type = models.CharField(
@@ -45,11 +45,15 @@ class InteractiveInput(ClusterableModel):
         choices=ANIMATION_CHOICES,
         default=ANIMATION_NONE,
     )
+    asset_type = models.ForeignKey(
+        "holon.Asset", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
+    )
 
     panels = [
         FieldPanel("name"),
         FieldPanel("type"),
         FieldPanel("animation_tag"),
+        FieldPanel("asset_type"),
         InlinePanel(
             "options",
             heading="Options",
@@ -68,7 +72,7 @@ class InteractiveInput(ClusterableModel):
     ]
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + dict(TYPE_CHOICES)[self.type] + ")"
 
     class Meta:
         verbose_name = "Interactive Input"
@@ -93,11 +97,13 @@ class InteractiveInputContinuousValues(models.Model):
         validators=[MinValueValidator(0)],
         blank=True,
         null=True,
+        default=0,
         help_text=_("Minimum amount of the continuous input"),
     )
     slider_value_max = models.IntegerField(
         validators=[MinValueValidator(0)],
         blank=True,
         null=True,
+        default=100,
         help_text=_("Maximum amount of the continuous input"),
     )
