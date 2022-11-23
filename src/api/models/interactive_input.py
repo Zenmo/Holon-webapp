@@ -32,6 +32,7 @@ ANIMATION_CHOICES = (
 @register_snippet
 class InteractiveInput(ClusterableModel):
 
+    etm_key = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=100)
     type = models.CharField(
         max_length=14,
