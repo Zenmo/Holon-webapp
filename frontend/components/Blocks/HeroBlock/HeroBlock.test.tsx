@@ -169,10 +169,10 @@ describe("<HeroBlock />", () => {
     });
 
     it("renders text", () => {
-      const heading = screen.getByTestId("content");
+      const text = screen.getByTestId("content");
 
-      expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("Lorem ipsum");
+      expect(text).toBeInTheDocument();
+      expect(text).toHaveTextContent("Lorem ipsum");
     });
 
     it("renders an image", () => {

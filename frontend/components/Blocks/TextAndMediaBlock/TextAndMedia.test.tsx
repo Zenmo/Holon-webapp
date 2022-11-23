@@ -45,7 +45,8 @@ describe("<TextAndMedia />", () => {
     });
 
     it("renders text", () => {
-      expect(screen.getByText("Lorem ipsum")).toBeInTheDocument();
+      const text = screen.getByText("Lorem ipsum");
+      expect(text).toBeInTheDocument();
     });
 
     it("renders a video player", () => {
@@ -99,7 +100,8 @@ describe("<TextAndMedia />", () => {
     });
 
     it("renders text", () => {
-      expect(screen.getByText("Lorem ipsum")).toBeInTheDocument();
+      const text = screen.getByText("Lorem ipsum");
+      expect(text).toBeInTheDocument();
     });
 
     it("renders an image", () => {
