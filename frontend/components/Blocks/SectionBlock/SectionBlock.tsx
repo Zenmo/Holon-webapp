@@ -4,7 +4,7 @@ import RawHtml from "@/components/RawHtml/RawHtml";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import { getGrid } from "services/grid";
 import debounce from "lodash.debounce";
-import { getHolonKPIs } from "@/api/holon";
+import { getHolonKPIs } from "../../../api/holon";
 
 type Props = {
   data: {
