@@ -20,17 +20,27 @@
 #                         converted with. E.g for 'divide' this is the value to be divided by.
 #                         This value has the same properties as the main 'value' field.
 
-name_of_holon_input_buildings_solar_panels: # deze HOLON-slidernaam moet nog worden geüpdatet, is nu nog onbekend
+share_of_buildings_with_solar_panels: # deze HOLON-slidernaam moet nog worden geüpdatet, is nu nog onbekend
   value:
     type: input
     data: value
     etm_key: buildings_solar_pv_solar_radiation_market_penetration
 
-name_of_holon_input_eletric_trucks:
+share_of_electric_trucks:
   value:
     type: input
     data: value
     etm_key: transport_truck_using_electricity_share
+
+grid_battery_on_off:
+  value:
+    type: input
+    data: value
+    etm_key: energy_flexibility_mv_batteries_electricity
+  conversion: multiply
+  convert_with_value:
+    type: static
+    data: 280000.0 # aantal bedrijventerreinen in NL (3500) * typische grootte batterijen in ETM(80 MW)
 
 # hourly profile electric trucks
 totalEHGVHourlyChargingProfile_kWh:
@@ -38,10 +48,9 @@ totalEHGVHourlyChargingProfile_kWh:
     type: curve
     data: curve
     etm_key: electric_trucks
-
-# hourly profile electric cars
-totalEHGVHourlyChargingProfile_kWh:
-  value:
-    type: curve
-    data: curve
-    etm_key: electric_vehicle_profile_1
+# # hourly profile electric cars
+# totalEVHourlyChargingProfile_kWh:
+#   value:
+#     type: curve
+#     data: curve
+#     etm_key: electric_vehicle_profile_1

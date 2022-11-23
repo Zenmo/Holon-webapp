@@ -1,12 +1,15 @@
 from rest_framework.response import Response
 from rest_framework import generics, status
 from cloudclient.scripts.run_scenario import run_scenario_endpoint
+from cloudclient.datamodel import GridConnection
 
 from holon.serializers import HolonRequestSerializer
 from etm_service import retrieve_results, scale_copy_and_send
 from holon.economic.im_sorry import calculate_total_costs
 
 from pathlib import Path
+from typing import List
+import json
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parent / "services"
 ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
@@ -34,6 +37,17 @@ def format_holon_input(value):
     }
 
 
+def map_slider_values_to_gridconnections(
+    gridconnections: List[GridConnection], slidervalues: dict
+) -> List[dict]:
+
+    gridconnections = [json.loads(gridcon.json()) for gridcon in gridconnections]
+
+    ## TODO: update 
+    
+    return gridconnections
+
+
 class HolonService(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
@@ -48,14 +62,23 @@ class HolonService(generics.CreateAPIView):
                 data.get("scenario").model_name, format_holon_input(value), RESULTS
             )
 
+            dummy_value = 1
+
+            holon_results_w_sliders = holon_results
+            holon_results_w_sliders.update(
+                {
+                    "share_of_buildings_with_solar_panels": dummy_value,
+                    "share_of_electric_trucks": dummy_value,
+                    "grid_battery_on_off": dummy_value,
+                }
+            )
+
             # Upscaling of KPI's to national
-            # TODO: Make sure the right holon results are sent here (as a dict) - check config for
-            # the expected keys
             updated_etm_scenario_id = scale_copy_and_send(
                 data.get("scenario").etm_scenario_id,
-                holon_results,  # TODO: + sliders holon (merged dict) {e.g. solarpanels: 30}
+                holon_results_w_sliders,
                 ETM_CONFIG_PATH,
-                ETM_CONFIG_FILE_SCALING,  # TODO: add slider names if they are known
+                ETM_CONFIG_FILE_SCALING,
             )
             etm_results = retrieve_results(
                 updated_etm_scenario_id, ETM_CONFIG_PATH, ETM_CONFIG_FILE_GET_KPIS
