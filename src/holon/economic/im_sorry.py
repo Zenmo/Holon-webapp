@@ -12,6 +12,7 @@ ETM_MAPPING = {
     "hourly_price_of_electricity_per_mwh": ("SystemHourlyElectricity", ""),
     "price_of_natural_gas_per_mwh": ("totalMethane", ""),
     "price_of_hydrogen_per_mwh": ("totalHydrogen", ""),
+    "price_of_diesel_per_mwh": ("totalDiesel", ""),
     "electricity_grid_expansion_costs_lv_mv_trafo_per_kw": ("MSLSPeakLoadElectricity_kW", ""),
     "electricity_grid_expansion_costs_mv_hv_trafo_per_kw": ("HSMSPeakLoadElectricity_kW", ""),
     "depreciation_costs_grid_battery_per_mwh": (
@@ -20,13 +21,11 @@ ETM_MAPPING = {
     ),
 }
 
-#  TODO: wat doen we nog met CO2 voor postprocessing
-
 
 def calculate_total_costs(
     etm_inputs: dict, holon_config_gridconnections: list, holon_outputs: list
 ) -> float:
-    """Caluculates the costs KPI's - if we need it they can be reported back per category as well"""
+    """Calculates the costs KPI's - if we need it they can be reported back per category as well"""
     categories = Categories()
     categories.add_connections(holon_config_gridconnections)
     categories.add_carriers_and_infra(
@@ -74,7 +73,8 @@ class Category:
         for cost_item in self.cost_items:
             for key, val in ETM_MAPPING.items():
                 if cost_item.match(*val):
-                    cost_item.set_price(etm_inputs[key])
+                    # NOTE: if etm_key is not available, we set costs to zero
+                    cost_item.set_price(etm_inputs.get(key, 0))
                     self.total_costs += cost_item.costs
                     break
 
@@ -87,7 +87,7 @@ class Categories:
         "infrastructure": ["HSMSPeakLoadElectricity_kW", "MSLSPeakLoadElectricity_kW"],
         "flexibility": ["totalBatteryInstalledCapacity_MWh:Grid_battery_10MWh"],
         "energy_production": ["SOLARFARM"],
-        "carriers": ["SystemHourlyElectricity", "totalMethane", "totalHydrogen"],
+        "carriers": ["SystemHourlyElectricity", "totalMethane", "totalHydrogen", "totalDiesel"],
     }
 
     def __init__(self) -> None:
@@ -99,6 +99,8 @@ class Categories:
     def add_connections(self, gridconnections):
         """"""
         for connection in gridconnections:
+            if not self._category_of(connection):
+                continue
             self.categories[self._category_of(connection)].add_cost_items(connection)
 
     def add_carriers_and_infra(self, holon_output):
