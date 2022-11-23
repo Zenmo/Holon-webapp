@@ -22,7 +22,7 @@ class Pepe:
     def preprocessor(self):
         return self._preprocessor
 
-    @preprocessor.setter
+    @preprocessor.setter #S: this one I like
     def preprocessor(self, data):
         self._preprocessor = PreProcessor(data)
 
@@ -30,7 +30,7 @@ class Pepe:
     def preprocessor(self):
         try:
             return self._preprocessor
-        #  :-)
+        #  :-) big ooffff
         except:
             return EmptyProcessor()
 
@@ -99,6 +99,7 @@ class PreProcessor:
         self.holon_payload = data
 
     def is_valid(self):
+        #TODO!
         return True
 
     # Time to misuse some properties!
@@ -129,16 +130,28 @@ class PreProcessor:
 
         self._assets = converted_assets
 
+    def apply_interactive_to_payload(self):
+        """TODO: cry many tears for this function, poor pepe"""
+        grid_connections = self.holon_payload['gridconnections']
+        for factor in self.assets:
+            for gc in grid_connections:
+                if gc['type'] == factor.grid_connection:
+                    for asset in gc['assets']:
+                        if asset['type'] == factor.asset_type:
+                            asset[factor.asset_attribute] = factor.value
+
+
+
+
     @property
-    def holon_payload(self) -> Payload:
+    def holon_payload(self) -> dict:
         """The thing that goes into anylogic as JSON."""
         return self._holon_payload
 
     @holon_payload.setter
-    def holon_payload(self, data):
-        """TODO: inject data into the payload. Make sure to use deepcopy COPY COPY"""
-        # meh meh IMPORTANT!!!!!!
-        self._holon_payload = payload
+    def holon_payload(self, value):
+        """TODO: inject data into the payload. Make sure to use deepcopy COPY COPY (seth: Noooo, we _want_ a pointer!)"""
+        self._holon_payload = value
 
     def grid_connections(self) -> list[dict]:
         """Returns the grid_connections in list format to be processed by economic modules"""
@@ -161,6 +174,7 @@ class PostProcessor:
         self.total_costs = 0
 
     def is_valid(self):
+        #TODO!
         return True
 
     def costs_holon_output(self) -> list[dict]:

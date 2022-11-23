@@ -1,6 +1,8 @@
 from rest_framework.response import Response
 from rest_framework import generics, status
-from cloudclient.scripts.run_scenario import run_scenario_endpoint
+
+from cloudclient.experiments import prepare_scenario_as_experiment, AnyLogicExperiment
+
 
 from .serializers import HolonRequestSerializer
 from .models.pepe import Pepe
@@ -27,9 +29,12 @@ class HolonService(generics.CreateAPIView):
             pepe.preprocessor.set(data)
 
             # holon_results = {}
-            holon_results = run_scenario_endpoint(
-                data.get("scenario").model_name, pepe.preprocessor.holon_payload.to_json(), RESULTS
-            )
+            scenario : AnyLogicExperiment = prepare_scenario_as_experiment(data.get("scenario").model_name)
+            pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
+            pepe.preprocessor.apply_interactive_to_payload()
+            
+            holon_results = AnyLogicExperiment.runScenario().to_dict(orient='records')[0]
+            holon_results = {key: value for key, value in holon_results.items() if key in RESULTS}
 
             pepe.postprocessor.set(holon_results)
 
