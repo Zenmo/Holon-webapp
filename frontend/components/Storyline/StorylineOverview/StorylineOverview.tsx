@@ -97,7 +97,6 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
       <div className="flex flex-col p-8 lg:w-2/3 xl:w-3/4">
         <div className="flex flex-row justify-between mb-2">
           <strong>{filteredProjects?.length} resultaten</strong>
-          <strong>Sorteren placenholder</strong>
         </div>
 
         <div className="flex flex-row flex-wrap mx-[-1rem]">
