@@ -1,8 +1,17 @@
 import json
+from pathlib import Path
 from cloudclient import Payload
+import etm_service
 
 from .factor import Factor
 from holon.services.anylogic_datamodel_mvp import payload
+from holon.economic.im_sorry import calculate_total_costs
+
+ETM_CONFIG_PATH = Path(__file__).resolve().parents[1] / "services"
+ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
+ETM_CONFIG_FILE_COSTS = "etm_costs.config"
+ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
+COSTS_SCENARIO_ID = 2166341  # KEV + 1 MW grid battery | ETM sceanrio on beta
 
 
 class Pepe:
@@ -41,6 +50,32 @@ class Pepe:
         except:
             return EmptyProcessor()
 
+    def upscale_to_etm(self):
+        """Postprocessing step"""
+        if self.preprocessor.is_valid() and self.postprocessor.is_valid():
+            self.preprocessor.etm_scenario_id = etm_service.scale_copy_and_send(
+                self.preprocessor.etm_scenario_id,
+                self.preprocessor.slider_settings() | self.postprocessor.etm_kpi_holon_output(),
+                ETM_CONFIG_PATH,
+                ETM_CONFIG_FILE_SCALING,
+            )
+            self.postprocessor.etm_results = etm_service.retrieve_results(
+                self.preprocessor.etm_scenario_id, ETM_CONFIG_PATH, ETM_CONFIG_FILE_GET_KPIS
+            )
+
+    def calculate_costs(self):
+        """Postprocessing step"""
+        if self.preprocessor.is_valid() and self.postprocessor.is_valid():
+            # NOTE: inputs for the costs are queried from a different 'standard' scenario and
+            # independent of any HOLON influence. These are an excellent candidate for caching.
+            self.postprocessor.total_costs = calculate_total_costs(
+                etm_service.retrieve_results(
+                    COSTS_SCENARIO_ID, ETM_CONFIG_PATH, ETM_CONFIG_FILE_COSTS
+                ),
+                self.preprocessor.grid_connections(),
+                self.postprocessor.costs_holon_output(),
+            )
+
 
 class EmptyProcessor:
     """Some defaults not to make it all crash"""
@@ -48,17 +83,25 @@ class EmptyProcessor:
     def __init__(self) -> None:
         self.assets = []
         self.holon_payload = payload
-        self.gridconnections = []
         self.holon_output = {}
+
+    def is_valid(self):
+        return False
+
+    def results(self):
+        return {}
 
 
 class PreProcessor:
     def __init__(self, data) -> None:
+        self.etm_scenario_id = data.get("scenario").etm_scenario_id
         self.assets = data.get("interactive_elements")
         self.holon_payload = data
-        self.grid_connections = data
 
-    # Time to rape some properties!
+    def is_valid(self):
+        return True
+
+    # Time to misuse some properties!
 
     @property
     def assets(self):
@@ -78,9 +121,9 @@ class PreProcessor:
                 None,
             )
             if interactive_input is not None:
-                factor.value = (factor.max_value + factor.min_value) * (
+                factor.value = (factor.max_value - factor.min_value) * (
                     interactive_input["value"] / 100
-                )
+                ) + factor.min_value
 
             converted_assets.append(factor)
 
@@ -88,54 +131,67 @@ class PreProcessor:
 
     @property
     def holon_payload(self) -> Payload:
-        """The thing that goes into anylogic as JSON. Is a cloudclient.Payload"""
+        """The thing that goes into anylogic as JSON."""
         return self._holon_payload
 
     @holon_payload.setter
     def holon_payload(self, data):
         """TODO: inject data into the payload. Make sure to use deepcopy COPY COPY"""
-        # meh meh
+        # meh meh IMPORTANT!!!!!!
         self._holon_payload = payload
 
-    @property
-    def grid_connections(self):
-        return self._grid_connections
-
-    @grid_connections.setter
-    def grid_connections(self, data):
-        """TODO: Process me with some data! Make sure to make a COPY of the payload from the config"""
-        self._grid_connections = [json.loads(gridcon.json()) for gridcon in payload.gridconnections]
+    def grid_connections(self) -> list[dict]:
+        """Returns the grid_connections in list format to be processed by economic modules"""
+        return [json.loads(gridcon.json()) for gridcon in self._holon_payload.gridconnections]
 
     def slider_settings(self):
-        """TODO: convert self.assets to some nice sliders ettings to flow into upscaling"""
-        DUMMY = 1
-
-        return {
-            "share_of_buildings_with_solar_panels": DUMMY,
-            "share_of_electric_trucks": DUMMY,
-            "grid_battery_on_off": DUMMY,
-        }
+        """
+        Raw slider settings from front end to send to ETM -
+        TODO: we gaan ervanuit dat
+        inetractive element een ETM key heeft. Deze mappen voor slider settings. Dus dit hieronder
+        aanpassen etm_key. Zelde loop gebruiken als voor de assets
+        """
+        return {factor.asset.type: factor.value for factor in self.assets}
 
 
 class PostProcessor:
     def __init__(self, holon_output) -> None:
         self.holon_output = holon_output
+        self.etm_results = {}
+        self.total_costs = 0
 
-    def costs_holon_output(self):
-        """TODO: retrun outputs sed for costs"""
-        return self.holon_output
+    def is_valid(self):
+        return True
 
-    def etm_kpi_holon_output(self):
-        """TODO: return etm kpi relevant holon output"""
-        return self.holon_output
+    def costs_holon_output(self) -> list[dict]:
+        """Returns outputs used for economic module"""
+        return self.holon_output["APIOutputTotalCostData"]
 
-    def holon_kpis(self):
-        """TODO: retrun the HOLON KPI's"""
+    def etm_kpi_holon_output(self) -> dict:
+        """
+        Returns the only relevant holon output to be upscaled to ETM,
+        if it's missing, returns a flat profile
+        """
+        return {
+            "totalEHGVHourlyChargingProfile_kWh": self.holon_output.get(
+                "totalEHGVHourlyChargingProfile_kWh", [1] * 8670
+            )
+        }
+
+    def holon_kpis(self) -> dict:
+        """TODO: return the relevant HOLON KPI's"""
         return self.holon_output
 
     def co2_calculation(self):
-        """
-        TODO: SystemHourlyElectricityImport_MWh (AL) *
-        hourly_co2_emissions_of_electricity_production (ETM)
-        """
-        return 0
+        """Returns the KPI of CO2"""
+        return self.holon_output["SystemHourlyElectricityImport_MWh"] * self.etm_results.get(
+            "hourly_co2_emissions_of_electricity_production", 0
+        )
+
+    def results(self):
+        """TODO: pepe geeft de juiste resultaten terug"""
+        return (
+            self.holon_kpis()
+            | self.etm_results
+            | {"total_costs": self.total_costs, "co2_kpi": self.co2_calculation()}
+        )
