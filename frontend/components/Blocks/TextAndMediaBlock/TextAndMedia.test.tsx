@@ -74,7 +74,7 @@ describe("<TextAndMedia />", () => {
                   {
                     type: "image",
                     value: {
-                      img: { src: "http://localhost:3000/video", width: 1, height: 1, alt: "Alt" },
+                      img: { src: "http://localhost:3000/img", width: 1, height: 1, alt: "Alt" },
                       id: 1,
                       title: "Some image",
                     },

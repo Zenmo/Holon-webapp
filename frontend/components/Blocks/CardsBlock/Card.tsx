@@ -74,7 +74,8 @@ export default function Card({ cardItem }: CardProps) {
   return (
     <React.Fragment>
       <span
-        className={`min-h-[400px] ${colorStyle} relative border-solid border cardFadeIn rounded-lg flex h-full flex-col`}>
+        className={`min-h-[400px] ${colorStyle} relative border-solid border cardFadeIn rounded-lg flex h-full flex-col`}
+        data-testid={cardItem.title}>
         <span className="overflow-hidden relative m-4 mb-0 flex-1 border">
           <Image
             src={cardItem.imageSelector.img.src}
