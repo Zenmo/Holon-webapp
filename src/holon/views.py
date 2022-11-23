@@ -2,11 +2,12 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from cloudclient.scripts.run_scenario import run_scenario_endpoint
 
-from holon.serializers import HolonRequestSerializer
 from etm_service import retrieve_results, scale_copy_and_send
 from holon.economic.im_sorry import calculate_total_costs
-
 from pathlib import Path
+
+from .models import Factor
+from .serializers import HolonRequestSerializer
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parent / "services"
 ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
@@ -37,12 +38,35 @@ def format_holon_input(value):
 class HolonService(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
+    def convert_input_to_assets(self, data):
+        converted_assets = []
+        factors = Factor.objects.all()
+        for factor in factors:
+            interactive_input = next(
+                (
+                    item
+                    for item in data
+                    if item["interactive_element"].asset_type_id == factor.asset_id
+                ),
+                None,
+            )
+            if interactive_input is not None:
+                factor.value = (factor.max_value + factor.min_value) * (
+                    interactive_input["value"] / 100
+                )
+
+            converted_assets.append(factor)
+
+        return converted_assets
+
     def post(self, request):
 
         serializer = HolonRequestSerializer(data=request.data)
 
         if serializer.is_valid():
             data = serializer.validated_data
+
+            asset_data = self.convert_input_to_assets(data.get("interactive_elements"))
             value = data.get("interactive_elements")[0]["value"]
             holon_results = {}
             # holon_results = run_scenario_endpoint(

@@ -88,6 +88,7 @@ export type InteractiveInputOptions = {
 export default function SectionBlock({ data }: Props) {
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
+  const [kpis, setKPIs] = useState({});
 
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
@@ -195,7 +196,9 @@ export default function SectionBlock({ data }: Props) {
         value: element.currentValue,
       }));
     if (interactiveElements.length === 0) return;
-    getHolonKPIs({ interactiveElements: interactiveElements });
+    getHolonKPIs({ interactiveElements: interactiveElements }).then(res => {
+      setKPIs(res);
+    });
   };
 
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 2000), []);

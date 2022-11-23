@@ -24,4 +24,7 @@ class Factor(models.Model):
         unique_together = ("asset", "grid_connection")
 
     def __str__(self):
-        return self.asset.type + "-" + self.grid_connection.type
+        if self.asset is not None and self.grid_connection is not None:
+            return self.asset.type + "-" + self.grid_connection.type
+        else:
+            return self
