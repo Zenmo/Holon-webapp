@@ -3,7 +3,7 @@
 technical_debt:
   path: ".."
   query_api: True
-  model_name: Base_21nov
+  model_name: Base_23nov
   config_file: input/mvp.py
   timestep_hours: 0.25
   force_uncached: false
