@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "asset_attribute",
-                    models.CharField(default="asset_attribute)", max_length=100),
+                    models.CharField(default="asset_attribute_not_supplied", max_length=100),
                 ),
                 ("min_value", models.IntegerField()),
                 ("max_value", models.IntegerField()),

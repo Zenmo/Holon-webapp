@@ -5,7 +5,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 class Factor(models.Model):
 
     asset = models.ForeignKey("holon.asset", on_delete=models.CASCADE, related_name="+")
-    asset_attribute = models.CharField(max_length=100, default="asset_attribute)")
+    asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
 
     grid_connection = models.ForeignKey(
         "holon.gridconnection", on_delete=models.CASCADE, related_name="+"

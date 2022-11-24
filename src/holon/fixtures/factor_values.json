@@ -1,0 +1,13 @@
+[
+    {
+        "model": "holon.factor",
+        "pk": 1,
+        "fields": {
+            "asset": 1,
+            "asset_attribute": "capacityElectricity_kW",
+            "grid_connection": 4,
+            "min_value": 0,
+            "max_value": 10000
+        }
+    }
+]

@@ -26,17 +26,21 @@ class HolonService(generics.CreateAPIView):
             pepe = Pepe()
 
             data = serializer.validated_data
-            pepe.preprocessor.set(data)
+
+            data["scenario"] = {"etm_scenario_id": 1647734, "model_name": "technical_debt"}
+            pepe.preprocessor = data
 
             # holon_results = {}
-            scenario : AnyLogicExperiment = prepare_scenario_as_experiment(data.get("scenario").model_name)
+            scenario: AnyLogicExperiment = prepare_scenario_as_experiment(
+                data.get("scenario")["model_name"]
+            )
             pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
             pepe.preprocessor.apply_interactive_to_payload()
-            
-            holon_results = AnyLogicExperiment.runScenario().to_dict(orient='records')[0]
+
+            holon_results = scenario.runScenario()
             holon_results = {key: value for key, value in holon_results.items() if key in RESULTS}
 
-            pepe.postprocessor.set(holon_results)
+            pepe.postprocessor = holon_results
 
             pepe.upscale_to_etm()
             pepe.calculate_costs()

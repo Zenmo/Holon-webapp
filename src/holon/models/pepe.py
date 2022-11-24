@@ -91,7 +91,7 @@ class EmptyProcessor:
 
 class PreProcessor:
     def __init__(self, data) -> None:
-        self.etm_scenario_id = data.get("scenario").etm_scenario_id
+        self.etm_scenario_id = data.get("scenario").get("etm_scenario_id")
         self.assets = data.get("interactive_elements")
         self.holon_payload = data
 
@@ -132,9 +132,16 @@ class PreProcessor:
         grid_connections = self.holon_payload["gridconnections"]
         for factor in self.assets:
             for gc in grid_connections:
-                if gc["type"] == factor.grid_connection:
+                print(factor.grid_connection.__dict__)
+
+                try:
+                    gc_type = gc["type"]
+                except KeyError:
+                    gc_type = gc["category"]
+
+                if gc_type == factor.grid_connection.type:
                     for asset in gc["assets"]:
-                        if asset["type"] == factor.asset_type:
+                        if asset["type"] == factor.asset.type:
                             asset[factor.asset_attribute] = factor.value
 
     @property
