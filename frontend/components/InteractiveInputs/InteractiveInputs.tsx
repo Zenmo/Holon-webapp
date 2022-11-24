@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import ImageSlider from "../InteractiveImage/ImageSlider";
 
 export type Props = {
@@ -76,18 +77,22 @@ function InteractiveRadios({ id, name, type, options }: Props) {
 }
 
 function InteractiveInputs({ id, name, type, options, display }: Props) {
+  const [inputvalue, setInputvalue] = useState(options[0].sliderValueDefault);
+
   return type === "continuous" ? (
     <ImageSlider
       inputId={name}
       datatestid={name}
-      value={options[0].sliderValueDefault}
-      setValue={() => console.log("set value")}
+      value={inputvalue}
+      setValue={setInputvalue}
       min={options[0].sliderValueMin}
       max={options[0].sliderValueMax}
+      updateLayers={() => console.log("update layers")}
       step={1}
       label={name}
-      updateLayers={() => console.log("update layers")}
       type="range"
+      unit="%"
+      tooltip={true}
       locked={false}></ImageSlider>
   ) : display === "checkbox_radio" ? (
     <InteractiveRadios id={id} name={name} type={type} options={options} />
