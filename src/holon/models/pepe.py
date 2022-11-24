@@ -1,10 +1,8 @@
 import json
 from pathlib import Path
-from cloudclient import Payload
 import etm_service
 
 from .factor import Factor
-from holon.services.anylogic_datamodel_mvp import payload
 from holon.economic.im_sorry import calculate_total_costs
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parents[1] / "services"
@@ -22,7 +20,7 @@ class Pepe:
     def preprocessor(self):
         return self._preprocessor
 
-    @preprocessor.setter #S: this one I like
+    @preprocessor.setter  # S: this one I like
     def preprocessor(self, data):
         self._preprocessor = PreProcessor(data)
 
@@ -82,7 +80,6 @@ class EmptyProcessor:
 
     def __init__(self) -> None:
         self.assets = []
-        self.holon_payload = payload
         self.holon_output = {}
 
     def is_valid(self):
@@ -99,7 +96,7 @@ class PreProcessor:
         self.holon_payload = data
 
     def is_valid(self):
-        #TODO!
+        # TODO!
         return True
 
     # Time to misuse some properties!
@@ -132,16 +129,13 @@ class PreProcessor:
 
     def apply_interactive_to_payload(self):
         """TODO: cry many tears for this function, poor pepe"""
-        grid_connections = self.holon_payload['gridconnections']
+        grid_connections = self.holon_payload["gridconnections"]
         for factor in self.assets:
             for gc in grid_connections:
-                if gc['type'] == factor.grid_connection:
-                    for asset in gc['assets']:
-                        if asset['type'] == factor.asset_type:
+                if gc["type"] == factor.grid_connection:
+                    for asset in gc["assets"]:
+                        if asset["type"] == factor.asset_type:
                             asset[factor.asset_attribute] = factor.value
-
-
-
 
     @property
     def holon_payload(self) -> dict:
@@ -174,7 +168,7 @@ class PostProcessor:
         self.total_costs = 0
 
     def is_valid(self):
-        #TODO!
+        # TODO!
         return True
 
     def costs_holon_output(self) -> list[dict]:

@@ -3,9 +3,9 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 # Create your models here.
 class Factor(models.Model):
-    
+
     asset = models.ForeignKey("holon.asset", on_delete=models.CASCADE, related_name="+")
-    asset_attribute = models.CharField(max_length=100)
+    asset_attribute = models.CharField(max_length=100, default="asset_attribute)")
 
     grid_connection = models.ForeignKey(
         "holon.gridconnection", on_delete=models.CASCADE, related_name="+"
