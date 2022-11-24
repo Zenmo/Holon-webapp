@@ -44,7 +44,7 @@ actors = [
         category="ENERGYHOLON",
         id="hol1",
         parent_actor="sup1",
-        contracts=[Contract(type="GOPACS", contract_scope="GRIDOPERATOR")],
+        contracts=[Contract(type="NODALPRICING", contract_scope="GRIDOPERATOR")],
         nfATO_capacity_kw=900.0,
         nfATO_starttime=18.0,
         nfATO_endtime=7.0,
@@ -245,3 +245,19 @@ payload = Payload(
     gridnodes=gridnodes,
     policies=policies,
 )
+
+
+if __name__ == "__main__":
+    import json
+    from pathlib import Path
+
+    base_path = Path(__file__).parent / "doc" / "assets"
+
+    for key, json_output in payload.to_json().items():
+        variable_filename = f"example_{key}.json"
+        fp = base_path / variable_filename
+        with open(fp, "w") as outfile:
+            json.dump(json_output, outfile, indent=2)
+
+    with open(base_path / "example_total.json", "w") as outfile:
+        json.dump(json.loads(payload.json()), outfile, indent=2)
