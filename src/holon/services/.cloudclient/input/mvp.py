@@ -1,6 +1,4 @@
-from pathlib import Path
-
-from cloudclient.datamodel import Payload, Actor, Contract
+from cloudclient.datamodel import Payload, Actor, Contract, NonFirmActor
 
 actors = [
     Actor(
@@ -8,14 +6,20 @@ actors = [
         type="commercial",
         id="com1",
         parent_actor="hol1",
-        contracts=[Contract(type="DEFAULT", contract_scope="ENERGYHOLON")],
+        contracts=[
+            Contract(type="DEFAULT", contract_scope="ENERGYHOLON"),
+            Contract(type="VARIABLE", contract_scope="ENERGYSUPPLIER"),
+        ],
     ),
     Actor(
         category="CONNECTIONOWNER",
         type="commercial",
         id="com2",
         parent_actor="hol1",
-        contracts=[Contract(type="DEFAULT", contract_scope="ENERGYHOLON")],
+        contracts=[
+            Contract(type="DEFAULT", contract_scope="ENERGYHOLON"),
+            Contract(type="VARIABLE", contract_scope="ENERGYSUPPLIER"),
+        ],
     ),
     Actor(
         category="CONNECTIONOWNER",
@@ -36,11 +40,14 @@ actors = [
         id="sup1",
         parent_actor="nat",
     ),
-    Actor(
+    NonFirmActor(
         category="ENERGYHOLON",
         id="hol1",
         parent_actor="sup1",
         contracts=[Contract(type="GOPACS", contract_scope="GRIDOPERATOR")],
+        nfATO_capacity_kw=900.0,
+        nfATO_starttime=18.0,
+        nfATO_endtime=7.0,
     ),
     Actor(
         category="GRIDOPERATOR",
@@ -50,10 +57,14 @@ actors = [
 ]
 
 from cloudclient.datamodel.defaults import (
-    Logistics_fleet_hgv_E,
+    Grid_battery_7MWh,
+    Diesel_Truck,
+    EHGV,
     Solarpanels_1MW,
     Grid_battery_10MWh,
+    Industry_other_heat_demand,
     Building_solarpanels_0kWp,
+    Building_solarpanels_10kWp,
     Building_gas_burner_60kW,
 )
 
@@ -71,11 +82,19 @@ gridconnections = [
         owner_actor="com1",
         parent_electric="E2",
         id="b1",
-        capacity_kw=2000,
+        capacity_kw=750,
+        charging_mode="MAX_POWER",
+        battery_mode="BALANCE",
+        nfATO_capacity_kw=900.0,
+        nfATO_starttime=18.0,
+        nfATO_endtime=7.0,
         assets=[
-            Logistics_fleet_hgv_E,
+            *[EHGV] * 6,
+            Diesel_Truck,
+            Grid_battery_7MWh,
             Building_solarpanels_0kWp,
             Building_gas_burner_60kW,
+            Building_solarpanels_10kWp,
         ],
     ),
     IndustryGridConnection(
@@ -85,7 +104,11 @@ gridconnections = [
         parent_electric="E2",
         id="b2",
         capacity_kw=1000,
-        assets=[Building_solarpanels_0kWp, Building_gas_burner_60kW],
+        assets=[
+            Industry_other_heat_demand,
+            Building_solarpanels_0kWp,
+            Building_gas_burner_60kW,
+        ],
     ),
     ProductionGridConnection(
         category="SOLARFARM",
@@ -99,6 +122,7 @@ gridconnections = [
         category="GRIDBATTERY",
         owner_actor="com4",
         parent_electric="E2",
+        battery_mode="BALANCE",
         id="b4",
         capacity_kw=1000,
         assets=[Grid_battery_10MWh],
@@ -136,35 +160,84 @@ policies = [
     ),
     Policy(
         parameter="Grid_MS_congestion_allowance_level_kW",
-        value="3",
+        value="0",
         unit="kW",
         comment="gridOperator policy variable",
     ),
     Policy(
-        parameter="Grid_MS_congestion_price",
-        value="0.5",
-        unit="kW",
+        parameter="Grid_MS_congestion_price_eurpkWh",
+        value="0.3",
+        unit="eurpkWh",
         comment="gridOperator policy value",
     ),
     Policy(
-        parameter="Grid_MS_congestion_threshold",
-        value="0.7",
+        parameter="Grid_MS_congestion_threshold_fr",
+        value="0.5",
         unit="fr",
         comment="gridOperator policy value",
     ),
     Policy(
-        parameter="Grid_MS_congestion_pricing_consumption",
+        parameter="Grid_MS_congestion_pricing_consumption_eurpkWh",
         value="TRUE",
         unit=None,
         comment="gridOperator policy value",
     ),
     Policy(
-        parameter="Grid_MS_congestion_pricing_production",
-        value="FALSE",
+        parameter="Grid_MS_congestion_pricing_production_eurpkWh",
+        value="TRUE",
         unit=None,
         comment="gridOperator policy value",
     ),
+    Policy(
+        parameter="Fixed_electricity_price_eurpkWh",
+        value="0.21",
+        unit="EUR p kWh",
+        comment="Fixed_electricity_price",
+    ),
+    Policy(
+        parameter="Fixed_heat_price_eurpkWh",
+        value="0.10",
+        unit="EUR p kWh",
+        comment="Fixed_heat_price",
+    ),
+    Policy(
+        parameter="Fixed_methane_price_eurpkWh",
+        value="0.05",
+        unit="EUR p kWh",
+        comment="Fixed_methane_price",
+    ),
+    Policy(
+        parameter="Fixed_hydrogen_price_eurpkWh",
+        value="0.3",
+        unit="EUR p kWh",
+        comment="Fixed_hydrogen_price",
+    ),
+    Policy(
+        parameter="Energy_supplier_electricity_price_margin_eurpkWh",
+        value="0.17",
+        unit="fr",
+        comment="p_variableElectricityPriceOverNational_eurpkWh",
+    ),
+    Policy(
+        parameter="Fixed_electricity_feed_in_tariff_eurpkWh",
+        value="0.1",
+        unit="EUR_pKWh",
+        comment="p_fixedFeedinTariff_eurpkWh",
+    ),
+    Policy(
+        parameter="Fixed_diesel_price_eurpkWh",
+        value="0.2",
+        unit="EUR_pKWh",
+        comment="Fixed_diesel_price",
+    ),
+    Policy(
+        parameter="Time_buffer_for_spread_charging_min",
+        value="60",
+        unit="minutes",
+        comment="Time_buffer_for_spread_charging, Integer value",
+    ),
 ]
+
 
 payload = Payload(
     actors=actors,
