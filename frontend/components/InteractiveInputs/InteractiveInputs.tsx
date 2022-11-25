@@ -79,6 +79,11 @@ function InteractiveRadios({ id, name, type, options }: Props) {
 function InteractiveInputs({ id, name, type, options, display }: Props) {
   const [inputvalue, setInputvalue] = useState(options[0].sliderValueDefault);
 
+  function updateLayers(value: string, setInputvalue: (newValue: number) => void) {
+    const newValue: number = parseInt(value);
+    setInputvalue(newValue);
+  }
+
   return type === "continuous" ? (
     <ImageSlider
       inputId={name}
@@ -87,7 +92,7 @@ function InteractiveInputs({ id, name, type, options, display }: Props) {
       setValue={setInputvalue}
       min={options[0].sliderValueMin}
       max={options[0].sliderValueMax}
-      updateLayers={() => console.log("update layers")}
+      updateLayers={updateLayers}
       step={1}
       label={name}
       type="range"

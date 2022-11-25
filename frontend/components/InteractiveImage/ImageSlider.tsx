@@ -40,7 +40,7 @@ export default function ImageSlider({
             data-testid={datatestid}
             defaultValue={value}
             disabled={locked}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => updateLayers(e.target.value, setValue)}
             className={`h-1 w-3/5 ${
               locked ? "cursor-not-allowed" : ""
             } slider interactImg appearance-none disabled:bg-holon-grey-300`}
