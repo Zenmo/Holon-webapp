@@ -30,9 +30,14 @@ setup_django () {
     python manage.py createcachetable
 }
 
+load_fixture_data() {
+  python manage.py loaddata holon/fixtures/factor_types.json
+}
+
 setup_submodules
 wait_for_db
 setup_django
+load_fixture_data
 
 echo Starting using gunicorn
 exec gunicorn pipit.wsgi:application --bind 0.0.0.0:8000 --workers 3
