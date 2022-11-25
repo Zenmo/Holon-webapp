@@ -1,10 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import RawHtml from "@/components/RawHtml/RawHtml";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import { getGrid } from "services/grid";
-import debounce from "lodash.debounce";
-import { getHolonKPIs } from "../../../api/holon";
+import KPIS from "./KPIS";
 
 type Props = {
   data: {
@@ -88,7 +87,6 @@ export type InteractiveInputOptions = {
 export default function SectionBlock({ data }: Props) {
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
-  const [kpis, setKPIs] = useState({});
 
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
@@ -117,9 +115,7 @@ export default function SectionBlock({ data }: Props) {
       }
     });
 
-    calculateKPIs();
-
-    setContent(contentArr);
+    setContent([...contentArr]);
   }, [data]);
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
@@ -128,7 +124,9 @@ export default function SectionBlock({ data }: Props) {
         return content.value.options.find(option => option.default)?.option;
       case "continuous":
         return (
-          Number(content.value.defaultValueOverride) || content.value.options[0].sliderValueDefault
+          Number(content.value.defaultValueOverride) ||
+          content.value.options[0].sliderValueDefault ||
+          0
         );
       case "multi_select":
         const defaultOptions = content.value.options.filter(option => option.default);
@@ -180,29 +178,8 @@ export default function SectionBlock({ data }: Props) {
 
     const spreadedElements = [...content];
     spreadedElements[currentIndex] = currentElement;
-
-    setContent(spreadedElements);
-    debouncedCalculateKPIs();
+    setContent([...spreadedElements]);
   }
-
-  const calculateKPIs = () => {
-    const interactiveElements = content
-      .filter(
-        (element): element is InteractiveContent =>
-          element.type == "interactive_input" && !!element.currentValue
-      )
-      .map(element => ({
-        interactiveElement: element.value.id,
-        value: element.currentValue,
-      }));
-    if (interactiveElements.length === 0) return;
-    getHolonKPIs({ interactiveElements: interactiveElements }).then(res => {
-      setKPIs(res);
-    });
-  };
-
-  const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 2000), []);
-
   return (
     <div className={`${backgroundFullcolor} storyline__row flex flex-col lg:flex-row`}>
       <div
@@ -246,6 +223,7 @@ export default function SectionBlock({ data }: Props) {
             <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
           )}
         </div>
+        <KPIS content={content} />
       </div>
     </div>
   );
