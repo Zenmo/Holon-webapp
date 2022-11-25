@@ -93,6 +93,7 @@ class PreProcessor:
     def __init__(self, data) -> None:
         self.etm_scenario_id = data.get("scenario").get("etm_scenario_id")
         self.assets = data.get("interactive_elements")
+        self.interactive_elements = data.get("interactive_elements")
         self.holon_payload = data
 
     def is_valid(self):
@@ -132,7 +133,6 @@ class PreProcessor:
         grid_connections = self.holon_payload["gridconnections"]
         for factor in self.assets:
             for gc in grid_connections:
-                print(factor.grid_connection.__dict__)
 
                 try:
                     gc_type = gc["type"]
@@ -165,7 +165,10 @@ class PreProcessor:
         inetractive element een ETM key heeft. Deze mappen voor slider settings. Dus dit hieronder
         aanpassen etm_key. Zelde loop gebruiken als voor de assets
         """
-        return {factor.asset.type: factor.value for factor in self.assets}
+        return {
+            user_input["interactive_element"].etm_key: user_input["value"]
+            for user_input in self.interactive_elements
+        }
 
 
 class PostProcessor:
@@ -187,9 +190,10 @@ class PostProcessor:
         Returns the only relevant holon output to be upscaled to ETM,
         if it's missing, returns a flat profile
         """
+        # TODO: This resolves to the default option (aka the matrix of ones)
         return {
             "totalEHGVHourlyChargingProfile_kWh": self.holon_output.get(
-                "totalEHGVHourlyChargingProfile_kWh", [1] * 8670
+                "totalEHGVHourlyChargingProfile_kWh", [1] * 8760
             )
         }
 

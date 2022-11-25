@@ -40,7 +40,8 @@ grid_battery_on_off:
   conversion: multiply
   convert_with_value:
     type: static
-    data: 280000.0 # aantal bedrijventerreinen in NL (3500) * typische grootte batterijen in ETM(80 MW)
+    value: 280000.0 # aantal bedrijventerreinen in NL (3500) * typische grootte batterijen in ETM(80 MW)
+    key: scaling_factor_grid_batteries
 
 # hourly profile electric trucks
 totalEHGVHourlyChargingProfile_kWh:

@@ -40,13 +40,15 @@ class HolonService(generics.CreateAPIView):
             holon_results = scenario.runScenario()
             holon_results = {key: value for key, value in holon_results.items() if key in RESULTS}
 
+            print(list(holon_results.keys()))
             pepe.postprocessor = holon_results
 
             pepe.upscale_to_etm()
             pepe.calculate_costs()
 
+            results = pepe.postprocessor.results()
             return Response(
-                pepe.postprocessor.results(),
+                results,
                 status=status.HTTP_200_OK,
             )
         else:

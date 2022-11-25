@@ -25,18 +25,18 @@ technical_debt:
     - anylogic_key: O output runSettings
       human_key: APIOutputRunData
       writeExcel: False
-      writeJSON: True
-      print: True
+      writeJSON: False
+      print: False
     #- anylogic_key: O output actorData
     #  human_key: APIOutputAgentData
     #  writeExcel: False
-    #  writeJSON: True
+    #  writeJSON: False
     #  print: False
     - anylogic_key: O total cost data
       human_key: APIOutputTotalCostData
       writeExcel: False
-      writeJSON: True
-      print: True
+      writeJSON: False
+      print: False
     # - anylogic_key: O output trigger
     #   human_key: OutputTrigger
     #   write: false
