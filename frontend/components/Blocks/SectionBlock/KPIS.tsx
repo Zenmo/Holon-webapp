@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Content, InteractiveContent } from "./SectionBlock";
 import { debounce } from "lodash";
 import { getHolonKPIs } from "../../../api/holon";
@@ -15,26 +15,29 @@ export type InteractiveElement = {
 function KPIS({ content }: Props) {
   const [kpis, setKPIs] = useState({});
 
-  const interactiveElements = content
-    .filter(
-      (element): element is InteractiveContent =>
-        element.type == "interactive_input" && !!element.currentValue
-    )
-    .map((element): InteractiveElement => {
-      return {
-        interactiveElement: element.value.id,
-        value: element.currentValue,
-      };
-    });
-
-  const calculateKPIs = () => {
+  function calculateKPIs(content: Content[]) {
+    const interactiveElements = content
+      .filter(
+        (element): element is InteractiveContent =>
+          element.type == "interactive_input" &&
+          (element.currentValue !== undefined || element.currentValue !== null)
+      )
+      .map((element): InteractiveElement => {
+        return {
+          interactiveElement: element.value.id,
+          value: element.currentValue,
+        };
+      });
     if (!interactiveElements || interactiveElements.length === 0) return;
     getHolonKPIs({ interactiveElements: interactiveElements }).then(res => {
       setKPIs(res);
     });
-  };
+  }
 
-  const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 2000), []);
+  const debouncedCalculateKPIs = useMemo(
+    () => debounce(() => calculateKPIs(content), 2000),
+    [content]
+  );
 
   debouncedCalculateKPIs();
   return null;
