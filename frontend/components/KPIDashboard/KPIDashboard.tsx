@@ -24,8 +24,10 @@ type Data = {
 export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
   const [level, setLevel] = useState("local");
 
+  const backgroundColor = loading ? "bg-holon-gray-300" : "bg-holon-slated-blue-900";
+
   function valueCheck(value: number) {
-    if (value == undefined) {
+    if (value == undefined || loading) {
       return "-";
     } else {
       return value;
@@ -33,11 +35,11 @@ export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
   }
 
   return (
-    <div className="flex flex-col w-full" data-testid="KPIDashboard">
+    <div className="flex flex-col w-full " data-testid="KPIDashboard">
       <div>
-        <KPIRadioButtons updateValue={setLevel} />
+        <KPIRadioButtons updateValue={setLevel} loading={loading} />
       </div>
-      <div className="flex flex-row">
+      <div className={`flex flex-row ${backgroundColor}`}>
         <KPIItem label="Netbelasting" value={valueCheck(data[level].Netbelasting)} unit="%" />
         <KPIItem
           label="Betaalbaarheid"
