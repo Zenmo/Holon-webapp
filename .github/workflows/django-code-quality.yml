@@ -19,6 +19,7 @@ jobs:
       DB_HOST: localhost # default host value for the database
       DB_NAME: djtesting
       DB_PORT: 5432
+      AL_API_KEY: test-api-key
     services:
       postgres_main:
         image: postgres:12
