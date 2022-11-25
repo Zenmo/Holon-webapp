@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import RawHtml from "@/components/RawHtml/RawHtml";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
+import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
+import { exampleData } from "@/components/KPIDashboard/exampleData";
 import { getGrid } from "services/grid";
 
 type Props = {
@@ -81,6 +83,7 @@ export default function SectionBlock({ data }: Props) {
   const [value, setValue] = useState<number>(0);
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
@@ -167,6 +170,7 @@ export default function SectionBlock({ data }: Props) {
             <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
           )}
         </div>
+        <KPIDashboard data={exampleData} loading={loading}></KPIDashboard>
       </div>
     </div>
   );
