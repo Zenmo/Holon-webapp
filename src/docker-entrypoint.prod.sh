@@ -11,6 +11,11 @@ wait_for_db () {
     done
 }
 
+setup_submodules () {
+  cd /workspace/src/holon/services
+  cloudclient_init -tf . --get-api-key
+}
+
 setup_django () {
     echo Running migrations
     python manage.py migrate --noinput
@@ -25,6 +30,7 @@ setup_django () {
     python manage.py createcachetable
 }
 
+setup_submodules
 wait_for_db
 setup_django
 
