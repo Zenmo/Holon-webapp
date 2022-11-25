@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Content, InteractiveContent } from "./SectionBlock";
 import { debounce } from "lodash";
 import { getHolonKPIs } from "../../../api/holon";
@@ -40,6 +40,8 @@ function KPIS({ content }: Props) {
   );
 
   debouncedCalculateKPIs();
+
+  console.log(kpis);
   return null;
 }
 
