@@ -8,8 +8,7 @@ from .serializers import HolonRequestSerializer
 from .models.pepe import Pepe
 
 RESULTS = [
-    "totalElectricityImported_MWh",
-    "totalElectricityExported_MWh",
+    "SystemHourlyElectricityImport_MWh",
     "APIOutputTotalCostData",
     "totalEHGVHourlyChargingProfile_kWh",
 ]
@@ -38,7 +37,19 @@ class HolonService(generics.CreateAPIView):
             pepe.preprocessor.apply_interactive_to_payload()
 
             holon_results = scenario.runScenario()
-            holon_results = {key: value for key, value in holon_results.items() if key in RESULTS}
+
+            temp_holon_results = {
+                key: value for key, value in holon_results.items() if key in RESULTS
+            }
+            temp_holon_results.update(
+                {
+                    key: value
+                    for key, value in holon_results["APIOutputTotalCostData"][0].items()
+                    if key in RESULTS
+                }
+            )
+
+            holon_results = temp_holon_results
 
             pepe.postprocessor = holon_results
 
@@ -46,6 +57,8 @@ class HolonService(generics.CreateAPIView):
             pepe.calculate_costs()
 
             results = pepe.postprocessor.results()
+
+            print(results)
             return Response(
                 results,
                 status=status.HTTP_200_OK,

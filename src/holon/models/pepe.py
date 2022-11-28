@@ -210,14 +210,20 @@ class PostProcessor:
 
     def co2_calculation(self):
         """Returns the KPI of CO2"""
-        return self.holon_output["SystemHourlyElectricityImport_MWh"] * self.etm_results.get(
-            "hourly_co2_emissions_of_electricity_production", 0
+        import numpy as np
+
+        output = self.holon_output["SystemHourlyElectricityImport_MWh"]
+        import_curve = np.array(list(output.values())[:8760])
+
+        co2_curve = np.array(
+            self.etm_results.get(
+                "hourly_co2_emissions_of_electricity_production", np.zeros(import_curve.shape)
+            )
         )
+        return np.inner(import_curve, co2_curve)
 
     def results(self):
         """TODO: pepe geeft de juiste resultaten terug"""
-        return (
-            self.holon_kpis()
-            | self.etm_results
-            | {"total_costs": self.total_costs, "co2_kpi": self.co2_calculation()}
-        )
+        holon_kpis = self.holon_kpis()
+        co2_kpi = self.co2_calculation()
+        return holon_kpis | self.etm_results | {"total_costs": self.total_costs, "co2_kpi": co2_kpi}
