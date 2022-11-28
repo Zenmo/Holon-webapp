@@ -37,7 +37,7 @@ COPY . $APP_HOME
 
 # Chown all files
 RUN chown -R app:app $APP_HOME
-RUN chown app:app '/usr/local/lib/python3.9/site-packages/cloudclient/config/.cloudclient_location.yml'
+RUN chown -R app:app '/usr/local/lib/python3.9/site-packages/cloudclient/config/'
 
 # Change user to app
 USER app
