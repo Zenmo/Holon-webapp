@@ -43,7 +43,8 @@ setup_django () {
 
 load_fixture_data() {
   cd /workspace/src
-  python manage.py loaddata holon/fixtures/factor_types.json
+  python manage.py loaddata holon/fixtures/holon-fixture.json
+  python manage.py loaddata holon/fixtures/api-fixture.json
 }
 
 setup_frontend () {
