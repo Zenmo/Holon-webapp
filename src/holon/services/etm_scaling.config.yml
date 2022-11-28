@@ -1,0 +1,57 @@
+# Specify the ETM keys of what to set in the ETM.
+# You can add conversions based on static values.
+# The name of the item is how it will be expected to be called when input values are given:
+#
+# <ITEM_NAME>:
+#   value:                The main value on which conversions will be done
+#     type:               Which type of ETM request is needed. Right now only 'query', 'input' and
+#                         'node_property' are supported. In the future the curves endpoint
+#                         can be added as well.
+#     data:               What data to look for / expect. For queries this can be either
+#                         'value' or 'curve'. For node properties you can specify which
+#                         property of the node is needed. The path to the property should be
+#                         separated by dots ('.'), for example:
+#                         technical.electricity_output_conversion.future
+#                         For inputs this should always be 'value'
+#     etm_key:            The key of the query to send to the ETM, or the name of the node
+#   conversion:           If a conversion is nesccesary, please specify. Currently only 'divide'
+#                         and 'multiply' are supported.
+#   convert_with_value:   When conversion is set, specify with which ETM value the item should be
+#                         converted with. E.g for 'divide' this is the value to be divided by.
+#                         This value has the same properties as the main 'value' field.
+
+share_of_buildings_with_solar_panels: # deze HOLON-slidernaam moet nog worden geüpdatet, is nu nog onbekend
+  value:
+    type: input
+    data: value
+    etm_key: buildings_solar_pv_solar_radiation_market_penetration
+
+share_of_electric_trucks:
+  value:
+    type: input
+    data: value
+    etm_key: transport_truck_using_electricity_share
+
+grid_battery_on_off:
+  value:
+    type: input
+    data: value
+    etm_key: capacity_of_energy_flexibility_mv_batteries_electricity
+  conversion: multiply
+  convert_with_value:
+    type: static
+    value: 10.0 # aantal bedrijventerreinen in NL (3500) * typische grootte batterijen in ETM(80 MW)
+    key: scaling_factor_grid_batteries
+
+# hourly profile electric trucks
+totalEHGVHourlyChargingProfile_kWh:
+  value:
+    type: curve
+    data: curve
+    etm_key: electric_trucks
+# # hourly profile electric cars
+# totalEVHourlyChargingProfile_kWh:
+#   value:
+#     type: curve
+#     data: curve
+#     etm_key: electric_vehicle_profile_1

@@ -2,9 +2,8 @@ interface Props {
   locked?: boolean;
   inputId: string;
   datatestid: string;
-  value?: number;
-  setValue: (value: number) => void;
-  updateLayers: (value: string, setValue: (value: number) => void) => void;
+  defaultValue?: number;
+  setValue: (id: string, value: number) => void;
   label?: string;
   step?: number;
   min?: number;
@@ -16,9 +15,8 @@ export default function ImageSlider({
   locked,
   inputId,
   datatestid,
-  value,
+  defaultValue,
   setValue,
-  updateLayers,
   step,
   min,
   max,
@@ -33,9 +31,9 @@ export default function ImageSlider({
       <div className="flex flex-row items-center justify-between gap-2">
         <input
           data-testid={datatestid}
-          value={value}
           disabled={locked}
-          onChange={e => updateLayers(e.target.value, setValue)}
+          value={defaultValue}
+          onChange={e => setValue(inputId, parseInt(e.target.value))}
           className={`h-1 w-3/5 ${
             locked ? "cursor-not-allowed" : ""
           } slider interactImg appearance-none disabled:bg-holon-grey-300`}

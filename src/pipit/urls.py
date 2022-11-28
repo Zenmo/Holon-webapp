@@ -14,6 +14,7 @@ from main.views.page_not_found import PageNotFoundView
 from main.views.error_500 import error_500_view
 from nextjs.api import api_router
 from api.router import api_router as rest_api_router
+from holon.urls import urlpatterns as holon_urls
 
 handler404 = PageNotFoundView.as_view()
 handler500 = error_500_view
@@ -48,6 +49,7 @@ urlpatterns += [
     path(settings.ADMIN_URL, admin.site.urls),
     path("wt/api/nextjs/v1/", api_router.urls),
     path("wt/api/nextjs/v1/", include(rest_api_router.urls)),
+    path("wt/api/nextjs/v1/", include(holon_urls)),
     path("wt/cms/", include(wagtailadmin_urls)),
     path("wt/documents/", include(wagtaildocs_urls)),
     path("wt/sitemap.xml", sitemap, name="sitemap"),

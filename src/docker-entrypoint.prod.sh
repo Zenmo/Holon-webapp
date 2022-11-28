@@ -11,6 +11,11 @@ wait_for_db () {
     done
 }
 
+setup_submodules () {
+  cd /workspace/src/holon/services
+  cloudclient_init -tf . --get-api-key
+}
+
 setup_django () {
     echo Running migrations
     python manage.py migrate --noinput
@@ -25,8 +30,15 @@ setup_django () {
     python manage.py createcachetable
 }
 
+load_fixture_data() {
+  python manage.py loaddata holon/fixtures/holon-fixture.json
+  python manage.py loaddata holon/fixtures/api-fixture.json
+}
+
+setup_submodules
 wait_for_db
 setup_django
+load_fixture_data
 
 echo Starting using gunicorn
 exec gunicorn pipit.wsgi:application --bind 0.0.0.0:8000 --workers 3

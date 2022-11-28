@@ -22,6 +22,7 @@ export type Slider = {
 };
 
 export type StorylineScenario = {
+  id: number;
   name: string;
   description?: string;
   tag: string;

@@ -17,6 +17,11 @@ wait_for_db () {
   fi
 }
 
+setup_submodules () {
+  cd /workspace/src/holon/services
+  cloudclient_init -tf . --get-api-key
+}
+
 setup_django () {
   cd /workspace/src
 
@@ -36,6 +41,12 @@ setup_django () {
   python manage.py createcachetable
 }
 
+load_fixture_data() {
+  cd /workspace/src
+  python manage.py loaddata holon/fixtures/holon-fixture.json
+  python manage.py loaddata holon/fixtures/api-fixture.json
+}
+
 setup_frontend () {
   cd /workspace/frontend
   
@@ -44,7 +55,9 @@ setup_frontend () {
 }
 
 wait_for_db
+setup_submodules
 setup_django
+load_fixture_data
 setup_frontend
 
 exec "$@"

@@ -8,6 +8,11 @@ from api.models import (
     InteractiveInputContinuousValues,
 )
 from wagtail.core import blocks
+from wagtail.blocks.struct_block import StructBlockAdapter
+from wagtail.telepath import register
+from django import forms
+from django.utils.functional import cached_property
+from api.models.interactive_input import CHOICE_CONTINUOUS, CHOICE_MULTISELECT, CHOICE_SINGLESELECT
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .grid_chooser import GridChooserBlock
@@ -15,7 +20,7 @@ from .background_chooser import BackgroundChooserBlock
 
 
 def get_interactive_inputs():
-    return [(ii.pk, ii.name) for ii in InteractiveInput.objects.all()]
+    return [(ii.pk, ii.__str__) for ii in InteractiveInput.objects.all()]
 
 
 def get_sliders():
@@ -52,7 +57,11 @@ class InteractiveInputBlock(blocks.StructBlock):
     )
 
     interactive_input = blocks.ChoiceBlock(choices=get_interactive_inputs)
-    display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES, default=DISPLAY_CHECKBOXRADIO)
+    display = blocks.ChoiceBlock(
+        choices=DISPLAY_CHOICES,
+        default=DISPLAY_CHECKBOXRADIO,
+        help_text="Only applies if the interactive input is a Select type",
+    )
     visible = blocks.BooleanBlock(required=False)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(
@@ -61,10 +70,13 @@ class InteractiveInputBlock(blocks.StructBlock):
 
     def get_api_representation(self, value, context=None):
         if value:
-            ii = InteractiveInput.objects.get(pk=value["interactive_input"])
+            interactive_input = InteractiveInput.objects.get(pk=value["interactive_input"])
             options_arr = []
-            if ii.type == ii.CHOICE_SINGLESELECT or ii.type == ii.CHOICE_MULTISELECT:
-                options = InteractiveInputOptions.objects.filter(input_id=ii.id)
+            if (
+                interactive_input.type == CHOICE_SINGLESELECT
+                or interactive_input.type == CHOICE_MULTISELECT
+            ):
+                options = InteractiveInputOptions.objects.filter(input_id=interactive_input.id)
 
                 for option in options:
                     option_default = False
@@ -78,8 +90,10 @@ class InteractiveInputBlock(blocks.StructBlock):
                     }
                     options_arr.append(option_dict)
 
-            if ii.type == ii.CHOICE_CONTINUOUS:
-                options = InteractiveInputContinuousValues.objects.filter(input_id=ii.id)
+            if interactive_input.type == CHOICE_CONTINUOUS:
+                options = InteractiveInputContinuousValues.objects.filter(
+                    input_id=interactive_input.id
+                )
                 for option in options:
                     option_dict = {
                         "id": int(option.id),
@@ -90,15 +104,15 @@ class InteractiveInputBlock(blocks.StructBlock):
                     options_arr.append(option_dict)
 
             return {
-                "id": ii.id,
-                "name": ii.name,
-                "type": ii.type,
-                "animation_tag": ii.animation_tag,
+                "id": interactive_input.id,
+                "name": interactive_input.name,
+                "type": interactive_input.type,
+                "animation_tag": interactive_input.animation_tag,
                 "options": options_arr,
                 "display": value["display"],
                 "visible": value["visible"],
                 "locked": value["locked"],
-                "default_value": value["default_value"],
+                "default_value_override": value["default_value"],
             }
 
     class Meta:
