@@ -34,10 +34,7 @@ function KPIS({ content }: Props) {
     });
   }
 
-  const debouncedCalculateKPIs = useMemo(
-    () => debounce(() => calculateKPIs(content), 2000),
-    [content]
-  );
+  const debouncedCalculateKPIs = useMemo(() => debounce(() => calculateKPIs(content), 2000), []);
 
   debouncedCalculateKPIs();
 
