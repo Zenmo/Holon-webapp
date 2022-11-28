@@ -15,7 +15,7 @@ price_of_hydrogen_per_mwh:
 hourly_price_of_electricity_per_mwh:
   value:
     type: query
-    data: value
+    data: curve
     etm_key: hourly_price_of_electricity_per_mwh
 
 depreciation_costs_grid_battery_per_mwh:

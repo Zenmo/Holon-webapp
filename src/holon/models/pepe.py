@@ -156,7 +156,7 @@ class PreProcessor:
 
     def grid_connections(self) -> list[dict]:
         """Returns the grid_connections in list format to be processed by economic modules"""
-        return [json.loads(gridcon.json()) for gridcon in self._holon_payload.gridconnections]
+        return self._holon_payload["gridconnections"]
 
     def slider_settings(self):
         """
@@ -191,11 +191,18 @@ class PostProcessor:
         if it's missing, returns a flat profile
         """
         # TODO: This resolves to the default option (aka the matrix of ones)
-        return {
-            "totalEHGVHourlyChargingProfile_kWh": self.holon_output.get(
-                "totalEHGVHourlyChargingProfile_kWh", [1] * 8760
-            )
-        }
+
+        holon_output = {}
+        try:
+            holon_output = {
+                "totalEHGVHourlyChargingProfile_kWh": self.holon_output[
+                    "totalEHGVHourlyChargingProfile_kWh"
+                ]
+            }
+        except KeyError:
+            print("pepe.etm_kpi_holon_output: Resolving to empty values for this key!")
+
+        return holon_output
 
     def holon_kpis(self) -> dict:
         """TODO: return the relevant HOLON KPI's"""

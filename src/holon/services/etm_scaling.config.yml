@@ -36,11 +36,11 @@ grid_battery_on_off:
   value:
     type: input
     data: value
-    etm_key: energy_flexibility_mv_batteries_electricity
+    etm_key: capacity_of_energy_flexibility_mv_batteries_electricity
   conversion: multiply
   convert_with_value:
     type: static
-    value: 280000.0 # aantal bedrijventerreinen in NL (3500) * typische grootte batterijen in ETM(80 MW)
+    value: 10.0 # aantal bedrijventerreinen in NL (3500) * typische grootte batterijen in ETM(80 MW)
     key: scaling_factor_grid_batteries
 
 # hourly profile electric trucks
