@@ -209,21 +209,46 @@ class PostProcessor:
         return self.holon_output
 
     def co2_calculation(self):
-        """Returns the KPI of CO2"""
+        """Returns the KPI of CO2 TODO: come up with a better function for local co2"""
         import numpy as np
 
         output = self.holon_output["SystemHourlyElectricityImport_MWh"]
         import_curve = np.array(list(output.values())[:8760])
 
-        co2_curve = np.array(
-            self.etm_results.get(
-                "hourly_co2_emissions_of_electricity_production", np.zeros(import_curve.shape)
-            )
-        )
-        return np.inner(import_curve, co2_curve)
+        co2_curve = np.array(self.etm_results.get("CO2_curve", np.zeros(import_curve.shape)))
+        co2_local = np.inner(import_curve, co2_curve)
+        sus_percentage = co2_local / import_curve.sum() / 10000 / 1500
+        return sus_percentage
+
+    def local_sufficiency_calculation(self):
+        """TODO: make a sensible formula for this"""
+        imported = self.holon_output["APIOutputTotalCostData"][0]["totalElectricityImport_MWh"]
+        exported = self.holon_output["APIOutputTotalCostData"][0]["totalElectricityExport_MWh"]
+        return imported / exported
+
+    def local_network_load_calculation(self):
+        """TODO: make a sensible formula for this"""
+
+        peakload = self.holon_output["APIOutputTotalCostData"][0]["HSMSPeakLoadElectricity_kW"]
+
+        return peakload / 500_000  # TODO watchout for the hard coded
 
     def results(self):
         """TODO: pepe geeft de juiste resultaten terug"""
-        holon_kpis = self.holon_kpis()
-        co2_kpi = self.co2_calculation()
-        return holon_kpis | self.etm_results | {"total_costs": self.total_costs, "co2_kpi": co2_kpi}
+
+        results = {
+            "national": {
+                "netload": self.etm_results["national_kpi_network_load"],
+                "costs": self.etm_results["national_total_costs"],
+                "sustainability": self.etm_results["national_CO2_emissions_percentage"],
+                "self_sufficiency": self.etm_results["national_kpi_self_sufficiency"],
+            },
+            "local": {
+                "netload": self.local_network_load_calculation(),
+                "sustainability": self.co2_calculation(),
+                "costs": self.total_costs,
+                "self_sufficiency": self.local_sufficiency_calculation(),
+            },
+        }
+
+        return results
