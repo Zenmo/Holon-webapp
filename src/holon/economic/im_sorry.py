@@ -45,7 +45,7 @@ def format(output):
     if isinstance(output, list):
         return np.array(output)
     if isinstance(output, dict):
-        return np.array(list(output.values())[:8670])
+        return np.array(list(output.values())[:8760])
     return output
 
 
@@ -174,8 +174,9 @@ class CostItem:
         if self.costs is not None:
             return
 
-        self.costs = format(costs) * self.value
-
         # Sum curves to one number
-        if isinstance(self.costs, np.ndarray):
-            self.costs = self.costs.sum()
+        if isinstance(format(costs), np.ndarray):
+            self.costs = np.inner(format(costs), self.value)
+
+        else:
+            self.costs = costs * self.value
