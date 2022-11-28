@@ -12,7 +12,7 @@ wait_for_db () {
 }
 
 setup_submodules () {
-  cd src/holon/services
+  cd holon/services
   cloudclient_init -tf . --get-api-key
 }
 
