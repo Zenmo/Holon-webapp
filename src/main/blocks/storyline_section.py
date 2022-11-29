@@ -87,6 +87,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "id": int(option.id),
                         "option": option.option,
                         "default": option_default,
+                        "label": option.label,
                     }
                     options_arr.append(option_dict)
 
