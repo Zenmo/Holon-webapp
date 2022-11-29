@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface Props {
   locked?: boolean;
   inputId: string;
@@ -23,6 +25,7 @@ export default function ImageSlider({
   label,
   type,
 }: Props) {
+  const [value, setInnerValue] = useState(defaultValue);
   return (
     <div className="my-4 flex flex-row items-center justify-between gap-2">
       <label htmlFor={inputId} className="flex">
@@ -32,8 +35,11 @@ export default function ImageSlider({
         <input
           data-testid={datatestid}
           disabled={locked}
-          value={defaultValue}
-          onChange={e => setValue(inputId, parseInt(e.target.value))}
+          value={value}
+          onChange={e => {
+            setInnerValue(Number(e.target.value));
+            setValue(inputId, Number(e.target.value));
+          }}
           className={`h-1 w-3/5 ${
             locked ? "cursor-not-allowed" : ""
           } slider interactImg appearance-none disabled:bg-holon-grey-300`}

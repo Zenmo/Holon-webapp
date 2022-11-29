@@ -119,10 +119,12 @@ class PreProcessor:
                 ),
                 None,
             )
-            if interactive_input is not None:
+            try:
                 factor.value = (factor.max_value - factor.min_value) * (
                     interactive_input["value"] / 100
                 ) + factor.min_value
+            except:
+                factor.value = interactive_input["value"]
 
             converted_assets.append(factor)
 
@@ -238,16 +240,16 @@ class PostProcessor:
 
         results = {
             "national": {
-                "netload": self.etm_results["national_kpi_network_load"],
-                "costs": self.etm_results["national_total_costs"],
-                "sustainability": self.etm_results["national_CO2_emissions_percentage"],
-                "self_sufficiency": self.etm_results["national_kpi_self_sufficiency"],
+                "netload": round(self.etm_results["national_kpi_network_load"], 1),
+                "costs": round(self.etm_results["national_total_costs"], 0),
+                "sustainability": round(self.etm_results["national_CO2_emissions_percentage"], 1),
+                "self_sufficiency": round(self.etm_results["national_kpi_self_sufficiency"], 1),
             },
             "local": {
-                "netload": self.local_network_load_calculation(),
-                "sustainability": self.co2_calculation(),
-                "costs": self.total_costs,
-                "self_sufficiency": self.local_sufficiency_calculation(),
+                "netload": round(self.local_network_load_calculation(), 1),
+                "sustainability": round(self.co2_calculation(), 0),
+                "costs": round(self.total_costs, 1),
+                "self_sufficiency": round(self.local_sufficiency_calculation(), 1),
             },
         }
 

@@ -8,16 +8,16 @@ type KPIDashboardProps = {
 
 type Data = {
   local: {
-    Netbelasting: number;
-    Betaalbaarheid: number;
-    Duurzaamheid: number;
-    Zelfvoorzienendheid: number;
+    netload: number;
+    costs: number;
+    sustainability: number;
+    selfSufficiency: number;
   };
   national: {
-    Netbelasting: number;
-    Betaalbaarheid: number;
-    Duurzaamheid: number;
-    Zelfvoorzienendheid: number;
+    netload: number;
+    costs: number;
+    sustainability: number;
+    selfSufficiency: number;
   };
 };
 
@@ -40,15 +40,15 @@ export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
         <KPIRadioButtons updateValue={setLevel} loading={loading} />
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
-        <KPIItem label="Netbelasting" value={valueCheck(data[level].Netbelasting)} unit="%" />
+        <KPIItem label="Netbelasting" value={valueCheck(data[level].netload)} unit="%" />
         <KPIItem
           label="Betaalbaarheid"
-          value={valueCheck(data[level].Betaalbaarheid)}
+          value={valueCheck(data[level].costs)}
           unit="kEUR/jaar"></KPIItem>
-        <KPIItem label="Duurzaamheid" value={valueCheck(data[level].Duurzaamheid)} unit="%" />
+        <KPIItem label="Duurzaamheid" value={valueCheck(data[level].sustainability)} unit="%" />
         <KPIItem
           label="Zelfvoorzienendheid"
-          value={valueCheck(data[level].Zelfvoorzienendheid)}
+          value={valueCheck(data[level].selfSufficiency)}
           unit="%"></KPIItem>
       </div>
     </div>

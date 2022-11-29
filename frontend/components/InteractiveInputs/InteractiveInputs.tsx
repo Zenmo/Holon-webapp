@@ -6,7 +6,7 @@ export type Props = {
   type?: string;
   options: InteractiveInputOptions[];
   display?: string;
-  defaultValueOverride?: string;
+  defaultValue?: string | number;
   setValue: (id: string, value: number | string | boolean, optionId?: number) => void;
 };
 
@@ -82,16 +82,14 @@ function InteractiveInputs({
   type,
   options,
   display,
-  defaultValueOverride,
+  defaultValue,
   setValue,
 }: Props) {
   return type === "continuous" ? (
     <ImageSlider
       inputId={contentId}
       datatestid={name}
-      defaultvalue={
-        defaultValueOverride ? parseInt(defaultValueOverride) : options[0].sliderValueDefault
-      }
+      defaultValue={Number(defaultValue)}
       setValue={setValue}
       min={options[0].sliderValueMin}
       max={options[0].sliderValueMax}
