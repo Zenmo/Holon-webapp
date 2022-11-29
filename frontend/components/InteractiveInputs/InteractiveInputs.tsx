@@ -55,6 +55,7 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
 
   return (
     <div className="mb-4 font-bold text-base">
+      <p>{name}</p>
       {options.map((inputItem, index) => (
         <label
           key={index}

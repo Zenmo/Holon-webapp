@@ -32,7 +32,7 @@ export default function ImageSlider({
   const [sliderValue, setSliderValue] = useState(defaultValue);
   return (
     <div className="my-4 flex flex-col">
-      <label htmlFor={inputId} className="flex text-base">
+      <label htmlFor={inputId} className="flex text-base font-bold">
         {label}
       </label>
       <div className={`flex flex-row ${tooltip && `pt-8`}`}>
