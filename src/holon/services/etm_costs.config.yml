@@ -1,0 +1,73 @@
+# ----- COSTS -------
+
+price_of_natural_gas_per_mwh:
+  value:
+    type: query
+    data: value
+    etm_key: price_of_natural_gas_per_mwh
+
+price_of_hydrogen_per_mwh:
+  value:
+    type: query
+    data: value
+    etm_key: price_of_hydrogen_per_mwh
+
+hourly_price_of_electricity_per_mwh:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_price_of_electricity_per_mwh
+
+depreciation_costs_grid_battery_per_mwh:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_grid_battery_per_mwh
+
+depreciation_costs_solar_farm_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_solar_farm_per_kw
+
+# depreciation_costs_buildings_air_source_heat_pump_per_kw:
+#   value:
+#     type: query
+#     data: value
+#     etm_key: depreciation_costs_buildings_air_source_heat_pump_per_kw
+
+depreciation_costs_buildings_gas_burner_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_buildings_gas_burner_per_kw
+
+depreciation_costs_buildings_solar_panels_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_buildings_solar_panels_per_kw
+
+depreciation_costs_industry_solar_panels_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_industry_solar_panels_per_kw
+
+depreciation_costs_industry_gas_burner_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_industry_gas_burner_per_kw
+
+electricity_grid_expansion_costs_lv_mv_trafo_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: electricity_grid_expansion_costs_lv_mv_trafo_per_kw
+
+electricity_grid_expansion_costs_mv_hv_trafo_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: electricity_grid_expansion_costs_mv_hv_trafo_per_kw
