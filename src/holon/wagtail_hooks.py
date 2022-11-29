@@ -1,7 +1,8 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from api.models.scenario import Scenario
 from holon.models.factor import Factor
+from holon.models.gridconnection import GridConnection
+from holon.models.asset import Asset
 
 
 class FactorAdmin(ModelAdmin):
@@ -15,4 +16,28 @@ class FactorAdmin(ModelAdmin):
     add_to_admin_menu = True
 
 
+class GridconnectionAdmin(ModelAdmin):
+    model = GridConnection
+    base_url_path = "gridconnections"
+    menu_label = "Gridconnections"
+    menu_icon = "list-ul"
+    menu_order = 201
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    add_to_admin_menu = True
+
+
+class AssetAdmin(ModelAdmin):
+    model = Asset
+    base_url_path = "assets"
+    menu_label = "Assets"
+    menu_icon = "list-ol"
+    menu_order = 202
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    add_to_admin_menu = True
+
+
 modeladmin_register(FactorAdmin)
+modeladmin_register(GridconnectionAdmin)
+modeladmin_register(AssetAdmin)

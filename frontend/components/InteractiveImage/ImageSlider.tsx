@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 interface Props {
   locked?: boolean;
   inputId: string;
@@ -39,9 +40,10 @@ export default function ImageSlider({
           <input
             data-testid={datatestid}
             disabled={locked}
-            defaultValue={defaultValue}
+            value={sliderValue}
             onChange={e => {
-              setValue(inputId, parseInt(e.target.value)), setSliderValue(parseInt(e.target.value));
+              setSliderValue(Number(e.target.value));
+              setValue(inputId, Number(e.target.value));
             }}
             className={`h-1 w-3/5 ${
               locked ? "cursor-not-allowed" : ""
