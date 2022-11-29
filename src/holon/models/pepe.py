@@ -242,7 +242,10 @@ class PostProcessor:
             "national": {
                 "netload": round(self.etm_results["national_kpi_network_load"], 1),
                 "costs": round(self.etm_results["national_total_costs"], 0),
-                "sustainability": round(self.etm_results["national_CO2_emissions_percentage"], 1),
+                # ETM returns factor instead of percentage for sustainability
+                "sustainability": round(
+                    100 * self.etm_results["national_CO2_emissions_percentage"], 1
+                ),
                 "self_sufficiency": round(self.etm_results["national_kpi_self_sufficiency"], 1),
             },
             "local": {
