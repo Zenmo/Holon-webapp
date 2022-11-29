@@ -1,4 +1,3 @@
-import Image from "next/future/image";
 import React from "react";
 import RawHtml from "../../RawHtml/RawHtml";
 import StretchedLink from "../../StretchedLink";
@@ -76,7 +75,8 @@ export default function Card({ cardItem }: CardProps) {
       <span
         className={`min-h-[400px] ${colorStyle} relative border-solid border cardFadeIn rounded-lg flex h-full flex-col`}>
         <span className="overflow-hidden relative m-4 mb-0 flex-1 border">
-          <Image
+          {/* eslint-disable @next/next/no-img-element */}
+          <img
             src={cardItem.imageSelector.img.src}
             alt={cardItem.imageSelector.img.alt}
             width="725"
