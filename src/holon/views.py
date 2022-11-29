@@ -26,6 +26,7 @@ class HolonService(generics.CreateAPIView):
 
             data = serializer.validated_data
 
+            # TODO: this is hardcoded; should be a result from the DB::scenario linked to the storyline
             data["scenario"] = {"etm_scenario_id": 1647734, "model_name": "technical_debt"}
             pepe.preprocessor = data
 
