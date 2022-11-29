@@ -1,7 +1,12 @@
 """ Serializer for the Slider """
 from rest_framework import serializers
 
+from api.models.slider import Slider
 
-class SliderSerializer(serializers.Serializer):
-    name = serializers.EmailField()
-    slider_value_default = serializers.IntegerField()
+
+class SliderSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Slider
+        fields = ["id", "name"]

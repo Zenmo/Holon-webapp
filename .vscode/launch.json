@@ -15,7 +15,8 @@
                 "--noreload",
                 "--nothreading"
             ],
-            "django": true
+            "django": true,
+            "justMyCode": false
         }
     ]
 }

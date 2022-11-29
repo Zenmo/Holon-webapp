@@ -1,13 +1,13 @@
-import React from "react";
-import { useState } from "react";
 import ImageSlider from "../InteractiveImage/ImageSlider";
 
 export type Props = {
-  id: number;
+  contentId: string;
   name: string;
   type?: string;
   options: InteractiveInputOptions[];
   display?: string;
+  defaultValueOverride?: string;
+  setValue: (id: string, value: number | string | boolean, optionId?: number) => void;
 };
 
 export type InteractiveInputOptions = {
@@ -18,7 +18,7 @@ export type InteractiveInputOptions = {
   sliderValueMax?: number;
   sliderValueMin?: number;
 };
-function InteractiveButtons({ id, name, type, options }: Props) {
+function InteractiveButtons({ contentId, name, type, options, setValue }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
 
   return (
@@ -28,15 +28,15 @@ function InteractiveButtons({ id, name, type, options }: Props) {
           <input
             type={inputType}
             name={name}
-            id={id + "" + inputItem.id}
+            id={contentId + "" + inputItem.id}
             data-testid={name + inputItem.id}
-            onChange={() => console.log("onchange")}
+            onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
             // checked={}
             className="hidden peer"
           />
           <label
             key={index}
-            htmlFor={id + "" + inputItem.id}
+            htmlFor={contentId + "" + inputItem.id}
             className="flex h-full flex-row items-center justify-center peer-checked:bg-white peer-checked:text-blue-900 peer-checked:border-blue-900 border-white text-white bg-holon-blue-900 hover:bg-holon-blue-500 relative rounded border-2 px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50">
             <span>{inputItem.option}</span>
           </label>
@@ -45,7 +45,7 @@ function InteractiveButtons({ id, name, type, options }: Props) {
     </div>
   );
 }
-function InteractiveRadios({ id, name, type, options }: Props) {
+function InteractiveRadios({ contentId, name, type, options, setValue }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
   const cssClass =
     type === "single_select"
@@ -57,15 +57,15 @@ function InteractiveRadios({ id, name, type, options }: Props) {
       {options.map((inputItem, index) => (
         <label
           key={index}
-          htmlFor={id + inputItem.id + "input"}
+          htmlFor={contentId + inputItem.id + "input"}
           className="flex flex-row mb-2 gap-4 ">
           <input
             defaultChecked={inputItem.default ? true : false}
             type={inputType}
-            name={name}
-            id={id + inputItem.id + "input"}
+            name={name + contentId}
+            id={contentId + inputItem.id + "input"}
             data-testid={name + inputItem.id}
-            onChange={() => console.log("onchange")}
+            onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
             // checked={}
             className={`${cssClass} flex h-5 w-5 appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
           />
@@ -76,23 +76,25 @@ function InteractiveRadios({ id, name, type, options }: Props) {
   );
 }
 
-function InteractiveInputs({ id, name, type, options, display }: Props) {
-  const [inputvalue, setInputvalue] = useState(options[0].sliderValueDefault);
-
-  function updateLayers(value: string, setInputvalue: (newValue: number) => void) {
-    const newValue: number = parseInt(value);
-    setInputvalue(newValue);
-  }
-
+function InteractiveInputs({
+  contentId,
+  name,
+  type,
+  options,
+  display,
+  defaultValueOverride,
+  setValue,
+}: Props) {
   return type === "continuous" ? (
     <ImageSlider
-      inputId={name}
+      inputId={contentId}
       datatestid={name}
-      value={inputvalue}
-      setValue={setInputvalue}
+      defaultValue={
+        defaultValueOverride ? parseInt(defaultValueOverride) : options[0].sliderValueDefault
+      }
+      setValue={setValue}
       min={options[0].sliderValueMin}
       max={options[0].sliderValueMax}
-      updateLayers={updateLayers}
       step={1}
       label={name}
       type="range"
@@ -100,9 +102,21 @@ function InteractiveInputs({ id, name, type, options, display }: Props) {
       tooltip={true}
       locked={false}></ImageSlider>
   ) : display === "checkbox_radio" ? (
-    <InteractiveRadios id={id} name={name} type={type} options={options} />
+    <InteractiveRadios
+      setValue={setValue}
+      contentId={contentId}
+      name={name}
+      type={type}
+      options={options}
+    />
   ) : display === "button" ? (
-    <InteractiveButtons id={id} name={name} type={type} options={options} />
+    <InteractiveButtons
+      setValue={setValue}
+      contentId={contentId}
+      name={name}
+      type={type}
+      options={options}
+    />
   ) : (
     <p>Another one {name}</p>
   );

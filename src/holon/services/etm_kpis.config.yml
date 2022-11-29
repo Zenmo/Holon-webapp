@@ -1,0 +1,30 @@
+national_total_costs:
+  value:
+    type: query
+    data: value
+    etm_key: total_costs
+
+national_CO2_emissions_percentage:
+  value:
+    type: query
+    data: value
+    etm_key: dashboard_co2_emissions_versus_start_year
+
+national_kpi_network_load:
+  value:
+    type: query
+    data: value
+    etm_key: kpi_required_additional_hv_network_percentage
+
+national_kpi_self_sufficiency:
+  value:
+    type: query
+    data: value
+    etm_key: kpi_self_sufficiency_local_production_of_primary_demand
+
+# This one is used for determining local results
+CO2_curve:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_co2_emissions_of_electricity_production
