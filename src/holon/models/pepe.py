@@ -4,6 +4,7 @@ import etm_service
 
 from .factor import Factor
 from holon.economic.im_sorry import calculate_total_costs
+from holon.anylogic_kpi import calculate_holon_kpis
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parents[1] / "services"
 ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
@@ -119,12 +120,13 @@ class PreProcessor:
                 ),
                 None,
             )
-            try:
-                factor.value = (factor.max_value - factor.min_value) * (
-                    interactive_input["value"] / 100
-                ) + factor.min_value
-            except:
-                factor.value = interactive_input["value"]
+            if interactive_input is not None:
+                try:
+                    factor.value = (factor.max_value - factor.min_value) * (
+                        interactive_input["value"] / 100
+                    ) + factor.min_value
+                except:
+                    factor.value = interactive_input["value"]
 
             converted_assets.append(factor)
 
@@ -249,10 +251,11 @@ class PostProcessor:
                 "self_sufficiency": round(self.etm_results["national_kpi_self_sufficiency"], 1),
             },
             "local": {
-                "netload": round(self.local_network_load_calculation(), 1),
-                "sustainability": round(self.co2_calculation(), 0),
-                "costs": round(self.total_costs, 1),
-                "self_sufficiency": round(self.local_sufficiency_calculation(), 1),
+                "costs": round(self.total_costs, 0),
+                **calculate_holon_kpis(
+                    total_cost_data=self.holon_output["APIOutputTotalCostData"][0],
+                    etm_data=self.etm_results,
+                ),
             },
         }
 
