@@ -87,7 +87,14 @@ a {
   outline: none;
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
+  position: relative;
   @apply bg-holon-blue-900;
+}
+.slider::after {
+  left: 100%;
+}
+.slider::before {
+  right: 100%;
 }
 
 .slider:hover {
@@ -95,12 +102,11 @@ a {
 }
 
 .slider::-webkit-slider-thumb {
-  width: 8px;
-  height: 25px;
-  border: 3;
+  width: 20px;
+  height: 20px;
   @apply bg-holon-blue-500;
   @apply border-holon-blue-900;
-  @apply rounded-none;
+  @apply rounded-full;
   @apply appearance-none;
   --tw-shadow: 2.5px 2.5px 0 0;
   --tw-shadow-colored: 2.5px 2.5px 0 0 var(--tw-shadow-color);
@@ -114,9 +120,8 @@ a {
 }
 
 .slider::-moz-range-thumb {
-  width: 8px;
-  height: 25px;
-  border: 3;
+  width: 20px;
+  height: 20px;
   @apply bg-holon-blue-500;
   @apply border-holon-blue-900;
   @apply rounded-none;
@@ -130,6 +135,29 @@ a {
 
 .slider:disabled::-moz-range-thumb {
   background-color: grey;
+}
+
+.slidervalue {
+  position: absolute;
+  width: calc(100% - 20px);
+  margin-left: 10px;
+  bottom: 100%;
+  margin-bottom: 20px;
+}
+
+.slider + .slidervalue output {
+  position: absolute;
+
+  width: 40px;
+  margin-bottom: 12px;
+  height: 20px;
+  @apply bg-holon-blue-900;
+  transform: translateX(-50%);
+  text-align: center;
+  @apply bg-holon-blue-500;
+}
+.slider:focus + output {
+  @apply bg-holon-blue-900;
 }
 
 input::-moz {
