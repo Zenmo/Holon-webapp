@@ -14,6 +14,7 @@ export type InteractiveInputOptions = {
   id: number;
   option?: string;
   default?: boolean;
+  label?: string;
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
@@ -38,7 +39,7 @@ function InteractiveButtons({ contentId, name, type, options, setValue }: Props)
             key={index}
             htmlFor={contentId + "" + inputItem.id}
             className="flex h-full flex-row items-center justify-center peer-checked:bg-white peer-checked:text-blue-900 peer-checked:border-blue-900 border-white text-white bg-holon-blue-900 hover:bg-holon-blue-500 relative rounded border-2 px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50">
-            <span>{inputItem.option}</span>
+            <span>{inputItem.label || inputItem.option}</span>
           </label>
         </div>
       ))}
@@ -69,7 +70,7 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
             // checked={}
             className={`${cssClass} flex h-5 w-5 appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
           />
-          <span className="mr-auto">{inputItem.option}</span>
+          <span className="mr-auto">{inputItem.label || inputItem.option}</span>
         </label>
       ))}
     </div>

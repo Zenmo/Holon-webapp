@@ -83,6 +83,9 @@ class InteractiveInput(ClusterableModel):
 class InteractiveInputOptions(Orderable):
     input = ParentalKey(InteractiveInput, on_delete=models.CASCADE, related_name="options")
     option = models.CharField(max_length=255, help_text=_("Fill in your option"))
+    label = models.CharField(
+        max_length=255, help_text=_("Fill in your option"), null=True, blank=True
+    )
 
 
 class InteractiveInputContinuousValues(models.Model):
