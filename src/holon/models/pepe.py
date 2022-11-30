@@ -10,7 +10,7 @@ ETM_CONFIG_PATH = Path(__file__).resolve().parents[1] / "services"
 ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
 ETM_CONFIG_FILE_COSTS = "etm_costs.config"
 ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
-COSTS_SCENARIO_ID = 1661972  # KEV + 1 MW grid battery | ETM sceanrio on beta
+COSTS_SCENARIO_ID = 2166341  # KEV + 1 MW grid battery | ETM sceanrio on beta
 
 
 class Pepe:
