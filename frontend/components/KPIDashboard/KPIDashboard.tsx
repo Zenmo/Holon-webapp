@@ -11,13 +11,13 @@ type Data = {
     netload: number;
     costs: number;
     sustainability: number;
-    selfSufficiency: number;
+    self_sufficiency: number;
   };
   national: {
     netload: number;
     costs: number;
     sustainability: number;
-    selfSufficiency: number;
+    self_sufficiency: number;
   };
 };
 
@@ -48,7 +48,7 @@ export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
         <KPIItem label="Duurzaamheid" value={valueCheck(data[level].sustainability)} unit="%" />
         <KPIItem
           label="Zelfvoorzienendheid"
-          value={valueCheck(data[level].selfSufficiency)}
+          value={valueCheck(data[level].self_sufficiency)}
           unit="%"></KPIItem>
       </div>
     </div>
