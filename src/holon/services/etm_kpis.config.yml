@@ -4,7 +4,7 @@ national_total_costs:
     data: value
     etm_key: total_costs
 
-national_CO2_emissions_percentage:
+national_share_of_renewable_electricity:
   value:
     type: query
     data: value
