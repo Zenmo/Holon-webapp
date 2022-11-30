@@ -1,6 +1,9 @@
 import { basePageWrap } from "@/containers/BasePage";
 import SectionBlock from "@/components/Blocks/SectionBlock/SectionBlock";
 import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMediaBlock";
+import CardBlock from "@/components/Blocks/CardsBlock/CardBlock";
+import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
+import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 
 import styles from "./StorylinePage.module.css";
 import React from "react";
@@ -37,6 +40,15 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
     <div className={styles["StorylinePage"]}>
       {storyline?.map((content, _index) => {
         switch (content.type) {
+          case "heroblock":
+            return <HeroBlock key={`heroblock ${_index}`} data={content} />;
+            break;
+          case "title_block":
+            return <TitleBlock key={`titleblock ${_index}`} data={content} />;
+            break;
+          case "card_block":
+            return <CardBlock key={`cardsblock ${_index}`} data={content} />;
+            break;
           case "text_and_media":
             return <TextAndMediaBlock key={`txtmedia ${_index}`} data={content} />;
             break;
