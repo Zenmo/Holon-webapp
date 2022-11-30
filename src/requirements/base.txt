@@ -14,4 +14,4 @@ django-autoslug==1.9.8
 git+https://github.com/ZEnMo/HOLON-cloudclient@main#egg=cloudclient
 
 # ETM-service
-https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.3.1/etm_service-0.3.1.tar.gz
+https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.3.2/etm_service-0.3.2.tar.gz
