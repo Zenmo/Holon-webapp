@@ -9,7 +9,7 @@ ETM_MAPPING = {
     "depreciation_costs_buildings_gas_burner_per_kw": ("BUILDING", "GAS_BURNER"),
     "depreciation_costs_industry_solar_panels_per_kw": ("INDUSTRY", "PHOTOVOLTAIC"),
     "depreciation_costs_industry_gas_burner_per_kw": ("INDUSTRY", "GAS_BURNER"),
-    "hourly_price_of_electricity_per_mwh": ("SystemHourlyElectricity", ""),
+    "hourly_price_of_electricity_per_mwh": ("SystemHourlyElectricity", ""),  # TODO: check this key
     "price_of_natural_gas_per_mwh": ("totalMethane", ""),
     "price_of_hydrogen_per_mwh": ("totalHydrogen", ""),
     "price_of_diesel_per_mwh": ("totalDiesel", ""),
@@ -43,7 +43,7 @@ def format(output):
     en waarom zijn er 8761 uren??
     """
     if isinstance(output, list):
-        return np.array(output)
+        return np.array(output[:8760])
     if isinstance(output, dict):
         return np.array(list(output.values())[:8760])
     return output
@@ -69,7 +69,7 @@ class Category:
             self.cost_items.append(cost_item)
 
     def set_prices(self, etm_inputs):
-        """AU"""
+        """AU; S:lol"""
         for cost_item in self.cost_items:
             for key, val in ETM_MAPPING.items():
                 if cost_item.match(*val):

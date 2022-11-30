@@ -27,4 +27,70 @@ CO2_curve:
   value:
     type: query
     data: curve
-    etm_key: hourly_co2_emissions_of_electricity_production
+    etm_key: hourly_co2_intensity_of_electricity_production
+
+hourly_supply_electricity_from_biogas:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_biogas
+
+hourly_supply_electricity_from_biomass:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_biomass
+
+hourly_supply_electricity_from_geothermal:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_geothermal
+
+hourly_supply_electricity_from_greengas:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_greengas
+
+hourly_supply_electricity_from_hydro:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_hydro
+
+hourly_supply_electricity_from_hydrogen:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_hydrogen
+
+hourly_supply_electricity_from_solar:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_solar
+
+hourly_supply_electricity_from_uranium:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_uranium
+
+hourly_supply_electricity_from_waste:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_waste
+
+hourly_supply_electricity_from_wind:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_supply_electricity_from_wind
+
+hourly_production_electricity:
+  value:
+    type: query
+    data: curve
+    etm_key: hourly_production_electricity
