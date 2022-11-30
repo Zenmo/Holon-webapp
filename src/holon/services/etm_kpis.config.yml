@@ -8,7 +8,7 @@ national_CO2_emissions_percentage:
   value:
     type: query
     data: value
-    etm_key: dashboard_co2_emissions_versus_start_year
+    etm_key: dashboard_share_of_renewable_electricity
 
 national_kpi_network_load:
   value:
