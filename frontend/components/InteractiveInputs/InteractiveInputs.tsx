@@ -55,6 +55,7 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
 
   return (
     <div className="mb-4 font-bold text-base">
+      <p>{name}</p>
       {options.map((inputItem, index) => (
         <label
           key={index}
@@ -97,6 +98,8 @@ function InteractiveInputs({
       step={1}
       label={name}
       type="range"
+      unit="%"
+      tooltip={true}
       locked={false}></ImageSlider>
   ) : display === "checkbox_radio" ? (
     <InteractiveRadios
