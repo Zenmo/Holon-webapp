@@ -26,11 +26,24 @@ export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
 
   const backgroundColor = loading ? "bg-holon-gray-300" : "bg-holon-slated-blue-900";
 
-  function valueCheck(value: number) {
+  function valueCheck(value: number): number | string {
     if (value == undefined || loading) {
       return "-";
     } else {
       return value;
+    }
+  }
+
+  function CostKPIItemGenerator(level: string) {
+    let value = valueCheck(data[level].costs);
+    if (level == "local") {
+      // divides by 1e9 because "miljard"
+      typeof value == "number" ? (value = value / 1e9) : (value = value);
+      return <KPIItem label="Betaalbaarheid" value={value} unit="mld.EUR/jaar"></KPIItem>;
+    } else {
+      // divides by 1e3 because "k euro"
+      typeof value == "number" ? (value = value / 1e3) : (value = value);
+      return <KPIItem label="Betaalbaarheid" value={value} unit="kEUR/jaar"></KPIItem>;
     }
   }
 
@@ -41,10 +54,7 @@ export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
         <KPIItem label="Netbelasting" value={valueCheck(data[level].netload)} unit="%" />
-        <KPIItem
-          label="Betaalbaarheid"
-          value={valueCheck(data[level].costs)}
-          unit="kEUR/jaar"></KPIItem>
+        {CostKPIItemGenerator(level)}
         <KPIItem label="Duurzaamheid" value={valueCheck(data[level].sustainability)} unit="%" />
         <KPIItem
           label="Zelfvoorzienendheid"
