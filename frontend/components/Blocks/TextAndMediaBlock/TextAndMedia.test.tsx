@@ -1,19 +1,24 @@
 import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import HeroBlock from "./";
+import TextAndMedia from "./";
 
-describe("<HeroBlock />", () => {
+describe("<TextAndMedia />", () => {
   describe("with video media", () => {
     beforeEach(async () => {
       await act(() => {
         render(
-          <HeroBlock
+          <TextAndMedia
             data={{
-              type: "unknown",
+              type: "textImageBlock",
               value: {
-                backgroundColor: "block__bg-purple",
-                text: "Lorem ipsum",
-                title: "Hello world",
+                gridLayout: {
+                  grid: "50_50",
+                },
+                background: {
+                  color: "block__bg-purple",
+                  size: "bg__full",
+                },
+                text: "<h1>Title</h1><p>Lorem ipsum</p>",
                 media: [
                   {
                     type: "video",
@@ -24,7 +29,7 @@ describe("<HeroBlock />", () => {
                 alt_text: "Some alt text",
                 buttonBlock: [],
               },
-              id: "a-hero-block",
+              id: "a-text-and-media-block",
             }}
           />
         ).container;
@@ -36,14 +41,12 @@ describe("<HeroBlock />", () => {
 
       expect(heading.tagName).toEqual("H1");
       expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("Hello world");
+      expect(heading).toHaveTextContent("Title");
     });
 
     it("renders text", () => {
-      const heading = screen.getByTestId("content");
-
-      expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("Lorem ipsum");
+      const text = screen.getByText("Lorem ipsum");
+      expect(text).toBeInTheDocument();
     });
 
     it("renders a video player", () => {
@@ -56,27 +59,32 @@ describe("<HeroBlock />", () => {
     beforeEach(async () => {
       await act(() => {
         render(
-          <HeroBlock
+          <TextAndMedia
             data={{
-              type: "unknown",
+              type: "textImageBlock",
               value: {
-                backgroundColor: "block__bg-purple",
-                text: "Lorem ipsum",
-                title: "Hello world",
+                gridLayout: {
+                  grid: "50_50",
+                },
+                background: {
+                  color: "block__bg-purple",
+                  size: "bg__full",
+                },
+                text: "<h1>Title</h1><p>Lorem ipsum</p>",
                 media: [
                   {
                     type: "image",
                     value: {
-                      img: { src: "http://localhost:3000/video", width: 1, height: 1, alt: "Alt" },
+                      img: { src: "http://localhost:3000/img", width: 1, height: 1, alt: "Alt" },
                       id: 1,
                       title: "Some image",
                     },
                   },
                 ],
-                altText: "alternative alt text",
+                altText: "Some alt text",
                 buttonBlock: [],
               },
-              id: "a-hero-block",
+              id: "a-text-and-media-block",
             }}
           />
         ).container;
@@ -88,19 +96,24 @@ describe("<HeroBlock />", () => {
 
       expect(heading.tagName).toEqual("H1");
       expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("Hello world");
+      expect(heading).toHaveTextContent("Title");
     });
 
     it("renders text", () => {
-      const text = screen.getByTestId("content");
-
+      const text = screen.getByText("Lorem ipsum");
       expect(text).toBeInTheDocument();
-      expect(text).toHaveTextContent("Lorem ipsum");
     });
 
     it("renders an image", () => {
       const media = screen.getByRole("img");
+
       expect(media).toBeInTheDocument();
+    });
+
+    it("renders an image with alt text", () => {
+      const media = screen.getByRole("img");
+
+      expect(media).toHaveAttribute("alt", "Some alt text");
     });
   });
 
@@ -108,13 +121,18 @@ describe("<HeroBlock />", () => {
     beforeEach(async () => {
       await act(() => {
         render(
-          <HeroBlock
+          <TextAndMedia
             data={{
-              type: "unknown",
+              type: "textImageBlock",
               value: {
-                backgroundColor: "block__bg-purple",
-                text: "Lorem ipsum",
-                title: "Hello world",
+                gridLayout: {
+                  grid: "50_50",
+                },
+                background: {
+                  color: "block__bg-purple",
+                  size: "bg__full",
+                },
+                text: "<h1>Title</h1><p>Lorem ipsum</p>",
                 media: [
                   {
                     type: "image",
@@ -125,7 +143,7 @@ describe("<HeroBlock />", () => {
                     },
                   },
                 ],
-                altText: "alternative alt text",
+                alt_text: "Some alt text",
                 buttonBlock: [
                   {
                     type: "buttons",
@@ -153,26 +171,11 @@ describe("<HeroBlock />", () => {
                   },
                 ],
               },
-              id: "a-hero-block",
+              id: "a-text-and-media-block",
             }}
           />
         ).container;
       });
-    });
-
-    it("renders a header", () => {
-      const heading = screen.getByRole("heading");
-
-      expect(heading.tagName).toEqual("H1");
-      expect(heading).toBeInTheDocument();
-      expect(heading).toHaveTextContent("Hello world");
-    });
-
-    it("renders text", () => {
-      const text = screen.getByTestId("content");
-
-      expect(text).toBeInTheDocument();
-      expect(text).toHaveTextContent("Lorem ipsum");
     });
 
     it("renders an image", () => {
@@ -185,6 +188,51 @@ describe("<HeroBlock />", () => {
       expect(link).toBeInTheDocument();
       expect(link).toHaveTextContent("xx");
       expect(link).toHaveAttribute("href", "http://www.test.com");
+    });
+  });
+
+  describe("with the correct styling", () => {
+    beforeEach(async () => {
+      await act(() => {
+        render(
+          <TextAndMedia
+            data={{
+              type: "textImageBlock",
+              value: {
+                gridLayout: {
+                  grid: "50_50",
+                },
+                background: {
+                  color: "block__bg-purple",
+                  size: "bg__left",
+                },
+                text: "<h1>Title</h1><p>Lorem ipsum</p>",
+                media: [
+                  {
+                    type: "image",
+                    value: {
+                      img: { src: "http://localhost:3000/video", width: 1, height: 1, alt: "Alt" },
+                      id: 1,
+                      title: "Some image",
+                    },
+                  },
+                ],
+                alt_text: "Some alt text",
+                buttonBlock: [],
+              },
+              id: "a-text-and-media-block",
+            }}
+          />
+        ).container;
+      });
+    });
+
+    it("has the chosen backgroundcolor", () => {
+      expect(screen.getByTestId("textMedia")).toHaveClass("block__bg-purple");
+    });
+
+    it("has the chosen grid", () => {
+      expect(screen.getByTestId("textMedia")).toHaveClass("lg:w-1/2");
     });
   });
 });
