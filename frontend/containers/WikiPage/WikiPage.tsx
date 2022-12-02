@@ -61,16 +61,6 @@ const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
 
   return (
     <div className="flex min-h-screen min-w-full flex-col">
-      <header className="flex h-[8vh] flex-row justify-start overflow-hidden bg-holon-blue-900 align-middle">
-        <div className="flex w-3/12 justify-center justify-items-center">
-          <Link href="/">
-            <a className="flex flex-row">
-              Icon
-              <h1 className="ml-2 self-center py-2 text-3xl font-bold text-white">Holon Wiki</h1>
-            </a>
-          </Link>
-        </div>
-      </header>
       <div className="flex w-full flex-1 flex-row">
         <div className="flex w-3/12 flex-col border-r-2 border-gray-200">
           {pages && <Aside posts={wikiPostsHierarchy} />}
