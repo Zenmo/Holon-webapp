@@ -17,7 +17,6 @@ type Button = {
         id: string;
       }
     ];
-    buttonAlign: string;
   };
   id: string;
 };

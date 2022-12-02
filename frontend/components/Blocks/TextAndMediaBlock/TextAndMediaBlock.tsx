@@ -38,7 +38,8 @@ export default function TextAndMedia({ data }: Props) {
     <div className={`${backgroundFullcolor}`}>
       <div className={` storyline__row flex flex-col lg:flex-row`}>
         <div
-          className={`flex flex-col py-8 px-10 lg:px-16 lg:pt-16 ${gridValue.left} ${backgroundLeftColor}`}>
+          className={`flex flex-col py-8 px-10 lg:px-16 lg:pt-16 ${gridValue.left} ${backgroundLeftColor}`}
+          data-testid="textMedia">
           <RawHtml html={data.value?.text} />
         </div>
 

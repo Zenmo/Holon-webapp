@@ -165,7 +165,6 @@ WAGTAILSEARCH_BACKENDS = {
 }
 
 WAGTAILIMAGES_FORMAT_CONVERSIONS = {
-    "png": "jpeg",
     "webp": "webp",
 }
 
