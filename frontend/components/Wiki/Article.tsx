@@ -51,8 +51,8 @@ export default function Article({ article }: Props) {
   return (
     <>
       <Head>
-        <title>HOLON en de kunst van het Loslaten</title>
-        <meta name="description" content="HOLON en de kunst van het Loslaten" />
+        <title>HOLON Wiki</title>
+        <meta name="description" content="HOLON Wiki" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
