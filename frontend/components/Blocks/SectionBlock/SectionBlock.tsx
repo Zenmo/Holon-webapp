@@ -90,16 +90,16 @@ export type InteractiveInputOptions = {
 
 const initialData = {
   local: {
-    netload: 0,
-    costs: 0,
-    sustainability: 0,
-    selfSufficiency: 0,
+    netload: null,
+    costs: null,
+    sustainability: null,
+    selfSufficiency: null,
   },
   national: {
-    netload: 0,
-    costs: 0,
-    sustainability: 0,
-    selfSufficiency: 0,
+    netload: null,
+    costs: null,
+    sustainability: null,
+    selfSufficiency: null,
   },
 };
 export default function SectionBlock({ data }: Props) {
@@ -156,12 +156,12 @@ export default function SectionBlock({ data }: Props) {
         }
       case "continuous":
         if (defaultValue !== undefined && defaultValue !== "") {
-          return defaultValue;
+          return Number(defaultValue);
         } else if (
           content.value.options.length &&
           content.value.options[0].sliderValueDefault !== undefined
         ) {
-          return content.value.options[0].sliderValueDefault;
+          return Number(content.value.options[0].sliderValueDefault);
         } else {
           return 0;
         }
