@@ -76,10 +76,12 @@ export type InteractiveInput = {
   animationTag?: string;
   options: InteractiveInputOptions[];
   display: string;
+  visible?: boolean;
 };
 export type InteractiveInputOptions = {
   id: number;
   option?: string;
+  label?: string;
   default?: boolean;
   sliderValueDefault?: number;
   sliderValueMax?: number;
@@ -115,7 +117,7 @@ export default function SectionBlock({ data }: Props) {
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
   const gridValue = getGrid(data.value.gridLayout.grid);
 
-  const debouncedCalculateKPIs = useMemo(() => debounce(() => calculateKPIs(), 2000), []);
+  const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 2000), []);
 
   useEffect(() => {
     const contentArr: Content[] = [];
@@ -138,21 +140,23 @@ export default function SectionBlock({ data }: Props) {
   }, [data]);
 
   useEffect(() => {
-    // TODO remove console.log but retain content update
-    console.log(content);
-    debouncedCalculateKPIs();
+    debouncedCalculateKPIs(content);
   }, [content]);
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
+    const defaultValue = content.value.defaultValueOverride;
     switch (content.value.type) {
       case "single_select":
-        return content.value.options.find(option => option.default)?.option;
+        if (defaultValue) {
+          return content.value.options.find(
+            option => option.option === defaultValue || option.label === defaultValue
+          )?.option;
+        } else {
+          return content.value.options.find(option => option.default)?.option;
+        }
       case "continuous":
-        if (
-          content.value.defaultValueOverride !== undefined &&
-          content.value.defaultValueOverride !== ""
-        ) {
-          return content.value.defaultValueOverride;
+        if (defaultValue !== undefined && defaultValue !== "") {
+          return defaultValue;
         } else if (
           content.value.options.length &&
           content.value.options[0].sliderValueDefault !== undefined
@@ -162,8 +166,14 @@ export default function SectionBlock({ data }: Props) {
           return 0;
         }
       case "multi_select":
-        const defaultOptions = content.value.options.filter(option => option.default);
-        defaultOptions.length && defaultOptions.map(option => option.option);
+        const defaultValueArray = defaultValue && defaultValue.split(",");
+        const defaultOptions = content.value.options.filter(
+          option =>
+            option.default ||
+            defaultValueArray?.includes(option.option) ||
+            defaultValueArray?.includes(option.label)
+        );
+        return defaultOptions.length ? defaultOptions.map(option => option.option) : undefined;
     }
   }
 
@@ -208,18 +218,16 @@ export default function SectionBlock({ data }: Props) {
     const spreadedElements = [...content];
     spreadedElements[currentIndex] = currentElement;
     setContent([...spreadedElements]);
-    console.log("update");
-    debouncedCalculateKPIs();
   }
 
-  function calculateKPIs() {
-    console.log("calculate");
+  function calculateKPIs(content) {
     setLoading(true);
     const interactiveElements = content
       .filter(
         (element): element is InteractiveContent =>
           element.type == "interactive_input" &&
-          (element.currentValue !== undefined || element.currentValue !== null)
+          element.currentValue !== undefined &&
+          element.currentValue !== null
       )
       .map((element): InteractiveElement => {
         return {
@@ -242,11 +250,11 @@ export default function SectionBlock({ data }: Props) {
     <div className={`${backgroundFullcolor} storyline__row flex flex-col lg:flex-row`}>
       <div
         className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 bg-slate-200 ${gridValue.left} ${backgroundLeftColor}`}>
-        {content.map((ct, _index) => {
+        {content.map(ct => {
           if (ct.type === "slider") {
             return (
               <ImageSlider
-                key={`slider${_index}`}
+                key={`slider${ct.id}`}
                 inputId={ct.id}
                 datatestid={`ct.value?.name${_index}`}
                 value={ct.value.currentValue}
@@ -258,7 +266,7 @@ export default function SectionBlock({ data }: Props) {
                 type="range"
                 locked={ct.value.sliderLocked}></ImageSlider>
             );
-          } else if (ct.type === "interactive_input") {
+          } else if (ct.type === "interactive_input" && ct.value.visible) {
             return (
               <InteractiveInputs
                 setValue={setInteractiveInputValue}
@@ -269,7 +277,7 @@ export default function SectionBlock({ data }: Props) {
               />
             );
           } else if (ct.type == "text") {
-            return <RawHtml key={`text_${_index}`} html={ct.value} />;
+            return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
           } else {
             return null;
           }
