@@ -98,6 +98,7 @@ class PreProcessor:
         self.assets = data.get("interactive_elements")
         self.interactive_elements = data.get("interactive_elements")
         self.holon_payload = data
+        self.policies = self.extract_policies_from_interactive_input()
 
     def is_valid(self):
         # TODO!
@@ -134,9 +135,79 @@ class PreProcessor:
 
         self._assets = converted_assets
 
+    def extract_policies_from_interactive_input(self) -> dict:
+        """
+        TODO: asumes that all user values that are strings (cannot be parsed to floats) should be parsed here
+        """
+        policies = {}
+        for user_input in self.interactive_elements:
+            interactive_el: InteractiveInput = user_input["interactive_element"]
+            input_value: float | str = user_input["value"]
+
+            try:
+                float(input_value)
+            except ValueError:
+                policies.update({interactive_el.name: input_value})
+
+        return policies
+
+    def apply_charging_policies(
+        self,
+        charging_mode: str,
+        battery_mode: str,
+        apply_to_connections: list = ["LOGISTICS", "GRIDBATTERY"],
+    ) -> None:
+        """lil bit more DRY still cry"""
+        gcs = self.holon_payload["gridconnections"]
+        for gc in gcs:
+            try:
+                gc_type = gc["type"]
+            except KeyError:
+                gc_type = gc["category"]
+                if gc_type in apply_to_connections:
+                    gc["charging_mode"] = charging_mode
+                    gc["battery_mode"] = battery_mode
+
+    def apply_policies(self) -> None:
+        """
+        Minimal modularity, seperate the hacky cheese from the fondue
+        TODO: assumes that bools ("true" or "false") only apply to smart charging or not
+        """
+
+        for key, value in self.policies.items():
+
+            match value:
+                # battery charging mode
+                case "false":
+                    self.apply_charging_policies(charging_mode="MAX_POWER", battery_mode="BALANCE")
+
+                case "true":
+                    self.apply_charging_policies(charging_mode="MAX_SPREAD", battery_mode="BALANCE")
+
+                # financiacial individual
+                case "dayahead_gopacs_individual":
+                    pass
+
+                # financial collective
+                case "dayahead_gopacs_collective":
+                    pass
+
+        """ 
+        financieel individueel - nodal pricing - day ahead - alleen batterij reageert daarop
+            In actor contract aanmaken
+            In gridconnection grid battery charging mode op price zetten
+            Die gridconnection moet een battery asset hebben
+
+        financieel gezamelijke - nodal pricing - day ahead - alleen batterij reageert
+            Gridcon met grid battery die energy holon is
+            Gridcon mode price
+
+        """
+        pass
+
     def apply_interactive_to_payload(self):
         """
-        TODO: cry many tears for this function, poor pepe
+        TODO: cry many tears for this function, poor pepe #pepelivesmatter
 
         >>> Unsure what the factor object will contain for single selects and multi selects
         >>> Parse policies
