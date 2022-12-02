@@ -63,7 +63,6 @@ from cloudclient.datamodel.defaults import (
     Solarpanels_1MW,
     Grid_battery_10MWh,
     Industry_other_heat_demand,
-    Building_solarpanels_0kWp,
     Building_solarpanels_10kWp,
     Building_gas_burner_60kW,
 )
@@ -92,7 +91,6 @@ gridconnections = [
             *[EHGV] * 6,
             Diesel_Truck,
             Grid_battery_7MWh,
-            Building_solarpanels_0kWp,
             Building_gas_burner_60kW,
             Building_solarpanels_10kWp,
         ],
