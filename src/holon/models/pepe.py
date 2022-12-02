@@ -131,7 +131,7 @@ class PreProcessor:
                 except:
                     factor.value = interactive_input["value"]
 
-            converted_assets.append(factor)
+                converted_assets.append(factor)
 
         self._assets = converted_assets
 
@@ -218,6 +218,7 @@ class PreProcessor:
         TODO: Balancing may set the "vehicleScaling" attribute to 0, does AL know how to handle this?
         TODO: Balancing should round the output because the data model specificies an int, fck. We should change that.
         TODO: do smtng with recursive shit that is smarter than this junk
+        TODO: every interactive element (that has a factor table) should be included, otherwise this function breaks
         """
         # ugh
         ev_truck_asset_count = 0
