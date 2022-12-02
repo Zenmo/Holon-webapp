@@ -106,7 +106,6 @@ gridconnections = [
         capacity_kw=1000,
         assets=[
             Industry_other_heat_demand,
-            Building_solarpanels_0kWp,
             Building_gas_burner_60kW,
         ],
     ),
@@ -115,8 +114,8 @@ gridconnections = [
         owner_actor="com3",
         parent_electric="E2",
         id="b3",
-        capacity_kw=2000,
-        assets=[Solarpanels_1MW, Solarpanels_1MW],
+        capacity_kw=10000,
+        assets=[Solarpanels_1MW],
     ),
     ProductionGridConnection(
         category="GRIDBATTERY",
@@ -251,7 +250,7 @@ if __name__ == "__main__":
     import json
     from pathlib import Path
 
-    base_path = Path(__file__).parent / "doc" / "assets"
+    base_path = Path(__file__).parent
 
     for key, json_output in payload.to_json().items():
         variable_filename = f"example_{key}.json"
@@ -259,5 +258,3 @@ if __name__ == "__main__":
         with open(fp, "w") as outfile:
             json.dump(json_output, outfile, indent=2)
 
-    with open(base_path / "example_total.json", "w") as outfile:
-        json.dump(json.loads(payload.json()), outfile, indent=2)
