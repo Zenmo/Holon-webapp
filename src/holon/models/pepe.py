@@ -135,7 +135,23 @@ class PreProcessor:
         self._assets = converted_assets
 
     def apply_interactive_to_payload(self):
-        """TODO: cry many tears for this function, poor pepe"""
+        """
+        TODO: cry many tears for this function, poor pepe
+        
+        >>> Unsure what the factor object will contain for single selects and multi selects
+        >>> Parse policies
+        >>> Balance diesel and EV's
+        
+        TODO: For balancing diesel and electric trucks this assumes many _identical_ E trucks against 1 diesel truck assets (scaled).
+        TODO: Balancing assumes the diesel and electric trucks to always be part of the same grid connection.
+        TODO: Balancing may set the "vehicleScaling" attribute to 0, does AL know how to handle this?
+        TODO: Balancing should round the output because the data model specificies an int, fck. We should change that.
+        """
+        # ugh
+        ev_truck_asset_count = 0
+        def_ev_scaling = None
+
+        # For things that only affect assets
         grid_connections = self.holon_payload["gridconnections"]
         for factor in self.assets:
             for gc in grid_connections:
@@ -148,7 +164,23 @@ class PreProcessor:
                 if gc_type == factor.grid_connection.type:
                     for asset in gc["assets"]:
                         if asset["type"] == factor.asset.type:
+                            
+                            def_ev_scaling = asset[factor.asset_attribute] if factor.asset_type == "ELECTRIC_VEHICLE" else None
+                            ev_truck_asset_count = ev_truck_asset_count + 1 if factor.asset_type == "ELECTRIC_VEHICLE" else ev_truck_asset_count
                             asset[factor.asset_attribute] = factor.value
+
+                    # >>> DIESEL_TRUCK EGHV balancing
+                    if factor.asset_type == "ELECTRIC_VEHICLE":
+                        for asset in gc["assets"]:
+                            if asset["type"] == "DIESEL_TRUCK":
+                                
+                                # oof
+                                diesel_truck_count = asset[factor.asset_attribute]
+                                ev_truck_count = ev_truck_asset_count * def_ev_scaling
+                                total_truck_count = diesel_truck_count + ev_truck_count
+                                target_diesel_truck_count = total_truck_count - ev_truck_asset_count * factor.value
+
+                                asset[factor.asset_attribute] = target_diesel_truck_count
 
     @property
     def holon_payload(self) -> dict:
