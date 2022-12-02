@@ -11,7 +11,14 @@ from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
 from api.models.scenario import Scenario
 
 from .base import BasePage
-from ..blocks import TextAndMediaBlock, StorylineSectionBlock, HeroBlock, TitleBlock, CardsBlock, HeaderFullImageBlock
+from ..blocks import (
+    TextAndMediaBlock,
+    StorylineSectionBlock,
+    HeroBlock,
+    TitleBlock,
+    CardsBlock,
+    HeaderFullImageBlock,
+)
 
 ICON_CHOICES = (
     ("book", "Book"),

@@ -22,7 +22,6 @@ class HeaderFullImageBlock(blocks.StructBlock):
     )
 
     image_selector = HolonImageChooserBlock(required=True)
-    
 
     alt_text = blocks.CharBlock(
         help_text=(
