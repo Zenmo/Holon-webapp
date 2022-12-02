@@ -1,10 +1,12 @@
-import json
 from pathlib import Path
+
 import etm_service
 
-from .factor import Factor
-from holon.economic.im_sorry import calculate_total_costs
+from api.models.interactive_input import InteractiveInput
 from holon.anylogic_kpi import calculate_holon_kpis
+from holon.economic.im_sorry import calculate_total_costs
+
+from .factor import Factor
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parents[1] / "services"
 ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
@@ -54,7 +56,7 @@ class Pepe:
         if self.preprocessor.is_valid() and self.postprocessor.is_valid():
             self.preprocessor.etm_scenario_id = etm_service.scale_copy_and_send(
                 self.preprocessor.etm_scenario_id,
-                self.preprocessor.slider_settings() | self.postprocessor.etm_kpi_holon_output(),
+                self.preprocessor.etm_slider_settings() | self.postprocessor.etm_kpi_holon_output(),
                 ETM_CONFIG_PATH,
                 ETM_CONFIG_FILE_SCALING,
             )
@@ -162,17 +164,25 @@ class PreProcessor:
         """Returns the grid_connections in list format to be processed by economic modules"""
         return self._holon_payload["gridconnections"]
 
-    def slider_settings(self):
+    def etm_slider_settings(self):
         """
         Raw slider settings from front end to send to ETM -
-        TODO: we gaan ervanuit dat
+        TODO: we gaan ervanuit dat _IEDER_
         inetractive element een ETM key heeft. Deze mappen voor slider settings. Dus dit hieronder
         aanpassen etm_key. Zelde loop gebruiken als voor de assets
+
+        S: I've added type hinting here, based on the serializer. Perhaps it would be nice to implement typehinting together with linting 
+        such that we have more certainty about interfaces?
         """
-        return {
-            user_input["interactive_element"].etm_key: user_input["value"]
-            for user_input in self.interactive_elements
-        }
+        sliders = {}
+        for user_input in self.interactive_elements:
+            interactive_el : InteractiveInput = user_input["interactive_element"]
+            input_value : float | str = user_input["value"]
+
+            if user_input.etm_key is not None:
+                sliders.update({interactive_el.etm_key: input_value})
+
+        return sliders
 
 
 class PostProcessor:
