@@ -187,9 +187,9 @@ class PreProcessor:
                                 diesel_truck_count = asset[factor.asset_attribute]
                                 ev_truck_count = ev_truck_asset_count * def_ev_scaling
                                 total_truck_count = diesel_truck_count + ev_truck_count
-                                target_diesel_truck_count = (
-                                    total_truck_count - ev_truck_asset_count * factor.value
-                                )
+                                target_diesel_truck_count = total_truck_count - ev_truck_asset_count * float(
+                                    factor.value
+                                )  # TODO: This is needed because the wagtail default arg is a string
 
                                 asset[factor.asset_attribute] = target_diesel_truck_count
 

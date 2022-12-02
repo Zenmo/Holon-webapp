@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
 import ImageSlider from "@/components/InteractiveImage/ImageSlider";
-import RawHtml from "@/components/RawHtml/RawHtml";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
+import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
+import RawHtml from "@/components/RawHtml/RawHtml";
+import { debounce } from "lodash";
+import { useEffect, useMemo, useState } from "react";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
-import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
-import { debounce } from "lodash";
 
 type Props = {
   data: {
@@ -117,7 +117,7 @@ export default function SectionBlock({ data }: Props) {
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
   const gridValue = getGrid(data.value.gridLayout.grid);
 
-  const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 2000), []);
+  const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
 
   useEffect(() => {
     const contentArr: Content[] = [];
