@@ -12,16 +12,6 @@
         "fields": { "type": "STORAGE_ELECTRIC" }
     },
     {
-        "model": "holon.asset",
-        "pk": 12,
-        "fields": { "type": "ELECTRIC_VEHICLE" }
-    },
-    {
-        "model": "holon.asset",
-        "pk": 13,
-        "fields": { "type": "STORAGE_ELECTRIC" }
-    },
-    {
         "model": "holon.gridconnection",
         "pk": 1,
         "fields": { "type": "LOGISTICS" }
@@ -61,22 +51,22 @@
         "model": "holon.factor",
         "pk": 2,
         "fields": {
-            "asset": 12,
+            "asset": 3,
             "asset_attribute": "vehicleScaling",
             "grid_connection": 1,
             "min_value": 0,
-            "max_value": 12
+            "max_value": 5
         }
     },
     {
         "model": "holon.factor",
         "pk": 3,
         "fields": {
-            "asset": 13,
+            "asset": 4,
             "asset_attribute": "capacityElectricity_kWh",
             "grid_connection": 5,
             "min_value": 0,
-            "max_value": 42
+            "max_value": 8000
         }
     },
     {

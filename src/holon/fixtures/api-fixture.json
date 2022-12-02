@@ -1,16 +1,5 @@
 [
     {
-        "model": "api.slider",
-        "pk": 1,
-        "fields": {
-            "name": "zonnepaneel",
-            "slider_value_default": 1,
-            "slider_value_min": 0,
-            "slider_value_max": 1,
-            "tag": "solar"
-        }
-    },
-    {
         "model": "api.interactiveinput",
         "pk": 1,
         "fields": {
@@ -29,7 +18,7 @@
             "name": "Batterijopslag",
             "type": "single_select",
             "animation_tag": "no-animation",
-            "asset_type": 13
+            "asset_type": 4
         }
     },
     {
@@ -40,7 +29,7 @@
             "name": "Elektrificatie zwaar transport",
             "type": "continuous",
             "animation_tag": "no-animation",
-            "asset_type": 12
+            "asset_type": 3
         }
     },
     {
