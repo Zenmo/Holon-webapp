@@ -177,7 +177,7 @@ class PreProcessor:
         actors = self.holon_payload["actors"]
         for actor in actors:
             if actor["category"] == actor_category:
-                actor["contracts"] = [contract.to_json() for contract in contracts]
+                actor["contracts"] = [contract.json() for contract in contracts]
 
     def apply_policies(self) -> None:
         """
@@ -185,17 +185,22 @@ class PreProcessor:
         TODO: assumes that bools ("true" or "false") only apply to smart charging or not
         """
 
+        def pprint(message: str) -> None:
+            print(f"[apply_policies]: {message}")
+
         for key, value in self.policies.items():
 
             match value:
                 # battery charging mode
                 case "false":
+                    pprint("Match at smart charging: false")
                     self.apply_charging_policies(
                         charging_mode=ChargingModeEnum.max_power.value,
                         battery_mode=BatteryModeEnum.balance.value,
                     )
 
                 case "true":
+                    pprint("Match at smart charging: true")
                     self.apply_charging_policies(
                         charging_mode=ChargingModeEnum.max_spread.value,
                         battery_mode=BatteryModeEnum.balance.value,
@@ -203,6 +208,7 @@ class PreProcessor:
 
                 # financiacial individual
                 case "dayahead_gopacs_individual":
+                    pprint("Match at finacial: dayahead_gopacs_individual")
                     self.apply_charging_policies(
                         charging_mode=ChargingModeEnum.max_spread.value,
                         battery_mode=BatteryModeEnum.price.value,
@@ -230,6 +236,7 @@ class PreProcessor:
 
                 # financial collective
                 case "dayahead_gopacs_collective":
+                    pprint("Match at finacial: dayahead_gopacs_collective")
 
                     # Apply default pricing irt energyholon and variable price at an individual level
                     self.apply_contracts(
@@ -279,6 +286,8 @@ class PreProcessor:
         TODO: do smtng with recursive shit that is smarter than this junk
         TODO: every interactive element (that has a factor table) should be included, otherwise this function breaks
         """
+        self.apply_policies()
+
         # ugh
         ev_truck_asset_count = 0
         def_ev_scaling = None
