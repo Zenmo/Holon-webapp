@@ -257,4 +257,3 @@ if __name__ == "__main__":
         fp = base_path / variable_filename
         with open(fp, "w") as outfile:
             json.dump(json_output, outfile, indent=2)
-
