@@ -25,7 +25,7 @@
         "model": "api.interactiveinput",
         "pk": 2,
         "fields": {
-            "etm_key": "grid_battery_on_off",
+            "etm_key": "installed_energy_grid_battery",
             "name": "Batterijopslag",
             "type": "single_select",
             "animation_tag": "no-animation",
@@ -63,6 +63,17 @@
             "type": "single_select",
             "animation_tag": "no-animation",
             "asset_type": null
+        }
+    },
+    {
+        "model": "api.interactiveinput",
+        "pk": 6,
+        "fields": {
+            "etm_key": "installed_energy_grid_battery",
+            "name": "Batterijopslag",
+            "type": "continuous",
+            "animation_tag": "no-animation",
+            "asset_type": 4
         }
     },
     {
