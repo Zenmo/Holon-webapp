@@ -1,6 +1,10 @@
 from pathlib import Path
+from typing import List
 
 import etm_service
+from cloudclient.datamodel.contracts import Contract, ContractTypeEnum, ContractScopeEnum
+from cloudclient.datamodel.actors import ActorTypeEnum
+from cloudclient.datamodel.gridconnections import ChargingModeEnum, BatteryModeEnum
 
 from api.models.interactive_input import InteractiveInput
 from holon.anylogic_kpi import calculate_holon_kpis
@@ -168,6 +172,13 @@ class PreProcessor:
                     gc["charging_mode"] = charging_mode
                     gc["battery_mode"] = battery_mode
 
+    def apply_contracts(self, actor_category: str, contracts: List[Contract]) -> None:
+        """lil bit more DRY still cry"""
+        actors = self.holon_payload["actors"]
+        for actor in actors:
+            if actor["category"] == actor_category:
+                actor["contracts"] = [contract.to_json() for contract in contracts]
+
     def apply_policies(self) -> None:
         """
         Minimal modularity, seperate the hacky cheese from the fondue
@@ -179,29 +190,77 @@ class PreProcessor:
             match value:
                 # battery charging mode
                 case "false":
-                    self.apply_charging_policies(charging_mode="MAX_POWER", battery_mode="BALANCE")
+                    self.apply_charging_policies(
+                        charging_mode=ChargingModeEnum.max_power.value,
+                        battery_mode=BatteryModeEnum.balance.value,
+                    )
 
                 case "true":
-                    self.apply_charging_policies(charging_mode="MAX_SPREAD", battery_mode="BALANCE")
+                    self.apply_charging_policies(
+                        charging_mode=ChargingModeEnum.max_spread.value,
+                        battery_mode=BatteryModeEnum.balance.value,
+                    )
 
                 # financiacial individual
                 case "dayahead_gopacs_individual":
-                    pass
+                    self.apply_charging_policies(
+                        charging_mode=ChargingModeEnum.max_spread.value,
+                        battery_mode=BatteryModeEnum.price.value,
+                    )
+
+                    # Apply nodal pricing and variable price at an individual level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.connectionowner.value,
+                        contracts=[
+                            Contract(
+                                type=ContractTypeEnum.nodalpricing.value,
+                                contract_scope=ContractScopeEnum.gridoperator.value,
+                            ),
+                            Contract(
+                                type=ContractTypeEnum.variable.value,
+                                contract_scope=ContractScopeEnum.energysupplier.value,
+                            ),
+                        ],
+                    )
+                    # Explicitly no contracts at the holon level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.energyholon.value,
+                        contracts=[],
+                    )
 
                 # financial collective
                 case "dayahead_gopacs_collective":
-                    pass
+
+                    # Apply default pricing irt energyholon and variable price at an individual level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.connectionowner.value,
+                        contracts=[
+                            Contract(
+                                type=ContractTypeEnum.default.value,
+                                contract_scope=ContractScopeEnum.energyholon.value,
+                            ),
+                            Contract(
+                                type=ContractTypeEnum.variable.value,
+                                contract_scope=ContractScopeEnum.energysupplier.value,
+                            ),
+                        ],
+                    )
+
+                    # Apply a nodal pricing contract to the gridoperator at energy holon level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.energyholon.value,
+                        contracts=[
+                            Contract(
+                                type=ContractTypeEnum.nodalpricing.value,
+                                contract_scope=ContractScopeEnum.gridoperator.value,
+                            ),
+                        ],
+                    )
 
         """ 
-        financieel individueel - nodal pricing - day ahead - alleen batterij reageert daarop
-            In actor contract aanmaken
-            In gridconnection grid battery charging mode op price zetten
-            Die gridconnection moet een battery asset hebben
-
         financieel gezamelijke - nodal pricing - day ahead - alleen batterij reageert
             Gridcon met grid battery die energy holon is
-            Gridcon mode price
-
+            Gridcon mode price
         """
         pass
 
