@@ -57,11 +57,14 @@ def calculate_holon_kpis(total_cost_data: dict, etm_data: dict) -> dict:
     Sustainability_pct = min(100, Sustainability_pct)
 
     # TODO: Hardcoded net capacity
-    netOverload_pct = (max(0, total_cost_data["MSLSPeakLoadElectricity_kW"] - 1200)) / 1200
+    netOverload_pct = (
+        max(0, total_cost_data["MSLSPeakLoadElectricity_kW"] - 1200) / 1200
+    ) * 100 + 100
 
     KPIs = {
         "sustainability": round(Sustainability_pct, 1),
         "self_sufficiency": round(total_cost_data["totalSelfSufficiency_fr"] * 100, 1),
         "netload": round(netOverload_pct, 1),
     }
+
     return KPIs
