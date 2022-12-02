@@ -11,7 +11,7 @@ from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
 from api.models.scenario import Scenario
 
 from .base import BasePage
-from ..blocks import TextAndMediaBlock, StorylineSectionBlock, HeroBlock, TitleBlock, CardsBlock
+from ..blocks import TextAndMediaBlock, StorylineSectionBlock, HeroBlock, TitleBlock, CardsBlock, HeaderFullImageBlock
 
 ICON_CHOICES = (
     ("book", "Book"),
@@ -125,6 +125,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
 
     storyline = StreamField(
         [
+            ("header_full_image", HeaderFullImageBlock()),
             ("text_and_media", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
             ("heroblock", HeroBlock()),
@@ -132,7 +133,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
             ("card_block", CardsBlock()),
         ],
         block_counts={
-            "text_and_media": {"min_num": 1},
+            "header_full_image": {"min_num": 1},
             "section": {"min_num": 1},
         },
         use_json_field=True,

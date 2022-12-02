@@ -6,3 +6,4 @@ from .title import *  # NOQA
 from .hero import *  # NOQA
 from .cards import *  # NOQA
 from .grid_chooser import *  # NOQA
+from .header_full_image import * # NOQA

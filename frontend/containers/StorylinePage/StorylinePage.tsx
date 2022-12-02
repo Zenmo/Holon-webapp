@@ -4,6 +4,7 @@ import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMedi
 import CardBlock from "@/components/Blocks/CardsBlock/CardBlock";
 import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
+import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock";
 
 import styles from "./StorylinePage.module.css";
 import React from "react";
@@ -40,6 +41,9 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
     <div className={styles["StorylinePage"]}>
       {storyline?.map((content, _index) => {
         switch (content.type) {
+          case "header_full_image":
+            return <HeaderFullImageBlock key={`headerFull ${_index}`} data={content} />;
+            break;
           case "heroblock":
             return <HeroBlock key={`heroblock ${_index}`} data={content} />;
             break;
