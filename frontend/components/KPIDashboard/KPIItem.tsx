@@ -1,5 +1,5 @@
 import {
-  BoltSlashIcon,
+  BoltIcon,
   CurrencyEuroIcon,
   GlobeEuropeAfricaIcon,
   MapPinIcon,
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const icon_map = {
-  netload: <BoltSlashIcon />,
+  netload: <BoltIcon />,
   costs: <CurrencyEuroIcon />,
   sustainability: <GlobeEuropeAfricaIcon />,
   self_sufficiency: <MapPinIcon />,
