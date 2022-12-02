@@ -40,7 +40,7 @@ installed_energy_grid_battery:
   conversion: multiply
   convert_with_value:
     type: static
-    value: 17.5 # divided by 100 since both the button and the slider will use this. Not 0 or 1 but a whole range is possible between 0 and 100
+    value: 175 # divided by 100 since both the button and the slider will use this. Not 0 or 1 but a whole range is possible between 0 and 100
     key: scaling_factor_grid_batteries
 
 # hourly profile electric trucks
