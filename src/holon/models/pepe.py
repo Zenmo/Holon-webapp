@@ -137,15 +137,16 @@ class PreProcessor:
     def apply_interactive_to_payload(self):
         """
         TODO: cry many tears for this function, poor pepe
-        
+
         >>> Unsure what the factor object will contain for single selects and multi selects
         >>> Parse policies
         >>> Balance diesel and EV's
-        
+
         TODO: For balancing diesel and electric trucks this assumes many _identical_ E trucks against 1 diesel truck assets (scaled).
         TODO: Balancing assumes the diesel and electric trucks to always be part of the same grid connection.
         TODO: Balancing may set the "vehicleScaling" attribute to 0, does AL know how to handle this?
         TODO: Balancing should round the output because the data model specificies an int, fck. We should change that.
+        TODO: do smtng with recursive shit that is smarter than this junk
         """
         # ugh
         ev_truck_asset_count = 0
@@ -164,21 +165,31 @@ class PreProcessor:
                 if gc_type == factor.grid_connection.type:
                     for asset in gc["assets"]:
                         if asset["type"] == factor.asset.type:
-                            
-                            def_ev_scaling = asset[factor.asset_attribute] if factor.asset_type == "ELECTRIC_VEHICLE" else None
-                            ev_truck_asset_count = ev_truck_asset_count + 1 if factor.asset_type == "ELECTRIC_VEHICLE" else ev_truck_asset_count
+
+                            def_ev_scaling = (
+                                asset[factor.asset_attribute]
+                                if factor.asset.type == "ELECTRIC_VEHICLE"
+                                else None
+                            )
+                            ev_truck_asset_count = (
+                                ev_truck_asset_count + 1
+                                if factor.asset.type == "ELECTRIC_VEHICLE"
+                                else ev_truck_asset_count
+                            )
                             asset[factor.asset_attribute] = factor.value
 
                     # >>> DIESEL_TRUCK EGHV balancing
-                    if factor.asset_type == "ELECTRIC_VEHICLE":
+                    if factor.asset.type == "ELECTRIC_VEHICLE":
                         for asset in gc["assets"]:
-                            if asset["type"] == "DIESEL_TRUCK":
-                                
+                            if asset["type"] == "DIESEL_VEHICLE":
+
                                 # oof
                                 diesel_truck_count = asset[factor.asset_attribute]
                                 ev_truck_count = ev_truck_asset_count * def_ev_scaling
                                 total_truck_count = diesel_truck_count + ev_truck_count
-                                target_diesel_truck_count = total_truck_count - ev_truck_asset_count * factor.value
+                                target_diesel_truck_count = (
+                                    total_truck_count - ev_truck_asset_count * factor.value
+                                )
 
                                 asset[factor.asset_attribute] = target_diesel_truck_count
 
@@ -203,16 +214,18 @@ class PreProcessor:
         inetractive element een ETM key heeft. Deze mappen voor slider settings. Dus dit hieronder
         aanpassen etm_key. Zelde loop gebruiken als voor de assets
 
-        S: I've added type hinting here, based on the serializer. Perhaps it would be nice to implement typehinting together with linting 
+        S: I've added type hinting here, based on the serializer. Perhaps it would be nice to implement typehinting together with linting
         such that we have more certainty about interfaces?
         """
         sliders = {}
         for user_input in self.interactive_elements:
-            interactive_el : InteractiveInput = user_input["interactive_element"]
-            input_value : float | str = user_input["value"]
+            interactive_el: InteractiveInput = user_input["interactive_element"]
+            input_value: float | str = user_input["value"]
 
-            if user_input.etm_key is not None:
+            try:
                 sliders.update({interactive_el.etm_key: input_value})
+            except AttributeError:
+                pass
 
         return sliders
 
