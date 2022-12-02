@@ -2,6 +2,7 @@ import numpy as np
 
 
 def determine_share_of_renewables(etm_data: dict) -> np.ndarray:
+    # TODO: move this to the ETsource repo as a gquery
 
     renewables = np.array(
         [
