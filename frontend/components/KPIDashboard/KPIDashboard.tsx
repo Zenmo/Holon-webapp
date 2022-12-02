@@ -47,8 +47,6 @@ export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
     return value;
   }
 
-  console.table(data["local"]);
-
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
       <div>
