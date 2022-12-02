@@ -128,12 +128,10 @@ class PreProcessor:
                 None,
             )
             if interactive_input is not None:
-                try:
-                    factor.value = (factor.max_value - factor.min_value) * (
-                        interactive_input["value"] / 100
-                    ) + factor.min_value
-                except:
-                    factor.value = interactive_input["value"]
+                factor.value = (factor.max_value - factor.min_value) * (
+                    float(interactive_input["value"])
+                    / 100  # TODO: cast here to float, but bro should that not just be a float?
+                ) + factor.min_value
 
                 converted_assets.append(factor)
 
@@ -287,6 +285,11 @@ class PreProcessor:
         TODO: every interactive element (that has a factor table) should be included, otherwise this function breaks
         """
         self.apply_policies()
+        self.apply_anylogic_asset_scaling()
+
+    def apply_anylogic_asset_scaling(self) -> None:
+        def pprint(message: str) -> None:
+            print(f"[anylogic_asset_scaling] {message}")
 
         # ugh
         ev_truck_asset_count = 0
@@ -318,6 +321,10 @@ class PreProcessor:
                             )
                             asset[factor.asset_attribute] = factor.value
 
+                            pprint(
+                                f"setting {factor.asset_attribute} to {factor.value} for {factor.asset.type} in {gc_type}"
+                            )
+
                     # >>> DIESEL_TRUCK EGHV balancing
                     if factor.asset.type == "ELECTRIC_VEHICLE":
                         for asset in gc["assets"]:
@@ -332,6 +339,10 @@ class PreProcessor:
                                 )  # TODO: This is needed because the wagtail default arg is a string
 
                                 asset[factor.asset_attribute] = target_diesel_truck_count
+
+                                print(
+                                    f"|---> balancing by setting {factor.asset_attribute} to {target_diesel_truck_count} for 'DIESEL_VEHICLE' in {gc_type}"
+                                )
 
     @property
     def holon_payload(self) -> dict:
