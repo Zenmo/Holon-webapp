@@ -181,6 +181,8 @@ class PreProcessor:
         """
         Minimal modularity, seperate the hacky cheese from the fondue
         TODO: assumes that bools ("true" or "false") only apply to smart charging or not
+        TODO: Loads of hardcoded stuff now
+        TODO: Verify whether it works like this, should implement non-firm ato in a different way I suppose
         """
 
         def pprint(message: str) -> None:
@@ -235,6 +237,10 @@ class PreProcessor:
                 # financial collective
                 case "dayahead_gopacs_collective":
                     pprint("Match at finacial: dayahead_gopacs_collective")
+                    self.apply_charging_policies(
+                        charging_mode=ChargingModeEnum.max_spread.value,
+                        battery_mode=BatteryModeEnum.price.value,
+                    )
 
                     # Apply default pricing irt energyholon and variable price at an individual level
                     self.apply_contracts(
@@ -257,6 +263,60 @@ class PreProcessor:
                         contracts=[
                             Contract(
                                 type=ContractTypeEnum.nodalpricing.value,
+                                contract_scope=ContractScopeEnum.gridoperator.value,
+                            ),
+                        ],
+                    )
+
+                # contract individual
+                case "nf_ato_individual":
+                    pprint("Match at contract: nf_ato_individual")
+
+                    # Apply nonfirm contract at an individual level and default pricing at individual level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.connectionowner.value,
+                        contracts=[
+                            Contract(
+                                type=ContractTypeEnum.nonfirm.value,
+                                contract_scope=ContractScopeEnum.gridoperator.value,
+                            ),
+                            Contract(
+                                type=ContractTypeEnum.default.value,
+                                contract_scope=ContractScopeEnum.energysupplier.value,
+                            ),
+                        ],
+                    )
+                    # Explicitly no contracts at the holon level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.energyholon.value,
+                        contracts=[],
+                    )
+
+                # contract collective
+                case "nf_ato_collective":
+                    pprint("Match at contract: nf_ato_collective")
+
+                    # Apply default pricing irt energyholon and default price at an individual level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.connectionowner.value,
+                        contracts=[
+                            Contract(
+                                type=ContractTypeEnum.default.value,
+                                contract_scope=ContractScopeEnum.energyholon.value,
+                            ),
+                            Contract(
+                                type=ContractTypeEnum.default.value,
+                                contract_scope=ContractScopeEnum.energysupplier.value,
+                            ),
+                        ],
+                    )
+
+                    # Apply a nonfirm contract to the gridoperator at energy holon level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.energyholon.value,
+                        contracts=[
+                            Contract(
+                                type=ContractTypeEnum.nonfirm.value,
                                 contract_scope=ContractScopeEnum.gridoperator.value,
                             ),
                         ],
