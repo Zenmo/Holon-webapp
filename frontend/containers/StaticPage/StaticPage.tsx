@@ -15,7 +15,7 @@ const StaticPage = ({ content }: { content: Content[] }) => {
     <div className={styles[""]}>
       {content?.map(contentItem => {
         switch (contentItem.type) {
-          case "header_full_image":
+          case "header_full_image_block":
             return <HeaderFullImageBlock key={`headerfull ${contentItem.id}`} data={contentItem} />;
           case "text_image_block":
             return <TextAndMediaBlock key={`txtmedia ${contentItem.id}`} data={contentItem} />;

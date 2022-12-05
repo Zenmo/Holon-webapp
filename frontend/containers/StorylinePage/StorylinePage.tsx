@@ -41,7 +41,7 @@ const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
     <div className={styles["StorylinePage"]}>
       {storyline?.map((content, _index) => {
         switch (content.type) {
-          case "header_full_image":
+          case "header_full_image_block":
             return <HeaderFullImageBlock key={`headerFull ${_index}`} data={content} />;
             break;
           case "heroblock":

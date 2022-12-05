@@ -132,7 +132,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
 
     storyline = StreamField(
         [
-            ("header_full_image", HeaderFullImageBlock()),
+            ("header_full_image_block", HeaderFullImageBlock()),
             ("text_and_media", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
             ("heroblock", HeroBlock()),
@@ -140,7 +140,7 @@ class StorylinePage(HeadlessPreviewMixin, BasePage):
             ("card_block", CardsBlock()),
         ],
         block_counts={
-            "header_full_image": {"min_num": 1},
+            "header_full_image_block": {"min_num": 1},
             "section": {"min_num": 1},
         },
         use_json_field=True,
