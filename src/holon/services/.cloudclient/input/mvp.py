@@ -6,34 +6,28 @@ actors = [
         type="commercial",
         id="com1",
         parent_actor="hol1",
-        contracts=[
-            Contract(type="DEFAULT", contract_scope="ENERGYHOLON"),
-            Contract(type="VARIABLE", contract_scope="ENERGYSUPPLIER"),
-        ],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="CONNECTIONOWNER",
         type="commercial",
         id="com2",
         parent_actor="hol1",
-        contracts=[
-            Contract(type="DEFAULT", contract_scope="ENERGYHOLON"),
-            Contract(type="VARIABLE", contract_scope="ENERGYSUPPLIER"),
-        ],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="CONNECTIONOWNER",
         type="commercial",
         id="com3",
         parent_actor="hol1",
-        contracts=[Contract(type="DEFAULT", contract_scope="ENERGYHOLON")],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="CONNECTIONOWNER",
         type="commercial",
         id="com4",
         parent_actor="hol1",
-        contracts=[Contract(type="DEFAULT", contract_scope="ENERGYHOLON")],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="ENERGYSUPPLIER",
@@ -44,10 +38,10 @@ actors = [
         category="ENERGYHOLON",
         id="hol1",
         parent_actor="sup1",
-        contracts=[Contract(type="DEFAULT", contract_scope="GRIDOPERATOR")],
-        nfATO_capacity_kw=900.0,
-        nfATO_starttime=18.0,
-        nfATO_endtime=7.0,
+        contracts=[],
+        nfATO_capacity_kw=3000.0,
+        nfATO_starttime=20.0,
+        nfATO_endtime=6.0,
     ),
     Actor(
         category="GRIDOPERATOR",
@@ -84,9 +78,9 @@ gridconnections = [
         capacity_kw=750,
         charging_mode="MAX_POWER",
         battery_mode="BALANCE",
-        nfATO_capacity_kw=900.0,
-        nfATO_starttime=18.0,
-        nfATO_endtime=7.0,
+        nfATO_capacity_kw=1500.0,
+        nfATO_starttime=20.0,
+        nfATO_endtime=6.0,
         assets=[
             *[EHGV] * 6,
             Diesel_Truck,
@@ -121,7 +115,7 @@ gridconnections = [
         parent_electric="E2",
         battery_mode="BALANCE",
         id="b4",
-        capacity_kw=1000,
+        capacity_kw=2000,
         assets=[Grid_battery_10MWh],
     ),
 ]
@@ -149,12 +143,6 @@ gridnodes = [
 from cloudclient.datamodel.policies import Policy
 
 policies = [
-    Policy(
-        parameter="EV_charging_attitude_standard",
-        value="CHEAP",
-        unit=None,
-        comment="charging behaviour not contingent on holon",
-    ),
     Policy(
         parameter="Grid_MS_congestion_allowance_level_kW",
         value="0",

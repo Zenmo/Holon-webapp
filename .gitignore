@@ -62,3 +62,6 @@ htmlcov
 .mypy_cache
 .devcontainer/.env
 docker-compose.prod.local.yml
+
+# HOLON
+src/holon/services/jsons/*.json

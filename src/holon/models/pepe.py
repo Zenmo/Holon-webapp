@@ -10,6 +10,7 @@ from api.models.interactive_input import InteractiveInput
 from holon.anylogic_kpi import calculate_holon_kpis
 from holon.economic.im_sorry import calculate_total_costs
 
+from .util import write_payload_to_jsons
 from .factor import Factor
 
 ETM_CONFIG_PATH = Path(__file__).resolve().parents[1] / "services"
@@ -155,8 +156,8 @@ class PreProcessor:
 
     def apply_charging_policies(
         self,
-        charging_mode: str,
-        battery_mode: str,
+        charging_mode: str = None,
+        battery_mode: str = None,
         apply_to_connections: list = ["LOGISTICS", "GRIDBATTERY"],
     ) -> None:
         """lil bit more DRY still cry"""
@@ -196,21 +197,41 @@ class PreProcessor:
                     pprint("Match at smart charging: false")
                     self.apply_charging_policies(
                         charging_mode=ChargingModeEnum.max_power.value,
-                        battery_mode=BatteryModeEnum.balance.value,
                     )
 
                 case "true":
                     pprint("Match at smart charging: true")
                     self.apply_charging_policies(
                         charging_mode=ChargingModeEnum.max_spread.value,
+                    )
+
+                # current policy
+                case "current":
+                    pprint("Match at default: current")
+                    self.apply_charging_policies(
                         battery_mode=BatteryModeEnum.balance.value,
                     )
 
+                    # Apply nodal pricing and variable price at an individual level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.connectionowner.value,
+                        contracts=[
+                            Contract(
+                                type=ContractTypeEnum.fixed.value,
+                                contract_scope=ContractScopeEnum.energysupplier.value,
+                            ),
+                        ],
+                    )
+                    # Explicitly no contracts at the holon level
+                    self.apply_contracts(
+                        actor_category=ActorTypeEnum.energyholon.value,
+                        contracts=[],
+                    )
+                    write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
                 # financiacial individual
                 case "dayahead_gopacs_individual":
                     pprint("Match at finacial: dayahead_gopacs_individual")
                     self.apply_charging_policies(
-                        charging_mode=ChargingModeEnum.max_spread.value,
                         battery_mode=BatteryModeEnum.price.value,
                     )
 
@@ -233,12 +254,12 @@ class PreProcessor:
                         actor_category=ActorTypeEnum.energyholon.value,
                         contracts=[],
                     )
+                    write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
                 # financial collective
                 case "dayahead_gopacs_collective":
                     pprint("Match at finacial: dayahead_gopacs_collective")
                     self.apply_charging_policies(
-                        charging_mode=ChargingModeEnum.max_spread.value,
                         battery_mode=BatteryModeEnum.price.value,
                     )
 
@@ -249,10 +270,6 @@ class PreProcessor:
                             Contract(
                                 type=ContractTypeEnum.default.value,
                                 contract_scope=ContractScopeEnum.energyholon.value,
-                            ),
-                            Contract(
-                                type=ContractTypeEnum.variable.value,
-                                contract_scope=ContractScopeEnum.energysupplier.value,
                             ),
                         ],
                     )
@@ -265,12 +282,20 @@ class PreProcessor:
                                 type=ContractTypeEnum.nodalpricing.value,
                                 contract_scope=ContractScopeEnum.gridoperator.value,
                             ),
+                            Contract(
+                                type=ContractTypeEnum.variable.value,
+                                contract_scope=ContractScopeEnum.energysupplier.value,
+                            ),
                         ],
                     )
+                    write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
                 # contract individual
                 case "nf_ato_individual":
                     pprint("Match at contract: nf_ato_individual")
+                    self.apply_charging_policies(
+                        battery_mode=BatteryModeEnum.balance.value,
+                    )
 
                     # Apply nonfirm contract at an individual level and default pricing at individual level
                     self.apply_contracts(
@@ -281,7 +306,7 @@ class PreProcessor:
                                 contract_scope=ContractScopeEnum.gridoperator.value,
                             ),
                             Contract(
-                                type=ContractTypeEnum.default.value,
+                                type=ContractTypeEnum.fixed.value,
                                 contract_scope=ContractScopeEnum.energysupplier.value,
                             ),
                         ],
@@ -291,10 +316,14 @@ class PreProcessor:
                         actor_category=ActorTypeEnum.energyholon.value,
                         contracts=[],
                     )
+                    write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
                 # contract collective
                 case "nf_ato_collective":
                     pprint("Match at contract: nf_ato_collective")
+                    self.apply_charging_policies(
+                        battery_mode=BatteryModeEnum.balance.value,
+                    )
 
                     # Apply default pricing irt energyholon and default price at an individual level
                     self.apply_contracts(
@@ -303,10 +332,6 @@ class PreProcessor:
                             Contract(
                                 type=ContractTypeEnum.default.value,
                                 contract_scope=ContractScopeEnum.energyholon.value,
-                            ),
-                            Contract(
-                                type=ContractTypeEnum.default.value,
-                                contract_scope=ContractScopeEnum.energysupplier.value,
                             ),
                         ],
                     )
@@ -319,14 +344,13 @@ class PreProcessor:
                                 type=ContractTypeEnum.nonfirm.value,
                                 contract_scope=ContractScopeEnum.gridoperator.value,
                             ),
+                            Contract(
+                                type=ContractTypeEnum.fixed.value,
+                                contract_scope=ContractScopeEnum.energysupplier.value,
+                            ),
                         ],
                     )
-
-        """ 
-        financieel gezamelijke - nodal pricing - day ahead - alleen batterij reageert
-            Gridcon met grid battery die energy holon is
-            Gridcon mode price
-        """
+                    write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
         pass
 
     def apply_interactive_to_payload(self):
