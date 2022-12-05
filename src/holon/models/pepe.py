@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from typing import List
 
@@ -176,7 +177,7 @@ class PreProcessor:
         actors = self.holon_payload["actors"]
         for actor in actors:
             if actor["category"] == actor_category:
-                actor["contracts"] = [contract.json() for contract in contracts]
+                actor["contracts"] = [json.loads(contract.json()) for contract in contracts]
 
     def apply_policies(self) -> None:
         """
