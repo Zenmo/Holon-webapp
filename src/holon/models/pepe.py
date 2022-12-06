@@ -166,12 +166,16 @@ class PreProcessor:
         """lil bit more DRY still cry"""
         gcs = self.holon_payload["gridconnections"]
         for gc in gcs:
+
             try:
                 gc_type = gc["type"]
             except KeyError:
                 gc_type = gc["category"]
-                if gc_type in apply_to_connections:
+
+            if gc_type in apply_to_connections:
+                if charging_mode is not None:
                     gc["charging_mode"] = charging_mode
+                if battery_mode is not None:
                     gc["battery_mode"] = battery_mode
 
     def apply_contracts(self, actor_category: str, contracts: List[Contract]) -> None:
@@ -180,6 +184,23 @@ class PreProcessor:
         for actor in actors:
             if actor["category"] == actor_category:
                 actor["contracts"] = [json.loads(contract.json()) for contract in contracts]
+
+    def toggle_battery_location(self, remove_location: str) -> None:
+
+        grid_connections = self.holon_payload["gridconnections"]
+
+        for gc in grid_connections:
+            try:
+                gc_type = gc["type"]
+            except KeyError:
+                gc_type = gc["category"]
+
+            if gc_type == remove_location:
+                for i, asset in enumerate(gc["assets"]):
+                    if asset["type"] == "STORAGE_ELECTRIC":
+                        _ = gc["assets"].pop(i)
+
+                        print(f"[toggle_battery_location]: removing STORAGE_ELECTRIC at {gc_type}")
 
     def apply_policies(self) -> None:
         """
@@ -209,6 +230,10 @@ class PreProcessor:
             # current policy
             elif value == "current":
                 pprint("Match at default: current")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="GRIDBATTERY")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.balance.value,
                 )
@@ -233,6 +258,10 @@ class PreProcessor:
             # financiacial individual
             elif value == "dayahead_gopacs_individual":
                 pprint("Match at finacial: dayahead_gopacs_individual")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="GRIDBATTERY")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.price.value,
                 )
@@ -262,6 +291,10 @@ class PreProcessor:
             # financial collective
             elif value == "dayahead_gopacs_collective":
                 pprint("Match at finacial: dayahead_gopacs_collective")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="LOGISTICS")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.price.value,
                 )
@@ -297,6 +330,10 @@ class PreProcessor:
             # contract individual
             elif value == "nf_ato_individual":
                 pprint("Match at contract: nf_ato_individual")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="GRIDBATTERY")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.balance.value,
                 )
@@ -326,6 +363,9 @@ class PreProcessor:
             # contract collective
             elif value == "nf_ato_collective":
                 pprint("Match at contract: nf_ato_collective")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="LOGISTICS")
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.balance.value,
                 )
@@ -438,6 +478,12 @@ class PreProcessor:
                                 print(
                                     f"|---> balancing by setting {factor.asset_attribute} to {target_diesel_truck_count} for 'DIESEL_VEHICLE' in {gc_type}"
                                 )
+                                if (
+                                    WRITE_TO_JSON
+                                ):  # TODO: Remove this line once everything is up and running
+                                    write_payload_to_jsons(
+                                        payload_dict=self.holon_payload, name="latest"
+                                    )
 
     @property
     def holon_payload(self) -> dict:

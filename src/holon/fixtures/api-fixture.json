@@ -149,7 +149,7 @@
             "sort_order": 0,
             "input": 5,
             "option": "false",
-            "label": "Standaard laadgedraag",
+            "label": "Standaard laadgedrag",
             "default": true
         }
     },
@@ -160,7 +160,7 @@
             "sort_order": 1,
             "input": 5,
             "option": "true",
-            "label": "Slimmer laadgedraag",
+            "label": "Slimmer laadgedrag",
             "default": null
         }
     },
@@ -169,7 +169,7 @@
         "pk": 1,
         "fields": {
             "input": 1,
-            "slider_value_default": 10,
+            "slider_value_default": 6,
             "slider_value_min": 0,
             "slider_value_max": 100
         }
@@ -179,6 +179,16 @@
         "pk": 2,
         "fields": {
             "input": 3,
+            "slider_value_default": 1,
+            "slider_value_min": 1,
+            "slider_value_max": 100
+        }
+    },
+    {
+        "model": "api.interactiveinputcontinuousvalues",
+        "pk": 3,
+        "fields": {
+            "input": 6,
             "slider_value_default": 0,
             "slider_value_min": 0,
             "slider_value_max": 100
