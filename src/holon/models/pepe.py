@@ -166,12 +166,16 @@ class PreProcessor:
         """lil bit more DRY still cry"""
         gcs = self.holon_payload["gridconnections"]
         for gc in gcs:
+
             try:
                 gc_type = gc["type"]
             except KeyError:
                 gc_type = gc["category"]
-                if gc_type in apply_to_connections:
+
+            if gc_type in apply_to_connections:
+                if charging_mode is not None:
                     gc["charging_mode"] = charging_mode
+                if battery_mode is not None:
                     gc["battery_mode"] = battery_mode
 
     def apply_contracts(self, actor_category: str, contracts: List[Contract]) -> None:
@@ -474,6 +478,8 @@ class PreProcessor:
                                 print(
                                     f"|---> balancing by setting {factor.asset_attribute} to {target_diesel_truck_count} for 'DIESEL_VEHICLE' in {gc_type}"
                                 )
+
+                                write_payload_to_jsons(self.holon_payload, "latest")
 
     @property
     def holon_payload(self) -> dict:
