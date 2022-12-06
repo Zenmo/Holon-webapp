@@ -32,7 +32,7 @@ share_of_electric_trucks:
     data: value
     etm_key: transport_truck_using_electricity_share
 
-grid_battery_on_off:
+installed_energy_grid_battery:
   value:
     type: input
     data: value
@@ -40,7 +40,7 @@ grid_battery_on_off:
   conversion: multiply
   convert_with_value:
     type: static
-    value: 10.0 # aantal bedrijventerreinen in NL (3500) * typische grootte batterijen in ETM(80 MW)
+    value: 175 # divided by 100 since both the button and the slider will use this. Not 0 or 1 but a whole range is possible between 0 and 100
     key: scaling_factor_grid_batteries
 
 # hourly profile electric trucks

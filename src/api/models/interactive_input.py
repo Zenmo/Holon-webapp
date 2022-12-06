@@ -74,7 +74,12 @@ class InteractiveInput(ClusterableModel):
     ]
 
     def __str__(self):
-        return self.name + " (" + dict(TYPE_CHOICES)[self.type] + ")"
+        name = self.name + ", " + dict(TYPE_CHOICES)[self.type]
+        if self.type == CHOICE_SINGLESELECT or self.type == CHOICE_MULTISELECT:
+            options = " (" + ", ".join([str(i) for i in self.options.all()]) + ")"
+            name += options
+
+        return name
 
     class Meta:
         verbose_name = "Interactive Input"
@@ -84,8 +89,20 @@ class InteractiveInputOptions(Orderable):
     input = ParentalKey(InteractiveInput, on_delete=models.CASCADE, related_name="options")
     option = models.CharField(max_length=255, help_text=_("Fill in your option"))
     label = models.CharField(
-        max_length=255, help_text=_("Fill in your option"), null=True, blank=True
+        max_length=255,
+        help_text=_("Fill in the label that the user sees in a storyline"),
+        null=True,
+        blank=True,
     )
+    default = models.BooleanField(
+        null=True, blank=True, help_text=_("Should this option be default selected?")
+    )
+
+    def __str__(self):
+        if self.label:
+            return self.label
+        else:
+            return self.option
 
 
 class InteractiveInputContinuousValues(models.Model):
