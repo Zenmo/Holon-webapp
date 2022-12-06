@@ -19,7 +19,8 @@ ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
 ETM_CONFIG_FILE_COSTS = "etm_costs.config"
 ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
 COSTS_SCENARIO_ID = 2166341  # KEV + 1 MW grid battery | ETM sceanrio on beta
-WRITE_TO_JSON = False # controls the write to json at policy level
+WRITE_TO_JSON = False  # controls the write to json at policy level
+
 
 class Pepe:
     def __init__(self) -> None:
@@ -226,7 +227,7 @@ class PreProcessor:
                     actor_category=ActorTypeEnum.energyholon.value,
                     contracts=[],
                 )
-                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
+                if WRITE_TO_JSON:  # TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
             # financiacial individual
             elif value == "dayahead_gopacs_individual":
@@ -254,7 +255,7 @@ class PreProcessor:
                     actor_category=ActorTypeEnum.energyholon.value,
                     contracts=[],
                 )
-                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
+                if WRITE_TO_JSON:  # TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
             # financial collective
@@ -289,9 +290,9 @@ class PreProcessor:
                         ),
                     ],
                 )
-                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
+                if WRITE_TO_JSON:  # TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
-            
+
             # contract individual
             elif value == "nf_ato_individual":
                 pprint("Match at contract: nf_ato_individual")
@@ -318,7 +319,7 @@ class PreProcessor:
                     actor_category=ActorTypeEnum.energyholon.value,
                     contracts=[],
                 )
-                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
+                if WRITE_TO_JSON:  # TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
             # contract collective
@@ -353,12 +354,14 @@ class PreProcessor:
                         ),
                     ],
                 )
-                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
+                if WRITE_TO_JSON:  # TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
                 # catch the unknowns
                 else:
-                    raise ValueError(f"The value that was supplied ('{value}') as a policy was not known!")
+                    raise ValueError(
+                        f"The value that was supplied ('{value}') as a policy was not known!"
+                    )
 
     def apply_interactive_to_payload(self):
         """
