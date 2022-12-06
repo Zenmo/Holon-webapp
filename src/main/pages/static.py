@@ -4,13 +4,14 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
 
 from .base import BasePage
-from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock
+from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 
 
 class StaticPage(HeadlessPreviewMixin, BasePage):
     content = StreamField(
         [
             ("title_block", TitleBlock()),
+            ("header_full_image_block", HeaderFullImageBlock()),
             ("text_image_block", TextAndMediaBlock()),
             ("card_block", CardsBlock()),
         ],
