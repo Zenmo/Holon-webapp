@@ -19,7 +19,7 @@ ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
 ETM_CONFIG_FILE_COSTS = "etm_costs.config"
 ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
 COSTS_SCENARIO_ID = 2166341  # KEV + 1 MW grid battery | ETM sceanrio on beta
-
+WRITE_TO_JSON = False # controls the write to json at policy level
 
 class Pepe:
     def __init__(self) -> None:
@@ -191,168 +191,174 @@ class PreProcessor:
             print(f"[apply_policies]: {message}")
 
         for key, value in self.policies.items():
+            # battery charging mode
+            if value == "false":
+                pprint("Match at smart charging: false")
+                self.apply_charging_policies(
+                    charging_mode=ChargingModeEnum.max_power.value,
+                )
 
-            match value:
-                # battery charging mode
-                case "false":
-                    pprint("Match at smart charging: false")
-                    self.apply_charging_policies(
-                        charging_mode=ChargingModeEnum.max_power.value,
-                    )
+            elif value == "true":
+                pprint("Match at smart charging: true")
+                self.apply_charging_policies(
+                    charging_mode=ChargingModeEnum.max_spread.value,
+                )
 
-                case "true":
-                    pprint("Match at smart charging: true")
-                    self.apply_charging_policies(
-                        charging_mode=ChargingModeEnum.max_spread.value,
-                    )
+            # current policy
+            elif value == "current":
+                pprint("Match at default: current")
+                self.apply_charging_policies(
+                    battery_mode=BatteryModeEnum.balance.value,
+                )
 
-                # current policy
-                case "current":
-                    pprint("Match at default: current")
-                    self.apply_charging_policies(
-                        battery_mode=BatteryModeEnum.balance.value,
-                    )
-
-                    # Apply nodal pricing and variable price at an individual level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.connectionowner.value,
-                        contracts=[
-                            Contract(
-                                type=ContractTypeEnum.fixed.value,
-                                contract_scope=ContractScopeEnum.energysupplier.value,
-                            ),
-                        ],
-                    )
-                    # Explicitly no contracts at the holon level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.energyholon.value,
-                        contracts=[],
-                    )
+                # Apply nodal pricing and variable price at an individual level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.connectionowner.value,
+                    contracts=[
+                        Contract(
+                            type=ContractTypeEnum.fixed.value,
+                            contract_scope=ContractScopeEnum.energysupplier.value,
+                        ),
+                    ],
+                )
+                # Explicitly no contracts at the holon level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.energyholon.value,
+                    contracts=[],
+                )
+                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
-                # financiacial individual
-                case "dayahead_gopacs_individual":
-                    pprint("Match at finacial: dayahead_gopacs_individual")
-                    self.apply_charging_policies(
-                        battery_mode=BatteryModeEnum.price.value,
-                    )
+            # financiacial individual
+            elif value == "dayahead_gopacs_individual":
+                pprint("Match at finacial: dayahead_gopacs_individual")
+                self.apply_charging_policies(
+                    battery_mode=BatteryModeEnum.price.value,
+                )
 
-                    # Apply nodal pricing and variable price at an individual level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.connectionowner.value,
-                        contracts=[
-                            Contract(
-                                type=ContractTypeEnum.nodalpricing.value,
-                                contract_scope=ContractScopeEnum.gridoperator.value,
-                            ),
-                            Contract(
-                                type=ContractTypeEnum.variable.value,
-                                contract_scope=ContractScopeEnum.energysupplier.value,
-                            ),
-                        ],
-                    )
-                    # Explicitly no contracts at the holon level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.energyholon.value,
-                        contracts=[],
-                    )
-                    write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
-
-                # financial collective
-                case "dayahead_gopacs_collective":
-                    pprint("Match at finacial: dayahead_gopacs_collective")
-                    self.apply_charging_policies(
-                        battery_mode=BatteryModeEnum.price.value,
-                    )
-
-                    # Apply default pricing irt energyholon and variable price at an individual level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.connectionowner.value,
-                        contracts=[
-                            Contract(
-                                type=ContractTypeEnum.default.value,
-                                contract_scope=ContractScopeEnum.energyholon.value,
-                            ),
-                        ],
-                    )
-
-                    # Apply a nodal pricing contract to the gridoperator at energy holon level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.energyholon.value,
-                        contracts=[
-                            Contract(
-                                type=ContractTypeEnum.nodalpricing.value,
-                                contract_scope=ContractScopeEnum.gridoperator.value,
-                            ),
-                            Contract(
-                                type=ContractTypeEnum.variable.value,
-                                contract_scope=ContractScopeEnum.energysupplier.value,
-                            ),
-                        ],
-                    )
+                # Apply nodal pricing and variable price at an individual level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.connectionowner.value,
+                    contracts=[
+                        Contract(
+                            type=ContractTypeEnum.nodalpricing.value,
+                            contract_scope=ContractScopeEnum.gridoperator.value,
+                        ),
+                        Contract(
+                            type=ContractTypeEnum.variable.value,
+                            contract_scope=ContractScopeEnum.energysupplier.value,
+                        ),
+                    ],
+                )
+                # Explicitly no contracts at the holon level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.energyholon.value,
+                    contracts=[],
+                )
+                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
-                # contract individual
-                case "nf_ato_individual":
-                    pprint("Match at contract: nf_ato_individual")
-                    self.apply_charging_policies(
-                        battery_mode=BatteryModeEnum.balance.value,
-                    )
+            # financial collective
+            elif value == "dayahead_gopacs_collective":
+                pprint("Match at finacial: dayahead_gopacs_collective")
+                self.apply_charging_policies(
+                    battery_mode=BatteryModeEnum.price.value,
+                )
 
-                    # Apply nonfirm contract at an individual level and default pricing at individual level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.connectionowner.value,
-                        contracts=[
-                            Contract(
-                                type=ContractTypeEnum.nonfirm.value,
-                                contract_scope=ContractScopeEnum.gridoperator.value,
-                            ),
-                            Contract(
-                                type=ContractTypeEnum.fixed.value,
-                                contract_scope=ContractScopeEnum.energysupplier.value,
-                            ),
-                        ],
-                    )
-                    # Explicitly no contracts at the holon level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.energyholon.value,
-                        contracts=[],
-                    )
+                # Apply default pricing irt energyholon and variable price at an individual level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.connectionowner.value,
+                    contracts=[
+                        Contract(
+                            type=ContractTypeEnum.default.value,
+                            contract_scope=ContractScopeEnum.energyholon.value,
+                        ),
+                    ],
+                )
+
+                # Apply a nodal pricing contract to the gridoperator at energy holon level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.energyholon.value,
+                    contracts=[
+                        Contract(
+                            type=ContractTypeEnum.nodalpricing.value,
+                            contract_scope=ContractScopeEnum.gridoperator.value,
+                        ),
+                        Contract(
+                            type=ContractTypeEnum.variable.value,
+                            contract_scope=ContractScopeEnum.energysupplier.value,
+                        ),
+                    ],
+                )
+                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
+                    write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
+            
+            # contract individual
+            elif value == "nf_ato_individual":
+                pprint("Match at contract: nf_ato_individual")
+                self.apply_charging_policies(
+                    battery_mode=BatteryModeEnum.balance.value,
+                )
+
+                # Apply nonfirm contract at an individual level and default pricing at individual level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.connectionowner.value,
+                    contracts=[
+                        Contract(
+                            type=ContractTypeEnum.nonfirm.value,
+                            contract_scope=ContractScopeEnum.gridoperator.value,
+                        ),
+                        Contract(
+                            type=ContractTypeEnum.fixed.value,
+                            contract_scope=ContractScopeEnum.energysupplier.value,
+                        ),
+                    ],
+                )
+                # Explicitly no contracts at the holon level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.energyholon.value,
+                    contracts=[],
+                )
+                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
-                # contract collective
-                case "nf_ato_collective":
-                    pprint("Match at contract: nf_ato_collective")
-                    self.apply_charging_policies(
-                        battery_mode=BatteryModeEnum.balance.value,
-                    )
+            # contract collective
+            elif value == "nf_ato_collective":
+                pprint("Match at contract: nf_ato_collective")
+                self.apply_charging_policies(
+                    battery_mode=BatteryModeEnum.balance.value,
+                )
 
-                    # Apply default pricing irt energyholon and default price at an individual level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.connectionowner.value,
-                        contracts=[
-                            Contract(
-                                type=ContractTypeEnum.default.value,
-                                contract_scope=ContractScopeEnum.energyholon.value,
-                            ),
-                        ],
-                    )
+                # Apply default pricing irt energyholon and default price at an individual level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.connectionowner.value,
+                    contracts=[
+                        Contract(
+                            type=ContractTypeEnum.default.value,
+                            contract_scope=ContractScopeEnum.energyholon.value,
+                        ),
+                    ],
+                )
 
-                    # Apply a nonfirm contract to the gridoperator at energy holon level
-                    self.apply_contracts(
-                        actor_category=ActorTypeEnum.energyholon.value,
-                        contracts=[
-                            Contract(
-                                type=ContractTypeEnum.nonfirm.value,
-                                contract_scope=ContractScopeEnum.gridoperator.value,
-                            ),
-                            Contract(
-                                type=ContractTypeEnum.fixed.value,
-                                contract_scope=ContractScopeEnum.energysupplier.value,
-                            ),
-                        ],
-                    )
+                # Apply a nonfirm contract to the gridoperator at energy holon level
+                self.apply_contracts(
+                    actor_category=ActorTypeEnum.energyholon.value,
+                    contracts=[
+                        Contract(
+                            type=ContractTypeEnum.nonfirm.value,
+                            contract_scope=ContractScopeEnum.gridoperator.value,
+                        ),
+                        Contract(
+                            type=ContractTypeEnum.fixed.value,
+                            contract_scope=ContractScopeEnum.energysupplier.value,
+                        ),
+                    ],
+                )
+                if WRITE_TO_JSON: #TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
-        pass
+
+                # catch the unknowns
+                else:
+                    raise ValueError(f"The value that was supplied ('{value}') as a policy was not known!")
 
     def apply_interactive_to_payload(self):
         """
