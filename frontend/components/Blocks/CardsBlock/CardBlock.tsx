@@ -1,6 +1,6 @@
 import React from "react";
-import CardItem from "./Card";
-import Card from "./Card";
+import CardItem from "../../Card/Card";
+import Card from "../../Card/Card";
 import ButtonBlock from "@/components/Button/ButtonBlock";
 
 type Props = {

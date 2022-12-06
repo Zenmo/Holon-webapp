@@ -49,26 +49,26 @@ a {
 }
 
 .card__bg-gold {
-  @apply bg-holon-gold-200 border-holon-gold-600;
+  @apply bg-holon-gold-200;
 }
 
 .card__bg-blue {
-  @apply bg-holon-blue-100 border-holon-blue-200;
+  @apply bg-holon-blue-100;
 }
 
 .card__bg-gray {
-  @apply bg-holon-gray-100 border-holon-gray-300;
+  @apply bg-holon-gray-100;
 }
 
 .card__bg-purple {
-  @apply bg-holon-purple-100 border-holon-purple-200;
+  @apply bg-holon-purple-100;
 }
 
 .card__bg-pink {
-  @apply bg-holon-pink-100 border-holon-pink-200;
+  @apply bg-holon-pink-100;
 }
 .card__bg-orange {
-  @apply bg-holon-orange-100 border-holon-orange-200;
+  @apply bg-holon-orange-100;
 }
 
 .block__bg-gray {
