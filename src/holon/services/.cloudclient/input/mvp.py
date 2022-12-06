@@ -103,7 +103,7 @@ gridconnections = [
         owner_actor="com2",
         parent_electric="E2",
         id="b2",
-        capacity_kw=1000,
+        capacity_kw=2000,
         assets=[
             Industry_other_heat_demand,
             Office_other_electricity,
@@ -136,7 +136,7 @@ gridnodes = [
         id="E2",
         parent="E1",
         owner_actor="o1",
-        capacity_kw=1200,
+        capacity_kw=2000,
         category="ELECTRICITY",
         type="MSLS",
     ),
