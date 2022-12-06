@@ -69,7 +69,6 @@ actors = [
 ]
 
 from cloudclient.datamodel.defaults import (
-    Grid_battery_7MWh,
     Diesel_Truck,
     Solarpanels_1MW,
     Grid_battery_10MWh,
@@ -101,7 +100,7 @@ gridconnections = [
         assets=[
             *[EHGV] * 5,
             Diesel_Truck,
-            Grid_battery_7MWh,
+            Grid_battery_10MWh,
             Building_gas_burner_60kW,
             Building_solarpanels_10kWp,
         ],

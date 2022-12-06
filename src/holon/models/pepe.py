@@ -19,7 +19,7 @@ ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
 ETM_CONFIG_FILE_COSTS = "etm_costs.config"
 ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
 COSTS_SCENARIO_ID = 2166341  # KEV + 1 MW grid battery | ETM sceanrio on beta
-WRITE_TO_JSON = False  # controls the write to json at policy level
+WRITE_TO_JSON = True  # controls the write to json at policy level
 
 
 class Pepe:
@@ -181,6 +181,23 @@ class PreProcessor:
             if actor["category"] == actor_category:
                 actor["contracts"] = [json.loads(contract.json()) for contract in contracts]
 
+    def toggle_battery_location(self, remove_location: str) -> None:
+
+        grid_connections = self.holon_payload["gridconnections"]
+
+        for gc in grid_connections:
+            try:
+                gc_type = gc["type"]
+            except KeyError:
+                gc_type = gc["category"]
+
+            if gc_type == remove_location:
+                for i, asset in enumerate(gc["assets"]):
+                    if asset["type"] == "STORAGE_ELECTRIC":
+                        _ = gc["assets"].pop(i)
+
+                        print(f"[toggle_battery_location]: removing STORAGE_ELECTRIC at {gc_type}")
+
     def apply_policies(self) -> None:
         """
         Minimal modularity, seperate the hacky cheese from the fondue
@@ -209,6 +226,10 @@ class PreProcessor:
             # current policy
             elif value == "current":
                 pprint("Match at default: current")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="GRIDBATTERY")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.balance.value,
                 )
@@ -233,6 +254,10 @@ class PreProcessor:
             # financiacial individual
             elif value == "dayahead_gopacs_individual":
                 pprint("Match at finacial: dayahead_gopacs_individual")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="GRIDBATTERY")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.price.value,
                 )
@@ -262,6 +287,10 @@ class PreProcessor:
             # financial collective
             elif value == "dayahead_gopacs_collective":
                 pprint("Match at finacial: dayahead_gopacs_collective")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="LOGISTICS")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.price.value,
                 )
@@ -297,6 +326,10 @@ class PreProcessor:
             # contract individual
             elif value == "nf_ato_individual":
                 pprint("Match at contract: nf_ato_individual")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="GRIDBATTERY")
+
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.balance.value,
                 )
@@ -326,6 +359,9 @@ class PreProcessor:
             # contract collective
             elif value == "nf_ato_collective":
                 pprint("Match at contract: nf_ato_collective")
+
+                # remove battery from gridbattery (no dupes)
+                self.toggle_battery_location(remove_location="LOGISTICS")
                 self.apply_charging_policies(
                     battery_mode=BatteryModeEnum.balance.value,
                 )
