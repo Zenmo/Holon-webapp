@@ -19,7 +19,7 @@ ETM_CONFIG_FILE_GET_KPIS = "etm_kpis.config"
 ETM_CONFIG_FILE_COSTS = "etm_costs.config"
 ETM_CONFIG_FILE_SCALING = "etm_scaling.config"
 COSTS_SCENARIO_ID = 2166341  # KEV + 1 MW grid battery | ETM sceanrio on beta
-WRITE_TO_JSON = True  # controls the write to json at policy level
+WRITE_TO_JSON = False  # controls the write to json at policy level
 
 
 class Pepe:
