@@ -1,9 +1,19 @@
-from cloudclient.datamodel.assets import ElectricConsumptionAsset
+from cloudclient.datamodel.assets import ElectricConsumptionAsset, VehicleElectricStorageAsset
 
 Office_other_electricity = ElectricConsumptionAsset(
     name="Office_other_electricity",
     type="ELECTRICITY_DEMAND",
     yearlyDemandElectricity_kWh=35_00_000,
+)
+
+EHGV = VehicleElectricStorageAsset(
+    name="EHGV",
+    type="ELECTRIC_VEHICLE",
+    stateOfCharge_r=1.0,
+    storageCapacity_kWh=500,
+    capacityElectricity_kW=100,
+    energyConsumption_kWhpkm=1.3,
+    vehicleScaling=6,
 )
 
 from cloudclient.datamodel import Payload, Actor, Contract, NonFirmActor
@@ -61,7 +71,6 @@ actors = [
 from cloudclient.datamodel.defaults import (
     Grid_battery_7MWh,
     Diesel_Truck,
-    EHGV,
     Solarpanels_1MW,
     Grid_battery_10MWh,
     Industry_other_heat_demand,
@@ -90,7 +99,7 @@ gridconnections = [
         nfATO_starttime=20.0,
         nfATO_endtime=6.0,
         assets=[
-            *[EHGV] * 6,
+            *[EHGV] * 5,
             Diesel_Truck,
             Grid_battery_7MWh,
             Building_gas_burner_60kW,
