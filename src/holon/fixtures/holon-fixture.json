@@ -44,7 +44,7 @@
             "asset_attribute": "capacityElectricity_kW",
             "grid_connection": 1,
             "min_value": 0,
-            "max_value": 10000
+            "max_value": 3000
         }
     },
     {
@@ -66,7 +66,7 @@
             "asset_attribute": "capacityElectricity_kWh",
             "grid_connection": 5,
             "min_value": 0,
-            "max_value": 8000
+            "max_value": 20000
         }
     },
     {

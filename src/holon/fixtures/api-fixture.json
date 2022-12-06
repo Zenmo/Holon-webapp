@@ -82,7 +82,7 @@
         "fields": {
             "sort_order": 1,
             "input": 2,
-            "option": "100",
+            "option": "50",
             "label": "Wel batterijopslag",
             "default": null
         }

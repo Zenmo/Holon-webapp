@@ -1,3 +1,11 @@
+from cloudclient.datamodel.assets import ElectricConsumptionAsset
+
+Office_other_electricity = ElectricConsumptionAsset(
+    name="Office_other_electricity",
+    type="ELECTRICITY_DEMAND",
+    yearlyDemandElectricity_kWh=35_00_000,
+)
+
 from cloudclient.datamodel import Payload, Actor, Contract, NonFirmActor
 
 actors = [
@@ -98,6 +106,7 @@ gridconnections = [
         capacity_kw=1000,
         assets=[
             Industry_other_heat_demand,
+            Office_other_electricity,
             Building_gas_burner_60kW,
         ],
     ),
@@ -106,7 +115,7 @@ gridconnections = [
         owner_actor="com3",
         parent_electric="E2",
         id="b3",
-        capacity_kw=10000,
+        capacity_kw=3000,
         assets=[Solarpanels_1MW],
     ),
     ProductionGridConnection(
