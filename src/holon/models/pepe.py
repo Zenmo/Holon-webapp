@@ -478,8 +478,12 @@ class PreProcessor:
                                 print(
                                     f"|---> balancing by setting {factor.asset_attribute} to {target_diesel_truck_count} for 'DIESEL_VEHICLE' in {gc_type}"
                                 )
-
-                                write_payload_to_jsons(self.holon_payload, "latest")
+                                if (
+                                    WRITE_TO_JSON
+                                ):  # TODO: Remove this line once everything is up and running
+                                    write_payload_to_jsons(
+                                        payload_dict=self.holon_payload, name="latest"
+                                    )
 
     @property
     def holon_payload(self) -> dict:
