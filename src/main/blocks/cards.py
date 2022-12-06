@@ -26,7 +26,7 @@ class CardComponent(StructBlock):
     title = CharBlock(required=False)
     image_selector = HolonImageChooserBlock()
     text = CharBlock(required=False, max_length=255)
-    card_background = ChoiceBlock(
+    card_color = ChoiceBlock(
         choices=COLOR_CHOICES,
         required=False,
     )

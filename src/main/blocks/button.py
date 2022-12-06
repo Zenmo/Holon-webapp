@@ -34,7 +34,7 @@ class ButtonComponent(StructBlock):
 
 class ButtonBlock(StructBlock):
     buttons_align = ChoiceBlock(
-        choices=[("btn-left", "left"), ("btn-center", "center")],
+        choices=[("btn-left", "left"), ("btn-center", "center"), ("btn-right", "right")],
         required=False,
         default="btn-left",
     )

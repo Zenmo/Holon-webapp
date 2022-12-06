@@ -22,7 +22,7 @@ export default function CardBlock({
   return (
     <div>
       <div
-        className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 py-12 px-10 lg:px-16 lg:pt-16 gap-8`}
+        className={`flex flex-row justify-center flex-wrap py-12 px-10 lg:px-16 lg:pt-16 gap-[2%]`}
         data-testid="cardblock">
         {cards.map((cardItem, index) => {
           return (

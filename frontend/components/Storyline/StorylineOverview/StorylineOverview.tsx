@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StorylineOverviewCard from "./StorylineOverviewCard";
+import Card from "../../Card/Card";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
 import { StoryLineItem as StoryLineItemData } from "./types";

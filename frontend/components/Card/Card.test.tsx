@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Card from "../../Card/Card";
+import Card from "./Card";
 
 describe("<Card />", () => {
   describe("with all content", () => {
@@ -28,6 +28,7 @@ describe("<Card />", () => {
               },
             ],
           }}
+          cardType=""
         />
       );
     });
@@ -85,6 +86,7 @@ describe("<Card />", () => {
               },
             ],
           }}
+          cardType=""
         />
       );
     });

@@ -1,7 +1,8 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
 import RawHtml from "../RawHtml/RawHtml";
 import StretchedLink from "../StretchedLink";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 type CardItem = {
   title: string;
@@ -16,7 +17,7 @@ type CardItem = {
     };
   };
   text?: string;
-  cardBackground: string;
+  cardColor: string;
   cardLink:
     | []
     | [
@@ -52,7 +53,7 @@ const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
 };
 
 export default function Card({ cardItem, cardType }: CardProps) {
-  const backgroundColor: string = cardItem.cardBackground;
+  const backgroundColor: string = cardItem.cardColor !== "" ? cardItem.cardColor : "bg-white";
   let cardStyling;
 
   let externLinkProps:
@@ -68,15 +69,17 @@ export default function Card({ cardItem, cardType }: CardProps) {
   function cardStyle(type: string) {
     if (type === "buttonCard") {
       return (cardStyling = {
-        card: "flex-row min-w-[400px] m-4 hover:brightness-110",
+        card: "flex-row min-w-96 m-4 hover:brightness-110 h-16 md:h-24",
+        imgSpan: "w-1/3",
         img: "rounded-l-lg",
-        text: "max-w-1/3 flex-row justify-between items-center",
+        text: "flex-row justify-between items-center w-2/3 ml-12",
       });
     } else {
       return (cardStyling = {
-        card: "flex-col min-h-[400px]",
+        card: "flex-col min-h-96 w-1/2 md:w-1/3 lg:w-1/4 xl:w-[18.4%] mb-4",
+        imgSpan: "h-2/3",
         img: "rounded-t-lg duration-300 ease-in group-hover:brightness-100 group-hover:scale-110",
-        text: "max-h-1/3 flex-col ",
+        text: "flex-col h-1/3",
       });
     }
   }
@@ -94,20 +97,20 @@ export default function Card({ cardItem, cardType }: CardProps) {
   return (
     <React.Fragment>
       <span
-        className={`group ${cardStyling.card} ${backgroundColor} relative rounded-lg flex h-[100px]`}
+        className={`group ${cardStyling.card} ${backgroundColor} relative rounded-lg flex`}
         data-testid={cardItem.title}>
-        <span className="overflow-hidden relative flex-1">
+        <span className={`${cardStyling.imgSpan} overflow-hidden relative`}>
           {/* eslint-disable @next/next/no-img-element */}
           <img
             src={cardItem.imageSelector.img.src}
             alt={cardItem.imageSelector.img.alt}
             width="725"
             height="380"
-            className={`object-cover object-center h-full w-full ${cardStyling.img} max-w-none max-h-none brightness-90 `}
+            className={`object-cover object-center h-full w-full ${cardStyling.img} max-w-none  max-h-none brightness-90 `}
           />
         </span>
 
-        <span className={`flex m-4 flex-1 ${cardStyling.text} overflow-hidden`}>
+        <span className={`flex m-4 ${cardStyling.text}`}>
           <CardTitle
             condition={cardItem.cardLink.length > 0}
             href={cardItem.cardLink[0]?.value}
@@ -116,8 +119,8 @@ export default function Card({ cardItem, cardType }: CardProps) {
           </CardTitle>
 
           {cardType === "buttonCard" ? (
-            <span className="w-12 h-12">
-              <ArrowRightIcon />
+            <span className="w-10 h-10">
+              <ArrowSmallRightIcon />
             </span>
           ) : (
             <span className="">

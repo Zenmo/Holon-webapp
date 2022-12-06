@@ -19,7 +19,7 @@ COLOR_CHOICES = (
 class ButtonCardComponent(blocks.StructBlock):
     title = blocks.CharBlock(required=False)
     image_selector = HolonImageChooserBlock()
-    card_background = blocks.ChoiceBlock(
+    card_color = blocks.ChoiceBlock(
         choices=COLOR_CHOICES,
         required=False,
     )
