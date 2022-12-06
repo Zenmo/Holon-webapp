@@ -47,8 +47,9 @@ class Pepe:
         return self._postprocessor
 
     @postprocessor.setter
-    def postprocessor(self, holon_results):
-        self._postprocessor = PostProcessor(holon_results)
+    def postprocessor(self, results_and_payload_tuple):
+        holon_results, holon_payload = results_and_payload_tuple
+        self._postprocessor = PostProcessor(holon_results, holon_payload)
 
     @postprocessor.getter
     def postprocessor(self):
@@ -476,8 +477,9 @@ class PreProcessor:
 
 
 class PostProcessor:
-    def __init__(self, holon_output) -> None:
+    def __init__(self, holon_output, holon_payload) -> None:
         self.holon_output = holon_output
+        self.holon_payload = holon_payload
         self.etm_results = {}
         self.total_costs = 0
 
@@ -554,6 +556,7 @@ class PostProcessor:
                 "costs": round(self.total_costs, -3),  # reduce significance
                 **calculate_holon_kpis(
                     total_cost_data=self.holon_output["APIOutputTotalCostData"][0],
+                    gridnode_config=self.holon_payload["gridnodes"],
                     etm_data=self.etm_results,
                 ),
             },

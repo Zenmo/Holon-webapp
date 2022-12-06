@@ -54,7 +54,7 @@ class HolonService(generics.CreateAPIView):
 
             holon_results = temp_holon_results
 
-            pepe.postprocessor = holon_results
+            pepe.postprocessor = (holon_results, pepe.preprocessor.holon_payload)
 
             pepe.upscale_to_etm()
             pepe.calculate_costs()
