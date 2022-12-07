@@ -55,13 +55,12 @@ function StorylineOverviewCardIcon({ icon }: { icon: string }) {
 
 export default function StorylineOverviewCard({ project, index }: Props) {
   const router = useRouter();
-  const cssClass = index === 0 ? ` lg:w-2/4 xl:w-2/5 ` : ` lg:w-1/4 xl:w-1/5`;
 
   return (
-    <div className={`storyline__griditem w-1/2 p-4 ${cssClass} `} data-testid="storyline-card">
+    <div className="storyline__griditem w-1/2 p-4 lg:w-1/4 xl:w-1/5" data-testid="storyline-card">
       <Link href={router.asPath + project.slug}>
         <a
-          className={`${project.cardColor} ${s.storyline__card} flex h-full flex-col p-2 rounded gap-2 border min-h-[400px] opacity-0 hover:opacity-1`}
+          className={`${project.cardColor} ${s.storyline__card} flex h-full flex-col p-2 rounded gap-2 border opacity-0 hover:opacity-1`}
           style={{ animationDelay: index + "00ms" }}>
           {project.thumbnail && (
             <span className="h-1/2 overflow-hidden relative">

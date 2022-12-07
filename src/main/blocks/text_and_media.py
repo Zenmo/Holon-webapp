@@ -1,7 +1,6 @@
 """ Streamfields """
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
-
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .button import ButtonBlock
@@ -14,16 +13,17 @@ class TextAndMediaBlock(blocks.StructBlock):
 
     grid_layout = GridChooserBlock(required=True)
 
-    background = BackgroundChooserBlock()
+    column_order = blocks.ChoiceBlock(
+        choices=[
+            ("", "Default (Text left, Media right)"),
+            ("invert", "Invert columns (Media left, Text right)"),
+        ],
+        blank=True,
+        required=False,
+        default="",
+    )
 
-    # background_size = blocks.ChoiceBlock(
-    #     choices=[
-    #         ("bg__full", "Full backgroundcolor"),
-    #         ("bg__left", "Background only in left block"),
-    #     ],
-    #     default="bg__full",
-    #     required=True,
-    # )
+    background = BackgroundChooserBlock()
 
     text = RichtextBlock(required=True, help_text="Add your text", rows=15)
 

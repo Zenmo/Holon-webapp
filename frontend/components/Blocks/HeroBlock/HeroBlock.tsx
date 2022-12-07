@@ -42,18 +42,19 @@ export default function HeroBlock({ data }: Props) {
             </div>
           </div>
 
-          <div className="flex flex-col py-12 px-10 lg:px-16 lg:pt-24 lg:w-1/2">
+          <div className="flex flex-col lg:w-1/2 py-12 px-10 lg:px-16">
             <MediaContent media={data.value.media} alt={data.value.altText} />
           </div>
         </div>
 
-        <div className="flex flex-row h-16 justify-center">
-          {data.value.buttonBlock.length > 0 && (
+        {data.value.buttonBlock.length > 0 && (
+          <div className="flex flex-row h-16 justify-center">
             <ButtonBlock
               buttons={data.value.buttonBlock[0].value.buttons}
-              align="btn-left"></ButtonBlock>
-          )}
-
+              align={data.value.buttonBlock[0].buttons_align}></ButtonBlock>
+          </div>
+        )}
+        <div className="flex flex-row h-16 justify-center">
           <button
             onClick={scrollDown}
             className="bg-holon-purple-100 w-12 h-12 mb-4 absolute rounded-full p-2 hover:bg-holon-purple-200">

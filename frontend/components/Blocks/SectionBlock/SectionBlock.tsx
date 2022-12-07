@@ -241,7 +241,7 @@ export default function SectionBlock({ data }: Props) {
   return (
     <div className={`${backgroundFullcolor} storyline__row flex flex-col lg:flex-row`}>
       <div
-        className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 bg-slate-200 ${gridValue.left} ${backgroundLeftColor}`}>
+        className={`flex flex-col defaultBlockPadding bg-slate-200 ${gridValue.left} ${backgroundLeftColor}`}>
         {content.map((ct, _index) => {
           if (ct.type === "slider") {
             return (

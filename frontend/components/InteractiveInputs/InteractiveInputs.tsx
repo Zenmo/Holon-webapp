@@ -50,7 +50,7 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
   const inputType = type === "single_select" ? "radio" : "checkbox";
   const cssClass =
     type === "single_select"
-      ? "rounded-full after:checked:content-['●'] after:mt-[-2px]"
+      ? "rounded-full after:checked:content-['●'] after:mt-[-2px]  flex-[0_0_20px]"
       : "rounded-none after:checked:content-['✔'] ";
 
   return (

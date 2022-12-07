@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from "react";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 type ButtonVariant = keyof typeof variants;
 
@@ -10,8 +11,9 @@ type Props<T extends React.ElementType> = {
 } & React.ComponentPropsWithoutRef<T>;
 
 const variants = {
-  dark: "border-white text-white bg-holon-blue-900 hover:bg-holon-blue-500 ",
-  light: "bg-holon-gold-200 border-holon-blue-900  hover:bg-holon-gold-600",
+  dark: "border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500 ",
+  arrow: "border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500 ",
+  light: "bg-white border-holon-blue-900 hover:bg-holon-blue-500 hover:text-white",
 };
 
 const ButtonContext = createContext<ButtonVariant | undefined>(undefined);
@@ -46,11 +48,18 @@ export default function Button<T extends React.ElementType>({
 
   return (
     <Tag
-      className={`${className} ${colorClasses} relative rounded border-2 px-4 py-3 mr-4 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
+      className={`${className} ${colorClasses} flex flex-row justify-center items-center relative rounded border-2 gap-4 nowrap px-4 py-3 mr-4 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
       {...rest}
       href={details.buttonLink[0].value}
       {...externLinkProps}>
-      <ButtonContext.Provider value={variant}>{children}</ButtonContext.Provider>
+      <ButtonContext.Provider value={variant}>
+        {children}
+        {variant === "arrow" && (
+          <span className="w-[20px]">
+            <ArrowRightIcon />
+          </span>
+        )}
+      </ButtonContext.Provider>
     </Tag>
   );
 }

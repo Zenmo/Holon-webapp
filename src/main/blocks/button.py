@@ -5,7 +5,11 @@ from .page_chooser_block import PageChooserBlock
 
 class ButtonComponent(StructBlock):
     button_style = ChoiceBlock(
-        choices=[("", "Default button style"), ("dark", "dark"), ("light", "light")],
+        choices=[
+            ("dark", "Default (Dark blue)"),
+            ("arrow", "Dark blue with arrow"),
+            ("light", "light"),
+        ],
         blank=True,
         required=False,
         default="dark",
@@ -34,7 +38,7 @@ class ButtonComponent(StructBlock):
 
 class ButtonBlock(StructBlock):
     buttons_align = ChoiceBlock(
-        choices=[("btn-left", "left"), ("btn-center", "center")],
+        choices=[("btn-left", "left"), ("btn-center", "center"), ("btn-righg", "right")],
         required=False,
         default="btn-left",
     )

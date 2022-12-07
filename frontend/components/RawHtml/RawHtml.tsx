@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import s from "./RawHtml.module.css";
-import HolonButton from "../VersionOne/Buttons/HolonButton";
 import { Dialog, Transition } from "@headlessui/react";
+import Button from "../Button/Button";
 
 export default function RawHtml({ html }: { html: string }) {
   const [modal, setModal] = useState<{
@@ -80,9 +80,11 @@ export default function RawHtml({ html }: { html: string }) {
                       <p className="text-sm text-gray-500">{modal.modalText}</p>
                     </div>
                     <div className="mt-4">
-                      <HolonButton tag="a" href={modal.modalLink} variant="darkmode">
+                      <a
+                        className={`border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-block relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
+                        href={modal.modalLink}>
                         Lees meer
-                      </HolonButton>
+                      </a>
                     </div>
                     <button
                       onClick={closeModal}
