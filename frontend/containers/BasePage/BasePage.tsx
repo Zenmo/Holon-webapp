@@ -7,7 +7,6 @@ import { getCookieConsentValue } from "react-cookie-consent";
 import CookieBar from "@/components/CookieBar";
 import Header from "@/components/Header/Header";
 import { NavItem } from "@/api/types";
-import s from "./BasePage.module.css";
 
 const WagtailUserbar = dynamic(() => import("@/components/WagtailUserbar"));
 
@@ -76,7 +75,7 @@ const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => 
         {!!canonicalLink && <link rel="canonical" href={canonicalLink} />}
       </Head>
       <Header navigation={navigation} />
-      <div className={`BasePage ${s.BasePage}`}>{children}</div>
+      <div className="BasePage">{children}</div>
       <CookieBar onAccept={initGA} />
       {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}
     </>
