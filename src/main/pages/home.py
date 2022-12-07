@@ -15,7 +15,7 @@ class HomePage(HeadlessPreviewMixin, BasePage):
             ("hero_block", HeroBlock()),
             ("text_image_block", TextAndMediaBlock()),
             ("card_block", CardsBlock()),
-            ("buttons_and_media_block", ButtonsAndMediaBlock())
+            ("buttons_and_media_block", ButtonsAndMediaBlock()),
         ],
         verbose_name="Page body",
         blank=True,

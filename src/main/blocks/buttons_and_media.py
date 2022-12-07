@@ -15,6 +15,7 @@ COLOR_CHOICES = (
     ("card__bg-orange", "Orange"),
 )
 
+
 class ButtonCardComponent(blocks.StructBlock):
     title = blocks.CharBlock(required=False)
     image_selector = HolonImageChooserBlock()
@@ -33,7 +34,9 @@ class ButtonCardComponent(blocks.StructBlock):
             ),
             (
                 "extern",
-                blocks.URLBlock(required=False, helptext="Fill in if the button should link externally"),
+                blocks.URLBlock(
+                    required=False, helptext="Fill in if the button should link externally"
+                ),
             ),
         ],
         help_text="Where do you want the button to link to",
@@ -43,7 +46,6 @@ class ButtonCardComponent(blocks.StructBlock):
 
 class ButtonsAndMediaBlock(blocks.StructBlock):
     """Buttons and Media block"""
-    
 
     background = BackgroundChooserBlock()
 
