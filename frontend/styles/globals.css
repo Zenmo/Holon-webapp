@@ -25,7 +25,7 @@ a {
   }
 
   h1 {
-    @apply text-3xl lg:text-5xl font-bold leading-relaxed;
+    @apply text-3xl lg:text-5xl font-bold;
   }
 
   h2 {
