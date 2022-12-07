@@ -6,6 +6,12 @@ price_of_natural_gas_per_mwh:
     data: value
     etm_key: price_of_natural_gas_per_mwh
 
+price_of_diesel_per_mwh:
+  value:
+    type: query
+    data: value
+    etm_key: price_of_diesel_per_mwh
+
 price_of_hydrogen_per_mwh:
   value:
     type: query

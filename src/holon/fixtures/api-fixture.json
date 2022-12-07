@@ -1,1 +1,197 @@
-[{"model": "api.slider", "pk": 1, "fields": {"name": "zonnepaneel", "slider_value_default": 1, "slider_value_min": 0, "slider_value_max": 1, "tag": "solar"}}, {"model": "api.interactiveinput", "pk": 1, "fields": {"etm_key": "share_of_buildings_with_solar_panels", "name": "zonnepanelen", "type": "continuous", "animation_tag": "no-animation", "asset_type": 1}}, {"model": "api.interactiveinput", "pk": 2, "fields": {"etm_key": "grid_battery_on_off", "name": "gridbattery", "type": "single_select", "animation_tag": "no-animation", "asset_type": 13}}, {"model": "api.interactiveinput", "pk": 3, "fields": {"etm_key": "share_of_electric_trucks", "name": "Elektrificatie zwaar transport", "type": "continuous", "animation_tag": "no-animation", "asset_type": 12}}, {"model": "api.interactiveinputoptions", "pk": 1, "fields": {"sort_order": 0, "input": 2, "option": "1"}}, {"model": "api.interactiveinputoptions", "pk": 2, "fields": {"sort_order": 1, "input": 2, "option": "0"}}, {"model": "api.interactiveinputcontinuousvalues", "pk": 1, "fields": {"input": 1, "slider_value_default": 12, "slider_value_min": 0, "slider_value_max": 100}}, {"model": "api.scenario", "pk": 1, "fields": {"name": "yay", "model_name": "", "etm_scenario_id": 123456, "config_file": null, "timestep_hours": "0.00", "force_uncached": false, "show_progress": false, "parallelize": false, "log_exceptions": false}}]
+[
+    {
+        "model": "api.interactiveinput",
+        "pk": 1,
+        "fields": {
+            "etm_key": "share_of_buildings_with_solar_panels",
+            "name": "Zonnepanelen",
+            "type": "continuous",
+            "animation_tag": "no-animation",
+            "asset_type": 1
+        }
+    },
+    {
+        "model": "api.interactiveinput",
+        "pk": 2,
+        "fields": {
+            "etm_key": "installed_energy_grid_battery",
+            "name": "Batterijopslag",
+            "type": "single_select",
+            "animation_tag": "no-animation",
+            "asset_type": 4
+        }
+    },
+    {
+        "model": "api.interactiveinput",
+        "pk": 3,
+        "fields": {
+            "etm_key": "share_of_electric_trucks",
+            "name": "Elektrificatie zwaar transport",
+            "type": "continuous",
+            "animation_tag": "no-animation",
+            "asset_type": 3
+        }
+    },
+    {
+        "model": "api.interactiveinput",
+        "pk": 4,
+        "fields": {
+            "etm_key": "",
+            "name": "Beleidsmaatregelen",
+            "type": "single_select",
+            "animation_tag": "no-animation",
+            "asset_type": null
+        }
+    },
+    {
+        "model": "api.interactiveinput",
+        "pk": 5,
+        "fields": {
+            "etm_key": "",
+            "name": "Laadgedrag",
+            "type": "single_select",
+            "animation_tag": "no-animation",
+            "asset_type": null
+        }
+    },
+    {
+        "model": "api.interactiveinput",
+        "pk": 6,
+        "fields": {
+            "etm_key": "installed_energy_grid_battery",
+            "name": "Batterijopslag",
+            "type": "continuous",
+            "animation_tag": "no-animation",
+            "asset_type": 4
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 1,
+        "fields": {
+            "sort_order": 0,
+            "input": 2,
+            "option": "0",
+            "label": "Geen batterijopslag",
+            "default": true
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 2,
+        "fields": {
+            "sort_order": 1,
+            "input": 2,
+            "option": "50",
+            "label": "Wel batterijopslag",
+            "default": null
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 3,
+        "fields": {
+            "sort_order": 0,
+            "input": 4,
+            "option": "current",
+            "label": "Huidig beleid",
+            "default": null
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 4,
+        "fields": {
+            "sort_order": 1,
+            "input": 4,
+            "option": "nf_ato_individual",
+            "label": "Contractafspraak: Non-firm ATO per bedrijf",
+            "default": null
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 5,
+        "fields": {
+            "sort_order": 2,
+            "input": 4,
+            "option": "dayahead_gopacs_individual",
+            "label": "Financieel: Day-ahead + GOPACS per bedrijf",
+            "default": null
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 6,
+        "fields": {
+            "sort_order": 3,
+            "input": 4,
+            "option": "nf_ato_collective",
+            "label": "Contractafspraak: Non-firm ATO gezamenlijk",
+            "default": null
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 7,
+        "fields": {
+            "sort_order": 4,
+            "input": 4,
+            "option": "dayahead_gopacs_collective",
+            "label": "Financieel: Day-ahead + GOPACS gezamenlijk",
+            "default": null
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 8,
+        "fields": {
+            "sort_order": 0,
+            "input": 5,
+            "option": "false",
+            "label": "Standaard laadgedrag",
+            "default": true
+        }
+    },
+    {
+        "model": "api.interactiveinputoptions",
+        "pk": 9,
+        "fields": {
+            "sort_order": 1,
+            "input": 5,
+            "option": "true",
+            "label": "Slimmer laadgedrag",
+            "default": null
+        }
+    },
+    {
+        "model": "api.interactiveinputcontinuousvalues",
+        "pk": 1,
+        "fields": {
+            "input": 1,
+            "slider_value_default": 6,
+            "slider_value_min": 0,
+            "slider_value_max": 100
+        }
+    },
+    {
+        "model": "api.interactiveinputcontinuousvalues",
+        "pk": 2,
+        "fields": {
+            "input": 3,
+            "slider_value_default": 1,
+            "slider_value_min": 1,
+            "slider_value_max": 100
+        }
+    },
+    {
+        "model": "api.interactiveinputcontinuousvalues",
+        "pk": 3,
+        "fields": {
+            "input": 6,
+            "slider_value_default": 0,
+            "slider_value_min": 0,
+            "slider_value_max": 100
+        }
+    }
+]

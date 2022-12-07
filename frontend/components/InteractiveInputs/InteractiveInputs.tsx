@@ -29,6 +29,7 @@ function InteractiveButtons({ contentId, name, type, options, setValue }: Props)
           <input
             type={inputType}
             name={name}
+            defaultChecked={inputItem.default}
             id={contentId + "" + inputItem.id}
             data-testid={name + inputItem.id}
             onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
