@@ -48,7 +48,7 @@ export default function Card({ cardItem, cardType }: CardProps) {
       });
     } else {
       return (cardStyling = {
-        card: "flex-col min-h-96 w-1/2 md:w-1/3 lg:w-1/5 xl:w-[18.4%] mb-4 h-[360px] xl:h-[400px]",
+        card: "flex-col min-h-96 w-3/5 sm:w-[35%] md:w-[30%] lg:w-[22%] xl:w-[18.4%] mb-4 h-[360px] xl:h-[400px]",
         imgSpan: "h-2/3",
         img: "rounded-t-lg duration-300 ease-in group-hover:brightness-100 group-hover:scale-110",
         text: "flex-col h-1/3",
@@ -110,7 +110,7 @@ export default function Card({ cardItem, cardType }: CardProps) {
           </CardTitle>
 
           {cardType === "buttonCard" ? (
-            <span className="w-10 h-10">
+            <span className="w-10 h-10" data-testid="arrow">
               <ArrowSmallRightIcon />
             </span>
           ) : (
