@@ -4,11 +4,11 @@ national_total_costs:
     data: value
     etm_key: total_costs
 
-national_share_of_renewable_electricity:
+national_renewability:
   value:
     type: query
     data: value
-    etm_key: dashboard_share_of_renewable_electricity
+    etm_key: dashboard_renewability
 
 national_kpi_network_load:
   value:
