@@ -1,3 +1,21 @@
+from cloudclient.datamodel.assets import ElectricConsumptionAsset, VehicleElectricStorageAsset
+
+Office_other_electricity = ElectricConsumptionAsset(
+    name="Office_other_electricity",
+    type="ELECTRICITY_DEMAND",
+    yearlyDemandElectricity_kWh=35_00_000,
+)
+
+EHGV = VehicleElectricStorageAsset(
+    name="EHGV",
+    type="ELECTRIC_VEHICLE",
+    stateOfCharge_r=1.0,
+    storageCapacity_kWh=500,
+    capacityElectricity_kW=100,
+    energyConsumption_kWhpkm=1.3,
+    vehicleScaling=6,
+)
+
 from cloudclient.datamodel import Payload, Actor, Contract, NonFirmActor
 
 actors = [
@@ -6,34 +24,28 @@ actors = [
         type="commercial",
         id="com1",
         parent_actor="hol1",
-        contracts=[
-            Contract(type="DEFAULT", contract_scope="ENERGYHOLON"),
-            Contract(type="VARIABLE", contract_scope="ENERGYSUPPLIER"),
-        ],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="CONNECTIONOWNER",
         type="commercial",
         id="com2",
         parent_actor="hol1",
-        contracts=[
-            Contract(type="DEFAULT", contract_scope="ENERGYHOLON"),
-            Contract(type="VARIABLE", contract_scope="ENERGYSUPPLIER"),
-        ],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="CONNECTIONOWNER",
         type="commercial",
         id="com3",
         parent_actor="hol1",
-        contracts=[Contract(type="DEFAULT", contract_scope="ENERGYHOLON")],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="CONNECTIONOWNER",
         type="commercial",
         id="com4",
         parent_actor="hol1",
-        contracts=[Contract(type="DEFAULT", contract_scope="ENERGYHOLON")],
+        contracts=[Contract(type="FIXED", contract_scope="ENERGYSUPPLIER")],
     ),
     Actor(
         category="ENERGYSUPPLIER",
@@ -44,10 +56,10 @@ actors = [
         category="ENERGYHOLON",
         id="hol1",
         parent_actor="sup1",
-        contracts=[Contract(type="NODALPRICING", contract_scope="GRIDOPERATOR")],
-        nfATO_capacity_kw=900.0,
-        nfATO_starttime=18.0,
-        nfATO_endtime=7.0,
+        contracts=[],
+        nfATO_capacity_kw=3000.0,
+        nfATO_starttime=20.0,
+        nfATO_endtime=6.0,
     ),
     Actor(
         category="GRIDOPERATOR",
@@ -57,13 +69,10 @@ actors = [
 ]
 
 from cloudclient.datamodel.defaults import (
-    Grid_battery_7MWh,
     Diesel_Truck,
-    EHGV,
     Solarpanels_1MW,
     Grid_battery_10MWh,
     Industry_other_heat_demand,
-    Building_solarpanels_0kWp,
     Building_solarpanels_10kWp,
     Building_gas_burner_60kW,
 )
@@ -85,14 +94,13 @@ gridconnections = [
         capacity_kw=750,
         charging_mode="MAX_POWER",
         battery_mode="BALANCE",
-        nfATO_capacity_kw=900.0,
-        nfATO_starttime=18.0,
-        nfATO_endtime=7.0,
+        nfATO_capacity_kw=1500.0,
+        nfATO_starttime=20.0,
+        nfATO_endtime=6.0,
         assets=[
-            *[EHGV] * 6,
+            *[EHGV] * 5,
             Diesel_Truck,
-            Grid_battery_7MWh,
-            Building_solarpanels_0kWp,
+            Grid_battery_10MWh,
             Building_gas_burner_60kW,
             Building_solarpanels_10kWp,
         ],
@@ -103,10 +111,10 @@ gridconnections = [
         owner_actor="com2",
         parent_electric="E2",
         id="b2",
-        capacity_kw=1000,
+        capacity_kw=2000,
         assets=[
             Industry_other_heat_demand,
-            Building_solarpanels_0kWp,
+            Office_other_electricity,
             Building_gas_burner_60kW,
         ],
     ),
@@ -115,8 +123,8 @@ gridconnections = [
         owner_actor="com3",
         parent_electric="E2",
         id="b3",
-        capacity_kw=2000,
-        assets=[Solarpanels_1MW, Solarpanels_1MW],
+        capacity_kw=3000,
+        assets=[Solarpanels_1MW],
     ),
     ProductionGridConnection(
         category="GRIDBATTERY",
@@ -124,7 +132,7 @@ gridconnections = [
         parent_electric="E2",
         battery_mode="BALANCE",
         id="b4",
-        capacity_kw=1000,
+        capacity_kw=2000,
         assets=[Grid_battery_10MWh],
     ),
 ]
@@ -136,7 +144,7 @@ gridnodes = [
         id="E2",
         parent="E1",
         owner_actor="o1",
-        capacity_kw=1200,
+        capacity_kw=2000,
         category="ELECTRICITY",
         type="MSLS",
     ),
@@ -152,12 +160,6 @@ gridnodes = [
 from cloudclient.datamodel.policies import Policy
 
 policies = [
-    Policy(
-        parameter="EV_charging_attitude_standard",
-        value="CHEAP",
-        unit=None,
-        comment="charging behaviour not contingent on holon",
-    ),
     Policy(
         parameter="Grid_MS_congestion_allowance_level_kW",
         value="0",
@@ -251,13 +253,10 @@ if __name__ == "__main__":
     import json
     from pathlib import Path
 
-    base_path = Path(__file__).parent / "doc" / "assets"
+    base_path = Path(__file__).parent
 
     for key, json_output in payload.to_json().items():
         variable_filename = f"example_{key}.json"
         fp = base_path / variable_filename
         with open(fp, "w") as outfile:
             json.dump(json_output, outfile, indent=2)
-
-    with open(base_path / "example_total.json", "w") as outfile:
-        json.dump(json.loads(payload.json()), outfile, indent=2)

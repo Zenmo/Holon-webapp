@@ -4,10 +4,14 @@ const contiuousSection = "#panel-continuous_values-section";
 
 // Shows or hides options in the Interactive Input CMS based on the type of interactive element that is chosen
 $(document).ready(function () {
-    $(selectSection).hide();
+    setVisibleElements($(interactiveTypeInput).val());
 
     $(interactiveTypeInput).change(function (e) {
-        switch ($(this).val()) {
+        setVisibleElements($(this).val());
+    });
+
+    function setVisibleElements(type) {
+        switch (type) {
             case "single_select":
             case "multi_select":
                 $(selectSection).show();
@@ -22,5 +26,5 @@ $(document).ready(function () {
                 $(contiuousSection).hide();
                 break;
         }
-    });
+    }
 });

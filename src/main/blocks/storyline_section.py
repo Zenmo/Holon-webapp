@@ -62,7 +62,7 @@ class InteractiveInputBlock(blocks.StructBlock):
         default=DISPLAY_CHECKBOXRADIO,
         help_text="Only applies if the interactive input is a Select type",
     )
-    visible = blocks.BooleanBlock(required=False)
+    visible = blocks.BooleanBlock(required=False, default=True)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(
         required=False, help_text="Type the default value exactly as it's shown on the website page"
@@ -80,9 +80,12 @@ class InteractiveInputBlock(blocks.StructBlock):
 
                 for option in options:
                     option_default = False
-                    if value["default_value"] is not None:
+                    if bool(value["default_value"]):
                         if value["default_value"].lower() == option.option.lower():
                             option_default = True
+                    else:
+                        option_default = option.default
+
                     option_dict = {
                         "id": int(option.id),
                         "option": option.option,
