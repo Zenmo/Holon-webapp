@@ -1,8 +1,8 @@
-import { getRequest, postRequest } from "./wagtail";
-import * as Cookies from "es-cookie";
 import { InteractiveElement } from "@/components/Blocks/SectionBlock/KPIS";
+import * as Cookies from "es-cookie";
+import { postRequest } from "./wagtail";
 
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL;
+const API_URL = process.env.WAGTAIL_API_URL;
 
 export type InteractiveElement = {
   interactiveElement: number;
@@ -10,7 +10,7 @@ export type InteractiveElement = {
 };
 
 export async function getHolonKPIs(data: { interactiveElements: InteractiveElement[] }) {
-  const { json } = await postRequest(`${NEXT_PUBLIC_API_URL}/v1/holon/`, data, {
+  const { json } = await postRequest(`${API_URL}/v1/holon/`, data, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken"),
     },
