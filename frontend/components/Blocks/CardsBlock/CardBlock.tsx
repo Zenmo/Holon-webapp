@@ -27,7 +27,7 @@ export default function CardBlock({
         {cards.map((cardItem, index) => {
           return (
             <React.Fragment key={index}>
-              <Card cardItem={cardItem}></Card>
+              <Card cardItem={cardItem} cardType="cardBlockCard"></Card>
             </React.Fragment>
           );
         })}

@@ -1,11 +1,10 @@
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
 
-from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .background_chooser import BackgroundChooserBlock
 from .page_chooser_block import PageChooserBlock
-from .cards import CardComponent
+
 
 COLOR_CHOICES = (
     ("card__bg-gold", "Gold"),
@@ -23,10 +22,24 @@ class ButtonCardComponent(blocks.StructBlock):
         choices=COLOR_CHOICES,
         required=False,
     )
-    card_link = PageChooserBlock(
-                    required=True,
-                    helptext="Add an internal link to the button",
+    item_link = blocks.StreamBlock(
+        [
+            (
+                "intern",
+                PageChooserBlock(
+                    required=False,
+                    helptext="Choose if you want the button to link to a page internally",
+                ),
+            ),
+            (
+                "extern",
+                blocks.URLBlock(required=False, helptext="Fill in if the button should link externally"),
+            ),
+        ],
+        help_text="Where do you want the button to link to",
+        max_num=1,
     )
+
 
 class ButtonsAndMediaBlock(blocks.StructBlock):
     """Buttons and Media block"""

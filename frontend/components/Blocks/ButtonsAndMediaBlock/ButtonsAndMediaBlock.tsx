@@ -1,6 +1,6 @@
 import React from "react";
 import MediaContent from "@/components/MediaContent/MediaContent";
-import CardItem from "../../Card/Card";
+import { CardItem } from "../../Card/types";
 import Card from "../../Card/Card";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
         color: string;
         size: string;
       };
-      buttons: Array<typeof CardItem>;
+      buttons: CardItem[];
       media: React.ComponentProps<typeof MediaContent>["media"];
       altText: string;
     };
@@ -32,7 +32,7 @@ export default function ButtonsAndMedia({ data }: Props) {
     <div className={`${backgroundFullcolor}`} data-testid="ButtonsMedia">
       <div className={`flex flex-col lg:flex-row`}>
         <div
-          className={`flex flex-col py-8 px-10 lg:px-16 lg:pt-16 lg:w-1/2 ${backgroundLeftColor}`}>
+          className={`flex flex-col gap-6 py-8 px-10 lg:px-16 lg:pt-16 lg:w-1/2 ${backgroundLeftColor}`}>
           {data.value.buttons.map((buttonItem, index) => {
             return (
               <React.Fragment key={index}>
@@ -42,8 +42,8 @@ export default function ButtonsAndMedia({ data }: Props) {
           })}
         </div>
 
-        <div className={`flex flex-col lg:w-1/2`}>
-          <div className="lg:sticky py-8 px-10 lg:px-16 lg:pt-24 top-0">
+        <div className={`flex flex-col justify-center lg:w-1/2`}>
+          <div className="lg:sticky py-8 px-10 lg:px-16 lg:pt-16 top-0">
             <MediaContent media={data.value.media} alt={data.value.altText} />
           </div>
         </div>

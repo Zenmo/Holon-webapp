@@ -3,42 +3,8 @@ import { useRouter } from "next/router";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
 import RawHtml from "../RawHtml/RawHtml";
 import StretchedLink from "../StretchedLink";
-
-type CardItem = {
-  title: string;
-  imageSelector: {
-    id: number;
-    title: string;
-    img: {
-      src: string;
-      width: number;
-      height: number;
-      alt: string;
-    };
-  };
-  text?: string;
-  cardColor: string;
-  cardLink:
-    | []
-    | [
-        {
-          type: string;
-          value: string;
-          id: string;
-        }
-      ];
-};
-
-export type CardProps = {
-  cardItem: CardItem;
-  cardType: string;
-};
-
-type CardTitleProps = {
-  condition: boolean;
-  children: React.ReactNode;
-  linkProps: React.ComponentProps<"a">;
-};
+import StorylineIcons from "./StorylineIcons";
+import { CardItem, CardProps, CardStyling, CardTitleProps } from "./types";
 
 const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
   if (condition) {
@@ -54,8 +20,14 @@ const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
 
 export default function Card({ cardItem, cardType }: CardProps) {
   const backgroundColor: string = cardItem.cardColor !== "" ? cardItem.cardColor : "bg-white";
-  let cardStyling;
-
+  const router = useRouter();
+  let link: string;
+  let cardStyling: CardStyling = {
+    card: "",
+    imgSpan: "",
+    img: "",
+    text: "",
+  };
   let externLinkProps:
     | boolean
     | {
@@ -69,14 +41,14 @@ export default function Card({ cardItem, cardType }: CardProps) {
   function cardStyle(type: string) {
     if (type === "buttonCard") {
       return (cardStyling = {
-        card: "flex-row min-w-96 m-4 hover:brightness-110 h-16 md:h-24",
+        card: "flex-row min-w-96 hover:drop-shadow-md h-16 md:h-24",
         imgSpan: "w-1/3",
-        img: "rounded-l-lg",
-        text: "flex-row justify-between items-center w-2/3 ml-12",
+        img: "rounded-l-lg group-hover:brightness-110",
+        text: "flex-row justify-between items-center w-2/3 ml-12 text-xl md:text-2xl",
       });
     } else {
       return (cardStyling = {
-        card: "flex-col min-h-96 w-1/2 md:w-1/3 lg:w-1/4 xl:w-[18.4%] mb-4",
+        card: "flex-col min-h-96 w-1/2 md:w-1/3 lg:w-1/5 xl:w-[18.4%] mb-4 h-[360px] xl:h-[400px]",
         imgSpan: "h-2/3",
         img: "rounded-t-lg duration-300 ease-in group-hover:brightness-100 group-hover:scale-110",
         text: "flex-col h-1/3",
@@ -86,13 +58,18 @@ export default function Card({ cardItem, cardType }: CardProps) {
 
   cardStyle(cardType);
 
-  function createLink(cardLink) {
-    if (cardLink.length && cardLink[0].type === "intern") {
+  function createLink(cardDetails: CardItem) {
+    if (cardDetails.slug) {
+      link = router.asPath + cardDetails.slug;
       externLinkProps = false;
+    } else if (cardDetails.itemLink?.length) {
+      link = cardDetails.itemLink[0]?.value;
+      if (cardDetails.itemLink[0].type === "intern") {
+        externLinkProps = false;
+      }
     }
+    return link;
   }
-
-  createLink(cardItem.cardLink);
 
   return (
     <React.Fragment>
@@ -102,18 +79,32 @@ export default function Card({ cardItem, cardType }: CardProps) {
         <span className={`${cardStyling.imgSpan} overflow-hidden relative`}>
           {/* eslint-disable @next/next/no-img-element */}
           <img
-            src={cardItem.imageSelector.img.src}
-            alt={cardItem.imageSelector.img.alt}
+            src={cardItem.thumbnail ? cardItem.thumbnail.url : cardItem.imageSelector?.img.src}
+            alt={
+              cardItem.thumbnail ? `storyline ${cardItem.title}` : cardItem.imageSelector?.img.alt
+            }
             width="725"
             height="380"
-            className={`object-cover object-center h-full w-full ${cardStyling.img} max-w-none  max-h-none brightness-90 `}
+            className={`object-cover object-center h-full w-full ${cardStyling.img}  max-w-none max-h-none brightness-90 `}
           />
+          {cardItem.informationTypes && (
+            <span className="mt-auto text-right absolute bottom-1 flex justify-start self-end align- flex-wrap-reverse">
+              {cardItem.informationTypes.map((informationtype, index) => (
+                <span
+                  key={index}
+                  className="flex bg-white opacity-80 rounded-3xl items-center py-1 px-2 ml-2 mt-2 whitespace-nowrap ">
+                  {informationtype.icon && <StorylineIcons icon={informationtype.icon} />}
+                  {informationtype.name}
+                </span>
+              ))}
+            </span>
+          )}
         </span>
 
         <span className={`flex m-4 ${cardStyling.text}`}>
           <CardTitle
-            condition={cardItem.cardLink.length > 0}
-            href={cardItem.cardLink[0]?.value}
+            condition={cardItem.slug || cardItem.itemLink?.length > 0}
+            href={createLink(cardItem)}
             {...externLinkProps}>
             {cardItem.title}
           </CardTitle>
@@ -123,8 +114,8 @@ export default function Card({ cardItem, cardType }: CardProps) {
               <ArrowSmallRightIcon />
             </span>
           ) : (
-            <span className="">
-              <RawHtml html={cardItem.text} />
+            <span className="line-clamp-4">
+              <RawHtml html={cardItem.description} />
             </span>
           )}
         </span>

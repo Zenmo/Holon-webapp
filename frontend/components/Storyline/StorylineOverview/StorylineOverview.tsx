@@ -99,10 +99,9 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
         <div className="flex flex-row justify-between mb-2">
           <strong>{filteredProjects?.length} resultaten</strong>
         </div>
-
-        <div className="flex flex-row flex-wrap mx-[-1rem]">
+        <div className="flex flex-row flex-wrap justify-center md:justify-start gap-4 mx-[-1rem]">
           {filteredProjects?.map((project, index) => (
-            <StorylineOverviewCard key={index} index={index} project={project} />
+            <Card key={index} cardItem={project} cardType="storylineCard" />
           ))}
         </div>
       </div>

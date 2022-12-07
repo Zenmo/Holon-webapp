@@ -18,9 +18,9 @@ describe("<Card />", () => {
                 alt: "",
               },
             },
-            text: "TestText1",
-            cardBackground: "card__bg-gray",
-            cardLink: [
+            description: "TestText1",
+            cardColor: "card__bg-gray",
+            itemLink: [
               {
                 type: "extern",
                 value: "http://www.link.com",
@@ -28,7 +28,7 @@ describe("<Card />", () => {
               },
             ],
           }}
-          cardType=""
+          cardType="cardBlockCard"
         />
       );
     });
@@ -76,9 +76,9 @@ describe("<Card />", () => {
                 alt: "",
               },
             },
-            text: "TestText1",
-            cardBackground: "card__bg-gray",
-            cardLink: [
+            description: "TestText1",
+            cardColor: "card__bg-gray",
+            itemLink: [
               {
                 type: "extern",
                 value: "http://www.link.com",
@@ -86,7 +86,7 @@ describe("<Card />", () => {
               },
             ],
           }}
-          cardType=""
+          cardType="cardBlockCard"
         />
       );
     });
