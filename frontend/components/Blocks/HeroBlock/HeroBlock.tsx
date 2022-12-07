@@ -30,36 +30,38 @@ export default function HeroBlock({ data }: Props) {
   };
 
   return (
-    <div className={``}>
+    <div>
       <div className={`flex flex-col justify-center w-full ${backgroundcolor}`}>
-        <div className={`flex flex-col  lg:flex-row `}>
-          <div className="flex flex-col lg:w-1/2 py-12 px-10 lg:px-16">
-            <h1>
-              <RawHtml html={data.value.title}></RawHtml>
-            </h1>
-            <div className={`font-normal mt-8 mr-8`} data-testid="content">
-              <RawHtml html={data.value.text}></RawHtml>
+        <div className="holonContentContainer">
+          <div className={`flex flex-col  lg:flex-row `}>
+            <div className="flex flex-col lg:w-1/2 py-12 px-10 lg:px-16">
+              <h1>
+                <RawHtml html={data.value.title}></RawHtml>
+              </h1>
+              <div className={`font-normal mt-8 mr-8`} data-testid="content">
+                <RawHtml html={data.value.text}></RawHtml>
+              </div>
+            </div>
+
+            <div className="flex flex-col lg:w-1/2 py-12 px-10 lg:px-16">
+              <MediaContent media={data.value.media} alt={data.value.altText} />
             </div>
           </div>
 
-          <div className="flex flex-col lg:w-1/2 py-12 px-10 lg:px-16">
-            <MediaContent media={data.value.media} alt={data.value.altText} />
-          </div>
-        </div>
-
-        {data.value.buttonBlock.length > 0 && (
+          {data.value.buttonBlock.length > 0 && (
+            <div className="flex flex-row justify-center">
+              <ButtonBlock
+                buttons={data.value.buttonBlock[0].value.buttons}
+                align={data.value.buttonBlock[0].buttons_align}></ButtonBlock>
+            </div>
+          )}
           <div className="flex flex-row h-16 justify-center">
-            <ButtonBlock
-              buttons={data.value.buttonBlock[0].value.buttons}
-              align={data.value.buttonBlock[0].buttons_align}></ButtonBlock>
+            <button
+              onClick={scrollDown}
+              className="bg-holon-purple-100 w-12 h-12 mb-4 absolute rounded-full p-2 hover:bg-holon-purple-200">
+              <ArrowDownIcon />
+            </button>
           </div>
-        )}
-        <div className="flex flex-row h-16 justify-center">
-          <button
-            onClick={scrollDown}
-            className="bg-holon-purple-100 w-12 h-12 mb-4 absolute rounded-full p-2 hover:bg-holon-purple-200">
-            <ArrowDownIcon />
-          </button>
         </div>
       </div>
     </div>

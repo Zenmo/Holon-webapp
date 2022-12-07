@@ -20,7 +20,7 @@ export default function CardBlock({
   },
 }: Props) {
   return (
-    <div>
+    <div className="holonContentContainer">
       <div
         className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 defaultBlockPadding gap-8`}
         data-testid="cardblock">

@@ -29,7 +29,7 @@ interface DocumentItemProps {
 function Document({ docItem }: DocumentItemProps) {
   return (
     <Link href={docItem.relativeUrl}>
-      <span className={"block cursor-pointer bg-inherit px-4 pt-1 pb-3 "}>{docItem.title}</span>
+      <span className={"block cursor-pointer bg-inherit pr-4 pt-1 pb-3 "}>{docItem.title}</span>
     </Link>
   );
 }
@@ -37,7 +37,7 @@ function Document({ docItem }: DocumentItemProps) {
 function Folder({ folderItem }: FolderItemProps) {
   return (
     <details open className="order-1 p-0 ">
-      <summary className="text-md cursor-pointer bg-inherit py-3 px-4">
+      <summary className="text-md cursor-pointer bg-inherit py-3 pr-4">
         <Link href={folderItem.relativeUrl}>
           <strong>{folderItem.title}</strong>
         </Link>
@@ -57,7 +57,7 @@ function Folder({ folderItem }: FolderItemProps) {
 
 function Aside({ posts }: Props) {
   return (
-    <aside className="sticky top-0 mx-3 mt-5">
+    <aside className="sticky top-0 mr-3 mt-5">
       {posts &&
         posts.map((item, index) =>
           item.children.length < 1 ? (
