@@ -25,7 +25,7 @@ a {
   }
 
   h1 {
-    @apply text-3xl lg:text-5xl font-bold;
+    @apply text-3xl lg:text-5xl font-bold leading-relaxed;
   }
 
   h2 {
@@ -39,7 +39,7 @@ a {
   }
 
   p {
-    @apply text-base;
+    @apply text-base lg:leading-7;
   }
 
   .stretched-link::after {

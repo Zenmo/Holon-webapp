@@ -34,11 +34,11 @@ export default function HeroBlock({ data }: Props) {
       <div className={`flex flex-col justify-center w-full ${backgroundcolor}`}>
         <div className="holonContentContainer">
           <div className={`flex flex-col  lg:flex-row `}>
-            <div className="flex flex-col lg:w-1/2 py-12 px-10 lg:px-16">
+            <div className="flex flex-col lg:w-1/2 py-12 px-10 lg:px-16 gap-8">
               <h1>
                 <RawHtml html={data.value.title}></RawHtml>
               </h1>
-              <div className={`font-normal mt-8 mr-8`} data-testid="content">
+              <div className={`font-normal`} data-testid="content">
                 <RawHtml html={data.value.text}></RawHtml>
               </div>
             </div>
