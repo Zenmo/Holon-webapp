@@ -21,7 +21,7 @@ export default function CardBlock({
 }: Props) {
   return (
     <div className="holonContentContainer">
-      <div className="px-10 lg:px-16 lg:pt-16">
+      <div className="defaultBlockPadding">
         <div
           className={`flex flex-row justify-center flex-wrap py-12 mx-[-1rem]`}
           data-testid="cardblock">
