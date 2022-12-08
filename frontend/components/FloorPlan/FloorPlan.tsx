@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "../VersionOne/Buttons/HolonButton";
+/* eslint-disable @next/next/no-img-element */
 
 const tileImages = [
   "detailhandel",
