@@ -38,11 +38,11 @@ jobs:
         uses: actions/checkout@main
       - name: Set environment for branch
         run: |
-        if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
-            echo "NEXT_PUBLIC_WAGTAIL_API_URL=https://holon-v2-acceptatie.azurewebsites.net/wt/api/nextjs" >> "$GITHUB_ENV"
-        else
-            echo "NEXT_PUBLIC_WAGTAIL_API_URL=https://holontool.nl/wt/api/nextjs" >> "$GITHUB_ENV"
-        fi
+          if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
+              echo "NEXT_PUBLIC_WAGTAIL_API_URL=https://holon-v2-acceptatie.azurewebsites.net/wt/api/nextjs" >> "$GITHUB_ENV"
+          else
+              echo "NEXT_PUBLIC_WAGTAIL_API_URL=https://holontool.nl/wt/api/nextjs" >> "$GITHUB_ENV"
+          fi
       - name: "Build and push image"
         uses: azure/docker-login@v1
         with:
