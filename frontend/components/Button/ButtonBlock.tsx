@@ -42,7 +42,7 @@ export default function ButtonBlock({ buttons, align }: Props) {
     <div
       className={`flex flex-row w-full ${alignValue(
         align
-      )} h-fit px-10 lg:px-16 lg:pb-4 flex-wrap `}>
+      )} h-fit px-10 lg:px-16 lg:pb-4 flex-wrap gap-4`}>
       {buttons.map((button, index) => {
         return (
           <Button tag="a" details={button.value} variant={button.value.buttonStyle} key={index}>

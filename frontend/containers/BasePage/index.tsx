@@ -1,6 +1,7 @@
 import React from "react";
 import BasePage from "./BasePage";
 
+
 export function basePageWrap<P extends object>(Component: React.ComponentType<P>) {
   const displayName = Component.displayName || Component.name || "Component";
 

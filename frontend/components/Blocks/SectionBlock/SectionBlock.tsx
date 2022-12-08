@@ -247,51 +247,57 @@ export default function SectionBlock({ data }: Props) {
   }
 
   return (
-    <div className={`${backgroundFullcolor} storyline__row flex flex-col lg:flex-row`}>
-      <div
-        className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 bg-slate-200 ${gridValue.left} ${backgroundLeftColor}`}>
-        {content.map(ct => {
-          if (ct.type === "slider") {
-            return (
-              <ImageSlider
-                key={`slider${ct.id}`}
-                inputId={ct.id}
-                datatestid={`ct.value?.name${_index}`}
-                value={ct.value.currentValue}
-                setValue={setInteractiveInputValue}
-                min={ct.value.sliderValueMin}
-                max={ct.value.sliderValueMax}
-                step={1}
-                label={ct.value.name}
-                type="range"
-                locked={ct.value.sliderLocked}></ImageSlider>
-            );
-          } else if (ct.type === "interactive_input" && ct.value.visible) {
-            return (
-              <InteractiveInputs
-                setValue={setInteractiveInputValue}
-                defaultValue={getDefaultValue(ct)}
-                key={ct.id}
-                contentId={ct.id}
-                {...ct.value}
-              />
-            );
-          } else if (ct.type == "text") {
-            return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
-          } else {
-            return null;
-          }
-        })}
-      </div>
-      <div className={`flex flex-col ${gridValue.right}`}>
-        <div className="lg:sticky top-0">
-          <div className="py-12 px-10 lg:px-16 lg:pt-24">
-            {Object.keys(media).length > 0 && (
-              /* eslint-disable @next/next/no-img-element */
-              <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
+    <div className={`${backgroundFullcolor} `}>
+      <div className="holonContentContainer">
+        <div className={`flex flex-col lg:flex-row`}>
+          <div
+            className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 bg-slate-200 relative ${gridValue.left} ${backgroundLeftColor}`}>
+            {data.value.background.size !== "bg_full" && (
+              <span className={`extra_bg ${backgroundLeftColor}`}></span>
             )}
+            {content.map(ct => {
+              if (ct.type === "slider") {
+                return (
+                  <ImageSlider
+                    key={`slider${ct.id}`}
+                    inputId={ct.id}
+                    datatestid={`ct.value?.name${_index}`}
+                    value={ct.value.currentValue}
+                    setValue={setInteractiveInputValue}
+                    min={ct.value.sliderValueMin}
+                    max={ct.value.sliderValueMax}
+                    step={1}
+                    label={ct.value.name}
+                    type="range"
+                    locked={ct.value.sliderLocked}></ImageSlider>
+                );
+              } else if (ct.type === "interactive_input" && ct.value.visible) {
+                return (
+                  <InteractiveInputs
+                    setValue={setInteractiveInputValue}
+                    defaultValue={getDefaultValue(ct)}
+                    key={ct.id}
+                    contentId={ct.id}
+                    {...ct.value}
+                  />
+                );
+              } else if (ct.type == "text") {
+                return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
+              } else {
+                return null;
+              }
+            })}
           </div>
-          <KPIDashboard data={kpis} loading={loading}></KPIDashboard>
+          <div className={`flex flex-col ${gridValue.right}`}>
+            <div className="lg:sticky top-0">
+              <div className="py-12 px-10 lg:px-16 lg:pt-24">
+                {Object.keys(media).length > 0 && (
+                  <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
+                )}
+              </div>
+              <KPIDashboard data={kpis} loading={loading}></KPIDashboard>
+            </div>
+          </div>
         </div>
       </div>
     </div>

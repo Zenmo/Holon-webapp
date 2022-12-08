@@ -77,7 +77,7 @@ describe("<CardBlock />", () => {
 
     it("with correct style", () => {
       const button = screen.getByRole("link");
-      expect(button).toHaveClass("bg-holon-gold-200");
+      expect(button).toHaveClass("bg-white");
     });
 
     it("is outlined correctly", () => {

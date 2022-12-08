@@ -60,7 +60,7 @@ const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
   }, [wikiMenu]);
 
   return (
-    <div className="flex min-h-screen min-w-full flex-col">
+    <div className="flex min-h-screen flex-col  holonContentContainer px-10 lg:px-16">
       <div className="flex w-full flex-1 flex-row">
         <div className="flex w-3/12 flex-col border-r-2 border-gray-200">
           {pages && <Aside posts={wikiPostsHierarchy} />}

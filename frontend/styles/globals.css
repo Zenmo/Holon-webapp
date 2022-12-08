@@ -39,7 +39,7 @@ a {
   }
 
   p {
-    @apply text-base;
+    @apply text-base lg:leading-7;
   }
 
   .stretched-link::after {
@@ -77,87 +77,6 @@ a {
 
 .block__bg-purple {
   @apply bg-holon-purple-100;
-}
-
-.slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 5px;
-  background: #ffffff;
-  outline: none;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
-  position: relative;
-  @apply bg-holon-blue-900;
-}
-.slider::after {
-  left: 100%;
-}
-.slider::before {
-  right: 100%;
-}
-
-.slider:hover {
-  opacity: 1;
-}
-
-.slider::-webkit-slider-thumb {
-  width: 20px;
-  height: 20px;
-  @apply bg-holon-blue-500;
-  @apply border-holon-blue-900;
-  @apply rounded-full;
-  @apply appearance-none;
-  --tw-shadow: 2.5px 2.5px 0 0;
-  --tw-shadow-colored: 2.5px 2.5px 0 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-    var(--tw-shadow);
-  cursor: pointer;
-}
-
-.slider:disabled::-webkit-slider-thumb {
-  background-color: grey;
-}
-
-.slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  @apply bg-holon-blue-500;
-  @apply border-holon-blue-900;
-  @apply rounded-none;
-  @apply appearance-none;
-  --tw-shadow: 2.5px 2.5px 0 0;
-  --tw-shadow-colored: 2.5px 2.5px 0 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-    var(--tw-shadow);
-  cursor: pointer;
-}
-
-.slider:disabled::-moz-range-thumb {
-  background-color: grey;
-}
-
-.slidervalue {
-  position: absolute;
-  width: calc(100% - 20px);
-  margin-left: 10px;
-  bottom: 100%;
-  margin-bottom: 20px;
-}
-
-.slider + .slidervalue output {
-  position: absolute;
-
-  width: 40px;
-  margin-bottom: 12px;
-  height: 20px;
-  @apply bg-holon-blue-900;
-  transform: translateX(-50%);
-  text-align: center;
-  @apply bg-holon-blue-500;
-}
-.slider:focus + output {
-  @apply bg-holon-blue-900;
 }
 
 input::-moz {
@@ -226,4 +145,23 @@ input::-moz {
 [data-size="4"] div:nth-child(4),
 [data-size="4"] div:nth-child(11) {
   margin-left: calc(12.5%);
+}
+.defaultBlockPadding {
+  @apply py-8 px-10 lg:px-16 lg:py-12;
+}
+
+.holonContentContainer {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.extra_bg {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  width: 100vw;
+  height: 100%;
+}
+.inverseColumns .extra_bg {
+  left: 100%;
+  right: auto;
 }
