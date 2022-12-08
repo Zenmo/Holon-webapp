@@ -22,11 +22,27 @@ type Button = {
 };
 
 export default function ButtonBlock({ buttons, align }: Props) {
-  const alignValue = align === "btn-left" ? "justify-start" : "justify-center";
+  const alignValue = align => {
+    switch (align) {
+      case "btn-left":
+        return "justify-start";
+        break;
+      case "btn-center":
+        return "justify-center";
+        break;
+      case "btn-right":
+        return "justify-end";
+        break;
+      default:
+        return "justify-start";
+    }
+  };
 
   return (
     <div
-      className={`flex flex-row w-full ${alignValue} h-fit px-10 lg:px-16 lg:pb-4 flex-wrap gap-4`}>
+      className={`flex flex-row w-full ${alignValue(
+        align
+      )} h-fit px-10 lg:px-16 lg:pb-4 flex-wrap gap-4`}>
       {buttons.map((button, index) => {
         return (
           <Button tag="a" details={button.value} variant={button.value.buttonStyle} key={index}>

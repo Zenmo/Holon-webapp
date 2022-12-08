@@ -1,5 +1,5 @@
 import { useState } from "react";
-import StorylineOverviewCard from "./StorylineOverviewCard";
+import Card from "../../Card/Card";
 import StorylineOverviewFilter from "./StorylineOverviewFilter";
 
 import { StoryLineItem as StoryLineItemData } from "./types";
@@ -84,13 +84,13 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
             <strong>{filteredProjects?.length} resultaten</strong>
           </div>
 
-          <div className="flex flex-row flex-wrap mx-[-1rem]">
+          <div className="flex flex-row flex-wrap justify-center md:justify-start mx-[-1rem]">
             {filteredProjects?.map((project, index) => (
-              <StorylineOverviewCard key={index} index={index} project={project} />
-            ))}
-
-            {filteredProjects?.map((project, index) => (
-              <StorylineOverviewCard key={index} index={index} project={project} />
+              <div
+                key={index}
+                className="px-[1rem] flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]">
+                <Card cardItem={project} cardType="storylineCard" />
+              </div>
             ))}
           </div>
         </div>

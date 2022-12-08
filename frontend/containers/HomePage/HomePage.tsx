@@ -2,6 +2,7 @@ import CardBlock from "@/components/Blocks/CardsBlock/CardBlock";
 import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMediaBlock";
+import ButtonsAndMediaBlock from "@/components/Blocks/ButtonsAndMediaBlock/ButtonsAndMediaBlock";
 import { basePageWrap } from "../BasePage";
 
 import styles from "./HomePage.module.css";
@@ -31,6 +32,10 @@ const HomePage = ({ content }: { content: HomePageProps[] }) => {
             return <TitleBlock key={`titleblock ${contentItem.id}`} data={contentItem} />;
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
+          case "buttons_and_media_block":
+            return (
+              <ButtonsAndMediaBlock key={`buttonsmedia ${contentItem.id}`} data={contentItem} />
+            );
           default:
             null;
         }

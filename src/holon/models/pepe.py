@@ -398,11 +398,11 @@ class PreProcessor:
                 if WRITE_TO_JSON:  # TODO: Remove this line once everything is up and running
                     write_payload_to_jsons(payload_dict=self.holon_payload, name=value)
 
-                # catch the unknowns
-                else:
-                    raise ValueError(
-                        f"The value that was supplied ('{value}') as a policy was not known!"
-                    )
+            # catch the unknowns
+            else:
+                raise ValueError(
+                    f"The value that was supplied ('{value}') as a policy was not known!"
+                )
 
     def apply_interactive_to_payload(self):
         """

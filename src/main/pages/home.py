@@ -4,7 +4,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
 
 from .base import BasePage
-from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock
+from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock, ButtonsAndMediaBlock
 
 
 class HomePage(HeadlessPreviewMixin, BasePage):
@@ -15,6 +15,7 @@ class HomePage(HeadlessPreviewMixin, BasePage):
             ("hero_block", HeroBlock()),
             ("text_image_block", TextAndMediaBlock()),
             ("card_block", CardsBlock()),
+            ("buttons_and_media_block", ButtonsAndMediaBlock()),
         ],
         verbose_name="Page body",
         blank=True,
