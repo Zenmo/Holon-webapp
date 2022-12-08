@@ -6,13 +6,15 @@ import StretchedLink from "../StretchedLink";
 import StorylineIcons from "./StorylineIcons";
 import { CardItem, CardProps, CardStyling, CardTitleProps } from "./types";
 
-const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
+const CardTitle = ({ condition, cardType, children, ...linkProps }: CardTitleProps) => {
   if (condition) {
     return (
       <StretchedLink
         {...linkProps}
         content={children}
-        className={`mb-3 block font-bold`}></StretchedLink>
+        className={`block font-bold ${
+          cardType === "buttonCard" ? "truncate" : "mb-3"
+        }`}></StretchedLink>
     );
   }
   return <strong className="mb-3 block">{children}</strong>;
@@ -101,16 +103,17 @@ export default function Card({ cardItem, cardType }: CardProps) {
           )}
         </span>
 
-        <span className={`flex m-4 ${cardStyling.text}`}>
+        <span className={`flex gap-2 m-4 ${cardStyling.text}`}>
           <CardTitle
             condition={cardItem.slug || cardItem.itemLink?.length > 0}
             href={createLink(cardItem)}
+            cardType={cardType}
             {...externLinkProps}>
             {cardItem.title}
           </CardTitle>
 
           {cardType === "buttonCard" ? (
-            <span className="w-10 h-10" data-testid="arrow">
+            <span className="w-10 h-10 flex-[0_0_40px]" data-testid="arrow">
               <ArrowSmallRightIcon />
             </span>
           ) : (
