@@ -50,7 +50,7 @@ describe("<StorylineOverview />", () => {
     });
 
     it("renders an storyline card", () => {
-      const card = screen.getByTestId("storyline-card");
+      const card = screen.getByTestId("test1");
       expect(card).toBeInTheDocument();
     });
 
@@ -71,21 +71,18 @@ describe("<StorylineOverview />", () => {
 
     it("renders a link", () => {
       const link = screen.getByRole("link");
-      expect(link).toHaveAttribute("href", "/test");
+      expect(link).toHaveAttribute("href", "test");
     });
 
     it("has the selected background color", () => {
-      const link = screen.getByRole("link");
+      const card = screen.getByTestId("test1");
 
-      expect(link).toHaveClass("card__bg-blue");
+      expect(card).toHaveClass("card__bg-blue");
     });
 
-    //Stretched link still needs to be added to storylinecard
-    /* 
     it("renders a stetched link", () => {
       const link = screen.getByRole("link");
       expect(link).toHaveClass("stretched-link");
     });
-    */
   });
 });

@@ -141,7 +141,7 @@ export default function SectionBlock({ data }: Props) {
 
   useEffect(() => {
     debouncedCalculateKPIs(content);
-  }, [content]);
+  }, [content, debouncedCalculateKPIs]);
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
     const defaultValue = content.value.defaultValueOverride;
