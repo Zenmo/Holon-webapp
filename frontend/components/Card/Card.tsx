@@ -6,18 +6,16 @@ import StretchedLink from "../StretchedLink";
 import StorylineIcons from "./StorylineIcons";
 import { CardItem, CardProps, CardStyling, CardTitleProps } from "./types";
 
-const CardTitle = ({ condition, cardType, children, ...linkProps }: CardTitleProps) => {
+const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
   if (condition) {
     return (
       <StretchedLink
         {...linkProps}
         content={children}
-        className={`block font-bold ${
-          cardType === "buttonCard" ? "truncate" : "mb-3"
-        }`}></StretchedLink>
+        className={`block font-bold line-clamp-2`}></StretchedLink>
     );
   }
-  return <strong className="mb-3 block">{children}</strong>;
+  return <strong className="block line-clamp-2">{children}</strong>;
 };
 
 export default function Card({ cardItem, cardType }: CardProps) {
@@ -50,7 +48,7 @@ export default function Card({ cardItem, cardType }: CardProps) {
       });
     } else {
       return (cardStyling = {
-        card: "flex-col min-h-96 w-3/5 sm:w-[35%] md:w-[30%] lg:w-[22%] xl:w-[18.4%] mb-4 h-[360px] xl:h-[400px]",
+        card: "flex-col  min-h-96  mb-4 h-[360px] xl:h-[400px] overflow-hidden",
         imgSpan: "h-2/3",
         img: "rounded-t-lg duration-300 ease-in group-hover:brightness-100 group-hover:scale-110",
         text: "flex-col h-1/3",
@@ -90,11 +88,11 @@ export default function Card({ cardItem, cardType }: CardProps) {
             className={`object-cover object-center h-full w-full ${cardStyling.img}  max-w-none max-h-none brightness-90 `}
           />
           {cardItem.informationTypes && (
-            <span className="mt-auto text-right absolute bottom-1 flex justify-start self-end align- flex-wrap-reverse">
+            <span className="max-w-full  mt-auto text-right absolute bottom-1 flex justify-start self-end align- flex-wrap-reverse">
               {cardItem.informationTypes.map((informationtype, index) => (
                 <span
                   key={index}
-                  className="flex bg-white opacity-80 rounded-3xl items-center py-1 px-2 ml-2 mt-2 whitespace-nowrap ">
+                  className="flex bg-white truncate opacity-80 rounded-3xl items-center py-1 px-2 ml-2 mt-2">
                   {informationtype.icon && <StorylineIcons icon={informationtype.icon} />}
                   {informationtype.name}
                 </span>
@@ -107,7 +105,6 @@ export default function Card({ cardItem, cardType }: CardProps) {
           <CardTitle
             condition={cardItem.slug || cardItem.itemLink?.length > 0}
             href={createLink(cardItem)}
-            cardType={cardType}
             {...externLinkProps}>
             {cardItem.title}
           </CardTitle>

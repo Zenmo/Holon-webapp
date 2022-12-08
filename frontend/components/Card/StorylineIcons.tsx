@@ -13,7 +13,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function StorylineOverviewCardIcon({ icon }: { icon: string }) {
-  const cssclass = "mr-1 h-6 w-6";
+  const cssclass = "mr-1 h-6 w-6 flex-[0_0_24px]";
   switch (icon) {
     case "bell":
       return <BellIcon className={cssclass} />;

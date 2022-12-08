@@ -98,9 +98,13 @@ export default function StorylineOverview({ storylines, allInformationTypes, all
         <div className="flex flex-row justify-between mb-2">
           <strong>{filteredProjects?.length} resultaten</strong>
         </div>
-        <div className="flex flex-row flex-wrap justify-center md:justify-start gap-4 mx-[-1rem]">
+        <div className="flex flex-row flex-wrap justify-center md:justify-start mx-[-1rem]">
           {filteredProjects?.map((project, index) => (
-            <Card key={index} cardItem={project} cardType="storylineCard" />
+            <div
+              key={index}
+              className="px-[1rem] flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]">
+              <Card cardItem={project} cardType="storylineCard" />
+            </div>
           ))}
         </div>
       </div>

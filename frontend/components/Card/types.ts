@@ -54,7 +54,6 @@ export type CardProps = {
 };
 
 export type CardTitleProps = {
-  cardType: string;
   condition: boolean;
   children: React.ReactNode;
   linkProps: React.ComponentProps<"a">;
