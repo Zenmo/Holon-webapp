@@ -30,7 +30,7 @@ export default function ButtonsAndMedia({ data }: Props) {
 
   return (
     <div className={`${backgroundFullcolor}`} data-testid="ButtonsMedia">
-      <div className={`flex flex-col lg:flex-row`}>
+      <div className={`flex flex-col lg:flex-row holonContentContainer`}>
         <div
           className={`flex flex-col gap-6 py-8 px-10 lg:px-16 lg:pt-16 lg:w-1/2 ${backgroundLeftColor}`}>
           {data.value.buttons.map((buttonItem, index) => {

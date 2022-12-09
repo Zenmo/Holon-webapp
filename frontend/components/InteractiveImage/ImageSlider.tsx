@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./ImageSlider.module.css";
 
 interface Props {
   locked?: boolean;
@@ -45,16 +46,16 @@ export default function ImageSlider({
               setSliderValue(Number(e.target.value));
               setValue(inputId, Number(e.target.value));
             }}
-            className={`h-1 w-3/5 ${
-              locked ? "cursor-not-allowed" : ""
-            } slider interactImg appearance-none disabled:bg-holon-grey-300`}
+            className={`h-1 w-3/5 ${locked ? "cursor-not-allowed" : ""} ${
+              styles.slider
+            } interactImg appearance-none disabled:bg-holon-grey-300`}
             step={step}
             min={min}
             max={max}
             type={type}
           />
           {tooltip && (
-            <div className="slidervalue">
+            <div className={styles.slidervalue}>
               <div className="relative">
                 <output
                   className="text-white border-white rounded"

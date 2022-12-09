@@ -10,6 +10,7 @@ type Props = {
       gridLayout: {
         grid: string;
       };
+      columnOrder: string;
       background: {
         color: string;
         size: string;
@@ -33,28 +34,35 @@ export default function TextAndMedia({ data }: Props) {
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
 
   const gridValue = getGrid(data.value.gridLayout.grid);
+  const direction =
+    data.value.columnOrder === "invert" ? "lg:flex-row-reverse inverseColumns" : "lg:flex-row";
 
   return (
-    <div className={`${backgroundFullcolor}`}>
-      <div className={` storyline__row flex flex-col lg:flex-row`}>
-        <div
-          className={`flex flex-col py-8 px-10 lg:px-16 lg:pt-16 ${gridValue.left} ${backgroundLeftColor}`}
-          data-testid="textMedia">
-          <RawHtml html={data.value?.text} />
-        </div>
+    <div className={`overflow-hidden ${backgroundFullcolor}`}>
+      <div className="holonContentContainer">
+        <div className={`flex flex-col ${direction}`}>
+          <div
+            className={`flex flex-col relative defaultBlockPadding ${gridValue.left} ${backgroundLeftColor}`}
+            data-testid="textMedia">
+            {data.value.background.size !== "bg_full" && (
+              <span className={`extra_bg ${backgroundLeftColor}`}></span>
+            )}
+            <RawHtml html={data.value?.text} />
+          </div>
 
-        <div className={`flex flex-col ${gridValue.right}`}>
-          <div className="lg:sticky py-8 px-10 lg:px-16 lg:pt-24 top-0">
-            <MediaContent media={data.value.media} alt={data.value.altText} />
+          <div className={`flex flex-col ${gridValue.right}`}>
+            <div className="lg:sticky defaultBlockPadding top-0">
+              <MediaContent media={data.value.media} alt={data.value.altText} />
+            </div>
           </div>
         </div>
-      </div>
 
-      {data.value.buttonBlock.length > 0 && (
-        <ButtonBlock
-          buttons={data.value.buttonBlock[0].value.buttons}
-          align={data.value.buttonBlock[0].value.buttonsAlign}></ButtonBlock>
-      )}
+        {data.value.buttonBlock.length > 0 && (
+          <ButtonBlock
+            buttons={data.value.buttonBlock[0].value.buttons}
+            align={data.value.buttonBlock[0].value.buttonsAlign}></ButtonBlock>
+        )}
+      </div>
     </div>
   );
 }

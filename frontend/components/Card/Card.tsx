@@ -12,10 +12,10 @@ const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
       <StretchedLink
         {...linkProps}
         content={children}
-        className={`block font-bold line-clamp-2`}></StretchedLink>
+        className={`block font-bold line-clamp-2 break-all`}></StretchedLink>
     );
   }
-  return <strong className="block line-clamp-2">{children}</strong>;
+  return <strong className="block line-clamp-2 break-all">{children}</strong>;
 };
 
 export default function Card({ cardItem, cardType }: CardProps) {
@@ -74,7 +74,7 @@ export default function Card({ cardItem, cardType }: CardProps) {
   return (
     <React.Fragment>
       <span
-        className={`group ${cardStyling.card} ${backgroundColor} relative rounded-lg flex`}
+        className={`group ${cardStyling.card} ${backgroundColor} relative rounded-lg flex `}
         data-testid={cardItem.title}>
         <span className={`${cardStyling.imgSpan} overflow-hidden relative`}>
           {/* eslint-disable @next/next/no-img-element */}
@@ -83,12 +83,12 @@ export default function Card({ cardItem, cardType }: CardProps) {
             alt={
               cardItem.thumbnail ? `storyline ${cardItem.title}` : cardItem.imageSelector?.img.alt
             }
-            width="725"
-            height="380"
-            className={`object-cover object-center h-full w-full ${cardStyling.img}  max-w-none max-h-none brightness-90 `}
+            width="100%"
+            height="auto"
+            className={`object-cover object-center h-full w-full ${cardStyling.img}  max-w-none max-h-none brightness-90 overflow-hidden`}
           />
           {cardItem.informationTypes && (
-            <span className="max-w-full  mt-auto text-right absolute bottom-1 flex justify-start self-end align- flex-wrap-reverse">
+            <span className="max-w-full  mt-auto text-right absolute bottom-1 flex justify-start self-end flex-wrap-reverse">
               {cardItem.informationTypes.map((informationtype, index) => (
                 <span
                   key={index}
@@ -101,7 +101,7 @@ export default function Card({ cardItem, cardType }: CardProps) {
           )}
         </span>
 
-        <span className={`flex gap-2 m-4 ${cardStyling.text}`}>
+        <span className={`flex gap-2 overflow-hidden m-4 ${cardStyling.text}`}>
           <CardTitle
             condition={cardItem.slug || cardItem.itemLink?.length > 0}
             href={createLink(cardItem)}
