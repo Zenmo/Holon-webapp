@@ -38,5 +38,5 @@
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "peacock.color": "#dd0531"
+    "python.analysis.typeCheckingMode": "strict"
 }
