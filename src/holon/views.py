@@ -29,7 +29,7 @@ class HolonService(generics.CreateAPIView):
             # TODO: this is hardcoded; should be a result from the DB::scenario linked to the storyline
             # NOTE: other things (like balancer in ETM_service) are now also hardcoded to work with
             # this specific scenario, please notify @noracto when you change this. Scenario = KEV
-            data["scenario"] = {"etm_scenario_id": 2171098, "model_name": "technical_debt"}
+            data["scenario"] = {"etm_scenario_id": 2175158, "model_name": "technical_debt"}
             pepe.preprocessor = data
 
             # holon_results = {}
