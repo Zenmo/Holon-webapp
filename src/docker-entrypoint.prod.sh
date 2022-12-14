@@ -13,7 +13,7 @@ wait_for_db () {
 
 setup_submodules () {
   echo Setup submodules
-  (cd holon/services && cloudclient_init -tf . --get-api-key)
+  (cd holon/services && cloudclient_init -tf . )
 }
 
 setup_django () {
