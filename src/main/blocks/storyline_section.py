@@ -2,16 +2,11 @@
 from django.utils.translation import gettext_lazy as _
 
 from api.models import (
-    Slider,
     InteractiveInput,
     InteractiveInputOptions,
     InteractiveInputContinuousValues,
 )
 from wagtail.core import blocks
-from wagtail.blocks.struct_block import StructBlockAdapter
-from wagtail.telepath import register
-from django import forms
-from django.utils.functional import cached_property
 from api.models.interactive_input import CHOICE_CONTINUOUS, CHOICE_MULTISELECT, CHOICE_SINGLESELECT
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
@@ -21,31 +16,6 @@ from .background_chooser import BackgroundChooserBlock
 
 def get_interactive_inputs():
     return [(ii.pk, ii.__str__) for ii in InteractiveInput.objects.all()]
-
-
-def get_sliders():
-    return [(slider.pk, slider.name) for slider in Slider.objects.all()]
-
-
-class SliderBlock(blocks.StructBlock):
-    slider = blocks.ChoiceBlock(choices=get_sliders)
-    visible = blocks.BooleanBlock(required=False)
-    locked = blocks.BooleanBlock(required=False)
-
-    def get_api_representation(self, value, context=None):
-        if value:
-            slide = Slider.objects.get(pk=value["slider"])
-            return {
-                "id": slide.id,
-                "name": slide.name,
-                "slider_value_default": slide.slider_value_default,
-                "slider_value_min": slide.slider_value_min,
-                "slider_value_max": slide.slider_value_max,
-                "tag": slide.tag,
-            }
-
-    class Meta:
-        label = _("Slider (use interactive input for new sliders)")
 
 
 class InteractiveInputBlock(blocks.StructBlock):
@@ -133,7 +103,6 @@ class StorylineSectionBlock(blocks.StructBlock):
         [
             ("text", RichtextBlock()),
             ("interactive_input", InteractiveInputBlock()),
-            ("slider", SliderBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
         ],
         block_counts={"static_image": {"max_num": 1}},

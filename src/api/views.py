@@ -1,14 +1,7 @@
-from django.shortcuts import render
-from rest_framework import mixins, viewsets
+from rest_framework import viewsets
 
-from api.models import Slider, InteractiveInput
-from api.serializers import SliderSerializer, InteractiveInputSerializer
-
-
-# Create your views here.
-class SliderViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Slider.objects.all()
-    serializer_class = SliderSerializer
+from api.models import InteractiveInput
+from api.serializers import InteractiveInputSerializer
 
 
 class InteractiveInputViewset(viewsets.ReadOnlyModelViewSet):
