@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from api.models.interactive_input import InteractiveInput
 from api.models.scenario import Scenario
-from api.models.slider import Slider
 from django.utils.translation import gettext_lazy as _
 
 

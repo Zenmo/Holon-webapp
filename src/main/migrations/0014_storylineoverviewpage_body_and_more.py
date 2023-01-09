@@ -91,12 +91,6 @@ class Migration(migrations.Migration):
                                                 wagtail.blocks.StructBlock(
                                                     [
                                                         (
-                                                            "slider",
-                                                            wagtail.blocks.ChoiceBlock(
-                                                                choices=main.blocks.storyline_section.get_sliders
-                                                            ),
-                                                        ),
-                                                        (
                                                             "visible",
                                                             wagtail.blocks.BooleanBlock(
                                                                 required=False

@@ -1,4 +1,3 @@
-import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
@@ -30,11 +29,6 @@ export type Content =
     }
   | {
       id: string;
-      type: "slider";
-      value: Slider;
-    }
-  | {
-      id: string;
       type: "static_image";
       value: StaticImage;
     }
@@ -45,16 +39,6 @@ export type InteractiveContent = {
   type: "interactive_input";
   currentValue?: number | string | string[] | number[] | undefined;
   value: InteractiveInput;
-};
-
-export type Slider = {
-  id: number;
-  name?: string;
-  currentValue?: number;
-  sliderValueDefault?: number;
-  sliderValueMax?: number;
-  sliderValueMin?: number;
-  sliderLocked?: boolean;
 };
 
 export type StaticImage = {
@@ -78,6 +62,7 @@ export type InteractiveInput = {
   display: string;
   visible?: boolean;
 };
+
 export type InteractiveInputOptions = {
   id: number;
   option?: string;
@@ -256,22 +241,7 @@ export default function SectionBlock({ data }: Props) {
               <span className={`extra_bg ${backgroundLeftColor}`}></span>
             )}
             {content.map(ct => {
-              if (ct.type === "slider") {
-                return (
-                  <ImageSlider
-                    key={`slider${ct.id}`}
-                    inputId={ct.id}
-                    datatestid={`ct.value?.name${_index}`}
-                    value={ct.value.currentValue}
-                    setValue={setInteractiveInputValue}
-                    min={ct.value.sliderValueMin}
-                    max={ct.value.sliderValueMax}
-                    step={1}
-                    label={ct.value.name}
-                    type="range"
-                    locked={ct.value.sliderLocked}></ImageSlider>
-                );
-              } else if (ct.type === "interactive_input" && ct.value.visible) {
+              if (ct.type === "interactive_input" && ct.value.visible) {
                 return (
                   <InteractiveInputs
                     setValue={setInteractiveInputValue}
