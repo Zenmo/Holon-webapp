@@ -2,6 +2,7 @@ import React from "react";
 import CardBlock from "@/components/Blocks/CardsBlock/CardBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMediaBlock";
+import ParagraphBlock from "@/components/Blocks/ParagraphBlock/ParagraphBlock";
 import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock";
 import styles from "./StaticPage.module.css";
 import { basePageWrap } from "@/containers/BasePage";
@@ -14,6 +15,7 @@ const StaticPage = ({ content }: { content: Content[] }) => {
   return (
     <div className={styles[""]}>
       {content?.map(contentItem => {
+        console.log(contentItem.type);
         switch (contentItem.type) {
           case "header_full_image_block":
             return <HeaderFullImageBlock key={`headerfull ${contentItem.id}`} data={contentItem} />;
@@ -23,6 +25,8 @@ const StaticPage = ({ content }: { content: Content[] }) => {
             return <TitleBlock key={`titleblock ${contentItem.id}`} data={contentItem} />;
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
+          case "paragraph_block":
+            return <ParagraphBlock key={`paragraphBlock ${contentItem.id}`} data={contentItem} />;
           default:
             null;
         }
