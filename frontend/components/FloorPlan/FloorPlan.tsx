@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Button from "../VersionOne/Buttons/HolonButton";
 /* eslint-disable @next/next/no-img-element */
 
 const tileImages = [
@@ -24,7 +23,11 @@ export default function FloorPlan() {
   return (
     <React.Fragment>
       <h1>Proof of concept tiles</h1>
-      <Button onClick={() => changeGrid()}>Refresh tiles</Button>
+      <button
+        className="border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50"
+        onClick={() => changeGrid()}>
+        Refresh tiles
+      </button>
 
       <div data-size={size} className="floorplan">
         {Array(Math.pow(size, 2))
