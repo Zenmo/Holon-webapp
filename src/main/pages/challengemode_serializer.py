@@ -6,4 +6,3 @@ class ChallengeModePageSerializer(BasePageSerializer):
     class Meta:
         model = ChallengeModePage
         fields = BasePageSerializer.Meta.fields
-

@@ -464,9 +464,7 @@ class Migration(migrations.Migration):
                                                         ),
                                                     ),
                                                 ],
-                                                block_counts={
-                                                    "static_image": {"max_num": 1}
-                                                },
+                                                block_counts={"static_image": {"max_num": 1}},
                                             ),
                                         ),
                                     ]
