@@ -15,5 +15,5 @@ class ParagraphBlock(blocks.StructBlock):
     text = RichtextBlock(required=True, help_text="Add your text", rows=15)
 
     class Meta:  # NOQA
-        icon = "text"
+        icon = "form"
         label = "Paragraph"
