@@ -36,6 +36,9 @@ export default function Paragraph({ data }: Props) {
           <div
             className={`flex flex-col relative defaultBlockPadding ${gridValue.left} ${backgroundLeftColor}`}
             data-testid="paragraph">
+            {data.value.background.size !== "bg_full" && (
+              <span className={`extra_bg ${backgroundLeftColor}`}></span>
+            )}
             <RawHtml html={data.value?.text} />
           </div>
         </div>
