@@ -3,10 +3,12 @@ from . import StorylineOverviewPage
 from rest_framework.fields import Field
 from rest_framework import serializers
 from main.pages.storyline import StorylinePage
+from main.pages.challengemode import ChallengeModePage
 from main.pages.base_storyline_challengemode import (
     StorylinePageRoleType,
     StorylinePageInformationType,
 )
+from itertools import chain
 
 
 class StorylineOverviewPageSerializer(BasePageSerializer):
@@ -15,9 +17,12 @@ class StorylineOverviewPageSerializer(BasePageSerializer):
     all_information_types = serializers.SerializerMethodField()
 
     def get_all_storylines(self, page):
-        all = StorylinePage.objects.descendant_of(page)
+        all_story = StorylinePage.objects.descendant_of(page)
+        all_challenge = ChallengeModePage.objects.descendant_of(page)
+        result_list = sorted(chain(all_story, all_challenge), key=lambda instance: instance.id)
+
         return_all_storylines = []
-        for sl in all:
+        for sl in result_list:
             roles_array = []
             roles = sl.roles.all()
             for role in roles:
