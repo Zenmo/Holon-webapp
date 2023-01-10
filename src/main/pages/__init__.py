@@ -10,3 +10,5 @@ from .storyline import *  # NOQA
 from .storyline_serializer import *  # NOQA
 from .static import *  # NOQA
 from .static_serializer import *  # NOQA
+from .challengemode import *  # NOQA
+from .challengemode_serializer import *  # NOQA

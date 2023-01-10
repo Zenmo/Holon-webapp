@@ -2,7 +2,11 @@ from .base_serializer import BasePageSerializer
 from . import StorylineOverviewPage
 from rest_framework.fields import Field
 from rest_framework import serializers
-from main.pages.storyline import StorylinePage, StorylinePageRoleType, StorylinePageInformationType
+from main.pages.storyline import StorylinePage
+from main.pages.base_storyline_challengemode import (
+    StorylinePageRoleType,
+    StorylinePageInformationType,
+)
 
 
 class StorylineOverviewPageSerializer(BasePageSerializer):
