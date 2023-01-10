@@ -8,5 +8,7 @@ class StorylinePage(BaseStorylineChallengeMode):
     extra_panels = BaseStorylineChallengeMode.extra_panels + []
     content_panels = BaseStorylineChallengeMode.content_panels + []
 
+    serializer_class = "main.pages.StorylinePageSerializer"
+
     class Meta:
         verbose_name = _("Storyline")

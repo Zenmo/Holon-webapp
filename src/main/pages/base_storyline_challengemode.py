@@ -146,8 +146,6 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BasePage):
         use_json_field=True,
     )
 
-    serializer_class = "main.pages.StorylinePageSerializer"
-
     content_panels = BasePage.content_panels + [
         MultiFieldPanel(
             [
