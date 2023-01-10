@@ -4,7 +4,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
 
 from .base import BasePage
-from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
+from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 
 
 class StaticPage(HeadlessPreviewMixin, BasePage):
@@ -13,6 +13,7 @@ class StaticPage(HeadlessPreviewMixin, BasePage):
             ("title_block", TitleBlock()),
             ("header_full_image_block", HeaderFullImageBlock()),
             ("text_image_block", TextAndMediaBlock()),
+            ("paragraph_block", ParagraphBlock()),
             ("card_block", CardsBlock()),
         ],
         verbose_name="Page body",
