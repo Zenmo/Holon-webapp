@@ -9,5 +9,6 @@ export default {
   PureHtmlPage: dynamic(() => import("./PureHtmlPage")),
   WikiPage: dynamic(() => import("./WikiPage")),
   StorylinePage: dynamic(() => import("./StorylinePage")),
+  ChallengeModePage: dynamic(() => import("./ChallengeModePage")),
   StorylineOverviewPage: dynamic(() => import("./StorylineOverviewPage")),
 };
