@@ -265,7 +265,7 @@ export default function SectionBlock({ data }: Props) {
                   <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
                 )}
               </div>
-              <KPIDashboard data={kpis} loading={loading}></KPIDashboard>
+              <KPIDashboard data={kpis} loading={loading} dashboardId={data.id}></KPIDashboard>
             </div>
           </div>
         </div>

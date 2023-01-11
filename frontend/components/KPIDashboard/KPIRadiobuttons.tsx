@@ -1,18 +1,19 @@
 type RadioButtons = {
   updateValue: (value: string) => void;
   loading: boolean;
+  dashboardId: string;
 };
 
-export default function KPIRadioButtons({ updateValue, loading }: RadioButtons) {
+export default function KPIRadioButtons({ updateValue, loading, dashboardId }: RadioButtons) {
   return (
     <div className="flex flex-row ml-4">
       <label htmlFor="lokaal" className="flex flex-row mb-2">
         <input
           defaultChecked={true}
           type="radio"
-          name="lokaal-nationaal"
+          name={`${dashboardId}-lokaal-nationaal`}
           value="local"
-          id="lokaal"
+          id={`lokaal`}
           data-testid="radio-local"
           onChange={e => updateValue(e.target.value)}
           disabled={loading ? true : false}
@@ -26,9 +27,9 @@ export default function KPIRadioButtons({ updateValue, loading }: RadioButtons) 
         <input
           //defaultChecked={}
           type="radio"
-          name="lokaal-nationaal"
+          name={`${dashboardId}-lokaal-nationaal`}
           value="national"
-          id="nationaal"
+          id={`nationaal`}
           data-testid="radio-national"
           onChange={e => updateValue(e.target.value)}
           disabled={loading ? true : false}
