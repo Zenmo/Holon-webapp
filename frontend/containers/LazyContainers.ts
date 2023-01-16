@@ -8,6 +8,7 @@ export default {
   PasswordProtectedPage: dynamic(() => import("./PasswordProtectedPage")),
   PureHtmlPage: dynamic(() => import("./PureHtmlPage")),
   WikiPage: dynamic(() => import("./WikiPage")),
+  CasusOverviewPage: dynamic(() => import("./CasusOverviewPage")),
   StorylinePage: dynamic(() => import("./StorylinePage")),
   ChallengeModePage: dynamic(() => import("./ChallengeModePage")),
   StorylineOverviewPage: dynamic(() => import("./StorylineOverviewPage")),

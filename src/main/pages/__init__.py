@@ -12,3 +12,5 @@ from .static import *  # NOQA
 from .static_serializer import *  # NOQA
 from .challengemode import *  # NOQA
 from .challengemode_serializer import *  # NOQA
+from .casusoverview import *  # NOQA
+from .casusoverview_serializer import *  # NOQA
