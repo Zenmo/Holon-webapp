@@ -14,3 +14,5 @@ from .challengemode import *  # NOQA
 from .challengemode_serializer import *  # NOQA
 from .casusoverview import *  # NOQA
 from .casusoverview_serializer import *  # NOQA
+from .casus import *  # NOQA
+from .casus_serializer import *  # NOQA

@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from .base_serializer import BasePageSerializer
 from . import CasusOverviewPage
 
@@ -5,5 +7,6 @@ from . import CasusOverviewPage
 class CasusOverviewPageSerializer(BasePageSerializer):
     class Meta:
         model = CasusOverviewPage
-        fields = BasePageSerializer.Meta.fields
-
+        fields = [
+            "introduction",
+        ] + BasePageSerializer.Meta.fields
