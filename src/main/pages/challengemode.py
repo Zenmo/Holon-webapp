@@ -12,4 +12,4 @@ class ChallengeModePage(BaseStorylineChallengeMode):
     serializer_class = "main.pages.ChallengeModePageSerializer"
 
     class Meta:
-        verbose_name = _("ChallengeMode")
+        verbose_name = _("Challenge Mode")

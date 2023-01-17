@@ -16,3 +16,5 @@ from .casusoverview import *  # NOQA
 from .casusoverview_serializer import *  # NOQA
 from .casus import *  # NOQA
 from .casus_serializer import *  # NOQA
+from .bestpractice import *  # NOQA
+from .bestpractice_serializer import *  # NOQA

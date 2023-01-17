@@ -8,6 +8,7 @@ from modelcluster.fields import ParentalManyToManyField
 
 from .base import BasePage
 from .base_storyline_challengemode import StorylinePageFilter
+from .bestpractice import BestPracticePage
 
 
 @register_snippet
@@ -27,6 +28,7 @@ class CasusFilter(StorylinePageFilter):
 
 class CasusPage(HeadlessPreviewMixin, BasePage):
     casus_filter = ParentalManyToManyField(CasusFilter)
+    best_practice = models.ManyToManyField(BestPracticePage, blank=True)
 
     parent_page_types = ["main.CasusOverviewPage"]
     subpage_types = [
@@ -37,7 +39,10 @@ class CasusPage(HeadlessPreviewMixin, BasePage):
     extra_panels = BasePage.extra_panels
     serializer_class = "main.pages.CasusPageSerializer"
 
-    content_panels = BasePage.content_panels + [FieldPanel("casus_filter")]
+    content_panels = BasePage.content_panels + [
+        FieldPanel("casus_filter"),
+        FieldPanel("best_practice"),
+    ]
 
     class Meta:
         verbose_name = _("CasusPage")
