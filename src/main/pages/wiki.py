@@ -9,7 +9,7 @@ from wagtail.core.blocks import StreamBlock
 from .base import BasePage
 
 
-new_table_options = {"renderer": "text", "startRows": 10, "editor": "text"}
+new_table_options = {"renderer": "text", "startRows": 3, "editor": "text"}
 
 
 class ContentBlocks(StreamBlock):

@@ -7,7 +7,7 @@ from wagtail.contrib.table_block.blocks import TableBlock
 from .base import BasePage
 from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 
-new_table_options = {"renderer": "text", "startRows": 10, "editor": "text"}
+new_table_options = {"renderer": "text", "startRows": 3, "editor": "text"}
 
 
 class StaticPage(HeadlessPreviewMixin, BasePage):

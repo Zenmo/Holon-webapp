@@ -24,6 +24,10 @@ type Props = {
 };
 
 export default function Table({ data }: Props) {
+  if (!data.value) {
+    return console.warn("empty table");
+  }
+
   const tableData = data.value.table ? data.value.table : data.value;
 
   const tablebody = tableData.firstRowIsTableHeader ? tableData.data.slice(1) : tableData.data;
