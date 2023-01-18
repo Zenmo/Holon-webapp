@@ -1,5 +1,4 @@
 from django.utils.translation import gettext_lazy as _
-from django.db import models
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.snippets.models import register_snippet
@@ -28,6 +27,7 @@ class CasusFilter(StorylinePageFilter):
 class CasusPage(HeadlessPreviewMixin, BasePage):
     casus_filter = ParentalManyToManyField(CasusFilter)
 
+    parent_page_types = ["main.CasusOverviewPage"]
     subpage_types = ["main.StorylinePage", "main.ChallengeModePage", "main.SandboxPage"]
 
     extra_panels = BasePage.extra_panels

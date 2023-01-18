@@ -16,6 +16,8 @@ class BestPracticePage(HeadlessPreviewMixin, BasePage):
 
     content_panels = BasePage.content_panels + [FieldPanel("linked_casusses")]
 
+    subpage_types = []
+
     class Meta:
         verbose_name = _("Best Practice")
         verbose_name_plural = _("Best Practices")

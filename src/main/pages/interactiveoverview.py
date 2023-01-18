@@ -1,22 +1,19 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
-from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.admin.panels import FieldPanel
 
 from .base import BasePage
-
+from .base_overview import BaseOverview
 
 TYPE_CHOICES = (
     ("storyline", "Storyline overview"),
     ("challenge", "Challenge overview"),
     ("sandbox", "Sandbox overview"),
-    ("casus", "Casus overview"),
-    ("bestpractice", "Best Practice overview"),
 )
 
 
-class OverviewPage(HeadlessPreviewMixin, BasePage):
+class InteractiveOverviewPage(BaseOverview):
     overview_type = models.CharField(
         max_length=50,
         choices=TYPE_CHOICES,
@@ -29,7 +26,9 @@ class OverviewPage(HeadlessPreviewMixin, BasePage):
         FieldPanel("overview_type"),
     ]
     extra_panels = BasePage.extra_panels
-    serializer_class = "main.pages.OverviewPageSerializer"
+    serializer_class = "main.pages.InteractiveOverviewPageSerializer"
+
+    subpage_types = []
 
     class Meta:
         verbose_name = _("Overview")
