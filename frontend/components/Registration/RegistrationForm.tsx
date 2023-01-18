@@ -1,8 +1,18 @@
-import React from "react";
+import { useState } from "react";
 
 export default function RegistrationForm() {
+  const [user, setUser] = useState({ name: "", email: "", password: "", verifyPassword: "" });
+
+  function handleInputChange(e) {
+    e.preventDefault();
+    setUser({ ...user, [e.target.name]: e.target.value });
+  }
+
   function handleSubmit(e) {
-    console.log(e);
+    e.preventDefault();
+    if (user.password !== user.verifyPassword) {
+      console.log("wachtwoord moet hetzelfde zijn");
+    }
   }
 
   return (
@@ -20,6 +30,8 @@ export default function RegistrationForm() {
           id="name"
           name="name"
           placeholder="Naam"
+          value={user.name}
+          onChange={handleInputChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required
         />
@@ -31,6 +43,8 @@ export default function RegistrationForm() {
           type="email"
           id="email"
           name="email"
+          value={user.email}
+          onChange={handleInputChange}
           placeholder="E-mail"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required
@@ -43,20 +57,22 @@ export default function RegistrationForm() {
           type="text"
           id="password"
           name="password"
+          value={user.password}
+          onChange={handleInputChange}
           placeholder="Wachtwoord"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required
         />
 
-        <label
-          htmlFor="confirmPassword"
-          className="block text-gray-700 text-lg font-bold mb-2 mt-8">
+        <label htmlFor="verifyPassword" className="block text-gray-700 text-lg font-bold mb-2 mt-8">
           Wachtwoord bevestigen*:
         </label>
         <input
           type="text"
-          id="confirmPassword"
-          name="confirmPassword"
+          id="verifyPassword"
+          name="verifyPassword"
+          value={user.verifyPassword}
+          onChange={handleInputChange}
           placeholder="Wachtwoord bevestigen"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required

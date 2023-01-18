@@ -50,7 +50,7 @@ const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => 
     canonicalLink,
   } = seo;
   const [status, setStatus] = useState("register");
-  const [nameUser, setNameUser] = useState("");
+  const [user, setUser] = useState({ name: "", email: "", password: "", verifyPassword: "" });
 
   useEffect(() => {
     getCookieConsentValue() === "true" && initGA();
@@ -76,7 +76,7 @@ const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => 
         <meta name="robots" content={seoMetaRobots} />
         {!!canonicalLink && <link rel="canonical" href={canonicalLink} />}
       </Head>
-      <Header navigation={navigation} status={status} nameUser={nameUser} />
+      <Header navigation={navigation} status={status} nameUser={user.name} />
       <div className="BasePage">{children}</div>
       <CookieBar onAccept={initGA} />
       {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}
