@@ -1,4 +1,4 @@
-import LoginForm from "@/components/Authentication/LoginForm";
+import LoginForm from "@/components/Login/LoginForm";
 import { basePageWrap } from "@/containers/BasePage";
 
 function LoginPage() {

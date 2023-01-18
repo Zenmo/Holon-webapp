@@ -6,7 +6,7 @@ export default function UpdatePassword(onSubmit) {
           Oud wachtwoord:
         </label>
         <input
-          type="text"
+          type="password"
           id="oldPassword"
           name="oldPassword"
           placeholder="Oud wachtwoord"
@@ -18,7 +18,7 @@ export default function UpdatePassword(onSubmit) {
           Nieuw wachtwoord:
         </label>
         <input
-          type="text"
+          type="password"
           id="newPassword"
           name="newPassword"
           placeholder="Nieuw wachtwoord"
@@ -32,7 +32,7 @@ export default function UpdatePassword(onSubmit) {
           Bevestig nieuw wachtwoord:
         </label>
         <input
-          type="verifyNewPassword"
+          type="password"
           id="verifyNewPassword"
           name="verifyNewPassword"
           placeholder="Bevestig nieuw wachtwoord"

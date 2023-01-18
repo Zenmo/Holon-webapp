@@ -28,7 +28,7 @@ export default function LoginForm() {
           Wachtwoord:
         </label>
         <input
-          type="text"
+          type="password"
           id="password"
           name="password"
           placeholder="Wachtwoord"
