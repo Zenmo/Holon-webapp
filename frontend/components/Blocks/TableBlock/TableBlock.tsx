@@ -29,8 +29,8 @@ export default function Table({ data }: Props) {
   const tablebody = tableData.firstRowIsTableHeader ? tableData.data.slice(1) : tableData.data;
 
   return (
-    <div className="prose mx-auto">
-      <table>
+    <div className="prose mx-auto max-w-full">
+      <table className="mx-auto w-auto">
         {tableData.firstRowIsTableHeader && (
           <thead>
             <tr>
