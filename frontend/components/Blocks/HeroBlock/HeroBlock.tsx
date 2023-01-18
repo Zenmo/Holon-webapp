@@ -1,4 +1,3 @@
-import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import MediaContent from "@/components/MediaContent/MediaContent";
 import ButtonBlock from "@/components/Button/ButtonBlock";
 
@@ -21,13 +20,6 @@ type Props = {
 
 export default function HeroBlock({ data }: Props) {
   const backgroundcolor = data.value.backgroundColor;
-
-  const scrollDown = () => {
-    const viewportHeight = window.innerHeight;
-    window.scrollTo({
-      top: viewportHeight,
-    });
-  };
 
   return (
     <div>
@@ -55,13 +47,6 @@ export default function HeroBlock({ data }: Props) {
                 align={data.value.buttonBlock[0].buttons_align}></ButtonBlock>
             </div>
           )}
-          <div className="flex flex-row h-16 justify-center">
-            <button
-              onClick={scrollDown}
-              className="bg-holon-purple-100 w-12 h-12 mb-4 absolute rounded-full p-2 hover:bg-holon-purple-200">
-              <ArrowDownIcon />
-            </button>
-          </div>
         </div>
       </div>
     </div>
