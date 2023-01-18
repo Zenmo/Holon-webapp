@@ -3,7 +3,15 @@ import Link from "next/link";
 import Navbar from "./Navbar";
 import { NavItem } from "@/api/types";
 
-export default function Header({ navigation }: { navigation: NavItem[] }) {
+export default function Header({
+  navigation,
+  status,
+  nameUser,
+}: {
+  navigation: NavItem[];
+  status: string;
+  nameUser: string;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleClick = () => {
@@ -42,7 +50,7 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
           <div
             className={`${menuOpen ? "" : "hidden"} w-full md:block md:w-auto`}
             id="navbar-default">
-            <Navbar items={navigation} />
+            <Navbar items={navigation} status={status} nameUser={nameUser} />
           </div>
         </div>
       </div>

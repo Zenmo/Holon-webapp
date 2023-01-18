@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
@@ -49,6 +49,8 @@ const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => 
     seoMetaRobots,
     canonicalLink,
   } = seo;
+  const [status, setStatus] = useState("register");
+  const [nameUser, setNameUser] = useState("");
 
   useEffect(() => {
     getCookieConsentValue() === "true" && initGA();
@@ -74,7 +76,7 @@ const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => 
         <meta name="robots" content={seoMetaRobots} />
         {!!canonicalLink && <link rel="canonical" href={canonicalLink} />}
       </Head>
-      <Header navigation={navigation} />
+      <Header navigation={navigation} status={status} nameUser={nameUser} />
       <div className="BasePage">{children}</div>
       <CookieBar onAccept={initGA} />
       {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}
