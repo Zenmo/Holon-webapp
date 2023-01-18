@@ -5,6 +5,7 @@ from main.pages.storyline import StorylinePage
 from main.pages.challengemode import ChallengeModePage
 from main.pages.casus import CasusPage
 from main.pages.bestpractice import BestPracticePage
+from main.pages.sandbox import SandboxPage
 
 
 def add_roles_and_informationtypes(page):
@@ -23,6 +24,14 @@ def add_roles_and_informationtypes(page):
     return roles_array, it_array
 
 
+def add_casusfilter(page):
+    casusfilter = None
+    if hasattr(page, "casus_filter"):
+        for filter in page.casus_filter.all():
+            casusfilter = filter
+    return {"id": casusfilter.id, "name": casusfilter.name}
+
+
 class OverviewPageSerializer(BasePageSerializer):
     overview_type = serializers.CharField()
     overview_pages = serializers.SerializerMethodField()
@@ -39,6 +48,8 @@ class OverviewPageSerializer(BasePageSerializer):
                 overview_pages = CasusPage.objects.all().live()
             case "bestpractice":
                 overview_pages = BestPracticePage.objects.all().live()
+            case "sandbox":
+                overview_pages = SandboxPage.objects.all().live()
 
         for opage in overview_pages:
             fields = ["title", "description", "slug", "card_color"]
@@ -47,6 +58,9 @@ class OverviewPageSerializer(BasePageSerializer):
             for field in fields:
                 if hasattr(opage, field):
                     return_obj[field] = getattr(opage, field)
+
+            if hasattr(opage, "casus_filter"):
+                return_obj["casus_filter"] = add_casusfilter(opage)
 
             return_obj["thumbnail"] = None
             if (

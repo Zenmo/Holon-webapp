@@ -12,11 +12,11 @@ from .static import *  # NOQA
 from .static_serializer import *  # NOQA
 from .challengemode import *  # NOQA
 from .challengemode_serializer import *  # NOQA
-from .casusoverview import *  # NOQA
-from .casusoverview_serializer import *  # NOQA
 from .casus import *  # NOQA
 from .casus_serializer import *  # NOQA
 from .bestpractice import *  # NOQA
 from .bestpractice_serializer import *  # NOQA
 from .overview import *  # NOQA
 from .overview_serializer import *  # NOQA
+from .sandbox import *  # NOQA
+from .sandbox_serializer import *  # NOQA

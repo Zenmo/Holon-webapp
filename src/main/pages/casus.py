@@ -30,11 +30,7 @@ class CasusPage(HeadlessPreviewMixin, BasePage):
     casus_filter = ParentalManyToManyField(CasusFilter)
     best_practice = models.ManyToManyField(BestPracticePage, blank=True)
 
-    parent_page_types = ["main.CasusOverviewPage"]
-    subpage_types = [
-        "main.StorylinePage",
-        "main.ChallengeModePage",
-    ]
+    subpage_types = ["main.StorylinePage", "main.ChallengeModePage", "main.SandboxPage"]
 
     extra_panels = BasePage.extra_panels
     serializer_class = "main.pages.CasusPageSerializer"
