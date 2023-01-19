@@ -39,7 +39,7 @@ export default function Table({ data }: Props) {
           <thead>
             <tr>
               {tableData.data[0].map((tabledata: string, tabledataIndex) => (
-                <th key={tabledataIndex}>{tabledata}</th>
+                <th key={tabledataIndex}>{typeof tabledata !== "object" && tabledata}</th>
               ))}
             </tr>
           </thead>
