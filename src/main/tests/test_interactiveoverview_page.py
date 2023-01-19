@@ -2,21 +2,21 @@ from wagtail.test.utils import WagtailPageTests
 from wagtail_factories import SiteFactory
 
 from ..factories.base_page import BasePageFactory
-from ..factories.overview_page import OverviewPageFactory
-from ..pages import OverviewPageSerializer
+from ..factories.interactiveoverview_page import InteractiveOverviewPageFactory
+from ..pages import InteractiveOverviewPageSerializer
 
 
-class OverviewPageTest(WagtailPageTests):
+class InteractiveOverviewPageTest(WagtailPageTests):
     def setUp(self):
         self.root_page = BasePageFactory.create(title="Start", parent=None)
         SiteFactory.create(root_page=self.root_page)
 
     def test_get_serializer_class(self):
-        page = OverviewPageFactory.create(title="Overview", parent=self.root_page)
-        self.assertEqual(page.get_serializer_class(), OverviewPageSerializer)
+        page = InteractiveOverviewPageFactory.create(title="Overview", parent=self.root_page)
+        self.assertEqual(page.get_serializer_class(), InteractiveOverviewPageSerializer)
 
     def test_to_react_representation(self):
-        page = OverviewPageFactory.create(title="Overview", parent=self.root_page)
+        page = InteractiveOverviewPageFactory.create(title="Overview", parent=self.root_page)
 
         data = page.get_component_data({})
 

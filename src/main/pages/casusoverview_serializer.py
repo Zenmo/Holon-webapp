@@ -12,8 +12,10 @@ class CasusOverviewPageSerializer(BasePageSerializer):
     child_casusses = serializers.SerializerMethodField()
 
     def get_child_casusses(self, page):
-        request = self.context["request"]
-        filter_param = request.query_params.get("filter", None)
+        request = self.context.get("request", None)
+        filter_param = None
+        if request:
+            filter_param = request.query_params.get("filter", None)
         all_casusses = CasusPage.objects.descendant_of(page)
 
         return_arr = []
