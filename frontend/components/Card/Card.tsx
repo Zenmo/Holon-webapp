@@ -71,6 +71,7 @@ export default function Card({ cardItem, cardType }: CardProps) {
     return link;
   }
 
+  console.log(cardItem);
   return (
     <React.Fragment>
       <span

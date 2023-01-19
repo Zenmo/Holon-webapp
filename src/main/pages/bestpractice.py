@@ -16,6 +16,7 @@ class BestPracticePage(HeadlessPreviewMixin, BasePage):
 
     content_panels = BasePage.content_panels + [FieldPanel("linked_casusses")]
 
+    parent_page_types = ["main.BestPracticeOverviewPage"]
     subpage_types = []
 
     class Meta:
