@@ -31,4 +31,4 @@ class InteractiveOverviewPage(BaseOverview):
     subpage_types = []
 
     class Meta:
-        verbose_name = _("Overview")
+        verbose_name = _("Interactive Overview")
