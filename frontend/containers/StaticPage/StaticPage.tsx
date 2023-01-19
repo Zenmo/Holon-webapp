@@ -4,6 +4,7 @@ import TitleBlock from "@/components/Blocks/TitleBlock/TitleBlock";
 import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMediaBlock";
 import ParagraphBlock from "@/components/Blocks/ParagraphBlock/ParagraphBlock";
 import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock";
+import TableBlock from "@/components/Blocks/TableBlock/TableBlock";
 import styles from "./StaticPage.module.css";
 import { basePageWrap } from "@/containers/BasePage";
 
@@ -15,7 +16,6 @@ const StaticPage = ({ content }: { content: Content[] }) => {
   return (
     <div className={styles[""]}>
       {content?.map(contentItem => {
-        console.log(contentItem.type);
         switch (contentItem.type) {
           case "header_full_image_block":
             return <HeaderFullImageBlock key={`headerfull ${contentItem.id}`} data={contentItem} />;
@@ -27,6 +27,12 @@ const StaticPage = ({ content }: { content: Content[] }) => {
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "paragraph_block":
             return <ParagraphBlock key={`paragraphBlock ${contentItem.id}`} data={contentItem} />;
+          case "table_block":
+            return (
+              <div className="holonContentContainer defaultBlockPadding">
+                <TableBlock key={`tableBlock ${contentItem.id}`} data={contentItem} />;
+              </div>
+            );
           default:
             null;
         }
