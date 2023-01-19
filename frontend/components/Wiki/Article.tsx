@@ -5,12 +5,14 @@ import rehypeParse from "rehype-parse";
 import rehypeStringify from "rehype-stringify";
 import { visit } from "unist-util-visit";
 import { useEffect, useState } from "react";
+import TableBlock from "@/components/Blocks/TableBlock/TableBlock";
 
 interface Props {
   article?: React.ReactNode;
+  tables?: Array<object>;
 }
 
-export default function Article({ article }: Props) {
+export default function Article({ article, tables }: Props) {
   const [content, setContent] = useState(article);
   const [tableOfContents, setTableOfContents] = useState([]);
 
@@ -58,6 +60,8 @@ export default function Article({ article }: Props) {
 
       <article className="prose mt-5 ml-10 mb-16 w-3/4">
         <RawHtml html={content} />
+        {tables &&
+          tables.map((tableItem, index) => <TableBlock key={index} data={tableItem}></TableBlock>)}
       </article>
 
       <nav className=" mx-3 w-1/4 border-l-2 border-gray-200">

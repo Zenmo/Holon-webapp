@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { basePageWrap } from "../BasePage";
 import Aside from "@/components/Wiki/Aside";
@@ -14,13 +13,14 @@ interface WikiPageProps {
 
 interface WikiContainerProps {
   richText: string;
+  table: Array<object>;
   wikiMenu: {
     items: WikiPageProps[];
     meta: { totalCount: number };
   };
 }
 
-const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
+const WikiPage = ({ richText, wikiMenu, table }: WikiContainerProps) => {
   const router = useRouter();
   const { path } = router.query;
 
@@ -71,7 +71,7 @@ const WikiPage = ({ richText, wikiMenu }: WikiContainerProps) => {
             {pages && <Breadcrumbs path={path ? [path].flat() : []} posts={pages} />}
           </div>
           <div className="p-3 flex flex-1 flex-row justify-between">
-            <Article article={richText}></Article>
+            <Article tables={table} article={richText}></Article>
           </div>
         </main>
       </div>
