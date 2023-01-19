@@ -12,7 +12,10 @@ class CasusOverviewPageSerializer(BasePageSerializer):
     child_casusses = serializers.SerializerMethodField()
 
     def get_child_casusses(self, page):
+        request = self.context["request"]
+        filter_param = request.query_params.get("filter", None)
         all_casusses = CasusPage.objects.descendant_of(page)
+
         return_arr = []
         for casus in all_casusses:
             casus_to_append = {
@@ -46,7 +49,11 @@ class CasusOverviewPageSerializer(BasePageSerializer):
                 ] = connected_casus_content.card_color
                 casus_to_append["connected_casus_content"]["thumbnail"] = thumbnail
 
-            return_arr.append(casus_to_append)
+            if filter_param:
+                if casus.casus_filter.all().first().name.lower() == filter_param.lower():
+                    return_arr.append(casus_to_append)
+            else:
+                return_arr.append(casus_to_append)
         return return_arr
 
     class Meta:
