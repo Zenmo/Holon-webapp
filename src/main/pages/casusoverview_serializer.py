@@ -6,4 +6,3 @@ class CasusOverviewPageSerializer(BasePageSerializer):
     class Meta:
         model = CasusOverviewPage
         fields = BasePageSerializer.Meta.fields
-

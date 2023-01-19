@@ -12,11 +12,15 @@ class BestPracticeOverviewPageTest(WagtailPageTests):
         SiteFactory.create(root_page=self.root_page)
 
     def test_get_serializer_class(self):
-        page = BestPracticeOverviewPageFactory.create(title="BestPracticeOverview", parent=self.root_page)
+        page = BestPracticeOverviewPageFactory.create(
+            title="BestPracticeOverview", parent=self.root_page
+        )
         self.assertEqual(page.get_serializer_class(), BestPracticeOverviewPageSerializer)
 
     def test_to_react_representation(self):
-        page = BestPracticeOverviewPageFactory.create(title="BestPracticeOverview", parent=self.root_page)
+        page = BestPracticeOverviewPageFactory.create(
+            title="BestPracticeOverview", parent=self.root_page
+        )
 
         data = page.get_component_data({})
 

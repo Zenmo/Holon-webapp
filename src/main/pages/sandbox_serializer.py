@@ -6,4 +6,3 @@ class SandboxPageSerializer(BasePageSerializer):
     class Meta:
         model = SandboxPage
         fields = BasePageSerializer.Meta.fields
-

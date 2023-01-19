@@ -6,4 +6,3 @@ class BestPracticeOverviewPageSerializer(BasePageSerializer):
     class Meta:
         model = BestPracticeOverviewPage
         fields = BasePageSerializer.Meta.fields
-
