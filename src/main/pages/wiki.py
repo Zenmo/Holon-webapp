@@ -28,6 +28,7 @@ class WikiPage(HeadlessPreviewMixin, BasePage):
         blank=True,
         null=True,
         help_text=_("Add extra columns and rows with right mouse click"),
+        use_json_field=True,
     )
 
     content_panels = BasePage.content_panels + [
