@@ -1,13 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
 import RegistrationForm from "./index";
 
 describe("<RegistrationForm />", () => {
-  describe("with video media", () => {
-    beforeEach(async () => {
-      await act(() => {
-        render(<RegistrationForm />);
-      });
+  describe("registration form", () => {
+    beforeEach(() => {
+      render(<RegistrationForm />);
     });
 
     it("renders a registration form", () => {

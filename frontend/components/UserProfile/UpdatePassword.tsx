@@ -1,50 +1,50 @@
-export default function UpdatePassword(onSubmit) {
+export default function UpdatePassword({ handleChange, handleSubmit }) {
   return (
-    <div className="">
-      <form onSubmit={onSubmit} data-testid="edit-password" className="flex flex-col">
-        <label htmlFor="oldPassword" className="block text-gray-700 text-lg font-bold mb-2">
-          Oud wachtwoord:
+    <div className="mt-8">
+      <form onSubmit={handleSubmit} data-testid="edit-password" className="flex flex-col">
+        <label htmlFor="oldPassword" className="labelInputForm">
+          Huidig wachtwoord:
         </label>
         <input
           type="password"
-          id="oldPassword"
-          name="oldPassword"
+          id="currentPassword"
+          name="currentPassword"
+          onChange={handleChange}
           placeholder="Oud wachtwoord"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="inputForm"
           required
         />
 
-        <label htmlFor="newPassword" className="block text-gray-700 text-lg mt-8 font-bold mb-2">
+        <label htmlFor="newPassword" className="labelInputForm">
           Nieuw wachtwoord:
         </label>
         <input
           type="password"
           id="newPassword"
           name="newPassword"
+          onChange={handleChange}
           placeholder="Nieuw wachtwoord"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="inputForm"
           required
         />
 
-        <label
-          htmlFor="verifyNewPassword"
-          className="block text-gray-700 text-lg font-bold mb-2 mt-8">
+        <label htmlFor="verifyNewPassword" className="labelInputForm">
           Bevestig nieuw wachtwoord:
         </label>
         <input
           type="password"
           id="verifyNewPassword"
           name="verifyNewPassword"
+          onChange={handleChange}
           placeholder="Bevestig nieuw wachtwoord"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="inputForm"
           required
         />
-
-        <button
-          type="submit"
-          className="border-holon-blue-900  text-white mt-8 bg-holon-blue-900 w-44 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50">
-          Wachtwoord updaten
-        </button>
+        <div className="flex justify-end">
+          <button type="submit" className="buttonDark">
+            Wachtwoord updaten
+          </button>
+        </div>
       </form>
     </div>
   );

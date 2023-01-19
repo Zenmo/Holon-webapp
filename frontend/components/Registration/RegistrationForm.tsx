@@ -13,17 +13,23 @@ export default function RegistrationForm() {
     if (user.password !== user.verifyPassword) {
       console.log("wachtwoord moet hetzelfde zijn");
     }
+    console.log(e.target.name.value);
+    console.log(e.target.email.value);
   }
 
   return (
     <div className="flex flex-col items-center m-8">
       <h2>Registreer je voor Holontool.nl</h2>
+      <p className="mt-4 w-3/4 md:w-2/3 lg:w-1/3 text-center">
+        Registreer je hier om een account aan te maken op holontool.nl. De onderstaande velden zijn
+        verplicht om een account aan te maken.{" "}
+      </p>
       <form
         onSubmit={handleSubmit}
         data-testid="registration-form"
-        className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3 m-8">
-        <label htmlFor="name" className="block text-gray-700 text-lg font-bold mb-2">
-          Naam*:
+        className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
+        <label htmlFor="name" className="labelInputForm">
+          Naam:
         </label>
         <input
           type="text"
@@ -32,12 +38,12 @@ export default function RegistrationForm() {
           placeholder="Naam"
           value={user.name}
           onChange={handleInputChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="inputForm"
           required
         />
 
-        <label htmlFor="email" className="block text-gray-700 text-lg font-bold mb-2 mt-8">
-          E-mail*:
+        <label htmlFor="email" className="labelInputForm">
+          E-mail:
         </label>
         <input
           type="email"
@@ -50,39 +56,36 @@ export default function RegistrationForm() {
           required
         />
 
-        <label htmlFor="password" className="block text-gray-700 text-lg font-bold mb-2 mt-8">
-          Wachtwoord*:
+        <label htmlFor="password" className="labelInputForm">
+          Wachtwoord:
         </label>
         <input
-          type="text"
+          type="password"
           id="password"
           name="password"
           value={user.password}
           onChange={handleInputChange}
           placeholder="Wachtwoord"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="inputForm"
           required
         />
 
-        <label htmlFor="verifyPassword" className="block text-gray-700 text-lg font-bold mb-2 mt-8">
-          Wachtwoord bevestigen*:
+        <label htmlFor="verifyPassword" className="labelInputForm">
+          Wachtwoord bevestigen:
         </label>
         <input
-          type="text"
+          type="password"
           id="verifyPassword"
           name="verifyPassword"
           value={user.verifyPassword}
           onChange={handleInputChange}
           placeholder="Wachtwoord bevestigen"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="inputForm"
           required
         />
-        <p className="text-gray-600 text-xs italic mt-4">* is verplicht</p>
 
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="border-holon-blue-900  text-white mt-8 bg-holon-blue-900 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50">
+        <div className="flex justify-end">
+          <button type="submit" className="buttonDark">
             Registreer
           </button>
         </div>
