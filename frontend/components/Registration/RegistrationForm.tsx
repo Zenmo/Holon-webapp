@@ -1,7 +1,10 @@
 import { useState } from "react";
+import PasswordInput from "../PasswordInput/PasswordInput";
+import SuccessModal from "./SuccessModal";
 
 export default function RegistrationForm() {
   const [user, setUser] = useState({ name: "", email: "", password: "", verifyPassword: "" });
+  const [showModal, setShowModal] = useState(false);
 
   function handleInputChange(e) {
     e.preventDefault();
@@ -15,6 +18,8 @@ export default function RegistrationForm() {
     }
     console.log(e.target.name.value);
     console.log(e.target.email.value);
+
+    setShowModal(true);
   }
 
   return (
@@ -24,6 +29,7 @@ export default function RegistrationForm() {
         Registreer je hier om een account aan te maken op holontool.nl. De onderstaande velden zijn
         verplicht om een account aan te maken.{" "}
       </p>
+      {showModal && <SuccessModal onClose={() => setShowModal(false)} />}
       <form
         onSubmit={handleSubmit}
         data-testid="registration-form"
@@ -56,33 +62,7 @@ export default function RegistrationForm() {
           required
         />
 
-        <label htmlFor="password" className="labelInputForm">
-          Wachtwoord:
-        </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={user.password}
-          onChange={handleInputChange}
-          placeholder="Wachtwoord"
-          className="inputForm"
-          required
-        />
-
-        <label htmlFor="verifyPassword" className="labelInputForm">
-          Wachtwoord bevestigen:
-        </label>
-        <input
-          type="password"
-          id="verifyPassword"
-          name="verifyPassword"
-          value={user.verifyPassword}
-          onChange={handleInputChange}
-          placeholder="Wachtwoord bevestigen"
-          className="inputForm"
-          required
-        />
+        <PasswordInput inputChange={setUser} input={user} />
 
         <div className="flex justify-end">
           <button type="submit" className="buttonDark">
