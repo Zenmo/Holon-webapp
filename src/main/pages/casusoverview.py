@@ -10,8 +10,6 @@ class CasusOverviewPage(BaseOverview):
     extra_panels = BasePage.extra_panels
     serializer_class = "main.pages.CasusOverviewPageSerializer"
 
-    content_panels = BasePage.content_panels + [FieldPanel("introduction")]
-
     subpage_types = ["main.CasusPage"]
 
     class Meta:
