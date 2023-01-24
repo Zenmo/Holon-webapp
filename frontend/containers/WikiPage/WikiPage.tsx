@@ -16,7 +16,6 @@ type Content = PageProps<TextAndMediaVariant | TitleBlockVariant | CardBlockVari
 
 interface WikiContainerProps {
   content: Content;
-  table: Array<object>;
   wikiMenu: {
     items: WikiPageProps[];
     meta: { totalCount: number };
