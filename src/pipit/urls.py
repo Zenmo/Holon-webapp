@@ -54,6 +54,7 @@ urlpatterns += [
     path("wt/documents/", include(wagtaildocs_urls)),
     path("wt/sitemap.xml", sitemap, name="sitemap"),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
+    path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
 ]
 
 urlpatterns += [re_path(r"", include(wagtail_urls))]

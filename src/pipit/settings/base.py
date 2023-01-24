@@ -24,6 +24,7 @@ INTERNAL_IPS = ("127.0.0.1",)
 
 # Application definition
 INSTALLED_APPS = [
+    "django.contrib.sites",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -65,6 +66,11 @@ INSTALLED_APPS = [
     "api",
     "holon",
     "dj_rest_auth",
+    "dj_rest_auth.registration",
+    # allauth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 ]
 
 MIDDLEWARE = [
@@ -224,3 +230,8 @@ WAGTAIL_HEADLESS_PREVIEW = {
 # Sentry
 SENTRY_DSN: Optional[str] = None
 SENTRY_ENVIRONMENT: Optional[str] = None
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ["localhost:3000"]

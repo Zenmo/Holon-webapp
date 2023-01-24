@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
+import * as Cookies from "es-cookie";
 
 export default function RegistrationForm() {
   const [user, setUser] = useState({ name: "", email: "", password: "", verifyPassword: "" });
@@ -16,20 +17,42 @@ export default function RegistrationForm() {
     if (user.password !== user.verifyPassword) {
       console.log("wachtwoord moet hetzelfde zijn");
     }
-    console.log(e.target.name.value);
-    console.log(e.target.email.value);
+
+    fetch("http://localhost:8000/dj-rest-auth/registration/", {
+      method: "POST",
+      body: JSON.stringify({
+        username: user.name,
+        password1: user.password,
+        password2: user.verifyPassword,
+        email: user.email,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      credentials: "include",
+    });
 
     setShowModal(true);
+  }
+
+  function logout() {
+    fetch("http://localhost:8000/dj-rest-auth/logout/", {
+      method: "POST",
+    });
   }
 
   return (
     <div className="flex flex-col items-center m-8">
       <h2>Registreer je voor Holontool.nl</h2>
+
       <p className="mt-4 w-3/4 md:w-2/3 lg:w-1/3 text-center">
         Registreer je hier om een account aan te maken op holontool.nl. De onderstaande velden zijn
         verplicht om een account aan te maken.{" "}
       </p>
+
       {showModal && <SuccessModal onClose={() => setShowModal(false)} />}
+
       <form
         onSubmit={handleSubmit}
         data-testid="registration-form"
