@@ -24,6 +24,7 @@ INTERNAL_IPS = ("127.0.0.1",)
 
 # Application definition
 INSTALLED_APPS = [
+    "django.contrib.sites",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -63,6 +64,10 @@ INSTALLED_APPS = [
     "nextjs",
     "api",
     "holon",
+    # allauth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 ]
 
 MIDDLEWARE = [
@@ -101,9 +106,18 @@ TEMPLATES = [
                 "wagtail.contrib.settings.context_processors.settings",
                 # Project specific
                 "pipit.context_processors.settings_context_processor",
+                # Auth (allauth)
+                "django.template.context_processors.request",
             ],
         },
     }
+]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 WSGI_APPLICATION = "pipit.wsgi.application"
@@ -222,3 +236,13 @@ WAGTAIL_HEADLESS_PREVIEW = {
 # Sentry
 SENTRY_DSN: Optional[str] = None
 SENTRY_ENVIRONMENT: Optional[str] = None
+
+LOGIN_URL = "/accounts/login"
+LOGIN_REDIRECT_URL = "/wt/cms"
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = True
+ACCOUNT_USERNAME_BLACKLIST = ["admin", "holon", "root"]
