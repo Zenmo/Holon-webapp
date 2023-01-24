@@ -53,7 +53,7 @@ const CasusOverviewPage = props => {
             </div>
             <div className="col-span-3">
               <div className="flex flex-row flex-wrap justify-center md:justify-start mx-[-1rem]">
-                {casusses.map((casus: any, index: number) => {
+                {casusses?.map((casus: any, index: number) => {
                   return (
                     <div
                       key={index}
