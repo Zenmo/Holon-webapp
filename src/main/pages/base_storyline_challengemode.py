@@ -82,6 +82,16 @@ class StorylinePageInformationType(StorylinePageFilter):
         ordering = ["name"]
 
 
+COLOR_CHOICES = (
+    ("card__bg-gold", "Gold"),
+    ("card__bg-blue", "Blue"),
+    ("card__bg-gray", "Gray"),
+    ("card__bg-purple", "Purple"),
+    ("card__bg-pink", "Pink"),
+    ("card__bg-orange", "Orange"),
+)
+
+
 class BaseStorylineChallengeMode(HeadlessPreviewMixin, BasePage):
     """A default Storyline / Challenge Mode parent page"""
 
@@ -111,15 +121,6 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BasePage):
         null=True,
         on_delete=models.SET_NULL,
         related_name="+",
-    )
-
-    COLOR_CHOICES = (
-        ("card__bg-gold", "Gold"),
-        ("card__bg-blue", "Blue"),
-        ("card__bg-gray", "Gray"),
-        ("card__bg-purple", "Purple"),
-        ("card__bg-pink", "Pink"),
-        ("card__bg-orange", "Orange"),
     )
 
     card_color = models.CharField(

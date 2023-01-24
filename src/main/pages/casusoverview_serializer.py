@@ -20,9 +20,18 @@ class CasusOverviewPageSerializer(BasePageSerializer):
 
         return_arr = []
         for casus in all_casusses:
+            thumbnail = (
+                {"url": casus.thumbnail_rendition_url.url}
+                if casus.thumbnail_rendition_url is not None
+                else None
+            )
             casus_to_append = {
                 "title": casus.title,
                 "filter": casus.casus_filter.all().first().name,
+                "thumbnail": thumbnail,
+                "description": casus.description,
+                "slug": casus.slug,
+                "card_color": casus.card_color,
                 "connected_casus_content": {},
             }
 
