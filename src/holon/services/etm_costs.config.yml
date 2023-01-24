@@ -54,6 +54,18 @@ depreciation_costs_buildings_solar_panels_per_kw:
     data: value
     etm_key: depreciation_costs_buildings_solar_panels_per_kw
 
+depreciation_costs_households_solar_panels_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_households_solar_panels_per_kw
+
+depreciation_costs_wind_farm_inland_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_wind_farm_inland_per_kw
+
 depreciation_costs_industry_solar_panels_per_kw:
   value:
     type: query
