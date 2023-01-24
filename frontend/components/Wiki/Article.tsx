@@ -1,23 +1,17 @@
 import Head from "next/head";
-import RawHtml from "../RawHtml";
 import { unified } from "unified";
 import rehypeParse from "rehype-parse";
 import rehypeStringify from "rehype-stringify";
 import { visit } from "unist-util-visit";
-import { useEffect, useState } from "react";
 import TableBlock from "@/components/Blocks/TableBlock/TableBlock";
+import ParagraphBlock from "../Blocks/ParagraphBlock";
 
-interface Props {
-  article?: React.ReactNode;
-  tables?: Array<object>;
-}
+type Content = PageProps<TextAndMediaVariant | TitleBlockVariant | CardBlockVariant>;
 
-export default function Article({ article, tables }: Props) {
-  const [content, setContent] = useState(article);
-  const [tableOfContents, setTableOfContents] = useState([]);
+export default function Article({ article }: { article: Content[] }) {
+  const tableOfContents = [];
 
-  useEffect(() => {
-    const toc = [];
+  const transformAndExtractHeadings = (html: string) => {
     const content = unified()
       .use(rehypeParse, {
         fragment: true,
@@ -29,11 +23,10 @@ export default function Article({ article, tables }: Props) {
               if (node.children[0].value !== undefined) {
                 const id = encodeURI(node.children[0].value);
                 node.properties.id = id;
-                toc.push({
+                tableOfContents.push({
                   id,
                   title: node.children[0].value,
                 });
-                setTableOfContents(toc);
               } else {
                 console.log(
                   "error: node h2/h3 can not be found. check if headings are not strong or italic..."
@@ -44,11 +37,11 @@ export default function Article({ article, tables }: Props) {
         };
       })
       .use(rehypeStringify)
-      .processSync(article)
+      .processSync(html)
       .toString();
 
-    setContent(content);
-  }, [article]);
+    return content;
+  };
 
   return (
     <>
@@ -58,10 +51,22 @@ export default function Article({ article, tables }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <article className="prose mt-5 ml-10 mb-16 w-3/4">
-        <RawHtml html={content} />
-        {tables &&
-          tables.map((tableItem, index) => <TableBlock key={index} data={tableItem}></TableBlock>)}
+      <article className="prose mt-5 mb-16 w-3/4">
+        {article?.map(contentItem => {
+          switch (contentItem.type) {
+            case "paragraph_block":
+              contentItem.value.text = transformAndExtractHeadings(contentItem.value.text);
+              return <ParagraphBlock key={`paragraphBlock ${contentItem.id}`} data={contentItem} />;
+            case "table_block":
+              return (
+                <div className="holonContentContainer defaultBlockPadding">
+                  <TableBlock key={`tableBlock ${contentItem.id}`} data={contentItem} />
+                </div>
+              );
+            default:
+              null;
+          }
+        })}
       </article>
 
       <nav className=" mx-3 w-1/4 border-l-2 border-gray-200">

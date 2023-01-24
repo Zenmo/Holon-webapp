@@ -25,7 +25,8 @@ type Props = {
 
 export default function Table({ data }: Props) {
   if (!data.value) {
-    return console.warn("empty table");
+    console.warn("empty table");
+    return null;
   }
 
   const tableData = data.value.table ? data.value.table : data.value;

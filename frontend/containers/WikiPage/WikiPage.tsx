@@ -4,6 +4,7 @@ import { basePageWrap } from "../BasePage";
 import Aside from "@/components/Wiki/Aside";
 import Article from "@/components/Wiki/Article";
 import Breadcrumbs from "@/components/Wiki/Breadcrumbs";
+import { PageProps, TextAndMediaVariant, TitleBlockVariant, CardBlockVariant } from "../types";
 
 interface WikiPageProps {
   title: string;
@@ -11,8 +12,10 @@ interface WikiPageProps {
   children: WikiPageProps[];
 }
 
+type Content = PageProps<TextAndMediaVariant | TitleBlockVariant | CardBlockVariant>;
+
 interface WikiContainerProps {
-  richText: string;
+  content: Content;
   table: Array<object>;
   wikiMenu: {
     items: WikiPageProps[];
@@ -20,7 +23,7 @@ interface WikiContainerProps {
   };
 }
 
-const WikiPage = ({ richText, wikiMenu, table }: WikiContainerProps) => {
+const WikiPage = ({ content, wikiMenu }: WikiContainerProps) => {
   const router = useRouter();
   const { path } = router.query;
 
@@ -71,7 +74,7 @@ const WikiPage = ({ richText, wikiMenu, table }: WikiContainerProps) => {
             {pages && <Breadcrumbs path={path ? [path].flat() : []} posts={pages} />}
           </div>
           <div className="p-3 flex flex-1 flex-row justify-between">
-            <Article tables={table} article={richText}></Article>
+            <Article article={content}></Article>
           </div>
         </main>
       </div>
