@@ -38,14 +38,24 @@ const CasusPage = ({ content, childPages }: { content: Content[]; childPages: an
             null;
         }
       })}
-
-      {childPages?.map(child => {
-        return (
-          <a className="border-holon-blue-900 bg-holon-gold-200 mb-3" href={child.slug}>
-            {child.title}
-          </a>
-        );
-      })}
+      {childPages && (
+        <div className="holonContentContainer">
+          <div className="defaultBlockPadding ">
+            <div className="flex flex-row gap-4 ">
+              {childPages?.map((child, index) => {
+                return (
+                  <a
+                    key={index}
+                    className="border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50"
+                    href={child.slug}>
+                    {child.title}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

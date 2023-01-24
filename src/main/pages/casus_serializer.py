@@ -32,4 +32,4 @@ class CasusPageSerializer(BasePageSerializer):
 
     class Meta:
         model = CasusPage
-        fields = ["content", "casusses_list", "child_pages"] + BasePageSerializer.Meta.fields
+        fields = ["content", "child_pages"] + BasePageSerializer.Meta.fields

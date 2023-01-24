@@ -6,10 +6,12 @@ from .casus import CasusPage
 from .storyline import StorylinePage
 from .challengemode import ChallengeModePage
 from .sandbox import SandboxPage
+from main.pages.casus import CasusFilter
 
 
 class CasusOverviewPageSerializer(BasePageSerializer):
     child_casusses = serializers.SerializerMethodField()
+    all_casus_filters = serializers.SerializerMethodField()
 
     def get_child_casusses(self, page):
         request = self.context.get("request", None)
@@ -67,6 +69,14 @@ class CasusOverviewPageSerializer(BasePageSerializer):
                 return_arr.append(casus_to_append)
         return return_arr
 
+    def get_all_casus_filters(self, page):
+        all = CasusFilter.objects.all()
+        return_all_roles = []
+        for role in all:
+            role_dict = {"name": role.name}
+            return_all_roles.append(role_dict)
+        return return_all_roles
+
     class Meta:
         model = CasusOverviewPage
-        fields = ["hero", "child_casusses"] + BasePageSerializer.Meta.fields
+        fields = ["hero", "all_casus_filters", "child_casusses"] + BasePageSerializer.Meta.fields

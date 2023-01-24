@@ -32,28 +32,37 @@ const CasusOverviewPage = props => {
         }
       })}
       <div className="holonContentContainer">
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-3">
-            <ul>
-              <li>
-                <input type="checkbox" name="nationaal" onChange={handleChange} /> Nationaal
-              </li>
-              <li>
-                <input type="checkbox" name="gemeente" onChange={handleChange} /> Gemeente
-              </li>
-            </ul>
-          </div>
-          <div className="col-span-9">
-            <div className="flex flex-row flex-wrap justify-center md:justify-start mx-[-1rem] mt-3">
-              {casusses.map((casus: any, index: number) => {
-                return (
-                  <div
-                    key={index}
-                    className="px-[1rem] flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]">
-                    <Card cardItem={casus} cardType="storylineCard" />
-                  </div>
-                );
-              })}
+        <div className="defaultBlockPadding">
+          <div className="grid grid-cols-4 gap-4">
+            <div className="col-span-1">
+              <ul>
+                {props.allCasusFilters?.map((casusfilter, index) => (
+                  <li key={index}>
+                    <label className="flex flex-row mb-2 gap-4">
+                      <input
+                        type="checkbox"
+                        className="rounded-none after:checked:content-['✔'] flex h-5 w-5 appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500 flex-[0_0_20px]"
+                        name={casusfilter.name}
+                        onChange={handleChange}
+                      />{" "}
+                      <span className="mr-auto">{casusfilter.name}</span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="col-span-3">
+              <div className="flex flex-row flex-wrap justify-center md:justify-start mx-[-1rem]">
+                {casusses.map((casus: any, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="px-[1rem] flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]">
+                      <Card cardItem={casus} cardType="storylineCard" />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
