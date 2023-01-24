@@ -53,7 +53,7 @@ urlpatterns += [
     path("wt/cms/", include(wagtailadmin_urls)),
     path("wt/documents/", include(wagtaildocs_urls)),
     path("wt/sitemap.xml", sitemap, name="sitemap"),
-    path("accounts/", include("allauth.urls")),
+    path("dj-rest-auth/", include("dj_rest_auth.urls")),
 ]
 
 urlpatterns += [re_path(r"", include(wagtail_urls))]
