@@ -61,6 +61,8 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "option": option.option,
                         "default": option_default,
                         "label": option.label,
+                        "legal_limitation": option.legal_limitation,
+                        "color": option.color,
                     }
                     options_arr.append(option_dict)
 

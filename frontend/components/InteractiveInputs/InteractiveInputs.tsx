@@ -1,4 +1,5 @@
 import ImageSlider from "../InteractiveImage/ImageSlider";
+import InputPopover from "./InputPopover";
 
 export type Props = {
   contentId: string;
@@ -15,6 +16,8 @@ export type InteractiveInputOptions = {
   option?: string;
   default?: boolean;
   label?: string;
+  legalLimitation?: string;
+  color?: string;
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
@@ -58,22 +61,35 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
     <div className="mb-4 font-bold text-base">
       <p>{name}</p>
       {options.map((inputItem, index) => (
-        <label
-          key={index}
-          htmlFor={contentId + inputItem.id + "input"}
-          className="flex flex-row mb-2 gap-4 ">
-          <input
-            defaultChecked={inputItem.default ? true : false}
-            type={inputType}
-            name={name + contentId}
-            id={contentId + inputItem.id + "input"}
-            data-testid={name + inputItem.id}
-            onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
-            // checked={}
-            className={`${cssClass} flex h-5 w-5 appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
-          />
-          <span className="mr-auto">{inputItem.label || inputItem.option}</span>
-        </label>
+        <div key={index} className="flex flex-row mb-2 gap-4 items-center">
+          <label
+            key={index}
+            htmlFor={contentId + inputItem.id + "input"}
+            className="flex flex-row mb-2 gap-4 items-center">
+            <input
+              defaultChecked={inputItem.default ? true : false}
+              type={inputType}
+              name={name + contentId}
+              id={contentId + inputItem.id + "input"}
+              data-testid={name + inputItem.id}
+              onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
+              // checked={}
+              className={`${cssClass} flex h-5 w-5 appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
+            />
+            <span className="">{inputItem.label || inputItem.option}</span>
+          </label>
+          <InputPopover
+            name={inputItem.label || inputItem.option}
+            legal_limitation={inputItem.legalLimitation}
+            color={inputItem.color}
+            titleWikiPage="test Titel Wikipagina"
+            linkWikiPage="www.test.wikipage.nl"></InputPopover>
+          {inputItem.color !== "no-color" && (
+            <span
+              className="rounded-full w-2 h-2"
+              style={{ backgroundColor: inputItem.color }}></span>
+          )}
+        </div>
       ))}
     </div>
   );

@@ -692,7 +692,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 help_text="Add extra columns and rows with right mouse click",
                 null=True,
-                use_json_field=None,
+                use_json_field=True,
             ),
         ),
     ]

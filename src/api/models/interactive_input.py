@@ -5,6 +5,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.models import Orderable
+from wagtail.admin.panels import PageChooserPanel
 
 # from django.core.validators import MinValueValidator
 from wagtail.snippets.models import register_snippet
@@ -28,6 +29,18 @@ ANIMATION_CHOICES = (
     (ANIMATION_SOLAR_ROOF, "Solarpanels on roof"),
     (ANIMATION_TRANSPORT_ELECTRIFICATION, "Transport electriciteit"),
 )
+
+COLOR_NONE = "no-color"
+COLOR_RED = "red"
+COLOR_ORANGE = "orange"
+COLOR_GREEN = "limegreen"
+COLOR_CHOICES = (
+    (COLOR_NONE, "Geen kleur"),
+    (COLOR_RED, "Rood"),
+    (COLOR_ORANGE, "Oranje"), 
+    (COLOR_GREEN, "Groen")
+)
+
 # Create your models here.
 @register_snippet
 class InteractiveInput(ClusterableModel):
@@ -97,6 +110,20 @@ class InteractiveInputOptions(Orderable):
     default = models.BooleanField(
         null=True, blank=True, help_text=_("Should this option be default selected?")
     )
+    legal_limitation = models.CharField(
+        max_length=255,
+        help_text=_("Fill in the status of the legal limitation"),
+        null=True,
+        blank=True,
+    )
+    color = models.CharField(
+        max_length=10,
+        choices=COLOR_CHOICES,
+        default=COLOR_NONE,
+        null=True,
+    )
+    
+   
 
     def __str__(self):
         if self.label:
