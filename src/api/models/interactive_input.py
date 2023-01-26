@@ -38,8 +38,8 @@ COLOR_GREEN = "limegreen"
 COLOR_CHOICES = (
     (COLOR_NONE, "Geen kleur"),
     (COLOR_RED, "Rood"),
-    (COLOR_ORANGE, "Oranje"), 
-    (COLOR_GREEN, "Groen")
+    (COLOR_ORANGE, "Oranje"),
+    (COLOR_GREEN, "Groen"),
 )
 
 # Create your models here.
@@ -124,22 +124,18 @@ class InteractiveInputOptions(Orderable):
         null=True,
     )
 
-    
     link_wiki_page = models.ForeignKey(
-        "main.WikiPage", 
+        "main.WikiPage",
         blank=True,
         null=True,
         related_name="+",
         on_delete=models.SET_NULL,
-        help_text=_(
-            "Use this to link to an internal page."
-        ),
+        help_text=_("Use this to link to an internal page."),
     )
 
     content_panels = Page.content_panels + [
-       PageChooserPanel('link_wiki_page'),
+        PageChooserPanel("link_wiki_page"),
     ]
-    
 
     def __str__(self):
         if self.label:

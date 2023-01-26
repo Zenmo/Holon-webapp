@@ -63,9 +63,9 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "legal_limitation": option.legal_limitation,
                         "color": option.color,
                     }
-                    if option.link_wiki_page is not None: 
-                        option_dict['title_wiki_page'] = option.link_wiki_page.title
-                        option_dict['link_wiki_page'] = option.link_wiki_page.url_path
+                    if option.link_wiki_page is not None:
+                        option_dict["title_wiki_page"] = option.link_wiki_page.title
+                        option_dict["link_wiki_page"] = option.link_wiki_page.url_path
                     options_arr.append(option_dict)
 
             if interactive_input.type == CHOICE_CONTINUOUS:
