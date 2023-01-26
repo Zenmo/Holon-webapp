@@ -78,12 +78,17 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
             />
             <span className="">{inputItem.label || inputItem.option}</span>
           </label>
-          <InputPopover
-            name={inputItem.label || inputItem.option}
-            legal_limitation={inputItem.legalLimitation}
-            color={inputItem.color}
-            titleWikiPage="test Titel Wikipagina"
-            linkWikiPage="www.test.wikipage.nl"></InputPopover>
+          {inputItem.legalLimitation || inputItem.linkWikiPage ? (
+            <InputPopover
+              name={inputItem.label || inputItem.option}
+              legal_limitation={inputItem.legalLimitation}
+              color={inputItem.color}
+              titleWikiPage="test Titel Wikipagina"
+              linkWikiPage="/info/"></InputPopover>
+          ) : (
+            ""
+          )}
+
           {inputItem.color !== "no-color" && (
             <span
               className="rounded-full w-2 h-2"

@@ -18,23 +18,28 @@ export default function InputPopover({
   linkWikiPage,
 }: Props) {
   const buttonRef = useRef();
-  const selectBackgroundColor = color => {
+
+  const selectBackgroundColor = (color: string) => {
     let bgColor = "";
-    if (color === "red") {
-      bgColor = "bg-red-100";
-    } else if (color === "orange") {
-      bgColor = "bg-orange-100";
-    } else if (color === "limegreen") {
-      bgColor = "bg-green-100";
-    } else {
-      bgColor = "bg-white";
+    switch (color) {
+      case "red":
+        bgColor = "bg-red-100";
+        break;
+      case "orange":
+        bgColor = "bg-orange-100";
+        break;
+      case "limegreen":
+        bgColor = "bg-green-100";
+        break;
+      default:
+        bgColor = "bg-white";
     }
     return bgColor;
   };
 
   return (
     <Popover className="relative" data-testid="input-popover">
-      <Popover.Button className="w-4 h-4" ref={buttonRef}>
+      <Popover.Button className="w-6 h-6" ref={buttonRef}>
         <InformationCircleIcon />
       </Popover.Button>
 

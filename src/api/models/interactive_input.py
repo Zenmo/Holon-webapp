@@ -5,6 +5,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.models import Orderable
+from wagtail.models import Page
 from wagtail.admin.panels import PageChooserPanel
 
 # from django.core.validators import MinValueValidator
@@ -122,8 +123,29 @@ class InteractiveInputOptions(Orderable):
         default=COLOR_NONE,
         null=True,
     )
+    title_wiki_page = models.CharField(
+        max_length=150, 
+        help_text=_("Fill in an informative title for the wikipage you link to"),
+        null=True,
+        blank=True,
+    )
+
     
-   
+    #link_wiki_page = models.ForeignKey(
+    #    "wagtailcore.Page", 
+    #    blank=True,
+    #    null=True,
+    #    related_name="+",
+    #    on_delete=models.SET_NULL,
+    #    help_text=_(
+    #        "Use this to link to an internal page."
+    #    ),
+    #)
+
+    #content_panels = Page.content_panels + [
+    #    PageChooserPanel('link_wiki_page'),
+    #]
+    
 
     def __str__(self):
         if self.label:
