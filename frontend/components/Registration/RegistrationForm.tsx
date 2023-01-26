@@ -6,11 +6,16 @@ import TokenService from "@/services/token";
 
 export default function RegistrationForm() {
   const [user, setUser] = useState({ email: "", password: "", verifyPassword: "" });
-  const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   function handleInputChange(e) {
     e.preventDefault();
     setUser({ ...user, [e.target.name]: e.target.value });
+
+    if (showErrorMessage == true) {
+      setShowErrorMessage(false);
+    }
   }
 
   async function handleSubmit(e) {
@@ -18,11 +23,7 @@ export default function RegistrationForm() {
 
     TokenService.setCSRFToken();
 
-    if (user.password !== user.verifyPassword) {
-      console.log("wachtwoord moet hetzelfde zijn");
-    }
-
-    await fetch("http://localhost:8000/dj-rest-auth/registration/", {
+    const response = await fetch("http://localhost:8000/dj-rest-auth/registration/", {
       method: "POST",
       body: JSON.stringify({
         username: user.email,
@@ -36,8 +37,12 @@ export default function RegistrationForm() {
       },
       credentials: "include",
     });
-
-    setShowModal(true);
+    const message = await response;
+    if (message.ok) {
+      setShowSuccessModal(true);
+    } else {
+      setShowErrorMessage(true);
+    }
   }
 
   function logout() {
@@ -55,15 +60,12 @@ export default function RegistrationForm() {
         verplicht om een account aan te maken.{" "}
       </p>
 
-      {showModal && <SuccessModal onClose={() => setShowModal(false)} />}
+      {showSuccessModal && <SuccessModal onClose={() => setShowSuccessModal(false)} />}
 
       <form
         onSubmit={handleSubmit}
         data-testid="registration-form"
         className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
-        <label htmlFor="name" className="labelInputForm">
-          Naam:
-        </label>
         <label htmlFor="email" className="labelInputForm">
           E-mail:
         </label>
@@ -79,7 +81,11 @@ export default function RegistrationForm() {
         />
 
         <PasswordInput inputChange={setUser} input={user} />
-
+        {showErrorMessage && (
+          <p className="text-red-700 block m-1">
+            Er is iets fout gegaan met je registratie. Probeer het opnieuw.{" "}
+          </p>
+        )}
         <div className="flex justify-end">
           <button type="submit" className="buttonDark">
             Registreer
