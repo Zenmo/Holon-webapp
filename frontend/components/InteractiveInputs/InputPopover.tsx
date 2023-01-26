@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { useRouter } from "next/router";
 import { Popover } from "@headlessui/react";
 import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
