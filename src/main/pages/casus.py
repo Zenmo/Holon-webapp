@@ -47,6 +47,8 @@ class CasusPage(HeadlessPreviewMixin, BasePage):
         related_name="+",
     )
 
+    linked_best_practices = ParentalManyToManyField("main.bestpracticepage", blank=True)
+
     @property
     def thumbnail_rendition_url(self):
         url = None
@@ -97,6 +99,7 @@ class CasusPage(HeadlessPreviewMixin, BasePage):
         FieldPanel("description"),
         FieldPanel("card_color"),
         FieldPanel("casus_filter"),
+        FieldPanel("linked_best_practices"),
         FieldPanel("content"),
     ]
 

@@ -1,3 +1,4 @@
+from main.pages.bestpractice import BestPracticePage
 from .base_serializer import BasePageSerializer
 from rest_framework import serializers
 
@@ -8,8 +9,15 @@ from .challengemode import ChallengeModePage
 from itertools import chain
 
 
+class NestedBestPracticePageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BestPracticePage
+        fields = ("id", "title", "slug")
+
+
 class CasusPageSerializer(BasePageSerializer):
     child_pages = serializers.SerializerMethodField()
+    linked_best_practices = NestedBestPracticePageSerializer(many=True)
 
     def get_child_pages(self, page):
         all_story = StorylinePage.objects.descendant_of(page)
@@ -32,4 +40,8 @@ class CasusPageSerializer(BasePageSerializer):
 
     class Meta:
         model = CasusPage
-        fields = ["content", "child_pages"] + BasePageSerializer.Meta.fields
+        fields = [
+            "content",
+            "child_pages",
+            "linked_best_practices",
+        ] + BasePageSerializer.Meta.fields
