@@ -123,12 +123,6 @@ class InteractiveInputOptions(Orderable):
         default=COLOR_NONE,
         null=True,
     )
-    title_wiki_page = models.CharField(
-        max_length=150, 
-        help_text=_("Fill in an informative title for the wikipage you link to"),
-        null=True,
-        blank=True,
-    )
 
     
     link_wiki_page = models.ForeignKey(

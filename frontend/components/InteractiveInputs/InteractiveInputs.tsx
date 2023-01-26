@@ -63,7 +63,7 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
     <div className="mb-4 font-bold text-base">
       <p>{name}</p>
       {options.map((inputItem, index) => (
-        <div key={index} className="flex flex-row mb-2 gap-4 items-center">
+        <div key={index} className="flex flex-row mb-2 gap-3 items-center">
           <label
             key={index}
             htmlFor={contentId + inputItem.id + "input"}

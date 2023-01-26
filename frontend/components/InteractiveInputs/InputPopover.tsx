@@ -41,7 +41,7 @@ export default function InputPopover({
 
   return (
     <Popover className="relative" data-testid="input-popover">
-      <Popover.Button className="w-6 h-6" ref={buttonRef}>
+      <Popover.Button className="w-6 h-6 mt-1" ref={buttonRef}>
         <InformationCircleIcon />
       </Popover.Button>
 
