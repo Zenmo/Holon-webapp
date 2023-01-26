@@ -12,12 +12,14 @@ from wagtail.contrib.sitemaps.views import sitemap
 
 from main.views.page_not_found import PageNotFoundView
 from main.views.error_500 import error_500_view
+from main.views.csfr import get_csrf
 from nextjs.api import api_router
 from api.router import api_router as rest_api_router
 from holon.urls import urlpatterns as holon_urls
 
 handler404 = PageNotFoundView.as_view()
 handler500 = error_500_view
+csrf = get_csrf
 
 URL = typing.Union[URLPattern, URLResolver]
 URLList = typing.List[URL]
@@ -38,6 +40,7 @@ if settings.DEBUG:
         ),  # NOQA
         path("wt/404/", handler404, kwargs={"exception": Exception("Page not Found")}),  # NOQA
         path("wt/500/", handler500, kwargs={"exception": Exception("Internal error")}),  # NOQA
+        path("wt/csrf/", csrf),  # NOQA
     ]
 
     if "debug_toolbar" in settings.INSTALLED_APPS:

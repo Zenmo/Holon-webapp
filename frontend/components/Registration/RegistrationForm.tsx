@@ -2,9 +2,10 @@ import { useState } from "react";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
 import * as Cookies from "es-cookie";
+import TokenService from "@/services/token";
 
 export default function RegistrationForm() {
-  const [user, setUser] = useState({ name: "", email: "", password: "", verifyPassword: "" });
+  const [user, setUser] = useState({ email: "", password: "", verifyPassword: "" });
   const [showModal, setShowModal] = useState(false);
 
   function handleInputChange(e) {
@@ -12,16 +13,16 @@ export default function RegistrationForm() {
     setUser({ ...user, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (user.password !== user.verifyPassword) {
       console.log("wachtwoord moet hetzelfde zijn");
     }
 
-    fetch("http://localhost:8000/dj-rest-auth/registration/", {
+    await fetch("http://localhost:8000/dj-rest-auth/registration/", {
       method: "POST",
       body: JSON.stringify({
-        username: user.name,
+        username: user.email,
         password1: user.password,
         password2: user.verifyPassword,
         email: user.email,
@@ -60,17 +61,6 @@ export default function RegistrationForm() {
         <label htmlFor="name" className="labelInputForm">
           Naam:
         </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="Naam"
-          value={user.name}
-          onChange={handleInputChange}
-          className="inputForm"
-          required
-        />
-
         <label htmlFor="email" className="labelInputForm">
           E-mail:
         </label>

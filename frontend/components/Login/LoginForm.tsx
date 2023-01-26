@@ -1,8 +1,43 @@
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import * as Cookies from "es-cookie";
+import TokenService from "@/services/token";
 
 export default function LoginForm() {
-  function handleSubmit(e) {
-    console.log(e);
+  const [user, setUser] = useState({ email: "", password: "" });
+
+  useEffect(() => {
+    if (!Cookies.get("csrftoken")) {
+      fetch("http://localhost:8000/wt/csrf", {
+        method: "GET",
+      })
+        .then(response => response.json())
+        .then(json => Cookies.set("csrftoken", json.token));
+    }
+  }, []);
+
+  function handleInputChange(e) {
+    e.preventDefault();
+    setUser({ ...user, [e.target.name]: e.target.value });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const result = await fetch("http://localhost:8000/dj-rest-auth/login/", {
+      method: "POST",
+      body: JSON.stringify({
+        username: user.email,
+        password: user.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      credentials: "include",
+    });
+
+    const data = await result.json();
+    TokenService.setAccessToken(data.key);
   }
 
   return (
@@ -22,6 +57,7 @@ export default function LoginForm() {
           name="email"
           placeholder="E-mail"
           className="inputForm"
+          onChange={handleInputChange}
           required
         />
 
@@ -34,6 +70,7 @@ export default function LoginForm() {
           name="password"
           placeholder="Wachtwoord"
           className="inputForm"
+          onChange={handleInputChange}
           required
         />
 

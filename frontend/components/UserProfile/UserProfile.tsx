@@ -1,17 +1,51 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import Router from "next/router";
 import UpdatePassword from "./UpdatePassword";
+import TokenService from "@/services/token";
 
 export default function UserProfile() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [changePassword, setChangePassword] = useState(false);
   const [user, setUser] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     currentPassword: "",
     newPassword: "",
     verifyNewPassword: "",
   });
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  async function getProfile() {
+    const result = await fetch("http://localhost:8000/dj-rest-auth/user/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + TokenService.getAccessToken() + "",
+      },
+      credentials: "include",
+    }).then(response => {
+      if (response.status >= 400 && response.status < 600) {
+        // Router.push("http://localhost:3000");
+        // TODO: Wat gaan we doen wanneer je niet bent ingelogd?
+        setUser({
+          first_name: "",
+          last_name: "",
+          email: "",
+          currentPassword: "",
+          newPassword: "",
+          verifyNewPassword: "",
+        });
+      }
+      return response;
+    });
+
+    const data = await result.json();
+    setUser(data);
+  }
 
   function handleInputChange(e) {
     e.preventDefault();
@@ -60,13 +94,26 @@ export default function UserProfile() {
             data-testid="edit-profile-form"
             className="flex flex-col">
             <label htmlFor="name" className="labelInputForm">
-              Naam:
+              Voornaam:
             </label>
             <input
               type="text"
               id="name"
               name="name"
-              value={user.name}
+              value={user.first_name}
+              onChange={handleInputChange}
+              placeholder="Name"
+              className="inputForm"
+              required
+            />
+            <label htmlFor="name" className="labelInputForm">
+              Achternaam:
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={user.last_name}
               onChange={handleInputChange}
               placeholder="Name"
               className="inputForm"
