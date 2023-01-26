@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useRouter } from "next/router";
 import { Popover } from "@headlessui/react";
 import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -18,6 +19,7 @@ export default function InputPopover({
   linkWikiPage,
 }: Props) {
   const buttonRef = useRef();
+  const link = linkWikiPage?.replace("/home-page/", "");
 
   const selectBackgroundColor = (color: string) => {
     let bgColor = "";
@@ -46,7 +48,7 @@ export default function InputPopover({
       <Popover.Panel className="absolute z-10 bg-white w-[350px] sm:w-[400px] xl:w-[475px] border-2 border-solid rounded-md border-holon-gray-300 ">
         <div>
           <div className="border-b-2 border-holon-gray-300 mt-4 mx-4 mb-2">
-            <h4>{name}</h4>
+            <h4 className="text-ellipsis overflow-hidden">{name}</h4>
           </div>
 
           {legal_limitation && (
@@ -65,7 +67,7 @@ export default function InputPopover({
               <div className="mt-4 flex justify-center">
                 <a
                   className={`gap-4 border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-flex relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
-                  href={linkWikiPage}>
+                  href={`/${link}`}>
                   Lees meer
                 </a>
               </div>

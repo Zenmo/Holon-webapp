@@ -131,20 +131,20 @@ class InteractiveInputOptions(Orderable):
     )
 
     
-    #link_wiki_page = models.ForeignKey(
-    #    "wagtailcore.Page", 
-    #    blank=True,
-    #    null=True,
-    #    related_name="+",
-    #    on_delete=models.SET_NULL,
-    #    help_text=_(
-    #        "Use this to link to an internal page."
-    #    ),
-    #)
+    link_wiki_page = models.ForeignKey(
+        "main.WikiPage", 
+        blank=True,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+        help_text=_(
+            "Use this to link to an internal page."
+        ),
+    )
 
-    #content_panels = Page.content_panels + [
-    #    PageChooserPanel('link_wiki_page'),
-    #]
+    content_panels = Page.content_panels + [
+       PageChooserPanel('link_wiki_page'),
+    ]
     
 
     def __str__(self):

@@ -18,6 +18,8 @@ export type InteractiveInputOptions = {
   label?: string;
   legalLimitation?: string;
   color?: string;
+  titleWikiPage?: string;
+  linkWikiPage?: string;
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
@@ -74,7 +76,7 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
               data-testid={name + inputItem.id}
               onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
               // checked={}
-              className={`${cssClass} flex h-5 w-5 appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
+              className={`${cssClass} flex h-5 w-5 min-w-[1.25rem] appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
             />
             <span className="">{inputItem.label || inputItem.option}</span>
           </label>
@@ -83,16 +85,16 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
               name={inputItem.label || inputItem.option}
               legal_limitation={inputItem.legalLimitation}
               color={inputItem.color}
-              titleWikiPage="test Titel Wikipagina"
-              linkWikiPage="/info/"></InputPopover>
+              titleWikiPage={inputItem.titleWikiPage}
+              linkWikiPage={inputItem.linkWikiPage}></InputPopover>
           ) : (
             ""
           )}
 
           {inputItem.color !== "no-color" && (
-            <span
-              className="rounded-full w-2 h-2"
-              style={{ backgroundColor: inputItem.color }}></span>
+            <div
+              className="rounded-full w-2 h-2 min-w-[0.5rem]"
+              style={{ backgroundColor: inputItem.color }}></div>
           )}
         </div>
       ))}
