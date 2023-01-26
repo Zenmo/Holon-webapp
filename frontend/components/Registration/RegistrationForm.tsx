@@ -15,6 +15,9 @@ export default function RegistrationForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    TokenService.setCSRFToken();
+
     if (user.password !== user.verifyPassword) {
       console.log("wachtwoord moet hetzelfde zijn");
     }

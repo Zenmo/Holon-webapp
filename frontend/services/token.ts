@@ -1,7 +1,18 @@
 const ACCESS_TOKEN_KEY = 'accessToken_holontool'
 const REFRESH_TOKEN_KEY = 'refreshToken_holontool'
+import * as Cookies from "es-cookie";
 
 const TokenService = {
+  setCSRFToken() {
+    if (!Cookies.get("csrftoken")) {
+      fetch("http://localhost:8000/wt/csrf", {
+        method: "GET",
+      })
+        .then(response => response.json())
+        .then(json => Cookies.set("csrftoken", json.token));
+    }
+  },
+
   getAccessToken() {
     return localStorage.getItem(ACCESS_TOKEN_KEY)
   },

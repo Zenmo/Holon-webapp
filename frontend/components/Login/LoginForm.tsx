@@ -1,20 +1,10 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import * as Cookies from "es-cookie";
 import TokenService from "@/services/token";
 
 export default function LoginForm() {
   const [user, setUser] = useState({ email: "", password: "" });
-
-  useEffect(() => {
-    if (!Cookies.get("csrftoken")) {
-      fetch("http://localhost:8000/wt/csrf", {
-        method: "GET",
-      })
-        .then(response => response.json())
-        .then(json => Cookies.set("csrftoken", json.token));
-    }
-  }, []);
 
   function handleInputChange(e) {
     e.preventDefault();
@@ -23,6 +13,9 @@ export default function LoginForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    TokenService.setCSRFToken();
+
     const result = await fetch("http://localhost:8000/dj-rest-auth/login/", {
       method: "POST",
       body: JSON.stringify({

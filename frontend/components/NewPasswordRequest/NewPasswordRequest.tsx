@@ -1,9 +1,22 @@
-import Link from "next/link";
+import * as Cookies from "es-cookie";
 
 export default function NewPasswordRequest() {
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(e.target.email.value);
+    console.log();
+
+    fetch("http://localhost:8000/password/reset/", {
+      method: "POST",
+      body: {
+        email: e.target.email.value,
+      },
+
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      credentials: "include",
+    });
   }
 
   return (
