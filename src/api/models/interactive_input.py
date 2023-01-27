@@ -31,15 +31,15 @@ ANIMATION_CHOICES = (
     (ANIMATION_TRANSPORT_ELECTRIFICATION, "Transport electriciteit"),
 )
 
-COLOR_NONE = "no-color"
+COLOR_NONE = ""
 COLOR_RED = "red"
 COLOR_ORANGE = "orange"
 COLOR_GREEN = "limegreen"
 COLOR_CHOICES = (
-    (COLOR_NONE, "Geen kleur"),
-    (COLOR_RED, "Rood"),
-    (COLOR_ORANGE, "Oranje"),
-    (COLOR_GREEN, "Groen"),
+    (COLOR_NONE, "No color"),
+    (COLOR_RED, "Red"),
+    (COLOR_ORANGE, "Orange"),
+    (COLOR_GREEN, "Green"),
 )
 
 # Create your models here.
@@ -120,8 +120,8 @@ class InteractiveInputOptions(Orderable):
     color = models.CharField(
         max_length=10,
         choices=COLOR_CHOICES,
-        default=COLOR_NONE,
         null=True,
+        blank=True,
     )
 
     link_wiki_page = models.ForeignKey(

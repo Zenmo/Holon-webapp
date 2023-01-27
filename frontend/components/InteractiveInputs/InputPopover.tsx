@@ -33,7 +33,8 @@ export default function InputPopover({
         bgColor = "bg-green-100";
         break;
       default:
-        bgColor = "bg-white";
+        bgColor =
+          "bg-white border-holon-gray-300 border-2 border-solid rounded-md border-holon-gray-300";
     }
     return bgColor;
   };
@@ -51,16 +52,20 @@ export default function InputPopover({
           </div>
 
           {legal_limitation && (
-            <div className="mr-12 ml-4">
+            <div className="mr-12 ml-4 mb-4">
               <p className="text-sm">Beleid juridisch toepasbaar</p>
               <div className={`flex items-center rounded-md ${selectBackgroundColor(color)}`}>
-                <div className="rounded-full w-2 h-2 m-2" style={{ backgroundColor: color }}></div>
-                <p>{legal_limitation}</p>
+                {color && (
+                  <div
+                    className="rounded-full w-2 h-2 m-2 flex-[0_0_0.5rem]"
+                    style={{ backgroundColor: color }}></div>
+                )}
+                <p className="p-1">{legal_limitation}</p>
               </div>
             </div>
           )}
           {linkWikiPage && (
-            <div className="mr-12 ml-4 my-4">
+            <div className="mr-12 ml-4 mb-4">
               <p className="text-sm">Link naar Wiki-pagina</p>
               {titleWikiPage && <p className="text-lg">{titleWikiPage}</p>}
               <div className="mt-4 flex justify-center">
