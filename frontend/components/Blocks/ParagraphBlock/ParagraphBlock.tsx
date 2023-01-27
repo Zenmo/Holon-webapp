@@ -1,5 +1,6 @@
 import RawHtml from "@/components/RawHtml";
 import { getGrid } from "services/grid";
+import { useRouter } from "next/router";
 
 type Props = {
   data: {
@@ -19,6 +20,11 @@ type Props = {
 };
 
 export default function Paragraph({ data }: Props) {
+  const router = useRouter();
+  const { path } = router.query;
+  console.log(path);
+  const isInWiki = path.includes("wiki");
+
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
 
@@ -28,6 +34,10 @@ export default function Paragraph({ data }: Props) {
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
 
   const gridValue = getGrid(data.value.gridLayout.grid);
+
+  if (isInWiki) {
+    return <RawHtml html={data.value?.text} />;
+  }
 
   return (
     <div className={`overflow-hidden ${backgroundFullcolor}`}>
