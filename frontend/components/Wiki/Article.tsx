@@ -51,12 +51,18 @@ export default function Article({ article }: { article: Content[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <article className="prose mt-5 mb-16 w-3/4">
+      <article className="prose mt-5 mb-16 max-w-none">
         {article?.map(contentItem => {
           switch (contentItem.type) {
             case "paragraph_block":
               contentItem.value.text = transformAndExtractHeadings(contentItem.value.text);
-              return <ParagraphBlock key={`paragraphBlock ${contentItem.id}`} data={contentItem} />;
+              return (
+                <ParagraphBlock
+                  key={`paragraphBlock ${contentItem.id}`}
+                  data={contentItem}
+                  ignoreLayout={true}
+                />
+              );
             case "table_block":
               return (
                 <div className="holonContentContainer defaultBlockPadding">

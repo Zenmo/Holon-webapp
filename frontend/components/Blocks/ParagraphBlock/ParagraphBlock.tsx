@@ -1,8 +1,8 @@
 import RawHtml from "@/components/RawHtml";
 import { getGrid } from "services/grid";
-import { useRouter } from "next/router";
 
 type Props = {
+  ignoreLayout?: boolean;
   data: {
     type: string;
     value: {
@@ -19,11 +19,7 @@ type Props = {
   };
 };
 
-export default function Paragraph({ data }: Props) {
-  const router = useRouter();
-  //in wiki pages, width should be ignored
-  const isInWiki = router?.query?.path?.includes("wiki");
-
+export default function Paragraph({ data, ignoreLayout }: Props) {
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
 
@@ -34,7 +30,7 @@ export default function Paragraph({ data }: Props) {
 
   const gridValue = getGrid(data.value.gridLayout.grid);
 
-  if (isInWiki) {
+  if (ignoreLayout === true) {
     return <RawHtml html={data.value?.text} />;
   }
 
