@@ -21,9 +21,8 @@ type Props = {
 
 export default function Paragraph({ data }: Props) {
   const router = useRouter();
-  const { path } = router.query;
-  console.log(path);
-  const isInWiki = path.includes("wiki");
+  //in wiki pages, width should be ignored
+  const isInWiki = router?.query?.path?.includes("wiki");
 
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
