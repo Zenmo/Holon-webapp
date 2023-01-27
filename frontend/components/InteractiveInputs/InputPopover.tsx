@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Popover } from "@headlessui/react";
 import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 type Props = {
   name: string | undefined;
@@ -18,7 +19,6 @@ export default function InputPopover({
   linkWikiPage,
 }: Props) {
   const buttonRef = useRef();
-  const link = linkWikiPage?.replace("/home-page/", "");
 
   const selectBackgroundColor = (color: string) => {
     let bgColor = "";
@@ -64,11 +64,12 @@ export default function InputPopover({
               <p className="text-sm">Link naar Wiki-pagina</p>
               {titleWikiPage && <p className="text-lg">{titleWikiPage}</p>}
               <div className="mt-4 flex justify-center">
-                <a
-                  className={`gap-4 border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-flex relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
-                  href={`/${link}`}>
-                  Lees meer
-                </a>
+                <Link href={`/${linkWikiPage}`}>
+                  <a
+                    className={`gap-4 border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-flex relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}>
+                    Lees meer
+                  </a>
+                </Link>
               </div>
             </div>
           )}
