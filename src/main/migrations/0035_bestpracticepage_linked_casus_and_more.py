@@ -14,9 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="bestpracticepage",
             name="linked_casus",
-            field=modelcluster.fields.ParentalManyToManyField(
-                blank=True, to="main.casuspage"
-            ),
+            field=modelcluster.fields.ParentalManyToManyField(blank=True, to="main.casuspage"),
         ),
         migrations.AddField(
             model_name="casuspage",

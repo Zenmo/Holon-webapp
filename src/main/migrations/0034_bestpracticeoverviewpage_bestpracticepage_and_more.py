@@ -860,9 +860,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "description",
-                    models.TextField(
-                        blank=True, help_text="Description of the casus", null=True
-                    ),
+                    models.TextField(blank=True, help_text="Description of the casus", null=True),
                 ),
                 (
                     "card_color",
