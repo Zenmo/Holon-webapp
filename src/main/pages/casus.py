@@ -1,7 +1,4 @@
 from django.utils.translation import gettext_lazy as _
-from django.db import models
-from django import forms
-
 
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.admin.edit_handlers import FieldPanel
@@ -11,10 +8,10 @@ from wagtail.fields import StreamField
 
 from modelcluster.fields import ParentalManyToManyField
 
-from .base_storyline_challengemode import COLOR_CHOICES
 from .base import BasePage
+from .base_card import BaseCard
 from .base_storyline_challengemode import StorylinePageFilter
-from .bestpractice import BestPracticePage
+
 from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 
 
@@ -36,35 +33,10 @@ class CasusFilter(StorylinePageFilter):
         ordering = ["name"]
 
 
-class CasusPage(HeadlessPreviewMixin, BasePage):
+class CasusPage(HeadlessPreviewMixin, BaseCard):
     casus_filter = ParentalManyToManyField(CasusFilter)
 
-    thumbnail = models.ForeignKey(
-        "customimage.CustomImage",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-
     linked_best_practices = ParentalManyToManyField("main.bestpracticepage", blank=True)
-
-    @property
-    def thumbnail_rendition_url(self):
-        url = None
-        if self.thumbnail is not None:
-            url = self.thumbnail.get_rendition("fill-750x380|jpegquality-80")
-        return url
-
-    description = models.TextField(null=True, blank=True, help_text="Description of the casus")
-
-    card_color = models.CharField(
-        max_length=20,
-        choices=COLOR_CHOICES,
-        default="card__bg-blue",
-        blank=True,
-        help_text="Background color in the overview pages",
-    )
 
     content = StreamField(
         [
@@ -94,10 +66,7 @@ class CasusPage(HeadlessPreviewMixin, BasePage):
     extra_panels = BasePage.extra_panels
     serializer_class = "main.pages.CasusPageSerializer"
 
-    content_panels = BasePage.content_panels + [
-        FieldPanel("thumbnail"),
-        FieldPanel("description"),
-        FieldPanel("card_color"),
+    content_panels = BaseCard.content_panels + [
         FieldPanel("casus_filter"),
         FieldPanel("linked_best_practices"),
         FieldPanel("content"),

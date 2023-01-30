@@ -10,9 +10,24 @@ from itertools import chain
 
 
 class NestedBestPracticePageSerializer(serializers.ModelSerializer):
+    # thumbnail = (
+    #     {"url": thumbnail_rendition_url.url}
+    #     if connected_casus_content.thumbnail_rendition_url is not None
+    #     else None
+    # )
+
+    thumbnail = serializers.SerializerMethodField()
+
+    def get_thumbnail(self, thumb):
+        return (
+            {"url": thumb.thumbnail_rendition_url.url}
+            if thumb.thumbnail_rendition_url is not None
+            else None
+        )
+
     class Meta:
         model = BestPracticePage
-        fields = ("id", "title", "slug")
+        fields = ("id", "title", "slug", "description", "card_color", "thumbnail")
 
 
 class CasusPageSerializer(BasePageSerializer):

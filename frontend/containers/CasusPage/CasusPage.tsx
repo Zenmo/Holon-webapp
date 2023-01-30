@@ -5,6 +5,7 @@ import TextAndMediaBlock from "@/components/Blocks/TextAndMediaBlock/TextAndMedi
 import ParagraphBlock from "@/components/Blocks/ParagraphBlock/ParagraphBlock";
 import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock";
 import TableBlock from "@/components/Blocks/TableBlock/TableBlock";
+import Card from "@/components/Card/Card";
 import styles from "./CasusPage.module.css";
 import { basePageWrap } from "@/containers/BasePage";
 
@@ -12,7 +13,15 @@ import { PageProps, TextAndMediaVariant, TitleBlockVariant, CardBlockVariant } f
 
 type Content = PageProps<TextAndMediaVariant | TitleBlockVariant | CardBlockVariant>;
 
-const CasusPage = ({ content, childPages }: { content: Content[]; childPages: any[] }) => {
+const CasusPage = ({
+  content,
+  childPages,
+  linkedBestPractices,
+}: {
+  content: Content[];
+  childPages: any[];
+  linkedBestPractices: any[];
+}) => {
   console.log;
   return (
     <div className={styles[""]}>
@@ -50,6 +59,24 @@ const CasusPage = ({ content, childPages }: { content: Content[]; childPages: an
                     href={child.slug}>
                     {child.title}
                   </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {linkedBestPractices && (
+        <div className="holonContentContainer">
+          <div className="defaultBlockPadding ">
+            <div className="flex flex-row gap-4 ">
+              {linkedBestPractices?.map((child, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="px-[1rem] flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]">
+                    <Card cardItem={child} cardType="storylineCard" />
+                  </div>
                 );
               })}
             </div>
