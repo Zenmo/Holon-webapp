@@ -1,6 +1,7 @@
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
+import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { getGrid } from "services/grid";
@@ -233,6 +234,8 @@ export default function SectionBlock({ data }: Props) {
 
   return (
     <div className={`${backgroundFullcolor} `}>
+      <ChallengeFeedbackModal />
+
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div
