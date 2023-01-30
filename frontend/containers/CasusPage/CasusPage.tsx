@@ -69,7 +69,8 @@ const CasusPage = ({
       {linkedBestPractices && (
         <div className="holonContentContainer">
           <div className="defaultBlockPadding ">
-            <div className="flex flex-row gap-4 ">
+            <h2 className="mb-5">Ontdek in de praktijk</h2>
+            <div className="flex flex-row gap-4">
               {linkedBestPractices?.map((child, index) => {
                 return (
                   <div
