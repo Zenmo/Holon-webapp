@@ -11,6 +11,7 @@ ETM_MAPPING = {
     "depreciation_costs_buildings_gas_burner_per_kw": ("BUILDING", "GAS_BURNER"),
     "depreciation_costs_industry_solar_panels_per_kw": ("INDUSTRY", "PHOTOVOLTAIC"),
     "depreciation_costs_industry_gas_burner_per_kw": ("INDUSTRY", "GAS_BURNER"),
+    "depreciation_costs_industry_electrolyser_per_kw": ("INDUSTRY", "ELECTROLYSER"),
 
     "hourly_price_of_electricity_per_mwh": ("SystemHourlyElectricity", ""),  # TODO: check this key
     "price_of_natural_gas_per_mwh": ("totalMethane", ""),

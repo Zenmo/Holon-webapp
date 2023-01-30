@@ -30,6 +30,12 @@ depreciation_costs_grid_battery_per_mwh:
     data: value
     etm_key: depreciation_costs_grid_battery_per_mwh
 
+depreciation_costs_industry_electrolyser_per_kw:
+  value:
+    type: query
+    data: value
+    etm_key: depreciation_costs_industry_electrolyser_per_kw
+
 depreciation_costs_solar_farm_per_kw:
   value:
     type: query
