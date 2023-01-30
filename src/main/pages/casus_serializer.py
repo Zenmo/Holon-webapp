@@ -10,12 +10,6 @@ from itertools import chain
 
 
 class NestedBestPracticePageSerializer(serializers.ModelSerializer):
-    # thumbnail = (
-    #     {"url": thumbnail_rendition_url.url}
-    #     if connected_casus_content.thumbnail_rendition_url is not None
-    #     else None
-    # )
-
     thumbnail = serializers.SerializerMethodField()
 
     def get_thumbnail(self, thumb):
