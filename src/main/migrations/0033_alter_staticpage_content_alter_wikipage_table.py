@@ -51,9 +51,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
-                                        required=False
-                                    ),
+                                    main.blocks.rich_text_block.RichtextBlock(required=False),
                                 ),
                                 (
                                     "button_block",
@@ -498,9 +496,7 @@ class Migration(migrations.Migration):
                                             [
                                                 (
                                                     "title",
-                                                    wagtail.blocks.CharBlock(
-                                                        required=False
-                                                    ),
+                                                    wagtail.blocks.CharBlock(required=False),
                                                 ),
                                                 (
                                                     "image_selector",
@@ -692,7 +688,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 help_text="Add extra columns and rows with right mouse click",
                 null=True,
-                use_json_field=None,
+                use_json_field=True,
             ),
         ),
     ]
