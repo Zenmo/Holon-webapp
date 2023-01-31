@@ -39,7 +39,7 @@ const BestPracticePage = ({ content, linkedCasus }: { content: Content[]; linked
         }
       })}
 
-      {linkedCasus.length > 0 && (
+      {linkedCasus && linkedCasus.length > 0 && (
         <div className="holonContentContainer">
           <div className="defaultBlockPadding ">
             <h2 className="mb-5">Bekijk de casus</h2>
