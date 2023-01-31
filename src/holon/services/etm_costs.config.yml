@@ -52,19 +52,19 @@ depreciation_costs_households_air_source_heat_pump_per_kw:
   value:
     type: query
     data: value
-    etm_key: depceciation_costs_households_air_source_heat_pump_per_kw
+    etm_key: depreciation_costs_households_air_source_heat_pump_per_kw
 
 depreciation_costs_households_air_source_hybrid_heat_pump_per_kw:
   value:
     type: query
     data: value
-    etm_key: depceciation_costs_households_air_source_hybrid_heat_pump_per_kw
+    etm_key: depreciation_costs_households_air_source_hybrid_heat_pump_per_kw
 
 depreciation_costs_households_gas_burner_per_kw:
   value:
     type: query
     data: value
-    etm_key: depceciation_costs_households_gas_burner_per_kw
+    etm_key: depreciation_costs_households_gas_burner_per_kw
 
 depreciation_costs_buildings_gas_burner_per_kw:
   value:
