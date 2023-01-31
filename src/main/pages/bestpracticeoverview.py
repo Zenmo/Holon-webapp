@@ -12,7 +12,5 @@ class BestPracticeOverviewPage(BaseOverview):
 
     subpage_types = ["main.BestPracticePage"]
 
-    content_panels = BasePage.content_panels
-
     class Meta:
         verbose_name = _("Best Practice Overview")

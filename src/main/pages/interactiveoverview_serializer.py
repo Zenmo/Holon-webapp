@@ -22,14 +22,6 @@ def add_roles_and_informationtypes(page):
     return roles_array, it_array
 
 
-# def add_casusfilter(page):
-#     casusfilter = None
-#     if hasattr(page, "casus_filter"):
-#         for filter in page.casus_filter.all():
-#             casusfilter = filter
-#     return {"id": casusfilter.id, "name": casusfilter.name}
-
-
 class InteractiveOverviewPageSerializer(BasePageSerializer):
     overview_type = serializers.CharField()
     overview_pages = serializers.SerializerMethodField()
@@ -37,13 +29,12 @@ class InteractiveOverviewPageSerializer(BasePageSerializer):
     def get_overview_pages(self, page):
         return_arr = []
 
-        match page.overview_type:
-            case "storyline":
-                overview_pages = StorylinePage.objects.all().live()
-            case "challenge":
-                overview_pages = ChallengeModePage.objects.all().live()
-            case "sandbox":
-                overview_pages = SandboxPage.objects.all().live()
+        if page.overview_type == "storyline":
+            overview_pages = StorylinePage.objects.all().live()
+        elif page.overview_type == "challenge":
+            overview_pages = ChallengeModePage.objects.all().live()
+        elif page.overview_type == "sandbox":
+            overview_pages = SandboxPage.objects.all().live()
 
         for opage in overview_pages:
             fields = ["title", "description", "slug", "card_color"]
@@ -53,10 +44,8 @@ class InteractiveOverviewPageSerializer(BasePageSerializer):
                 if hasattr(opage, field):
                     return_obj[field] = getattr(opage, field)
 
-            # if hasattr(opage, "casus_filter"):
-            #     return_obj["casus_filter"] = add_casusfilter(opage)
-
             return_obj["thumbnail"] = None
+
             if (
                 hasattr(opage, "thumbnail_rendition_url")
                 and getattr(opage, "thumbnail_rendition_url") is not None
@@ -64,6 +53,7 @@ class InteractiveOverviewPageSerializer(BasePageSerializer):
                 return_obj["thumbnail"] = {"url": opage.thumbnail_rendition_url.url}
 
             roles_and_informationtypes = add_roles_and_informationtypes(opage)
+
             if hasattr(opage, "roles"):
                 return_obj["roles"] = roles_and_informationtypes[0]
             if hasattr(opage, "information_types"):

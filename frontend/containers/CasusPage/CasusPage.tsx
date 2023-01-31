@@ -66,7 +66,7 @@ const CasusPage = ({
         </div>
       )}
 
-      {linkedBestPractices && (
+      {linkedBestPractices.length > 0 && (
         <div className="holonContentContainer">
           <div className="defaultBlockPadding ">
             <h2 className="mb-5">Ontdek in de praktijk</h2>

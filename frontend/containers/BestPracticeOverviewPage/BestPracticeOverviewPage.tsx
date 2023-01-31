@@ -5,7 +5,9 @@ import { basePageWrap } from "@/containers/BasePage";
 import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
 import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock";
 
-const CasusOverviewPage = props => {
+const BestPracticeOverviewPage = props => {
+  console.log(props);
+  return <div>Test</div>;
   const [casusses, setCasusses] = useState(props.childCasusses);
 
   const handleChange = e => {
@@ -71,4 +73,4 @@ const CasusOverviewPage = props => {
   );
 };
 
-export default basePageWrap(CasusOverviewPage);
+export default basePageWrap(BestPracticeOverviewPage);
