@@ -22,7 +22,7 @@ type Button = {
 };
 
 export default function ButtonBlock({ buttons, align }: Props) {
-  const alignValue = align => {
+  const alignValue = (align: string) => {
     switch (align) {
       case "btn-left":
         return "justify-start";

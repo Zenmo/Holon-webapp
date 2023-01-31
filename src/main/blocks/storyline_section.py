@@ -55,13 +55,17 @@ class InteractiveInputBlock(blocks.StructBlock):
                             option_default = True
                     else:
                         option_default = option.default
-
                     option_dict = {
                         "id": int(option.id),
                         "option": option.option,
                         "default": option_default,
                         "label": option.label,
+                        "legal_limitation": option.legal_limitation,
+                        "color": option.color,
                     }
+                    if option.link_wiki_page is not None:
+                        option_dict["title_wiki_page"] = option.link_wiki_page.title
+                        option_dict["link_wiki_page"] = option.link_wiki_page.get_url_parts()[2]
                     options_arr.append(option_dict)
 
             if interactive_input.type == CHOICE_CONTINUOUS:
