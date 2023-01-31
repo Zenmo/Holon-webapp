@@ -22,10 +22,8 @@ ETM_MAPPING = {
     "price_of_diesel_per_mwh": ("totalDiesel", ""),
     "electricity_grid_expansion_costs_lv_mv_trafo_per_kw": ("MSLSPeakLoadElectricity_kW", ""),
     "electricity_grid_expansion_costs_mv_hv_trafo_per_kw": ("HSMSPeakLoadElectricity_kW", ""),
-    "depreciation_costs_grid_battery_per_mwh": (
-        "totalBatteryInstalledCapacity_MWh:Grid_battery_10MWh",
-        "",
-    ),
+    "depreciation_costs_grid_battery_per_mwh": ("totalBatteryInstalledCapacity_MWh:Grid_battery_10MWh",""),
+    "depreciation_costs_households_battery_per_kwh": ("totalBatteryInstalledCapacity_kWh:Households_battery_50kWh","") # TODO: check this key
 }
 
 
