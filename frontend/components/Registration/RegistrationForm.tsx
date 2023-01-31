@@ -5,7 +5,13 @@ import * as Cookies from "es-cookie";
 import TokenService from "@/services/token";
 
 export default function RegistrationForm() {
-  const [user, setUser] = useState({ email: "", password: "", verifyPassword: "" });
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    verifyPassword: "",
+  });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 

@@ -98,11 +98,11 @@ export default function UserProfile() {
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
+              id="first_name"
+              name="first_name"
               value={user.first_name}
               onChange={handleInputChange}
-              placeholder="Name"
+              placeholder="Voornaam"
               className="inputForm"
               required
             />
@@ -111,11 +111,11 @@ export default function UserProfile() {
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
+              id="last_name"
+              name="last_name"
               value={user.last_name}
               onChange={handleInputChange}
-              placeholder="Name"
+              placeholder="Achternaam"
               className="inputForm"
               required
             />
@@ -135,7 +135,7 @@ export default function UserProfile() {
           </form>
         </div>
 
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-col xl:flex-row justify-between">
           <button
             onClick={handleRemoveProfile}
             className="border-red-600  text-holon-blue-900 mt-8  hover:bg-red-200 flex flex-row justify-center items-center relative rounded border-2 px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x disabled:opacity-50">
