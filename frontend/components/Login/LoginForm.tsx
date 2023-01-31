@@ -100,7 +100,7 @@ export default function LoginForm() {
               </a>
             </Link>
           </p>
-          <button type="submit" className="buttonDark nowrap">
+          <button type="submit" className="buttonDark nowrap mt-8">
             Log in
           </button>
         </div>

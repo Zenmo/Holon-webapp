@@ -42,7 +42,7 @@ export default function NewPasswordRequest() {
           required
         />
         <div className="flex justify-end">
-          <button type="submit" className="buttonDark">
+          <button type="submit" className="buttonDark mt-8">
             Vraag aan
           </button>
         </div>

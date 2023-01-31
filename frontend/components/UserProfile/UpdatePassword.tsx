@@ -1,6 +1,6 @@
 export default function UpdatePassword({ handleChange, handleSubmit }) {
   return (
-    <div className="mt-8">
+    <div className="">
       <form onSubmit={handleSubmit} data-testid="edit-password" className="flex flex-col">
         <label htmlFor="oldPassword" className="labelInputForm">
           Huidig wachtwoord:
@@ -11,6 +11,7 @@ export default function UpdatePassword({ handleChange, handleSubmit }) {
           name="currentPassword"
           onChange={handleChange}
           placeholder="Oud wachtwoord"
+          minLength={6}
           className="inputForm"
           required
         />
@@ -24,6 +25,7 @@ export default function UpdatePassword({ handleChange, handleSubmit }) {
           name="newPassword"
           onChange={handleChange}
           placeholder="Nieuw wachtwoord"
+          minLength={6}
           className="inputForm"
           required
         />
@@ -37,11 +39,12 @@ export default function UpdatePassword({ handleChange, handleSubmit }) {
           name="verifyNewPassword"
           onChange={handleChange}
           placeholder="Bevestig nieuw wachtwoord"
+          minLength={6}
           className="inputForm"
           required
         />
         <div className="flex justify-end">
-          <button type="submit" className="buttonDark">
+          <button type="submit" className="buttonDark mt-8">
             Wachtwoord updaten
           </button>
         </div>

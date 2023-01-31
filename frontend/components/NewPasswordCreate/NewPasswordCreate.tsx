@@ -21,7 +21,7 @@ export default function NewPasswordCreate() {
         className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
         <PasswordInput inputChange={setInput} input={input} />
         <div className="flex justify-end">
-          <button type="submit" className="buttonDark">
+          <button type="submit" className="buttonDark mt-8">
             Wachtwoord updaten
           </button>
         </div>

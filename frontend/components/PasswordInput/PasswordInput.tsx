@@ -56,6 +56,7 @@ export default function PasswordInput({ inputChange, input }) {
         onChange={onInputChange}
         onBlur={validateInput}
         placeholder="Nieuw wachtwoord"
+        minLength={6}
         className="inputForm"
         required
       />
@@ -72,6 +73,7 @@ export default function PasswordInput({ inputChange, input }) {
         onChange={onInputChange}
         onBlur={validateInput}
         placeholder="Bevestig nieuw wachtwoord"
+        minLength={6}
         className="inputForm"
         required
       />

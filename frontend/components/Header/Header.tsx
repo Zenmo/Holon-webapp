@@ -2,17 +2,14 @@ import { useState } from "react";
 import Link from "next/link";
 import Navbar from "./Navbar";
 import { NavItem } from "@/api/types";
+import useUser from "@/utils/useUser";
+import TokenService from "@/services/token";
 
-export default function Header({
-  navigation,
-  status,
-  nameUser,
-}: {
-  navigation: NavItem[];
-  status: string;
-  nameUser: string;
-}) {
+export default function Header({ navigation }: { navigation: NavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [status, setStatus] = useState("loggedIn");
+  const currentUser = useUser({});
+  const nameUser = currentUser ? currentUser.username : "";
 
   const handleClick = () => {
     setMenuOpen(!menuOpen);

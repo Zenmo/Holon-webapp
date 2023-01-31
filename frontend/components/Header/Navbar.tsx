@@ -16,26 +16,28 @@ export default function Navbar({
     "border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50";
 
   const handleLogOut = () => {
-    console.log("uitgelogd");
+    fetch("http://localhost:8000/dj-rest-auth/logout/", {
+      method: "POST",
+    });
   };
 
   const statusButton = (status: string) => {
-    if (status === "register") {
+    if (status === "loggedIn") {
       return (
-        <Link href="/registratie">
-          <a className={styleButton}>Registreer nu</a>
-        </Link>
-      );
-    } else if (status === "loggedIn") {
-      return (
-        <button onClick={handleLogOut} className={styleButton}>
+        <button onClick={handleLogOut} className="buttonDark">
           Uitloggen
         </button>
       );
     } else if (status === "loggedOut") {
       return (
         <Link href="/inloggen">
-          <a className={styleButton}>Inloggen</a>
+          <a className="buttonDark">Inloggen</a>
+        </Link>
+      );
+    } else {
+      return (
+        <Link href="/registratie">
+          <a className="buttonDark">Registreer nu</a>
         </Link>
       );
     }

@@ -34,6 +34,7 @@
         "react-player": "^2.11.0",
         "rehype-parse": "^8.0.4",
         "rehype-stringify": "^9.0.3",
+        "swr": "^2.0.3",
         "unified": "^10.1.2",
         "unist-util-visit": "^4.1.1"
     },

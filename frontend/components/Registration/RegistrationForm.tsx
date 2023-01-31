@@ -6,8 +6,7 @@ import TokenService from "@/services/token";
 
 export default function RegistrationForm() {
   const [user, setUser] = useState({
-    first_name: "",
-    last_name: "",
+    username: "",
     email: "",
     password: "",
     verifyPassword: "",
@@ -32,7 +31,7 @@ export default function RegistrationForm() {
     const response = await fetch("http://localhost:8000/dj-rest-auth/registration/", {
       method: "POST",
       body: JSON.stringify({
-        username: user.email,
+        username: user.username,
         password1: user.password,
         password2: user.verifyPassword,
         email: user.email,
@@ -72,6 +71,20 @@ export default function RegistrationForm() {
         onSubmit={handleSubmit}
         data-testid="registration-form"
         className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
+        <label htmlFor="email" className="labelInputForm">
+          Username:
+        </label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={user.username}
+          onChange={handleInputChange}
+          placeholder="E-mail"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+
         <label htmlFor="email" className="labelInputForm">
           E-mail:
         </label>
