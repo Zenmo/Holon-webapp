@@ -5,9 +5,9 @@ import numpy as np
 # in the etm_costs.config.yml
 ETM_MAPPING = {
     "depreciation_costs_buildings_solar_panels_per_kw": ("BUILDING", "PHOTOVOLTAIC"),
-    "depceciation_costs_households_air_source_heat_pump_per_kw": ("HOUSE", "HEAT_PUMP_AIR"), #TODO: check this key
-    "depceciation_costs_households_air_source_hybrid_heat_pump_per_kw": ("HOUSE", "HYBRID_HEAT_PUMP_AIR"), #TODO: check this key
-    "depceciation_costs_households_gas_burner_per_kw": ("HOUSE", "GAS_BURNER"), #TODO: check this key
+    "depreciation_costs_households_air_source_heat_pump_per_kw": ("HOUSE", "HEAT_PUMP_AIR"), #TODO: check this key
+    "depreciation_costs_households_air_source_hybrid_heat_pump_per_kw": ("HOUSE", "HYBRID_HEAT_PUMP_AIR"), #TODO: check this key
+    "depreciation_costs_households_gas_burner_per_kw": ("HOUSE", "GAS_BURNER"), #TODO: check this key
     "depreciation_costs_households_solar_panels_per_kw": ("HOUSE", "PHOTOVOLTAIC"),
     "depreciation_costs_solar_farm_per_kw": ("SOLARFARM", "PHOTOVOLTAIC"),
     "depreciation_costs_wind_farm_inland_per_kw": ("WINDFARM", "INLAND_WIND_TURBINE"),
