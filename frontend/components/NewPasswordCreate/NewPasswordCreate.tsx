@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as Cookies from "es-cookie";
 import PasswordInput from "../PasswordInput/PasswordInput";
 
 export default function NewPasswordCreate() {
@@ -7,8 +8,20 @@ export default function NewPasswordCreate() {
     verifyPassword: "",
   });
 
-  function handleSubmit() {
-    console.log("wachtwoord geupdate");
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const response = await fetch(`http://localhost:8000/dj-rest-auth/password/change/`, {
+      method: "POST",
+      body: JSON.stringify({
+        new_password1: input.password,
+        new_password2: input.verifyPassword,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      credentials: "include",
+    });
   }
 
   return (
@@ -21,7 +34,7 @@ export default function NewPasswordCreate() {
         className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
         <PasswordInput inputChange={setInput} input={input} />
         <div className="flex justify-end">
-          <button type="submit" className="buttonDark mt-8">
+          <button type="submit" className="buttonDark mt-8" onClick={handleSubmit}>
             Wachtwoord updaten
           </button>
         </div>

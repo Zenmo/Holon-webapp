@@ -8,12 +8,21 @@ import useUser from "@/utils/useUser";
 export default function UserProfile() {
   const [isDisabled, setIsDisabled] = useState(true);
   const currentUser = useUser({ redirectTo: "/inloggen" });
-  const [user, setUser] = useState(currentUser);
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    currentPassword: "",
+    newPassword: "",
+    verifyNewPassword: "",
+    email: "",
+  });
   const [message, setMessage] = useState("");
 
-  console.log(currentUser);
-  console.log(user);
+  useEffect(() => {
+    currentUser && setUser(currentUser);
+  }, [currentUser]);
 
+  console.log(currentUser);
   if (!user) return null;
 
   function handleInputChange(e) {
@@ -44,21 +53,21 @@ export default function UserProfile() {
     });
   }
 
-  function handleUpdatePassword(e) {
-    //verify old password is really password
-    //verify if new password and new verify password are same
-    //if all yes, then send to backend to update
-
-    if (user.newPassword !== user.verifyNewPassword) {
-      console.log("wachtwoord komt niet overeen");
-    } else {
-      console.log("wachtwoord geupdate");
-      setChangePassword(!changePassword);
-    }
-  }
-
-  function toggleChangePassword() {
-    setChangePassword(!changePassword);
+  async function handleUpdatePassword(e) {
+    e.preventDefault();
+    const response = await fetch(`http://localhost:8000/dj-rest-auth/password/change/`, {
+      method: "POST",
+      body: JSON.stringify({
+        old_password: user.currentPassword,
+        new_password1: user.newPassword,
+        new_password2: user.verifyNewPassword,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      credentials: "include",
+    });
   }
 
   function handleRemoveProfile(e) {
