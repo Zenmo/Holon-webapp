@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+// import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import InteractiveInputs from "./InteractiveInputs";
 
 const mockSetValue = jest.fn();
