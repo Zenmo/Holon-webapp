@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import WikiPage from "./";
-// import data from './WikiPage.data';
+import data from "./WikiPage.data";
 
 jest.mock("next/router", () => ({
   useRouter: () => ({
@@ -12,7 +12,7 @@ describe("WikiPage with simple text", () => {
   it("renders the content", () => {
     render(
       <WikiPage
-        richText="Hello world"
+        content={data}
         wikiMenu={{
           items: [{ relativeUrl: "/test/", title: "Test page", children: [] }],
           meta: { totalCount: 1 },

@@ -8,7 +8,10 @@ from .background_chooser import BackgroundChooserBlock
 class ParagraphBlock(blocks.StructBlock):
     """Paragraph block"""
 
-    grid_layout = GridChooserBlock(required=True)
+    grid_layout = GridChooserBlock(
+        required=True,
+        help_text="Note: Within Wiki pages, 'grid layout' , 'background color' and 'background size' are ignored",
+    )
 
     background = BackgroundChooserBlock()
 

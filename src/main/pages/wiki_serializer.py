@@ -5,8 +5,4 @@ from . import WikiPage
 class WikiPageSerializer(BasePageSerializer):
     class Meta:
         model = WikiPage
-        fields = [
-            "introduction",
-            "rich_text",
-            "table",
-        ] + BasePageSerializer.Meta.fields
+        fields = ["introduction", "content"] + BasePageSerializer.Meta.fields
