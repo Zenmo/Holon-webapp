@@ -32,4 +32,4 @@ class BestPracticeOverviewPageSerializer(BasePageSerializer):
 
     class Meta:
         model = BestPracticeOverviewPage
-        fields = BasePageSerializer.Meta.fields + ["hero", "child_practices"]
+        fields = BasePageSerializer.Meta.fields + ["hero", "content", "child_practices"]
