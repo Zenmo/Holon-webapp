@@ -29,7 +29,7 @@ class CasusOverviewPageSerializer(BasePageSerializer):
             )
             casus_to_append = {
                 "title": casus.title,
-                "filter": casus.casus_filter.all().first().name,
+                "filter": casus.casus_filter.name,
                 "thumbnail": thumbnail,
                 "description": casus.description,
                 "slug": casus.slug,

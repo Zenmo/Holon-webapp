@@ -5,8 +5,9 @@ from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.fields import StreamField
+from django.db import models
 
-from modelcluster.fields import ParentalManyToManyField
+from modelcluster.fields import ParentalManyToManyField, ForeignKey
 
 from .base import BasePage
 from .base_card import BaseCard
@@ -34,7 +35,8 @@ class CasusFilter(StorylinePageFilter):
 
 
 class CasusPage(HeadlessPreviewMixin, BaseCard):
-    casus_filter = ParentalManyToManyField(CasusFilter)
+
+    casus_filter = ForeignKey(CasusFilter, on_delete=models.CASCADE, related_name="+")
 
     linked_best_practices = ParentalManyToManyField("main.bestpracticepage", blank=True)
 
