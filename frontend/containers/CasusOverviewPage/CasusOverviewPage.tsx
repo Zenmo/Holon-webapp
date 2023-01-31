@@ -5,8 +5,16 @@ import { basePageWrap } from "@/containers/BasePage";
 import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
 import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock";
 
-const CasusOverviewPage = props => {
-  const [casusses, setCasusses] = useState(props.childCasusses);
+const CasusOverviewPage = ({
+  hero,
+  childCasusses,
+  allCasusFilters,
+}: {
+  hero: any[];
+  childCasusses: any[];
+  allCasusFilters: any[];
+}) => {
+  const [casusses, setCasusses] = useState(childCasusses);
 
   const handleChange = e => {
     if (e.target.checked) {
@@ -21,7 +29,7 @@ const CasusOverviewPage = props => {
 
   return (
     <React.Fragment>
-      {props.hero?.map(contentItem => {
+      {hero?.map(contentItem => {
         switch (contentItem.type) {
           case "header_full_image_block":
             return <HeaderFullImageBlock key={`headerfull ${contentItem.id}`} data={contentItem} />;
@@ -36,7 +44,7 @@ const CasusOverviewPage = props => {
           <div className="grid grid-cols-4 gap-4">
             <div className="col-span-1">
               <ul>
-                {props.allCasusFilters?.map((casusfilter, index) => (
+                {allCasusFilters?.map((casusfilter, index) => (
                   <li key={index}>
                     <label className="flex flex-row mb-2 gap-4">
                       <input

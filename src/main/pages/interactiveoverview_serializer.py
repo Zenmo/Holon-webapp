@@ -65,4 +65,4 @@ class InteractiveOverviewPageSerializer(BasePageSerializer):
 
     class Meta:
         model = InteractiveOverviewPage
-        fields = ["overview_type", "overview_pages"] + BasePageSerializer.Meta.fields
+        fields = ["hero", "overview_type", "overview_pages"] + BasePageSerializer.Meta.fields

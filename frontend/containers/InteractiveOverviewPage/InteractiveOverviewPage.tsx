@@ -5,12 +5,12 @@ import { basePageWrap } from "@/containers/BasePage";
 import HeroBlock from "@/components/Blocks/HeroBlock/HeroBlock";
 import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock";
 
-const BestPracticeOverviewPage = ({
+const InteractiveOverviewPage = ({
   hero,
-  childPractices,
+  overviewPages,
 }: {
   hero: any[];
-  childPractices: any[];
+  overviewPages: any[];
 }) => {
   return (
     <React.Fragment>
@@ -27,12 +27,12 @@ const BestPracticeOverviewPage = ({
       <div className="holonContentContainer">
         <div className="defaultBlockPadding">
           <div className="flex flex-row gap-4">
-            {childPractices?.map((practice: any, index: number) => {
+            {overviewPages?.map((page: any, index: number) => {
               return (
                 <div
                   key={index}
                   className="px-[1rem] flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]">
-                  <Card cardItem={practice} cardType="storylineCard" />
+                  <Card cardItem={page} cardType="storylineCard" />
                 </div>
               );
             })}
@@ -43,4 +43,4 @@ const BestPracticeOverviewPage = ({
   );
 };
 
-export default basePageWrap(BestPracticeOverviewPage);
+export default basePageWrap(InteractiveOverviewPage);

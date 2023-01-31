@@ -22,7 +22,7 @@ class InteractiveOverviewPage(BaseOverview):
         help_text="Which type of overview is this page",
     )
 
-    content_panels = BasePage.content_panels + [
+    content_panels = BaseOverview.content_panels + [
         FieldPanel("overview_type"),
     ]
     extra_panels = BasePage.extra_panels
