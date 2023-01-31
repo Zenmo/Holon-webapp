@@ -32,7 +32,7 @@ class BaseCard(BasePage):
             url = self.thumbnail.get_rendition("fill-750x380|jpegquality-80")
         return url
 
-    description = models.TextField(null=True, blank=True, help_text="Description of the casus")
+    description = models.TextField(null=True, blank=True, help_text="Description of this entity")
 
     card_color = models.CharField(
         max_length=20,
