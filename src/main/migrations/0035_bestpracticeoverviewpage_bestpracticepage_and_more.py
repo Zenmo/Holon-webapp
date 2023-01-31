@@ -268,9 +268,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "description",
-                    models.TextField(
-                        blank=True, help_text="Description of this entity", null=True
-                    ),
+                    models.TextField(blank=True, help_text="Description of this entity", null=True),
                 ),
                 (
                     "card_color",
@@ -1555,9 +1553,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="challengemodepage",
             name="description",
-            field=models.TextField(
-                blank=True, help_text="Description of this entity", null=True
-            ),
+            field=models.TextField(blank=True, help_text="Description of this entity", null=True),
         ),
         migrations.AlterField(
             model_name="storylinepage",
@@ -1580,9 +1576,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="storylinepage",
             name="description",
-            field=models.TextField(
-                blank=True, help_text="Description of this entity", null=True
-            ),
+            field=models.TextField(blank=True, help_text="Description of this entity", null=True),
         ),
         migrations.AlterField(
             model_name="wikipage",
@@ -1622,9 +1616,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "description",
-                    models.TextField(
-                        blank=True, help_text="Description of this entity", null=True
-                    ),
+                    models.TextField(blank=True, help_text="Description of this entity", null=True),
                 ),
                 (
                     "card_color",
@@ -2364,9 +2356,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="bestpracticepage",
             name="linked_casus",
-            field=modelcluster.fields.ParentalManyToManyField(
-                blank=True, to="main.casuspage"
-            ),
+            field=modelcluster.fields.ParentalManyToManyField(blank=True, to="main.casuspage"),
         ),
         migrations.AddField(
             model_name="bestpracticepage",
