@@ -1,0 +1,98 @@
+{
+  "feedbackmodals": [
+    {
+      "modaltitle": "Goed gedaan",
+      "modaltext": "Je bent de beste",
+      "modaltheme": "green",
+      "image_selector": {
+        "id": 1,
+        "title": "hangende-tak",
+        "img": {
+          "src": "/wt/media/images/hangende-tak.width-1600.jpg",
+          "width": 1600,
+          "height": 1200,
+          "alt": "hangende-tak"
+        }
+      },
+      "conditions": [
+        {
+          "parameter": "nationalcosts",
+          "operator": "bigger then",
+          "value": 60
+        },
+        {
+          "parameter": {
+            "type": "interactive_input",
+            "id": "2"
+          },
+          "operator": "bigger then",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "modaltitle": "Dit is niet goed",
+      "modaltext": "Dit moet echt beter",
+      "modaltheme": "red",
+      "image_selector": {
+        "id": 1,
+        "title": "hangende-tak",
+        "img": {
+          "src": "/wt/media/images/hangende-tak.width-1600.jpg",
+          "width": 1600,
+          "height": 1200,
+          "alt": "hangende-tak"
+        }
+      },
+      "conditions": [
+        {
+          "parameter": "localnetload",
+          "operator": "lower then",
+          "value": 600
+        },
+        {
+          "parameter": "netload",
+          "operator": "bigger then",
+          "value": 8
+        },
+        {
+          "parameter": "nationalsustainability",
+          "operator": "bigger then",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "modaltitle": "Bijna",
+      "modaltext": "bla bla nog even doorgaan",
+      "modaltheme": "orange",
+      "image_selector": {
+        "id": 1,
+        "title": "hangende-tak",
+        "img": {
+          "src": "/wt/media/images/hangende-tak.width-1600.jpg",
+          "width": 1600,
+          "height": 1200,
+          "alt": "hangende-tak"
+        }
+      },
+      "conditions": [
+        {
+          "parameter": "localnetload",
+          "operator": "bigger then",
+          "value": 600
+        },
+        {
+          "parameter": "netload",
+          "operator": "equal to",
+          "value": 8
+        },
+        {
+          "parameter": "nationalsustainability",
+          "operator": "bigger then",
+          "value": 8
+        }
+      ]
+    }
+  ]
+}

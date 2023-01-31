@@ -234,8 +234,7 @@ export default function SectionBlock({ data }: Props) {
 
   return (
     <div className={`${backgroundFullcolor} `}>
-      <ChallengeFeedbackModal />
-
+      <ChallengeFeedbackModal kpis={kpis} />
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div
