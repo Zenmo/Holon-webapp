@@ -35,8 +35,9 @@ class CasusFilter(StorylinePageFilter):
 
 
 class CasusPage(HeadlessPreviewMixin, BaseCard):
-
-    casus_filter = ForeignKey(CasusFilter, on_delete=models.CASCADE, related_name="+")
+    casus_filter = ForeignKey(
+        CasusFilter, on_delete=models.DO_NOTHING, related_name="+", null=True, blank=True
+    )
 
     linked_best_practices = ParentalManyToManyField("main.bestpracticepage", blank=True)
 
