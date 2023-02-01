@@ -15,7 +15,7 @@ class NestedBestCasusPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BestPracticePage
-        fields = ("id", "title", "slug", "description", "card_color", "thumbnail")
+        fields = ("id", "title", "slug", "description", "card_color", "thumbnail", "url")
 
 
 class BestPracticePageSerializer(BasePageSerializer):
