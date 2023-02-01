@@ -1,4 +1,5 @@
 import { useState } from "react";
+import InteractiveInputPopover from "../InteractiveInputs/InteractiveInputPopover";
 import styles from "./ImageSlider.module.css";
 
 interface Props {
@@ -36,6 +37,15 @@ export default function ImageSlider({
       <label htmlFor={inputId} className="flex text-base font-bold">
         {label}
       </label>
+      {inputItem.more_information || inputItem.linkWikiPage ? (
+        <InteractiveInputPopover
+          name={label}
+          more_information={more_information}
+          titleWikiPage={titleWikiPage}
+          linkWikiPage={linkWikiPage}></InteractiveInputPopover>
+      ) : (
+        ""
+      )}
       <div className={`flex flex-row ${tooltip && `pt-8`}`}>
         <div className="flex flex-row relative items-center flex-1 h-[24px]">
           <input

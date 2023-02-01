@@ -80,11 +80,15 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_max": option.slider_value_max,
                     }
                     options_arr.append(option_dict)
+            
+            
 
             return {
                 "id": interactive_input.id,
                 "name": interactive_input.name,
                 "type": interactive_input.type,
+                "more_information": interactive_input.more_information,
+                ""
                 "animation_tag": interactive_input.animation_tag,
                 "options": options_arr,
                 "display": value["display"],

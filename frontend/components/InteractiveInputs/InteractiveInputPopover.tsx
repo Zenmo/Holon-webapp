@@ -5,14 +5,16 @@ import Link from "next/link";
 
 type Props = {
   name: string | undefined;
+  more_information?: string;
   legal_limitation?: string;
   color?: string;
   titleWikiPage?: string;
   linkWikiPage?: string;
 };
 
-export default function InputPopover({
+export default function InteractiveInputPopover({
   name,
+  more_information,
   legal_limitation,
   color,
   titleWikiPage,
@@ -49,6 +51,7 @@ export default function InputPopover({
         <div>
           <div className="border-b-2 border-holon-gray-300 mt-4 mx-4 mb-2">
             <h4 className="text-ellipsis overflow-hidden">{name}</h4>
+            {more_information && <p>{more_information}</p>}
           </div>
 
           {legal_limitation && (

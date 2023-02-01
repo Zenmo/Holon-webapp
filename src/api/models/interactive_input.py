@@ -63,13 +63,24 @@ class InteractiveInput(ClusterableModel):
     asset_type = models.ForeignKey(
         "holon.Asset", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
     )
-
+    more_information = models.CharField(max_length=100, blank=True)
+    link_wiki_page = models.ForeignKey(
+        "main.WikiPage",
+        blank=True,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+        help_text=_("Use this to link to an internal wiki page."),
+    )
+   
     panels = [
         FieldPanel("name"),
         FieldPanel("type"),
         FieldPanel("animation_tag"),
         FieldPanel("asset_type"),
         FieldPanel("etm_key"),
+        FieldPanel("more_information", help_text="Here you can fill in more information. This will appear as a popover next to the title."),
+        PageChooserPanel("link_wiki_page"),
         InlinePanel(
             "options",
             heading="Options",

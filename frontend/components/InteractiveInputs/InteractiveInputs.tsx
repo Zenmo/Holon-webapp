@@ -1,5 +1,5 @@
 import ImageSlider from "../InteractiveImage/ImageSlider";
-import InputPopover from "./InputPopover";
+import InteractiveInputPopover from "./InteractiveInputPopover";
 
 export type Props = {
   contentId: string;
@@ -81,12 +81,12 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
             <span className="">{inputItem.label || inputItem.option}</span>
           </label>
           {inputItem.legalLimitation || inputItem.linkWikiPage ? (
-            <InputPopover
+            <InteractiveInputPopover
               name={inputItem.label || inputItem.option}
               legal_limitation={inputItem.legalLimitation}
               color={inputItem.color}
               titleWikiPage={inputItem.titleWikiPage}
-              linkWikiPage={inputItem.linkWikiPage}></InputPopover>
+              linkWikiPage={inputItem.linkWikiPage}></InteractiveInputPopover>
           ) : (
             ""
           )}
