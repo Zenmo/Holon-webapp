@@ -1,23 +1,10 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "@/components/Button/Button";
-import styles from "./ChallengeFeedbackModal.module.css";
+
+/* eslint-disable */
 const feedbackmodaljson = require("./staticjson.json");
-
-// const modal2 = {
-//   theme: "red",
-//   title: "Pas op!!!",
-//   text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-//   image: "https://holonstorage.blob.core.windows.net/media/images/header_holon.width-1600.jpg",
-// };
-
-// const modal1 = {
-//   theme: "orange",
-//   title: "Goed gedaan!!!",
-//   text: "Je hebt het goed gedan!",
-//   image: "https://holonstorage.blob.core.windows.net/media/images/header_holon.width-1600.jpg",
-// };
 
 type KPIDashboardProps = {
   data: Data;
@@ -40,7 +27,7 @@ type Data = {
   };
 };
 
-export default function ChallengeFeedbackModal({ kpis }: KPIDashboardProps) {
+export default function ChallengeFeedbackModal({ kpis, content }: KPIDashboardProps) {
   const [modal, setModal] = useState<{
     isOpen: boolean;
   }>({
@@ -49,14 +36,21 @@ export default function ChallengeFeedbackModal({ kpis }: KPIDashboardProps) {
   const [selectedModal, setSelectedModal] = useState({});
 
   useEffect(() => {
-    console.log(modal);
     setSelectedModal({});
+
     setSelectedModal(
+      //loop through al configured modals
       feedbackmodaljson.feedbackmodals.filter(modal => {
-        if (modal.conditions.length > 0) {
+        if (modal.conditions.length > 0 && content.length) {
+          //loop through all conditions within modal...
           for (const conditionItem of modal.conditions) {
-            const kpivalue = kpis[conditionItem.parameter.level][conditionItem.parameter.parameter];
-            if (kpivalue == null) {
+            //kpivalue is the vaule of the assessed validator
+            const kpivalue = conditionItem.parameter.id
+              ? content?.find(content => content.value.id == parseFloat(conditionItem.parameter.id))
+                  .currentValue
+              : kpis[conditionItem.parameter.level][conditionItem.parameter.parameter];
+            console.log(kpivalue, conditionItem.parameter);
+            if (kpivalue == null || kpivalue == undefined) {
               return false;
             } else if (
               conditionItem.operator == "bigger" &&
@@ -72,26 +66,20 @@ export default function ChallengeFeedbackModal({ kpis }: KPIDashboardProps) {
                 kpivalue + "is not bigger or euqyal then" + parseFloat(conditionItem.value)
               );
               return false;
-            } else if (
-              conditionItem.operator == "equal" &&
-              kpivalue !== parseFloat(conditionItem.value)
-            ) {
+            } else if (conditionItem.operator == "equal" && kpivalue != conditionItem.value) {
               console.log(kpivalue + "is not equal to" + parseFloat(conditionItem.value));
               return false;
-            } else if (
-              conditionItem.operator == "notequal" &&
-              kpivalue == parseFloat(conditionItem.value)
-            ) {
+            } else if (conditionItem.operator == "notequal" && kpivalue == conditionItem.value) {
               console.log(kpivalue + "is equal to" + parseFloat(conditionItem.value));
               return false;
             } else if (
-              conditionItem.operator == "smaller" &&
+              conditionItem.operator == "lower" &&
               kpivalue >= parseFloat(conditionItem.value)
             ) {
-              console.log(kpivalue + "is not smaller then" + parseFloat(conditionItem.value));
+              console.log(kpivalue + "is not lower then" + parseFloat(conditionItem.value));
               return false;
             } else if (
-              conditionItem.operator == "smallerequal" &&
+              conditionItem.operator == "lowerequal" &&
               kpivalue > parseFloat(conditionItem.value)
             ) {
               console.log(
@@ -99,11 +87,11 @@ export default function ChallengeFeedbackModal({ kpis }: KPIDashboardProps) {
               );
               return false;
             } else {
-              console.log("everything is fine");
-              setModal({ isOpen: true });
-              return true;
             }
           }
+          console.log("everything is fine");
+          setModal({ isOpen: true });
+          return true;
         }
       })[0]
     );
@@ -122,7 +110,6 @@ export default function ChallengeFeedbackModal({ kpis }: KPIDashboardProps) {
 
   return (
     <Fragment>
-      --{feedbackmodaljson.feedbackmodals[0].modaltitle}-- --{kpis?.national.netload}--
       {selectedModal && (
         <Transition appear show={modal.isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50" onClose={closeModal}>

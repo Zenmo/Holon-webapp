@@ -17,19 +17,19 @@
       "conditions": [
         {
           "parameter": {
-            "level": "national",
-            "parameter": "netload"
+            "parameter": "interactive_input",
+            "id": "3"
           },
-          "operator": "smaller",
-          "value": 60
+          "operator": "bigger",
+          "value": 50
         },
         {
           "parameter": {
-            "type": "interactive_input",
-            "id": "2"
+            "parameter": "interactive_input",
+            "id": "4"
           },
-          "operator": "biggerequal",
-          "value": 8
+          "operator": "equal",
+          "value": "dayahead_gopacs_collective"
         }
       ]
     },
@@ -54,7 +54,7 @@
             "parameter": "netload"
           },
           "operator": "lower",
-          "value": 600
+          "value": 6
         },
         {
           "parameter": {
@@ -70,7 +70,7 @@
             "parameter": "sustainability"
           },
           "operator": "biggerequal",
-          "value": 8
+          "value": 1
         }
       ]
     },
@@ -94,7 +94,7 @@
             "level": "local",
             "parameter": "netload"
           },
-          "operator": "bigger",
+          "operator": "smaller",
           "value": 600
         },
         {
@@ -102,7 +102,7 @@
             "level": "national",
             "parameter": "netload"
           },
-          "operator": "equal",
+          "operator": "bigger",
           "value": 8
         },
         {
