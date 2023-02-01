@@ -1,43 +1,37 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavItem } from "@/api/types";
+import TokenService from "@/services/token";
 
 export default function Navbar({
   items,
-  status,
+  loggedIn,
   nameUser,
 }: {
   items: NavItem[];
-  status: string;
+  loggedIn: boolean;
   nameUser: string;
 }) {
   const router = useRouter();
-  const styleButton =
-    "border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50";
 
   const handleLogOut = () => {
     fetch("http://localhost:8000/dj-rest-auth/logout/", {
       method: "POST",
     });
+    TokenService.removeAccessToken();
   };
 
-  const statusButton = (status: string) => {
-    if (status === "loggedIn") {
+  const statusButton = (status: boolean) => {
+    if (status == true) {
       return (
         <button onClick={handleLogOut} className="buttonDark">
           Uitloggen
         </button>
       );
-    } else if (status === "loggedOut") {
+    } else {
       return (
         <Link href="/inloggen">
           <a className="buttonDark">Inloggen</a>
-        </Link>
-      );
-    } else {
-      return (
-        <Link href="/registratie">
-          <a className="buttonDark">Registreer nu</a>
         </Link>
       );
     }
@@ -61,7 +55,7 @@ export default function Navbar({
         );
       })}
 
-      {status === "loggedIn" && nameUser ? (
+      {loggedIn && nameUser ? (
         <li className="px-2 py-3 md:py-2 text-xl text-holon-blue-900 dark:text-white sm:p-0">
           {nameUser}
         </li>
@@ -69,7 +63,7 @@ export default function Navbar({
         ""
       )}
 
-      <li>{statusButton(status)}</li>
+      <li>{statusButton(loggedIn)}</li>
     </ul>
   );
 }

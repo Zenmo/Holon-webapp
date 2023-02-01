@@ -3,12 +3,22 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Cookies from "es-cookie";
 import TokenService from "@/services/token";
+import useUser from "@/utils/useUser";
 
 export default function LoginForm() {
-  const [user, setUser] = useState({ email: "", password: "" });
+  const [user, setUser] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   const router = useRouter();
+  const currentUser = useUser({});
+
+  async function loggedIn() {
+    if (currentUser) {
+      router.push("/profiel");
+    }
+  }
+
+  loggedIn();
 
   function handleInputChange(e) {
     e.preventDefault();
@@ -27,7 +37,7 @@ export default function LoginForm() {
     const result = await fetch("http://localhost:8000/dj-rest-auth/login/", {
       method: "POST",
       body: JSON.stringify({
-        username: user.email,
+        username: user.username,
         password: user.password,
       }),
       headers: {
@@ -59,13 +69,13 @@ export default function LoginForm() {
         data-testid="login-form"
         className="flex flex-col  w-3/4 md:w-2/3 lg:w-1/3 m-4">
         <label htmlFor="email" className="labelInputForm">
-          E-mail:
+          Username:
         </label>
         <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="E-mail"
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Username"
           className="inputForm"
           onChange={handleInputChange}
           required
@@ -87,9 +97,11 @@ export default function LoginForm() {
           <p className="text-red-700 block m-1">Er is iets fout gegaan met het inloggen. </p>
         )}
 
+        {/* nieuw wachtwoord aanvragen func nog niet geimplementeerd
         <p className="underline mt-8 decoration-holon-blue-900 decoration-2 underline-offset-4 hover:underline hover:decoration-gray-300 hover:decoration-2 hover:underline-offset-4 sm:p-0">
           <Link href="/wachtwoord-aanvragen">Wachtwoord vergeten?</Link>
         </p>
+        */}
 
         <div className="flex justify-between flex-col sm:flex-row">
           <p className="flex flex-row py-3 mt-8">

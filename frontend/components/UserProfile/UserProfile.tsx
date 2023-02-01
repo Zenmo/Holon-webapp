@@ -12,18 +12,16 @@ export default function UserProfile() {
     first_name: "",
     last_name: "",
     currentPassword: "",
-    newPassword: "",
-    verifyNewPassword: "",
+    password: "",
+    verifyPassword: "",
     email: "",
   });
-  const [message, setMessage] = useState("");
+  const [messageProfileUpdate, setMessageProfileUpdate] = useState("");
+  const [messagePasswordUpdate, setMessagePasswordUpdate] = useState("");
 
   useEffect(() => {
     currentUser && setUser(currentUser);
   }, [currentUser]);
-
-  console.log(currentUser);
-  if (!user) return null;
 
   function handleInputChange(e) {
     e.preventDefault();
@@ -31,6 +29,7 @@ export default function UserProfile() {
     if (isDisabled) {
       setIsDisabled(false);
     }
+    setMessageProfileUpdate("");
   }
 
   async function handleUpdateProfile(e) {
@@ -41,8 +40,8 @@ export default function UserProfile() {
         first_name: user.first_name,
         last_name: user.last_name,
         currentPassword: user.currentPassword,
-        newPassword: user.newPassword,
-        verifyNewPassword: user.verifyNewPassword,
+        newPassword: user.password,
+        verifyNewPassword: user.verifyPassword,
         email: user.email,
       }),
       headers: {
@@ -51,16 +50,23 @@ export default function UserProfile() {
       },
       credentials: "include",
     });
+    const message = await response;
+    if (message.ok) {
+      setMessageProfileUpdate("Je profiel is succesvol geupdate");
+    } else {
+      setMessageProfileUpdate("Er is iets mis gegaan met het updaten van je profiel");
+    }
   }
 
   async function handleUpdatePassword(e) {
     e.preventDefault();
+
     const response = await fetch(`http://localhost:8000/dj-rest-auth/password/change/`, {
       method: "POST",
       body: JSON.stringify({
         old_password: user.currentPassword,
-        new_password1: user.newPassword,
-        new_password2: user.verifyNewPassword,
+        new_password1: user.password,
+        new_password2: user.verifyPassword,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -68,6 +74,19 @@ export default function UserProfile() {
       },
       credentials: "include",
     });
+    const message = await response.json();
+
+    if (message.old_password) {
+      if (message.old_password[0].includes("incorrectly")) {
+        setMessagePasswordUpdate(
+          "Je huidige wachtwoord is niet correct. Hierdoor kunnen we geen nieuw wachtwoord aanmaken."
+        );
+      }
+    } else if (message.ok) {
+      setMessagePasswordUpdate("Je nieuwe wachtwoord is succesvol aangemaakt.");
+    } else {
+      setMessagePasswordUpdate("Er is iets mis gegaan met het updaten van je wachtwoord");
+    }
   }
 
   function handleRemoveProfile(e) {
@@ -126,7 +145,7 @@ export default function UserProfile() {
               required
             />
           </form>
-          <p>{message}</p>
+          <p>{messageProfileUpdate}</p>
           <div className="flex justify-end">
             <button
               onClick={handleUpdateProfile}
@@ -140,9 +159,11 @@ export default function UserProfile() {
 
         <div className="flex flex-col mt-4">
           <h3>Wachtwoord wijzigen</h3>
-          <UpdatePassword handleChange={handleInputChange} handleSubmit={handleUpdatePassword} />
+          <UpdatePassword handleChange={setUser} handleSubmit={handleUpdatePassword} input={user} />
+          <p>{messagePasswordUpdate}</p>
         </div>
 
+        {/*}
         <div className="flex flex-col items-start mt-8">
           <h3>Profiel verwijderen</h3>
           <button
@@ -151,6 +172,7 @@ export default function UserProfile() {
             Profiel verwijderen
           </button>
         </div>
+  */}
       </div>
     </div>
   );

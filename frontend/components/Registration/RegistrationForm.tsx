@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
 import * as Cookies from "es-cookie";
 import TokenService from "@/services/token";
+import useUser from "@/utils/useUser";
 
 export default function RegistrationForm() {
   const [user, setUser] = useState({
@@ -13,6 +15,17 @@ export default function RegistrationForm() {
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+  const router = useRouter();
+  const currentUser = useUser({});
+
+  async function loggedIn() {
+    if (currentUser) {
+      router.push("/profiel");
+    }
+  }
+
+  loggedIn();
 
   function handleInputChange(e) {
     e.preventDefault();
@@ -45,6 +58,7 @@ export default function RegistrationForm() {
     const message = await response;
     if (message.ok) {
       setShowSuccessModal(true);
+      setUser({ username: "", email: "", password: "", verifyPassword: "" });
     } else {
       setShowErrorMessage(true);
     }
@@ -106,7 +120,7 @@ export default function RegistrationForm() {
           </p>
         )}
         <div className="flex justify-end">
-          <button type="submit" className="buttonDark">
+          <button type="submit" className="buttonDark mt-8">
             Registreer
           </button>
         </div>

@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
 import TokenService from "@/services/token";
+
 const fetcher = (...args) =>
   fetch("http://localhost:8000/dj-rest-auth/user/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Token " + TokenService.getAccessToken() + "",
+      Authorization: "Token " + "",
     },
     credentials: "include",
   }).then(res => res.json());
@@ -28,7 +29,6 @@ export default function useUser({ redirectTo = "" } = {}) {
       redirectTo &&
       !user?.username
     ) {
-      console.log("hoi");
       Router.push(redirectTo);
     }
   }, [user, redirectTo]);

@@ -19,13 +19,10 @@ export default function SuccessModal({ onClose }) {
             <CheckIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
           </div>
           <p className="text-center">
-            Bedankt voor je registratie! Deze is registratie succesvol verwerkt. Om je registratie
-            definitief te maken ontvang je een e-mail in je inbox. Via deze e-mail kan je inloggen
-            op{" "}
+            Bedankt voor je registratie! Deze is registratie succesvol verwerkt. Je bent nu ingelogd
+            op op{" "}
             <a
-              href="www.holontool.nl"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/"
               className="inline underline mt-8 decoration-holon-blue-900 decoration-2 underline-offset-4 hover:underline hover:decoration-gray-300 hover:decoration-2 hover:underline-offset-4 sm:p-0">
               holontool.nl
             </a>{" "}
