@@ -16,8 +16,11 @@
       },
       "conditions": [
         {
-          "parameter": "nationalcosts",
-          "operator": "bigger then",
+          "parameter": {
+            "level": "national",
+            "parameter": "netload"
+          },
+          "operator": "smaller",
           "value": 60
         },
         {
@@ -25,7 +28,7 @@
             "type": "interactive_input",
             "id": "2"
           },
-          "operator": "bigger then",
+          "operator": "biggerequal",
           "value": 8
         }
       ]
@@ -46,18 +49,27 @@
       },
       "conditions": [
         {
-          "parameter": "localnetload",
-          "operator": "lower then",
+          "parameter": {
+            "level": "local",
+            "parameter": "netload"
+          },
+          "operator": "lower",
           "value": 600
         },
         {
-          "parameter": "netload",
-          "operator": "bigger then",
+          "parameter": {
+            "level": "local",
+            "parameter": "netload"
+          },
+          "operator": "bigger",
           "value": 8
         },
         {
-          "parameter": "nationalsustainability",
-          "operator": "bigger then",
+          "parameter": {
+            "level": "national",
+            "parameter": "sustainability"
+          },
+          "operator": "biggerequal",
           "value": 8
         }
       ]
@@ -78,18 +90,27 @@
       },
       "conditions": [
         {
-          "parameter": "localnetload",
-          "operator": "bigger then",
+          "parameter": {
+            "level": "local",
+            "parameter": "netload"
+          },
+          "operator": "bigger",
           "value": 600
         },
         {
-          "parameter": "netload",
-          "operator": "equal to",
+          "parameter": {
+            "level": "national",
+            "parameter": "netload"
+          },
+          "operator": "equal",
           "value": 8
         },
         {
-          "parameter": "nationalsustainability",
-          "operator": "bigger then",
+          "parameter": {
+            "level": "national",
+            "parameter": "sustainability"
+          },
+          "operator": "bigger",
           "value": 8
         }
       ]

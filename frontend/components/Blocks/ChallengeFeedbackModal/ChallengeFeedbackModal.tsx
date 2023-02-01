@@ -44,36 +44,70 @@ export default function ChallengeFeedbackModal({ kpis }: KPIDashboardProps) {
   const [modal, setModal] = useState<{
     isOpen: boolean;
   }>({
-    isOpen: true,
+    isOpen: false,
   });
   const [selectedModal, setSelectedModal] = useState({});
 
   useEffect(() => {
+    console.log(modal);
+    setSelectedModal({});
     setSelectedModal(
       feedbackmodaljson.feedbackmodals.filter(modal => {
         if (modal.conditions.length > 0) {
           for (const conditionItem of modal.conditions) {
-            if (
-              conditionItem.operator == "bigger then" &&
-              kpis[conditionItem.parameter] > parseFloat(conditionItem.value)
-            ) {
-              console.log("true1");
-              return true;
-            } else if (
-              conditionItem.operator == "smaller then" &&
-              kpis[conditionItem.parameter] < parseFloat(conditionItem.value)
-            ) {
-              console.log("true2");
-              return true;
-            } else {
-              console.log("false");
+            const kpivalue = kpis[conditionItem.parameter.level][conditionItem.parameter.parameter];
+            if (kpivalue == null) {
               return false;
+            } else if (
+              conditionItem.operator == "bigger" &&
+              kpivalue <= parseFloat(conditionItem.value)
+            ) {
+              console.log(kpivalue + "is not bigger then" + parseFloat(conditionItem.value));
+              return false;
+            } else if (
+              conditionItem.operator == "biggerequal" &&
+              kpivalue < parseFloat(conditionItem.value)
+            ) {
+              console.log(
+                kpivalue + "is not bigger or euqyal then" + parseFloat(conditionItem.value)
+              );
+              return false;
+            } else if (
+              conditionItem.operator == "equal" &&
+              kpivalue !== parseFloat(conditionItem.value)
+            ) {
+              console.log(kpivalue + "is not equal to" + parseFloat(conditionItem.value));
+              return false;
+            } else if (
+              conditionItem.operator == "notequal" &&
+              kpivalue == parseFloat(conditionItem.value)
+            ) {
+              console.log(kpivalue + "is equal to" + parseFloat(conditionItem.value));
+              return false;
+            } else if (
+              conditionItem.operator == "smaller" &&
+              kpivalue >= parseFloat(conditionItem.value)
+            ) {
+              console.log(kpivalue + "is not smaller then" + parseFloat(conditionItem.value));
+              return false;
+            } else if (
+              conditionItem.operator == "smallerequal" &&
+              kpivalue > parseFloat(conditionItem.value)
+            ) {
+              console.log(
+                kpivalue + "is not smaller or equal then" + parseFloat(conditionItem.value)
+              );
+              return false;
+            } else {
+              console.log("everything is fine");
+              setModal({ isOpen: true });
+              return true;
             }
           }
         }
       })[0]
     );
-  }, []);
+  }, [kpis]);
 
   function closeModal() {
     setModal({ isOpen: false });
@@ -88,7 +122,7 @@ export default function ChallengeFeedbackModal({ kpis }: KPIDashboardProps) {
 
   return (
     <Fragment>
-      --{feedbackmodaljson.feedbackmodals[0].modaltitle}--
+      --{feedbackmodaljson.feedbackmodals[0].modaltitle}-- --{kpis?.national.netload}--
       {selectedModal && (
         <Transition appear show={modal.isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50" onClose={closeModal}>
