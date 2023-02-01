@@ -1,6 +1,6 @@
 import PasswordInput from "../PasswordInput/PasswordInput";
 
-export default function UpdatePassword({ handleChange, handleSubmit, input }) {
+export default function UpdatePassword({ handleChange, handleSubmit, input, setMessage }) {
   const onInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
     handleChange({ ...input, [e.target.name]: e.target.value });

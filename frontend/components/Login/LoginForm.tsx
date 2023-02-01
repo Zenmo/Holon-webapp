@@ -9,6 +9,7 @@ export default function LoginForm() {
   const [user, setUser] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
+  /*
   const router = useRouter();
   const currentUser = useUser({});
 
@@ -19,6 +20,7 @@ export default function LoginForm() {
   }
 
   loggedIn();
+  */
 
   function handleInputChange(e) {
     e.preventDefault();

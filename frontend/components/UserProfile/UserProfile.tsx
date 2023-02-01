@@ -159,7 +159,12 @@ export default function UserProfile() {
 
         <div className="flex flex-col mt-4">
           <h3>Wachtwoord wijzigen</h3>
-          <UpdatePassword handleChange={setUser} handleSubmit={handleUpdatePassword} input={user} />
+          <UpdatePassword
+            handleChange={setUser}
+            handleSubmit={handleUpdatePassword}
+            input={user}
+            setMessage={setMessagePasswordUpdate}
+          />
           <p>{messagePasswordUpdate}</p>
         </div>
 

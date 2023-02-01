@@ -16,6 +16,7 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
+  /*
   const router = useRouter();
   const currentUser = useUser({});
 
@@ -26,6 +27,7 @@ export default function RegistrationForm() {
   }
 
   loggedIn();
+  */
 
   function handleInputChange(e) {
     e.preventDefault();
