@@ -79,4 +79,9 @@ class CasusOverviewPageSerializer(BasePageSerializer):
 
     class Meta:
         model = CasusOverviewPage
-        fields = ["hero", "all_casus_filters", "child_casusses"] + BasePageSerializer.Meta.fields
+        fields = [
+            "hero",
+            "content",
+            "all_casus_filters",
+            "child_casusses",
+        ] + BasePageSerializer.Meta.fields

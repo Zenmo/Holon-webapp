@@ -2,14 +2,19 @@ import React, { useState } from "react";
 
 import Card from "@/components/Card/Card";
 import { basePageWrap } from "@/containers/BasePage";
+import { PageProps, TextAndMediaVariant, TitleBlockVariant, CardBlockVariant } from "../types";
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
+
+type Content = PageProps<TextAndMediaVariant | TitleBlockVariant | CardBlockVariant>;
 
 const CasusOverviewPage = ({
   hero,
+  content,
   childCasusses,
   allCasusFilters,
 }: {
   hero: any[];
+  content: Content[];
   childCasusses: any[];
   allCasusFilters: any[];
 }) => {
@@ -28,6 +33,8 @@ const CasusOverviewPage = ({
   return (
     <React.Fragment>
       <ContentBlocks content={hero} />
+
+      <ContentBlocks content={content} />
 
       <div className="holonContentContainer">
         <div className="defaultBlockPadding">
