@@ -34,8 +34,6 @@ const CasusOverviewPage = ({
     <React.Fragment>
       <ContentBlocks content={hero} />
 
-      <ContentBlocks content={content} />
-
       <div className="holonContentContainer">
         <div className="defaultBlockPadding">
           <div className="grid grid-cols-4 gap-4">
@@ -77,6 +75,8 @@ const CasusOverviewPage = ({
           </div>
         </div>
       </div>
+
+      <ContentBlocks content={content} />
     </React.Fragment>
   );
 };

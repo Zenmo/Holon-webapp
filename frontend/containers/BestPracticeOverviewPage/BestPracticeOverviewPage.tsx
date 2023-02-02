@@ -20,8 +20,6 @@ const BestPracticeOverviewPage = ({
     <React.Fragment>
       <ContentBlocks content={hero} />
 
-      <ContentBlocks content={content} />
-
       <div className="holonContentContainer">
         <div className="defaultBlockPadding">
           <div className="flex flex-row gap-4">
@@ -37,6 +35,8 @@ const BestPracticeOverviewPage = ({
           </div>
         </div>
       </div>
+
+      <ContentBlocks content={content} />
     </React.Fragment>
   );
 };
