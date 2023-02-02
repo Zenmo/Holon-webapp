@@ -4,6 +4,15 @@ import UpdatePassword from "./UpdatePassword";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
+type User = {
+  first_name: string;
+  last_name: string;
+  currentPassword: string;
+  password: string;
+  verifyPassword: string;
+  email: string;
+};
+
 export default function UserProfile() {
   const [isDisabled, setIsDisabled] = useState(true);
   const currentUser = useUser({ redirectTo: "/inloggen" });
@@ -44,10 +53,10 @@ export default function UserProfile() {
       body: JSON.stringify({
         first_name: user.first_name,
         last_name: user.last_name,
+        email: user.email,
         currentPassword: user.currentPassword,
         newPassword: user.password,
         verifyNewPassword: user.verifyPassword,
-        email: user.email,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -64,8 +73,8 @@ export default function UserProfile() {
     }
   }
 
-  function handlePasswordChange(password) {
-    setUser(password);
+  function handlePasswordChange(input: User) {
+    setUser(input);
   }
 
   async function handleUpdatePassword(e: React.SyntheticEvent<HTMLInputElement, SubmitEvent>) {
@@ -119,7 +128,7 @@ export default function UserProfile() {
             onSubmit={handleUpdateProfile}
             data-testid="edit-profile-form"
             className="flex flex-col">
-            <label htmlFor="name" className="labelInputForm">
+            <label htmlFor="first_name" className="labelInputForm">
               Voornaam:
             </label>
             <input
@@ -132,7 +141,7 @@ export default function UserProfile() {
               className="inputForm"
               required
             />
-            <label htmlFor="name" className="labelInputForm">
+            <label htmlFor="last_name" className="labelInputForm">
               Achternaam:
             </label>
             <input
@@ -158,17 +167,13 @@ export default function UserProfile() {
               className="inputForm"
               required
             />
+            <p>{messageProfileUpdate}</p>
+            <div className="flex justify-end">
+              <button type="submit" disabled={isDisabled} className="buttonDark mt-8">
+                Profiel updaten
+              </button>
+            </div>
           </form>
-          <p>{messageProfileUpdate}</p>
-          <div className="flex justify-end">
-            <button
-              onClick={handleUpdateProfile}
-              type="submit"
-              disabled={isDisabled}
-              className="buttonDark mt-8">
-              Profiel updaten
-            </button>
-          </div>
         </div>
 
         <div className="flex flex-col mt-4">

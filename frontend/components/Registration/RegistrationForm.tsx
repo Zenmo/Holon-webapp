@@ -29,7 +29,7 @@ export default function RegistrationForm() {
   loggedIn();
   */
 
-  function handleInputChange(e) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
     setUser({ ...user, [e.target.name]: e.target.value });
     setErrorMessage("");
@@ -50,7 +50,7 @@ export default function RegistrationForm() {
     setErrorMessage(message);
   }
 
-  async function handleSubmit(e: React.ChangeEventHandler<HTMLFormElement>) {
+  async function handleSubmit(e: any) {
     e.preventDefault();
 
     TokenService.setCSRFToken();

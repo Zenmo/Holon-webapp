@@ -2,7 +2,7 @@ import { useState } from "react";
 
 type Props = {
   inputChange: React.Dispatch<React.SetStateAction<object>>;
-  input: object;
+  input: { password: string; verifyPassword: string };
   setParentMessage: React.Dispatch<React.SetStateAction<string>>;
 };
 
