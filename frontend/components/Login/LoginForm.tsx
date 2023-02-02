@@ -9,12 +9,12 @@ export default function LoginForm() {
   const [user, setUser] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-  /*
   const router = useRouter();
+  /*
   const currentUser = useUser({});
 
   async function loggedIn() {
-    if (currentUser) {
+    if (currentUser && currentUser.username) {
       router.push("/profiel");
     }
   }
@@ -22,7 +22,7 @@ export default function LoginForm() {
   loggedIn();
   */
 
-  function handleInputChange(e) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
     setUser({ ...user, [e.target.name]: e.target.value });
 

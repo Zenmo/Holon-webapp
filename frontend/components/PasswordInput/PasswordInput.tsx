@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-export default function PasswordInput({ inputChange, input }) {
+type Props = {
+  inputChange: React.Dispatch<React.SetStateAction<object>>;
+  input: object;
+  setParentMessage: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export default function PasswordInput({ inputChange, input, setParentMessage }: Props) {
   const [error, setError] = useState({
     password: "",
     verifyPassword: "",
@@ -8,11 +14,13 @@ export default function PasswordInput({ inputChange, input }) {
 
   const onInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
+
     inputChange({ ...input, [e.target.name]: e.target.value });
     validateInput(e);
+    setParentMessage("");
   };
 
-  const validateInput = e => {
+  const validateInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setError(prev => {
       const stateObj = { ...prev, [name]: "" };

@@ -7,6 +7,11 @@ export default function NewPasswordCreate() {
     password: "",
     verifyPassword: "",
   });
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+
+  function handlePasswordChange(password) {
+    setInput(password);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -22,6 +27,11 @@ export default function NewPasswordCreate() {
       },
       credentials: "include",
     });
+    if (response.ok) {
+      setFeedbackMessage("Je wachtwoord is succesvol geupdate. ");
+    } else {
+      setFeedbackMessage("Er is iets mis gegaan bij het updaten van je wachtwoord.");
+    }
   }
 
   return (
@@ -32,7 +42,12 @@ export default function NewPasswordCreate() {
         onSubmit={handleSubmit}
         data-testid="create-new-password-form"
         className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
-        <PasswordInput inputChange={setInput} input={input} />
+        <PasswordInput
+          inputChange={handlePasswordChange}
+          input={input}
+          setParentMessage={setFeedbackMessage}
+        />
+        <p>{feedbackMessage}</p>
         <div className="flex justify-end">
           <button type="submit" className="buttonDark mt-8" onClick={handleSubmit}>
             Wachtwoord updaten

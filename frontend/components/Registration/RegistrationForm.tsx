@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
@@ -14,14 +14,14 @@ export default function RegistrationForm() {
     verifyPassword: "",
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   /*
   const router = useRouter();
   const currentUser = useUser({});
 
   async function loggedIn() {
-    if (currentUser) {
+    if (currentUser && currentUser.username) {
       router.push("/profiel");
     }
   }
@@ -32,13 +32,25 @@ export default function RegistrationForm() {
   function handleInputChange(e) {
     e.preventDefault();
     setUser({ ...user, [e.target.name]: e.target.value });
-
-    if (showErrorMessage == true) {
-      setShowErrorMessage(false);
-    }
+    setErrorMessage("");
   }
 
-  async function handleSubmit(e) {
+  function handlePasswordChange(
+    input: React.SetStateAction<{
+      username: string;
+      email: string;
+      password: string;
+      verifyPassword: string;
+    }>
+  ) {
+    setUser(input);
+  }
+
+  function handleErrorMessage(message: React.SetStateAction<string>) {
+    setErrorMessage(message);
+  }
+
+  async function handleSubmit(e: React.ChangeEventHandler<HTMLFormElement>) {
     e.preventDefault();
 
     TokenService.setCSRFToken();
@@ -62,14 +74,8 @@ export default function RegistrationForm() {
       setShowSuccessModal(true);
       setUser({ username: "", email: "", password: "", verifyPassword: "" });
     } else {
-      setShowErrorMessage(true);
+      setErrorMessage("Er is iets fout gegaan met je registratie.");
     }
-  }
-
-  function logout() {
-    fetch("http://localhost:8000/dj-rest-auth/logout/", {
-      method: "POST",
-    });
   }
 
   return (
@@ -88,7 +94,7 @@ export default function RegistrationForm() {
         data-testid="registration-form"
         className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
         <label htmlFor="email" className="labelInputForm">
-          Username:
+          Gebruikersnaam:
         </label>
         <input
           type="text"
@@ -96,7 +102,7 @@ export default function RegistrationForm() {
           name="username"
           value={user.username}
           onChange={handleInputChange}
-          placeholder="E-mail"
+          placeholder="Gebruikersnaam"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required
         />
@@ -115,12 +121,13 @@ export default function RegistrationForm() {
           required
         />
 
-        <PasswordInput inputChange={setUser} input={user} />
-        {showErrorMessage && (
-          <p className="text-red-700 block m-1">
-            Er is iets fout gegaan met je registratie. Probeer het opnieuw.{" "}
-          </p>
-        )}
+        <PasswordInput
+          inputChange={handlePasswordChange}
+          input={user}
+          setParentMessage={handleErrorMessage}
+        />
+
+        <p className="text-red-700 block m-1">{errorMessage}</p>
         <div className="flex justify-end">
           <button type="submit" className="buttonDark mt-8">
             Registreer

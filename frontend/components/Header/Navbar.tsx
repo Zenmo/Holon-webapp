@@ -22,7 +22,7 @@ export default function Navbar({
   };
 
   const statusButton = (status: boolean) => {
-    if (status == true) {
+    if (status === true) {
       return (
         <button onClick={handleLogOut} className="buttonDark">
           Uitloggen

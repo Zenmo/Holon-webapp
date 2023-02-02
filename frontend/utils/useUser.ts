@@ -8,7 +8,7 @@ const fetcher = (...args) =>
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Token " + "",
+      Authorization: "Token " + TokenService.getAccessToken() + "",
     },
     credentials: "include",
   }).then(res => res.json());
