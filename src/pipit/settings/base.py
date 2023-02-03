@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # "django.contrib.sitemaps"
     # Third party apps
+    "polymorphic",
     "storages",
     "wagtail.embeds",
     "wagtail.sites",

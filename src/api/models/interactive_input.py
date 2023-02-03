@@ -60,9 +60,9 @@ class InteractiveInput(ClusterableModel):
         choices=ANIMATION_CHOICES,
         default=ANIMATION_NONE,
     )
-    asset_type = models.ForeignKey(
-        "holon.Asset", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
-    )
+    # asset_type = models.ForeignKey(
+    #     "holon.Asset", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
+    # )
 
     panels = [
         FieldPanel("name"),
