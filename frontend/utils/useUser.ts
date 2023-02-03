@@ -11,10 +11,7 @@ const fetcher = (...args) =>
       Authorization: "Bearer " + TokenService.getAccessToken(),
     },
     credentials: "include",
-  }).then(res => {
-    console.log(res)
-    return res.json()
-  });
+  }).then(res =>  res.json());
 
 export default function useUser({ redirectTo = "" } = {}) {
   const {
@@ -24,6 +21,7 @@ export default function useUser({ redirectTo = "" } = {}) {
   } = useSWR("http://localhost:8000/dj-rest-auth/user/", fetcher);
   
   useEffect(() => {
+    console.log("[useUser] useEffect triggert")
     // if no redirect needed, just return (example: already on /dashboard)
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
     if (!redirectTo || !user) return;

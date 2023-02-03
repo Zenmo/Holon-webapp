@@ -7,6 +7,7 @@ import useUser from "@/utils/useUser";
 export default function LoginForm() {
   const [user, setUser] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("Er is iets fout gegaan met het inloggen.");
 
   const router = useRouter();
   const currentUser = useUser({});
@@ -45,14 +46,27 @@ export default function LoginForm() {
       credentials: "include",
     })
       .then(res => {
+        if (res.status == 401) {
+          setErrorMessage("Uw gebruikersnaam/wachtwoord is niet correct");
+        }
         if (!res.ok) {
-          const message = `An error has occured: ${result.status}`;
+          const message = `An error has occured: ${res.status}`;
           console.log(message);
           setShowErrorMessage(true);
+        } else {
+          return res.json();
         }
-        return res.json();
       })
-      .then(data => TokenService.setAccessToken(data.access));
+      .then(data => {
+        if (data) {
+          setErrorMessage("");
+          TokenService.setAccessToken(data.access);
+        }
+      })
+      .then(() => {
+        loggedIn();
+        router.push("/profiel");
+      });
   }
 
   return (
@@ -88,9 +102,7 @@ export default function LoginForm() {
           onChange={handleInputChange}
           required
         />
-        {showErrorMessage && (
-          <p className="text-red-700 block m-1">Er is iets fout gegaan met het inloggen. </p>
-        )}
+        {showErrorMessage && <p className="text-red-700 block m-1">{errorMessage}</p>}
 
         {/* nieuw wachtwoord aanvragen func nog niet geimplementeerd
         <p className="underline mt-8 decoration-holon-blue-900 decoration-2 underline-offset-4 hover:underline hover:decoration-gray-300 hover:decoration-2 hover:underline-offset-4 sm:p-0">

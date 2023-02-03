@@ -63,6 +63,7 @@ export default function UserProfile() {
       },
       credentials: "include",
     });
+
     const message = await response;
     if (message.ok) {
       setMessageProfileUpdate("Je profiel is succesvol geupdate");

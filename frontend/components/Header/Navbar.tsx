@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavItem } from "@/api/types";
-import * as Cookies from "es-cookie";
+import useUser from "@/utils/useUser";
 import TokenService from "@/services/token";
 
 export default function Navbar({
@@ -17,6 +17,7 @@ export default function Navbar({
 
   const handleLogOut = () => {
     TokenService.removeAccessToken();
+    router.push("/inloggen");
   };
 
   const statusButton = (status: boolean) => {
