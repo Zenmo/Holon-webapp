@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import * as Cookies from "es-cookie";
 import UpdatePassword from "./UpdatePassword";
-import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
+import TokenService from "@/services/token";
 
 type User = {
   first_name: string;
@@ -60,7 +59,7 @@ export default function UserProfile() {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        Authorization: "Bearer " + TokenService.getAccessToken(),
       },
       credentials: "include",
     });
@@ -89,7 +88,7 @@ export default function UserProfile() {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        Authorization: "Bearer " + TokenService.getAccessToken(),
       },
       credentials: "include",
     });

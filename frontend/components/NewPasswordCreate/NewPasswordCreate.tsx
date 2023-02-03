@@ -1,5 +1,5 @@
 import { useState } from "react";
-import * as Cookies from "es-cookie";
+import TokenService from "@/services/token";
 import PasswordInput from "../PasswordInput/PasswordInput";
 
 export default function NewPasswordCreate() {
@@ -23,12 +23,12 @@ export default function NewPasswordCreate() {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        Authorization: "Bearer " + TokenService.getAccessToken(),
       },
       credentials: "include",
     });
     if (response.ok) {
-      setFeedbackMessage("Je wachtwoord is succesvol geupdate. ");
+      setFeedbackMessage("Je wachtwoord is succesvol geupdate.");
     } else {
       setFeedbackMessage("Er is iets mis gegaan bij het updaten van je wachtwoord.");
     }

@@ -17,6 +17,11 @@ from nextjs.api import api_router
 from api.router import api_router as rest_api_router
 from holon.urls import urlpatterns as holon_urls
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 handler404 = PageNotFoundView.as_view()
 handler500 = error_500_view
 csrf = get_csrf
@@ -58,6 +63,8 @@ urlpatterns += [
     path("wt/sitemap.xml", sitemap, name="sitemap"),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
     path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
 
 urlpatterns += [re_path(r"", include(wagtail_urls))]

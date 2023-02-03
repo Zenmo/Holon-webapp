@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
-import * as Cookies from "es-cookie";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
@@ -16,7 +15,6 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  /*
   const router = useRouter();
   const currentUser = useUser({});
 
@@ -27,7 +25,6 @@ export default function RegistrationForm() {
   }
 
   loggedIn();
-  */
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
@@ -53,7 +50,7 @@ export default function RegistrationForm() {
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    TokenService.setCSRFToken();
+    console.log("[RegistrationForm] HandleSubmit");
 
     const response = await fetch("http://localhost:8000/dj-rest-auth/registration/", {
       method: "POST",
@@ -65,10 +62,11 @@ export default function RegistrationForm() {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        Authorization: "Bearer " + TokenService.getAccessToken(),
       },
       credentials: "include",
     });
+
     const message = await response;
     if (message.ok) {
       setShowSuccessModal(true);

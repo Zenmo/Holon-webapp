@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import * as Cookies from "es-cookie";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
@@ -10,7 +9,6 @@ export default function LoginForm() {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   const router = useRouter();
-  /*
   const currentUser = useUser({});
 
   async function loggedIn() {
@@ -20,7 +18,6 @@ export default function LoginForm() {
   }
 
   loggedIn();
-  */
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
@@ -34,9 +31,9 @@ export default function LoginForm() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    TokenService.setCSRFToken();
+    console.log("[LoginForm] handleSubmit");
 
-    const result = await fetch("http://localhost:8000/dj-rest-auth/login/", {
+    const result = await fetch("http://localhost:8000/api/token/", {
       method: "POST",
       body: JSON.stringify({
         username: user.username,
@@ -44,22 +41,18 @@ export default function LoginForm() {
       }),
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
       },
       credentials: "include",
-    });
-
-    if (!result.ok) {
-      const message = `An error has occured: ${result.status}`;
-      console.log(message);
-      setShowErrorMessage(true);
-    } else {
-      const data = await result.json();
-
-      TokenService.setAccessToken(data.key);
-
-      router.push("/profiel");
-    }
+    })
+      .then(res => {
+        if (!res.ok) {
+          const message = `An error has occured: ${result.status}`;
+          console.log(message);
+          setShowErrorMessage(true);
+        }
+        return res.json();
+      })
+      .then(data => TokenService.setAccessToken(data.access));
   }
 
   return (

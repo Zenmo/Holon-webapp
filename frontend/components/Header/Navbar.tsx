@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavItem } from "@/api/types";
+import * as Cookies from "es-cookie";
 import TokenService from "@/services/token";
 
 export default function Navbar({
@@ -15,9 +16,6 @@ export default function Navbar({
   const router = useRouter();
 
   const handleLogOut = () => {
-    fetch("http://localhost:8000/dj-rest-auth/logout/", {
-      method: "POST",
-    });
     TokenService.removeAccessToken();
   };
 

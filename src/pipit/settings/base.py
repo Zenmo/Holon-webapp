@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "wagtail_headless_preview",
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
     "corsheaders",
     # Project specific apps
     "pipit",
@@ -72,6 +73,8 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
 ]
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -116,6 +119,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "pipit.wsgi.application"
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",)
+}
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = "holon-auth"
+JWT_AUTH_REFRESH_COOKIE = "holon-refresh-token"
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -237,4 +246,3 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
 
 OLD_PASSWORD_FIELD_ENABLED = True
-REST_USE_JWT = True

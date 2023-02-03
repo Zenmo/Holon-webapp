@@ -1,4 +1,4 @@
-import * as Cookies from "es-cookie";
+import TokenService from "@/services/token";
 
 export default function NewPasswordRequest() {
   function handleSubmit(e) {
@@ -13,7 +13,7 @@ export default function NewPasswordRequest() {
 
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        Authorization: "Bearer " + TokenService.getAccessToken(),
       },
       credentials: "include",
     });
