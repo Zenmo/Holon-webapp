@@ -9,7 +9,6 @@ from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock, Story
 
 
 class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
-
     intro = StreamField(
         [
             ("title_block", TitleBlock()),

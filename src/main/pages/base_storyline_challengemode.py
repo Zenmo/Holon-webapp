@@ -11,6 +11,7 @@ from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
 from api.models.scenario import Scenario
 
 from .base import BasePage
+from .base_card import BaseCard
 from ..blocks import (
     TextAndMediaBlock,
     StorylineSectionBlock,
@@ -82,28 +83,21 @@ class StorylinePageInformationType(StorylinePageFilter):
         ordering = ["name"]
 
 
-class BaseStorylineChallengeMode(HeadlessPreviewMixin, BasePage):
+COLOR_CHOICES = (
+    ("card__bg-gold", "Gold"),
+    ("card__bg-blue", "Blue"),
+    ("card__bg-gray", "Gray"),
+    ("card__bg-purple", "Purple"),
+    ("card__bg-pink", "Pink"),
+    ("card__bg-orange", "Orange"),
+)
+
+
+class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
     """A default Storyline / Challenge Mode parent page"""
 
     roles = ParentalManyToManyField(StorylinePageRoleType, blank=True)
     information_types = ParentalManyToManyField(StorylinePageInformationType, blank=True)
-
-    thumbnail = models.ForeignKey(
-        "customimage.CustomImage",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-
-    @property
-    def thumbnail_rendition_url(self):
-        url = None
-        if self.thumbnail is not None:
-            url = self.thumbnail.get_rendition("fill-750x380|jpegquality-80")
-        return url
-
-    description = models.TextField(null=True, blank=True, help_text="Description of the storyline")
 
     scenario = models.ForeignKey(
         Scenario,
@@ -111,23 +105,6 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BasePage):
         null=True,
         on_delete=models.SET_NULL,
         related_name="+",
-    )
-
-    COLOR_CHOICES = (
-        ("card__bg-gold", "Gold"),
-        ("card__bg-blue", "Blue"),
-        ("card__bg-gray", "Gray"),
-        ("card__bg-purple", "Purple"),
-        ("card__bg-pink", "Pink"),
-        ("card__bg-orange", "Orange"),
-    )
-
-    card_color = models.CharField(
-        max_length=20,
-        choices=COLOR_CHOICES,
-        default="card__bg-blue",
-        blank=True,
-        help_text="Background color in storyline overview page",
     )
 
     storyline = StreamField(
@@ -146,7 +123,7 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BasePage):
         use_json_field=True,
     )
 
-    content_panels = BasePage.content_panels + [
+    content_panels = BaseCard.content_panels + [
         MultiFieldPanel(
             [
                 FieldPanel("roles", widget=forms.CheckboxSelectMultiple),
@@ -154,12 +131,10 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BasePage):
             ],
             heading="Page data",
         ),
-        FieldPanel("thumbnail"),
-        FieldPanel("description"),
         FieldPanel("scenario"),
         FieldPanel("storyline"),
-        FieldPanel("card_color"),
     ]
+
     extra_panels = BasePage.extra_panels
 
     class Meta:

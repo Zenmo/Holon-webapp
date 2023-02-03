@@ -59,7 +59,10 @@ export default function Card({ cardItem, cardType }: CardProps) {
   cardStyle(cardType);
 
   function createLink(cardDetails: CardItem) {
-    if (cardDetails.slug) {
+    if (cardDetails.url) {
+      link = cardDetails.url;
+      externLinkProps = false;
+    } else if (cardDetails.slug) {
       link = router.asPath + cardDetails.slug;
       externLinkProps = false;
     } else if (cardDetails.itemLink?.length) {
@@ -103,7 +106,7 @@ export default function Card({ cardItem, cardType }: CardProps) {
 
         <span className={`flex gap-2 overflow-hidden ${cardStyling.text}`}>
           <CardTitle
-            condition={cardItem.slug || cardItem.itemLink?.length > 0}
+            condition={cardItem.url || cardItem.slug || cardItem.itemLink?.length > 0}
             href={createLink(cardItem)}
             {...externLinkProps}>
             {cardItem.title}
