@@ -12,6 +12,7 @@ export type CardItem = {
   };
   description?: string;
   slug?: string;
+  url?: string;
   cardColor: string;
   itemLink?:
     | []

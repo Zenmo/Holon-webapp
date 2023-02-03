@@ -37,6 +37,7 @@ class WikiPage(HeadlessPreviewMixin, BasePage):
         verbose_name="Page body",
         blank=True,
         null=True,
+        help_text=_("Add extra columns and rows with right mouse click"),
         use_json_field=True,
     )
 

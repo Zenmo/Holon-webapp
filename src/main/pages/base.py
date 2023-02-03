@@ -10,6 +10,8 @@ from wagtail.models import Page
 
 from ..mixins import EnhancedEditHandlerMixin, SeoMixin
 
+new_table_options = {"renderer": "text", "startRows": 3, "editor": "text"}
+
 
 class BasePage(EnhancedEditHandlerMixin, SeoMixin, Page):
     is_creatable = False
