@@ -37,13 +37,10 @@ class InteractiveInputBlock(blocks.StructBlock):
     default_value = blocks.CharBlock(
         required=False, help_text="Type the default value exactly as it's shown on the website page"
     )
-   
+
     def get_api_representation(self, value, context=None):
         if value:
             interactive_input = InteractiveInput.objects.get(pk=value["interactive_input"])
-          
-
-         
 
             options_arr = []
             if (
@@ -84,8 +81,6 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_max": option.slider_value_max,
                     }
                     options_arr.append(option_dict)
-            
-            
 
             interactive_input_info = {
                 "id": interactive_input.id,
@@ -105,10 +100,11 @@ class InteractiveInputBlock(blocks.StructBlock):
             if interactive_input.link_wiki_page is not None:
                 print(interactive_input.link_wiki_page.title)
                 interactive_input_info["title_wiki_page"] = interactive_input.link_wiki_page.title
-                interactive_input_info["link_wiki_page"] = interactive_input.link_wiki_page.get_url_parts()[2]
+                interactive_input_info[
+                    "link_wiki_page"
+                ] = interactive_input.link_wiki_page.get_url_parts()[2]
 
             return interactive_input_info
-
 
     class Meta:
         icon = "radio-empty"
