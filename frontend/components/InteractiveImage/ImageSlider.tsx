@@ -13,6 +13,9 @@ interface Props {
   min?: number;
   max?: number;
   type?: string;
+  moreInformation?: string;
+  titleWikiPage?: string;
+  linkWikiPage?: string;
   tooltip?: boolean;
   unit?: string;
 }
@@ -28,24 +31,31 @@ export default function ImageSlider({
   max,
   label,
   type,
+  moreInformation,
+  titleWikiPage,
+  linkWikiPage,
   tooltip,
   unit,
 }: Props) {
   const [sliderValue, setSliderValue] = useState(defaultValue);
   return (
     <div className="my-4 flex flex-col">
-      <label htmlFor={inputId} className="flex text-base font-bold">
-        {label}
-      </label>
-      {inputItem.more_information || inputItem.linkWikiPage ? (
-        <InteractiveInputPopover
-          name={label}
-          more_information={more_information}
-          titleWikiPage={titleWikiPage}
-          linkWikiPage={linkWikiPage}></InteractiveInputPopover>
-      ) : (
-        ""
-      )}
+      <div className="flex flex-row mb-2 gap-3 items-center">
+        <label htmlFor={inputId} className="flex text-base font-bold">
+          {label}
+        </label>
+
+        {moreInformation || linkWikiPage ? (
+          <InteractiveInputPopover
+            name={label}
+            moreInformation={moreInformation}
+            titleWikiPage={titleWikiPage}
+            linkWikiPage={linkWikiPage}></InteractiveInputPopover>
+        ) : (
+          ""
+        )}
+      </div>
+
       <div className={`flex flex-row ${tooltip && `pt-8`}`}>
         <div className="flex flex-row relative items-center flex-1 h-[24px]">
           <input

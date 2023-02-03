@@ -37,10 +37,14 @@ class InteractiveInputBlock(blocks.StructBlock):
     default_value = blocks.CharBlock(
         required=False, help_text="Type the default value exactly as it's shown on the website page"
     )
-
+   
     def get_api_representation(self, value, context=None):
         if value:
             interactive_input = InteractiveInput.objects.get(pk=value["interactive_input"])
+          
+
+         
+
             options_arr = []
             if (
                 interactive_input.type == CHOICE_SINGLESELECT
@@ -83,19 +87,28 @@ class InteractiveInputBlock(blocks.StructBlock):
             
             
 
-            return {
+            interactive_input_info = {
                 "id": interactive_input.id,
                 "name": interactive_input.name,
                 "type": interactive_input.type,
                 "more_information": interactive_input.more_information,
-                ""
                 "animation_tag": interactive_input.animation_tag,
+                "title_wiki_page": "",
+                "link_wiki_page": "",
                 "options": options_arr,
                 "display": value["display"],
                 "visible": value["visible"],
                 "locked": value["locked"],
                 "default_value_override": value["default_value"],
             }
+
+            if interactive_input.link_wiki_page is not None:
+                print(interactive_input.link_wiki_page.title)
+                interactive_input_info["title_wiki_page"] = interactive_input.link_wiki_page.title
+                interactive_input_info["link_wiki_page"] = interactive_input.link_wiki_page.get_url_parts()[2]
+
+            return interactive_input_info
+
 
     class Meta:
         icon = "radio-empty"
