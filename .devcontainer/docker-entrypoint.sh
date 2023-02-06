@@ -45,6 +45,7 @@ load_fixture_data() {
   cd /workspace/src
   python manage.py loaddata holon/fixtures/holon-fixture.json
   python manage.py loaddata holon/fixtures/api-fixture.json
+  python manage.py loaddata holon/fixtures/main-casusfilter-fixture.json
 }
 
 setup_frontend () {
