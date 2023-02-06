@@ -32,8 +32,6 @@ export default function LoginForm() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log("[LoginForm] handleSubmit");
-
     const result = await fetch("http://localhost:8000/api/token/", {
       method: "POST",
       body: JSON.stringify({
@@ -51,7 +49,6 @@ export default function LoginForm() {
         }
         if (!res.ok) {
           const message = `An error has occured: ${res.status}`;
-          console.log(message);
           setShowErrorMessage(true);
         } else {
           return res.json();
@@ -61,11 +58,9 @@ export default function LoginForm() {
         if (data) {
           setErrorMessage("");
           TokenService.setAccessToken(data.access);
+          loggedIn();
+          router.push("/profiel");
         }
-      })
-      .then(() => {
-        loggedIn();
-        router.push("/profiel");
       });
   }
 
