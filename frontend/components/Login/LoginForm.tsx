@@ -32,7 +32,7 @@ export default function LoginForm() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const result = await fetch("http://localhost:8000/api/token/", {
+    await fetch("http://localhost:8000/api/token/", {
       method: "POST",
       body: JSON.stringify({
         username: user.username,
@@ -49,6 +49,7 @@ export default function LoginForm() {
         }
         if (!res.ok) {
           const message = `An error has occured: ${res.status}`;
+          console.log(message);
           setShowErrorMessage(true);
         } else {
           return res.json();
