@@ -18,10 +18,6 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
     }
   }, [currentUser]);
 
-  const setStatus = (status: React.SetStateAction<boolean>) => {
-    setLoggedIn(status);
-  };
-
   const handleClick = () => {
     setMenuOpen(!menuOpen);
   };
