@@ -34,7 +34,7 @@ export default function UserProfile() {
         last_name: currentUser.last_name,
         email: currentUser.email,
       });
-  }, [currentUser, user]);
+  }, [currentUser]);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();

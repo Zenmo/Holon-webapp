@@ -13,7 +13,7 @@ export default function RegistrationForm() {
     password: "",
     verifyPassword: "",
   });
-  const [showSuccessModal, setShowSuccessModal] = useState(true);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
