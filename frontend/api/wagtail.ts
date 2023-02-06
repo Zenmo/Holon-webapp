@@ -2,7 +2,7 @@ import querystring from "querystring";
 import { keysToCamelFromSnake, keysToSnakeFromCamel } from "../utils/caseconverters";
 
 const API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL;
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL;
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL || "/wt/api/nextjs"; // Use environment variable for browser requests if it exists and the domain root if this variable is empty on production
 
 export async function getPage(path, params, options) {
   params = params || {};

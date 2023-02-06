@@ -41,6 +41,7 @@ class InteractiveInputBlock(blocks.StructBlock):
     def get_api_representation(self, value, context=None):
         if value:
             interactive_input = InteractiveInput.objects.get(pk=value["interactive_input"])
+
             options_arr = []
             if (
                 interactive_input.type == CHOICE_SINGLESELECT
@@ -55,13 +56,17 @@ class InteractiveInputBlock(blocks.StructBlock):
                             option_default = True
                     else:
                         option_default = option.default
-
                     option_dict = {
                         "id": int(option.id),
                         "option": option.option,
                         "default": option_default,
                         "label": option.label,
+                        "legal_limitation": option.legal_limitation,
+                        "color": option.color,
                     }
+                    if option.link_wiki_page is not None:
+                        option_dict["title_wiki_page"] = option.link_wiki_page.title
+                        option_dict["link_wiki_page"] = option.link_wiki_page.get_url_parts()[2]
                     options_arr.append(option_dict)
 
             if interactive_input.type == CHOICE_CONTINUOUS:
@@ -77,17 +82,29 @@ class InteractiveInputBlock(blocks.StructBlock):
                     }
                     options_arr.append(option_dict)
 
-            return {
+            interactive_input_info = {
                 "id": interactive_input.id,
                 "name": interactive_input.name,
                 "type": interactive_input.type,
+                "more_information": interactive_input.more_information,
                 "animation_tag": interactive_input.animation_tag,
+                "title_wiki_page": "",
+                "link_wiki_page": "",
                 "options": options_arr,
                 "display": value["display"],
                 "visible": value["visible"],
                 "locked": value["locked"],
                 "default_value_override": value["default_value"],
             }
+
+            if interactive_input.link_wiki_page is not None:
+                print(interactive_input.link_wiki_page.title)
+                interactive_input_info["title_wiki_page"] = interactive_input.link_wiki_page.title
+                interactive_input_info[
+                    "link_wiki_page"
+                ] = interactive_input.link_wiki_page.get_url_parts()[2]
+
+            return interactive_input_info
 
     class Meta:
         icon = "radio-empty"
