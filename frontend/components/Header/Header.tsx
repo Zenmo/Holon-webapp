@@ -62,7 +62,7 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
               items={navigation}
               loggedIn={loggedIn}
               nameUser={nameUser}
-              setStatus={setStatus}
+              setStatus={setLoggedIn}
             />
           </div>
         </div>
