@@ -15,13 +15,13 @@ export default function PasswordInput({ inputChange, input, setParentMessage }: 
   const onInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
     e.preventDefault();
 
-    inputChange({ ...input, [e.target.name]: e.target.value });
+    inputChange({ ...input, [e.currentTarget.name]: e.currentTarget.value });
     validateInput(e);
     setParentMessage("");
   };
 
-  const validateInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
+  const validateInput = (e: React.FormEvent<HTMLInputElement>): void => {
+    const { name, value } = e.currentTarget;
     setError(prev => {
       const stateObj = { ...prev, [name]: "" };
 

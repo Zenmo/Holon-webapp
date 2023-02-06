@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import * as Cookies from "es-cookie";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
 import TokenService from "@/services/token";
@@ -47,8 +48,9 @@ export default function RegistrationForm() {
     setErrorMessage(message);
   }
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    TokenService.setCSRFToken();
 
     console.log("[RegistrationForm] HandleSubmit");
 
@@ -62,7 +64,7 @@ export default function RegistrationForm() {
       }),
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + TokenService.getAccessToken(),
+        "X-CSRFToken": Cookies.get("csrftoken"),
       },
       credentials: "include",
     });

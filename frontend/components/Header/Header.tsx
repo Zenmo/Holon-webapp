@@ -13,8 +13,14 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
   useEffect(() => {
     if (currentUser && currentUser.username) {
       setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
     }
   }, [currentUser]);
+
+  const setStatus = (status: React.SetStateAction<boolean>) => {
+    setLoggedIn(status);
+  };
 
   const handleClick = () => {
     setMenuOpen(!menuOpen);
@@ -52,7 +58,12 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
           <div
             className={`${menuOpen ? "" : "hidden"} w-full md:block md:w-auto`}
             id="navbar-default">
-            <Navbar items={navigation} loggedIn={loggedIn} nameUser={nameUser} />
+            <Navbar
+              items={navigation}
+              loggedIn={loggedIn}
+              nameUser={nameUser}
+              setStatus={setStatus}
+            />
           </div>
         </div>
       </div>
