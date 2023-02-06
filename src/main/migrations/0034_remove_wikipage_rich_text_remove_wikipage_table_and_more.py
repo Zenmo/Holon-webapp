@@ -140,8 +140,4 @@ class Migration(migrations.Migration):
             model_name="wikipage",
             name="rich_text",
         ),
-        migrations.RemoveField(
-            model_name="wikipage",
-            name="table",
-        ),
     ]
