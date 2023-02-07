@@ -34,4 +34,4 @@ if get_env_bool("DEBUG_TOOLBAR", default=True):
 
 # Allow django-debug-bar under docker
 def show_toolbar(request):
-    return True
+    return False
