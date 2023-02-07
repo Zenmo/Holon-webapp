@@ -17,7 +17,6 @@ const CasusPage = ({
   childPages: any[];
   linkedBestPractices: any[];
 }) => {
-  console.log;
   return (
     <div className={styles[""]}>
       <ContentBlocks content={content} />
