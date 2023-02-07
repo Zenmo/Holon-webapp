@@ -3,7 +3,6 @@ import TokenService from "@/services/token";
 export default function NewPasswordRequest() {
   function handleSubmit(e) {
     e.preventDefault();
-    console.log();
 
     fetch("http://localhost:8000/password/reset/", {
       method: "POST",

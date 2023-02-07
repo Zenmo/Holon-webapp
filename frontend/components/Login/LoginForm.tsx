@@ -47,7 +47,6 @@ export default function LoginForm() {
         })
         .then(data => {
           if (data) {
-            console.log("inlog gaat goed");
             setErrorMessage("");
             TokenService.setAccessToken(data.access);
           }

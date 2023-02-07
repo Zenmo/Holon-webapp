@@ -20,7 +20,6 @@ export default function useUser({ redirectTo = "", redirectIfFound = false } = {
   );
 
   useEffect(() => {
-    console.log("[useUser] useEffect triggert");
     // if no redirect needed, just return (example: already on /dashboard)
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
     if (!redirectTo || !user) return;

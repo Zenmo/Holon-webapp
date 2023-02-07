@@ -43,8 +43,6 @@ export default function RegistrationForm() {
     e.preventDefault();
     TokenService.setCSRFToken();
 
-    console.log("[RegistrationForm] HandleSubmit");
-
     const response = await fetch("http://localhost:8000/dj-rest-auth/registration/", {
       method: "POST",
       body: JSON.stringify({
