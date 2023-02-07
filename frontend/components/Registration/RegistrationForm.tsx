@@ -15,7 +15,7 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  /* eslint-disable no-unused-vars */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const { user } = useUser({ redirectTo: "/profiel", redirectIfFound: true });
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
