@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import * as Cookies from "es-cookie";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
@@ -16,6 +15,7 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  /* eslint-disable no-unused-vars */
   const { user } = useUser({ redirectTo: "/profiel", redirectIfFound: true });
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
