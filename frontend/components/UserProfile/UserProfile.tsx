@@ -3,7 +3,7 @@ import UpdatePassword from "./UpdatePassword";
 import useUser from "@/utils/useUser";
 import TokenService from "@/services/token";
 
-type User = {
+type UserData = {
   first_name: string;
   last_name: string;
   currentPassword: string;
@@ -14,8 +14,8 @@ type User = {
 
 export default function UserProfile() {
   const [isDisabled, setIsDisabled] = useState(true);
-  const currentUser = useUser({ redirectTo: "/inloggen" });
-  const [user, setUser] = useState({
+  const { user } = useUser({ redirectTo: "/inloggen", redirectIfFound: false });
+  const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
     currentPassword: "",
@@ -27,18 +27,18 @@ export default function UserProfile() {
   const [messagePasswordUpdate, setMessagePasswordUpdate] = useState("");
 
   useEffect(() => {
-    currentUser &&
-      setUser({
-        ...user,
-        first_name: currentUser.first_name,
-        last_name: currentUser.last_name,
-        email: currentUser.email,
+    user &&
+      setUserData({
+        ...userData,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
       });
-  }, [currentUser]);
+  }, [user]);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUserData({ ...userData, [e.target.name]: e.target.value });
     if (isDisabled) {
       setIsDisabled(false);
     }
@@ -50,12 +50,12 @@ export default function UserProfile() {
     const response = await fetch(`http://localhost:8000/dj-rest-auth/user/`, {
       method: "PATCH",
       body: JSON.stringify({
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        currentPassword: user.currentPassword,
-        newPassword: user.password,
-        verifyNewPassword: user.verifyPassword,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        email: userData.email,
+        currentPassword: userData.currentPassword,
+        newPassword: userData.password,
+        verifyNewPassword: userData.verifyPassword,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -73,8 +73,9 @@ export default function UserProfile() {
     }
   }
 
-  function handlePasswordChange(input: User) {
-    setUser(input);
+  function handlePasswordChange(input: UserData) {
+    setUserData(input);
+    setMessagePasswordUpdate("");
   }
 
   async function handleUpdatePassword(e: React.SyntheticEvent<HTMLInputElement, SubmitEvent>) {
@@ -83,9 +84,9 @@ export default function UserProfile() {
     const response = await fetch(`http://localhost:8000/dj-rest-auth/password/change/`, {
       method: "POST",
       body: JSON.stringify({
-        old_password: user.currentPassword,
-        new_password1: user.password,
-        new_password2: user.verifyPassword,
+        old_password: userData.currentPassword,
+        new_password1: userData.password,
+        new_password2: userData.verifyPassword,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +105,7 @@ export default function UserProfile() {
       }
     } else if (res.ok) {
       setMessagePasswordUpdate("Je nieuwe wachtwoord is succesvol aangemaakt.");
-      setUser({ ...user, currentPassword: "", password: "", verifyPassword: "" });
+      setUserData({ ...userData, currentPassword: "", password: "", verifyPassword: "" });
     } else {
       setMessagePasswordUpdate("Er is iets mis gegaan met het updaten van je wachtwoord");
     }
@@ -135,7 +136,7 @@ export default function UserProfile() {
               type="text"
               id="first_name"
               name="first_name"
-              value={user.first_name}
+              value={userData.first_name}
               onChange={handleInputChange}
               placeholder="Voornaam"
               className="inputForm"
@@ -148,7 +149,7 @@ export default function UserProfile() {
               type="text"
               id="last_name"
               name="last_name"
-              value={user.last_name}
+              value={userData.last_name}
               onChange={handleInputChange}
               placeholder="Achternaam"
               className="inputForm"
@@ -161,7 +162,7 @@ export default function UserProfile() {
               type="email"
               id="email"
               name="email"
-              value={user.email}
+              value={userData.email}
               onChange={handleInputChange}
               placeholder="E-mail"
               className="inputForm"
@@ -181,7 +182,7 @@ export default function UserProfile() {
           <UpdatePassword
             handleChange={handlePasswordChange}
             handleSubmit={handleUpdatePassword}
-            input={user}
+            input={userData}
             setMessage={setMessagePasswordUpdate}
           />
           <p>{messagePasswordUpdate}</p>

@@ -1,28 +1,17 @@
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
 export default function LoginForm() {
-  const [user, setUser] = useState({ username: "", password: "" });
+  const [userData, setUserData] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Er is iets fout gegaan met het inloggen.");
-
-  const router = useRouter();
-  const currentUser = useUser({});
-
-  async function loggedIn() {
-    if (currentUser && currentUser.username) {
-      router.push("/profiel");
-    }
-  }
-
-  loggedIn();
+  const { mutateUser } = useUser({ redirectTo: "/profiel", redirectIfFound: true });
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUserData({ ...userData, [e.target.name]: e.target.value });
 
     if (showErrorMessage == true) {
       setShowErrorMessage(false);
@@ -32,37 +21,38 @@ export default function LoginForm() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    await fetch("http://localhost:8000/api/token/", {
-      method: "POST",
-      body: JSON.stringify({
-        username: user.username,
-        password: user.password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then(res => {
-        if (res.status == 401) {
-          setErrorMessage("Uw gebruikersnaam/wachtwoord is niet correct");
-        }
-        if (!res.ok) {
-          const message = `An error has occured: ${res.status}`;
-          console.log(message);
-          setShowErrorMessage(true);
-        } else {
-          return res.json();
-        }
+    mutateUser(
+      await fetch("http://localhost:8000/api/token/", {
+        method: "POST",
+        body: JSON.stringify({
+          username: userData.username,
+          password: userData.password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       })
-      .then(data => {
-        if (data) {
-          setErrorMessage("");
-          TokenService.setAccessToken(data.access);
-          loggedIn();
-          router.push("/profiel");
-        }
-      });
+        .then(res => {
+          if (res.status == 401) {
+            setErrorMessage("Uw gebruikersnaam/wachtwoord is niet correct");
+          }
+          if (!res.ok) {
+            const message = `An error has occured: ${res.status}`;
+            console.log(message);
+            setShowErrorMessage(true);
+          } else {
+            return res.json();
+          }
+        })
+        .then(data => {
+          if (data) {
+            console.log("inlog gaat goed");
+            setErrorMessage("");
+            TokenService.setAccessToken(data.access);
+          }
+        })
+    );
   }
 
   return (

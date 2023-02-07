@@ -7,7 +7,7 @@ import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
 export default function RegistrationForm() {
-  const [user, setUser] = useState({
+  const [userData, setUserData] = useState({
     username: "",
     email: "",
     password: "",
@@ -16,20 +16,11 @@ export default function RegistrationForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const router = useRouter();
-  const currentUser = useUser({});
-
-  async function loggedIn() {
-    if (currentUser && currentUser.username) {
-      router.push("/profiel");
-    }
-  }
-
-  loggedIn();
+  const { user } = useUser({ redirectTo: "/profiel", redirectIfFound: true });
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUserData({ ...userData, [e.target.name]: e.target.value });
     setErrorMessage("");
   }
 
@@ -41,7 +32,7 @@ export default function RegistrationForm() {
       verifyPassword: string;
     }>
   ) {
-    setUser(input);
+    setUserData(input);
   }
 
   function handleErrorMessage(message: React.SetStateAction<string>) {
@@ -57,10 +48,10 @@ export default function RegistrationForm() {
     const response = await fetch("http://localhost:8000/dj-rest-auth/registration/", {
       method: "POST",
       body: JSON.stringify({
-        username: user.username,
-        password1: user.password,
-        password2: user.verifyPassword,
-        email: user.email,
+        username: userData.username,
+        password1: userData.password,
+        password2: userData.verifyPassword,
+        email: userData.email,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +63,7 @@ export default function RegistrationForm() {
     const message = await response;
     if (message.ok) {
       setShowSuccessModal(true);
-      setUser({ username: "", email: "", password: "", verifyPassword: "" });
+      setUserData({ username: "", email: "", password: "", verifyPassword: "" });
     } else {
       setErrorMessage("Er is iets fout gegaan met je registratie.");
     }
@@ -100,7 +91,7 @@ export default function RegistrationForm() {
           type="text"
           id="username"
           name="username"
-          value={user.username}
+          value={userData.username}
           onChange={handleInputChange}
           placeholder="Gebruikersnaam"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -114,7 +105,7 @@ export default function RegistrationForm() {
           type="email"
           id="email"
           name="email"
-          value={user.email}
+          value={userData.email}
           onChange={handleInputChange}
           placeholder="E-mail"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -123,7 +114,7 @@ export default function RegistrationForm() {
 
         <PasswordInput
           inputChange={handlePasswordChange}
-          input={user}
+          input={userData}
           setParentMessage={handleErrorMessage}
         />
 

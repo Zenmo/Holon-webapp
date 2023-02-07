@@ -7,20 +7,19 @@ export default function Navbar({
   items,
   loggedIn,
   nameUser,
-  setStatus,
+  mutateUser,
 }: {
   items: NavItem[];
   loggedIn: boolean;
   nameUser: string;
-  setStatus?: React.Dispatch<React.SetStateAction<boolean>>;
+  mutateUser: () => void;
 }) {
   const router = useRouter();
 
-  const handleLogOut = () => {
-    TokenService.removeAccessToken();
-    setStatus(false);
+  function handleLogOut() {
+    mutateUser(TokenService.removeAccessToken());
     router.push("/inloggen");
-  };
+  }
 
   const statusButton = (status: boolean) => {
     if (status === true) {

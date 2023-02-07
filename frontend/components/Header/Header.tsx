@@ -7,20 +7,14 @@ import useUser from "@/utils/useUser";
 export default function Header({ navigation }: { navigation: NavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const currentUser = useUser({});
-  const nameUser = currentUser ? currentUser.username : "";
+  const { user, mutateUser } = useUser({});
+  const nameUser = user ? user.username : "";
 
   useEffect(() => {
-    if (currentUser && currentUser.username) {
+    if (user && user.username) {
       setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
     }
-  }, [currentUser]);
-
-  const setStatus = (status: React.SetStateAction<boolean>) => {
-    setLoggedIn(status);
-  };
+  }, [user]);
 
   const handleClick = () => {
     setMenuOpen(!menuOpen);
@@ -62,7 +56,7 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
               items={navigation}
               loggedIn={loggedIn}
               nameUser={nameUser}
-              setStatus={setLoggedIn}
+              mutateUser={mutateUser}
             />
           </div>
         </div>

@@ -13,12 +13,11 @@ const fetcher = (...args) =>
     credentials: "include",
   }).then(res => res.json());
 
-export default function useUser({ redirectTo = "" } = {}) {
-  const {
-    data: user,
-    error,
-    isLoading,
-  } = useSWR("http://localhost:8000/dj-rest-auth/user/", fetcher);
+export default function useUser({ redirectTo = "", redirectIfFound = false } = {}) {
+  const { data: user, mutate: mutateUser } = useSWR(
+    "http://localhost:8000/dj-rest-auth/user/",
+    fetcher
+  );
 
   useEffect(() => {
     console.log("[useUser] useEffect triggert");
@@ -28,12 +27,13 @@ export default function useUser({ redirectTo = "" } = {}) {
 
     if (
       // If redirectTo is set, redirect if the user was not found.
-      redirectTo &&
-      !user?.username
+      (redirectTo && !user?.username && !redirectIfFound) ||
+      //or if redirect on find is set to true and the user is found
+      (redirectIfFound && user?.username)
     ) {
       Router.push(redirectTo);
     }
-  }, [user, redirectTo]);
+  }, [user, redirectTo, redirectIfFound]);
 
-  return user;
+  return { user, mutateUser };
 }
