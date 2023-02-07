@@ -82,7 +82,7 @@ export default function RegistrationForm() {
         onSubmit={handleSubmit}
         data-testid="registration-form"
         className="flex flex-col w-3/4 md:w-2/3 lg:w-1/3">
-        <label htmlFor="email" className="labelInputForm">
+        <label htmlFor="username" className="labelInputForm">
           Gebruikersnaam:
         </label>
         <input
