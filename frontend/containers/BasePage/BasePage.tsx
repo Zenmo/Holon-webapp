@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
@@ -10,7 +10,7 @@ import { NavItem } from "@/api/types";
 
 const WagtailUserbar = dynamic(() => import("@/components/WagtailUserbar"));
 
-type Props = React.PropsWithChildren<{
+export type Props = React.PropsWithChildren<{
   navigation: NavItem[];
   seo?: {
     canonicalLink?: string;
