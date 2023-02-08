@@ -1,8 +1,25 @@
+import type { Props } from "@/containers/BasePage/BasePage";
 import RegistrationForm from "@/components/Registration";
-import { basePageWrap } from "@/containers/BasePage";
+import BasePage from "@/containers/BasePage/BasePage";
+import { getPage } from "@/api/wagtail";
 
-function RegistrationPage() {
-  return <RegistrationForm />;
+export default function TilesDemo({
+  componentProps,
+}: {
+  componentProps: Props;
+  children: React.ReactNode;
+}) {
+  return (
+    <BasePage staticPageTitle="Registratie" navigation={componentProps.navigation}>
+      <RegistrationForm />
+    </BasePage>
+  );
 }
+export async function getStaticProps({ params }) {
+  params = params || {};
+  let path = params.path || [];
+  path = path.join("/");
 
-export default basePageWrap(RegistrationPage);
+  const { json: pageData } = await getPage(path);
+  return { props: pageData };
+}

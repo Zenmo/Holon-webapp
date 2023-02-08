@@ -1,8 +1,25 @@
-import NewPasswordRequest from "@/components/NewPasswordRequest/NewPasswordRequest";
-import { basePageWrap } from "@/containers/BasePage";
+import type { Props } from "@/containers/BasePage/BasePage";
+import NewPasswordRequest from "@/components/NewPasswordRequest";
+import BasePage from "@/containers/BasePage/BasePage";
+import { getPage } from "@/api/wagtail";
 
-function NewPasswordRequestPage() {
-  return <NewPasswordRequest />;
+export default function TilesDemo({
+  componentProps,
+}: {
+  componentProps: Props;
+  children: React.ReactNode;
+}) {
+  return (
+    <BasePage staticPageTitle="Wachtwoord aanvragen" navigation={componentProps.navigation}>
+      <NewPasswordRequest />
+    </BasePage>
+  );
 }
+export async function getStaticProps({ params }) {
+  params = params || {};
+  let path = params.path || [];
+  path = path.join("/");
 
-export default basePageWrap(NewPasswordRequestPage);
+  const { json: pageData } = await getPage(path);
+  return { props: pageData };
+}

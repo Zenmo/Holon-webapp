@@ -11,6 +11,7 @@ import { NavItem } from "@/api/types";
 const WagtailUserbar = dynamic(() => import("@/components/WagtailUserbar"));
 
 export type Props = React.PropsWithChildren<{
+  staticPageTitle?: string;
   navigation: NavItem[];
   seo?: {
     canonicalLink?: string;
@@ -33,7 +34,7 @@ export type Props = React.PropsWithChildren<{
   };
 }>;
 
-const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => {
+const BasePage = ({ children, navigation, seo = {}, staticPageTitle, wagtailUserbar }: Props) => {
   const {
     seoHtmlTitle,
     seoMetaDescription,
@@ -57,7 +58,7 @@ const BasePage = ({ children, navigation, seo = {}, wagtailUserbar }: Props) => 
   return (
     <>
       <Head>
-        <title>{seoHtmlTitle}</title>
+        <title>{staticPageTitle ? staticPageTitle : seoHtmlTitle}</title>
         <link rel="icon" href="/favicon.ico" />
         {!!seoMetaDescription && <meta name="description" content={seoMetaDescription} />}
         {!!seoOgTitle && <meta property="og:title" content={seoOgTitle} />}
