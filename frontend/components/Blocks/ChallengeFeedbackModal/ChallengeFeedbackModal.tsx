@@ -3,13 +3,37 @@ import Confetti from "react-confetti";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "@/components/Button/Button";
 
-/* eslint-disable */
-const feedbackmodaljson = require("./staticjson.json");
-
 type KPIDashboardProps = {
   data: Data;
   loading: boolean;
   dashboardId: string;
+  feedbackmodals: [
+    {
+      id: string;
+      type: string;
+      value: {
+        modaltitle: string;
+        modaltext: string;
+        modaltheme: string;
+        imageSelector: {
+          id: string;
+          title: string;
+          img: any;
+        };
+        conditions: [
+          {
+            id: string;
+            type: string;
+            value: {
+              parameter: string;
+              oparator: string;
+              value: string;
+            };
+          }
+        ];
+      };
+    }
+  ];
 };
 
 type Data = {
@@ -27,7 +51,11 @@ type Data = {
   };
 };
 
-export default function ChallengeFeedbackModal({ kpis, content }: KPIDashboardProps) {
+export default function ChallengeFeedbackModal({
+  kpis,
+  content,
+  feedbackmodals,
+}: KPIDashboardProps) {
   const [modal, setModal] = useState<{
     isOpen: boolean;
   }>({
@@ -37,54 +65,55 @@ export default function ChallengeFeedbackModal({ kpis, content }: KPIDashboardPr
 
   useEffect(() => {
     setSelectedModal({});
+    console.log(555);
 
     setSelectedModal(
       //loop through al configured modals
-      feedbackmodaljson.feedbackmodals.filter(modal => {
-        if (modal.conditions.length > 0 && content.length) {
+      feedbackmodals.filter(modal => {
+        if (modal.value.conditions.length > 0 && content.length) {
           //loop through all conditions within modal...
-          for (const conditionItem of modal.conditions) {
+          for (const conditionItem of modal.value.conditions) {
             //kpivalue is the vaule of the assessed validator
-            const kpivalue = conditionItem.parameter.id
-              ? content?.find(content => content.value.id == parseFloat(conditionItem.parameter.id))
-                  .currentValue
-              : kpis[conditionItem.parameter.level][conditionItem.parameter.parameter];
-            console.log(kpivalue, conditionItem.parameter);
+            console.log(
+              conditionItem.value.parameter,
+              content?.find(
+                content => content.value.id == parseFloat(conditionItem.value.parameter)
+              ).currentValue
+            );
+            const kpivalue = conditionItem.value.parameter
+              ? content?.find(
+                  content => content.value.id == parseFloat(conditionItem.value.parameter)
+                ).currentValue
+              : kpis[conditionItem.value.parameter][conditionItem.value.parameter];
+            console.log(kpivalue, conditionItem.value.parameter);
+
+            const conditionValue = parseFloat(conditionItem.value.value);
+
             if (kpivalue == null || kpivalue == undefined) {
               return false;
-            } else if (
-              conditionItem.operator == "bigger" &&
-              kpivalue <= parseFloat(conditionItem.value)
-            ) {
-              console.log(kpivalue + "is not bigger then" + parseFloat(conditionItem.value));
+            } else if (conditionItem.value.operator == "bigger" && kpivalue <= conditionValue) {
+              console.log(kpivalue + "is not bigger then" + conditionValue);
+              return false;
+            } else if (conditionItem.value.operator == "biggerequal" && kpivalue < conditionValue) {
+              console.log(kpivalue + "is not bigger or euqyal then" + conditionValue);
               return false;
             } else if (
-              conditionItem.operator == "biggerequal" &&
-              kpivalue < parseFloat(conditionItem.value)
+              conditionItem.value.operator == "equal" &&
+              kpivalue != conditionItem.value.value
             ) {
-              console.log(
-                kpivalue + "is not bigger or euqyal then" + parseFloat(conditionItem.value)
-              );
-              return false;
-            } else if (conditionItem.operator == "equal" && kpivalue != conditionItem.value) {
-              console.log(kpivalue + "is not equal to" + parseFloat(conditionItem.value));
-              return false;
-            } else if (conditionItem.operator == "notequal" && kpivalue == conditionItem.value) {
-              console.log(kpivalue + "is equal to" + parseFloat(conditionItem.value));
+              console.log(kpivalue + "is not equal to" + conditionValue);
               return false;
             } else if (
-              conditionItem.operator == "lower" &&
-              kpivalue >= parseFloat(conditionItem.value)
+              conditionItem.value.operator == "notequal" &&
+              kpivalue == conditionItem.value.value
             ) {
-              console.log(kpivalue + "is not lower then" + parseFloat(conditionItem.value));
+              console.log(kpivalue + "is equal to" + conditionValue);
               return false;
-            } else if (
-              conditionItem.operator == "lowerequal" &&
-              kpivalue > parseFloat(conditionItem.value)
-            ) {
-              console.log(
-                kpivalue + "is not smaller or equal then" + parseFloat(conditionItem.value)
-              );
+            } else if (conditionItem.value.operator == "lower" && kpivalue >= conditionValue) {
+              console.log(kpivalue + "is not lower then" + conditionValue);
+              return false;
+            } else if (conditionItem.value.operator == "lowerequal" && kpivalue > conditionValue) {
+              console.log(kpivalue + "is not smaller or equal then" + conditionValue);
               return false;
             } else {
             }
@@ -102,15 +131,15 @@ export default function ChallengeFeedbackModal({ kpis, content }: KPIDashboardPr
   }
 
   const modalstyling =
-    selectedModal?.modaltheme === "green"
+    selectedModal?.value.modaltheme === "green"
       ? "bg-holon-green"
-      : selectedModal?.modaltheme === "orange"
+      : selectedModal?.value.modaltheme === "orange"
       ? "bg-holon-orange"
       : "bg-holon-red";
 
   return (
     <Fragment>
-      {selectedModal && (
+      {selectedModal && selectedModal.value && (
         <Transition appear show={modal.isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50" onClose={closeModal}>
             <Transition.Child
@@ -136,19 +165,19 @@ export default function ChallengeFeedbackModal({ kpis, content }: KPIDashboardPr
                   leaveTo="opacity-0 scale-95">
                   <Dialog.Panel
                     className={`w-full p-relative max-w-md min-w-[50vw] transform overflow-hidden rounded p-6 text-center align-middle shadow-xl transition-all text-white flex flex-col gap-4 ${modalstyling}`}>
-                    {selectedModal.modaltheme === "green" && <Confetti />}
+                    {selectedModal.value.modaltheme === "green" && <Confetti />}
                     <Dialog.Title as="h2" className="leading-6 text-2xl font-bold">
-                      {selectedModal.modaltitle}
+                      {selectedModal.value.modaltitle}
                     </Dialog.Title>
                     {/* eslint-disable @next/next/no-img-element */}
                     <img
-                      src={selectedModal?.image_selector?.img?.src}
-                      alt={selectedModal?.image_selector?.img?.alt}
+                      src={selectedModal?.value.imageSelector?.img?.src}
+                      alt={selectedModal?.value.imageSelector?.img?.alt}
                       className="image"
                       width="1600"
                       height="auto"
                     />
-                    <p className="">{selectedModal.modaltext}</p>
+                    <p className="">{selectedModal.value.modaltext}</p>
                     <div className=" flex justify-center">
                       <Button onClick={closeModal} variant="dark" className="mb-0">
                         Ga door

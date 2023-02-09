@@ -74,6 +74,33 @@ export type InteractiveInputOptions = {
   sliderValueMin?: number;
 };
 
+export type Feedbackmodals = [
+  {
+    id: string;
+    type: string;
+    value: {
+      modaltitle: string;
+      modaltext: string;
+      modaltheme: string;
+      imageSelector: {
+        id: string;
+        title: string;
+        img: any;
+      };
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          oparator: string;
+          value: string;
+        };
+      }
+    ];
+  }
+];
 const initialData = {
   local: {
     netload: null,
@@ -88,7 +115,13 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data }: Props) {
+export default function SectionBlock({
+  data,
+  feedbackmodals,
+}: {
+  data: Props;
+  feedbackmodals: Feedbackmodals[];
+}) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
@@ -234,7 +267,7 @@ export default function SectionBlock({ data }: Props) {
 
   return (
     <div className={`${backgroundFullcolor} `}>
-      <ChallengeFeedbackModal kpis={kpis} content={content} />
+      <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div

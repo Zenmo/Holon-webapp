@@ -13,6 +13,34 @@ import { PageProps, SectionVariant, TextAndMediaVariant } from "../types";
 
 type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
+export type Feedbackmodals = [
+  {
+    id: string;
+    type: string;
+    value: {
+      modaltitle: string;
+      modaltext: string;
+      modaltheme: string;
+      imageSelector: {
+        id: string;
+        title: string;
+        img: any;
+      };
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          oparator: string;
+          value: string;
+        };
+      }
+    ];
+  }
+];
+
 export type Scenario = {
   id: string;
   type: string;
@@ -36,7 +64,14 @@ export type ChallengeModeScenario = {
   sliderLocked: boolean;
 };
 
-const ChallengeModePage = ({ storyline }: { storyline: Storyline[] }) => {
+const ChallengeModePage = ({
+  storyline,
+  feedbackmodals,
+}: {
+  storyline: Storyline[];
+  feedbackmodals: Feedbackmodals[];
+}) => {
+  console.log(123);
   return (
     <div className={styles["ChallengeModePage"]}>
       {storyline?.map((content, _index) => {
@@ -57,7 +92,13 @@ const ChallengeModePage = ({ storyline }: { storyline: Storyline[] }) => {
             return <TextAndMediaBlock key={`txtmedia ${_index}`} data={content} />;
             break;
           case "section":
-            return <SectionBlock key={`section ${_index}`} data={content} />;
+            return (
+              <SectionBlock
+                key={`section ${_index}`}
+                data={content}
+                feedbackmodals={feedbackmodals}
+              />
+            );
             break;
           default:
             null;
