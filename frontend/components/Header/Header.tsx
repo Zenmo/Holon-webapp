@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "./Navbar";
 import { NavItem } from "@/api/types";
+import useUser from "@/utils/useUser";
 
 export default function Header({ navigation }: { navigation: NavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const { user, mutateUser } = useUser({});
+  const nameUser = user ? user.username : "";
+
+  useEffect(() => {
+    if (user && user.username) {
+      setLoggedIn(true);
+    }
+  }, [user]);
 
   const handleClick = () => {
     setMenuOpen(!menuOpen);
@@ -42,7 +52,12 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
           <div
             className={`${menuOpen ? "" : "hidden"} w-full md:block md:w-auto`}
             id="navbar-default">
-            <Navbar items={navigation} />
+            <Navbar
+              items={navigation}
+              loggedIn={loggedIn}
+              nameUser={nameUser}
+              mutateUser={mutateUser}
+            />
           </div>
         </div>
       </div>

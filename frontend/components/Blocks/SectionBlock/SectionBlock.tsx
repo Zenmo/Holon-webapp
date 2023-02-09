@@ -297,6 +297,7 @@ export default function SectionBlock({
             <div className="lg:sticky top-0">
               <div className="py-12 px-10 lg:px-16 lg:pt-24">
                 {Object.keys(media).length > 0 && (
+                  /* eslint-disable @next/next/no-img-element */
                   <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
                 )}
               </div>
