@@ -3,6 +3,17 @@ import Confetti from "react-confetti";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "@/components/Button/Button";
 
+export type StaticImage = {
+  id?: number;
+  title?: string;
+  img: {
+    alt: string;
+    height: number;
+    width: number;
+    src: string;
+  };
+};
+
 type KPIDashboardProps = {
   data: Data;
   loading: boolean;
@@ -18,7 +29,7 @@ type KPIDashboardProps = {
         imageSelector: {
           id: string;
           title: string;
-          img: any;
+          img: StaticImage;
         };
         conditions: [
           {
@@ -65,7 +76,6 @@ export default function ChallengeFeedbackModal({
 
   useEffect(() => {
     setSelectedModal({});
-    console.log(555);
 
     setSelectedModal(
       //loop through al configured modals
@@ -73,52 +83,42 @@ export default function ChallengeFeedbackModal({
         if (modal.value.conditions.length > 0 && content.length) {
           //loop through all conditions within modal...
           for (const conditionItem of modal.value.conditions) {
+            //split parameter into [local/national] and [kpi]
+            const splittedParameter = conditionItem.value.parameter.split("|");
+
             //kpivalue is the vaule of the assessed validator
-            console.log(
-              conditionItem.value.parameter,
-              content?.find(
-                content => content.value.id == parseFloat(conditionItem.value.parameter)
-              ).currentValue
-            );
-            const kpivalue = conditionItem.value.parameter
-              ? content?.find(
-                  content => content.value.id == parseFloat(conditionItem.value.parameter)
-                ).currentValue
-              : kpis[conditionItem.value.parameter][conditionItem.value.parameter];
-            console.log(kpivalue, conditionItem.value.parameter);
+            const kpivalue =
+              conditionItem.type == "interactive_input_condition"
+                ? content?.find(
+                    content => content.value.id == parseFloat(conditionItem.value.parameter)
+                  ).currentValue
+                : kpis[splittedParameter[0]][splittedParameter[1]];
 
             const conditionValue = parseFloat(conditionItem.value.value);
 
             if (kpivalue == null || kpivalue == undefined) {
               return false;
             } else if (conditionItem.value.operator == "bigger" && kpivalue <= conditionValue) {
-              console.log(kpivalue + "is not bigger then" + conditionValue);
               return false;
             } else if (conditionItem.value.operator == "biggerequal" && kpivalue < conditionValue) {
-              console.log(kpivalue + "is not bigger or euqyal then" + conditionValue);
               return false;
             } else if (
               conditionItem.value.operator == "equal" &&
               kpivalue != conditionItem.value.value
             ) {
-              console.log(kpivalue + "is not equal to" + conditionValue);
               return false;
             } else if (
               conditionItem.value.operator == "notequal" &&
               kpivalue == conditionItem.value.value
             ) {
-              console.log(kpivalue + "is equal to" + conditionValue);
               return false;
             } else if (conditionItem.value.operator == "lower" && kpivalue >= conditionValue) {
-              console.log(kpivalue + "is not lower then" + conditionValue);
               return false;
             } else if (conditionItem.value.operator == "lowerequal" && kpivalue > conditionValue) {
-              console.log(kpivalue + "is not smaller or equal then" + conditionValue);
               return false;
             } else {
             }
           }
-          console.log("everything is fine");
           setModal({ isOpen: true });
           return true;
         }
@@ -131,9 +131,9 @@ export default function ChallengeFeedbackModal({
   }
 
   const modalstyling =
-    selectedModal?.value.modaltheme === "green"
+    selectedModal?.value?.modaltheme === "green"
       ? "bg-holon-green"
-      : selectedModal?.value.modaltheme === "orange"
+      : selectedModal?.value?.modaltheme === "orange"
       ? "bg-holon-orange"
       : "bg-holon-red";
 

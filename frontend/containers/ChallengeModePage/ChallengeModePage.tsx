@@ -71,7 +71,6 @@ const ChallengeModePage = ({
   storyline: Storyline[];
   feedbackmodals: Feedbackmodals[];
 }) => {
-  console.log(123);
   return (
     <div className={styles["ChallengeModePage"]}>
       {storyline?.map((content, _index) => {

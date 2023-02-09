@@ -10,14 +10,14 @@ from .holon_image_chooser import HolonImageChooserBlock
 
 class FeedbackModalKPICondition(blocks.StructBlock):
     class ParameterChoices(models.TextChoices):
-        LOCALCOSTS = "localcosts", "Local Costs"
-        LOCALNETLOAD = "localnetload", "Local Netload"
-        LOCALSELF_SUFFICIENCY = "localself_sufficiency", "Local Sufficiency"
-        LOCALSUSTAINABILITY = "localsustainability", "Local Sustainability"
-        NATIONALCOSTS = "nationalcosts", "National Costs"
-        NATIONALNETLOAD = "nationalnetload", "National Netload"
-        NATIONALSELF_SUFFICIENCY = "nationalself_sufficiency", "National Sufficiency"
-        NATIONALSUSTAINABILITY = "nationalsustainability", "National Sustainability"
+        LOCALCOSTS = "local|costs", "Local Costs"
+        LOCALNETLOAD = "local|netload", "Local Netload"
+        LOCALSELF_SUFFICIENCY = "local|self_sufficiency", "Local Sufficiency"
+        LOCALSUSTAINABILITY = "local|sustainability", "Local Sustainability"
+        NATIONALCOSTS = "national|costs", "National Costs"
+        NATIONALNETLOAD = "national|netload", "National Netload"
+        NATIONALSELF_SUFFICIENCY = "national|self_sufficiency", "National Sufficiency"
+        NATIONALSUSTAINABILITY = "national|sustainability", "National Sustainability"
 
     class OperatorChoices(models.TextChoices):
         BIGGER = "bigger", "Bigger"
@@ -102,4 +102,8 @@ class FeedbackModal(blocks.StructBlock):
         ],
         block_counts={},
         use_json_field=True,
+        help_text="Feedback will only be shown when ALL conditions of a modal are true",
     )
+
+    class Meta:
+        help_text = "Only the first modal that meets all conditions will be show. You can change the order by hovering the three dots ... "
