@@ -27,9 +27,10 @@ class CasusOverviewPageSerializer(BasePageSerializer):
                 if casus.thumbnail_rendition_url is not None
                 else None
             )
+
             casus_to_append = {
                 "title": casus.title,
-                "filter": casus.casus_filter.name,
+                "filter": casus.casus_filter.name if hasattr(casus.casus_filter, "name") else None,
                 "thumbnail": thumbnail,
                 "description": casus.description,
                 "slug": casus.slug,

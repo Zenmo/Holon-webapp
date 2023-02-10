@@ -1,10 +1,13 @@
 import ImageSlider from "../InteractiveImage/ImageSlider";
-import InputPopover from "./InputPopover";
+import InteractiveInputPopover from "./InteractiveInputPopover";
 
 export type Props = {
   contentId: string;
   name: string;
   type?: string;
+  moreInformation?: string;
+  titleWikiPage?: string;
+  linkWikiPage?: string;
   options: InteractiveInputOptions[];
   display?: string;
   defaultValue?: string | number;
@@ -52,7 +55,16 @@ function InteractiveButtons({ contentId, name, type, options, setValue }: Props)
     </div>
   );
 }
-function InteractiveRadios({ contentId, name, type, options, setValue }: Props) {
+function InteractiveRadios({
+  contentId,
+  name,
+  type,
+  moreInformation,
+  titleWikiPage,
+  linkWikiPage,
+  options,
+  setValue,
+}: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
   const cssClass =
     type === "single_select"
@@ -61,7 +73,19 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
 
   return (
     <div className="mb-4 font-bold text-base">
-      <p>{name}</p>
+      <div className="flex flex-row mb-2 gap-3 items-center">
+        <p>{name}</p>
+        {moreInformation || linkWikiPage ? (
+          <InteractiveInputPopover
+            name={name}
+            moreInformation={moreInformation}
+            titleWikiPage={titleWikiPage}
+            linkWikiPage={linkWikiPage}></InteractiveInputPopover>
+        ) : (
+          ""
+        )}
+      </div>
+
       {options.map((inputItem, index) => (
         <div key={index} className="flex flex-row mb-2 gap-3 items-center">
           <label
@@ -81,12 +105,12 @@ function InteractiveRadios({ contentId, name, type, options, setValue }: Props) 
             <span className="">{inputItem.label || inputItem.option}</span>
           </label>
           {inputItem.legalLimitation || inputItem.linkWikiPage ? (
-            <InputPopover
+            <InteractiveInputPopover
               name={inputItem.label || inputItem.option}
               legal_limitation={inputItem.legalLimitation}
               color={inputItem.color}
               titleWikiPage={inputItem.titleWikiPage}
-              linkWikiPage={inputItem.linkWikiPage}></InputPopover>
+              linkWikiPage={inputItem.linkWikiPage}></InteractiveInputPopover>
           ) : (
             ""
           )}
@@ -106,6 +130,9 @@ function InteractiveInputs({
   contentId,
   name,
   type,
+  moreInformation,
+  titleWikiPage,
+  linkWikiPage,
   options,
   display,
   defaultValue,
@@ -122,6 +149,9 @@ function InteractiveInputs({
       step={1}
       label={name}
       type="range"
+      moreInformation={moreInformation}
+      titleWikiPage={titleWikiPage}
+      linkWikiPage={linkWikiPage}
       unit="%"
       tooltip={true}
       locked={false}></ImageSlider>
@@ -131,6 +161,9 @@ function InteractiveInputs({
       contentId={contentId}
       name={name}
       type={type}
+      moreInformation={moreInformation}
+      titleWikiPage={titleWikiPage}
+      linkWikiPage={linkWikiPage}
       options={options}
     />
   ) : display === "button" ? (

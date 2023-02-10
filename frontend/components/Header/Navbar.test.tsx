@@ -26,6 +26,8 @@ describe("<Navbar />", () => {
             slug: "test2",
           },
         ]}
+        loggedIn={false}
+        nameUser="x"
       />
     );
   });
