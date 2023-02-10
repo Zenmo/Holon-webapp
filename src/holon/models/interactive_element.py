@@ -18,7 +18,7 @@ class InteractiveElement(ClusterableModel):
     scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     type = models.CharField(
-        max_length=14,
+        max_length=19,
         choices=ChoiceType.choices,
         default=ChoiceType.continuous,
     )
