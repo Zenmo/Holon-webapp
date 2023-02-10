@@ -6,8 +6,8 @@ from polymorphic.models import PolymorphicModel
 
 
 class EnergyType(models.TextChoices):
-    electricity = "ELECTRICITY"
-    heat = "HEAT"
+    ELECTRICITY = "ELECTRICITY"
+    HEAT = "HEAT"
 
 
 class GridNode(PolymorphicModel):
@@ -18,8 +18,8 @@ class GridNode(PolymorphicModel):
 
 
 class ElectricGridType(models.TextChoices):
-    msls = "MSLS"
-    hsms = "HSMS"
+    MSLS = "MSLS"
+    HSMS = "HSMS"
 
 
 class ElectricGridNode(GridNode):
@@ -28,8 +28,8 @@ class ElectricGridNode(GridNode):
 
 
 class HeatGridType(models.TextChoices):
-    mt = "MT"
-    ht = "HT"
+    MT = "MT"
+    HT = "HT"
 
 
 class HeatGridNode(GridNode):

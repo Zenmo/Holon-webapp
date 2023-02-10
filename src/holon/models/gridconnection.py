@@ -86,9 +86,9 @@ class UtilityGridConnection(GridConnection):
 
 
 class HousingType(models.TextChoices):
-    SEMIDETACHED = "SEMIDETACHED", "Semidetached"
-    TERRACED = "TERRACED", "Terraced"
-    DETACHED = "DETACHED", "Detached"
+    SEMIDETACHED = "SEMIDETACHED"
+    TERRACED = "TERRACED"
+    DETACHED = "DETACHED"
 
 
 class HouseGridConnection(BuiltEnvironmentGridConnection):
@@ -97,9 +97,9 @@ class HouseGridConnection(BuiltEnvironmentGridConnection):
 
 
 class BuildingType(models.TextChoices):
-    store = "STORE"
-    office = "OFFICE"
-    logistics = "LOGISTICS"
+    STORE = "STORE"
+    OFFICE = "OFFICE"
+    LOGISTICS = "LOGISTICS"
 
 
 class BuildingGridConnection(BuiltEnvironmentGridConnection):
@@ -108,9 +108,9 @@ class BuildingGridConnection(BuiltEnvironmentGridConnection):
 
 
 class ProductionCategory(models.TextChoices):
-    windfarm = "WINDFARM"
-    solarfarm = "SOLARFARM"
-    gridbattery = "GRIDBATTERY"
+    WINDFARM = "WINDFARM"
+    SOLARFARM = "SOLARFARM"
+    GRIDBATTERY = "GRIDBATTERY"
 
 
 class ProductionGridConnection(GridConnection):
@@ -118,8 +118,8 @@ class ProductionGridConnection(GridConnection):
 
 
 class IndustryType(models.TextChoices):
-    steel = "STEEL"
-    industry_other = "INDUSTRY_OTHER"
+    STEEL = "STEEL"
+    INDUSTRY_OTHER = "INDUSTRY_OTHER"
 
 
 class IndustryGridConnection(UtilityGridConnection):
@@ -128,8 +128,8 @@ class IndustryGridConnection(UtilityGridConnection):
 
 
 class DistrictHeatingType(models.TextChoices):
-    mt = "MT"
-    ht = "HT"
+    MT = "MT"
+    HT = "HT"
 
 
 class DistrictHeatingGridConnection(UtilityGridConnection):

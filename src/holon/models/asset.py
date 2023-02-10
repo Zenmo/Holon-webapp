@@ -11,10 +11,10 @@ class EnergyAsset(PolymorphicModel):
 
 
 class ConsumptionAssetType(models.TextChoices):
-    electricity_demand = "ELECTRICITY_DEMAND"
-    heat_demand = "HEAT_DEMAND"
-    hot_water_consumption = "HOT_WATER_CONSUMPTION"
-    other_electricity_consumption = "OTHER_ELECTRICITY_CONSUMPTION"
+    ELECTRICITY_DEMAND = "ELECTRICITY_DEMAND"
+    HEAT_DEMAND = "HEAT_DEMAND"
+    HOT_WATER_CONSUMPTION = "HOT_WATER_CONSUMPTION"
+    OTHER_ELECTRICITY_CONSUMPTION = "OTHER_ELECTRICITY_CONSUMPTION"
 
 
 class ConsumptionAsset(EnergyAsset):
@@ -40,20 +40,20 @@ class HybridConsumptionAsset(ConsumptionAsset):
 
 
 class ConversionAssetType(models.TextChoices):
-    boiler = "BOILER"
-    electrolyser = "ELECTROLYSER"
-    gas_burner = "GAS_BURNER"
-    heat_delivery_set = "HEAT_DELIVERY_SET"
-    heat_pump_air = "HEAT_PUMP_AIR"
-    heat_pump_ground = "HEAT_PUMP_GROUND"
-    hydrogen_furnace = "HYDROGEN_FURNACE"
-    methane_furnace = "METHANE_FURNACE"
-    diesel_vehicle = "DIESEL_VEHICLE"
+    BOILER = "BOILER"
+    ELECTROLYSER = "ELECTROLYSER"
+    GAS_BURNER = "GAS_BURNER"
+    HEAT_DELIVERY_SET = "HEAT_DELIVERY_SET"
+    HEAT_PUMP_AIR = "HEAT_PUMP_AIR"
+    HEAT_PUMP_GROUND = "HEAT_PUMP_GROUND"
+    HYDROGEN_FURNACE = "HYDROGEN_FURNACE"
+    METHANE_FURNACE = "METHANE_FURNACE"
+    DIESEL_VEHICLE = "DIESEL_VEHICLE"
 
 
 class AmbientTempType(models.TextChoices):
-    air = "AIR"
-    ground = "GROUND"
+    AIR = "AIR"
+    GROUND = "GROUND"
 
 
 class ConversionAsset(EnergyAsset):
@@ -124,9 +124,9 @@ class HybridProductionAsset(ProductionAsset):
 
 
 class StorageAssetType(models.TextChoices):
-    electric_vehicle = "ELECTRIC_VEHICLE"
-    storage_electric = "STORAGE_ELECTRIC"
-    storage_heat = "STORAGE_HEAT"
+    ELECTRIC_VEHICLE = "ELECTRIC_VEHICLE"
+    STORAGE_ELECTRIC = "STORAGE_ELECTRIC"
+    STORAGE_HEAT = "STORAGE_HEAT"
 
 
 class StorageAsset(EnergyAsset):
