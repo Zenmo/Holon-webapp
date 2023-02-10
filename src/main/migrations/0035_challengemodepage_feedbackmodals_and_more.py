@@ -131,26 +131,4 @@ class Migration(migrations.Migration):
                 use_json_field=True,
             ),
         ),
-        migrations.AlterField(
-            model_name="wikipage",
-            name="table",
-            field=wagtail.fields.StreamField(
-                [
-                    (
-                        "table_block",
-                        wagtail.contrib.table_block.blocks.TableBlock(
-                            table_options={
-                                "editor": "text",
-                                "renderer": "text",
-                                "startRows": 3,
-                            }
-                        ),
-                    )
-                ],
-                blank=True,
-                help_text="Add extra columns and rows with right mouse click",
-                null=True,
-                use_json_field=True,
-            ),
-        ),
     ]
