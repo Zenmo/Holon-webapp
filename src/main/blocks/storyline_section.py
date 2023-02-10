@@ -87,6 +87,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "id": interactive_input.id,
                 "name": interactive_input.name,
                 "type": interactive_input.type,
+                "level": interactive_input.level,
                 "more_information": interactive_input.more_information,
                 "animation_tag": interactive_input.animation_tag,
                 "title_wiki_page": "",

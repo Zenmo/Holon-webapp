@@ -62,6 +62,13 @@ class InteractiveInput(ClusterableModel):
         choices=TYPE_CHOICES,
         default=CHOICE_CONTINUOUS,
     )
+    level = models.CharField(
+        max_length=13,
+        choices=LEVEL_CHOICES,
+        null=True,
+        blank=True,
+        help_text=_("If type is 'Continuous (slider)', choose a level. Otherwise, leave it empty"),
+    )
     animation_tag = models.CharField(
         max_length=50,
         null=True,
@@ -85,6 +92,7 @@ class InteractiveInput(ClusterableModel):
     panels = [
         FieldPanel("name"),
         FieldPanel("type"),
+        FieldPanel("level"),
         FieldPanel("animation_tag"),
         FieldPanel("asset_type"),
         FieldPanel("etm_key"),
