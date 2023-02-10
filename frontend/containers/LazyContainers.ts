@@ -16,5 +16,9 @@ export default {
   ChallengeModePage: dynamic(() => import("./ChallengeModePage")),
   InteractiveOverviewPage: dynamic(() => import("./InteractiveOverviewPage")),
   StorylineOverviewPage: dynamic(() => import("./StorylineOverviewPage")),
-  CustomNonWagtailPage: dynamic(() => import("./CustomNonWagtailPage")),
+  LoginPage: dynamic(() => import("./LoginPage")),
+  RegistrationPage: dynamic(() => import("./RegistrationPage")),
+  NewPasswordPage: dynamic(() => import("./NewPasswordPage")),
+  ResetPasswordPage: dynamic(() => import("./ResetPasswordPage")),
+  UserProfilePage: dynamic(() => import("./UserProfilePage")),
 };

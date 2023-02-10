@@ -13,7 +13,7 @@ export default function CatchAllPage({ componentName, componentProps }) {
 }
 
 // For SSR
-export async function getServerSideProps({ req, params, res, resolvedUrl }) {
+export async function getServerSideProps({ req, params, res }) {
   let path = params?.path || [];
   path = path.join("/");
 
@@ -24,43 +24,26 @@ export async function getServerSideProps({ req, params, res, resolvedUrl }) {
   }
   queryParams = querystring.parse(queryParams);
 
-  const nonWagtailPages = [
-    { path: "/inloggen/", container: "CustomNonWagtailPage", type: "login" },
-    { path: "/registratie/", container: "CustomNonWagtailPage", type: "registratie" },
-    { path: "/profiel/", container: "CustomNonWagtailPage", type: "profiel" },
-    { path: "/tiles-demo/", container: "CustomNonWagtailPage", type: "tiles-demo" },
-    { path: "/animation-demo/", container: "CustomNonWagtailPage", type: "animation-demo" },
-    {
-      path: "/wachtwoord-aanmaken/",
-      container: "CustomNonWagtailPage",
-      type: "wachtwoord-aanmaken",
-    },
-    {
-      path: "/wachtwoord-aanvragen/",
-      container: "CustomNonWagtailPage",
-      type: "wachtwoord-aanvragen",
-    },
-  ];
+  const nonWagtailPages = {
+    inloggen: "LoginPage",
+    registratie: "RegistrationPage",
+    profiel: "UserProfilePage",
+    "wachtwoord-aanmaken": "NewPasswordPage",
+    "wachtwoord-aanvragen": "ResetPasswordPage",
+  };
 
-  const {
-    json: { componentProps },
-  } = await getPage("/", queryParams, {
-    headers: {
-      cookie: req.headers.cookie,
-      host,
-    },
-  });
+  if (nonWagtailPages[path]) {
+    const {
+      json: { componentProps },
+    } = await getPage("/", queryParams, {
+      headers: {
+        cookie: req.headers.cookie,
+        host,
+      },
+    });
 
-  try {
-    for await (const page of nonWagtailPages) {
-      if (resolvedUrl == page.path) {
-        const componentName = page.container;
-        componentProps.type = page.type;
-        return { props: { componentName, componentProps } };
-      }
-    }
-  } catch (err) {
-    return err;
+    const componentName = nonWagtailPages[path];
+    return { props: { componentName, componentProps } };
   }
 
   // Try to serve page
