@@ -1,7 +1,7 @@
 from django.db import models
 from holon.models.actor import Actor
 
-from holon.models.payload import Payload
+from holon.models.scenario import Scenario
 from polymorphic.models import PolymorphicModel
 
 
@@ -14,7 +14,7 @@ class GridNode(PolymorphicModel):
     owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     capacity_kw = models.FloatField()
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
-    payload = models.ForeignKey(Payload, on_delete=models.CASCADE)
+    payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
 
 
 class ElectricGridType(models.TextChoices):

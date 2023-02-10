@@ -1,12 +1,13 @@
 from rest_framework import serializers
-from api.models.interactive_input import InteractiveInput
 from api.models.scenario import Scenario
 from django.utils.translation import gettext_lazy as _
+
+from holon.models.interactive_element import InteractiveElement
 
 
 class InteractiveElementInputSerializer(serializers.Serializer):
     interactive_element = serializers.PrimaryKeyRelatedField(
-        queryset=InteractiveInput.objects.all()
+        queryset=InteractiveElement.objects.all()
     )
     value = serializers.JSONField()
 

@@ -1,6 +1,6 @@
 from django.db import models
 
-from holon.models.payload import Payload
+from holon.models.scenario import Scenario
 from polymorphic.models import PolymorphicModel
 
 
@@ -9,4 +9,4 @@ class Policy(PolymorphicModel):
     value = models.CharField(max_length=255)
     unit = models.CharField(max_length=255, null=True, blank=True)
     comment = models.TextField()
-    payload = models.ForeignKey(Payload, on_delete=models.CASCADE, related_name="gridconnections")
+    payload = models.ForeignKey(Scenario, on_delete=models.CASCADE, related_name="gridconnections")

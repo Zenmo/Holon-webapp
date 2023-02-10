@@ -129,7 +129,7 @@ class StorageAssetType(models.TextChoices):
     storage_heat = "STORAGE_HEAT"
 
 
-class StorageAsset(models.Model):
+class StorageAsset(EnergyAsset):
     category = "STORAGE"
     type = models.CharField(
         max_length=50,

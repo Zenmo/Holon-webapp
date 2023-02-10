@@ -3,7 +3,7 @@ from holon.models.actor import Actor
 from holon.models.asset import EnergyAsset
 from holon.models.gridnode import ElectricGridNode, GridNode, HeatGridNode
 
-from holon.models.payload import Payload
+from holon.models.scenario import Scenario
 from polymorphic.models import PolymorphicModel
 
 
@@ -44,7 +44,7 @@ class GridConnection(PolymorphicModel):
     nfATO_capacity_kw = models.FloatField(null=True, blank=True)
     nfATO_starttime = models.FloatField(null=True, blank=True)
     nfATO_endtime = models.FloatField(null=True, blank=True)
-    payload = models.ForeignKey(Payload, on_delete=models.CASCADE)
+    payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
 
 
 class InsulationLabel(models.TextChoices):

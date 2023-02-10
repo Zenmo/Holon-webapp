@@ -1,6 +1,6 @@
 from django.db import models
 
-from holon.models.payload import Payload
+from holon.models.scenario import Scenario
 from polymorphic.models import PolymorphicModel
 
 
@@ -20,7 +20,7 @@ class Actor(PolymorphicModel):
     category = models.CharField(max_length=255, choices=ActorType.choices)
     type = models.CharField(max_length=255, choices=SubType.choices, null=True, blank=True)
     parent_actor = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
-    payload = models.ForeignKey(Payload, on_delete=models.CASCADE)
+    payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
 
 
 class NonFirmActor(Actor):
