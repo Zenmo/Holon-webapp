@@ -94,7 +94,7 @@ export default function SectionBlock({ data }: Props) {
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
-  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
 
   const myRef = useRef(null);
 
@@ -133,14 +133,16 @@ export default function SectionBlock({ data }: Props) {
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
-  useEffect(() => {
-    if (tabIndex === 1) {
-      myRef.current.scrollIntoView();
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-  }, [tabIndex]);
+  function openHolarchyModal() {
+    myRef.current.scrollIntoView();
+    setHolarchyModal(true);
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeHolarchyModal() {
+    setHolarchyModal(false);
+    document.body.classList.remove("overflow-hidden");
+  }
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
     const defaultValue = content.value.defaultValueOverride;
@@ -248,69 +250,62 @@ export default function SectionBlock({ data }: Props) {
   return (
     <div className={`sectionContainer`} ref={myRef}>
       <div className="holonContentContainer">
-        <Tab.Group onChange={(i: any) => setTabIndex(i)} selectedIndex={tabIndex}>
-          <div className="lg:sticky top-[100px] bg-white z-10 pt-2">
-            <div>
-              <Tab.List className="mt-4 sticky top-0 ">
-                <Tab
-                  className={`px-6 py-2 ${data.value.background.color} rounded-t-lg border-x-2 border-t-2 border-solid`}>
-                  Interactiemodus
-                </Tab>
-                <Tab className={`px-6 py-2 bg-holon-gray-300 rounded-t-lg`}>Holarchie</Tab>
-              </Tab.List>
-            </div>
+        <div className="sticky top-[110px] bg-white z-10 mt-4 pt-2">
+          <div>
+            <button
+              onClick={closeHolarchyModal}
+              className={`px-6 py-2 ${data.value.background.color} rounded-t-lg border-x-2 border-t-2 border-solid`}>
+              Interactiemodus
+            </button>
+            <button
+              onClick={openHolarchyModal}
+              className={`px-6 py-2 bg-holon-gray-300 rounded-t-lg`}>
+              Holarchie
+            </button>
+          </div>
+        </div>
+
+        <div className={`flex flex-col lg:flex-row ${backgroundFullcolor}`}>
+          <div
+            className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${gridValue.left} ${backgroundLeftColor}`}>
+            {data.value.background.size !== "bg_full" && !holarchyModal ? (
+              <span className={`extra_bg ${backgroundLeftColor}`}></span>
+            ) : (
+              ""
+            )}
+            {content.map(ct => {
+              if (ct.type === "interactive_input" && ct.value.visible) {
+                return (
+                  <InteractiveInputs
+                    setValue={setInteractiveInputValue}
+                    defaultValue={getDefaultValue(ct)}
+                    key={ct.id}
+                    contentId={ct.id}
+                    {...ct.value}
+                  />
+                );
+              } else if (ct.type == "text") {
+                return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
+              } else {
+                return null;
+              }
+            })}
           </div>
 
-          <Tab.Panels>
-            <Tab.Panel>
-              <div className={`flex flex-col lg:flex-row ${backgroundFullcolor}`}>
-                <div
-                  className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${gridValue.left} ${backgroundLeftColor}`}>
-                  {data.value.background.size !== "bg_full" && (
-                    <span className={`extra_bg ${backgroundLeftColor}`}></span>
-                  )}
-                  {content.map(ct => {
-                    if (ct.type === "interactive_input" && ct.value.visible) {
-                      return (
-                        <InteractiveInputs
-                          setValue={setInteractiveInputValue}
-                          defaultValue={getDefaultValue(ct)}
-                          key={ct.id}
-                          contentId={ct.id}
-                          {...ct.value}
-                        />
-                      );
-                    } else if (ct.type == "text") {
-                      return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
-                    } else {
-                      return null;
-                    }
-                  })}
-                </div>
+          <div className={`flex flex-col ${gridValue.right}`}>
+            <div className="lg:sticky top-0">
+              <div className="py-12 px-10 lg:px-16 lg:pt-24">
+                {Object.keys(media).length > 0 && (
+                  /* eslint-disable @next/next/no-img-element */
+                  <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
+                )}
+              </div>
+              <KPIDashboard data={kpis} loading={loading} dashboardId={data.id}></KPIDashboard>
+            </div>
+          </div>
+        </div>
 
-                <div className={`flex flex-col ${gridValue.right}`}>
-                  <div className="lg:sticky top-0">
-                    <div className="py-12 px-10 lg:px-16 lg:pt-24">
-                      {Object.keys(media).length > 0 && (
-                        /* eslint-disable @next/next/no-img-element */
-                        <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
-                      )}
-                    </div>
-                    <KPIDashboard
-                      data={kpis}
-                      loading={loading}
-                      dashboardId={data.id}></KPIDashboard>
-                  </div>
-                </div>
-              </div>
-            </Tab.Panel>
-            <Tab.Panel>
-              <div className="h-screen">
-                <HolarchyTab images={media.img?.src} />
-              </div>
-            </Tab.Panel>
-          </Tab.Panels>
-        </Tab.Group>
+        <div className="">{holarchyModal && <HolarchyTab />}</div>
       </div>
     </div>
   );
