@@ -37,7 +37,7 @@ type KPIDashboardProps = {
             type: string;
             value: {
               parameter: string;
-              oparator: string;
+              operator: string;
               value: string;
             };
           }

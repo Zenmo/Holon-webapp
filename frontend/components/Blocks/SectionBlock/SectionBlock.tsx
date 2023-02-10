@@ -272,7 +272,9 @@ export default function SectionBlock({
 
   return (
     <div className={`${backgroundFullcolor} `}>
-      <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
+      {feedbackmodals && (
+        <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
+      )}
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div
