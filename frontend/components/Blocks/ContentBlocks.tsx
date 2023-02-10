@@ -26,9 +26,14 @@ export type Feedbackmodals = [
       modaltext: string;
       modaltheme: string;
       imageSelector: {
-        id: string;
+        id: number;
         title: string;
-        img: any;
+        img: {
+          src: string;
+          width: number;
+          height: number;
+          alt: string;
+        };
       };
     };
     conditions: [
@@ -49,7 +54,13 @@ type ContentBlockProps = PageProps<
   TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
 >;
 
-const ContentBlocks = ({ content, feedbackmodals }: { content: ContentBlockProps[]; feedbackmodals: Feedbackmodals[]; }) => {
+const ContentBlocks = ({
+  content,
+  feedbackmodals,
+}: {
+  content: ContentBlockProps[];
+  feedbackmodals: Feedbackmodals[];
+}) => {
   return (
     <React.Fragment>
       {content?.map(contentItem => {
@@ -73,7 +84,13 @@ const ContentBlocks = ({ content, feedbackmodals }: { content: ContentBlockProps
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            return <SectionBlock key={`section ${contentItem.id}`} data={contentItem}  feedbackmodals={feedbackmodals} />;
+            return (
+              <SectionBlock
+                key={`section ${contentItem.id}`}
+                data={contentItem}
+                feedbackmodals={feedbackmodals}
+              />
+            );
             break;
           case "buttons_and_media_block":
             return (

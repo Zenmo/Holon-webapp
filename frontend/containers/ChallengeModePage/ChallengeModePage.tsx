@@ -16,9 +16,14 @@ export type Feedbackmodals = [
       modaltext: string;
       modaltheme: string;
       imageSelector: {
-        id: string;
+        id: number;
         title: string;
-        img: any;
+        img: {
+          src: string;
+          width: number;
+          height: number;
+          alt: string;
+        };
       };
     };
     conditions: [
