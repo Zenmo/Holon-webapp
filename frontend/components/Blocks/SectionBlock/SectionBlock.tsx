@@ -1,6 +1,7 @@
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
+import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { getGrid } from "services/grid";
@@ -73,6 +74,38 @@ export type InteractiveInputOptions = {
   sliderValueMin?: number;
 };
 
+export type Feedbackmodals = [
+  {
+    id: string;
+    type: string;
+    value: {
+      modaltitle: string;
+      modaltext: string;
+      modaltheme: string;
+      imageSelector: {
+        id: number;
+        title: string;
+        img: {
+          src: string;
+          width: number;
+          height: number;
+          alt: string;
+        };
+      };
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          oparator: string;
+          value: string;
+        };
+      }
+    ];
+  }
+];
 const initialData = {
   local: {
     netload: null,
@@ -87,7 +120,13 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data }: Props) {
+export default function SectionBlock({
+  data,
+  feedbackmodals,
+}: {
+  data: Props;
+  feedbackmodals: Feedbackmodals[];
+}) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
@@ -233,6 +272,9 @@ export default function SectionBlock({ data }: Props) {
 
   return (
     <div className={`${backgroundFullcolor} `}>
+      {feedbackmodals && (
+        <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
+      )}
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div

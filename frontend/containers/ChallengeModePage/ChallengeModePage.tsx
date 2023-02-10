@@ -7,6 +7,39 @@ import ContentBlocks from "@/components/Blocks/ContentBlocks";
 
 type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
+export type Feedbackmodals = [
+  {
+    id: string;
+    type: string;
+    value: {
+      modaltitle: string;
+      modaltext: string;
+      modaltheme: string;
+      imageSelector: {
+        id: number;
+        title: string;
+        img: {
+          src: string;
+          width: number;
+          height: number;
+          alt: string;
+        };
+      };
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          oparator: string;
+          value: string;
+        };
+      }
+    ];
+  }
+];
+
 export type Scenario = {
   id: string;
   type: string;
@@ -30,10 +63,16 @@ export type ChallengeModeScenario = {
   sliderLocked: boolean;
 };
 
-const ChallengeModePage = ({ storyline }: { storyline: Storyline[] }) => {
+const ChallengeModePage = ({
+  storyline,
+  feedbackmodals,
+}: {
+  storyline: Storyline[];
+  feedbackmodals: Feedbackmodals[];
+}) => {
   return (
     <div className={styles["ChallengeModePage"]}>
-      <ContentBlocks content={storyline} />
+      <ContentBlocks content={storyline} feedbackmodals={feedbackmodals} />
     </div>
   );
 };

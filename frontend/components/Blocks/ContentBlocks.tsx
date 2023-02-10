@@ -17,11 +17,50 @@ import ParagraphBlock from "./ParagraphBlock";
 import TableBlock from "./TableBlock/TableBlock";
 import SectionBlock from "./SectionBlock/SectionBlock";
 
+export type Feedbackmodals = [
+  {
+    id: string;
+    type: string;
+    value: {
+      modaltitle: string;
+      modaltext: string;
+      modaltheme: string;
+      imageSelector: {
+        id: number;
+        title: string;
+        img: {
+          src: string;
+          width: number;
+          height: number;
+          alt: string;
+        };
+      };
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          oparator: string;
+          value: string;
+        };
+      }
+    ];
+  }
+];
+
 type ContentBlockProps = PageProps<
   TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
 >;
 
-const ContentBlocks = ({ content }: { content: ContentBlockProps[] }) => {
+const ContentBlocks = ({
+  content,
+  feedbackmodals,
+}: {
+  content: ContentBlockProps[];
+  feedbackmodals: Feedbackmodals[];
+}) => {
   return (
     <React.Fragment>
       {content?.map(contentItem => {
@@ -45,7 +84,13 @@ const ContentBlocks = ({ content }: { content: ContentBlockProps[] }) => {
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            return <SectionBlock key={`section ${contentItem.id}`} data={contentItem} />;
+            return (
+              <SectionBlock
+                key={`section ${contentItem.id}`}
+                data={contentItem}
+                feedbackmodals={feedbackmodals}
+              />
+            );
             break;
           case "buttons_and_media_block":
             return (
