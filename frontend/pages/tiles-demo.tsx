@@ -1,25 +1,10 @@
-import type { Props } from "@/containers/BasePage/BasePage";
-import FloorPlan from "@/components/FloorPlan/FloorPlan";
-import BasePage from "@/containers/BasePage/BasePage";
-import { getPage } from "@/api/wagtail";
+import React from "react";
+import FloorPlan from "../components/FloorPlan/FloorPlan";
 
-export default function TilesDemo({
-  componentProps,
-}: {
-  componentProps: Props;
-  children: React.ReactNode;
-}) {
+export default function Tiles() {
   return (
-    <BasePage staticPageTitle="Tiles demo" navigation={componentProps.navigation}>
+    <React.Fragment>
       <FloorPlan />
-    </BasePage>
+    </React.Fragment>
   );
-}
-export async function getStaticProps({ params }) {
-  params = params || {};
-  let path = params.path || [];
-  path = path.join("/");
-
-  const { json: pageData } = await getPage(path);
-  return { props: pageData };
 }
