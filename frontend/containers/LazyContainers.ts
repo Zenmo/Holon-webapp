@@ -16,4 +16,5 @@ export default {
   ChallengeModePage: dynamic(() => import("./ChallengeModePage")),
   InteractiveOverviewPage: dynamic(() => import("./InteractiveOverviewPage")),
   StorylineOverviewPage: dynamic(() => import("./StorylineOverviewPage")),
+  CustomNonWagtailPage: dynamic(() => import("./CustomNonWagtailPage")),
 };
