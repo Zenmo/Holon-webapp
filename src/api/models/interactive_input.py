@@ -42,6 +42,15 @@ COLOR_CHOICES = (
     (COLOR_GREEN, "Green"),
 )
 
+LEVEL_NATIONAL = "national"
+LEVEL_INTERMEDIATE = "intermediate"
+LEVEL_LOCAL = "local"
+
+LEVEL_CHOICES = (
+    (LEVEL_NATIONAL, "National"),
+    (LEVEL_INTERMEDIATE, "Intermediate"),
+    (LEVEL_LOCAL, "Local"),
+)
 # Create your models here.
 @register_snippet
 class InteractiveInput(ClusterableModel):
@@ -128,6 +137,13 @@ class InteractiveInputOptions(Orderable):
     legal_limitation = models.CharField(
         max_length=255,
         help_text=_("Fill in the status of the legal limitation"),
+        null=True,
+        blank=True,
+    )
+    level = models.CharField(
+        max_length=13,
+        choices=LEVEL_CHOICES,
+        default=LEVEL_NATIONAL,
         null=True,
         blank=True,
     )

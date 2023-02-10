@@ -62,6 +62,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "default": option_default,
                         "label": option.label,
                         "legal_limitation": option.legal_limitation,
+                        "level": option.level,
                         "color": option.color,
                     }
                     if option.link_wiki_page is not None:
