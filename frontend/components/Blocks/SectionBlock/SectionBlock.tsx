@@ -93,6 +93,8 @@ export default function SectionBlock({ data }: Props) {
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
 
+  const levels = ["national", "intermediate", "local"];
+
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
 
@@ -257,6 +259,35 @@ export default function SectionBlock({ data }: Props) {
                 return null;
               }
             })}
+
+            <h2>POC Loop through levels</h2>
+            <p>
+              Selecting radios below won't work because they have they have the same name as the
+              radios above. To make it work, please comment out the code above
+            </p>
+            {levels.map(level => (
+              <>
+                <h2>{level}</h2>
+                {content.map(ct => {
+                  if (ct.type === "interactive_input" && ct.value.visible) {
+                    return (
+                      <InteractiveInputs
+                        setValue={setInteractiveInputValue}
+                        defaultValue={getDefaultValue(ct)}
+                        key={ct.id}
+                        contentId={ct.id}
+                        selectedLevel={level}
+                        {...ct.value}
+                      />
+                    );
+                  } else if (ct.type == "text") {
+                    return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
+                  } else {
+                    return null;
+                  }
+                })}
+              </>
+            ))}
           </div>
           <div className={`flex flex-col ${gridValue.right}`}>
             <div className="lg:sticky top-0">

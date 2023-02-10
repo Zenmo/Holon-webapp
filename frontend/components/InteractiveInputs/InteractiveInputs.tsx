@@ -11,6 +11,8 @@ export type Props = {
   options: InteractiveInputOptions[];
   display?: string;
   defaultValue?: string | number;
+  level?: string;
+  selectedLevel?: string;
   setValue: (id: string, value: number | string | boolean, optionId?: number) => void;
 };
 
@@ -26,6 +28,7 @@ export type InteractiveInputOptions = {
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
+  level?: string;
 };
 function InteractiveButtons({ contentId, name, type, options, setValue }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
@@ -136,9 +139,15 @@ function InteractiveInputs({
   options,
   display,
   defaultValue,
+  selectedLevel,
+  level,
   setValue,
 }: Props) {
-  return type === "continuous" ? (
+  const visibleOptions = selectedLevel
+    ? options.filter(option => option.level == selectedLevel)
+    : options;
+
+  return type === "continuous" && selectedLevel == level ? (
     <ImageSlider
       inputId={contentId}
       datatestid={name}
@@ -155,7 +164,7 @@ function InteractiveInputs({
       unit="%"
       tooltip={true}
       locked={false}></ImageSlider>
-  ) : display === "checkbox_radio" ? (
+  ) : display === "checkbox_radio" && visibleOptions.length ? (
     <InteractiveRadios
       setValue={setValue}
       contentId={contentId}
@@ -164,18 +173,18 @@ function InteractiveInputs({
       moreInformation={moreInformation}
       titleWikiPage={titleWikiPage}
       linkWikiPage={linkWikiPage}
-      options={options}
+      options={visibleOptions}
     />
-  ) : display === "button" ? (
+  ) : display === "button" && visibleOptions.length ? (
     <InteractiveButtons
       setValue={setValue}
       contentId={contentId}
       name={name}
       type={type}
-      options={options}
+      options={visibleOptions}
     />
   ) : (
-    <p>Another one {name}</p>
+    <></>
   );
 }
 
