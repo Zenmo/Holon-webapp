@@ -1,9 +1,14 @@
 import KPIItem from "./KPIItem";
+import React from "react";
+import styles from "./KPIItem.module.css";
 
 type KPIDashboardProps = {
   data: Data;
   loading: boolean;
   dashboardId: string;
+  textLabelNational: string;
+  textLabelIntermediate: string;
+  textLabelLocal: string;
 };
 
 type Data = {
@@ -21,22 +26,32 @@ type Data = {
   };
 };
 
-export default function HolarchyKPIDashboard({ data, loading, dashboardId }: KPIDashboardProps) {
+export default function HolarchyKPIDashboard({
+  data,
+  loading,
+  dashboardId,
+  textLabelNational,
+  textLabelIntermediate,
+  textLabelLocal,
+}: KPIDashboardProps) {
   const levels = [
     {
       title: "National",
       bgcolor: "bg-holon-blue-100",
       dataobject: "national",
+      labelNode: "textLabelNational",
     },
     // {
     //   title: "Res",
     //   bgcolor: "bg-holon-blue-200",
     //   dataobject: "intermediate",
+    //   labelNode: "textLabelIntermediate"
     // },
     {
       title: "Lokale KPIs",
       bgcolor: "bg-holon-blue-500",
       dataobject: "local",
+      labelNode: "textLabelLocal",
     },
   ];
 
@@ -59,6 +74,7 @@ export default function HolarchyKPIDashboard({ data, loading, dashboardId }: KPI
     }
     return value;
   }
+  console.log(Object(textLabelIntermediate));
 
   return (
     <div className="" data-testid="KPIDashboard">
@@ -66,6 +82,15 @@ export default function HolarchyKPIDashboard({ data, loading, dashboardId }: KPI
         <div
           key={index}
           className={`flex flex-row flex-wrap  ${loading ? "bg-holon-gray-300" : level.bgcolor}`}>
+          <p className={styles["kpiHolarchy__title"]}>
+            {level.dataobject == "national"
+              ? textLabelNational
+              : level.dataobject == "local"
+              ? textLabelLocal
+              : level.dataobject == "intermediate"
+              ? textLabelIntermediate
+              : ""}
+          </p>
           <KPIItem
             view="kpiHolarchy"
             title="Netbelasting"

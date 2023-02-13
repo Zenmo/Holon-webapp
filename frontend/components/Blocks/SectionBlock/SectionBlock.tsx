@@ -17,6 +17,9 @@ type Props = {
       };
       content: Content[];
       gridLayout: { grid: string };
+      textLabelNational: string;
+      textLabelIntermediate: string;
+      textLabelLocal: string;
     };
     id: string;
   };
@@ -268,6 +271,9 @@ export default function SectionBlock({ data }: Props) {
                 )}
               </div>
               <HolarchyKPIDashboard
+                textLabelNational={data.value.textLabelNational}
+                textLabelIntermediate={data.value.textLabelIntermediate}
+                textLabelLocal={data.value.textLabelLocal}
                 data={kpis}
                 loading={loading}
                 dashboardId={data.id}></HolarchyKPIDashboard>

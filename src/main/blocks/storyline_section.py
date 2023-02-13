@@ -118,6 +118,10 @@ class StorylineSectionBlock(blocks.StructBlock):
     background = BackgroundChooserBlock()
     grid_layout = GridChooserBlock(required=True)
 
+    text_label_national = blocks.CharBlock(default="Nationaal", required=True)
+    text_label_intermediate = blocks.CharBlock(default="Regionaal", required=True)
+    text_label_local = blocks.CharBlock(default="Lokaal", required=True)
+
     content = blocks.StreamBlock(
         [
             ("text", RichtextBlock()),
