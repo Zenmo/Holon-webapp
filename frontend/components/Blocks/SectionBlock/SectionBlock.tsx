@@ -1,5 +1,6 @@
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
+import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
 import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
@@ -266,6 +267,10 @@ export default function SectionBlock({ data }: Props) {
                   <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
                 )}
               </div>
+              <HolarchyKPIDashboard
+                data={kpis}
+                loading={loading}
+                dashboardId={data.id}></HolarchyKPIDashboard>
               <KPIDashboard data={kpis} loading={loading} dashboardId={data.id}></KPIDashboard>
             </div>
           </div>

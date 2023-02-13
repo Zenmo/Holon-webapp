@@ -55,23 +55,27 @@ export default function KPIDashboard({ data, loading, dashboardId }: KPIDashboar
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
         <KPIItem
+          view="kpiStoryline"
           title="Netbelasting"
           label="netload"
           value={valueCheck(data[level].netload)}
           unit="%"
         />
         <KPIItem
+          view="kpiStoryline"
           title="Betaalbaarheid"
           label="costs"
           unit={level === "local" ? "k.EUR/jaar" : "mld.EUR/jaar"}
           value={valueCosts(level)}></KPIItem>
         <KPIItem
+          view="kpiStoryline"
           title="Duurzaamheid"
           label="sustainability"
           value={valueCheck(data[level].sustainability)}
           unit="%"
         />
         <KPIItem
+          view="kpiStoryline"
           title="Zelfvoorzienendheid"
           label="selfSufficiency"
           value={valueCheck(data[level].selfSufficiency)}
