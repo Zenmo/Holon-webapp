@@ -1,7 +1,6 @@
 from django.db import models
 from holon.models.actor import Actor
-from holon.models.asset import EnergyAsset
-from holon.models.gridnode import ElectricGridNode, GridNode, HeatGridNode
+from holon.models.gridnode import ElectricGridNode, HeatGridNode
 
 from holon.models.scenario import Scenario
 from polymorphic.models import PolymorphicModel
@@ -25,9 +24,10 @@ class BatteryMode(models.TextChoices):
 class GridConnection(PolymorphicModel):
     owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     capacity_kw = models.FloatField()
-    parent_electric = models.ForeignKey(ElectricGridNode, on_delete=models.CASCADE)
-    parent_heat = models.ForeignKey(HeatGridNode, on_delete=models.CASCADE)
-    assets = models.ManyToManyField(EnergyAsset, blank=True)
+    parent_electric = models.ForeignKey(
+        ElectricGridNode, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    parent_heat = models.ForeignKey(HeatGridNode, on_delete=models.SET_NULL, null=True, blank=True)
     category = "GENERIC"
     charging_mode = models.CharField(
         max_length=100,
@@ -45,6 +45,9 @@ class GridConnection(PolymorphicModel):
     nfATO_starttime = models.FloatField(null=True, blank=True)
     nfATO_endtime = models.FloatField(null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"b{self.id}"
 
 
 class InsulationLabel(models.TextChoices):

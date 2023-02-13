@@ -25,3 +25,6 @@ class Contract(PolymorphicModel):
     type = models.CharField(max_length=255, choices=ContractType.choices)
     contract_scope = models.CharField(max_length=255, choices=ContractScope.choices)
     actor = models.ForeignKey(Actor, on_delete=models.CASCADE, related_name="contracts")
+
+    def __str__(self):
+        return f"c{self.id} - {self.type.lower()}"

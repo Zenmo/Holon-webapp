@@ -2,9 +2,15 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
 
+from holon.models.gridconnection import GridConnection
+
 
 class EnergyAsset(PolymorphicModel):
-    pass
+    gridconnection = models.ForeignKey(GridConnection, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 #%% Consumption assets
@@ -20,7 +26,6 @@ class ConsumptionAssetType(models.TextChoices):
 class ConsumptionAsset(EnergyAsset):
     category = "CONSUMPTION"
     type = models.CharField(max_length=255, choices=ConsumptionAssetType.choices)
-    name = models.CharField(max_length=255)
 
 
 class HeatConsumptionAsset(ConsumptionAsset):
@@ -60,7 +65,6 @@ class ConversionAsset(EnergyAsset):
     category = "CONVERSION"
     type = models.CharField(max_length=255, choices=ConversionAssetType.choices)
     eta_r = models.FloatField()
-    name = models.CharField(max_length=255)
 
 
 class VehicleConversionAsset(ConversionAsset):
@@ -104,7 +108,6 @@ class ProductionAssetType(models.TextChoices):
 class ProductionAsset(EnergyAsset):
     category = "PRODUCTION"
     type = models.CharField(max_length=20, choices=ProductionAssetType.choices)
-    name = models.CharField(max_length=100)
 
 
 class ElectricProductionAsset(ProductionAsset):
@@ -136,7 +139,6 @@ class StorageAsset(EnergyAsset):
         choices=StorageAssetType.choices,
     )
     stateOfCharge_r = models.FloatField()
-    name = models.CharField(max_length=100)
 
 
 class HeatStorageAsset(StorageAsset):

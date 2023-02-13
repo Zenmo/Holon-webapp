@@ -22,6 +22,9 @@ class Actor(PolymorphicModel):
     parent_actor = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.type.lower()[:3]}{self.id}"
+
 
 class NonFirmActor(Actor):
     nfATO_capacity_kw = models.FloatField()

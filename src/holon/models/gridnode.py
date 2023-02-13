@@ -26,6 +26,9 @@ class ElectricGridNode(GridNode):
     type = models.CharField(max_length=4, choices=ElectricGridType.choices)
     category = "ELECTRICITY"
 
+    def __str__(self):
+        return f"E{self.id}"
+
 
 class HeatGridType(models.TextChoices):
     MT = "MT"
@@ -35,3 +38,6 @@ class HeatGridType(models.TextChoices):
 class HeatGridNode(GridNode):
     type = models.CharField(max_length=2, choices=HeatGridType.choices)
     category = "HEAT"
+
+    def __str__(self):
+        return f"H{self.id}"
