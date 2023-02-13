@@ -275,8 +275,7 @@ export default function SectionBlock({ data }: Props) {
                 textLabelIntermediate={data.value.textLabelIntermediate}
                 textLabelLocal={data.value.textLabelLocal}
                 data={kpis}
-                loading={loading}
-                dashboardId={data.id}></HolarchyKPIDashboard>
+                loading={loading}></HolarchyKPIDashboard>
               <KPIDashboard data={kpis} loading={loading} dashboardId={data.id}></KPIDashboard>
             </div>
           </div>

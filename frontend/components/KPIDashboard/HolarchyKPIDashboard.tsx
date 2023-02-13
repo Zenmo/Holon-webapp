@@ -5,7 +5,6 @@ import styles from "./KPIItem.module.css";
 type KPIDashboardProps = {
   data: Data;
   loading: boolean;
-  dashboardId: string;
   textLabelNational: string;
   textLabelIntermediate: string;
   textLabelLocal: string;
@@ -29,7 +28,6 @@ type Data = {
 export default function HolarchyKPIDashboard({
   data,
   loading,
-  dashboardId,
   textLabelNational,
   textLabelIntermediate,
   textLabelLocal,
