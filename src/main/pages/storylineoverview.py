@@ -5,7 +5,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
 
 from .base import BasePage
-from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock, StorylineSectionBlock
+from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock
 
 
 class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
