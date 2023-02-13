@@ -2,7 +2,7 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 from holon.models.factor import Factor
 from holon.models.gridconnection import GridConnection
-from holon.models.asset import Asset
+from holon.models.asset import EnergyAsset
 
 
 class FactorAdmin(ModelAdmin):
@@ -28,7 +28,7 @@ class GridconnectionAdmin(ModelAdmin):
 
 
 class AssetAdmin(ModelAdmin):
-    model = Asset
+    model = EnergyAsset
     base_url_path = "assets"
     menu_label = "Assets"
     menu_icon = "list-ol"
