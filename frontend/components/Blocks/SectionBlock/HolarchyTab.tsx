@@ -1,6 +1,4 @@
-type HolarchyTabProps = {};
-
-export default function HolarchyTab(media) {
+export default function HolarchyTab() {
   return (
     <div className="w-screen h-screen bg-white">
       <div className="bg-white fixed top-[4.5rem] md:top-24 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-9.5rem)] w-screen z-10 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
@@ -14,7 +12,7 @@ export default function HolarchyTab(media) {
         <div className="row-start-4 bg-holon-blue-100 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-1 md:row-span-1">
           <div className="row-start-4 row-span-3 md:col-start-2 md:col-span-1 md:row-start-1 md:row-span-3">
             {/* eslint-disable @next/next/no-img-element */}
-            <img src={media.img?.src} alt={media.img?.alt} width="900" height="1600" />
+            {/*<img src={} alt={} width="900" height="1600" />*/}
           </div>
 
           <p>Hier komt een image</p>
