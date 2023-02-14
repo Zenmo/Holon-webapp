@@ -32,8 +32,24 @@ export default function HolarchyTab() {
         </div>
 
         {/*image */}
-        <div className="bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
-          <p></p>
+        <div className="relative overflow-hidden bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
+          <svg
+            viewBox="0 0 2 1"
+            preserveAspectRatio="none"
+            className="w-full h-[50px] absolute top-[-2px] fill-[#e8eeff]"
+            height="1"
+            strokeWidth="2"
+            strokeDasharray="5"
+            stroke="#000"
+            width="2">
+            <path
+              vectorEffect="non-scaling-stroke"
+              d="
+            M1 1
+            L0 0
+            L2 0 Z"
+            />
+          </svg>
         </div>
 
         {/*Middle KPIs */}
@@ -50,8 +66,24 @@ export default function HolarchyTab() {
         </div>
 
         {/*image */}
-        <div className="bg-holon-blue-300  row-start-6 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-3 md:row-span-1">
-          <p></p>
+        <div className="relative overflow-hidden bg-holon-blue-300  row-start-6 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-3 md:row-span-1">
+          <svg
+            viewBox="0 0 2 1"
+            preserveAspectRatio="none"
+            className="w-full h-[50px] absolute  top-[-2px] fill-[#d8e3ff]"
+            height="1"
+            strokeWidth="2"
+            strokeDasharray="5"
+            stroke="#000"
+            width="2">
+            <path
+              vectorEffect="non-scaling-stroke"
+              d="
+            M1 1
+            L0 0
+            L2 0 Z"
+            />
+          </svg>
         </div>
 
         {/*Local KPIs */}
