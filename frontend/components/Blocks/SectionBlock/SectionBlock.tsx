@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { debounce } from "lodash";
-import { Tab } from "@headlessui/react";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
@@ -21,6 +20,7 @@ type Props = {
     };
     id: string;
   };
+  pagetype?: string;
 };
 
 export type Content =
@@ -89,7 +89,7 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data }: Props) {
+export default function SectionBlock({ data, pagetype }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
@@ -250,16 +250,16 @@ export default function SectionBlock({ data }: Props) {
   return (
     <div className={`sectionContainer`} ref={myRef}>
       <div className="holonContentContainer">
-        <div className="sticky top-[110px] bg-white z-10 mt-4 pt-2">
+        <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
           <div>
             <button
               onClick={closeHolarchyModal}
               className={`px-6 py-2 ${data.value.background.color} rounded-t-lg border-x-2 border-t-2 border-solid`}>
-              Interactiemodus
+              Interactiemodus {pagetype}
             </button>
             <button
               onClick={openHolarchyModal}
-              className={`px-6 py-2 bg-holon-gray-300 rounded-t-lg`}>
+              className={`px-6 py-2 bg-holon-blue-100 rounded-t-lg`}>
               Holarchie
             </button>
           </div>
@@ -305,7 +305,7 @@ export default function SectionBlock({ data }: Props) {
           </div>
         </div>
 
-        <div className="">{holarchyModal && <HolarchyTab />}</div>
+        <div>{holarchyModal && <HolarchyTab media={media} />}</div>
       </div>
     </div>
   );

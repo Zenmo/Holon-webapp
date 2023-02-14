@@ -12,6 +12,7 @@ module.exports = {
         "holon-gold-600": "#C89D28",
         "holon-blue-100": "#648FFF26",
         "holon-blue-200": "#648FFF40",
+        "holon-blue-300": "#648FFF54",
         "holon-blue-500": "#23549F",
         "holon-blue-900": "#051E3F",
         "holon-gray-100": "#051E3F0D",

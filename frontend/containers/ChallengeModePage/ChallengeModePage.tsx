@@ -33,7 +33,7 @@ export type ChallengeModeScenario = {
 const ChallengeModePage = ({ storyline }: { storyline: Storyline[] }) => {
   return (
     <div className={styles["ChallengeModePage"]}>
-      <ContentBlocks content={storyline} />
+      <ContentBlocks content={storyline} pagetype="Challenge" />
     </div>
   );
 };
