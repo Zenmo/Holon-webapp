@@ -4,6 +4,7 @@ import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs"
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
 import HolarchyTab from "./HolarchyTab";
+import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
 
@@ -21,6 +22,7 @@ type Props = {
     id: string;
   };
   pagetype?: string;
+  feedbackmodals: Feedbackmodals[];
 };
 
 export type Content =
@@ -75,6 +77,38 @@ export type InteractiveInputOptions = {
   sliderValueMin?: number;
 };
 
+export type Feedbackmodals = [
+  {
+    id: string;
+    type: string;
+    value: {
+      modaltitle: string;
+      modaltext: string;
+      modaltheme: string;
+      imageSelector: {
+        id: number;
+        title: string;
+        img: {
+          src: string;
+          width: number;
+          height: number;
+          alt: string;
+        };
+      };
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          oparator: string;
+          value: string;
+        };
+      }
+    ];
+  }
+];
 const initialData = {
   local: {
     netload: null,
@@ -89,7 +123,7 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype }: Props) {
+export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
@@ -249,6 +283,9 @@ export default function SectionBlock({ data, pagetype }: Props) {
 
   return (
     <div className={`sectionContainer`} ref={myRef}>
+      {feedbackmodals && (
+        <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
+      )}
       <div className="holonContentContainer">
         <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
           <div>

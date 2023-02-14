@@ -14,4 +14,4 @@ class ChallengeModePageSerializer(BasePageSerializer):
 
     class Meta:
         model = ChallengeModePage
-        fields = StorylinePageSerializer.Meta.fields
+        fields = StorylinePageSerializer.Meta.fields + ["feedbackmodals"]
