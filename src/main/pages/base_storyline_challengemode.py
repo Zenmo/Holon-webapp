@@ -19,7 +19,6 @@ from ..blocks import (
     TitleBlock,
     CardsBlock,
     HeaderFullImageBlock,
-    HolarchyFeedbackImage,
 )
 
 ICON_CHOICES = (
@@ -116,7 +115,6 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
             ("heroblock", HeroBlock()),
             ("title_block", TitleBlock()),
             ("card_block", CardsBlock()),
-            ("holarchy_feedback_image", HolarchyFeedbackImage()),
         ],
         block_counts={
             "header_full_image_block": {"min_num": 1},

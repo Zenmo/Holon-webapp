@@ -20,7 +20,7 @@ class HolarchyFeedbackImage(blocks.StructBlock):
         ],
         block_counts={},
         use_json_field=True,
-        help_text="Feedback will only be shown when ALL conditions of a modal are true",
+        help_text="Image will only be shown when ALL conditions of a holarchy feedback image are true",
     )
 
     class Meta:

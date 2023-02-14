@@ -2,6 +2,7 @@ import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs"
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
+import HolarchyFeedbackImage from "@/components/Blocks/HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { getGrid } from "services/grid";
@@ -32,6 +33,22 @@ export type Content =
       id: string;
       type: "static_image";
       value: StaticImage;
+    }
+  | {
+      id: string;
+      type: "holarchy_feedback_image";
+      value: StaticImage;
+      conditions: [
+        {
+          id: string;
+          type: string;
+          value: {
+            parameter: string;
+            operator: string;
+            value: string;
+          };
+        }
+      ];
     }
   | InteractiveContent;
 
@@ -129,6 +146,7 @@ export default function SectionBlock({
 }) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
+  const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -145,6 +163,9 @@ export default function SectionBlock({
 
   useEffect(() => {
     const contentArr: Content[] = [];
+    setHolarchyFeedbackImages(
+      data?.value.content.filter(content => content.type == "holarchy_feedback_image")
+    );
     data?.value.content.map((content: Content) => {
       switch (content.type) {
         case "interactive_input":
@@ -272,9 +293,14 @@ export default function SectionBlock({
 
   return (
     <div className={`${backgroundFullcolor} `}>
+      <p>{holarchyFeedbackImages.length}</p>
+      {holarchyFeedbackImages.length && (
+        <HolarchyFeedbackImage holarchyfeedbackimages={holarchyFeedbackImages} content={content} />
+      )}
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
+
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div
