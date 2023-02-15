@@ -168,12 +168,14 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   }, [content, debouncedCalculateKPIs]);
 
   function openHolarchyModal() {
-    myRef.current.scrollIntoView();
     setHolarchyModal(true);
+    myRef.current.classList.add("h-screen");
+    myRef.current.scrollIntoView();
     document.body.classList.add("overflow-hidden");
   }
 
   function closeHolarchyModal() {
+    myRef.current.classList.remove("h-screen");
     setHolarchyModal(false);
     document.body.classList.remove("overflow-hidden");
   }
