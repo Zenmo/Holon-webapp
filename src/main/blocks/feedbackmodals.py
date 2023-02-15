@@ -74,6 +74,7 @@ class FeedbackModalInteractiveInputCondition(blocks.StructBlock):
 class FeedbackModal(blocks.StructBlock):
     class FeedbackModalThemes(models.TextChoices):
         GREEN = "green", "Green"
+        GREENWITHCONFETTI = "greenwithconfetti", "Green with confetti"
         ORANGE = "orange", "Orange"
         RED = "red", "Red"
 
