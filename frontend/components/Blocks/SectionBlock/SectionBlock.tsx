@@ -167,17 +167,26 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
+  useEffect(() => {
+    if (holarchyModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [holarchyModal]);
+
   function openHolarchyModal() {
     setHolarchyModal(true);
     myRef.current.classList.add("h-screen");
     myRef.current.scrollIntoView();
-    document.body.classList.add("overflow-hidden");
   }
 
   function closeHolarchyModal() {
     myRef.current.classList.remove("h-screen");
     setHolarchyModal(false);
-    document.body.classList.remove("overflow-hidden");
   }
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
