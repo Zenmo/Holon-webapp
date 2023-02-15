@@ -344,7 +344,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
           </div>
         </div>
 
-        <div>{holarchyModal && <HolarchyTab media={media} />}</div>
+        <div>{holarchyModal && <HolarchyTab />}</div>
       </div>
     </div>
   );

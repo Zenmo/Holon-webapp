@@ -36,11 +36,8 @@ export default function HolarchyTab() {
           <svg
             viewBox="0 0 2 1"
             preserveAspectRatio="none"
-            className="w-full h-[50px] absolute top-[-2px] fill-[#e8eeff]"
+            className="md:w-full md:h-[50px] md:absolute md:top-[-2px] md:fill-[#e8eeff]"
             height="1"
-            strokeWidth="2"
-            strokeDasharray="5"
-            stroke="#000"
             width="2">
             <path
               vectorEffect="non-scaling-stroke"
@@ -70,11 +67,8 @@ export default function HolarchyTab() {
           <svg
             viewBox="0 0 2 1"
             preserveAspectRatio="none"
-            className="w-full h-[50px] absolute  top-[-2px] fill-[#d8e3ff]"
+            className="md:w-full md:h-[50px] md:absolute md:top-[-2px] md:fill-[#d8e3ff]"
             height="1"
-            strokeWidth="2"
-            strokeDasharray="5"
-            stroke="#000"
             width="2">
             <path
               vectorEffect="non-scaling-stroke"
