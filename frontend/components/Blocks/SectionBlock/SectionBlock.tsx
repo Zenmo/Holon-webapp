@@ -6,6 +6,7 @@ import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 
 type Props = {
   data: {
@@ -131,6 +132,7 @@ export default function SectionBlock({
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
 
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
@@ -166,6 +168,38 @@ export default function SectionBlock({
   useEffect(() => {
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
+
+  useEffect(() => {
+    if (costBenefitModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [costBenefitModal]);
+
+  /*
+  function openHolarchyModal() {
+    setHolarchyModal(true);
+    myRef.current.classList.add("h-screen");
+    myRef.current.scrollIntoView();
+  }
+
+  function closeHolarchyModal() {
+    myRef.current.classList.remove("h-screen");
+    setHolarchyModal(false);
+  }
+  */
+
+  function openCostBenefitModal() {
+    setCostBenefitModal(true);
+  }
+
+  function closeCostBenefitModal() {
+    setCostBenefitModal(false);
+  }
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
     const defaultValue = content.value.defaultValueOverride;
@@ -275,6 +309,7 @@ export default function SectionBlock({
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
+      {costBenefitModal && <CostBenefitModal handleClose={closeCostBenefitModal} />}
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div
@@ -308,7 +343,11 @@ export default function SectionBlock({
                   <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
                 )}
               </div>
-              <KPIDashboard data={kpis} loading={loading} dashboardId={data.id}></KPIDashboard>
+              <KPIDashboard
+                data={kpis}
+                loading={loading}
+                dashboardId={data.id}
+                handleClickCostBen={openCostBenefitModal}></KPIDashboard>
             </div>
           </div>
         </div>
