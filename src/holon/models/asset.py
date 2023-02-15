@@ -10,10 +10,10 @@ class EnergyAsset(PolymorphicModel):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name} - {self.id} ({self.gridconnection.category}{self.gridconnection.id})"
 
 
-#%% Consumption assets
+# %% Consumption assets
 
 
 class ConsumptionAssetType(models.TextChoices):
@@ -41,7 +41,7 @@ class HybridConsumptionAsset(ConsumptionAsset):
     yearlyDemandElectricity_kWh = models.FloatField()
 
 
-#%% Conversion assets
+# %% Conversion assets
 
 
 class ConversionAssetType(models.TextChoices):
@@ -97,7 +97,7 @@ class HybridHeatCoversionAsset(HeatConversionAsset):
     capacityHeat_kW = models.FloatField()
 
 
-#%% Production assets
+# %% Production assets
 
 
 class ProductionAssetType(models.TextChoices):
@@ -123,7 +123,7 @@ class HybridProductionAsset(ProductionAsset):
     capacityHeat_kW = models.FloatField()
 
 
-#%% Storage assets
+# %% Storage assets
 
 
 class StorageAssetType(models.TextChoices):
