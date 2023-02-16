@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { debounce } from "lodash";
-import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
+import { Content, InteractiveContent, StaticImage, Feedbackmodals } from "./types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
-import RawHtml from "@/components/RawHtml/RawHtml";
+import ContentColumn from "./ContentColumn";
 import HolarchyTab from "./HolarchyTab";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { getGrid } from "services/grid";
@@ -25,90 +25,6 @@ type Props = {
   feedbackmodals: Feedbackmodals[];
 };
 
-export type Content =
-  | {
-      id: string;
-      type: "text";
-      value: string;
-    }
-  | {
-      id: string;
-      type: "static_image";
-      value: StaticImage;
-    }
-  | InteractiveContent;
-
-export type InteractiveContent = {
-  id: string;
-  type: "interactive_input";
-  currentValue?: number | string | string[] | number[] | undefined;
-  value: InteractiveInput;
-};
-
-export type StaticImage = {
-  id?: number;
-  title?: string;
-  img: {
-    alt: string;
-    height: number;
-    width: number;
-    src: string;
-  };
-};
-
-export type InteractiveInput = {
-  id: number;
-  name?: string;
-  type?: string;
-  defaultValueOverride?: string;
-  animationTag?: string;
-  options: InteractiveInputOptions[];
-  display: string;
-  visible?: boolean;
-};
-
-export type InteractiveInputOptions = {
-  id: number;
-  option?: string;
-  label?: string;
-  default?: boolean;
-  sliderValueDefault?: number;
-  sliderValueMax?: number;
-  sliderValueMin?: number;
-};
-
-export type Feedbackmodals = [
-  {
-    id: string;
-    type: string;
-    value: {
-      modaltitle: string;
-      modaltext: string;
-      modaltheme: string;
-      imageSelector: {
-        id: number;
-        title: string;
-        img: {
-          src: string;
-          width: number;
-          height: number;
-          alt: string;
-        };
-      };
-    };
-    conditions: [
-      {
-        id: string;
-        type: string;
-        value: {
-          parameter: string;
-          oparator: string;
-          value: string;
-        };
-      }
-    ];
-  }
-];
 const initialData = {
   local: {
     netload: null,
@@ -144,26 +60,6 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
 
   useEffect(() => {
-    const contentArr: Content[] = [];
-    data?.value.content.map((content: Content) => {
-      switch (content.type) {
-        case "interactive_input":
-          content.currentValue = getDefaultValue(content);
-          contentArr.push(content);
-          break;
-        case "static_image":
-          setMedia(content.value);
-          break;
-        default:
-          contentArr.push(content);
-          break;
-      }
-    });
-
-    setContent([...contentArr]);
-  }, [data]);
-
-  useEffect(() => {
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
@@ -187,83 +83,6 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   function closeHolarchyModal() {
     myRef.current.classList.remove("h-screen");
     setHolarchyModal(false);
-  }
-
-  function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
-    const defaultValue = content.value.defaultValueOverride;
-    switch (content.value.type) {
-      case "single_select":
-        if (defaultValue) {
-          return content.value.options.find(
-            option => option.option === defaultValue || option.label === defaultValue
-          )?.option;
-        } else {
-          return content.value.options.find(option => option.default)?.option;
-        }
-      case "continuous":
-        if (defaultValue !== undefined && defaultValue !== "") {
-          return Number(defaultValue);
-        } else if (
-          content.value.options.length &&
-          content.value.options[0].sliderValueDefault !== undefined
-        ) {
-          return Number(content.value.options[0].sliderValueDefault);
-        } else {
-          return 0;
-        }
-      case "multi_select":
-        const defaultValueArray = defaultValue && defaultValue.split(",");
-        const defaultOptions = content.value.options.filter(
-          option =>
-            option.default ||
-            defaultValueArray?.includes(option.option) ||
-            defaultValueArray?.includes(option.label)
-        );
-        return defaultOptions.length ? defaultOptions.map(option => option.option) : undefined;
-    }
-  }
-
-  function setInteractiveInputValue(
-    id: string,
-    value: number | string | boolean,
-    optionId?: number
-  ) {
-    const currentElement: InteractiveContent | undefined = content
-      .filter((element): element is InteractiveContent => element.type == "interactive_input")
-      .find(element => element.id == id);
-
-    const currentIndex: number = content.findIndex(
-      (element): element is InteractiveContent => element.id == id
-    );
-
-    if (!currentElement) return;
-
-    switch (currentElement.value.type) {
-      case "single_select":
-        const selectedOption = currentElement.value.options.find(option => option.id === optionId);
-        if (!selectedOption) break;
-        currentElement.currentValue = selectedOption.option;
-        break;
-      case "continuous":
-        currentElement.currentValue = Number(value);
-        break;
-
-      case "multi_select":
-        const currentOption = currentElement.value.options.find(option => option.id === optionId);
-        if (!currentOption) break;
-        const tempArray = new Set(currentElement.currentValue);
-        if (value) {
-          tempArray.add(currentOption.option);
-        } else {
-          tempArray.delete(currentOption.option);
-        }
-        currentElement.currentValue = [...tempArray];
-        break;
-    }
-
-    const spreadedElements = [...content];
-    spreadedElements[currentIndex] = currentElement;
-    setContent([...spreadedElements]);
   }
 
   function calculateKPIs(content) {
@@ -321,23 +140,12 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
             ) : (
               ""
             )}
-            {content.map(ct => {
-              if (ct.type === "interactive_input" && ct.value.visible) {
-                return (
-                  <InteractiveInputs
-                    setValue={setInteractiveInputValue}
-                    defaultValue={getDefaultValue(ct)}
-                    key={ct.id}
-                    contentId={ct.id}
-                    {...ct.value}
-                  />
-                );
-              } else if (ct.type == "text") {
-                return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
-              } else {
-                return null;
-              }
-            })}
+            <ContentColumn
+              dataContent={data?.value.content}
+              content={content}
+              handleContentChange={setContent}
+              handleMedia={setMedia}
+            />
           </div>
 
           <div className={`flex flex-col ${gridValue.right}`}>
