@@ -5,6 +5,8 @@ import SuccessModal from "./SuccessModal";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 export default function RegistrationForm() {
   const [userData, setUserData] = useState({
     username: "",
@@ -43,7 +45,7 @@ export default function RegistrationForm() {
     e.preventDefault();
     TokenService.setCSRFToken();
 
-    const response = await fetch("http://localhost:8000/dj-rest-auth/registration/", {
+    const response = await fetch(`${API_URL}/dj-rest-auth/registration/`, {
       method: "POST",
       body: JSON.stringify({
         username: userData.username,

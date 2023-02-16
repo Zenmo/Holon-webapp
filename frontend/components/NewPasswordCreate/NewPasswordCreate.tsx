@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TokenService from "@/services/token";
 import PasswordInput from "../PasswordInput/PasswordInput";
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function NewPasswordCreate() {
   const [input, setInput] = useState({
@@ -15,7 +16,7 @@ export default function NewPasswordCreate() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const response = await fetch(`http://localhost:8000/dj-rest-auth/password/change/`, {
+    const response = await fetch(`${API_URL}/dj-rest-auth/password/change/`, {
       method: "POST",
       body: JSON.stringify({
         new_password1: input.password,

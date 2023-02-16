@@ -3,8 +3,10 @@ import Router from "next/router";
 import useSWR from "swr";
 import TokenService from "@/services/token";
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const fetcher = (...args) =>
-  fetch("http://localhost:8000/dj-rest-auth/user/", {
+  fetch(`${API_URL}/dj-rest-auth/user/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -14,10 +16,7 @@ const fetcher = (...args) =>
   }).then(res => res.json());
 
 export default function useUser({ redirectTo = "", redirectIfFound = false } = {}) {
-  const { data: user, mutate: mutateUser } = useSWR(
-    "http://localhost:8000/dj-rest-auth/user/",
-    fetcher
-  );
+  const { data: user, mutate: mutateUser } = useSWR(`${API_URL}/dj-rest-auth/user/`, fetcher);
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
