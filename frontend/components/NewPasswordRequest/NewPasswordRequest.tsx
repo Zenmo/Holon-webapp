@@ -1,6 +1,6 @@
 import TokenService from "@/services/token";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 export default function NewPasswordRequest() {
   function handleSubmit(e) {

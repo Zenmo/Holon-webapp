@@ -5,7 +5,7 @@ import SuccessModal from "./SuccessModal";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 export default function RegistrationForm() {
   const [userData, setUserData] = useState({

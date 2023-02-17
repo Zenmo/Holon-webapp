@@ -3,7 +3,7 @@ import UpdatePassword from "./UpdatePassword";
 import useUser from "@/utils/useUser";
 import TokenService from "@/services/token";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 type UserData = {
   first_name: string;

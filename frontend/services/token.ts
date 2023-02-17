@@ -2,7 +2,7 @@ const ACCESS_TOKEN_KEY = "accessToken_holontool";
 const REFRESH_TOKEN_KEY = "refreshToken_holontool";
 import * as Cookies from "es-cookie";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 const TokenService = {
   setCSRFToken() {

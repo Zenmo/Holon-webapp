@@ -3,7 +3,7 @@ import Link from "next/link";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 export default function LoginForm() {
   const [userData, setUserData] = useState({ username: "", password: "" });
