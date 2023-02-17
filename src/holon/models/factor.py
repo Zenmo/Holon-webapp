@@ -41,11 +41,11 @@ class Factor(models.Model):
 
         if not (
             self.asset_attribute == "asset_attribute_not_supplied"
-            or self.asset_attribute in self.asset_attributes_values()
+            or self.asset_attribute in self.asset_attributes_options()
         ):
             raise ValidationError("Invalid value asset_attribute")
 
-    def asset_attributes_values(self):
+    def asset_attributes_options(self):
         model_type = (
             self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
         )

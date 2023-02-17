@@ -1,17 +1,21 @@
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from polymorphic.models import PolymorphicModel
+
+from holon.models.util import all_subclasses
 
 
 class Filter(PolymorphicModel):
     """Information on how to find the objects a scenario rule should be applied to"""
 
     rule = models.ForeignKey("holon.ScenarioRule", on_delete=models.CASCADE, related_name="filters")
-    
+
     def getQ(self) -> Q:
         pass
+
 
 class AttributeFilterComparator(models.TextChoices):
     """Types of supported comparators"""
@@ -27,7 +31,21 @@ class AttributeFilter(Filter):
 
     model_attribute = models.CharField(max_length=255, null=True)
     comparator = models.CharField(max_length=255, choices=AttributeFilterComparator.choices)
-    value = models.IntegerField()
+    value = models.JSONField()
+
+    def clean(self):
+        super().clean()
+
+        if self.relation_field not in self.model_attribute_options():
+            raise ValidationError("Invalid value model_attribute")
+
+    def model_attribute_options(self):
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+
+        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
     def getQ(self) -> Q:
         if self.comparator == AttributeFilterComparator.EQUAL:
@@ -46,7 +64,18 @@ class RelationAttributeFilter(AttributeFilter):
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
 
-    def relation_field_values(self):
+    def clean(self):
+        super().clean()
+
+        if self.relation_field not in self.relation_field_options():
+            raise ValidationError("Invalid value relation_field")
+        if (
+            self.relation_field_subtype
+            and self.relation_field_subtype not in self.relation_field_subtype_options()
+        ):
+            raise ValidationError("Invalid value relation_field_subtype")
+
+    def relation_field_options(self) -> list[str]:
         model_type = (
             self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
         )
@@ -54,11 +83,7 @@ class RelationAttributeFilter(AttributeFilter):
 
         return [field.name for field in model()._meta.get_fields() if field.is_relation]
 
-    def relation_field_subtype_values(self) -> list[str]:
-        def all_subclasses(cls) -> list[models.Model]:
-            return set(cls.__subclasses__()).union(
-                [s for c in cls.__subclasses__() for s in all_subclasses(c)]
-            )
+    def relation_field_subtype_options(self) -> list[str]:
 
         model = apps.get_model(self.rule.model_type)
         related_model = model()._meta.get_field(self.relation_field).related_model
