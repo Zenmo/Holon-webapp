@@ -1,8 +1,7 @@
+// import i18n from '../../i18n';
 import RegistrationForm from "@/components/Registration";
 import { basePageWrap } from "@/containers/BasePage";
 
-function RegistrationPage() {
-  return <RegistrationForm />;
-}
+const RegistrationPage = () => <RegistrationForm />;
 
 export default basePageWrap(RegistrationPage);

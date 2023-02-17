@@ -38,18 +38,21 @@ export default function HolarchyKPIDashboard({
       bgcolor: "bg-holon-blue-100",
       dataobject: "national",
       labelNode: "textLabelNational",
+      css: "row-start-7 bg-holon-blue-100 md:row-start-1 md:col-start-3",
     },
     // {
     //   title: "Res",
     //   bgcolor: "bg-holon-blue-200",
     //   dataobject: "intermediate",
     //   labelNode: "textLabelIntermediate"
+    //   css: "row-start-8 bg-holon-blue-200 md:row-start-2 md:col-start-3"
     // },
     {
       title: "Lokale KPIs",
       bgcolor: "bg-holon-blue-500",
       dataobject: "local",
       labelNode: "textLabelLocal",
+      css: "row-start-9 bg-holon-blue-300 md:row-start-3 md:col-start-3",
     },
   ];
 
@@ -75,48 +78,51 @@ export default function HolarchyKPIDashboard({
   console.log(Object(textLabelIntermediate));
 
   return (
-    <div className="" data-testid="KPIDashboard">
+    <React.Fragment>
       {levels.map((level, index) => (
         <div
           key={index}
-          className={`flex flex-row flex-wrap  ${loading ? "bg-holon-gray-300" : level.bgcolor}`}>
-          <p className={styles["kpiHolarchy__title"]}>
-            {level.dataobject == "national"
-              ? textLabelNational
-              : level.dataobject == "local"
-              ? textLabelLocal
-              : level.dataobject == "intermediate"
-              ? textLabelIntermediate
-              : ""}
-          </p>
-          <KPIItem
-            view="kpiHolarchy"
-            title="Netbelasting"
-            label="netload"
-            value={valueCheck(data[level.dataobject].netload)}
-            unit="%"
-          />
-          <KPIItem
-            view="kpiHolarchy"
-            title="Betaalbaarheid"
-            label="costs"
-            unit={level.dataobject === "local" ? "k.EUR/jaar" : "mld.EUR/jaar"}
-            value={valueCosts(level.dataobject)}></KPIItem>
-          <KPIItem
-            view="kpiHolarchy"
-            title="Duurzaamheid"
-            label="sustainability"
-            value={valueCheck(data[level.dataobject].sustainability)}
-            unit="%"
-          />
-          <KPIItem
-            view="kpiHolarchy"
-            title="Zelfvoorzienendheid"
-            label="selfSufficiency"
-            value={valueCheck(data[level.dataobject].selfSufficiency)}
-            unit="%"></KPIItem>
+          className={`${level.css} row-span-1 col-start-1 col-span-1 md:col-span-1  md:row-span-1 border-b-2 border-dashed border-holon-blue-900`}
+          data-testid="KPIDashboard">
+          <div key={index} className={`flex flex-row flex-wrap p-2`}>
+            <p className={styles["kpiHolarchy__title"]}>
+              {level.dataobject == "national"
+                ? textLabelNational
+                : level.dataobject == "local"
+                ? textLabelLocal
+                : level.dataobject == "intermediate"
+                ? textLabelIntermediate
+                : ""}
+            </p>
+            <KPIItem
+              view="kpiHolarchy"
+              title="Netbelasting"
+              label="netload"
+              value={valueCheck(data[level.dataobject].netload)}
+              unit="%"
+            />
+            <KPIItem
+              view="kpiHolarchy"
+              title="Betaalbaarheid"
+              label="costs"
+              unit={level.dataobject === "local" ? "k.EUR/jaar" : "mld.EUR/jaar"}
+              value={valueCosts(level.dataobject)}></KPIItem>
+            <KPIItem
+              view="kpiHolarchy"
+              title="Duurzaamheid"
+              label="sustainability"
+              value={valueCheck(data[level.dataobject].sustainability)}
+              unit="%"
+            />
+            <KPIItem
+              view="kpiHolarchy"
+              title="Zelfvoorzienendheid"
+              label="selfSufficiency"
+              value={valueCheck(data[level.dataobject].selfSufficiency)}
+              unit="%"></KPIItem>
+          </div>
         </div>
       ))}
-    </div>
+    </React.Fragment>
   );
 }

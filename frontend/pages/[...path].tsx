@@ -24,6 +24,28 @@ export async function getServerSideProps({ req, params, res }) {
   }
   queryParams = querystring.parse(queryParams);
 
+  const nonWagtailPages = {
+    inloggen: "LoginPage",
+    registratie: "RegistrationPage",
+    profiel: "UserProfilePage",
+    "wachtwoord-aanmaken": "NewPasswordPage",
+    "wachtwoord-aanvragen": "ResetPasswordPage",
+  };
+
+  if (nonWagtailPages[path]) {
+    const {
+      json: { componentProps },
+    } = await getPage("/", queryParams, {
+      headers: {
+        cookie: req.headers.cookie,
+        host,
+      },
+    });
+
+    const componentName = nonWagtailPages[path];
+    return { props: { componentName, componentProps } };
+  }
+
   // Try to serve page
   try {
     const {
