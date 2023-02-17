@@ -23,7 +23,12 @@ class Actor(PolymorphicModel):
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.type.lower()[:3]}{self.id}"
+        try:
+            string = f"{self.type.lower()[:3]}{self.id} ({self.category})"
+        except:
+            string = f"actor{self.id} ({self.category})"
+
+        return string
 
 
 class NonFirmActor(Actor):
