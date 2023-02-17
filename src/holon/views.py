@@ -1,3 +1,4 @@
+from holon.models import rule_mapping
 from rest_framework.response import Response
 from rest_framework import generics, status
 
@@ -38,6 +39,8 @@ class HolonService(generics.CreateAPIView):
             )
             pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
             pepe.preprocessor.apply_interactive_to_payload()
+
+            rule_mapping.get_scenario_and_apply_rules(scenario_id, data["interactive_elements"] )
 
             holon_results = scenario.runScenario()
 

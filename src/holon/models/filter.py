@@ -9,7 +9,9 @@ class Filter(PolymorphicModel):
     """Information on how to find the objects a scenario rule should be applied to"""
 
     rule = models.ForeignKey("holon.ScenarioRule", on_delete=models.CASCADE, related_name="filters")
-
+    
+    def getQ(self) -> Q:
+        pass
 
 class AttributeFilterComparator(models.TextChoices):
     """Types of supported comparators"""
@@ -27,9 +29,7 @@ class AttributeFilter(Filter):
     comparator = models.CharField(max_length=255, choices=AttributeFilterComparator.choices)
     value = models.IntegerField()
 
-    filter(Q(naam=5))
-
-    def getQ(self):
+    def getQ(self) -> Q:
         if self.comparator == AttributeFilterComparator.EQUAL:
             return Q(**{self.model_attribute: self.value})
         if self.comparator == AttributeFilterComparator.LESS_THAN:

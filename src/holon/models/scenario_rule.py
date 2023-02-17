@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from holon.models.interactive_element import InteractiveElement
+from holon.models.scenario import Scenario
 
 
 class ModelType(models.TextChoices):
@@ -49,3 +50,7 @@ class ScenarioRule(models.Model):
 
         model_type_class = apps.get_model("holon", self.model_type)
         return [subclass.__name__ for subclass in all_subclasses(model_type_class)]
+
+
+    def map_inputs(scenario: Scenario) -> Scenario:
+        """  """
