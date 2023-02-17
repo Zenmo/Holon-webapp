@@ -47,7 +47,7 @@ class GridConnection(PolymorphicModel):
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"b{self.id}"
+        return f"b{self.id} {self.category}"
 
 
 class InsulationLabel(models.TextChoices):
