@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactPlayer from "react-player/lazy";
+import { StaticImage } from "../ImageSelector/types";
 
 interface Props {
   media: MediaDetails;
@@ -15,16 +16,7 @@ type MediaDetails = {
       }
     | {
         type: "image";
-        value: {
-          id: number;
-          title: string;
-          img: {
-            src: string;
-            width: number;
-            height: number;
-            alt: string;
-          };
-        };
+        value: StaticImage;
       }
   ];
 };

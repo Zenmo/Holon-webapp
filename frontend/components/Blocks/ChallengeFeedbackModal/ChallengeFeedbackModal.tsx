@@ -2,64 +2,14 @@ import React, { Fragment, useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "@/components/Button/Button";
-
-export type StaticImage = {
-  id?: number;
-  title?: string;
-  img: {
-    alt: string;
-    height: number;
-    width: number;
-    src: string;
-  };
-};
+import { FeedbackModal } from "./types";
+import { KPIData } from "../../KPIDashboard/types";
 
 type KPIDashboardProps = {
-  data: Data;
+  data: KPIData;
   loading: boolean;
   dashboardId: string;
-  feedbackmodals: [
-    {
-      id: string;
-      type: string;
-      value: {
-        modaltitle: string;
-        modaltext: string;
-        modaltheme: string;
-        imageSelector: {
-          id: string;
-          title: string;
-          img: StaticImage;
-        };
-        conditions: [
-          {
-            id: string;
-            type: string;
-            value: {
-              parameter: string;
-              operator: string;
-              value: string;
-            };
-          }
-        ];
-      };
-    }
-  ];
-};
-
-type Data = {
-  local: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-  national: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
+  feedbackmodals: [FeedbackModal];
 };
 
 export default function ChallengeFeedbackModal({

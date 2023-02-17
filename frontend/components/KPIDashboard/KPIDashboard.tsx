@@ -1,26 +1,12 @@
 import { useState } from "react";
 import KPIItem from "./KPIItem";
 import KPIRadioButtons from "./KPIRadiobuttons";
+import { KPIData } from "./types";
 
 type KPIDashboardProps = {
-  data: Data;
+  data: KPIData;
   loading: boolean;
   dashboardId: string;
-};
-
-type Data = {
-  local: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-  national: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
 };
 
 export default function KPIDashboard({ data, loading, dashboardId }: KPIDashboardProps) {

@@ -6,17 +6,17 @@ import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { FeedbackModal } from "../ChallengeFeedbackModal/types";
+import { StaticImage } from "@/components/ImageSelector/types";
+import { Background, GridLayout } from "../types";
 
 type Props = {
   data: {
     type: string;
     value: {
-      background: {
-        color: string;
-        size: string;
-      };
+      background: Background;
       content: Content[];
-      gridLayout: { grid: string };
+      gridLayout: GridLayout;
     };
     id: string;
   };
@@ -42,17 +42,6 @@ export type InteractiveContent = {
   value: InteractiveInput;
 };
 
-export type StaticImage = {
-  id?: number;
-  title?: string;
-  img: {
-    alt: string;
-    height: number;
-    width: number;
-    src: string;
-  };
-};
-
 export type InteractiveInput = {
   id: number;
   name?: string;
@@ -74,38 +63,7 @@ export type InteractiveInputOptions = {
   sliderValueMin?: number;
 };
 
-export type Feedbackmodals = [
-  {
-    id: string;
-    type: string;
-    value: {
-      modaltitle: string;
-      modaltext: string;
-      modaltheme: string;
-      imageSelector: {
-        id: number;
-        title: string;
-        img: {
-          src: string;
-          width: number;
-          height: number;
-          alt: string;
-        };
-      };
-    };
-    conditions: [
-      {
-        id: string;
-        type: string;
-        value: {
-          parameter: string;
-          oparator: string;
-          value: string;
-        };
-      }
-    ];
-  }
-];
+export type Feedbackmodals = [FeedbackModal];
 const initialData = {
   local: {
     netload: null,
