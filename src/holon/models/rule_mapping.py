@@ -15,13 +15,28 @@ def get_scenario_and_apply_rules(scenario_id: int, interactive_element_inputs: l
     scenario = get_prefetched_scenario(scenario_id)
 
     for interactive_element_input in interactive_element_inputs:
-        interactive_element = InteractiveElement.objects.get(id=interactive_element_input.interactive_element_id)
+        interactive_element = interactive_element_input.interactive_element
 
         for rule in interactive_element.rules.all():
             queryset = get_queryset_for_rule(rule, scenario)
             queryset = apply_rule_filters_to_queryset(queryset, rule)
             apply_rule_factors(rule, queryset, interactive_element_input.value)
 
+    return scenario
+
+
+def get_prefetched_scenario(scenario_id: int) -> Scenario:
+    """ Load scenario object from database and return with prefetched fields """
+
+    scenario = (
+        Scenario.objects.prefetch_related("actor_set")
+        .prefetch_related("gridconnection_set")
+        .prefetch_related("gridconnection_set__energyasset_set")
+        .prefetch_related("gridnode_set")
+        .prefetch_related("policy_set")
+        .get(id=scenario_id)
+    )
+    return scenario
 
 def get_queryset_for_rule(rule: ScenarioRule, scenario: Scenario) -> QuerySet:
     """ Create the queryset for a rule based on its model type and model subtype """
@@ -64,7 +79,7 @@ def apply_rule_factors(rule: ScenarioRule, queryset: QuerySet, value: dict):
 
     for factor in rule.factors:
     # TODO make more generic if different factors come into play
-    
+
         for object in queryset:
             mapped_value = (factor.max_value - factor.min_value) * (
                 float(value)
@@ -73,16 +88,3 @@ def apply_rule_factors(rule: ScenarioRule, queryset: QuerySet, value: dict):
 
             setattr(object, rule.asset_attribute, mapped_value)
 
-
-def get_prefetched_scenario(scenario_id: int) -> Scenario:
-    """ Load scenario object from database and return with prefetched fields """
-
-    scenario = (
-        Scenario.objects.prefetch_related("actor_set")
-        .prefetch_related("gridconnection_set")
-        .prefetch_related("gridconnection_set__energyasset_set")
-        .prefetch_related("gridnode_set")
-        .prefetch_related("policy_set")
-        .get(id=scenario_id)
-    )
-    return scenario
