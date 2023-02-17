@@ -9,6 +9,7 @@ from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ModelType, ScenarioRule
 from holon.serializers import InteractiveElementInput, InteractiveElementInputSerializer
 
+
 def get_scenario_and_apply_rules(scenario_id: int, interactive_element_inputs: list[InteractiveElementInput]) -> Scenario:
     """ Load a scenario, apply rules from interactive elements and return with mapped fields """
 

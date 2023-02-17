@@ -1,8 +1,9 @@
-from rest_framework import serializers
-from api.models.scenario import Scenario
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 
+from api.models.scenario import Scenario
 from holon.models.interactive_element import InteractiveElement
+
 
 class InteractiveElementInput:
     def __init__(self, interactive_element: InteractiveElement, value: str):
@@ -15,23 +16,19 @@ class InteractiveElementInputSerializer(serializers.Serializer):
         queryset=InteractiveElement.objects.all()
     )
     value = serializers.CharField(max_length=255)
-    
+
     def create(self, validated_data):
         return InteractiveElementInput(**validated_data)
 
     class Meta:
         fields = ["interactive_element"]
         depth = 1
-    
 
 
 class HolonRequestSerializer(serializers.Serializer):
     interactive_elements = InteractiveElementInputSerializer(many=True)
 
-    scenario = serializers.PrimaryKeyRelatedField(
-        Scenario.objects.all()
-    )
+    scenario = serializers.PrimaryKeyRelatedField(queryset=Scenario.objects.all())
 
     class Meta:
         fields = ["interactive_elements"]
-        
