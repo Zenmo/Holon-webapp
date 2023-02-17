@@ -4,11 +4,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import Button from "@/components/Button/Button";
 import { FeedbackModal } from "./types";
 import { KPIData } from "../../KPIDashboard/types";
+import { Content } from "../SectionBlock/types";
 
-type KPIDashboardProps = {
-  data: KPIData;
+type ChallengeFeedbackModalProps = {
+  kpis: KPIData;
   loading: boolean;
   dashboardId: string;
+  content: Content;
   feedbackmodals: [FeedbackModal];
 };
 
@@ -16,7 +18,7 @@ export default function ChallengeFeedbackModal({
   kpis,
   content,
   feedbackmodals,
-}: KPIDashboardProps) {
+}: ChallengeFeedbackModalProps) {
   const [modal, setModal] = useState<{
     isOpen: boolean;
   }>({
