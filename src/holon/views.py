@@ -40,7 +40,7 @@ class HolonService(generics.CreateAPIView):
             pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
             pepe.preprocessor.apply_interactive_to_payload()
 
-            rule_mapping.get_scenario_and_apply_rules(scenario_id, data["interactive_elements"] )
+            rule_mapping.get_scenario_and_apply_rules(serializer.scenario.id, serializer.interactive_elements )
 
             holon_results = scenario.runScenario()
 

@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from holon.models.interactive_element import InteractiveElement
 
 class InteractiveElementInput:
-    def __init__(self, interactive_element: int, value: dict, created=None):
+    def __init__(self, interactive_element: int, value: dict):
         self.interactive_element_id = interactive_element
         self.value = value
 
@@ -27,6 +27,10 @@ class InteractiveElementInputSerializer(serializers.Serializer):
 
 class HolonRequestSerializer(serializers.Serializer):
     interactive_elements = InteractiveElementInputSerializer(many=True)
+
+    scenario = serializers.PrimaryKeyRelatedField(
+        Scenario.objects.all()
+    )
 
     class Meta:
         fields = ["interactive_elements"]
