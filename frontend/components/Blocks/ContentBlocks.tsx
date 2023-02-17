@@ -26,10 +26,12 @@ type ContentBlockProps = PageProps<
 
 const ContentBlocks = ({
   content,
+  pagetype,
   feedbackmodals,
 }: {
   content: ContentBlockProps[];
   feedbackmodals?: Feedbackmodals[];
+  pagetype?: string;
 }) => {
   return (
     <React.Fragment>
@@ -58,6 +60,7 @@ const ContentBlocks = ({
               <SectionBlock
                 key={`section ${contentItem.id}`}
                 data={contentItem}
+                pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
               />
             );

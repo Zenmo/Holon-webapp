@@ -19,7 +19,7 @@ const ChallengeModePage = ({
 }) => {
   return (
     <div className={styles["ChallengeModePage"]}>
-      <ContentBlocks content={storyline} feedbackmodals={feedbackmodals} />
+      <ContentBlocks content={storyline} feedbackmodals={feedbackmodals} pagetype="Challenge" />
     </div>
   );
 };

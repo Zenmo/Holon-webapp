@@ -10,7 +10,7 @@ type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 const StorylinePage = ({ storyline }: { storyline: Storyline[] }) => {
   return (
     <div className={styles["StorylinePage"]}>
-      <ContentBlocks content={storyline} />
+      <ContentBlocks content={storyline} pagetype={"Storyline"} />
     </div>
   );
 };
