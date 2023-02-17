@@ -66,6 +66,7 @@ function InteractiveRadios({
   titleWikiPage,
   linkWikiPage,
   options,
+  selectedLevel,
   setValue,
 }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
@@ -93,13 +94,15 @@ function InteractiveRadios({
         <div key={index} className="flex flex-row mb-2 gap-3 items-center">
           <label
             key={index}
-            htmlFor={contentId + inputItem.id + "input"}
+            htmlFor={
+              contentId + inputItem.id + (selectedLevel ? "holarchy" : "storyline") + "input"
+            }
             className="flex flex-row mb-2 gap-4 items-center">
             <input
               defaultChecked={inputItem.default ? true : false}
               type={inputType}
               name={name + contentId}
-              id={contentId + inputItem.id + "input"}
+              id={contentId + inputItem.id + (selectedLevel ? "holarchy" : "storyline") + "input"}
               data-testid={name + inputItem.id}
               onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
               // checked={}
@@ -147,7 +150,9 @@ function InteractiveInputs({
     ? options.filter(option => option.level == selectedLevel)
     : options;
 
-  return type === "continuous" && selectedLevel == level ? (
+  //if there is a selectedlevel, it should match, the slider,
+  //for interactive radios and interactive buttons, the sepeartion is done in InteractiveRadios and  InteractiveButtons
+  return type === "continuous" && (!selectedLevel || selectedLevel == level) ? (
     <ImageSlider
       inputId={contentId}
       datatestid={name}
@@ -163,6 +168,7 @@ function InteractiveInputs({
       linkWikiPage={linkWikiPage}
       unit="%"
       tooltip={true}
+      selectedLevel={selectedLevel}
       locked={false}></ImageSlider>
   ) : display === "checkbox_radio" && visibleOptions.length ? (
     <InteractiveRadios
@@ -173,6 +179,7 @@ function InteractiveInputs({
       moreInformation={moreInformation}
       titleWikiPage={titleWikiPage}
       linkWikiPage={linkWikiPage}
+      selectedLevel={selectedLevel}
       options={visibleOptions}
     />
   ) : display === "button" && visibleOptions.length ? (

@@ -18,6 +18,7 @@ interface Props {
   linkWikiPage?: string;
   tooltip?: boolean;
   unit?: string;
+  selectedLevel?: string;
 }
 
 export default function ImageSlider({
@@ -36,12 +37,15 @@ export default function ImageSlider({
   linkWikiPage,
   tooltip,
   unit,
+  selectedLevel,
 }: Props) {
   const [sliderValue, setSliderValue] = useState(defaultValue);
   return (
     <div className="my-4 flex flex-col">
       <div className="flex flex-row mb-2 gap-3 items-center">
-        <label htmlFor={inputId} className="flex text-base font-bold">
+        <label
+          htmlFor={inputId + (selectedLevel ? "holarchy" : "storyline")}
+          className="flex text-base font-bold">
           {label}
         </label>
 
@@ -73,6 +77,7 @@ export default function ImageSlider({
             min={min}
             max={max}
             type={type}
+            id={inputId + (selectedLevel ? "holarchy" : "storyline")}
           />
           {tooltip && (
             <div className={styles.slidervalue}>

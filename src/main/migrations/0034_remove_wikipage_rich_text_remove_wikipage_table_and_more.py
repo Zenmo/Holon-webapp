@@ -36,7 +36,7 @@ def convert_to_richtext(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("main", "0033_alter_staticpage_content_alter_wikipage_table"),
+        ("main", "0034_alter_wikipage_table"),
     ]
 
     operations = [
@@ -139,5 +139,9 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name="wikipage",
             name="rich_text",
+        ),
+        migrations.RemoveField(
+            model_name="wikipage",
+            name="table",
         ),
     ]
