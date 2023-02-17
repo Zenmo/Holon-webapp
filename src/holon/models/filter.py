@@ -12,6 +12,9 @@ class Filter(PolymorphicModel):
     """Information on how to find the objects a scenario rule should be applied to"""
 
     rule = models.ForeignKey("holon.ScenarioRule", on_delete=models.CASCADE, related_name="filters")
+    
+    class Meta:
+        abstract = True
 
     def getQ(self) -> Q:
         pass
@@ -32,6 +35,9 @@ class AttributeFilter(Filter):
     model_attribute = models.CharField(max_length=255, null=True)
     comparator = models.CharField(max_length=255, choices=AttributeFilterComparator.choices)
     value = models.JSONField()
+
+    class Meta:
+        verbose_name = "AttributeFilter"
 
     def clean(self):
         super().clean()
@@ -63,6 +69,9 @@ class RelationAttributeFilter(AttributeFilter):
 
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
+
+    class Meta:
+        verbose_name = "RelationAttributeFilter"
 
     def clean(self):
         super().clean()

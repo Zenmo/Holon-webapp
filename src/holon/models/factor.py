@@ -2,39 +2,19 @@ from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from polymorphic.models import PolymorphicModel
 
 from holon.models.scenario_rule import ScenarioRule
-
+import logging
 
 # Create your models here.
-class Factor(models.Model):
+class Factor(PolymorphicModel):
 
-    # asset = models.ForeignKey("holon.asset", on_delete=models.CASCADE, related_name="+")
     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-
-    # grid_connection = models.ForeignKey(
-    #     "holon.gridconnection", on_delete=models.CASCADE, related_name="+"
-    # )
-
-    min_value = models.IntegerField()
-    max_value = models.IntegerField()
-
     rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE, related_name="factors")
 
-    panels = [
-        FieldPanel("asset_attribute"),
-        FieldPanel("min_value"),
-        FieldPanel("max_value"),
-    ]
-
     class Meta:
-        verbose_name = "Factors"
-
-    # def __str__(self):
-    #     if self.asset is not None and self.grid_connection is not None:
-    #         return self.asset.type + "-" + self.grid_connection.type
-    #     else:
-    #         return self
+        abstract = True
 
     def clean(self):
         super().clean()
@@ -52,3 +32,40 @@ class Factor(models.Model):
         model = apps.get_model("holon", model_type)
 
         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
+
+    def map_factor_value(self, value: str):
+        """  """
+        pass 
+
+
+class DiscreteFactor(Factor):
+    value = models.IntegerField()
+
+    class Meta:
+        verbose_name = "DiscreteFactor"
+
+    def map_factor_value(self, value: str):
+        """ Return the factors own value """
+        return self.value
+        
+
+class ContinuousFactor(Factor):
+
+    min_value = models.IntegerField()
+    max_value = models.IntegerField()
+
+    class Meta:
+        verbose_name = "ContinuousFactor"
+
+    def map_factor_value(self, value: str):
+        """ Rescale a value to the min and max values of this factor """
+
+        try: 
+            value_flt = float(value)
+        except:
+            logging.warning(f"Value '{value}' could not be parsed to a float, setting to default value to 0.0")
+            value_flt = 0.0
+
+        return (self.max_value - self.min_value) * (value_flt / 100 ) + self.min_value
+
+    

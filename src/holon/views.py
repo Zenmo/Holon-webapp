@@ -23,51 +23,55 @@ class HolonService(generics.CreateAPIView):
         serializer = HolonRequestSerializer(data=request.data)
 
         if serializer.is_valid():
-            pepe = Pepe()
 
-            data = serializer.validated_data
+            scenario = rule_mapping.get_scenario_and_apply_rules(serializer.scenario, serializer.interactive_elements )
 
-            # TODO: this is hardcoded; should be a result from the DB::scenario linked to the storyline
-            # NOTE: other things (like balancer in ETM_service) are now also hardcoded to work with
-            # this specific scenario, please notify @noracto when you change this. Scenario = KEV
-            data["scenario"] = {"etm_scenario_id": 2175158, "model_name": "technical_debt"}
-            pepe.preprocessor = data
 
-            # holon_results = {}
-            scenario: AnyLogicExperiment = prepare_scenario_as_experiment(
-                data.get("scenario")["model_name"]
-            )
-            pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
-            pepe.preprocessor.apply_interactive_to_payload()
+            # pepe = Pepe()
 
-            rule_mapping.get_scenario_and_apply_rules(serializer.scenario.id, serializer.interactive_elements )
+            # data = serializer.validated_data
 
-            holon_results = scenario.runScenario()
+            # # TODO: this is hardcoded; should be a result from the DB::scenario linked to the storyline
+            # # NOTE: other things (like balancer in ETM_service) are now also hardcoded to work with
+            # # this specific scenario, please notify @noracto when you change this. Scenario = KEV
+            # data["scenario"] = {"etm_scenario_id": 2175158, "model_name": "technical_debt"}
+            # pepe.preprocessor = data
 
-            temp_holon_results = {
-                key: value for key, value in holon_results.items() if key in RESULTS
-            }
-            temp_holon_results.update(
-                {
-                    key: value
-                    for key, value in holon_results["APIOutputTotalCostData"][0].items()
-                    if key in RESULTS
-                }
-            )
+            # # holon_results = {}
+            # scenario: AnyLogicExperiment = prepare_scenario_as_experiment(
+            #     data.get("scenario")["model_name"]
+            # )
+            # pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
+            # pepe.preprocessor.apply_interactive_to_payload()
 
-            holon_results = temp_holon_results
+            # 
 
-            pepe.postprocessor = (holon_results, pepe.preprocessor.holon_payload)
+            # holon_results = scenario.runScenario()
 
-            pepe.upscale_to_etm()
-            pepe.calculate_costs()
+            # temp_holon_results = {
+            #     key: value for key, value in holon_results.items() if key in RESULTS
+            # }
+            # temp_holon_results.update(
+            #     {
+            #         key: value
+            #         for key, value in holon_results["APIOutputTotalCostData"][0].items()
+            #         if key in RESULTS
+            #     }
+            # )
 
-            results = pepe.postprocessor.results()
+            # holon_results = temp_holon_results
 
-            print(results)
-            return Response(
-                results,
-                status=status.HTTP_200_OK,
-            )
+            # pepe.postprocessor = (holon_results, pepe.preprocessor.holon_payload)
+
+            # pepe.upscale_to_etm()
+            # pepe.calculate_costs()
+
+            # results = pepe.postprocessor.results()
+
+            # print(results)
+            # return Response(
+            #     results,
+            #     status=status.HTTP_200_OK,
+            # )
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

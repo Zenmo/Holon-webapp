@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from holon.models.asset import EnergyAsset
+from holon.models.factor import Factor
 from holon.models.filter import Filter
 from holon.models.interactive_element import InteractiveElement
 from holon.models.scenario import Scenario
@@ -75,17 +76,12 @@ def apply_rule_filters_to_queryset(queryset: QuerySet, rule: ScenarioRule) -> Qu
 
     return queryset.filter(queryset_filter)
 
-def apply_rule_factors(rule: ScenarioRule, queryset: QuerySet, value: dict):
+def apply_rule_factors(rule: ScenarioRule, queryset: QuerySet, value: str):
     """ Apply factors to filtered objects """
 
+    factor: Factor
     for factor in rule.factors:
-    # TODO make more generic if different factors come into play
-
         for object in queryset:
-            mapped_value = (factor.max_value - factor.min_value) * (
-                float(value)
-                / 100  # TODO: cast here to float, but bro should that not just be a float?
-            ) + factor.min_value
-
-            setattr(object, rule.asset_attribute, mapped_value)
+            mapped_value = factor.map_factor_value(value)
+            setattr(object, factor.asset_attribute, mapped_value)
 
