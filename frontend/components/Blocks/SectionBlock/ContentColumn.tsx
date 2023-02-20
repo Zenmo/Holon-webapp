@@ -23,7 +23,7 @@ export default function ContentColumn({
     dataContent.map((content: Content) => {
       switch (content.type) {
         case "interactive_input":
-          content.currentValue = getDefaultValue(content);
+          // content.currentValue = getDefaultValue(content);
           contentArr.push(content);
           break;
         case "static_image":
@@ -36,7 +36,6 @@ export default function ContentColumn({
     });
 
     handleContentChange([...contentArr]);
-    console.log("useEffect in Content column");
   }, [dataContent]);
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
@@ -121,14 +120,17 @@ export default function ContentColumn({
       {content.map(ct => {
         if (ct.type === "interactive_input" && ct.value.visible) {
           return (
-            <InteractiveInputs
-              setValue={setInteractiveInputValue}
-              defaultValue={getDefaultValue(ct)}
-              key={ct.id}
-              contentId={ct.id}
-              selectedLevel={selectedLevel}
-              {...ct.value}
-            />
+            <>
+              <InteractiveInputs
+                setValue={setInteractiveInputValue}
+                defaultValue={getDefaultValue(ct)}
+                currentValue={ct.currentValue}
+                key={ct.id}
+                contentId={ct.id}
+                selectedLevel={selectedLevel}
+                {...ct.value}
+              />
+            </>
           );
         } else if (ct.type == "text") {
           return <RawHtml key={`text_${ct.id}`} html={ct.value} />;

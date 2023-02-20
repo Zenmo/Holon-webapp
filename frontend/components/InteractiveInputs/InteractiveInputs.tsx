@@ -11,6 +11,7 @@ export type Props = {
   options: InteractiveInputOptions[];
   display?: string;
   defaultValue?: string | number;
+  currentValue?: string | number;
   level?: string;
   selectedLevel?: string;
   setValue: (id: string, value: number | string | boolean, optionId?: number) => void;
@@ -68,6 +69,7 @@ function InteractiveRadios({
   options,
   selectedLevel,
   setValue,
+  defaultValue,
 }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
   const cssClass =
@@ -99,7 +101,7 @@ function InteractiveRadios({
             }
             className="flex flex-row mb-2 gap-4 items-center">
             <input
-              defaultChecked={inputItem.default ? true : false}
+              defaultChecked={defaultValue == inputItem.option}
               type={inputType}
               name={name + contentId}
               id={contentId + inputItem.id + (selectedLevel ? "holarchy" : "storyline") + "input"}
@@ -142,6 +144,7 @@ function InteractiveInputs({
   options,
   display,
   defaultValue,
+  currentValue,
   selectedLevel,
   level,
   setValue,
@@ -156,7 +159,7 @@ function InteractiveInputs({
     <ImageSlider
       inputId={contentId}
       datatestid={name}
-      defaultValue={Number(defaultValue)}
+      defaultValue={currentValue ? currentValue : Number(defaultValue)}
       setValue={setValue}
       min={options[0].sliderValueMin}
       max={options[0].sliderValueMax}
@@ -173,6 +176,7 @@ function InteractiveInputs({
   ) : display === "checkbox_radio" && visibleOptions.length ? (
     <InteractiveRadios
       setValue={setValue}
+      defaultValue={currentValue ? currentValue : Number(defaultValue)}
       contentId={contentId}
       name={name}
       type={type}

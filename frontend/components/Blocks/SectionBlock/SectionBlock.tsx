@@ -142,12 +142,14 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
             ) : (
               ""
             )}
-            <ContentColumn
-              dataContent={data?.value.content}
-              content={content}
-              handleContentChange={setContent}
-              handleMedia={setMedia}
-            />
+            {!holarchyModal && (
+              <ContentColumn
+                dataContent={data?.value.content}
+                content={content}
+                handleContentChange={setContent}
+                handleMedia={setMedia}
+              />
+            )}
           </div>
 
           <div className={`flex flex-col ${gridValue.right}`}>
@@ -162,13 +164,31 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
             </div>
           </div>
         </div>
-
         {holarchyModal && (
-          <HolarchyTab
-            dataContent={data?.value.content}
-            content={content}
-            handleContentChange={setContent}
-            handleMedia={setMedia}></HolarchyTab>
+          <div className={!holarchyModal && "hidden"}>
+            <HolarchyTab>
+              {levels.map((level, index) => {
+                const cssClasses = [
+                  "row-start-1 bg-holon-blue-100 ",
+                  "row-start-2 bg-holon-blue-200",
+                  "row-start-3 bg-holon-blue-300",
+                ];
+                return (
+                  <div
+                    key={index}
+                    className={`${cssClasses[index]} p-4  overflow-auto row-span-1 col-start-1 col-span-1 md:col-start-1 md:col-span-1  md:row-span-1 border-b-2 border-dashed border-holon-blue-900 `}>
+                    <ContentColumn
+                      dataContent={data?.value.content}
+                      content={content}
+                      handleContentChange={setContent}
+                      handleMedia={setMedia}
+                      selectedLevel={level}
+                    />
+                  </div>
+                );
+              })}
+            </HolarchyTab>
+          </div>
         )}
       </div>
     </div>
