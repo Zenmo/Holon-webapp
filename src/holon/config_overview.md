@@ -1,17 +1,15 @@
-### Cloudclient
+## Cloudclient
 
 1. Datamodel (`mvp.py` is now implemented as fixture in the datamodel)
 2. Perhaps a coupling to the cost module `ETM_MAPPING`? To enforce the correct data on response return from AL
+3. Below a `yaml` with the options that we might need. Although a part is for `# local` development. 
 
-
-#### Config
 
 ```yaml
 anylogic_cloud:
   api_key: 7a3563c1-ea1c-41d6-8009-b7abfd93f7ba
   url: "https://engine.holontool.nl"
-
-technical_debt:
+options:
   path: ".." # local
   query_api: True
   model_name: Base_5dec
@@ -23,31 +21,30 @@ technical_debt:
   parallelize: true 
   log_exceptions: false
   use_datamodel: true # local
-  inputs: # local
-    - anylogic_key: P actors config JSON 
-      file: actors
-    - anylogic_key: P grid connection config JSON
-      file: gridconnections
-    - anylogic_key: P grid node config JSON
-      file: gridnodes
-    - anylogic_key: P policies config JSON
-      file: policies
-
-  outcomes: 
-    - anylogic_key: O output runSettings
-      human_key: APIOutputRunData
-      writeExcel: False # local
-      writeJSON: False # local
-      print: False # local
-    - anylogic_key: O total cost data
-      human_key: APIOutputTotalCostData
-      writeExcel: False # local
-      writeJSON: False # local
-      print: False # local
+inputs: # local
+ - anylogic_key: P actors config JSON 
+   file: actors
+ - anylogic_key: P grid connection config JSON
+   file: gridconnections
+ - anylogic_key: P grid node config JSON
+   file: gridnodes
+ - anylogic_key: P policies config JSON
+   file: policies
+outcomes: 
+ - anylogic_key: O output runSettings
+   human_key: APIOutputRunData
+   writeExcel: False # local
+   writeJSON: False # local
+   print: False # local
+ - anylogic_key: O total cost data
+   human_key: APIOutputTotalCostData
+   writeExcel: False # local
+   writeJSON: False # local
+   print: False # local
 ```
 
 
-### ETM Upscaling
+## ETM Upscaling
 
 ```yaml
 api_url: "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
@@ -56,7 +53,7 @@ scenario:
 ```
 
 
-#### Example data format
+### Example data format
 ```yml
 installed_energy_grid_battery:
   value:
@@ -74,7 +71,7 @@ installed_energy_grid_battery:
 
 > Is `static` a supported type? Or only at the `convert_with_value`
 
-#### Description of data format
+### Description of data format
 ```
 <ITEM_NAME>:
   value:                The main value on which conversions will be done
@@ -95,10 +92,12 @@ installed_energy_grid_battery:
                         This value has the same properties as the main 'value' field.
 ```
 
-### Cost actor overview
+## Cost actor overview
 
 
-### ETM Cost module
+## ETM Cost module
+1. Depends on upscaling module for querying ETM values
+2. Uses an explicit mapping (`ETM_MAPPING`), perhaps we should control that using the datamodel? **@Nora** / **@Mathijs**
 
 ```yaml
 api_url: "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
