@@ -116,7 +116,9 @@ export default function ContentColumn({
   }
 
   return (
-    <div>
+    <div
+      data-empty="Er zijn er geen interactieve elementen in te stellen op dit niveau."
+      className="before:empty:content-[attr(data-empty)]">
       {content.map(ct => {
         if (ct.type === "interactive_input" && ct.value.visible) {
           return (

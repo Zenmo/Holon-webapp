@@ -10,7 +10,7 @@ export type Props = {
   linkWikiPage?: string;
   options: InteractiveInputOptions[];
   display?: string;
-  defaultValue?: string | number;
+  defaultValue?: string | number | [];
   currentValue?: string | number;
   level?: string;
   selectedLevel?: string;
@@ -77,6 +77,8 @@ function InteractiveRadios({
       ? "rounded-full after:checked:content-['●'] after:mt-[-2px]  flex-[0_0_20px]"
       : "rounded-none after:checked:content-['✔'] ";
 
+  const defaultCheckedValue = type === "single_select" ? [defaultValue] : defaultValue;
+
   return (
     <div className="mb-4 font-bold text-base">
       <div className="flex flex-row mb-2 gap-3 items-center">
@@ -91,7 +93,6 @@ function InteractiveRadios({
           ""
         )}
       </div>
-
       {options.map((inputItem, index) => (
         <div key={index} className="flex flex-row mb-2 gap-3 items-center">
           <label
@@ -101,7 +102,7 @@ function InteractiveRadios({
             }
             className="flex flex-row mb-2 gap-4 items-center">
             <input
-              defaultChecked={defaultValue == inputItem.option}
+              defaultChecked={defaultCheckedValue.includes(inputItem.option)}
               type={inputType}
               name={name + contentId}
               id={contentId + inputItem.id + (selectedLevel ? "holarchy" : "storyline") + "input"}
@@ -176,7 +177,7 @@ function InteractiveInputs({
   ) : display === "checkbox_radio" && visibleOptions.length ? (
     <InteractiveRadios
       setValue={setValue}
-      defaultValue={currentValue ? currentValue : Number(defaultValue)}
+      defaultValue={currentValue ? currentValue : defaultValue}
       contentId={contentId}
       name={name}
       type={type}
