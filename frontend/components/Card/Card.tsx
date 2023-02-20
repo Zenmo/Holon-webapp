@@ -12,10 +12,10 @@ const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
       <StretchedLink
         {...linkProps}
         content={children}
-        className={`block font-bold line-clamp-2 break-all`}></StretchedLink>
+        className={`block font-bold line-clamp-2`}></StretchedLink>
     );
   }
-  return <strong className="block line-clamp-2 break-all">{children}</strong>;
+  return <strong className="block line-clamp-2">{children}</strong>;
 };
 
 export default function Card({ cardItem, cardType }: CardProps) {
@@ -44,14 +44,14 @@ export default function Card({ cardItem, cardType }: CardProps) {
         card: "flex-row min-w-96 hover:drop-shadow-md h-16 md:h-24",
         imgSpan: "w-1/3",
         img: "rounded-l-lg group-hover:brightness-110",
-        text: "flex-row justify-between items-center w-2/3 ml-12 text-xl md:text-2xl",
+        text: "flex-row justify-between items-center w-2/3 ml-6 md:ml-12 text-xl md:text-2xl m-2 md:m-4",
       });
     } else {
       return (cardStyling = {
         card: "flex-col  min-h-96  mb-4 h-[360px] xl:h-[400px] overflow-hidden",
         imgSpan: "h-2/3",
         img: "rounded-t-lg duration-300 ease-in group-hover:brightness-100 group-hover:scale-110",
-        text: "flex-col h-1/3",
+        text: "flex-col h-1/3 m-4",
       });
     }
   }
@@ -59,7 +59,10 @@ export default function Card({ cardItem, cardType }: CardProps) {
   cardStyle(cardType);
 
   function createLink(cardDetails: CardItem) {
-    if (cardDetails.slug) {
+    if (cardDetails.url) {
+      link = cardDetails.url;
+      externLinkProps = false;
+    } else if (cardDetails.slug) {
       link = router.asPath + cardDetails.slug;
       externLinkProps = false;
     } else if (cardDetails.itemLink?.length) {
@@ -101,9 +104,9 @@ export default function Card({ cardItem, cardType }: CardProps) {
           )}
         </span>
 
-        <span className={`flex gap-2 overflow-hidden m-4 ${cardStyling.text}`}>
+        <span className={`flex gap-2 overflow-hidden ${cardStyling.text}`}>
           <CardTitle
-            condition={cardItem.slug || cardItem.itemLink?.length > 0}
+            condition={cardItem.url || cardItem.slug || cardItem.itemLink?.length > 0}
             href={createLink(cardItem)}
             {...externLinkProps}>
             {cardItem.title}

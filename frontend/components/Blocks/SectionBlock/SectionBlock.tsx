@@ -1,7 +1,7 @@
-import ImageSlider from "@/components/InteractiveImage/ImageSlider";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import RawHtml from "@/components/RawHtml/RawHtml";
+import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { debounce } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { getGrid } from "services/grid";
@@ -30,11 +30,6 @@ export type Content =
     }
   | {
       id: string;
-      type: "slider";
-      value: Slider;
-    }
-  | {
-      id: string;
       type: "static_image";
       value: StaticImage;
     }
@@ -45,16 +40,6 @@ export type InteractiveContent = {
   type: "interactive_input";
   currentValue?: number | string | string[] | number[] | undefined;
   value: InteractiveInput;
-};
-
-export type Slider = {
-  id: number;
-  name?: string;
-  currentValue?: number;
-  sliderValueDefault?: number;
-  sliderValueMax?: number;
-  sliderValueMin?: number;
-  sliderLocked?: boolean;
 };
 
 export type StaticImage = {
@@ -78,6 +63,7 @@ export type InteractiveInput = {
   display: string;
   visible?: boolean;
 };
+
 export type InteractiveInputOptions = {
   id: number;
   option?: string;
@@ -88,6 +74,38 @@ export type InteractiveInputOptions = {
   sliderValueMin?: number;
 };
 
+export type Feedbackmodals = [
+  {
+    id: string;
+    type: string;
+    value: {
+      modaltitle: string;
+      modaltext: string;
+      modaltheme: string;
+      imageSelector: {
+        id: number;
+        title: string;
+        img: {
+          src: string;
+          width: number;
+          height: number;
+          alt: string;
+        };
+      };
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          oparator: string;
+          value: string;
+        };
+      }
+    ];
+  }
+];
 const initialData = {
   local: {
     netload: null,
@@ -102,7 +120,13 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data }: Props) {
+export default function SectionBlock({
+  data,
+  feedbackmodals,
+}: {
+  data: Props;
+  feedbackmodals: Feedbackmodals[];
+}) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
   const [media, setMedia] = useState<StaticImage>({});
@@ -248,6 +272,9 @@ export default function SectionBlock({ data }: Props) {
 
   return (
     <div className={`${backgroundFullcolor} `}>
+      {feedbackmodals && (
+        <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
+      )}
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row`}>
           <div
@@ -256,22 +283,7 @@ export default function SectionBlock({ data }: Props) {
               <span className={`extra_bg ${backgroundLeftColor}`}></span>
             )}
             {content.map(ct => {
-              if (ct.type === "slider") {
-                return (
-                  <ImageSlider
-                    key={`slider${ct.id}`}
-                    inputId={ct.id}
-                    datatestid={`ct.value?.name${_index}`}
-                    value={ct.value.currentValue}
-                    setValue={setInteractiveInputValue}
-                    min={ct.value.sliderValueMin}
-                    max={ct.value.sliderValueMax}
-                    step={1}
-                    label={ct.value.name}
-                    type="range"
-                    locked={ct.value.sliderLocked}></ImageSlider>
-                );
-              } else if (ct.type === "interactive_input" && ct.value.visible) {
+              if (ct.type === "interactive_input" && ct.value.visible) {
                 return (
                   <InteractiveInputs
                     setValue={setInteractiveInputValue}
@@ -292,10 +304,11 @@ export default function SectionBlock({ data }: Props) {
             <div className="lg:sticky top-0">
               <div className="py-12 px-10 lg:px-16 lg:pt-24">
                 {Object.keys(media).length > 0 && (
+                  /* eslint-disable @next/next/no-img-element */
                   <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
                 )}
               </div>
-              <KPIDashboard data={kpis} loading={loading}></KPIDashboard>
+              <KPIDashboard data={kpis} loading={loading} dashboardId={data.id}></KPIDashboard>
             </div>
           </div>
         </div>

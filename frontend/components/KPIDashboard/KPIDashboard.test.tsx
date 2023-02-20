@@ -5,7 +5,7 @@ import KPIDashboard from "./KPIDashboard";
 describe("<KPIDashboard", () => {
   describe("renders a KPIDashboard", () => {
     beforeEach(() => {
-      render(<KPIDashboard data={exampleData} loading={false}></KPIDashboard>);
+      render(<KPIDashboard data={exampleData.one} loading={false} dashboardId="1"></KPIDashboard>);
     });
 
     it("renders a KPIDashboard", () => {

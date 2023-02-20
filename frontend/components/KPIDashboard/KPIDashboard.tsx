@@ -5,6 +5,7 @@ import KPIRadioButtons from "./KPIRadiobuttons";
 type KPIDashboardProps = {
   data: Data;
   loading: boolean;
+  dashboardId: string;
 };
 
 type Data = {
@@ -22,7 +23,7 @@ type Data = {
   };
 };
 
-export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
+export default function KPIDashboard({ data, loading, dashboardId }: KPIDashboardProps) {
   const [level, setLevel] = useState("local");
 
   const backgroundColor = loading ? "bg-holon-gray-300" : "bg-holon-slated-blue-900";
@@ -50,7 +51,7 @@ export default function KPIDashboard({ data, loading }: KPIDashboardProps) {
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
       <div>
-        <KPIRadioButtons updateValue={setLevel} loading={loading} />
+        <KPIRadioButtons updateValue={setLevel} loading={loading} dashboardId={dashboardId} />
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
         <KPIItem

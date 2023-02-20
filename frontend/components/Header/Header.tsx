@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "./Navbar";
 import { NavItem } from "@/api/types";
+import useUser from "@/utils/useUser";
 
 export default function Header({ navigation }: { navigation: NavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const { user, mutateUser } = useUser({});
+  const nameUser = user ? user.username : "";
+
+  useEffect(() => {
+    if (user && user.username) {
+      setLoggedIn(true);
+    }
+  }, [user]);
 
   const handleClick = () => {
     setMenuOpen(!menuOpen);
@@ -23,7 +33,7 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
             onClick={() => handleClick()}
             data-collapse-toggle="navbar-default"
             type="button"
-            className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 dark:text-white"
+            className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200  dark:hover:bg-gray-700 dark:focus:ring-gray-600 dark:text-white"
             aria-controls="navbar-default"
             aria-expanded="false">
             <span className="sr-only">Open main menu</span>
@@ -42,7 +52,12 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
           <div
             className={`${menuOpen ? "" : "hidden"} w-full md:block md:w-auto`}
             id="navbar-default">
-            <Navbar items={navigation} />
+            <Navbar
+              items={navigation}
+              loggedIn={loggedIn}
+              nameUser={nameUser}
+              mutateUser={mutateUser}
+            />
           </div>
         </div>
       </div>

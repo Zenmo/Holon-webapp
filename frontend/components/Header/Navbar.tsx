@@ -1,9 +1,41 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavItem } from "@/api/types";
+import TokenService from "@/services/token";
 
-export default function Navbar({ items }: { items: NavItem[] }) {
+export default function Navbar({
+  items,
+  loggedIn,
+  nameUser,
+  mutateUser,
+}: {
+  items: NavItem[];
+  loggedIn: boolean;
+  nameUser: string;
+  mutateUser: () => void;
+}) {
   const router = useRouter();
+
+  function handleLogOut() {
+    mutateUser(TokenService.removeAccessToken());
+    router.push("/inloggen");
+  }
+
+  const statusButton = (status: boolean) => {
+    if (status === true) {
+      return (
+        <button onClick={handleLogOut} className="buttonDark">
+          Uitloggen
+        </button>
+      );
+    } else {
+      return (
+        <Link href="/inloggen">
+          <a className="buttonDark">Inloggen</a>
+        </Link>
+      );
+    }
+  };
 
   return (
     <ul className="flex flex-col md:flex-row md:space-x-8 md:mt-0">
@@ -22,6 +54,16 @@ export default function Navbar({ items }: { items: NavItem[] }) {
           </li>
         );
       })}
+
+      {loggedIn && nameUser ? (
+        <li className="px-2 py-3 md:py-2 text-xl text-holon-blue-900 dark:text-white sm:p-0">
+          {nameUser}
+        </li>
+      ) : (
+        ""
+      )}
+
+      <li>{statusButton(loggedIn)}</li>
     </ul>
   );
 }

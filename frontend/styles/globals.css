@@ -165,3 +165,15 @@ input::-moz {
   left: 100%;
   right: auto;
 }
+
+.labelInputForm {
+  @apply block text-gray-700 text-lg font-bold mb-0.5 mt-8;
+}
+
+.inputForm {
+  @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+}
+
+.buttonDark {
+  @apply border-holon-blue-900  text-white bg-holon-blue-900 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x disabled:opacity-50;
+}

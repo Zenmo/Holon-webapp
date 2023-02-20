@@ -19,6 +19,7 @@ const customJestConfig = {
     "^@/utils/(.*)$": "<rootDir>/utils/$1",
     "^@/containers/(.*)$": "<rootDir>/containers/$1",
     "^@/pages/(.*)$": "<rootDir>/pages/$1",
+    "^@/services/(.*)$": "<rootDir>/services/$1",
   },
 };
 

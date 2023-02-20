@@ -37,6 +37,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y netcat gcc libpq-dev \
     && apt-get install -y binutils libproj-dev gdal-bin \
     && apt-get install -y vim curl gettext \
+    && apt-get install -y libmagickwand-dev \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000

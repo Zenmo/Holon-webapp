@@ -1,4 +1,4 @@
-""" Serializer for the Slider """
+""" Serializers """
 from rest_framework import serializers
 
 

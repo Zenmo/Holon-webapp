@@ -32,10 +32,8 @@ class WikiPageTest(WagtailPageTests):
         page = WikiPageFactory.create(
             title="Wikipage",
             introduction="Introduction",
-            rich_text="This is a automated test",
             parent=self.root_page,
         )
 
         data = page.get_component_data({})
         self.assertEqual(data["component_props"]["introduction"], "Introduction")
-        self.assertEqual(data["component_props"]["rich_text"], "This is a automated test")

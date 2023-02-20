@@ -9,7 +9,6 @@ from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock, Story
 
 
 class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
-
     intro = StreamField(
         [
             ("title_block", TitleBlock()),
@@ -45,6 +44,7 @@ class StorylineOverviewPage(HeadlessPreviewMixin, BasePage):
     parent_page_types = ["main.HomePage"]
     subpage_types = [
         "main.StorylinePage",  # appname.ModelName
+        "main.ChallengeModePage",  # appname.ModelName
     ]
 
     extra_panels = BasePage.extra_panels
