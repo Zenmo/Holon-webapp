@@ -1,12 +1,10 @@
 import TokenService from "@/services/token";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
-
 export default function NewPasswordRequest() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    fetch(`${API_URL}/password/reset/`, {
+    fetch("http://localhost:8000/password/reset/", {
       method: "POST",
       body: {
         email: e.target.email.value,

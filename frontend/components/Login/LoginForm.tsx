@@ -3,8 +3,6 @@ import Link from "next/link";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
-
 export default function LoginForm() {
   const [userData, setUserData] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -24,7 +22,7 @@ export default function LoginForm() {
     e.preventDefault();
 
     mutateUser(
-      await fetch(`${API_URL}/api/token/`, {
+      await fetch("http://localhost:8000/api/token/", {
         method: "POST",
         body: JSON.stringify({
           username: userData.username,
