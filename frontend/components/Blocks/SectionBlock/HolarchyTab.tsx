@@ -1,4 +1,4 @@
-export default function HolarchyTab() {
+export default function HolarchyTab({ children }: React.ReactNode) {
   return (
     <div className="w-screen h-screen bg-white">
       <div className="bg-white fixed top-[4.5rem] md:top-24 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-9.5rem)] w-screen z-10 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
@@ -33,20 +33,7 @@ export default function HolarchyTab() {
 
         {/*image */}
         <div className="relative overflow-hidden bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
-          <svg
-            viewBox="0 0 2 1"
-            preserveAspectRatio="none"
-            className="md:w-full md:h-[50px] md:absolute md:top-[-2px] md:fill-[#e8eeff]"
-            height="1"
-            width="2">
-            <path
-              vectorEffect="non-scaling-stroke"
-              d="
-            M1 1
-            L0 0
-            L2 0 Z"
-            />
-          </svg>
+          {children}
         </div>
 
         {/*Middle KPIs */}
