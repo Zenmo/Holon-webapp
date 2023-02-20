@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
-import InteractiveInputs from "@/components/InteractiveInputs/InterativeInputs";
 import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
-import RawHtml from "@/components/RawHtml/RawHtml";
 import { debounce } from "lodash";
 import { Content, InteractiveContent, StaticImage, Feedbackmodals } from "./types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
