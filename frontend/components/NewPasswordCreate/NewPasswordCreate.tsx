@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TokenService from "@/services/token";
 import PasswordInput from "../PasswordInput/PasswordInput";
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "/wt";
 
 export default function NewPasswordCreate() {
   const [input, setInput] = useState({
