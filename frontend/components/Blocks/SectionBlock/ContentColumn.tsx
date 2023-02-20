@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Content, InteractiveContent, StaticImage } from "./types";
+import { Content, InteractiveContent } from "./types";
+import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import RawHtml from "@/components/RawHtml/RawHtml";
 

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { debounce } from "lodash";
-import { Content, InteractiveContent, StaticImage, Feedbackmodals } from "./types";
+import { Content, InteractiveContent, Feedbackmodals } from "./types";
+import { StaticImage } from "@/components/ImageSelector/types";
+import { Background, GridLayout } from "../types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import ContentColumn from "./ContentColumn";
 import HolarchyTab from "./HolarchyTab";
@@ -12,12 +14,9 @@ type Props = {
   data: {
     type: string;
     value: {
-      background: {
-        color: string;
-        size: string;
-      };
+      background: Background;
       content: Content[];
-      gridLayout: { grid: string };
+      gridLayout: GridLayout;
     };
     id: string;
   };
