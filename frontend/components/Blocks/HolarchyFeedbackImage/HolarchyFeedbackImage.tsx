@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export type StaticImage = {
   id?: number;
@@ -96,16 +96,20 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
   }, [content, holarchyfeedbackimages]);
 
   return (
-    <Fragment>
-      {selectedImage && selectedImage.value && (
+    <React.Fragment>
+      {selectedImage && selectedImage.value ? (
         <img
           src={selectedImage?.value.imageSelector?.img?.src}
           alt={selectedImage?.value.imageSelector?.img?.alt}
-          className="image"
-          width="1600"
-          height="auto"
+          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2	 max-h-[300%] max-w-full object-contain"
+        />
+      ) : (
+        <img
+          src={holarchyfeedbackimages[0]?.value.imageSelector?.img?.src}
+          alt={holarchyfeedbackimages[0].value.imageSelector?.img?.alt}
+          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2	 max-h-[300%] max-w-full object-contain"
         />
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }

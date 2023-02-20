@@ -62,29 +62,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
 
   useEffect(() => {
-    const contentArr: Content[] = [];
-    setHolarchyFeedbackImages(
-      data?.value.content.filter(content => content.type == "holarchy_feedback_image")
-    );
-    data?.value.content.map((content: Content) => {
-      switch (content.type) {
-        case "interactive_input":
-          content.currentValue = getDefaultValue(content);
-          contentArr.push(content);
-          break;
-        case "static_image":
-          setMedia(content.value);
-          break;
-        default:
-          contentArr.push(content);
-          break;
-      }
-    });
-
-    setContent([...contentArr]);
-  }, [data]);
-
-  useEffect(() => {
+    setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
@@ -190,13 +168,14 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
         <div>
           {holarchyModal && (
             <HolarchyTab>
-              <p>{holarchyFeedbackImages.length}</p>
-              {holarchyFeedbackImages.length && (
-                <HolarchyFeedbackImage
-                  holarchyfeedbackimages={holarchyFeedbackImages}
-                  content={content}
-                />
-              )}
+              <div className="relative bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
+                {holarchyFeedbackImages.length > 0 && (
+                  <HolarchyFeedbackImage
+                    holarchyfeedbackimages={holarchyFeedbackImages}
+                    content={content}
+                  />
+                )}
+              </div>
             </HolarchyTab>
           )}
         </div>

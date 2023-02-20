@@ -9,13 +9,21 @@ export default function HolarchyTab({ children }: React.ReactNode) {
         </div>
 
         {/*image */}
-        <div className="row-start-4 bg-holon-blue-100 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-1 md:row-span-1">
-          <div className="row-start-4 row-span-3 md:col-start-2 md:col-span-1 md:row-start-1 md:row-span-3">
-            {/* eslint-disable @next/next/no-img-element */}
-            {/*<img src={} alt={} width="900" height="1600" />*/}
-          </div>
-
-          <p>Hier komt een image</p>
+        <div className="relative row-start-4 bg-holon-blue-100 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-1 md:row-span-1">
+          <svg
+            viewBox="0 0 2 1"
+            preserveAspectRatio="none"
+            className="md:w-full md:h-[50px] md:absolute md:top-[100%] md:fill-[#e8eeff] z-10"
+            height="1"
+            width="2">
+            <path
+              vectorEffect="non-scaling-stroke"
+              d="
+            M1 1
+            L0 0
+            L2 0 Z"
+            />
+          </svg>
         </div>
 
         {/*National KPIs */}
@@ -32,9 +40,7 @@ export default function HolarchyTab({ children }: React.ReactNode) {
         </div>
 
         {/*image */}
-        <div className="relative overflow-hidden bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
-          {children}
-        </div>
+        {children}
 
         {/*Middle KPIs */}
         <div className=" p-4 bg-holon-blue-200 row-start-8 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-2 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
