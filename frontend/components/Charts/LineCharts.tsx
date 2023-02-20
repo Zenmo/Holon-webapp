@@ -8,6 +8,8 @@ import {
   Legend,
   ReferenceLine,
   ComposedChart,
+  Label,
+  BarChart,
 } from "recharts";
 
 export default function LineCharts() {
@@ -36,7 +38,7 @@ export default function LineCharts() {
 
     return (
       <svg>
-        <line x1={x - (width - 14)} x2={x - 22} y1={y} y2={y} stroke={fill} strokeWidth={8} />
+        <line x1={x - (width - 30)} x2={x + 30} y1={y} y2={y} stroke={fill} strokeWidth={8} />
       </svg>
     );
   };
@@ -64,10 +66,19 @@ export default function LineCharts() {
   return (
     <React.Fragment>
       {data.length > 0 && (
-        <ComposedChart width={1600} height={900} data={data} stackOffset="sign">
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+        <BarChart
+          barGap={-40}
+          width={1600}
+          height={900}
+          data={data}
+          stackOffset="sign"
+          title="kosten en baten per groep">
+          <CartesianGrid strokeDasharray="2" vertical={false} />
+          <XAxis orientation="top" dataKey="name" axisLine={false} />
+          <YAxis>
+            <Label position="top" angle={-90} value="Baten" offset={-300} />
+            <Label position="bottom" angle={-90} value="Kosten" offset={-300} />
+          </YAxis>
           <Tooltip />
           <Legend />
           <ReferenceLine y={0} stroke="#000" />
@@ -75,12 +86,20 @@ export default function LineCharts() {
           {Object.keys(data[0]).map((label, _index) => {
             const found = ignoredLabels.find(ilabel => ilabel == label);
             if (!found) {
-              return <Bar key={_index} dataKey={label} fill={colors[_index]} stackId="stack" />;
+              return (
+                <Bar
+                  barSize={60}
+                  key={_index}
+                  dataKey={label}
+                  fill={colors[_index]}
+                  stackId="stack"
+                />
+              );
             }
           })}
 
-          <Bar dataKey="Netto kosten" shape={<CustomBarWithTarget />} fill="#FF1818" />
-        </ComposedChart>
+          <Bar barSize={40} dataKey="Netto kosten" shape={<CustomBarWithTarget />} fill="#FF1818" />
+        </BarChart>
       )}
     </React.Fragment>
   );
