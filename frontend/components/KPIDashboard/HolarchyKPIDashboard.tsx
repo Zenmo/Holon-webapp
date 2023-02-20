@@ -44,8 +44,8 @@ export default function HolarchyKPIDashboard({
     //   title: "Res",
     //   bgcolor: "bg-holon-blue-200",
     //   dataobject: "intermediate",
-    //   labelNode: "textLabelIntermediate"
-    //   css: "row-start-8 bg-holon-blue-200 md:row-start-2 md:col-start-3"
+    //   labelNode: "textLabelIntermediate",
+    //   css: "row-start-8 bg-holon-blue-200 md:row-start-2 md:col-start-3",
     // },
     {
       title: "Lokale KPIs",
