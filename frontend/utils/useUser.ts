@@ -3,7 +3,7 @@ import Router from "next/router";
 import useSWR from "swr";
 import TokenService from "@/services/token";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "/wt";
 
 const fetcher = url =>
   fetch(url, {

@@ -16,39 +16,9 @@ import HeaderFullImageBlock from "./HeaderFullImageBlock/HeaderFullImageBlock";
 import ParagraphBlock from "./ParagraphBlock";
 import TableBlock from "./TableBlock/TableBlock";
 import SectionBlock from "./SectionBlock/SectionBlock";
+import { FeedbackModal } from "./ChallengeFeedbackModal/types";
 
-export type Feedbackmodals = [
-  {
-    id: string;
-    type: string;
-    value: {
-      modaltitle: string;
-      modaltext: string;
-      modaltheme: string;
-      imageSelector: {
-        id: number;
-        title: string;
-        img: {
-          src: string;
-          width: number;
-          height: number;
-          alt: string;
-        };
-      };
-    };
-    conditions: [
-      {
-        id: string;
-        type: string;
-        value: {
-          parameter: string;
-          oparator: string;
-          value: string;
-        };
-      }
-    ];
-  }
-];
+export type Feedbackmodals = [FeedbackModal];
 
 type ContentBlockProps = PageProps<
   TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
@@ -60,8 +30,8 @@ const ContentBlocks = ({
   feedbackmodals,
 }: {
   content: ContentBlockProps[];
+  feedbackmodals?: Feedbackmodals[];
   pagetype?: string;
-  feedbackmodals: Feedbackmodals[];
 }) => {
   return (
     <React.Fragment>
