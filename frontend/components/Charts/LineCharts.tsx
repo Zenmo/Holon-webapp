@@ -7,9 +7,9 @@ import {
   Tooltip,
   Legend,
   ReferenceLine,
-  ComposedChart,
   Label,
   BarChart,
+  ResponsiveContainer,
 } from "recharts";
 
 export default function LineCharts() {
@@ -63,43 +63,52 @@ export default function LineCharts() {
     "#C7C28C",
   ];
 
+  const convertToPositive = tickItem => {
+    return Math.abs(tickItem);
+  };
+
+  const tooltipFormatter = tooltipItemLabel => {
+    return tooltipItemLabel + " betaalt:";
+  };
+
   return (
     <React.Fragment>
       {data.length > 0 && (
-        <BarChart
-          barGap={-40}
-          width={1600}
-          height={900}
-          data={data}
-          stackOffset="sign"
-          title="kosten en baten per groep">
-          <CartesianGrid strokeDasharray="2" vertical={false} />
-          <XAxis orientation="top" dataKey="name" axisLine={false} />
-          <YAxis>
-            <Label position="top" angle={-90} value="Baten" offset={-300} />
-            <Label position="bottom" angle={-90} value="Kosten" offset={-300} />
-          </YAxis>
-          <Tooltip />
-          <Legend />
-          <ReferenceLine y={0} stroke="#000" />
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart barGap={-40} data={data} stackOffset="sign">
+            <CartesianGrid strokeDasharray="2" vertical={false} />
+            <XAxis orientation="top" dataKey="name" axisLine={false} />
+            <YAxis tickFormatter={convertToPositive}>
+              <Label position="top" angle={-90} value="Baten →" offset={-300} />
+              <Label position="bottom" angle={-90} value="← Kosten" offset={-300} />
+            </YAxis>
+            <Tooltip labelFormatter={tooltipFormatter} formatter={convertToPositive} />
+            <Legend />
+            <ReferenceLine y={0} stroke="#000" />
 
-          {Object.keys(data[0]).map((label, _index) => {
-            const found = ignoredLabels.find(ilabel => ilabel == label);
-            if (!found) {
-              return (
-                <Bar
-                  barSize={60}
-                  key={_index}
-                  dataKey={label}
-                  fill={colors[_index]}
-                  stackId="stack"
-                />
-              );
-            }
-          })}
+            {Object.keys(data[0]).map((label, _index) => {
+              const found = ignoredLabels.find(ilabel => ilabel == label);
+              if (!found) {
+                return (
+                  <Bar
+                    barSize={60}
+                    key={_index}
+                    dataKey={label}
+                    fill={colors[_index]}
+                    stackId="stack"
+                  />
+                );
+              }
+            })}
 
-          <Bar barSize={40} dataKey="Netto kosten" shape={<CustomBarWithTarget />} fill="#FF1818" />
-        </BarChart>
+            <Bar
+              barSize={40}
+              dataKey="Netto kosten"
+              shape={<CustomBarWithTarget />}
+              fill="#FF1818"
+            />
+          </BarChart>
+        </ResponsiveContainer>
       )}
     </React.Fragment>
   );
