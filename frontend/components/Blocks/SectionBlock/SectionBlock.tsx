@@ -169,20 +169,12 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
           </div>
         </div>
 
-        <div>
-          {holarchyModal && (
-            <HolarchyTab>
-              <HolarchyKPIDashboard
-                textLabelNational={data.value.textLabelNational}
-                textLabelIntermediate={data.value.textLabelIntermediate}
-                textLabelLocal={data.value.textLabelLocal}
-                data={kpis}
-                loading={loading}></HolarchyKPIDashboard>
-            </HolarchyTab>
-          )}
-        </div>
         {holarchyModal && (
-          <HolarchyTab>
+          <HolarchyTab
+            textLabelNational={data.value.textLabelNational}
+            textLabelIntermediate={data.value.textLabelIntermediate}
+            textLabelLocal={data.value.textLabelLocal}
+            data={kpis}>
             {levels.map((level, index) => {
               const cssClasses = [
                 "row-start-1 bg-holon-blue-100 ",
