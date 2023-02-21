@@ -10,7 +10,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
 
   return (
     <div className="h-screen bg-white">
-      <div className="bg-white py-6 px-10 lg:px-16 fixed top-[4.5rem] md:top-28 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-7rem)] z-10">
+      <div className="bg-white py-6 px-10 lg:px-16 fixed top-[4.5rem] md:top-28 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-7rem)] z-20">
         <Tab.Group>
           <div className="flex flex-row justify-between">
             <Tab.List>
