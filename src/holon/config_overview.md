@@ -46,6 +46,13 @@ outcomes:
 
 ## ETM Upscaling
 
+TODO:
+1. Multiple convert with statements?
+2. Key-value pairs (upscaling factors) that are linkable (FK) at value field
+3. Differentiate between `upscaling_share` and `upscaling_factor`
+
+
+
 ```yaml
 api_url: "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
 scenario:
@@ -69,7 +76,11 @@ installed_energy_grid_battery:
 **@Nora:**
 > What does key do in this case?
 
+Not that important, is just used for passing data to the module.
+
 > Is `static` a supported type? Or only at the `convert_with_value`
+
+
 
 ### Description of data format
 ```
@@ -93,11 +104,16 @@ installed_energy_grid_battery:
 ```
 
 ## Cost actor overview
-
+???
 
 ## ETM Cost module
 1. Depends on upscaling module for querying ETM values
 2. Uses an explicit mapping (`ETM_MAPPING`), perhaps we should control that using the datamodel? **@Nora** / **@Mathijs**
+3. Depends on AL-input and AL-output (serialize AL-output)
+4. 2 stages:
+   1. What to query
+   2. How to map query to ALinput/output
+   3. What conversion to do
 
 ```yaml
 api_url: "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
