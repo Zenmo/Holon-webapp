@@ -24,7 +24,9 @@ export default function ContentColumn({
     dataContent.map((content: Content) => {
       switch (content.type) {
         case "interactive_input":
-          // content.currentValue = getDefaultValue(content);
+          content.currentValue = content.currentValue
+            ? content.currentValue
+            : getDefaultValue(content);
           contentArr.push(content);
           break;
         case "static_image":
