@@ -11,21 +11,6 @@ type KPIDashboardProps = {
   handleClickCostBen: () => void;
 };
 
-type Data = {
-  local: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-  national: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-};
-
 export default function KPIDashboard({
   data,
   loading,
