@@ -1,6 +1,15 @@
 import React from "react";
+import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { Content } from "@/components/Blocks/SectionBlock/types";
+import HolarchyFeedbackImage from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 
-export default function HolarchyTab({ children }: React.ReactNode) {
+type HolarchyTab = {
+  holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
+  content: Array<Content>;
+  children: React.ReactNode;
+};
+
+export default function HolarchyTab({ holarchyFeedbackImages, content, children }: HolarchyTab) {
   return (
     <div className="w-screen h-screen bg-white">
       <div className="bg-white fixed top-[4.5rem] md:top-24 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-9.5rem)] w-screen z-10 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
@@ -33,7 +42,14 @@ export default function HolarchyTab({ children }: React.ReactNode) {
         </div>
 
         {/*image */}
-        {children}
+        <div className="relative bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
+          {holarchyFeedbackImages.length > 0 && (
+            <HolarchyFeedbackImage
+              holarchyfeedbackimages={holarchyFeedbackImages}
+              content={content}
+            />
+          )}
+        </div>
 
         {/*Middle KPIs */}
         <div className=" p-4 bg-holon-blue-200 row-start-8 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-2 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">

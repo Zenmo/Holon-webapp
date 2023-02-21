@@ -1,44 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { StaticImage } from "@/components/ImageSelector/types";
+import { Content } from "@/components/Blocks/SectionBlock/types";
 
-export type StaticImage = {
-  id?: number;
-  title?: string;
-  img: {
-    alt: string;
-    height: number;
-    width: number;
-    src: string;
+export type HolarchyFeedbackImageProps = {
+  id: string;
+  type: string;
+  value: {
+    imageSelector: {
+      id: string;
+      title: string;
+      img: StaticImage;
+    };
+    conditions: [
+      {
+        id: string;
+        type: string;
+        value: {
+          parameter: string;
+          operator: string;
+          value: string;
+        };
+      }
+    ];
   };
 };
 
 type Props = {
-  data: Data;
-  loading: boolean;
-  dashboardId: string;
-  holarchyfeedbackimages: [
-    {
-      id: string;
-      type: string;
-      value: {
-        imageSelector: {
-          id: string;
-          title: string;
-          img: StaticImage;
-        };
-        conditions: [
-          {
-            id: string;
-            type: string;
-            value: {
-              parameter: string;
-              operator: string;
-              value: string;
-            };
-          }
-        ];
-      };
-    }
-  ];
+  content: Array<Content>;
+  holarchyfeedbackimages: Array<HolarchyFeedbackImageProps>;
 };
 
 export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages }: Props) {

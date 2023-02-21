@@ -7,7 +7,6 @@ import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import ContentColumn from "./ContentColumn";
 import HolarchyTab from "./HolarchyTab";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
-import HolarchyFeedbackImage from "@/components/Blocks/HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
 
@@ -170,15 +169,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
 
         <div>
           {holarchyModal && (
-            <HolarchyTab>
-              <div className="relative bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
-                {holarchyFeedbackImages.length > 0 && (
-                  <HolarchyFeedbackImage
-                    holarchyfeedbackimages={holarchyFeedbackImages}
-                    content={content}
-                  />
-                )}
-              </div>
+            <HolarchyTab holarchyFeedbackImages={holarchyFeedbackImages} content={content}>
               {levels.map((level, index) => {
                 const cssClasses = [
                   "row-start-1 bg-holon-blue-100 ",
