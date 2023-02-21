@@ -134,7 +134,7 @@ export default function ContentColumn({
               />
             </>
           );
-        } else if (ct.type == "text") {
+        } else if (ct.type == "text" && !selectedLevel) {
           return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
         } else {
           return null;
