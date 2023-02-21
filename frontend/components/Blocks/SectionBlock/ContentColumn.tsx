@@ -122,20 +122,19 @@ export default function ContentColumn({
     <div
       data-empty="Er zijn er geen interactieve elementen in te stellen op dit niveau."
       className="before:empty:content-[attr(data-empty)]">
-      {content.map(ct => {
+      {content.map((ct, index) => {
         if (ct.type === "interactive_input" && ct.value.visible) {
           return (
-            <>
+            <React.Fragment key={index}>
               <InteractiveInputs
                 setValue={setInteractiveInputValue}
                 defaultValue={getDefaultValue(ct)}
                 currentValue={ct.currentValue}
-                key={ct.id}
                 contentId={ct.id}
                 selectedLevel={selectedLevel}
                 {...ct.value}
               />
-            </>
+            </React.Fragment>
           );
         } else if (ct.type == "text" && !selectedLevel) {
           return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
