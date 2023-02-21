@@ -5,11 +5,13 @@ from autoslug import AutoSlugField
 
 from modelcluster.fields import ParentalManyToManyField
 from wagtail_headless_preview.models import HeadlessPreviewMixin
+
 from wagtail.fields import StreamField
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
+from wagtail_color_panel.fields import ColorField
+from wagtail_color_panel.edit_handlers import NativeColorPanel
 from api.models.scenario import Scenario
-
 from .base import BasePage
 from .base_card import BaseCard
 from ..blocks import (
@@ -80,6 +82,25 @@ class StorylinePageInformationType(StorylinePageFilter):
     class Meta:
         verbose_name = _("InformationType")
         verbose_name_plural = _("InformationTypes")
+        ordering = ["name"]
+
+
+@register_snippet
+class GraphColors(StorylinePageFilter):
+
+    name = models.CharField(
+        max_length=100, help_text="text should be exactly the same as the label of the bar"
+    )
+    color = ColorField()
+
+    panels = [FieldPanel("name"), NativeColorPanel("color")]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Graph Colors")
+        verbose_name_plural = _("Graph Colors")
         ordering = ["name"]
 
 

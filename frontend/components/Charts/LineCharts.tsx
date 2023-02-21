@@ -63,12 +63,18 @@ export default function LineCharts() {
     "#C7C28C",
   ];
 
-  const convertToPositive = tickItem => {
-    return Math.abs(tickItem);
+  const convertToPositiveEuro = tickItem => {
+    return "€ " + Math.abs(tickItem);
   };
 
-  const tooltipFormatter = tooltipItemLabel => {
-    return tooltipItemLabel + " betaalt:";
+  const tooltipFormatter = (value, name, props) => {
+    return [
+      convertToPositiveEuro(value),
+      (value < 0 ? "betaalt aan " : "ontvangt van ") + props.dataKey,
+    ];
+  };
+  const tooltipLabelFormatter = tooltipItemLabel => {
+    return tooltipItemLabel + ":";
   };
 
   return (
@@ -78,11 +84,15 @@ export default function LineCharts() {
           <BarChart barGap={-40} data={data} stackOffset="sign">
             <CartesianGrid strokeDasharray="2" vertical={false} />
             <XAxis orientation="top" dataKey="name" axisLine={false} />
-            <YAxis tickFormatter={convertToPositive}>
+            <YAxis tickFormatter={convertToPositiveEuro}>
               <Label position="top" angle={-90} value="Baten →" offset={-300} />
               <Label position="bottom" angle={-90} value="← Kosten" offset={-300} />
             </YAxis>
-            <Tooltip labelFormatter={tooltipFormatter} formatter={convertToPositive} />
+            <Tooltip
+              itemSorter={item => item.value}
+              formatter={tooltipFormatter}
+              labelFormatter={tooltipLabelFormatter}
+            />
             <Legend />
             <ReferenceLine y={0} stroke="#000" />
 
