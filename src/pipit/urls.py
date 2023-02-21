@@ -61,10 +61,10 @@ urlpatterns += [
     path("wt/cms/", include(wagtailadmin_urls)),
     path("wt/documents/", include(wagtaildocs_urls)),
     path("wt/sitemap.xml", sitemap, name="sitemap"),
-    path("dj-rest-auth/", include("dj_rest_auth.urls")),
-    path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("wt/dj-rest-auth/", include("dj_rest_auth.urls")),
+    path("wt/dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("wt/api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("wt/api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
 
 urlpatterns += [re_path(r"", include(wagtail_urls))]

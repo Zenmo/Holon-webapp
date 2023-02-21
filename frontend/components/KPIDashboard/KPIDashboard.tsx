@@ -2,9 +2,10 @@ import { useState } from "react";
 import Button from "../Button/Button";
 import KPIItem from "./KPIItem";
 import KPIRadioButtons from "./KPIRadiobuttons";
+import { KPIData } from "./types";
 
 type KPIDashboardProps = {
-  data: Data;
+  data: KPIData;
   loading: boolean;
   dashboardId: string;
   handleClickCostBen: () => void;
