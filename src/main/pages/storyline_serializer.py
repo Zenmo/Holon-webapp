@@ -5,8 +5,9 @@ from main.pages.storyline import StorylinePage
 from main.pages.base_storyline_challengemode import (
     StorylinePageRoleType,
     StorylinePageInformationType,
-    GraphColors,
 )
+
+from main.snippets.graphcolors import GraphColors
 
 
 class StorylinePageRoleTypeSerializer(serializers.ModelSerializer):

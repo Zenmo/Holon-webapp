@@ -7,10 +7,7 @@ from modelcluster.fields import ParentalManyToManyField
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 from wagtail.fields import StreamField
-from wagtail.snippets.models import register_snippet
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
-from wagtail_color_panel.fields import ColorField
-from wagtail_color_panel.edit_handlers import NativeColorPanel
 from api.models.scenario import Scenario
 from .base import BasePage
 from .base_card import BaseCard
@@ -22,6 +19,9 @@ from ..blocks import (
     CardsBlock,
     HeaderFullImageBlock,
 )
+
+from main.snippets.storyline_page_role_type import StorylinePageRoleType
+from main.snippets.storyline_page_information_type import StorylinePageInformationType
 
 ICON_CHOICES = (
     ("book", "Book"),
@@ -52,37 +52,6 @@ class StorylinePageFilter(models.Model):
 
     class Meta:
         abstract = True
-
-
-@register_snippet
-class StorylinePageRoleType(StorylinePageFilter):
-    panels = [
-        FieldPanel("name"),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("Roletype")
-        verbose_name_plural = _("Rolestypes")
-        ordering = ["name"]
-
-
-@register_snippet
-class StorylinePageInformationType(StorylinePageFilter):
-    panels = [
-        FieldPanel("name"),
-        FieldPanel("icon"),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("InformationType")
-        verbose_name_plural = _("InformationTypes")
-        ordering = ["name"]
 
 
 COLOR_CHOICES = (
