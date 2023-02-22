@@ -12,6 +12,7 @@ from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
+from .holarchyfeedbackimages import HolarchyFeedbackImage
 
 
 def get_interactive_inputs():
@@ -127,6 +128,7 @@ class StorylineSectionBlock(blocks.StructBlock):
             ("text", RichtextBlock()),
             ("interactive_input", InteractiveInputBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
+            ("holarchy_feedback_image", HolarchyFeedbackImage()),
         ],
         block_counts={"static_image": {"max_num": 1}},
     )

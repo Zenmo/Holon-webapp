@@ -10,6 +10,7 @@ import HolarchyTab from "./HolarchyTab";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 
 type Props = {
   data: {
@@ -45,13 +46,14 @@ const initialData = {
 export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
+  const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
+    HolarchyFeedbackImageProps[]
+  >([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
 
   const myRef = useRef(null);
-
-  const levels = ["national", "intermediate", "local"];
 
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
@@ -65,6 +67,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
 
   useEffect(() => {
+    setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
@@ -121,6 +124,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
+
       <div className="holonContentContainer">
         <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
           <div>
@@ -169,34 +173,20 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
           </div>
         </div>
 
-        {holarchyModal && (
-          <HolarchyTab
-            textLabelNational={data.value.textLabelNational}
-            textLabelIntermediate={data.value.textLabelIntermediate}
-            textLabelLocal={data.value.textLabelLocal}
-            data={kpis}>
-            {levels.map((level, index) => {
-              const cssClasses = [
-                "row-start-1 bg-holon-blue-100 ",
-                "row-start-2 bg-holon-blue-200",
-                "row-start-3 bg-holon-blue-300",
-              ];
-              return (
-                <div
-                  key={index}
-                  className={`${cssClasses[index]} p-4  overflow-auto row-span-1 col-start-1 col-span-1 md:col-start-1 md:col-span-1  md:row-span-1 border-b-2 border-dashed border-holon-blue-900 `}>
-                  <ContentColumn
-                    dataContent={data?.value.content}
-                    content={content}
-                    handleContentChange={setContent}
-                    handleMedia={setMedia}
-                    selectedLevel={level}
-                  />
-                </div>
-              );
-            })}
-          </HolarchyTab>
-        )}
+        <div>
+          {holarchyModal && (
+            <HolarchyTab
+              holarchyFeedbackImages={holarchyFeedbackImages}
+              content={content}
+              dataContent={data?.value.content}
+              handleContentChange={setContent}
+              handleMedia={setMedia}
+              textLabelNational={data.value.textLabelNational}
+              textLabelIntermediate={data.value.textLabelIntermediate}
+              textLabelLocal={data.value.textLabelLocal}
+              data={kpis}></HolarchyTab>
+          )}
+        </div>
       </div>
     </div>
   );
