@@ -40,9 +40,4 @@ class StorylinePageSerializer(BasePageSerializer):
 
     class Meta:
         model = StorylinePage
-        fields = [
-            "storyline",
-            "roles",
-            "information_types",
-            "graph_colors",
-        ] + BasePageSerializer.Meta.fields
+        fields = ["storyline", "roles", "information_types"] + BasePageSerializer.Meta.fields
