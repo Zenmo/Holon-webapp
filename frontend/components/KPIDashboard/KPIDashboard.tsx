@@ -1,29 +1,22 @@
 import { useState } from "react";
+import Button from "../Button/Button";
 import KPIItem from "./KPIItem";
 import KPIRadioButtons from "./KPIRadiobuttons";
+import { KPIData } from "./types";
 
 type KPIDashboardProps = {
-  data: Data;
+  data: KPIData;
   loading: boolean;
   dashboardId: string;
+  handleClickCostBen: () => void;
 };
 
-type Data = {
-  local: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-  national: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-};
-
-export default function KPIDashboard({ data, loading, dashboardId }: KPIDashboardProps) {
+export default function KPIDashboard({
+  data,
+  loading,
+  dashboardId,
+  handleClickCostBen,
+}: KPIDashboardProps) {
   const [level, setLevel] = useState("local");
 
   const backgroundColor = loading ? "bg-holon-gray-300" : "bg-holon-slated-blue-900";
@@ -50,8 +43,9 @@ export default function KPIDashboard({ data, loading, dashboardId }: KPIDashboar
 
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
-      <div>
+      <div className="flex flex-row justify-between items-center px-10 lg:px-16">
         <KPIRadioButtons updateValue={setLevel} loading={loading} dashboardId={dashboardId} />
+        <Button onClick={handleClickCostBen}>Kosten en Baten</Button>
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
         <KPIItem
