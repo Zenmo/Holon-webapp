@@ -20,7 +20,6 @@ export default function HolarchyTab({
   dataContent,
   handleContentChange,
   handleMedia,
-  selectedLevel,
 }: HolarchyTab) {
   const levels = ["national", "intermediate", "local"];
 
