@@ -3,7 +3,6 @@ import { debounce } from "lodash";
 import { Content, InteractiveContent, Feedbackmodals } from "./types";
 import { StaticImage } from "@/components/ImageSelector/types";
 import { Background, GridLayout } from "../types";
-import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import ContentColumn from "./ContentColumn";
 import HolarchyTab from "./HolarchyTab";

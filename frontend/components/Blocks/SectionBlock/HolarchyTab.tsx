@@ -4,6 +4,7 @@ import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFee
 import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
 import { Content } from "@/components/Blocks/SectionBlock/types";
 import { StaticImage } from "@/components/ImageSelector/types";
+import { KPIData } from "@/components/KPIDashboard/types";
 
 type HolarchyTab = {
   holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
@@ -15,7 +16,7 @@ type HolarchyTab = {
   textLabelIntermediate: string;
   textLabelLocal: string;
   loading: boolean;
-  kpis: {};
+  kpis: KPIData;
 };
 
 export default function HolarchyTab({
