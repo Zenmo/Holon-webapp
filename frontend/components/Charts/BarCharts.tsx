@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { httpGet } from "@/utils/Http";
 import {
   Bar,
   XAxis,
@@ -12,11 +13,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function LineCharts() {
-  const [data, setData] = useState([]);
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
-  const convertGraphData = data => {
-    const returnArr = [];
+export default function BarCharts() {
+  const [data, setData] = useState([]);
+  const [dataColors, setDataColors] = useState([]);
+  const ignoredLabels = ["name", "Netto kosten"];
+
+  const convertGraphData = (data: Record<string, unknown>) => {
+    const returnArr: unknown[] = [];
     Object.entries(data).map(value => {
       const constructObj = { ...value[1] };
       constructObj.name = value[0].replace(/['"]+/g, "");
@@ -27,9 +32,12 @@ export default function LineCharts() {
   };
 
   useEffect(() => {
-    fetch("/api/dummy-kosten-baten")
-      .then(res => res.json())
+    httpGet("/api/dummy-kosten-baten")
       .then(data => setData(convertGraphData(data)))
+      .catch(err => console.log(err));
+
+    httpGet(`${API_URL}/wt/api/nextjs/v1/graph-colors/`)
+      .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
   }, []);
 
@@ -42,26 +50,6 @@ export default function LineCharts() {
       </svg>
     );
   };
-
-  const ignoredLabels = ["name", "Netto kosten"];
-  const colors = [
-    "#B9A683",
-    "#FFA018",
-    "#697260",
-    "#C7C28C",
-    "#B9A683",
-    "#FFA018",
-    "#697260",
-    "#C7C28C",
-    "#B9A683",
-    "#FFA018",
-    "#697260",
-    "#C7C28C",
-    "#B9A683",
-    "#FFA018",
-    "#697260",
-    "#C7C28C",
-  ];
 
   const convertToPositiveEuro = tickItem => {
     return "€ " + Math.abs(tickItem);
@@ -99,12 +87,16 @@ export default function LineCharts() {
             {Object.keys(data[0]).map((label, _index) => {
               const found = ignoredLabels.find(ilabel => ilabel == label);
               if (!found) {
+                const color = dataColors.find(col => col.name == label) || {
+                  name: "default_color",
+                  color: "#ffa018",
+                };
                 return (
                   <Bar
                     barSize={60}
                     key={_index}
                     dataKey={label}
-                    fill={colors[_index]}
+                    fill={color.color}
                     stackId="stack"
                   />
                 );

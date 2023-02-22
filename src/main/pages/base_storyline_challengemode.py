@@ -85,25 +85,6 @@ class StorylinePageInformationType(StorylinePageFilter):
         ordering = ["name"]
 
 
-@register_snippet
-class GraphColors(StorylinePageFilter):
-
-    name = models.CharField(
-        max_length=100, help_text="text should be exactly the same as the label of the bar"
-    )
-    color = ColorField()
-
-    panels = [FieldPanel("name"), NativeColorPanel("color")]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("Graph Colors")
-        verbose_name_plural = _("Graph Colors")
-        ordering = ["name"]
-
-
 COLOR_CHOICES = (
     ("card__bg-gold", "Gold"),
     ("card__bg-blue", "Blue"),
