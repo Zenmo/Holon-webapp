@@ -1,16 +1,37 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 from polymorphic.models import PolymorphicModel
 
 from holon.models.gridconnection import GridConnection
+from holon.models.gridnode import GridNode
 
 
 class EnergyAsset(PolymorphicModel):
-    gridconnection = models.ForeignKey(GridConnection, on_delete=models.CASCADE)
+    gridconnection = models.ForeignKey(
+        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    gridnode = models.ForeignKey(GridNode, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=255)
 
+    def clean(self):
+        not_connected = self.gridconnection is None and self.gridnode is None
+        connected_twice = ~(self.gridconnection is None and self.gridnode is None)
+        
+        if not_connected or connected_twice:
+            raise ValidationError(
+                "Asset should be connected to either a grid node or a grid connection!"
+            )
+
     def __str__(self):
-        return f"{self.name} - {self.id} ({self.gridconnection.category}{self.gridconnection.id})"
+        try:
+            string = (
+                f"{self.name} - {self.id} ({self.gridconnection.category}{self.gridconnection.id})"
+            )
+        except AttributeError:
+            string = f"{self.name} - {self.id} ({self.gridnode.__str__()})"
+
+        return string
 
 
 # %% Consumption assets
