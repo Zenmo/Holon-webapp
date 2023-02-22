@@ -11,7 +11,7 @@ type ChallengeFeedbackModalProps = {
   loading: boolean;
   dashboardId: string;
   content: Content;
-  feedbackmodals: [FeedbackModal];
+  feedbackmodals: FeedbackModal[];
 };
 
 export default function ChallengeFeedbackModal({

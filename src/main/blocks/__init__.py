@@ -10,3 +10,4 @@ from .header_full_image import *  # NOQA
 from .buttons_and_media import *  # NOQA
 from .paragraph import *  # NOQA
 from .feedbackmodals import *  # NOQA
+from .holarchyfeedbackimages import *  # NOQA
