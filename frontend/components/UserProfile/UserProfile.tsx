@@ -3,6 +3,8 @@ import UpdatePassword from "./UpdatePassword";
 import useUser from "@/utils/useUser";
 import TokenService from "@/services/token";
 
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "/wt";
+
 type UserData = {
   first_name: string;
   last_name: string;
@@ -47,7 +49,7 @@ export default function UserProfile() {
 
   async function handleUpdateProfile(e: React.SyntheticEvent<HTMLInputElement, SubmitEvent>) {
     e.preventDefault();
-    const response = await fetch(`http://localhost:8000/dj-rest-auth/user/`, {
+    const response = await fetch(`${API_URL}/dj-rest-auth/user/`, {
       method: "PATCH",
       body: JSON.stringify({
         first_name: userData.first_name,

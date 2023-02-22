@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { debounce } from "lodash";
-import { Content, InteractiveContent, StaticImage, Feedbackmodals } from "./types";
+import { Content, InteractiveContent, Feedbackmodals } from "./types";
+import { StaticImage } from "@/components/ImageSelector/types";
+import { Background, GridLayout } from "../types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import ContentColumn from "./ContentColumn";
 import HolarchyTab from "./HolarchyTab";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 
 type Props = {
   data: {
     type: string;
     value: {
-      background: {
-        color: string;
-        size: string;
-      };
+      background: Background;
       content: Content[];
-      gridLayout: { grid: string };
+      gridLayout: GridLayout;
     };
     id: string;
   };
@@ -42,6 +42,9 @@ const initialData = {
 export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
+  const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
+    HolarchyFeedbackImageProps[]
+  >([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
@@ -60,6 +63,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
 
   useEffect(() => {
+    setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
@@ -116,6 +120,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
+
       <div className="holonContentContainer">
         <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
           <div>
@@ -140,12 +145,14 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
             ) : (
               ""
             )}
-            <ContentColumn
-              dataContent={data?.value.content}
-              content={content}
-              handleContentChange={setContent}
-              handleMedia={setMedia}
-            />
+            {!holarchyModal && (
+              <ContentColumn
+                dataContent={data?.value.content}
+                content={content}
+                handleContentChange={setContent}
+                handleMedia={setMedia}
+              />
+            )}
           </div>
 
           <div className={`flex flex-col ${gridValue.right}`}>
@@ -161,7 +168,16 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
           </div>
         </div>
 
-        <div>{holarchyModal && <HolarchyTab />}</div>
+        <div>
+          {holarchyModal && (
+            <HolarchyTab
+              holarchyFeedbackImages={holarchyFeedbackImages}
+              content={content}
+              dataContent={data?.value.content}
+              handleContentChange={setContent}
+              handleMedia={setMedia}></HolarchyTab>
+          )}
+        </div>
       </div>
     </div>
   );

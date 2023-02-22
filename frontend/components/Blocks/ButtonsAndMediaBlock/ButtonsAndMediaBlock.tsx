@@ -2,15 +2,13 @@ import React from "react";
 import MediaContent from "@/components/MediaContent/MediaContent";
 import { CardItem } from "../../Card/types";
 import Card from "../../Card/Card";
+import { Background } from "../types";
 
 type Props = {
   data: {
     type: string;
     value: {
-      background: {
-        color: string;
-        size: string;
-      };
+      background: Background;
       buttons: CardItem[];
       media: React.ComponentProps<typeof MediaContent>["media"];
       altText: string;

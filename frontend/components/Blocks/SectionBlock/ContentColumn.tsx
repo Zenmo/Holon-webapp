@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Content, InteractiveContent, StaticImage } from "./types";
+import { Content, InteractiveContent } from "./types";
+import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import RawHtml from "@/components/RawHtml/RawHtml";
 
@@ -8,6 +9,7 @@ type ContentColumn = {
   content: Content[];
   handleContentChange: React.Dispatch<React.SetStateAction<Content[]>>;
   handleMedia: React.Dispatch<React.SetStateAction<StaticImage>>;
+  selectedLevel?: string;
 };
 
 export default function ContentColumn({
@@ -15,13 +17,16 @@ export default function ContentColumn({
   content,
   handleContentChange,
   handleMedia,
+  selectedLevel,
 }: ContentColumn) {
   useEffect(() => {
     const contentArr: Content[] = [];
     dataContent.map((content: Content) => {
       switch (content.type) {
         case "interactive_input":
-          content.currentValue = getDefaultValue(content);
+          content.currentValue = content.currentValue
+            ? content.currentValue
+            : getDefaultValue(content);
           contentArr.push(content);
           break;
         case "static_image":
@@ -34,7 +39,6 @@ export default function ContentColumn({
     });
 
     handleContentChange([...contentArr]);
-    console.log("useEffect in Content column");
   }, [dataContent]);
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
@@ -115,19 +119,24 @@ export default function ContentColumn({
   }
 
   return (
-    <div>
-      {content.map(ct => {
+    <div
+      data-empty="Er zijn er geen interactieve elementen in te stellen op dit niveau."
+      className="before:empty:content-[attr(data-empty)]">
+      {content.map((ct, index) => {
         if (ct.type === "interactive_input" && ct.value.visible) {
           return (
-            <InteractiveInputs
-              setValue={setInteractiveInputValue}
-              defaultValue={getDefaultValue(ct)}
-              key={ct.id}
-              contentId={ct.id}
-              {...ct.value}
-            />
+            <React.Fragment key={index}>
+              <InteractiveInputs
+                setValue={setInteractiveInputValue}
+                defaultValue={getDefaultValue(ct)}
+                currentValue={ct.currentValue}
+                contentId={ct.id}
+                selectedLevel={selectedLevel}
+                {...ct.value}
+              />
+            </React.Fragment>
           );
-        } else if (ct.type == "text") {
+        } else if (ct.type == "text" && !selectedLevel) {
           return <RawHtml key={`text_${ct.id}`} html={ct.value} />;
         } else {
           return null;
