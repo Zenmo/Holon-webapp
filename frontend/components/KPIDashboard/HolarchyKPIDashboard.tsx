@@ -75,14 +75,13 @@ export default function HolarchyKPIDashboard({
     }
     return value;
   }
-  console.log(Object(textLabelIntermediate));
 
   return (
     <React.Fragment>
       {levels.map((level, index) => (
         <div
           key={index}
-          className={`${level.css} row-span-1 col-start-1 col-span-1 md:col-span-1  md:row-span-1 border-b-2 border-dashed border-holon-blue-900`}
+          className={`${level.css} row-span-1 col-start-1 col-span-1 md:col-span-1 overflow-auto md:row-span-1 border-b-2 border-dashed border-holon-blue-900`}
           data-testid="KPIDashboard">
           <div key={index} className={`flex flex-row flex-wrap p-2`}>
             <p className={styles["kpiHolarchy__title"]}>

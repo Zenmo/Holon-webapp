@@ -184,7 +184,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
               textLabelNational={data.value.textLabelNational}
               textLabelIntermediate={data.value.textLabelIntermediate}
               textLabelLocal={data.value.textLabelLocal}
-              data={kpis}></HolarchyTab>
+              loading={loading}
+              kpis={kpis}></HolarchyTab>
           )}
         </div>
       </div>
