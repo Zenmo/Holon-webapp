@@ -1,14 +1,14 @@
 export type KPIData = {
-    local: {
-      netload: number;
-      costs: number;
-      sustainability: number;
-      selfSufficiency: number;
-    };
-    national: {
-      netload: number;
-      costs: number;
-      sustainability: number;
-      selfSufficiency: number;
-    };
+  local: {
+    netload: number | null;
+    costs: number | null;
+    sustainability: number | null;
+    selfSufficiency: number | null;
   };
+  national: {
+    netload: number | null;
+    costs: number | null;
+    sustainability: number | null;
+    selfSufficiency: number | null;
+  };
+};

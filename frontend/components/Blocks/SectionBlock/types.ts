@@ -1,6 +1,6 @@
 import { FeedbackModal } from "../ChallengeFeedbackModal/types";
 import { StaticImage } from "@/components/ImageSelector/types";
-import { HolarchyFeedbackImage } from "@/components/Blocks/HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { HolarchyFeedbackImageProps } from "@/components/Blocks/HolarchyFeedbackImage/HolarchyFeedbackImage";
 
 export type Content =
   | {
@@ -16,7 +16,7 @@ export type Content =
   | {
       id: string;
       type: "holarchy_feedback_image";
-      value: HolarchyFeedbackImage;
+      value: HolarchyFeedbackImageProps;
     }
   | InteractiveContent;
 

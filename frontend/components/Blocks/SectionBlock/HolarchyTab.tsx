@@ -1,22 +1,55 @@
 import React from "react";
+import HolarchyFeedbackImage from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import ContentColumn from "./ContentColumn";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Content } from "@/components/Blocks/SectionBlock/types";
-import HolarchyFeedbackImage from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { StaticImage } from "@/components/ImageSelector/types";
 
 type HolarchyTab = {
   holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
   content: Array<Content>;
-  children: React.ReactNode;
+  dataContent: Content[];
+  handleContentChange: React.Dispatch<React.SetStateAction<Content[]>>;
+  handleMedia: React.Dispatch<React.SetStateAction<StaticImage>>;
+  selectedLevel?: string;
 };
 
-export default function HolarchyTab({ holarchyFeedbackImages, content, children }: HolarchyTab) {
+export default function HolarchyTab({
+  holarchyFeedbackImages,
+  content,
+  dataContent,
+  handleContentChange,
+  handleMedia,
+  selectedLevel,
+}: HolarchyTab) {
+  const levels = ["national", "intermediate", "local"];
+
   return (
     <div className="w-screen h-screen bg-white">
       <div className="bg-white fixed top-[4.5rem] md:top-24 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-9.5rem)] w-screen z-10 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
-        {/* in here, the three cells of left column */}
-        {children}
+        {/*Interactive input -  left column */}
+        {levels.map((level, index) => {
+          const cssClasses = [
+            "row-start-1 bg-holon-blue-100 ",
+            "row-start-2 bg-holon-blue-200",
+            "row-start-3 bg-holon-blue-300",
+          ];
+          return (
+            <div
+              key={index}
+              className={`${cssClasses[index]} p-4  overflow-auto row-span-1 col-start-1 col-span-1 md:col-start-1 md:col-span-1  md:row-span-1 border-b-2 border-dashed border-holon-blue-900 `}>
+              <ContentColumn
+                dataContent={dataContent}
+                content={content}
+                handleContentChange={handleContentChange}
+                handleMedia={handleMedia}
+                selectedLevel={level}
+              />
+            </div>
+          );
+        })}
 
-        {/*image */}
+        {/*image - highest block*/}
         <div className="relative row-start-4 bg-holon-blue-100 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-1 md:row-span-1">
           <svg
             viewBox="0 0 2 1"
@@ -34,14 +67,7 @@ export default function HolarchyTab({ holarchyFeedbackImages, content, children 
           </svg>
         </div>
 
-        {/*National KPIs */}
-        <div className=" p-4 bg-holon-blue-100 row-start-7 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-1 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
-          <p>
-            Nationale KPI<span>&#39;</span>s
-          </p>
-        </div>
-
-        {/*image */}
+        {/*image - middle block showing image*/}
         <div className="relative bg-holon-blue-200 row-start-5 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-2 md:row-span-1">
           {holarchyFeedbackImages.length > 0 && (
             <HolarchyFeedbackImage
@@ -51,14 +77,7 @@ export default function HolarchyTab({ holarchyFeedbackImages, content, children 
           )}
         </div>
 
-        {/*Middle KPIs */}
-        <div className=" p-4 bg-holon-blue-200 row-start-8 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-2 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
-          <p>
-            Tussen KPI<span>&#39;</span>s
-          </p>
-        </div>
-
-        {/*image */}
+        {/*image - lowest block*/}
         <div className="relative overflow-hidden bg-holon-blue-300  row-start-6 row-span-1 col-start-1 col-span-1 md:col-start-2 md:col-span-1 md:row-start-3 md:row-span-1">
           <svg
             viewBox="0 0 2 1"
@@ -74,6 +93,21 @@ export default function HolarchyTab({ holarchyFeedbackImages, content, children 
             L2 0 Z"
             />
           </svg>
+        </div>
+
+        {/* KPIs - right column */}
+        {/*National KPIs */}
+        <div className=" p-4 bg-holon-blue-100 row-start-7 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-1 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
+          <p>
+            Nationale KPI<span>&#39;</span>s
+          </p>
+        </div>
+
+        {/*Middle KPIs */}
+        <div className=" p-4 bg-holon-blue-200 row-start-8 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-2 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
+          <p>
+            Tussen KPI<span>&#39;</span>s
+          </p>
         </div>
 
         {/*Local KPIs */}
