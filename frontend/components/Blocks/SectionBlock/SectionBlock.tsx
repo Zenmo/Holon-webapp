@@ -9,6 +9,7 @@ import HolarchyTab from "./HolarchyTab";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 
 type Props = {
@@ -47,6 +48,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   >([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
 
   const myRef = useRef(null);
@@ -68,7 +70,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   }, [content, debouncedCalculateKPIs]);
 
   useEffect(() => {
-    if (holarchyModal) {
+    if (costBenefitModal || holarchyModal) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -76,7 +78,15 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [holarchyModal]);
+  }, [costBenefitModal, holarchyModal]);
+
+  function openCostBenefitModal() {
+    setCostBenefitModal(true);
+  }
+
+  function closeCostBenefitModal() {
+    setCostBenefitModal(false);
+  }
 
   function openHolarchyModal() {
     setHolarchyModal(true);
@@ -120,6 +130,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
+      {costBenefitModal && <CostBenefitModal handleClose={closeCostBenefitModal} />}
 
       <div className="holonContentContainer">
         <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
@@ -163,7 +174,11 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
                   <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
                 )}
               </div>
-              <KPIDashboard data={kpis} loading={loading} dashboardId={data.id}></KPIDashboard>
+              <KPIDashboard
+                data={kpis}
+                loading={loading}
+                dashboardId={data.id}
+                handleClickCostBen={openCostBenefitModal}></KPIDashboard>
             </div>
           </div>
         </div>
