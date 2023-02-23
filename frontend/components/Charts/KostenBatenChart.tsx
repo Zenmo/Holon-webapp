@@ -68,14 +68,18 @@ export default function KostenBatenChart() {
   return (
     <React.Fragment>
       {data.length > 0 && (
-        <div className="min-h-full">
-          <ResponsiveContainer width={"100%"} minHeight={"732px"}>
+        <div className="flex-1">
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart barGap={-40} data={data} stackOffset="sign">
               <CartesianGrid strokeDasharray="2" vertical={false} />
               <XAxis orientation="top" dataKey="name" axisLine={false} />
               <YAxis tickFormatter={convertToPositiveEuro}>
-                <Label position="top" angle={-90} value="Baten →" offset={-300} />
-                <Label position="bottom" angle={-90} value="← Kosten" offset={-300} />
+                <Label
+                  position="center"
+                  angle={-90}
+                  value="← Kosten &nbsp;  &nbsp; &nbsp;  Baten &nbsp;  →"
+                  offset={-25}
+                />
               </YAxis>
               <Tooltip
                 itemSorter={item => item.value}
