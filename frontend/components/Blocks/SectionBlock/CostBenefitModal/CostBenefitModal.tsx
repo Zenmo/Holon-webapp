@@ -1,3 +1,4 @@
+import KostenBatenChart from "@/components/Charts/KostenBatenChart";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
@@ -54,7 +55,10 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
           </div>
 
           <Tab.Panels>
-            <Tab.Panel>Content 1</Tab.Panel>
+            <Tab.Panel>
+              <h1 className="text-center">Kosten en baten per segment</h1>
+              <KostenBatenChart />
+            </Tab.Panel>
             <Tab.Panel>Content 2</Tab.Panel>
             <Tab.Panel>Content 3</Tab.Panel>
           </Tab.Panels>
