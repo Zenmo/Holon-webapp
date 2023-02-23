@@ -83,7 +83,7 @@ export default function UserProfile() {
   async function handleUpdatePassword(e: React.SyntheticEvent<HTMLInputElement, SubmitEvent>) {
     e.preventDefault();
 
-    const response = await fetch(`http://localhost:8000/dj-rest-auth/password/change/`, {
+    const response = await fetch(`${API_URL}dj-rest-auth/password/change/`, {
       method: "POST",
       body: JSON.stringify({
         old_password: userData.currentPassword,
