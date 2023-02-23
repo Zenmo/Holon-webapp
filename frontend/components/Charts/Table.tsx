@@ -1,6 +1,22 @@
 import { dummyData } from "./dummyData";
 
 export default function Table(data) {
+  const backgroundCell = {
+    pos: "bg-holon-light-green",
+    neg: "bg-holon-light-red",
+    neutral: "",
+  };
+
+  const createBackgroundCell = value => {
+    if (value > 0) {
+      return backgroundCell.pos;
+    } else if (value < 0) {
+      return backgroundCell.neg;
+    } else {
+      return backgroundCell.neutral;
+    }
+  };
+
   const getHeadings = data => {
     return Object.keys(data);
   };
@@ -43,12 +59,14 @@ export default function Table(data) {
   console.log(checkData);
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
+    <div className="flex justify-center flex-1">
+      <table className="m-4 table-fixed w-full h-full">
+        <thead className="border-b-2 border-holon-gray-300">
+          <tr className="bg-holon-gray-100 border-r-[1px] border-holon-gray-300 text-center">
             {headings.map((heading, index) => (
-              <th key={index}>{heading}</th>
+              <th key={index} className="py-4">
+                {heading}
+              </th>
             ))}
           </tr>
         </thead>
@@ -56,7 +74,13 @@ export default function Table(data) {
           {convertedData.map((item, index) => (
             <tr key={index}>
               {Object.values(item).map(val => (
-                <td key={index}>{val}</td>
+                <td
+                  key={index}
+                  className={`py-4 border-r-[1px] border-holon-gray-300 text-center ${createBackgroundCell(
+                    val
+                  )}`}>
+                  {val}
+                </td>
               ))}
             </tr>
           ))}
@@ -64,14 +88,4 @@ export default function Table(data) {
       </table>
     </div>
   );
-}
-
-{
-  /*}
-            <tr key={index}>
-              {Object.values(item).map(val => (
-                <td key={`cell-${val}`}>{val}</td>
-              ))}
-            </tr>
-              */
 }

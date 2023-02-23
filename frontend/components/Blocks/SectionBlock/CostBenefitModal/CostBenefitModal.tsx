@@ -57,6 +57,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
           <Tab.Panels>
             <Tab.Panel>Content 1</Tab.Panel>
             <Tab.Panel>
+              <h2 className="text-center">Kosten en baten per groep</h2>
               <Table></Table>
             </Tab.Panel>
             <Tab.Panel>Content 3</Tab.Panel>
