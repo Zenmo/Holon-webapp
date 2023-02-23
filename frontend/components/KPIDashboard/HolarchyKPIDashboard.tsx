@@ -1,28 +1,14 @@
-import KPIItem from "./KPIItem";
 import React from "react";
+import KPIItems from "./KPIItems";
 import styles from "./KPIItem.module.css";
+import { KPIData } from "./types";
 
 type KPIDashboardProps = {
-  data: Data;
+  data: KPIData;
   loading: boolean;
   textLabelNational: string;
   textLabelIntermediate: string;
   textLabelLocal: string;
-};
-
-type Data = {
-  local: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-  national: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
 };
 
 export default function HolarchyKPIDashboard({
@@ -56,26 +42,6 @@ export default function HolarchyKPIDashboard({
     },
   ];
 
-  function valueCheck(value: number): number | string {
-    if (value == undefined || loading) {
-      return "-";
-    } else {
-      return value;
-    }
-  }
-
-  function valueCosts(level: string) {
-    let value = valueCheck(data[level].costs);
-    if (level == "local") {
-      // divides by 1e3 because "k euro"
-      typeof value == "number" ? (value = value / 1e3) : (value = value);
-    } else {
-      // divides by 1e9 because "mld euro"
-      typeof value == "number" ? (value = value / 1e9) : (value = value);
-    }
-    return value;
-  }
-
   return (
     <React.Fragment>
       {levels.map((level, index) => (
@@ -93,32 +59,7 @@ export default function HolarchyKPIDashboard({
                 ? textLabelIntermediate
                 : ""}
             </p>
-            <KPIItem
-              view="kpiHolarchy"
-              title="Netbelasting"
-              label="netload"
-              value={valueCheck(data[level.dataobject].netload)}
-              unit="%"
-            />
-            <KPIItem
-              view="kpiHolarchy"
-              title="Betaalbaarheid"
-              label="costs"
-              unit={level.dataobject === "local" ? "k.EUR/jaar" : "mld.EUR/jaar"}
-              value={valueCosts(level.dataobject)}></KPIItem>
-            <KPIItem
-              view="kpiHolarchy"
-              title="Duurzaamheid"
-              label="sustainability"
-              value={valueCheck(data[level.dataobject].sustainability)}
-              unit="%"
-            />
-            <KPIItem
-              view="kpiHolarchy"
-              title="Zelfvoorzienendheid"
-              label="selfSufficiency"
-              value={valueCheck(data[level.dataobject].selfSufficiency)}
-              unit="%"></KPIItem>
+            <KPIItems view="kpiHolarchy" data={data} level={level.dataobject} loading={loading} />
           </div>
         </div>
       ))}
