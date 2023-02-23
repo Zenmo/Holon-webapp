@@ -1,6 +1,7 @@
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
+import Table from "@/components/Charts/Table";
 
 export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -55,7 +56,9 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
 
           <Tab.Panels>
             <Tab.Panel>Content 1</Tab.Panel>
-            <Tab.Panel>Content 2</Tab.Panel>
+            <Tab.Panel>
+              <Table></Table>
+            </Tab.Panel>
             <Tab.Panel>Content 3</Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
