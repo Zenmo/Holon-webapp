@@ -1,5 +1,5 @@
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
 
@@ -29,6 +29,17 @@ class AnylogicCloudConfig(ClusterableModel):
         FieldPanel("model_name"),
         FieldPanel("model_version_number"),
         FieldPanel("scenario"),
+        InlinePanel(
+            "anylogic_cloud_output",
+            heading="Cloud Output mapping",
+            label="Use these features to map the outputs of AnyLogic results to internal keys",
+            min_num=1,
+        ),
+        InlinePanel(
+            "anylogic_cloud_input",
+            heading="Additional AnyLogic Cloud inputs",
+            label="Optionally use this feature to supply additional operational arguments in JSON form",
+        ),
     ]
 
     class Meta:
@@ -46,12 +57,13 @@ class AnylogicCloudConfig(ClusterableModel):
 
 
 class AnylogicCloudInput(models.Model):
+    """supports configurable mapping from AnyLogic resuls to guaranteed internal keys"""
+
     anylogic_key = models.CharField(max_length=100)
     anylogic_value = models.JSONField()  # unsure if we should allow this
 
     anylogic_model_configuration = ParentalKey(
-        AnylogicCloudConfig,
-        on_delete=models.CASCADE,
+        AnylogicCloudConfig, on_delete=models.CASCADE, related_name="anylogic_cloud_input"
     )
 
     def __str__(self) -> str:
@@ -61,10 +73,16 @@ class AnylogicCloudInput(models.Model):
 class AnylogicCloudOutput(models.Model):
     """supports configurable mapping from AnyLogic resuls to guaranteed internal keys"""
 
-    anylogic_key = models.CharField(max_length=100)
-    internal_key = models.CharField(max_length=100)
+    anylogic_key = models.CharField(
+        max_length=50, help_text=_("Key as provided in the AnyLogic Cloud response JSON")
+    )
+    internal_key = models.CharField(
+        max_length=50, help_text=_("Key that is used internally to access the data associated with this AnyLogic key")
+    )
 
-    anylogic_model_configuration = ParentalKey(AnylogicCloudConfig, on_delete=models.CASCADE)
+    anylogic_model_configuration = ParentalKey(
+        AnylogicCloudConfig, on_delete=models.CASCADE, related_name="anylogic_cloud_output"
+    )
 
     def __str__(self) -> str:
         return f"{self.internal_key}"
