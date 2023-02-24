@@ -1,3 +1,4 @@
+import { keyBy } from "lodash";
 import { dummyData } from "./dummyData";
 
 export default function Table(data) {
@@ -21,6 +22,8 @@ export default function Table(data) {
     return Object.keys(data);
   };
 
+  const headings = getHeadings(dummyData);
+
   const convertGraphData = (data: Record<string, unknown>) => {
     const returnArr: unknown[] = [];
     Object.entries(data).map(value => {
@@ -33,38 +36,39 @@ export default function Table(data) {
   };
 
   const convertedData = convertGraphData(dummyData);
-  console.log(convertedData);
 
-  const createFirstColumn = data => {
-    return Object.keys(data[0]);
-  };
+  function valueCheck(value: number | undefined) {
+    if (!value) {
+      return "-";
+    } else if (value >= 0) {
+      return "€ " + value;
+    } else if (value < 0) {
+      return "-€ " + Math.abs(value);
+    }
+  }
 
-  const firstColumn = createFirstColumn(convertedData);
-  console.log(firstColumn);
+  const checkData = data => {
+    const firstObject = data[0];
+    const keys = Object.keys(firstObject);
 
-  const headings = getHeadings(dummyData);
+    const newArray = [];
 
-  const dataForTable = (data, column) => {
-    const newArrayData = [];
-    data.map(item => {
-      Object.entries(item).forEach(([key, value]) => {
-        if (key === column[0]) {
-          newArrayData.push(value);
-        }
-      });
+    keys.forEach(key => {
+      newArray.push(data.map(a => a[key]));
     });
-  };
 
-  const checkData = dataForTable(convertedData, firstColumn);
-  console.log(checkData);
+    return newArray;
+  };
+  const x = checkData(convertedData);
+  console.log("final data should be " + x);
 
   return (
     <div className="flex justify-center flex-1">
       <table className="m-4 table-fixed w-full h-full">
-        <thead className="border-b-2 border-holon-gray-300">
-          <tr className="bg-holon-gray-100 border-r-[1px] border-holon-gray-300 text-center">
+        <thead className="border-b-4 border-holon-gray-300">
+          <tr className="bg-holon-gray-100 text-center">
             {headings.map((heading, index) => (
-              <th key={index} className="py-4">
+              <th key={index} className="py-4  border-r-2 border-holon-gray-300">
                 {heading}
               </th>
             ))}
@@ -76,10 +80,10 @@ export default function Table(data) {
               {Object.values(item).map(val => (
                 <td
                   key={index}
-                  className={`py-4 border-r-[1px] border-holon-gray-300 text-center ${createBackgroundCell(
+                  className={`py-4 border-r-2 border-holon-gray-300 text-center ${createBackgroundCell(
                     val
                   )}`}>
-                  {val}
+                  {valueCheck(val)}
                 </td>
               ))}
             </tr>
