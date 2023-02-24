@@ -2,6 +2,7 @@ from .actor import *  # NOQA
 from .asset import *  # NOQA
 from .contract import *  # NOQA
 from .factor import *  # NOQA
+from .rule_action import *  # NOQA
 from .filter import *  # NOQA
 from .gridconnection import *  # NOQA
 from .gridnode import *  # NOQA

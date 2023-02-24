@@ -14,7 +14,7 @@ class Factor(PolymorphicModel):
     """Abstract base class for factors"""
 
     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE, related_name="factors")
+    rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
 
     min_value = models.IntegerField()
     max_value = models.IntegerField()
@@ -37,14 +37,39 @@ class Factor(PolymorphicModel):
         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
     def map_factor_value(self, value: str):
-        """Rescale a value to the min and max values of this factor"""
+        """Process an input value with the factors parameters and return a new value"""
+        pass
 
-        try:
-            value_flt = float(value)
-        except:
-            logging.warning(
-                f"Value '{value}' could not be parsed to a float, setting to default value to 0.0"
-            )
-            value_flt = 0.0
 
-        return (self.max_value - self.min_value) * (value_flt / 100) + self.min_value
+# class DiscreteFactor(Factor):
+#     """A discrete factor for setting the value of an attribute"""
+
+#     class Meta:
+#         verbose_name = "DiscreteFactor"
+
+#     def map_factor_value(self, value: str):
+#         """Return the factors own value"""
+#         return value
+
+
+# class ContinuousFactor(Factor):
+#     """A continuous factor for scaling an input value between a certain range"""
+
+#     min_value = models.IntegerField()
+#     max_value = models.IntegerField()
+
+#     class Meta:
+#         verbose_name = "ContinuousFactor"
+
+#     def map_factor_value(self, value: str):
+#         """Rescale a value to the min and max values of this factor"""
+
+#         try:
+#             value_flt = float(value)
+#         except:
+#             logging.warning(
+#                 f"Value '{value}' could not be parsed to a float, setting to default value to 0.0"
+#             )
+#             value_flt = 0.0
+
+#         return (self.max_value - self.min_value) * (value_flt / 100) + self.min_value

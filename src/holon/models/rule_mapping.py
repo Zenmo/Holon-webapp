@@ -2,7 +2,7 @@ from django.apps import apps
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
-from holon.models.factor import Factor
+from holon.models.rule_action import RuleAction
 from holon.models.filter import Filter
 from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ModelType, ScenarioRule
@@ -24,7 +24,7 @@ def get_scenario_and_apply_rules(
 
             filtered_queryset = apply_rule_filters_to_queryset(queryset, rule)
 
-            apply_rule_factors(
+            apply_rule_actions(
                 rule, queryset, filtered_queryset, interactive_element_input["value"]
             )
 
@@ -81,18 +81,12 @@ def apply_rule_filters_to_queryset(queryset: QuerySet, rule: ScenarioRule) -> Qu
     return queryset.filter(queryset_filter)
 
 
-def apply_rule_factors(
+def apply_rule_actions(
     rule: ScenarioRule, queryset: QuerySet, filtered_queryset: QuerySet, value: str
 ):
-    """Apply factors to filtered objects"""
+    """Apply rule actions to filtered objects"""
 
-    factor: Factor
-    for factor in rule.factors.all():
-        for object in filtered_queryset:
-            mapped_value = factor.map_factor_value(value)
-
-            # Find index from filtered element in prefetched queryset
-            queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == object.id)
-
-            # Update object in prefetched scenario
-            setattr(queryset[queryset_index], factor.asset_attribute, mapped_value)
+    rule_action: RuleAction
+    for rule_action in rule.ruleaction_set.all():
+        for filtered_object in filtered_queryset:
+            rule_action.apply_action_to_queryset(queryset, filtered_object, value)

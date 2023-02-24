@@ -12,7 +12,7 @@ class Filter(PolymorphicModel):
     """Information on how to find the objects a scenario rule should be applied to"""
 
     rule = models.ForeignKey("holon.ScenarioRule", on_delete=models.CASCADE, related_name="filters")
-    
+
     class Meta:
         abstract = True
 
@@ -45,7 +45,7 @@ class AttributeFilter(Filter):
         if self.model_attribute not in self.model_attribute_options():
             raise ValidationError("Invalid value model_attribute")
 
-    def model_attribute_options(self):
+    def model_attribute_options(self) -> list[str]:
         model_type = (
             self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
         )

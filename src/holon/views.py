@@ -85,14 +85,10 @@ class HolonV2Service(generics.CreateAPIView):
         if serializer.is_valid():
             data = serializer.validated_data
 
+            # TODO add try catch with 422 response if failed
             scenario = rule_mapping.get_scenario_and_apply_rules(
                 data["scenario"].id, data["interactive_elements"]
             )
-
-            from pprint import pprint
-
-            print(scenario.__dict__)
-            pprint([c.__dict__ for c in scenario.assets])
 
             return Response(
                 "success",
