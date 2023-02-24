@@ -90,13 +90,13 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
         <img
           src={selectedImage?.value.imageSelector?.img?.src}
           alt={selectedImage?.value.imageSelector?.img?.alt}
-          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2	 max-h-[300%] max-w-full object-contain"
+          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2	 h-full object-contain max-w-none"
         />
       ) : (
         <img
           src={holarchyfeedbackimages[0]?.value.imageSelector?.img?.src}
           alt={holarchyfeedbackimages[0].value.imageSelector?.img?.alt}
-          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2	 max-h-[300%] max-w-full object-contain"
+          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2	 h-[300%] object-contain max-w-none"
         />
       )}
     </React.Fragment>
