@@ -31,14 +31,14 @@ class AnylogicCloudConfig(ClusterableModel):
         FieldPanel("scenario"),
         InlinePanel(
             "anylogic_cloud_output",
-            heading="Cloud Output mapping",
-            label="Use these features to map the outputs of AnyLogic results to internal keys",
+            heading="Use these features to map the outputs of AnyLogic results to internal keys",
+            label="Cloud Output mapping",
             min_num=1,
         ),
         InlinePanel(
             "anylogic_cloud_input",
-            heading="Additional AnyLogic Cloud inputs",
-            label="Optionally use this feature to supply additional operational arguments in JSON form",
+            heading="Optionally use this feature to supply additional operational arguments in JSON form",
+            label="Additional AnyLogic Cloud inputs",
         ),
     ]
 
@@ -60,7 +60,11 @@ class AnylogicCloudInput(models.Model):
     """supports configurable mapping from AnyLogic resuls to guaranteed internal keys"""
 
     anylogic_key = models.CharField(max_length=100)
-    anylogic_value = models.JSONField()  # unsure if we should allow this
+    anylogic_value = models.JSONField(
+        help_text=_(
+            "JSON format, will be parsed to be at available the same level in the JSON-payload as the other data"
+        )
+    )  # unsure if we should allow this
 
     anylogic_model_configuration = ParentalKey(
         AnylogicCloudConfig, on_delete=models.CASCADE, related_name="anylogic_cloud_input"
@@ -77,7 +81,10 @@ class AnylogicCloudOutput(models.Model):
         max_length=50, help_text=_("Key as provided in the AnyLogic Cloud response JSON")
     )
     internal_key = models.CharField(
-        max_length=50, help_text=_("Key that is used internally to access the data associated with this AnyLogic key")
+        max_length=50,
+        help_text=_(
+            "Key that is used internally to access the data associated with this AnyLogic key"
+        ),
     )
 
     anylogic_model_configuration = ParentalKey(

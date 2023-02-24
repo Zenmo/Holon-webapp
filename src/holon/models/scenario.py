@@ -11,25 +11,38 @@ class Scenario(ClusterableModel):
 
     panels = [
         FieldPanel("name"),
-        FieldPanel("version"),
-        FieldPanel("comment"),
+        FieldPanel(
+            "version",
+            help_text=_(
+                "Symbolic, allows for multiple versions of the scenario to live (synchronise this with the AnyLogic version)"
+            ),
+        ),
+        FieldPanel(
+            "comment",
+            help_text=_(
+                "Use this field to describe the content of this version such that you can use the version in version control"
+            ),
+        ),
         InlinePanel(
             "anylogic_config",
             heading="Anylogic cloudclient configuration",
             label="Anylogic cloudclient configuration",
             max_num=1,
+            min_num=1,
         ),
         InlinePanel(
             "etm_scaling_config",
             heading="ETM scaling module configuration",
             label="ETM scaling module configuration",
-            max_num=1,
+            max_num=2,
+            min_num=1,
         ),
         InlinePanel(
             "etm_cost_config",
             heading="ETM cost module configuration",
             label="ETM cost module configuration",
             max_num=1,
+            min_num=1,
         ),
     ]
 
