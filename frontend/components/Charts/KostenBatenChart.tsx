@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { httpGet } from "@/utils/Http";
+import { getHolonDataSegments, getHolonGraphColor } from "@/api/holon";
 import {
   Bar,
   XAxis,
@@ -32,11 +32,11 @@ export default function KostenBatenChart() {
   };
 
   useEffect(() => {
-    httpGet("/api/dummy-kosten-baten")
+    getHolonDataSegments()
       .then(data => setData(convertGraphData(data)))
       .catch(err => console.log(err));
 
-    httpGet(`${API_URL}/wt/api/nextjs/v1/graph-colors/`)
+    getHolonGraphColor()
       .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
   }, []);
