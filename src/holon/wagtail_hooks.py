@@ -1,8 +1,8 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
+from holon.models.asset import EnergyAsset
 from holon.models.factor import Factor
 from holon.models.gridconnection import GridConnection
-from holon.models.asset import EnergyAsset
 
 
 class FactorAdmin(ModelAdmin):

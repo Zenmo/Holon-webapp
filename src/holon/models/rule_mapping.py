@@ -81,12 +81,14 @@ def apply_rule_filters_to_queryset(queryset: QuerySet, rule: ScenarioRule) -> Qu
     return queryset.filter(queryset_filter)
 
 
-def apply_rule_factors(rule: ScenarioRule, queryset: QuerySet, value: str):
+def apply_rule_factors(
+    rule: ScenarioRule, queryset: QuerySet, filtered_queryset: QuerySet, value: str
+):
     """Apply factors to filtered objects"""
 
     factor: Factor
-    for factor in rule.factors:
-        for object in queryset:
+    for factor in rule.factors.all():
+        for object in filtered_queryset:
             mapped_value = factor.map_factor_value(value)
 
             # Find index from filtered element in prefetched queryset
