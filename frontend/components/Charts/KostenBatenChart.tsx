@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getHolonDataSegments, getHolonGraphColor } from "@/api/holon";
+import { getHolonDataSegments, getHolonGraphColor } from "../../api/holon";
 import {
   Bar,
   XAxis,
@@ -12,8 +12,6 @@ import {
   BarChart,
   ResponsiveContainer,
 } from "recharts";
-
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 export default function KostenBatenChart() {
   const [data, setData] = useState([]);
