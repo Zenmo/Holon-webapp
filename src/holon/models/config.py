@@ -1,6 +1,7 @@
 from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 
 from holon.models.scenario import Scenario
@@ -95,17 +96,136 @@ class AnylogicCloudOutput(models.Model):
         return f"{self.internal_key}"
 
 
-class ETMScalingConfig(models.Model):
+class ETMScalingConfig(ClusterableModel):
+    api_url = models.URLField(
+        default="https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
+    )
     etm_scenario_id = models.IntegerField()
+
     scenario = ParentalKey(Scenario, related_name="etm_scaling_config")
 
-    panels = []
+    panels = [
+        InlinePanel(
+            "etm_query",
+            heading="Define your input and query statements here",
+            label="ETM query/input statement",
+            min_num=1,
+        ),
+    ]
 
     class Meta:
         verbose_name = "ETM opschalingsconfiguratie"
 
     def __str__(self):
         pass
+
+
+class QueryType(models.TextChoices):
+    INPUT = "input"
+    QUERY = "query"
+    CURVE = "curve"  # TODO: This seems weird to me
+
+
+class DataType(models.TextChoices):
+    VALUE = "value"
+    CURVE = "curve"
+
+
+class ETMQuery(ClusterableModel):
+    internal_key = models.CharField(
+        max_length=35,
+        help_text=_(
+            "Key that is used internally (downstream) to access the data associated with this query result"
+        ),
+    )
+
+    query_type = models.CharField(max_length=255, choices=QueryType.choices)
+    data_type = models.CharField(max_length=255, choices=DataType.choices)
+
+    etm_key = models.CharField(
+        max_length=255,
+        help_text=_("Key as defined in the ETM"),
+    )
+
+    etm_config = ParentalKey(ETMScalingConfig, related_name="etm_query")
+
+    panels = [
+        InlinePanel(
+            "conversion_step",
+            heading="Optionally use this feature edit the results from the ETM with other values or queries",
+            label="Conversion (convert_with)",
+        ),
+    ]
+
+    def clean(self) -> None:
+        # TODO validate the use of etm_keys?
+        pass
+
+
+class ConversionOperationType(models.TextChoices):
+    MULTIPLY = "multiply"
+    DIVIDE = "divide"
+    ADD = "add"
+    SUBSTRACT = "substract"
+    IN_PRODUCT = "in_product"
+
+
+class ConversionValueType(models.TextChoices):
+    STATIC = "static"
+    QUERY = "query"
+    CURVE = "curve"
+    ANYLOGIC_VALUE = "anylogic_value"
+    ANYLOGIC_CURVE = "anylogic_curve"
+
+
+class ETMConversion(models.Model):
+    etm_query = ParentalKey(ETMQuery, related_name="conversion_step")
+
+    conversion = models.CharField(max_length=255, choices=ConversionOperationType.choices)
+    conversion_value_type = models.CharField(max_length=255, choices=ConversionValueType.choices)
+
+    value = models.FloatField(
+        blank=True,
+        null=True,
+        help_text=_("Value for static conversions, only use when conversion type is static"),
+    )
+    key = models.CharField(
+        max_length=255,
+        help_text=_(
+            "Key as defined in the ETM or AnyLogic result data (only use when conversion type is not static)"
+        ),
+    )
+    shadow_key = models.CharField(
+        max_length=255,
+        help_text=_("Internal key, not used by human but might occur in logs when errors occur"),
+    )
+
+    def clean(self) -> None:
+        # both value and key are supplied
+        if self.value is not None and self.etm_key is not None:
+            raise ValidationError("Cannot supply both 'value' and 'etm_key'!")
+
+        # value is supplied but type is not static
+        if self.value is not None and self.conversion_value_type == ConversionValueType.STATIC:
+            raise ValidationError("value is supplied but type is not static")
+
+        # conversion type is curve or query but no key is supplied
+        if (
+            self.conversion_value_type == ConversionValueType.CURVE
+            or self.conversion_value_type == ConversionValueType.QUERY
+        ) and self.key is None:
+            raise ValidationError("Conversion type is curve or query but no key is supplied!")
+
+        # conversion operation is in product but no curves are supplied
+        if self.conversion == ConversionOperationType.IN_PRODUCT and (
+            self.conversion_value_type != ConversionValueType.CURVE
+            or self.conversion_value_type != ConversionValueType.ANYLOGIC_CURVE
+        ):
+            raise ValidationError(
+                "Conversion operation is 'in product' but no curves are supplied!"
+            )
+
+        return super().clean()
 
 
 class ETMCostConfig(models.Model):
