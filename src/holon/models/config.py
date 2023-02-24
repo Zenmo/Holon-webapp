@@ -1,61 +1,80 @@
 from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
+from django.utils.translation import gettext_lazy as _
 
 
 from holon.models.scenario import Scenario
+from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
 
 
-
-class AnylogicCloudConfig(models.Model):
-    """ top level model for AnyLogic cloudclient connection configuration """
+class AnylogicCloudConfig(ClusterableModel):
+    """top level model for AnyLogic cloudclient connection configuration"""
 
     api_key = models.CharField(max_length=40)
-    url = models.CharField(max_length=100, default="https://engine.holontool.nl") 
+    url = models.URLField(max_length=100, default="https://engine.holontool.nl")
     model_name = models.CharField(max_length=100)
-    model_version_number = models.IntegerField()
-    scenario = models.ForeignKey(Scenario)
+    model_version_number = models.IntegerField(
+        help_text=_("Use this field to define the AnyLogic Cloud model version number")
+    )
+    scenario = ParentalKey(Scenario, related_name="anylogic_config")
 
-    owner_email = models.EmailField() # use this later for sending error emails
+    owner_email = models.EmailField(
+        help_text=_("This will be used to send the owner emails when things break")
+    )  # use this later for sending error emails
 
-    panels = [ 
-        FieldPanel(None),
+    panels = [
+        FieldPanel("api_key"),
+        FieldPanel("url"),
+        FieldPanel("model_name"),
+        FieldPanel("model_version_number"),
+        FieldPanel("scenario"),
     ]
 
     class Meta:
-        verbose_name = "Anylogic clouldclient configuratie"
+        verbose_name = "Anylogic cloudclient configuratie"
+
+    def clean(self) -> None:
+        # TODO use holon.cloud.client to validate:
+        # 1) API access for model
+        # 2) Specified model version
+
+        pass
 
     def __str__(self):
         return f"{self.model_name} / version {self.model_version_number}"
 
 
 class AnylogicCloudInput(models.Model):
-    
     anylogic_key = models.CharField(max_length=100)
-    anylogic_value = models.JSONField() # unsure
+    anylogic_value = models.JSONField()  # unsure if we should allow this
 
-    anylogic_model_configuration = models.ForeignKey(AnylogicCloudConfig, verbose_name=AnylogicCloudConfig.__str__(), on_delete=models.CASCADE)
+    anylogic_model_configuration = ParentalKey(
+        AnylogicCloudConfig,
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self) -> str:
         return f"{self.anylogic_key}"
 
+
 class AnylogicCloudOutput(models.Model):
-    """ supports configurable mapping from AnyLogic resuls to guaranteed internal keys """
+    """supports configurable mapping from AnyLogic resuls to guaranteed internal keys"""
 
     anylogic_key = models.CharField(max_length=100)
     internal_key = models.CharField(max_length=100)
 
-    anylogic_model_configuration = models.ForeignKey(AnylogicCloudConfig, verbose_name=AnylogicCloudConfig.__str__(), on_delete=models.CASCADE)
+    anylogic_model_configuration = ParentalKey(AnylogicCloudConfig, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.internal_key}"
 
+
 class ETMScalingConfig(models.Model):
-
     etm_scenario_id = models.IntegerField()
+    scenario = ParentalKey(Scenario, related_name="etm_scaling_config")
 
-    panels = [
-        FieldPanel(None),
-    ]
+    panels = []
 
     class Meta:
         verbose_name = "ETM opschalingsconfiguratie"
@@ -63,15 +82,11 @@ class ETMScalingConfig(models.Model):
     def __str__(self):
         pass
 
+
 class ETMCostConfig(models.Model):
+    scenario = ParentalKey(Scenario, related_name="etm_cost_config")
 
-    asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    min_value = models.IntegerField()
-    max_value = models.IntegerField()
-
-    panels = [
-        FieldPanel(None),
-    ]
+    panels = []
 
     class Meta:
         verbose_name = "Kostenmodule configuratie"
@@ -79,19 +94,14 @@ class ETMCostConfig(models.Model):
     def __str__(self):
         pass
 
+
 class CostBenifitConfig(models.Model):
+    # casus
 
-    asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    min_value = models.IntegerField()
-    max_value = models.IntegerField()
-
-    panels = [
-        FieldPanel(None),
-    ]
+    panels = []
 
     class Meta:
         verbose_name = "Kosten&baten configuratie"
 
     def __str__(self):
         pass
-

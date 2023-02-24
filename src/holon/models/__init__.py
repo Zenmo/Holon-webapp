@@ -7,3 +7,4 @@ from .gridnode import *  # NOQA
 from .scenario import *  # NOQA
 from .policy import *  # NOQA
 from .interactive_element import *  # NOQA
+from .config import *  # NOQA
