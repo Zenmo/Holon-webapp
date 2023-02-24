@@ -90,7 +90,7 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
         <img
           src={selectedImage?.value.imageSelector?.img?.src}
           alt={selectedImage?.value.imageSelector?.img?.alt}
-          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2	 h-full object-contain max-w-none"
+          className="image z-10 absolute translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2 h-[300%] object-contain max-w-none"
         />
       ) : (
         <img

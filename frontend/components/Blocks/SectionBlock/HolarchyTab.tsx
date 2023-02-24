@@ -63,7 +63,7 @@ export default function HolarchyTab({
           <div className="relative row-start-1 bg-holon-blue-100 row-span-1 col-start-1 col-span-1">
             <svg
               viewBox="0 0 20 4.95"
-              className="md:absolute md:w-full md:top-[100%] md:fill-[#e8eeff] z-10">
+              className="hidden md:block md:absolute md:w-full md:top-[100%] md:fill-[#e8eeff] z-10">
               <path
                 d="
             M10 4.95
@@ -87,7 +87,7 @@ export default function HolarchyTab({
           <div className="relative overflow-hidden bg-holon-blue-300  row-start-3 row-span-1 col-start-1 col-span-1">
             <svg
               viewBox="0 0 20 4.95"
-              className="md:w-full md:absolute md:top-[-2px] md:fill-[#d8e3ff]">
+              className="hidden md:block md:w-full md:absolute md:top-[-2px] md:fill-[#d8e3ff]">
               <path
                 d="
             M10 4.95
