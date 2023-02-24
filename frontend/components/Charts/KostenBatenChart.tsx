@@ -36,7 +36,7 @@ export default function KostenBatenChart() {
       .then(data => setData(convertGraphData(data)))
       .catch(err => console.log(err));
 
-    httpGet(`${API_URL}wt/api/nextjs/v1/graph-colors/`)
+    httpGet(`${API_URL}/wt/api/nextjs/v1/graph-colors/`)
       .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
   }, []);
