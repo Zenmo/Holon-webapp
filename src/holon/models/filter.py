@@ -13,7 +13,7 @@ class Filter(PolymorphicModel):
 
     rule = models.ForeignKey("holon.ScenarioRule", on_delete=models.CASCADE, related_name="filters")
 
-    def getQ(self) -> Q:
+    def get_q(self) -> Q:
         pass
 
 
@@ -36,7 +36,7 @@ class AttributeFilter(Filter):
     def clean(self):
         super().clean()
 
-        if self.relation_field not in self.model_attribute_options():
+        if self.model_attribute not in self.model_attribute_options():
             raise ValidationError("Invalid value model_attribute")
 
     def model_attribute_options(self):
@@ -47,15 +47,17 @@ class AttributeFilter(Filter):
 
         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
-    def getQ(self) -> Q:
-        if self.comparator == AttributeFilterComparator.EQUAL:
-            return Q(**{self.model_attribute: self.value})
-        if self.comparator == AttributeFilterComparator.LESS_THAN:
-            return Q(**{f"{self.model_attribute}__lt": self.value})
-        if self.comparator == AttributeFilterComparator.GREATER_THAN:
-            return Q(**{f"{self.model_attribute}__gt": self.value})
-        if self.comparator == AttributeFilterComparator.NOT_EQUAL:
-            return ~Q(**{self.model_attribute: self.value})
+    def get_q(self) -> Q:
+        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+
+        if self.comparator == AttributeFilterComparator.EQUAL.value:
+            return Q(**{f"{model_type}___{self.model_attribute}": self.value})
+        if self.comparator == AttributeFilterComparator.LESS_THAN.value:
+            return Q(**{f"{model_type}___{self.model_attribute}__lt": self.value})
+        if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
+            return Q(**{f"{model_type}___{self.model_attribute}__gt": self.value})
+        if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
+            return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
 
 
 class RelationAttributeFilter(AttributeFilter):
@@ -90,21 +92,21 @@ class RelationAttributeFilter(AttributeFilter):
 
         return [subclass.__name__ for subclass in all_subclasses(related_model)]
 
-    def getQ(self) -> Q:
+    def get_q(self) -> Q:
         relation_field_q = Q()
         relation_field_subtype = Q()
 
-        if self.comparator == AttributeFilterComparator.EQ:
+        if self.comparator == AttributeFilterComparator.EQ.value:
             relation_field_q = Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
-        elif self.comparator == AttributeFilterComparator.LT:
+        elif self.comparator == AttributeFilterComparator.LT.value:
             relation_field_q = Q(
                 **{f"{self.relation_field}__{self.model_attribute}__lt": self.value}
             )
-        elif self.comparator == AttributeFilterComparator.GT:
+        elif self.comparator == AttributeFilterComparator.GT.value:
             relation_field_q = Q(
                 **{f"{self.relation_field}__{self.model_attribute}__gt": self.value}
             )
-        elif self.comparator == AttributeFilterComparator.NE:
+        elif self.comparator == AttributeFilterComparator.NE.value:
             relation_field_q = ~Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
 
         if self.relation_field_subtype:

@@ -25,3 +25,5 @@ class Scenario(models.Model):
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
+
+        return assets

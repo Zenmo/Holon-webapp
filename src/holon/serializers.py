@@ -1,8 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from api.models.scenario import Scenario
 from holon.models.interactive_element import InteractiveElement
+from holon.models.scenario import Scenario
 
 
 class InteractiveElementInput:

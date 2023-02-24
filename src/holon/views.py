@@ -1,12 +1,11 @@
-from holon.models import rule_mapping
-from rest_framework.response import Response
+from cloudclient.experiments import AnyLogicExperiment, prepare_scenario_as_experiment
 from rest_framework import generics, status
+from rest_framework.response import Response
 
-from cloudclient.experiments import prepare_scenario_as_experiment, AnyLogicExperiment
+from holon.models import rule_mapping
 
-
-from .serializers import HolonRequestSerializer
 from .models.pepe import Pepe
+from .serializers import HolonRequestSerializer
 
 RESULTS = [
     "SystemHourlyElectricityImport_MWh",
@@ -40,7 +39,9 @@ class HolonService(generics.CreateAPIView):
             pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
             pepe.preprocessor.apply_interactive_to_payload()
 
-            rule_mapping.get_scenario_and_apply_rules(serializer.scenario.id, serializer.interactive_elements )
+            rule_mapping.get_scenario_and_apply_rules(
+                serializer.scenario.id, serializer.interactive_elements
+            )
 
             holon_results = scenario.runScenario()
 
@@ -69,5 +70,33 @@ class HolonService(generics.CreateAPIView):
                 results,
                 status=status.HTTP_200_OK,
             )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class HolonV2Service(generics.CreateAPIView):
+    serializer_class = HolonRequestSerializer
+
+    def post(self, request):
+
+        serializer = HolonRequestSerializer(data=request.data)
+
+        if serializer.is_valid():
+            data = serializer.validated_data
+
+            scenario = rule_mapping.get_scenario_and_apply_rules(
+                data["scenario"].id, data["interactive_elements"]
+            )
+
+            from pprint import pprint
+
+            print(scenario.__dict__)
+            pprint([c.__dict__ for c in scenario.assets])
+
+            return Response(
+                "success",
+                status=status.HTTP_200_OK,
+            )
+
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
