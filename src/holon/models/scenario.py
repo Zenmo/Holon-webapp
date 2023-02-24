@@ -3,10 +3,11 @@ from django.db import models
 
 class Scenario(models.Model):
     name = models.CharField(max_length=255)
-    etm_scenario_id = models.IntegerField()
+    version = models.IntegerField()
+    comment = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "Scenario"
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - versie {self.version}"
