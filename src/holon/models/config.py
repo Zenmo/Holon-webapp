@@ -2,6 +2,9 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 
 
+from holon.models.scenario import Scenario
+
+
 
 class AnylogicCloudConfig(models.Model):
     """ top level model for AnyLogic cloudclient connection configuration """
@@ -10,6 +13,7 @@ class AnylogicCloudConfig(models.Model):
     url = models.CharField(max_length=100, default="https://engine.holontool.nl") 
     model_name = models.CharField(max_length=100)
     model_version_number = models.IntegerField()
+    scenario = models.ForeignKey(Scenario)
 
     owner_email = models.EmailField() # use this later for sending error emails
 
@@ -47,9 +51,7 @@ class AnylogicCloudOutput(models.Model):
 
 class ETMScalingConfig(models.Model):
 
-    asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    min_value = models.IntegerField()
-    max_value = models.IntegerField()
+    etm_scenario_id = models.IntegerField()
 
     panels = [
         FieldPanel(None),
