@@ -1,9 +1,10 @@
-import React from "react";
 import HolarchyFeedbackImage from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import ContentColumn from "./ContentColumn";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
 import { Content } from "@/components/Blocks/SectionBlock/types";
 import { StaticImage } from "@/components/ImageSelector/types";
+import { KPIData } from "@/components/KPIDashboard/types";
 
 type HolarchyTab = {
   holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
@@ -11,7 +12,11 @@ type HolarchyTab = {
   dataContent: Content[];
   handleContentChange: React.Dispatch<React.SetStateAction<Content[]>>;
   handleMedia: React.Dispatch<React.SetStateAction<StaticImage>>;
-  selectedLevel?: string;
+  textLabelNational: string;
+  textLabelIntermediate: string;
+  textLabelLocal: string;
+  loading: boolean;
+  kpis: KPIData;
 };
 
 export default function HolarchyTab({
@@ -20,12 +25,17 @@ export default function HolarchyTab({
   dataContent,
   handleContentChange,
   handleMedia,
+  textLabelNational,
+  textLabelIntermediate,
+  textLabelLocal,
+  loading,
+  kpis,
 }: HolarchyTab) {
   const levels = ["national", "intermediate", "local"];
 
   return (
     <div className="w-screen h-screen bg-white">
-      <div className="bg-white fixed top-[4.5rem] md:top-24 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-9.5rem)] w-screen z-10 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
+      <div className="bg-white fixed top-[4.5rem] md:top-24 overflow-auto md:overflow-hidden inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-9.5rem)] w-screen z-10 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
         {/*Interactive input -  left column */}
         {levels.map((level, index) => {
           const cssClasses = [
@@ -96,25 +106,13 @@ export default function HolarchyTab({
 
         {/* KPIs - right column */}
         {/*National KPIs */}
-        <div className=" p-4 bg-holon-blue-100 row-start-7 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-1 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
-          <p>
-            Nationale KPI<span>&#39;</span>s
-          </p>
-        </div>
 
-        {/*Middle KPIs */}
-        <div className=" p-4 bg-holon-blue-200 row-start-8 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-2 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
-          <p>
-            Tussen KPI<span>&#39;</span>s
-          </p>
-        </div>
-
-        {/*Local KPIs */}
-        <div className=" p-4 bg-holon-blue-300  row-start-9 row-span-1 col-start-1 col-span-1 md:col-start-3 md:col-span-1 md:row-start-3 md:row-span-1 border-b-2 border-dashed border-holon-blue-900">
-          <p>
-            Lokale KPI<span>&#39;</span>s
-          </p>
-        </div>
+        <HolarchyKPIDashboard
+          textLabelNational={textLabelNational}
+          textLabelIntermediate={textLabelIntermediate}
+          textLabelLocal={textLabelLocal}
+          loading={loading}
+          data={kpis}></HolarchyKPIDashboard>
       </div>
     </div>
   );

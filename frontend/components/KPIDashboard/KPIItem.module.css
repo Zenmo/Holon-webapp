@@ -1,0 +1,127 @@
+.kpiStoryline {
+  color: #fff;
+  width: 25%;
+  padding: 1.5rem;
+}
+.kpiStoryline > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+.kpiStoryline [data-class="kpiTitle"] {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.kpiStoryline [data-class="kpiIcon"] {
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+.kpiStoryline > div > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+}
+.kpiStoryline > div > div > output {
+  font-weight: bold;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+.kpiStoryline > div > div > span {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 300;
+}
+
+@media (min-width: 768px) {
+  .kpiStoryline [data-class="kpiTitle"] {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .kpiStoryline [data-class="kpiTitle"] {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  .kpiStoryline > div > div > output {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+.kpiHolarchy {
+  color: #000;
+  display: flex;
+  flex: 1 0 50%;
+  max-height: 65px;
+}
+.kpiHolarchy > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0rem 0.5rem;
+  gap: 0.25rem;
+}
+.kpiHolarchy__title {
+  padding: 0rem 0.5rem 0;
+  flex: 1 1 100%;
+  font-weight: 600;
+}
+
+.kpiHolarchy output {
+  font-size: 1.1rem;
+}
+
+.kpiHolarchy [data-class="kpiTitle"] {
+  margin-right: auto;
+  font-size: 1rem;
+}
+
+.kpiHolarchy [data-class="kpiIcon"] {
+  width: 1.2rem;
+  display: flex;
+  order: -1;
+  flex: 1 1 100%;
+}
+.kpiHolarchy > div > div {
+  margin-right: auto;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+@media (min-width: 1536px) {
+  .kpiHolarchy > div {
+    padding: 0rem 1.5rem;
+    gap: 0.75rem;
+  }
+  .kpiHolarchy__title {
+    padding: 0.5rem 1.5rem 0;
+  }
+  .kpiHolarchy [data-class="kpiIcon"] {
+    width: 2.2rem;
+  }
+}
+
+@media (min-height: 850px) and (min-width: 1536px) {
+  .kpiHolarchy {
+    max-height: 90px;
+  }
+
+  .kpiHolarchy [data-class="kpiTitle"] {
+    font-size: 1.1rem;
+    line-height: 1rem;
+  }
+  .kpiHolarchy output {
+    font-size: 1.3rem;
+  }
+}
+
+/* //flex flex-col bg-transparant text-white justify-between items-center p-6 w-1/4" */

@@ -18,6 +18,9 @@ type Props = {
     value: {
       background: Background;
       content: Content[];
+      textLabelNational: string;
+      textLabelIntermediate: string;
+      textLabelLocal: string;
       gridLayout: GridLayout;
     };
     id: string;
@@ -190,7 +193,12 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
               content={content}
               dataContent={data?.value.content}
               handleContentChange={setContent}
-              handleMedia={setMedia}></HolarchyTab>
+              handleMedia={setMedia}
+              textLabelNational={data.value.textLabelNational}
+              textLabelIntermediate={data.value.textLabelIntermediate}
+              textLabelLocal={data.value.textLabelLocal}
+              loading={loading}
+              kpis={kpis}></HolarchyTab>
           )}
         </div>
       </div>
