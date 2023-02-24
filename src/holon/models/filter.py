@@ -96,17 +96,17 @@ class RelationAttributeFilter(AttributeFilter):
         relation_field_q = Q()
         relation_field_subtype = Q()
 
-        if self.comparator == AttributeFilterComparator.EQ.value:
+        if self.comparator == AttributeFilterComparator.EQUAL.value:
             relation_field_q = Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
-        elif self.comparator == AttributeFilterComparator.LT.value:
+        elif self.comparator == AttributeFilterComparator.LESS_THAN.value:
             relation_field_q = Q(
                 **{f"{self.relation_field}__{self.model_attribute}__lt": self.value}
             )
-        elif self.comparator == AttributeFilterComparator.GT.value:
+        elif self.comparator == AttributeFilterComparator.GREATER_THAN.value:
             relation_field_q = Q(
                 **{f"{self.relation_field}__{self.model_attribute}__gt": self.value}
             )
-        elif self.comparator == AttributeFilterComparator.NE.value:
+        elif self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
             relation_field_q = ~Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
 
         if self.relation_field_subtype:
@@ -119,4 +119,4 @@ class RelationAttributeFilter(AttributeFilter):
                 }
             )
 
-        return relation_field_q & relation_field_subtype
+        return relation_field_subtype & relation_field_q
