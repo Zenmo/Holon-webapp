@@ -46,6 +46,3 @@ class ScenarioRule(models.Model):
     def model_subtype_options(self):
         model_type_class = apps.get_model("holon", self.model_type)
         return [subclass.__name__ for subclass in all_subclasses(model_type_class)]
-
-    def map_inputs(scenario: Scenario) -> Scenario:
-        """ """

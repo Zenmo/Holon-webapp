@@ -2,6 +2,7 @@ from django.apps import apps
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
+from holon.models.factor import Factor
 from holon.models.filter import Filter
 from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ModelType, ScenarioRule
@@ -80,17 +81,13 @@ def apply_rule_filters_to_queryset(queryset: QuerySet, rule: ScenarioRule) -> Qu
     return queryset.filter(queryset_filter)
 
 
-def apply_rule_factors(rule: ScenarioRule, queryset: QuerySet, filtered_queryset, value):
+def apply_rule_factors(rule: ScenarioRule, queryset: QuerySet, value: str):
     """Apply factors to filtered objects"""
 
-    for factor in rule.factors.all():
-        # TODO make more generic if different factors come into play
-
-        for object in filtered_queryset:
-            mapped_value = (factor.max_value - factor.min_value) * (
-                float(value)
-                / 100  # TODO: cast here to float, but bro should that not just be a float?
-            ) + factor.min_value
+    factor: Factor
+    for factor in rule.factors:
+        for object in queryset:
+            mapped_value = factor.map_factor_value(value)
 
             # Find index from filtered element in prefetched queryset
             queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == object.id)
