@@ -1,4 +1,3 @@
-import { Popover } from "@headlessui/react";
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import { dummyData } from "./dummyData";
 import styles from "./CostBenefit.module.css";
