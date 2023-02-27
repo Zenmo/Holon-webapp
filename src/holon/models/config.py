@@ -96,13 +96,11 @@ class AnylogicCloudOutput(models.Model):
         return f"{self.internal_key}"
 
 
-class ETMScalingConfig(ClusterableModel):
+class QueryAndConvertConfig(ClusterableModel):
     api_url = models.URLField(
         default="https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
     )
     etm_scenario_id = models.IntegerField()
-
-    scenario = ParentalKey(Scenario, related_name="etm_scaling_config")
 
     panels = [
         InlinePanel(
@@ -112,6 +110,16 @@ class ETMScalingConfig(ClusterableModel):
             min_num=1,
         ),
     ]
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        pass
+
+
+class ETMScalingConfig(QueryAndConvertConfig):
+    scenario = ParentalKey(Scenario, related_name="etm_scaling_config")
 
     class Meta:
         verbose_name = "ETM opschalingsconfiguratie"
@@ -235,19 +243,30 @@ class AnyLogicConversionValueType(models.TextChoices):
     STATIC = "static"
 
 
-class AnyLogicConversion(ETMConversion):
-    
+class AnyLogicConversion(models.Model):
     etm_query = ParentalKey(ETMQuery, related_name="al_conversion_step")
-    etm_key = None
-    conversion_value_type = models.CharField(max_length=255, choices=AnyLogicConversionValueType.choices)
-    
+    conversion = models.CharField(max_length=255, choices=ConversionOperationType.choices)
+    conversion_value_type = models.CharField(
+        max_length=255, choices=AnyLogicConversionValueType.choices
+    )
+    value = models.FloatField(
+        blank=True,
+        null=True,
+        help_text=_("Value for static conversions, only use when conversion type is static"),
+    )
     anylogic_key = models.CharField(
         max_length=255,
-        help_text=_("Key as defined in the AnyLogic results (only use when conversion type is not static)"),
+        help_text=_(
+            "Key as defined in the AnyLogic results (only use when conversion type is not static)"
+        ),
+    )
+    shadow_key = models.CharField(
+        max_length=255,
+        help_text=_("Internal key, not used by humans but might occur in logs when errors occur"),
     )
 
 
-class ETMCostConfig(ETMScalingConfig):
+class ETMCostConfig(QueryAndConvertConfig):
     scenario = ParentalKey(Scenario, related_name="etm_cost_config")
 
     class Meta:
