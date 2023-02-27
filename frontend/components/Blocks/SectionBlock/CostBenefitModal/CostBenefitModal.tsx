@@ -1,13 +1,46 @@
+import { useState, useEffect } from "react";
 import KostenBatenChart from "@/components/Charts/KostenBatenChart";
+import KostenBatenPerSubtypeChart from "@/components/Charts/KostenBatenPerSubtypeChart";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
+import { getHolonDataSegments, getHolonDataSegmentsDetail, getHolonGraphColor } from "@/api/holon";
 
 export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
+  const [data, setData] = useState([]);
+  const [detailData, setDetailData] = useState([]);
+  const [dataColors, setDataColors] = useState([]);
+  const ignoredLabels = ["name", "Netto kosten"];
+
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     handleClose();
   };
+
+  const convertGraphData = data => {
+    const returnArr: unknown[] = [];
+    Object.entries(data).map(value => {
+      const constructObj = { ...value[1] };
+      constructObj.name = value[0].replace(/['"]+/g, "");
+      returnArr.push(constructObj);
+    });
+
+    return returnArr;
+  };
+
+  useEffect(() => {
+    getHolonDataSegments()
+      .then(data => setData(convertGraphData(data)))
+      .catch(err => console.log(err));
+
+    getHolonDataSegmentsDetail()
+      .then(data => setDetailData(convertGraphData(data)))
+      .catch(err => console.log(err));
+
+    getHolonGraphColor()
+      .then(result => setDataColors(result.items))
+      .catch(err => console.log(err));
+  }, []);
 
   return (
     <div className="h-screen bg-white">
@@ -58,10 +91,27 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
               <Tab.Panels className="flex flex-1 h-full flex-col">
                 <Tab.Panel className="flex flex-1 h-full flex-col">
                   <h1 className="text-center">Kosten en baten per segment</h1>
-                  <KostenBatenChart />
+                  <KostenBatenChart
+                    chartdata={data}
+                    dataColors={dataColors}
+                    ignoredLabels={ignoredLabels}
+                  />
                 </Tab.Panel>
-                <Tab.Panel>Content 2</Tab.Panel>
-                <Tab.Panel>Content 3</Tab.Panel>
+                <Tab.Panel className="flex flex-1 h-full flex-col">Content 2</Tab.Panel>
+                <Tab.Panel className="flex flex-1 h-full flex-col">
+                  <h1 className="text-center">Kosten en baten per subtype huishouden</h1>
+
+                  <div className="flex flex-1 h-full flex-col">
+                    <div className="grid grid-cols-2 gap-2 h-full">
+                      <div className="flex-1">Links</div>
+                      <KostenBatenPerSubtypeChart
+                        chartdata={detailData}
+                        dataColors={dataColors}
+                        ignoredLabels={ignoredLabels}
+                      />
+                    </div>
+                  </div>
+                </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
           </div>

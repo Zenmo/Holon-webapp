@@ -23,6 +23,10 @@ export async function getHolonDataSegments() {
   return await httpGet(`/api/dummy-kosten-baten`);
 }
 
+export async function getHolonDataSegmentsDetail() {
+  return await httpGet(`/api/dummy-kosten-baten-2`);
+}
+
 export async function getHolonGraphColor() {
   return await httpGet(`${API_URL}/v1/graph-colors/`);
 }
