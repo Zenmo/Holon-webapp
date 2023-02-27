@@ -3,7 +3,11 @@ import CostBenefitChart from "@/components/Charts/CostBenefitChart";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { getHolonDataSegments, getHolonDataSegmentsDetail, getHolonGraphColor } from "@/api/holon";
+import {
+  getHolonDataSegments,
+  getHolonDataSegmentsDetail,
+  getHolonGraphColor,
+} from "../../../../api/holon";
 import CostBenefitTable from "@/components/Charts/CostBenefitTable";
 
 export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
