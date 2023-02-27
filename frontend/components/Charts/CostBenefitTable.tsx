@@ -1,18 +1,18 @@
 import { Popover } from "@headlessui/react";
+import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import { dummyData } from "./dummyData";
+import styles from "./CostBenefit.module.css";
+import React from "react";
 
-export default function Table(data) {
+export default function CostBenefitTable(data) {
   const backgroundCell = {
     pos: "bg-holon-light-green",
     neg: "bg-holon-light-red",
     neutral: "",
-    tfoot: "border-t-4",
   };
 
-  const createBackgroundCell = (value, titleItem) => {
-    if (titleItem == "Netto kosten") {
-      return backgroundCell.tfoot;
-    } else if (value > 0 || titleItem == "Netto kosten") {
+  const createBackgroundCell = (value: number) => {
+    if (value > 0) {
       return backgroundCell.pos;
     } else if (value < 0) {
       return backgroundCell.neg;
@@ -37,7 +37,18 @@ export default function Table(data) {
     }
   }
 
-  const tableCell = titleItem => {
+  const popUp = (labelText: number, innerText: string) => {
+    return (
+      <div className="relative cursor-help">
+        <abbr title={innerText}>{valueCheck(labelText)}</abbr>
+        <span className="text-left left-[50%] translate-x-[-50%] top-full absolute p-2 z-10 bg-holon-blue-900 border-2 border-solid text-white rounded-md border-holon-gray-300 ">
+          {innerText}
+        </span>
+      </div>
+    );
+  };
+
+  const tableCell = (titleItem: string) => {
     return (
       <>
         <td
@@ -56,24 +67,17 @@ export default function Table(data) {
                 titleItem
               )}`}
               key={index}>
-              {!tableCellValue || tableCellValue == 0 || titleItem == "Netto kosten" ? (
-                valueCheck(tableCellValue)
-              ) : (
-                <Popover className="relative inline">
-                  <Popover.Button>{valueCheck(tableCellValue)}</Popover.Button>
-                  <Popover.Panel className="text-left left-[50%] translate-x-[-50%] absolute p-2 z-10 bg-white border-2 border-solid rounded-md border-holon-gray-300 ">
-                    {tableCellValue < 0 ? (
-                      <span>
-                        {heading} betaalt {valueCheck(Math.abs(tableCellValue))} aan {titleItem}
-                      </span>
-                    ) : (
-                      <span>
-                        {heading} ontvangt {valueCheck(Math.abs(tableCellValue))} van {titleItem}
-                      </span>
-                    )}
-                  </Popover.Panel>
-                </Popover>
-              )}
+              {!tableCellValue || tableCellValue == 0 || titleItem == "Netto kosten"
+                ? valueCheck(tableCellValue)
+                : tableCellValue < 0
+                ? popUp(
+                    tableCellValue,
+                    ` ${heading} betaalt ${valueCheck(Math.abs(tableCellValue))} aan ${titleItem}`
+                  )
+                : popUp(
+                    tableCellValue,
+                    `${heading} ontvangt ${valueCheck(Math.abs(tableCellValue))} van ${titleItem}`
+                  )}
             </td>
           );
         })}
@@ -83,10 +87,17 @@ export default function Table(data) {
 
   return (
     <div className="flex justify-center flex-1">
-      <table className="m-4 table-fixed w-full h-full">
+      <table className={`my-4 table-fixed w-full h-full ${styles.Table}`}>
         <thead className="border-b-4 border-holon-gray-300">
           <tr className="bg-holon-gray-100 text-left">
-            <th className="p-4 border-r-2 border-holon-gray-300">Transactie met ↓</th>
+            <th className="p-4 border-r-2 border-holon-gray-300">
+              <span className="flex align-items-center gap-2">
+                Transactie met
+                <span className="flex-[0_0_20px]">
+                  <ArrowDownIcon />
+                </span>
+              </span>
+            </th>
             {headings.map((heading, index) => (
               <th key={index} className="px-4 border-r-2 border-holon-gray-300">
                 {heading}
