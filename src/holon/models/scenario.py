@@ -32,8 +32,8 @@ class Scenario(ClusterableModel):
         ),
         InlinePanel(
             "query_and_convert_config",
-            heading="ETM scaling module configuration",
-            label="ETM scaling module configuration",
+            heading="ETM module configuration",
+            label="ETM module configuration",
             max_num=3,
             min_num=2,
         ),

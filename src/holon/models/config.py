@@ -162,13 +162,25 @@ class ETMQuery(ClusterableModel):
         FieldPanel("data_type"),
         FieldPanel("etm_key"),
         InlinePanel(
+            "static_conversion_step",
+            heading="Optionally convert outcomes with static values",
+            label="Static conversion (convert with static value)",
+        ),
+        InlinePanel(
             "etm_conversion_step",
             heading="Optionally use this feature edit the results from the ETM with other values or queries",
-            label="Conversion (convert_with)",
+            label="ETM conversion (convert with ETM query)",
         ),
-        InlinePanel("al_conversion_step"),
-        InlinePanel("datamodel_conversion_step"),
-        InlinePanel("static_conversion_step"),
+        InlinePanel(
+            "datamodel_conversion_step",
+            heading="Optionally use this feature map outcomes based on specific parts of the datamodel definition",
+            label="Datamodel based conversion (convert based on datamodel fields)",
+        ),
+        InlinePanel(
+            "al_conversion_step",
+            heading="Optionally use this feature map outcomes based on AnyLogic outcomes",
+            label="AnyLogic result conversion (convert with AnyLogic outcomes)",
+        ),
     ]
 
     def clean(self) -> None:
