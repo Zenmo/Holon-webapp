@@ -25,6 +25,9 @@ export default function CostBenefitTable({ tableData }) {
 
   const headings = getHeadings(tableData);
 
+  //when there are a lot of columns, show all columns more compact
+  const CompactTable = headings.length > 9 ? true : false;
+
   function valueCheck(value: number | undefined) {
     if (!value) {
       return "-";
@@ -50,7 +53,8 @@ export default function CostBenefitTable({ tableData }) {
     return (
       <>
         <td
-          className={`p-4 border-r-2 border-holon-gray-300 text-left ${
+          colSpan={CompactTable ? 2 : 1}
+          className={`border-r-2 border-holon-gray-300 text-left ${
             titleItem == "Netto kosten" && ` border-t-4 `
           }`}>
           {titleItem == "Netto kosten" ? `Totaal` : titleItem}
@@ -60,7 +64,7 @@ export default function CostBenefitTable({ tableData }) {
             tableData[headings[index]] && tableData[headings[index]][titleItem];
           return (
             <td
-              className={`p-4 border-r-2 border-holon-gray-300 text-right ${createBackgroundCell(
+              className={`border-r-2 border-holon-gray-300 text-right ${createBackgroundCell(
                 tableCellValue,
                 titleItem
               )}`}
@@ -84,11 +88,14 @@ export default function CostBenefitTable({ tableData }) {
   };
 
   return (
-    <div className="flex justify-center flex-1">
-      <table className={`my-4 table-fixed w-full h-full ${styles.Table}`}>
+    <div className="flex justify-center flex-1 overflow-auto">
+      <table
+        className={`table-fixed w-full max-w-full h-full ${styles.Table} ${
+          CompactTable && styles.CompactTable
+        }`}>
         <thead className="border-b-4 border-holon-gray-300">
           <tr className="bg-holon-gray-100 text-left">
-            <th className="p-4 border-r-2 border-holon-gray-300">
+            <th colSpan={CompactTable ? 2 : 1} className="border-r-2 border-holon-gray-300">
               <span className="flex align-items-center gap-2">
                 Transactie met
                 <span className="flex-[0_0_20px]">
@@ -97,8 +104,8 @@ export default function CostBenefitTable({ tableData }) {
               </span>
             </th>
             {headings.map((heading, index) => (
-              <th key={index} className="px-4 border-r-2 border-holon-gray-300">
-                {heading}
+              <th key={index} className="border-r-2 border-holon-gray-300">
+                <span>{heading}</span>
               </th>
             ))}
           </tr>
