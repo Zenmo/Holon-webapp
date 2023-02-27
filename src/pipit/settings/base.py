@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # "django.contrib.sitemaps"
     # Third party apps
     "storages",
+    "wagtail.api.v2",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "wagtail.admin",
     "wagtail.search",
     "wagtail",
+    "wagtail_color_panel",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.modeladmin",

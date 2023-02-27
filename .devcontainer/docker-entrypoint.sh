@@ -46,6 +46,7 @@ load_fixture_data() {
   python manage.py loaddata holon/fixtures/holon-fixture.json
   python manage.py loaddata holon/fixtures/api-fixture.json
   python manage.py loaddata holon/fixtures/main-casusfilter-fixture.json
+  python manage.py loaddata holon/fixtures/graph-colors-fixture.json
 }
 
 setup_frontend () {

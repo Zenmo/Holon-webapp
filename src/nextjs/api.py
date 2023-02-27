@@ -26,7 +26,10 @@ from wagtail.wagtail_hooks import require_wagtail_login
 from wagtail_headless_preview.models import PagePreview
 from wagtail.api.v2.views import BaseAPIViewSet
 
+from main.snippets.graphcolors import GraphColors
+
 api_router = WagtailAPIRouter("nextjs")
+
 
 # Default pages functionality of WagTail
 class MainPagesViewSet(PagesAPIViewSet):
@@ -314,3 +317,20 @@ class RedirectByPathAPIViewSet(BaseAPIViewSet):
 
 
 api_router.register_endpoint("redirect_by_path", RedirectByPathAPIViewSet)
+
+
+class GraphColorsAPIEndpoint(BaseAPIViewSet):
+    model = GraphColors
+
+    body_fields = PagesAPIViewSet.body_fields + [
+        "name",
+        "color",
+    ]
+
+    listing_default_fields = PagesAPIViewSet.listing_default_fields = [
+        "name",
+        "color",
+    ]
+
+
+api_router.register_endpoint("graph-colors", GraphColorsAPIEndpoint)
