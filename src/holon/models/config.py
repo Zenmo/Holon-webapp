@@ -147,7 +147,7 @@ class ETMQuery(ClusterableModel):
         help_text=_("Key as defined in the ETM"),
     )
 
-    etm_config = ParentalKey(ETMScalingConfig, related_name="etm_query")
+    related_config = ParentalKey(ETMScalingConfig, related_name="etm_query")
 
     panels = [
         FieldPanel("query_type"),
@@ -174,8 +174,8 @@ class ConversionOperationType(models.TextChoices):
 
 
 class ConversionValueType(models.TextChoices):
-    STATIC = "static"
     QUERY = "query"
+    STATIC = "static"
     CURVE = "curve"
     ANYLOGIC_VALUE = "anylogic_value"
     ANYLOGIC_CURVE = "anylogic_curve"
@@ -231,20 +231,65 @@ class ETMConversion(models.Model):
         return super().clean()
 
 
-class ETMCostConfig(models.Model):
+class ETMCostConfig(ETMScalingConfig):
     scenario = ParentalKey(Scenario, related_name="etm_cost_config")
 
-    panels = []
+    panels = [
+        InlinePanel("etm_query"),
+    ]
 
     class Meta:
         verbose_name = "Kostenmodule configuratie"
 
+    def clean() -> None:
+        # left hand side ETM key should be querried
+        if False:
+            raise ("AnyLogic result not found!")
+
+        # right hand side is datamodel attr
+        if False:
+            raise ("AnyLogic result not found!")
+
+        # right hand sight is anylogic result
+        if False:
+            raise ("AnyLogic result not found!")
+
+        return super().clean()
+
     def __str__(self):
-        pass
+        return "Kostenmodule configuratie"
+
+
+ETM_MAPPING = {
+    "depreciation_costs_buildings_solar_panels_per_kw": ("BUILDING", "PHOTOVOLTAIC"),
+    "depreciation_costs_solar_farm_per_kw": ("SOLARFARM", "PHOTOVOLTAIC"),
+    "depreciation_costs_buildings_gas_burner_per_kw": ("BUILDING", "GAS_BURNER"),
+    "depreciation_costs_industry_solar_panels_per_kw": ("INDUSTRY", "PHOTOVOLTAIC"),
+    "depreciation_costs_industry_gas_burner_per_kw": ("INDUSTRY", "GAS_BURNER"),
+    "hourly_price_of_electricity_per_mwh": ("SystemHourlyElectricity", ""),  # TODO: check this key
+    "price_of_natural_gas_per_mwh": ("totalMethane", ""),
+    "price_of_hydrogen_per_mwh": ("totalHydrogen", ""),
+    "price_of_diesel_per_mwh": ("totalDiesel", ""),
+    "electricity_grid_expansion_costs_lv_mv_trafo_per_kw": ("MSLSPeakLoadElectricity_kW", ""),
+    "electricity_grid_expansion_costs_mv_hv_trafo_per_kw": ("HSMSPeakLoadElectricity_kW", ""),
+    "depreciation_costs_grid_battery_per_mwh": (
+        "totalBatteryInstalledCapacity_MWh:Grid_battery_10MWh",
+        "",
+    ),
+}
+
+
+class ETMCostConversion(models.Model):
+    cost_config = ParentalKey(ETMCostConfig, related_name="cost_conversion_element")
+
+    panels = [
+        InlinePanel(),
+        InlinePanel("conversion_step"),
+    ]
 
 
 class CostBenifitConfig(models.Model):
-    # casus
+    # casus wide scope
 
     panels = []
 
@@ -252,4 +297,4 @@ class CostBenifitConfig(models.Model):
         verbose_name = "Kosten&baten configuratie"
 
     def __str__(self):
-        pass
+        return "Kosten&baten configuratie"
