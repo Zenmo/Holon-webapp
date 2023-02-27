@@ -28,7 +28,9 @@ module.exports = {
         "holon-orange-100": "#FE610026",
         "holon-orange-200": "#FE610040",
         "holon-green": "#66b04f",
+        "holon-light-green": "#DEF3DE",
         "holon-red": "#c51700",
+        "holon-light-red": "#FFCCCC",
       },
       backgroundImage: {
         "split-white-blue": "linear-gradient(-18deg, #051E3F 40% , white 30%)",

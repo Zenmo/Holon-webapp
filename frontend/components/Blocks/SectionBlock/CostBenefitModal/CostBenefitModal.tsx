@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import KostenBatenChart from "@/components/Charts/KostenBatenChart";
-import KostenBatenPerSubtypeChart from "@/components/Charts/KostenBatenPerSubtypeChart";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { getHolonDataSegments, getHolonDataSegmentsDetail, getHolonGraphColor } from "@/api/holon";
+import CostBenefitTable from "@/components/Charts/CostBenefitTable";
 
 export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
   const [data, setData] = useState([]);
@@ -41,6 +41,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
       .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
   }, []);
+  const tabItems = ["Grafiek", "Tabel", "Detail"];
 
   return (
     <div className="h-screen bg-white">
@@ -50,61 +51,46 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
             <Tab.Group>
               <div className="flex flex-row justify-between">
                 <Tab.List>
-                  <Tab
-                    className={({ selected }) =>
-                      classNames(
-                        "p-3 mr-px ",
-                        selected
-                          ? "bg-holon-blue-900 text-white"
-                          : "bg-holon-gray-200 text-holon-blue-900"
-                      )
-                    }>
-                    Grafiek
-                  </Tab>
-                  <Tab
-                    className={({ selected }) =>
-                      classNames(
-                        "p-3 mr-px",
-                        selected
-                          ? "bg-holon-blue-900 text-white"
-                          : "bg-holon-gray-200 text-holon-blue-900"
-                      )
-                    }>
-                    Tabel
-                  </Tab>
-                  <Tab
-                    className={({ selected }) =>
-                      classNames(
-                        "p-3 ",
-                        selected
-                          ? "bg-holon-blue-900 text-white"
-                          : "bg-holon-gray-200 text-holon-blue-900"
-                      )
-                    }>
-                    Detail
-                  </Tab>
+                  {tabItems.map((tabItem, index) => (
+                    <Tab
+                      key={tabItem + index}
+                      className={({ selected }) =>
+                        classNames(
+                          "p-3 mr-px ",
+                          selected
+                            ? "bg-holon-blue-900 text-white"
+                            : "bg-holon-gray-200 text-holon-blue-900"
+                        )
+                      }>
+                      {tabItem}
+                    </Tab>
+                  ))}
                 </Tab.List>
                 <button type="button" className="text-holon-blue-900 w-8" onClick={handleClick}>
                   <XMarkIcon />
                 </button>
               </div>
+
               <Tab.Panels className="flex flex-1 h-full flex-col">
                 <Tab.Panel className="flex flex-1 h-full flex-col">
-                  <h1 className="text-center">Kosten en baten per segment</h1>
+                  <h2 className="text-center">Kosten en baten per segment</h2>
                   <KostenBatenChart
                     chartdata={data}
                     dataColors={dataColors}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
-                <Tab.Panel className="flex flex-1 h-full flex-col">Content 2</Tab.Panel>
                 <Tab.Panel className="flex flex-1 h-full flex-col">
-                  <h1 className="text-center">Kosten en baten per subtype huishouden</h1>
+                  <h2 className="text-center">Kosten en baten per groep</h2>
+                  <CostBenefitTable></CostBenefitTable>
+                </Tab.Panel>
+                <Tab.Panel className="flex flex-1 h-full flex-col">
+                  <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
 
                   <div className="flex flex-1 h-full flex-col">
                     <div className="grid grid-cols-2 gap-2 h-full">
                       <div className="flex-1">Links</div>
-                      <KostenBatenPerSubtypeChart
+                      <KostenBatenChart
                         chartdata={detailData}
                         dataColors={dataColors}
                         ignoredLabels={ignoredLabels}
