@@ -1,9 +1,8 @@
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
-import { dummyData } from "./dummyData";
 import styles from "./CostBenefit.module.css";
 import React from "react";
 
-export default function CostBenefitTable() {
+export default function CostBenefitTable({ tableData }) {
   const backgroundCell = {
     pos: "bg-holon-light-green",
     neg: "bg-holon-light-red",
@@ -24,7 +23,7 @@ export default function CostBenefitTable() {
     return Object.keys(data);
   };
 
-  const headings = getHeadings(dummyData);
+  const headings = getHeadings(tableData);
 
   function valueCheck(value: number | undefined) {
     if (!value) {
@@ -58,7 +57,7 @@ export default function CostBenefitTable() {
         </td>
         {headings.map((heading, index) => {
           const tableCellValue =
-            dummyData[headings[index]] && dummyData[headings[index]][titleItem];
+            tableData[headings[index]] && tableData[headings[index]][titleItem];
           return (
             <td
               className={`p-4 border-r-2 border-holon-gray-300 text-right ${createBackgroundCell(

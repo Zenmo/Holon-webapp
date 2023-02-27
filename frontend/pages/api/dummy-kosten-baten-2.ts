@@ -1,20 +1,24 @@
 export default function handler(req, res) {
     const data = {
         "Type A": {
-          "Sociaal-cultureel": "-60",
-          Wederik: null,
-          "Netbeheerder": "110",
-          "Romanist": "140",
+          Afschrijving: "-60",
+          Huishouden: null,
+          "Commercieel bedrijf": "50",
+          Overheidsinstelling: "70",
           Energieleverancier: "-200",
-          "Netto kosten": "-150",
+          Netbeheerder: "-200",
+          Overheid: "125",
+          "Netto kosten": "-335",
         },
-        "Commercieel bedrijf": {
-          "Cociaal-cultureel": "60",
-          Wederik: "25",
-          "Netbeheerder": "225",
-          "Romanist": "400",
+        "Type B": {
+          Afschrijving: "20",
+          Huishouden: "-40",
+          "Commercieel bedrijf": "25",
+          Overheidsinstelling: "15",
           Energieleverancier: "-200",
-          "Netto kosten": "150",
+          Netbeheerder: "-100",
+          Overheid: "-50",
+          "Netto kosten": "-350",
         },
       };
 

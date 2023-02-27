@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function KostenBatenChart({ chartdata, dataColors, ignoredLabels }) {
+export default function CostBenefitChart({ chartdata, dataColors, ignoredLabels }) {
   const CustomBarWithTarget = props => {
     const { fill, x, y, width } = props;
 

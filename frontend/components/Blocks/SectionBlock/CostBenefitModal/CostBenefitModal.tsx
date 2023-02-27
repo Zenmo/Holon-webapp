@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import KostenBatenChart from "@/components/Charts/KostenBatenChart";
+import CostBenefitChart from "@/components/Charts/CostBenefitChart";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
@@ -30,11 +30,11 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
 
   useEffect(() => {
     getHolonDataSegments()
-      .then(data => setData(convertGraphData(data)))
+      .then(data => setData(data))
       .catch(err => console.log(err));
 
     getHolonDataSegmentsDetail()
-      .then(data => setDetailData(convertGraphData(data)))
+      .then(data => setDetailData(data))
       .catch(err => console.log(err));
 
     getHolonGraphColor()
@@ -74,24 +74,26 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
               <Tab.Panels className="flex flex-1 h-full flex-col">
                 <Tab.Panel className="flex flex-1 h-full flex-col">
                   <h2 className="text-center">Kosten en baten per segment</h2>
-                  <KostenBatenChart
-                    chartdata={data}
+                  <CostBenefitChart
+                    chartdata={convertGraphData(data)}
                     dataColors={dataColors}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
                 <Tab.Panel className="flex flex-1 h-full flex-col">
                   <h2 className="text-center">Kosten en baten per groep</h2>
-                  <CostBenefitTable></CostBenefitTable>
+                  <CostBenefitTable tableData={data} />
                 </Tab.Panel>
                 <Tab.Panel className="flex flex-1 h-full flex-col">
                   <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
 
                   <div className="flex flex-1 h-full flex-col">
-                    <div className="grid grid-cols-2 gap-2 h-full">
-                      <div className="flex-1">Links</div>
-                      <KostenBatenChart
-                        chartdata={detailData}
+                    <div className="grid grid-cols-2 gap-4 h-full">
+                      <div className="flex-1">
+                        <CostBenefitTable tableData={detailData} />
+                      </div>
+                      <CostBenefitChart
+                        chartdata={convertGraphData(detailData)}
                         dataColors={dataColors}
                         ignoredLabels={ignoredLabels}
                       />
