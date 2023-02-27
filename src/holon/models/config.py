@@ -192,8 +192,6 @@ class ETMQuery(ClusterableModel):
 class ConversionOperationType(models.TextChoices):
     MULTIPLY = "multiply"
     DIVIDE = "divide"
-    ADD = "add"
-    SUBSTRACT = "substract"
     IN_PRODUCT = "in_product"
 
 
