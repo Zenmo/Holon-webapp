@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 from holon.models.scenario import Scenario
 from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 
 class AnylogicCloudConfig(ClusterableModel):
@@ -111,9 +111,6 @@ class QueryAndConvertConfig(ClusterableModel):
         ),
     ]
 
-    class Meta:
-        abstract = True
-
     def __str__(self):
         pass
 
@@ -155,7 +152,7 @@ class ETMQuery(ClusterableModel):
         help_text=_("Key as defined in the ETM"),
     )
 
-    related_config = ParentalKey(ETMScalingConfig, related_name="etm_query")
+    related_config = ParentalKey(QueryAndConvertConfig, related_name="etm_query")
 
     panels = [
         FieldPanel("query_type"),
@@ -197,7 +194,7 @@ class StaticConversion(models.Model):
         help_text=_("Value for static conversions"),
     )
     conversion = models.CharField(max_length=255, choices=ConversionOperationType.choices)
-    
+
     shadow_key = models.CharField(
         max_length=255,
         help_text=_("Internal key, not used by humans but might occur in logs when errors occur"),
