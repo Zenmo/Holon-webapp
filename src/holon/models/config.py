@@ -168,6 +168,7 @@ class ETMQuery(ClusterableModel):
         ),
         InlinePanel("al_conversion_step"),
         InlinePanel("datamodel_conversion_step"),
+        InlinePanel("static_conversion_step"),
     ]
 
     def clean(self) -> None:
@@ -185,9 +186,22 @@ class ConversionOperationType(models.TextChoices):
 
 
 class ETMConversionValueType(models.TextChoices):
-    QUERY = "query"
-    STATIC = "static"
+    VALUE = "value"
     CURVE = "curve"
+
+
+class StaticConversion(models.Model):
+    etm_query = ParentalKey(ETMQuery, related_name="static_conversion_step")
+
+    value = models.FloatField(
+        help_text=_("Value for static conversions"),
+    )
+    conversion = models.CharField(max_length=255, choices=ConversionOperationType.choices)
+    
+    shadow_key = models.CharField(
+        max_length=255,
+        help_text=_("Internal key, not used by humans but might occur in logs when errors occur"),
+    )
 
 
 class ETMConversion(models.Model):
@@ -196,14 +210,9 @@ class ETMConversion(models.Model):
     conversion = models.CharField(max_length=255, choices=ConversionOperationType.choices)
     conversion_value_type = models.CharField(max_length=255, choices=ETMConversionValueType.choices)
 
-    value = models.FloatField(
-        blank=True,
-        null=True,
-        help_text=_("Value for static conversions, only use when conversion type is static"),
-    )
     etm_key = models.CharField(
         max_length=255,
-        help_text=_("Key as defined in the ETM (only use when conversion type is not static)"),
+        help_text=_("Key as defined in the ETM"),
     )
     shadow_key = models.CharField(
         max_length=255,
@@ -211,14 +220,6 @@ class ETMConversion(models.Model):
     )
 
     def clean(self) -> None:
-        # both value and key are supplied
-        if self.value is not None and self.etm_key is not None:
-            raise ValidationError("Cannot supply both 'value' and 'etm_key'!")
-
-        # value is supplied but type is not static
-        if self.value is not None and self.conversion_value_type == ETMConversionValueType.STATIC:
-            raise ValidationError("value is supplied but type is not static")
-
         # conversion type is curve or query but no key is supplied
         if (
             self.conversion_value_type == ETMConversionValueType.CURVE
@@ -241,7 +242,6 @@ class ETMConversion(models.Model):
 class AnyLogicConversionValueType(models.TextChoices):
     VALUE = "value"
     CURVE = "curve"
-    STATIC = "static"
 
 
 class AnyLogicConversion(models.Model):
@@ -252,16 +252,9 @@ class AnyLogicConversion(models.Model):
         max_length=255, choices=AnyLogicConversionValueType.choices
     )
 
-    value = models.FloatField(
-        blank=True,
-        null=True,
-        help_text=_("Value for static conversions, only use when conversion type is static"),
-    )
     anylogic_key = models.CharField(
         max_length=255,
-        help_text=_(
-            "Key as defined in the AnyLogic results (only use when conversion type is not static)"
-        ),
+        help_text=_("Key as defined in the AnyLogic results"),
     )
     shadow_key = models.CharField(
         max_length=255,
@@ -269,17 +262,6 @@ class AnyLogicConversion(models.Model):
     )
 
     def clean(self) -> None:
-        # both value and key are supplied
-        if self.value is not None and self.etm_key is not None:
-            raise ValidationError("Cannot supply both 'value' and 'etm_key'!")
-
-        # value is supplied but type is not static
-        if (
-            self.value is not None
-            and self.conversion_value_type == AnyLogicConversionValueType.STATIC
-        ):
-            raise ValidationError("value is supplied but type is not static")
-
         # conversion type is curve or query but no key is supplied
         if self.conversion_value_type == AnyLogicConversionValueType.CURVE and self.key is None:
             raise ValidationError("Conversion type is curve or query but no key is supplied!")
@@ -331,17 +313,6 @@ class DatamodelConversion(models.Model):
     )
 
     def clean(self) -> None:
-        # both value and key are supplied
-        if self.value is not None and self.etm_key is not None:
-            raise ValidationError("Cannot supply both 'value' and 'etm_key'!")
-
-        # value is supplied but type is not static
-        if (
-            self.value is not None
-            and self.conversion_value_type == AnyLogicConversionValueType.STATIC
-        ):
-            raise ValidationError("value is supplied but type is not static")
-
         # conversion type is curve or query but no key is supplied
         if self.conversion_value_type == AnyLogicConversionValueType.CURVE and self.key is None:
             raise ValidationError("Conversion type is curve or query but no key is supplied!")
