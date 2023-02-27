@@ -3,7 +3,7 @@ import { dummyData } from "./dummyData";
 import styles from "./CostBenefit.module.css";
 import React from "react";
 
-export default function CostBenefitTable(data) {
+export default function CostBenefitTable() {
   const backgroundCell = {
     pos: "bg-holon-light-green",
     neg: "bg-holon-light-red",
