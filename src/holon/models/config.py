@@ -96,7 +96,15 @@ class AnylogicCloudOutput(models.Model):
         return f"{self.internal_key}"
 
 
+class QueryCovertModuleType(models.TextChoices):
+    UPSCALING = "upscaling"
+    COST = "cost"
+
+
 class QueryAndConvertConfig(ClusterableModel):
+    scenario = ParentalKey(Scenario, related_name="etm_scaling_config")
+    module = models.CharField(max_length=255, choices=QueryCovertModuleType.choices)
+
     api_url = models.URLField(
         default="https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
     )
@@ -112,17 +120,12 @@ class QueryAndConvertConfig(ClusterableModel):
     ]
 
     def __str__(self):
-        pass
+        if self.module == QueryCovertModuleType.UPSCALING:
+            return "ETM opschalingsconfiguratie"
+        if self.module == QueryCovertModuleType.COST:
+            return "Kostenmodule configuratie"
 
-
-class ETMScalingConfig(QueryAndConvertConfig):
-    scenario = ParentalKey(Scenario, related_name="etm_scaling_config")
-
-    class Meta:
-        verbose_name = "ETM opschalingsconfiguratie"
-
-    def __str__(self):
-        pass
+        raise NotImplementedError(f"__str__ is not implemented for {self.module}")
 
 
 class QueryType(models.TextChoices):
@@ -274,6 +277,23 @@ class AnyLogicConversion(models.Model):
 
         return super().clean()
 
+    if False:  # TODO!
+
+        def clean() -> None:
+            # left hand side ETM key should be querried
+            if False:
+                raise ("AnyLogic result not found!")
+
+            # right hand side is datamodel attr
+            if False:
+                raise ("AnyLogic result not found!")
+
+            # right hand sight is anylogic result
+            if False:
+                raise ("AnyLogic result not found!")
+
+            return super().clean()
+
 
 class DatamodelConversionOperationType(models.TextChoices):
     """Applied to the resulting set of objects attribute values before conversion"""
@@ -324,31 +344,6 @@ class DatamodelConversion(models.Model):
             )
 
         return super().clean()
-
-
-class ETMCostConfig(QueryAndConvertConfig):
-    scenario = ParentalKey(Scenario, related_name="etm_cost_config")
-
-    class Meta:
-        verbose_name = "Kostenmodule configuratie"
-
-    def clean() -> None:
-        # left hand side ETM key should be querried
-        if False:
-            raise ("AnyLogic result not found!")
-
-        # right hand side is datamodel attr
-        if False:
-            raise ("AnyLogic result not found!")
-
-        # right hand sight is anylogic result
-        if False:
-            raise ("AnyLogic result not found!")
-
-        return super().clean()
-
-    def __str__(self):
-        return "Kostenmodule configuratie"
 
 
 class CostBenifitConfig(models.Model):
