@@ -54,7 +54,7 @@ export default function CostBenefitTable(data) {
           className={`p-4 border-r-2 border-holon-gray-300 text-left ${
             titleItem == "Netto kosten" && ` border-t-4 `
           }`}>
-          {titleItem}
+          {titleItem == "Netto kosten" ? `Totaal` : titleItem}
         </td>
         {headings.map((heading, index) => {
           const tableCellValue =
