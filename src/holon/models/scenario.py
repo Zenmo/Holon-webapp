@@ -31,18 +31,11 @@ class Scenario(ClusterableModel):
             min_num=1,
         ),
         InlinePanel(
-            "etm_scaling_config",
+            "query_and_convert_config",
             heading="ETM scaling module configuration",
             label="ETM scaling module configuration",
-            max_num=2,
-            min_num=1,
-        ),
-        InlinePanel(
-            "etm_cost_config",
-            heading="ETM cost module configuration",
-            label="ETM cost module configuration",
-            max_num=1,
-            min_num=1,
+            max_num=3,
+            min_num=2,
         ),
     ]
 

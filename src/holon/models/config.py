@@ -102,7 +102,7 @@ class QueryCovertModuleType(models.TextChoices):
 
 
 class QueryAndConvertConfig(ClusterableModel):
-    scenario = ParentalKey(Scenario, related_name="etm_scaling_config")
+    scenario = ParentalKey(Scenario, related_name="query_and_convert_config")
     module = models.CharField(max_length=255, choices=QueryCovertModuleType.choices)
 
     api_url = models.URLField(
