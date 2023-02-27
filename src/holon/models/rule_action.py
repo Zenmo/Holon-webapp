@@ -8,6 +8,7 @@ from django.db.models.query import QuerySet
 from django.contrib.postgres.fields import ArrayField
 
 from holon.models.scenario_rule import ScenarioRule
+from modelcluster.fields import ParentalKey
 import logging
 
 # Create your models here.
@@ -15,7 +16,6 @@ class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 
     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "RuleAction"
@@ -47,6 +47,8 @@ class RuleAction(PolymorphicModel):
 
 class RuleActionFactor(RuleAction):
     """A continuous factor for scaling an input value between a certain range"""
+
+    rule = ParentalKey(ScenarioRule, on_delete=models.CASCADE, related_name="factors")
 
     min_value = models.IntegerField()
     max_value = models.IntegerField()

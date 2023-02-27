@@ -3,6 +3,9 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 from wagtail.core.models import Orderable
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.snippets.models import register_snippet
+from wagtailmodelchooser import register_model_chooser, Chooser, register_filter
 from django.core.validators import MinValueValidator
 
 from holon.models.scenario import Scenario
@@ -14,7 +17,9 @@ class ChoiceType(models.TextChoices):
     continuous = "CHOICE_CONTINUOUS"
 
 
+@register_snippet
 class InteractiveElement(ClusterableModel):
+
     scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     type = models.CharField(
@@ -22,6 +27,34 @@ class InteractiveElement(ClusterableModel):
         choices=ChoiceType.choices,
         default=ChoiceType.continuous,
     )
+
+    panels = [
+        FieldPanel("scenario"),
+        FieldPanel("name"),
+        FieldPanel("type"),
+        InlinePanel(
+            "options",
+            heading="Options",
+            label="Option",
+            help_text=_(
+                "Fill in the options for all the types of inputs, except the continuous input"
+            ),
+        ),
+        InlinePanel(
+            "continuous_values",
+            heading="Continuous values",
+            label="Continuous value",
+            help_text=_("Fill in the options for the continuous input"),
+            max_num=1,
+        ),
+        InlinePanel("rules", heading="Rules", label="Rules"),
+    ]
+
+    def __str__(self):
+        return f"{self.name}|{self.scenario.id}"
+
+    class Meta:
+        verbose_name = "Interactive Element"
 
 
 class InteractiveElementOptions(Orderable):

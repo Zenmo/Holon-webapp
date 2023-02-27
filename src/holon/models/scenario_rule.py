@@ -2,6 +2,9 @@ from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from holon.models.interactive_element import InteractiveElement
 from holon.models.scenario import Scenario
 from holon.models.util import all_subclasses
@@ -17,10 +20,10 @@ class ModelType(models.TextChoices):
     POLICY = "Policy"
 
 
-class ScenarioRule(models.Model):
+class ScenarioRule(ClusterableModel):
     """A rule that finds a selection of objects and updates an attribute according to user input"""
 
-    interactive_element = models.ForeignKey(
+    interactive_element = ParentalKey(
         InteractiveElement, on_delete=models.CASCADE, related_name="rules"
     )
     model_type = models.CharField(
@@ -29,6 +32,12 @@ class ScenarioRule(models.Model):
     model_subtype = models.CharField(
         max_length=255, null=True, blank=True
     )  # bijv industry terrain of photovoltaic
+
+    panels = [
+        FieldPanel("model_type"),
+        FieldPanel("model_subtype"),
+        InlinePanel("factors", heading="Factors", label="Factors"),
+    ]
 
     class Meta:
         verbose_name = "ScenarioRule"
