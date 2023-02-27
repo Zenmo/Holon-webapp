@@ -154,10 +154,12 @@ class ETMQuery(ClusterableModel):
         FieldPanel("data_type"),
         FieldPanel("etm_key"),
         InlinePanel(
-            "conversion_step",
+            "etm_conversion_step",
             heading="Optionally use this feature edit the results from the ETM with other values or queries",
             label="Conversion (convert_with)",
         ),
+        InlinePanel("al_conversion_step"),
+        InlinePanel("datamodel_conversion_step"),
     ]
 
     def clean(self) -> None:
@@ -173,34 +175,30 @@ class ConversionOperationType(models.TextChoices):
     IN_PRODUCT = "in_product"
 
 
-class ConversionValueType(models.TextChoices):
+class ETMConversionValueType(models.TextChoices):
     QUERY = "query"
     STATIC = "static"
     CURVE = "curve"
-    ANYLOGIC_VALUE = "anylogic_value"
-    ANYLOGIC_CURVE = "anylogic_curve"
 
 
 class ETMConversion(models.Model):
-    etm_query = ParentalKey(ETMQuery, related_name="conversion_step")
+    etm_query = ParentalKey(ETMQuery, related_name="etm_conversion_step")
 
     conversion = models.CharField(max_length=255, choices=ConversionOperationType.choices)
-    conversion_value_type = models.CharField(max_length=255, choices=ConversionValueType.choices)
+    conversion_value_type = models.CharField(max_length=255, choices=ETMConversionValueType.choices)
 
     value = models.FloatField(
         blank=True,
         null=True,
         help_text=_("Value for static conversions, only use when conversion type is static"),
     )
-    key = models.CharField(
+    etm_key = models.CharField(
         max_length=255,
-        help_text=_(
-            "Key as defined in the ETM or AnyLogic result data (only use when conversion type is not static)"
-        ),
+        help_text=_("Key as defined in the ETM (only use when conversion type is not static)"),
     )
     shadow_key = models.CharField(
         max_length=255,
-        help_text=_("Internal key, not used by human but might occur in logs when errors occur"),
+        help_text=_("Internal key, not used by humans but might occur in logs when errors occur"),
     )
 
     def clean(self) -> None:
@@ -209,20 +207,20 @@ class ETMConversion(models.Model):
             raise ValidationError("Cannot supply both 'value' and 'etm_key'!")
 
         # value is supplied but type is not static
-        if self.value is not None and self.conversion_value_type == ConversionValueType.STATIC:
+        if self.value is not None and self.conversion_value_type == ETMConversionValueType.STATIC:
             raise ValidationError("value is supplied but type is not static")
 
         # conversion type is curve or query but no key is supplied
         if (
-            self.conversion_value_type == ConversionValueType.CURVE
-            or self.conversion_value_type == ConversionValueType.QUERY
+            self.conversion_value_type == ETMConversionValueType.CURVE
+            or self.conversion_value_type == ETMConversionValueType.QUERY
         ) and self.key is None:
             raise ValidationError("Conversion type is curve or query but no key is supplied!")
 
         # conversion operation is in product but no curves are supplied
-        if self.conversion == ConversionOperationType.IN_PRODUCT and (
-            self.conversion_value_type != ConversionValueType.CURVE
-            or self.conversion_value_type != ConversionValueType.ANYLOGIC_CURVE
+        if (
+            self.conversion == ConversionOperationType.IN_PRODUCT
+            and self.conversion_value_type != ETMConversionValueType.CURVE
         ):
             raise ValidationError(
                 "Conversion operation is 'in product' but no curves are supplied!"
@@ -231,12 +229,26 @@ class ETMConversion(models.Model):
         return super().clean()
 
 
+class AnyLogicConversionValueType(models.TextChoices):
+    VALUE = "value"
+    CURVE = "curve"
+    STATIC = "static"
+
+
+class AnyLogicConversion(ETMConversion):
+    
+    etm_query = ParentalKey(ETMQuery, related_name="al_conversion_step")
+    etm_key = None
+    conversion_value_type = models.CharField(max_length=255, choices=AnyLogicConversionValueType.choices)
+    
+    anylogic_key = models.CharField(
+        max_length=255,
+        help_text=_("Key as defined in the AnyLogic results (only use when conversion type is not static)"),
+    )
+
+
 class ETMCostConfig(ETMScalingConfig):
     scenario = ParentalKey(Scenario, related_name="etm_cost_config")
-
-    panels = [
-        InlinePanel("etm_query"),
-    ]
 
     class Meta:
         verbose_name = "Kostenmodule configuratie"
@@ -258,34 +270,6 @@ class ETMCostConfig(ETMScalingConfig):
 
     def __str__(self):
         return "Kostenmodule configuratie"
-
-
-ETM_MAPPING = {
-    "depreciation_costs_buildings_solar_panels_per_kw": ("BUILDING", "PHOTOVOLTAIC"),
-    "depreciation_costs_solar_farm_per_kw": ("SOLARFARM", "PHOTOVOLTAIC"),
-    "depreciation_costs_buildings_gas_burner_per_kw": ("BUILDING", "GAS_BURNER"),
-    "depreciation_costs_industry_solar_panels_per_kw": ("INDUSTRY", "PHOTOVOLTAIC"),
-    "depreciation_costs_industry_gas_burner_per_kw": ("INDUSTRY", "GAS_BURNER"),
-    "hourly_price_of_electricity_per_mwh": ("SystemHourlyElectricity", ""),  # TODO: check this key
-    "price_of_natural_gas_per_mwh": ("totalMethane", ""),
-    "price_of_hydrogen_per_mwh": ("totalHydrogen", ""),
-    "price_of_diesel_per_mwh": ("totalDiesel", ""),
-    "electricity_grid_expansion_costs_lv_mv_trafo_per_kw": ("MSLSPeakLoadElectricity_kW", ""),
-    "electricity_grid_expansion_costs_mv_hv_trafo_per_kw": ("HSMSPeakLoadElectricity_kW", ""),
-    "depreciation_costs_grid_battery_per_mwh": (
-        "totalBatteryInstalledCapacity_MWh:Grid_battery_10MWh",
-        "",
-    ),
-}
-
-
-class ETMCostConversion(models.Model):
-    cost_config = ParentalKey(ETMCostConfig, related_name="cost_conversion_element")
-
-    panels = [
-        InlinePanel(),
-        InlinePanel("conversion_step"),
-    ]
 
 
 class CostBenifitConfig(models.Model):
