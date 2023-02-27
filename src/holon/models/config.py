@@ -150,6 +150,9 @@ class ETMQuery(ClusterableModel):
     etm_config = ParentalKey(ETMScalingConfig, related_name="etm_query")
 
     panels = [
+        FieldPanel("query_type"),
+        FieldPanel("data_type"),
+        FieldPanel("etm_key"),
         InlinePanel(
             "conversion_step",
             heading="Optionally use this feature edit the results from the ETM with other values or queries",
