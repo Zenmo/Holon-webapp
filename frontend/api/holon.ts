@@ -1,6 +1,6 @@
-import { InteractiveElement } from "@/components/Blocks/SectionBlock/KPIS";
 import * as Cookies from "es-cookie";
 import { postRequest } from "./wagtail";
+import { httpGet } from "@/utils/Http";
 
 const API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL || "/wt/api/nextjs";
 
@@ -17,4 +17,12 @@ export async function getHolonKPIs(data: { interactiveElements: InteractiveEleme
   });
 
   return json;
+}
+
+export async function getHolonDataSegments() {
+  return await httpGet(`/api/dummy-kosten-baten`);
+}
+
+export async function getHolonGraphColor() {
+  return await httpGet(`${API_URL}/v1/graph-colors/`);
 }

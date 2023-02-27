@@ -1,0 +1,58 @@
+[
+    {
+        "model": "main.graphcolors",
+        "pk": 1,
+        "fields": {
+            "name": "Huishouden",
+            "color": "#ffa018"
+        }
+    },
+    {
+        "model": "main.graphcolors",
+        "pk": 2,
+        "fields": {
+            "name": "Netto kosten",
+            "color": "#ff5151"
+        }
+    },
+    {
+        "model": "main.graphcolors",
+        "pk": 3,
+        "fields": {
+            "name": "Commercieel bedrijf",
+            "color": "#a26a18"
+        }
+    },
+    {
+        "model": "main.graphcolors",
+        "pk": 4,
+        "fields": {
+            "name": "Overheidsinstelling",
+            "color": "#6c6047"
+        }
+    },
+    {
+        "model": "main.graphcolors",
+        "pk": 5,
+        "fields": {
+            "name": "Energieleverancier",
+            "color": "#697260"
+        }
+    },
+    {
+        "model": "main.graphcolors",
+        "pk": 6,
+        "fields": {
+            "name": "Netbeheerder",
+            "color": "#c7c28c"
+        }
+    },
+    {
+        "model": "main.graphcolors",
+        "pk": 7,
+        "fields": {
+            "name": "Overheid",
+            "color": "#b9a683"
+        }
+    }    
+]
