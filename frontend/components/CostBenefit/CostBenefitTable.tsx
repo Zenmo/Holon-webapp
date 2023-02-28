@@ -2,7 +2,7 @@ import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import styles from "./CostBenefit.module.css";
 import React from "react";
 
-export default function CostBenefitTable({ tableData }) {
+export default function CostBenefitTable(tableData: Array<object>) {
   const backgroundCell = {
     pos: "bg-holon-light-green",
     neg: "bg-holon-light-red",
@@ -65,8 +65,7 @@ export default function CostBenefitTable({ tableData }) {
           return (
             <td
               className={`border-r-2 border-holon-gray-300 text-right ${createBackgroundCell(
-                tableCellValue,
-                titleItem
+                tableCellValue
               )}`}
               key={index}>
               {!tableCellValue || tableCellValue == 0 || titleItem == "Netto kosten"

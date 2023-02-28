@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import CostBenefitChart from "@/components/Charts/CostBenefitChart";
+import CostBenefitChart from "@/components/CostBenefit/CostBenefitChart";
+import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import { Tab } from "@headlessui/react";
-import { XMarkIcon, TableCellsIcon, ChartBarIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import {
   getHolonDataSegments,
   getHolonDataSegmentsDetail,
   getHolonGraphColor,
 } from "../../../../api/holon";
-import CostBenefitTable from "@/components/Charts/CostBenefitTable";
+import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 
 export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
   const [data, setData] = useState([]);
@@ -46,7 +47,6 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
       .catch(err => console.log(err));
   }, []);
   const tabItems = ["Grafiek", "Tabel", "Detail"];
-  const subTabItems = ["Grafiek", "Tabel"];
 
   return (
     <div className="h-screen bg-white">
@@ -92,43 +92,12 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
 
                 <Tab.Panel className="flex flex-1 h-full flex-col">
                   <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
-                  <Tab.Group>
-                    <Tab.List className="justify-center flex my-4">
-                      {subTabItems.map((tabItem, index) => (
-                        <Tab
-                          key={"sub" + tabItem + index}
-                          className={({ selected }) =>
-                            classNames(
-                              "p-1 border-b-4 bg-transparent ",
-                              selected
-                                ? "text-holon-blue-900 border-holon-blue-900"
-                                : "border-transparent text-holon-blue-500"
-                            )
-                          }>
-                          <span className="flex flex-row items-center px-2 gap-2">
-                            {tabItem == "Grafiek" ? (
-                              <ChartBarIcon className="w-6" />
-                            ) : (
-                              <TableCellsIcon className="w-6" />
-                            )}
-                            {tabItem}
-                          </span>
-                        </Tab>
-                      ))}
-                    </Tab.List>
-                    <Tab.Panels className="flex flex-1 h-full flex-col">
-                      <Tab.Panel className="flex flex-1 h-full flex-col">
-                        <CostBenefitChart
-                          chartdata={convertGraphData(detailData)}
-                          dataColors={dataColors}
-                          ignoredLabels={ignoredLabels}
-                        />
-                      </Tab.Panel>
-                      <Tab.Panel>
-                        <CostBenefitTable tableData={detailData} />
-                      </Tab.Panel>
-                    </Tab.Panels>
-                  </Tab.Group>
+                  <CostBenefitDetail
+                    chartdata={convertGraphData(data)}
+                    detailData={detailData}
+                    dataColors={dataColors}
+                    ignoredLabels={ignoredLabels}
+                  />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

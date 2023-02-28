@@ -12,8 +12,13 @@ import {
   BarChart,
   ResponsiveContainer,
 } from "recharts";
+import { CostBenefitChartProps } from "./types";
 
-export default function CostBenefitChart({ chartdata, dataColors, ignoredLabels }) {
+export default function CostBenefitChart({
+  chartdata,
+  dataColors,
+  ignoredLabels,
+}: CostBenefitChartProps) {
   const CustomBarWithTarget = props => {
     const { fill, x, y, width } = props;
 
@@ -24,18 +29,18 @@ export default function CostBenefitChart({ chartdata, dataColors, ignoredLabels 
     );
   };
 
-  const convertToPositiveEuro = tickItem => {
+  const convertToPositiveEuro = (tickItem: number) => {
     return "€ " + Math.abs(tickItem);
   };
 
-  const tooltipFormatter = (value, name, props) => {
+  const tooltipFormatter = (value: number, name: string, props) => {
     return [
       convertToPositiveEuro(value),
       (value < 0 ? "betaalt aan " : "ontvangt van ") + props.dataKey,
     ];
   };
 
-  const tooltipLabelFormatter = tooltipItemLabel => {
+  const tooltipLabelFormatter = (tooltipItemLabel: string) => {
     return tooltipItemLabel + ":";
   };
 
