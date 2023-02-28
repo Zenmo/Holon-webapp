@@ -8,6 +8,9 @@ from django.db.models.query import QuerySet
 from django.contrib.postgres.fields import ArrayField
 
 from holon.models.scenario_rule import ScenarioRule
+from holon.models.asset import EnergyAsset
+from holon.models import util
+
 import logging
 
 # Create your models here.
@@ -91,6 +94,20 @@ class RuleActionBalanceGroup(RuleAction):
     """Blans"""
 
     assets = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
+
+
+    def clean(self):
+        super().clean()
+
+        asset_classnames = [asset_class.__name__ for asset_class in util.all_subclasses(EnergyAsset)]
+        invalid_assetnames = []
+
+        for asset in self.assets:
+            if not asset in asset_classnames:
+                invalid_assetnames.append(asset)
+
+        if invalid_assetnames:
+            raise ValidationError(f"The following asset names are not recognized: {invalid_assetnames}")
 
     class Meta:
         verbose_name = "RuleActionBalanceGroup"
