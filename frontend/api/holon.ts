@@ -24,7 +24,7 @@ export async function getHolonDataSegments() {
 }
 
 export async function getHolonDataSegmentsDetail() {
-  return await httpGet(`/api/dummy-kosten-baten-2`);
+  return await httpGet(`/api/dummy-kosten-baten`);
 }
 
 export async function getHolonGraphColor() {

@@ -2,7 +2,7 @@ import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import styles from "./CostBenefit.module.css";
 import React from "react";
 
-export default function CostBenefitTable(tableData: Array<object>) {
+export default function CostBenefitTable({ tableData }: { tableData: Array<object> }) {
   const backgroundCell = {
     pos: "bg-holon-light-green",
     neg: "bg-holon-light-red",
