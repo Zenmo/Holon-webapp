@@ -47,8 +47,6 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
               content => content.value.id == parseFloat(conditionItem.value.parameter)
             ).currentValue;
 
-            console.log(inputvalue);
-
             const conditionValue = parseFloat(conditionItem.value.value);
 
             if (inputvalue == null || inputvalue == undefined) {
