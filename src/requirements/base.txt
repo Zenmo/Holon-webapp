@@ -12,7 +12,9 @@ django-autoslug==1.9.8
 Wand==0.6.11
 dj-rest-auth==2.2.7
 django-allauth==0.52.0
-djangorestframework-simplejwt==5.2.2 
+djangorestframework-simplejwt==5.2.2
+wagtail-color-panel==1.4.1
+
 
 # cloudclient
 git+https://github.com/ZEnMo/HOLON-cloudclient@main#egg=cloudclient
