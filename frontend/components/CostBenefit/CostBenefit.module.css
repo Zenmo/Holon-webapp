@@ -36,12 +36,29 @@
 @media (max-width: 1599px) {
   .CompactTable th,
   .CompactTable td {
-    padding: 0.25rem;
+    padding-right: 0.25rem;
+    padding-left: 0.25rem;
     font-size: 13px;
   }
   .CompactTable th + th span {
     writing-mode: vertical-rl;
     rotate: 180deg;
     padding: 1rem 0;
+  }
+}
+@media (max-height: 800px) {
+  .CompactTable th,
+  .CompactTable td {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 13px;
+  }
+}
+
+@media (max-height: 1000px) {
+  .CompactTable th,
+  .CompactTable td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 }

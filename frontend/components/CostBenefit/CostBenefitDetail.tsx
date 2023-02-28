@@ -17,7 +17,7 @@ export default function CostBenefitDetail({
 
   return (
     <Tab.Group>
-      <Tab.List className="justify-center flex my-4">
+      <Tab.List className="justify-center flex">
         {subTabItems.map((tabItem, index) => (
           <Tab
             key={"sub" + tabItem + index}
@@ -40,7 +40,7 @@ export default function CostBenefitDetail({
           </Tab>
         ))}
       </Tab.List>
-      <Tab.Panels className="flex flex-1 h-full flex-col">
+      <Tab.Panels className="flex flex-1 h-full flex-col min-h-0">
         <Tab.Panel className="flex flex-1 h-full flex-col">
           <CostBenefitChart
             chartdata={chartdata}
@@ -48,7 +48,7 @@ export default function CostBenefitDetail({
             ignoredLabels={ignoredLabels}
           />
         </Tab.Panel>
-        <Tab.Panel>
+        <Tab.Panel className="flex max-h-full flex-col overflow">
           <CostBenefitTable tableData={detailData} />
         </Tab.Panel>
       </Tab.Panels>

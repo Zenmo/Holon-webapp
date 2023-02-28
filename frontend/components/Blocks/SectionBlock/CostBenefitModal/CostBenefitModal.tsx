@@ -4,11 +4,7 @@ import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import {
-  getHolonDataSegments,
-  getHolonDataSegmentsDetail,
-  getHolonGraphColor,
-} from "../../../../api/holon";
+import { getHolonDataSegments, getHolonDataSegmentsDetail, getHolonGraphColor } from "@/api/holon";
 import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 
 export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
@@ -76,8 +72,8 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                 </button>
               </div>
 
-              <Tab.Panels className="flex flex-1 h-full flex-col">
-                <Tab.Panel className="flex flex-1 h-full flex-col">
+              <Tab.Panels className="flex flex-1 flex-col min-h-0">
+                <Tab.Panel className="flex flex-1 max-h-full flex-col">
                   <h2 className="text-center">Kosten en baten per segment</h2>
                   <CostBenefitChart
                     chartdata={convertGraphData(data)}
@@ -85,12 +81,12 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
-                <Tab.Panel className="flex flex-1 h-full flex-col">
+                <Tab.Panel className="flex  max-h-full flex-col">
                   <h2 className="text-center">Kosten en baten per groep</h2>
                   <CostBenefitTable tableData={data} />
                 </Tab.Panel>
 
-                <Tab.Panel className="flex flex-1 h-full flex-col">
+                <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0">
                   <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
                   <CostBenefitDetail
                     chartdata={convertGraphData(data)}

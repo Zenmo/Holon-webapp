@@ -89,7 +89,7 @@ export default function CostBenefitTable({ tableData }: { tableData: Array<objec
   return (
     <div className="flex justify-center flex-1 overflow-auto">
       <table
-        className={`table-fixed w-full max-w-full h-full ${styles.Table} ${
+        className={`table-fixed w-full max-w-full max-h-full ${styles.Table} ${
           CompactTable && styles.CompactTable
         }`}>
         <thead className="border-b-4 border-holon-gray-300">
