@@ -104,6 +104,7 @@ class QueryCovertModuleType(models.TextChoices):
 class QueryAndConvertConfig(ClusterableModel):
     scenario = ParentalKey(Scenario, related_name="query_and_convert_config")
     module = models.CharField(max_length=255, choices=QueryCovertModuleType.choices)
+    name = models.CharField(max_length=255, null=False, blank=True)
 
     api_url = models.URLField(
         default="https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
@@ -111,7 +112,9 @@ class QueryAndConvertConfig(ClusterableModel):
     etm_scenario_id = models.IntegerField()
 
     panels = [
+        FieldPanel("name"),
         FieldPanel("api_url"),
+        FieldPanel("module"),
         FieldPanel("etm_scenario_id"),
         InlinePanel(
             "etm_query",
@@ -123,9 +126,9 @@ class QueryAndConvertConfig(ClusterableModel):
 
     def __str__(self):
         if self.module == QueryCovertModuleType.UPSCALING:
-            return "ETM opschalingsconfiguratie"
+            return f"ETM opschalingsconfiguratie ({self.name})"
         if self.module == QueryCovertModuleType.COST:
-            return "Kostenmodule configuratie"
+            return f"Kostenmodule configuratie ({self.name})"
 
         raise NotImplementedError(f"__str__ is not implemented for {self.module}")
 
