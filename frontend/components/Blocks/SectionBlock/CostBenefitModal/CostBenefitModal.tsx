@@ -96,7 +96,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                     <Tab.List className="justify-center flex my-4">
                       {subTabItems.map((tabItem, index) => (
                         <Tab
-                          key={tabItem + index}
+                          key={"sub" + tabItem + index}
                           className={({ selected }) =>
                             classNames(
                               "p-1 border-b-4 bg-transparent ",
