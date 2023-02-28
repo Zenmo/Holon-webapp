@@ -130,7 +130,7 @@ class QueryAndConvertConfig(ClusterableModel):
         raise NotImplementedError(f"__str__ is not implemented for {self.module}")
 
 
-class QueryType(models.TextChoices):
+class EndPoint(models.TextChoices):
     INPUT = "input"
     QUERY = "query"
     CURVE = "curve"  # TODO: This seems weird to me
@@ -149,7 +149,7 @@ class ETMQuery(ClusterableModel):
         ),
     )
 
-    query_type = models.CharField(max_length=255, choices=QueryType.choices)
+    endpoint = models.CharField(max_length=255, choices=EndPoint.choices)
     data_type = models.CharField(max_length=255, choices=DataType.choices)
 
     etm_key = models.CharField(
@@ -160,7 +160,7 @@ class ETMQuery(ClusterableModel):
     related_config = ParentalKey(QueryAndConvertConfig, related_name="etm_query")
 
     panels = [
-        FieldPanel("query_type"),
+        FieldPanel("endpoint"),
         FieldPanel("data_type"),
         FieldPanel("etm_key"),
         InlinePanel(
