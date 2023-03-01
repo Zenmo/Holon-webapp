@@ -39,8 +39,28 @@ class Scenario(ClusterableModel):
         ),
     ]
 
+    _assets = None
+
+
     class Meta:
         verbose_name = "Scenario"
 
     def __str__(self):
         return f"{self.name} - versie {self.version}"
+
+
+    @property
+    def assets(self) -> "list[EnergyAsset]":
+        if not self._assets:
+            self._assets = self.__load_assets()
+
+        return self._assets
+
+    def __load_assets(self) -> "list[EnergyAsset]":
+        from holon.models.asset import EnergyAsset
+
+        assets = EnergyAsset.objects.none()
+        for gridconnection in self.gridconnection_set.all():
+            assets = assets | gridconnection.energyasset_set.all()
+
+        return assets
