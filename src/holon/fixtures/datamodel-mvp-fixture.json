@@ -14,7 +14,8 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "GRIDOPERATOR",
-            "type": null,
+            "group": null,
+            "subgroup": null,
             "parent_actor": null,
             "payload": 1
         }
@@ -25,7 +26,8 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "ENERGYHOLON",
-            "type": null,
+            "group": null,
+            "subgroup": null,
             "parent_actor": null,
             "payload": 1
         }
@@ -36,7 +38,8 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "type": "commercial",
+            "group": "COMMERCIAL",
+            "subgroup": null,
             "parent_actor": 5,
             "payload": 1
         }
@@ -47,7 +50,8 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "type": "commercial",
+            "group": "COMMERCIAL",
+            "subgroup": null,
             "parent_actor": 5,
             "payload": 1
         }
@@ -58,7 +62,8 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "type": "commercial",
+            "group": "commercial",
+            "subgroup": null,
             "parent_actor": 5,
             "payload": 1
         }
@@ -69,7 +74,8 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "type": "commercial",
+            "group": "commercial",
+            "subgroup": null,
             "parent_actor": 5,
             "payload": 1
         }
@@ -80,7 +86,8 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "ENERGYSUPPLIER",
-            "type": null,
+            "group": null,
+            "subgroup": null,
             "parent_actor": null,
             "payload": 1
         }
