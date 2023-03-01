@@ -62,9 +62,6 @@ export default function HolarchyTab({
                 handleContentChange={handleContentChange}
                 handleMedia={handleMedia}
                 selectedLevel={level}
-                textLabelNational={textLabelNational}
-                textLabelIntermediate={textLabelIntermediate}
-                textLabelLocal={textLabelLocal}
               />
             </div>
           );
