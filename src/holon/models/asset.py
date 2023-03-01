@@ -49,11 +49,31 @@ class ConsumptionAssetType(models.TextChoices):
     HEAT_DEMAND = "HEAT_DEMAND"
     HOT_WATER_CONSUMPTION = "HOT_WATER_CONSUMPTION"
     OTHER_ELECTRICITY_CONSUMPTION = "OTHER_ELECTRICITY_CONSUMPTION"
+    DIESEL_VEHICLE = "DIESEL_VEHICLE"
 
 
 class ConsumptionAsset(EnergyAsset):
     category = "CONSUMPTION"
     type = models.CharField(max_length=255, choices=ConsumptionAssetType.choices)
+
+    def clean(self) -> None:
+        if (
+            self.__class__.__name__ != "DieselVehicleAsset"
+            and self.type is ConsumptionAssetType.DIESEL_VEHICLE
+        ):
+            raise ValidationError("Only DieselVehicleAsset can have type `DIESEL_VEHICLE`")
+        return super().clean()
+
+
+class DieselVehicleAsset(ConsumptionAsset):
+    name: str
+    energyConsumption_kWhpkm = models.FloatField()
+    vehicleScaling = models.IntegerField()
+
+    def clean(self) -> None:
+        if self.type is not ConsumptionAssetType.DIESEL_VEHICLE:
+            raise ValidationError("DieselVehicleAsset can only have type `DIESEL_VEHICLE`")
+        return super().clean()
 
 
 class HeatConsumptionAsset(ConsumptionAsset):
@@ -73,15 +93,17 @@ class HybridConsumptionAsset(ConsumptionAsset):
 
 
 class ConversionAssetType(models.TextChoices):
-    BOILER = "BOILER"
-    ELECTROLYSER = "ELECTROLYSER"
+    ELECTRIC_HEATER = "ELECTRIC_HEATER"
     GAS_BURNER = "GAS_BURNER"
     HEAT_DELIVERY_SET = "HEAT_DELIVERY_SET"
     HEAT_PUMP_AIR = "HEAT_PUMP_AIR"
     HEAT_PUMP_GROUND = "HEAT_PUMP_GROUND"
+    HEAT_PUMP_WATER = "HEAT_PUMP_WATER"
     HYDROGEN_FURNACE = "HYDROGEN_FURNACE"
     METHANE_FURNACE = "METHANE_FURNACE"
-    DIESEL_VEHICLE = "DIESEL_VEHICLE"
+    ELECTROLYSER = "ELECTROLYSER"
+    CURTAILER = "CURTAILER"
+    METHANE_CHP = "METHANE_CHP"
 
 
 class AmbientTempType(models.TextChoices):
@@ -102,6 +124,30 @@ class VehicleConversionAsset(ConversionAsset):
 
 class ElectricCoversionAsset(ConversionAsset):
     capacityElectricity_kW = models.FloatField()
+
+
+class CookingConversionAssetTypes(models.TextChoices):
+    ELECTRIC_HOB = "ELECTRIC_HOB"
+    GAS_PIT = "GAS_PIT"
+
+
+class CookingConversionAsset(EnergyAsset):
+    type = models.CharField(max_length=255, choices=CookingConversionAssetTypes.choices)
+    capacityHeat_kW = models.FloatField(blank=True, null=True)
+    capacityElectricity_kW = models.FloatField(blank=True, null=True)
+    eta_r = models.FloatField()
+
+    def clean(self) -> None:
+        if self.type is CookingConversionAssetTypes.GAS_PIT and (
+            self.capacityHeat_kW is None or self.capacityElectricity_kW is not None
+        ):
+            raise ValueError("Type 'GAS_PIT' only works with capacityHeat_kW")
+        if self.type is CookingConversionAssetTypes.ELECTRIC_HOB and (
+            self.capacityElectricity_kW is None or self.capacityHeat_kW is not None
+        ):
+            raise ValueError("Type 'ELECTRIC_HOB' only works with capacityElectricity_kW")
+
+        return super().clean()
 
 
 class HeatConversionAsset(ConversionAsset):
@@ -131,6 +177,8 @@ class HybridHeatCoversionAsset(HeatConversionAsset):
 class ProductionAssetType(models.TextChoices):
     PHOTOVOLTAIC = "PHOTOVOLTAIC"
     WINDMILL = "WINDMILL"
+    RESIDUALHEATHT = "RESIDUALHEATHT"
+    RESIDUALHEATLT = "RESIDUALHEATLT"
 
 
 class ProductionAsset(EnergyAsset):
@@ -144,6 +192,7 @@ class ElectricProductionAsset(ProductionAsset):
 
 class HeatProductionAsset(ProductionAsset):
     capacityHeat_kW = models.FloatField()
+    deliveryTemp_degC = models.FloatField(default=80)
 
 
 class HybridProductionAsset(ProductionAsset):
