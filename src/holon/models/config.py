@@ -198,6 +198,24 @@ class ETMQuery(ClusterableModel):
 
     related_config = ParentalKey(QueryAndConvertConfig, related_name="etm_query")
 
+    related_interactive_element = models.ForeignKey(
+        "api.InteractiveInput",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Use this field to relate this query and conversion set to an interactive element (used for rendering in the front-end)"
+        ),
+    )
+    interactive_upscaling_comment = models.CharField(
+        max_length=350,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Use this field to explain the query in the front-end. Use {{variable}} for dynamic values. Options: local key-value pairs e.g., `scaling_factor`, `final_value` or `query_value` (to be implemented)"
+        ),
+    )
+
     panels = [
         FieldPanel("endpoint"),
         FieldPanel("data_type"),
@@ -222,6 +240,8 @@ class ETMQuery(ClusterableModel):
             heading="Convert inputs/queries based on AnyLogic outcomes",
             label="AnyLogic result conversion (convert with AnyLogic outcomes)",
         ),
+        FieldPanel("related_interactive_element"),
+        FieldPanel("interactive_upscaling_comment"),
     ]
 
     def clean(self) -> None:
