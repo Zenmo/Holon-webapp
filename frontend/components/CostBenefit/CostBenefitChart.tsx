@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { getHolonDataSegments, getHolonGraphColor } from "../../api/holon";
+import React from "react";
+
 import {
   Bar,
   XAxis,
@@ -12,33 +12,13 @@ import {
   BarChart,
   ResponsiveContainer,
 } from "recharts";
+import { CostBenefitChartProps } from "./types";
 
-export default function KostenBatenChart() {
-  const [data, setData] = useState([]);
-  const [dataColors, setDataColors] = useState([]);
-  const ignoredLabels = ["name", "Netto kosten"];
-
-  const convertGraphData = (data: Record<string, unknown>) => {
-    const returnArr: unknown[] = [];
-    Object.entries(data).map(value => {
-      const constructObj = { ...value[1] };
-      constructObj.name = value[0].replace(/['"]+/g, "");
-      returnArr.push(constructObj);
-    });
-
-    return returnArr;
-  };
-
-  useEffect(() => {
-    getHolonDataSegments()
-      .then(data => setData(convertGraphData(data)))
-      .catch(err => console.log(err));
-
-    getHolonGraphColor()
-      .then(result => setDataColors(result.items))
-      .catch(err => console.log(err));
-  }, []);
-
+export default function CostBenefitChart({
+  chartdata,
+  dataColors,
+  ignoredLabels,
+}: CostBenefitChartProps) {
   const CustomBarWithTarget = props => {
     const { fill, x, y, width } = props;
 
@@ -49,26 +29,27 @@ export default function KostenBatenChart() {
     );
   };
 
-  const convertToPositiveEuro = tickItem => {
+  const convertToPositiveEuro = (tickItem: number) => {
     return "€ " + Math.abs(tickItem);
   };
 
-  const tooltipFormatter = (value, name, props) => {
+  const tooltipFormatter = (value: number, name: string, props) => {
     return [
       convertToPositiveEuro(value),
       (value < 0 ? "betaalt aan " : "ontvangt van ") + props.dataKey,
     ];
   };
-  const tooltipLabelFormatter = tooltipItemLabel => {
+
+  const tooltipLabelFormatter = (tooltipItemLabel: string) => {
     return tooltipItemLabel + ":";
   };
 
   return (
     <React.Fragment>
-      {data.length > 0 && (
+      {chartdata.length > 0 && (
         <div className="flex-1">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart barGap={-40} data={data} stackOffset="sign">
+            <BarChart barGap={-40} data={chartdata} stackOffset="sign">
               <CartesianGrid strokeDasharray="2" vertical={false} />
               <XAxis orientation="top" dataKey="name" axisLine={false} />
               <YAxis tickFormatter={convertToPositiveEuro}>
@@ -87,7 +68,7 @@ export default function KostenBatenChart() {
               <Legend />
               <ReferenceLine y={0} stroke="#000" />
 
-              {Object.keys(data[0]).map((label, _index) => {
+              {Object.keys(chartdata[0]).map((label, index) => {
                 const found = ignoredLabels.find(ilabel => ilabel == label);
                 if (!found) {
                   const color = dataColors.find(col => col.name == label) || {
@@ -97,7 +78,7 @@ export default function KostenBatenChart() {
                   return (
                     <Bar
                       barSize={60}
-                      key={_index}
+                      key={label + index}
                       dataKey={label}
                       fill={color.color}
                       stackId="stack"
