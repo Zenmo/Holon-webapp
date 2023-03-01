@@ -90,6 +90,11 @@ class HolonV2Service(generics.CreateAPIView):
                 data["scenario"].id, data["interactive_elements"]
             )
 
+            # TODO serialize and send to anylogic
+
+            # Delete duplicated scenario
+            scenario.delete()
+
             return Response(
                 "success",
                 status=status.HTTP_200_OK,

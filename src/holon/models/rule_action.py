@@ -1,14 +1,16 @@
+import logging
 from typing import Any
+
 from django.apps import apps
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from polymorphic.models import PolymorphicModel
 from django.db.models.query import QuerySet
-from django.contrib.postgres.fields import ArrayField
+from polymorphic.models import PolymorphicModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from holon.models.scenario_rule import ScenarioRule
-import logging
+
 
 # Create your models here.
 class RuleAction(PolymorphicModel):
@@ -66,11 +68,8 @@ class RuleActionFactor(RuleAction):
         value_flt = float(value)
         mapped_value = (self.max_value - self.min_value) * (value_flt / 100.0) + self.min_value
 
-        # Find index from filtered element in prefetched queryset
-        queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == filtered_object.id)
-
-        # Update object in prefetched scenario
-        setattr(queryset[queryset_index], self.asset_attribute, mapped_value)
+        setattr(filtered_object, self.asset_attribute, mapped_value)
+        filtered_object.save()
 
 
 class RuleActionChangeAttribute(RuleAction):
