@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Scenario(ClusterableModel):
     name = models.CharField(max_length=255)
-    version = models.IntegerField()
+    version = models.IntegerField(default=1)
     comment = models.TextField(blank=True)
 
     panels = [
