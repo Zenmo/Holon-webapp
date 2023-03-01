@@ -88,5 +88,4 @@ def apply_rule_actions(
 
     rule_action: RuleAction
     for rule_action in rule.ruleaction_set.all():
-        for filtered_object in filtered_queryset:
-            rule_action.apply_action_to_queryset(queryset, filtered_object, value)
+        rule_action.apply_action_to_queryset(queryset, filtered_queryset, value)
