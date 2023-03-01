@@ -1,9 +1,9 @@
 from django.db import models
+from polymorphic.models import PolymorphicModel
+
 from holon.models.actor import Actor
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
-
 from holon.models.scenario import Scenario
-from polymorphic.models import PolymorphicModel
 
 
 class GridCategory(models.TextChoices):

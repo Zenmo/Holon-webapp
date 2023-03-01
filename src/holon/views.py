@@ -1,11 +1,11 @@
-from rest_framework.response import Response
+from cloudclient.experiments import AnyLogicExperiment, prepare_scenario_as_experiment
 from rest_framework import generics, status
+from rest_framework.response import Response
 
-from cloudclient.experiments import prepare_scenario_as_experiment, AnyLogicExperiment
+from holon.models import rule_mapping
 
-
-from .serializers import HolonRequestSerializer
 from .models.pepe import Pepe
+from .serializers import HolonRequestSerializer
 
 RESULTS = [
     "SystemHourlyElectricityImport_MWh",
@@ -22,6 +22,11 @@ class HolonService(generics.CreateAPIView):
         serializer = HolonRequestSerializer(data=request.data)
 
         if serializer.is_valid():
+
+            scenario = rule_mapping.get_scenario_and_apply_rules(
+                serializer.scenario, serializer.interactive_elements
+            )
+
             pepe = Pepe()
 
             data = serializer.validated_data
@@ -66,5 +71,29 @@ class HolonService(generics.CreateAPIView):
                 results,
                 status=status.HTTP_200_OK,
             )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class HolonV2Service(generics.CreateAPIView):
+    serializer_class = HolonRequestSerializer
+
+    def post(self, request):
+
+        serializer = HolonRequestSerializer(data=request.data)
+
+        if serializer.is_valid():
+            data = serializer.validated_data
+
+            # TODO add try catch with 422 response if failed
+            scenario = rule_mapping.get_scenario_and_apply_rules(
+                data["scenario"].id, data["interactive_elements"]
+            )
+
+            return Response(
+                "success",
+                status=status.HTTP_200_OK,
+            )
+
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
