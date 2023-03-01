@@ -1,7 +1,8 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from polymorphic.models import PolymorphicModel
 
 from holon.models.scenario import Scenario
-from polymorphic.models import PolymorphicModel
 
 
 class ActorType(models.TextChoices):
@@ -29,6 +30,13 @@ class Actor(PolymorphicModel):
     subgroup = models.CharField(max_length=255, choices=SubGroup.choices, null=True, blank=True)
     parent_actor = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    wildcard_JSON = models.JSONField(
+        blank=True,
+        null=True,
+        help_text=_(
+            "Use this field to define parameters that are not currently available in the datamodel."
+        ),
+    )
 
     def __str__(self):
         try:

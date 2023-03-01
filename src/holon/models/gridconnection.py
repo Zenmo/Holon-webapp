@@ -1,5 +1,6 @@
 from django.db import models
 from polymorphic.models import PolymorphicModel
+from django.utils.translation import gettext_lazy as _
 
 from holon.models.actor import Actor
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
@@ -45,6 +46,13 @@ class GridConnection(PolymorphicModel):
     nfATO_starttime = models.FloatField(null=True, blank=True)
     nfATO_endtime = models.FloatField(null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    wildcard_JSON = models.JSONField(
+        blank=True,
+        null=True,
+        help_text=_(
+            "Use this field to define parameters that are not currently available in the datamodel."
+        ),
+    )
 
     def __str__(self):
         return f"b{self.id} {self.category}"

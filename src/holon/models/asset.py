@@ -13,11 +13,18 @@ class EnergyAsset(PolymorphicModel):
     )
     gridnode = models.ForeignKey(GridNode, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=255)
+    wildcard_JSON = models.JSONField(
+        blank=True,
+        null=True,
+        help_text=_(
+            "Use this field to define parameters that are not currently available in the datamodel."
+        ),
+    )
 
     def clean(self):
         not_connected = self.gridconnection is None and self.gridnode is None
         connected_twice = ~(self.gridconnection is None and self.gridnode is None)
-        
+
         if not_connected or connected_twice:
             raise ValidationError(
                 "Asset should be connected to either a grid node or a grid connection!"
