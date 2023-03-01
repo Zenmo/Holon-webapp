@@ -23,7 +23,7 @@ class EnergyAsset(PolymorphicModel):
 
     def clean(self):
         not_connected = self.gridconnection is None and self.gridnode is None
-        connected_twice = ~(self.gridconnection is None and self.gridnode is None)
+        connected_twice = self.gridconnection is not None and self.gridnode is not None
 
         if not_connected or connected_twice:
             raise ValidationError(
@@ -59,7 +59,7 @@ class ConsumptionAsset(EnergyAsset):
     def clean(self) -> None:
         if (
             self.__class__.__name__ != "DieselVehicleAsset"
-            and self.type is ConsumptionAssetType.DIESEL_VEHICLE
+            and self.type == ConsumptionAssetType.DIESEL_VEHICLE
         ):
             raise ValidationError("Only DieselVehicleAsset can have type `DIESEL_VEHICLE`")
         return super().clean()
@@ -71,7 +71,8 @@ class DieselVehicleAsset(ConsumptionAsset):
     vehicleScaling = models.IntegerField()
 
     def clean(self) -> None:
-        if self.type is not ConsumptionAssetType.DIESEL_VEHICLE:
+        if self.type != ConsumptionAssetType.DIESEL_VEHICLE:
+            print(self.type)
             raise ValidationError("DieselVehicleAsset can only have type `DIESEL_VEHICLE`")
         return super().clean()
 
