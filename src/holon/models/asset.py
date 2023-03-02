@@ -224,11 +224,26 @@ class HeatStorageAsset(StorageAsset):
     capacityHeat_kW = models.FloatField()
     minTemp_degC = models.IntegerField()
     maxTemp_degC = models.IntegerField()
-    setTemp_degC = models.IntegerField()
-    initial_temperature_degC = models.IntegerField(default=20)
+    setTemp_degC = models.IntegerField(null=True, blank=True)
+    initial_temperature_degC = models.IntegerField(null=True, blank=True)
     lossFactor_WpK = models.FloatField()
     heatCapacity_JpK = models.FloatField()
-    ambientTempType = models.CharField(max_length=100)
+    ambientTempType = models.CharField(max_length=100, null=True, blank=True)
+
+    def clean(self) -> None:
+        if self.type == StorageAssetType.HEATMODEL:
+            if self.initial_temperature_degC is None:
+                raise ValidationError(
+                    f"Must supply 'initial_temperature_degC' for type '{self.type}'"
+                )
+
+        if self.type == StorageAssetType.STORAGE_HEAT:
+            if self.setTemp_degC is None or self.ambientTempType is None:
+                raise ValidationError(
+                    f"Must supply 'setTemp_degC' and 'ambientTempType' for type '{self.type}'"
+                )
+
+        return super().clean()
 
 
 class ElectricStorageAsset(StorageAsset):

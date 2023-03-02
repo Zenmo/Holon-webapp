@@ -109,9 +109,6 @@ class HousingType(models.TextChoices):
 class HouseGridConnection(BuiltEnvironmentGridConnection):
     category = "HOUSE"
     type = models.CharField(max_length=20, choices=HousingType.choices)
-    heatmodel = models.ForeignKey(
-        "holon.heatstorageasset", on_delete=models.SET_NULL, blank=True, null=True
-    )
 
 
 class BuildingType(models.TextChoices):
@@ -123,9 +120,6 @@ class BuildingType(models.TextChoices):
 class BuildingGridConnection(BuiltEnvironmentGridConnection):
     category = "BUILDING"
     type = models.CharField(max_length=9, choices=BuildingType.choices)
-    heatmodel = models.ForeignKey(
-        "holon.heatstorageasset", on_delete=models.SET_NULL, blank=True, null=True
-    )
 
 
 class ProductionCategory(models.TextChoices):
