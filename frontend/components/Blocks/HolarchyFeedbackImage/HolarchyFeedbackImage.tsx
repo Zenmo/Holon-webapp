@@ -45,7 +45,7 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
             //inputvalue is the vaule of the assessed validator
             const inputvalue = content?.find(
               content => content.value.id == parseFloat(conditionItem.value.parameter)
-            ).currentValue;
+            )?.currentValue;
 
             const conditionValue = parseFloat(conditionItem.value.value);
 
