@@ -109,6 +109,13 @@ class HousingType(models.TextChoices):
 class HouseGridConnection(BuiltEnvironmentGridConnection):
     category = "HOUSE"
     type = models.CharField(max_length=20, choices=HousingType.choices)
+    smart_assets = models.BooleanField(null=True, blank=True)
+    temp_setpoint_night_degC = models.FloatField(blank=True, null=True)
+    temp_setpoint_night_start_hr = models.FloatField(blank=True, null=True)
+    temp_setpoint_day_degC = models.FloatField(blank=True, null=True)
+    temp_setpoint_day_start_hr = models.FloatField(blank=True, null=True)
+    pricelevel_low_dif_from_avg_eurpkWh = models.FloatField(blank=True, null=True)
+    pricelevel_high_dif_from_avg_eurpkWh = models.FloatField(blank=True, null=True)
 
 
 class BuildingType(models.TextChoices):
