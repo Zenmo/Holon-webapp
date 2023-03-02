@@ -108,7 +108,7 @@ class HousingType(models.TextChoices):
 
 class HouseGridConnection(BuiltEnvironmentGridConnection):
     category = "HOUSE"
-    type = models.CharField(max_length=20, choices=HousingType.choices)
+    type = models.CharField(max_length=100, choices=HousingType.choices)
     smart_assets = models.BooleanField(null=True, blank=True)
     temp_setpoint_night_degC = models.FloatField(blank=True, null=True)
     temp_setpoint_night_start_hr = models.FloatField(blank=True, null=True)
@@ -126,7 +126,7 @@ class BuildingType(models.TextChoices):
 
 class BuildingGridConnection(BuiltEnvironmentGridConnection):
     category = "BUILDING"
-    type = models.CharField(max_length=9, choices=BuildingType.choices)
+    type = models.CharField(max_length=100, choices=BuildingType.choices)
 
 
 class ProductionCategory(models.TextChoices):
