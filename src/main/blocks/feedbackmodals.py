@@ -54,7 +54,12 @@ class FeedbackModalInteractiveInputCondition(blocks.StructBlock):
     def get_interactive_inputs():
         return [(ii.pk, ii.__str__) for ii in InteractiveInput.objects.all()]
 
-    parameter = blocks.ChoiceBlock(choices=get_interactive_inputs)
+    parameter = blocks.ChoiceBlock(
+        choices=get_interactive_inputs,
+        help_text=_(
+            "Please make sure the parameter is present in this section. Otherwise you assert something that doesn't exist"
+        ),
+    )
 
     operator = blocks.ChoiceBlock(
         max_length=50,
