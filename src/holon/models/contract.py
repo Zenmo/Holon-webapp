@@ -28,7 +28,9 @@ class EnergyCarrier(models.TextChoices):
 
 
 class Contract(PolymorphicModel):
-    contractType = models.CharField(max_length=255, choices=ContractType.choices)
+    contractType = models.CharField(
+        max_length=255, choices=ContractType.choices, default=ContractType.DELIVERY
+    )
     contractScope = models.CharField(max_length=255, choices=ContractScope.choices)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
@@ -44,7 +46,7 @@ class Contract(PolymorphicModel):
     )
 
     def __str__(self):
-        return f"c{self.id} - {self.type.lower()}"
+        return f"c{self.id} - {self.contractType.lower()}"
 
 
 class DeliveryContractType(models.TextChoices):
