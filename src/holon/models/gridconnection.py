@@ -82,6 +82,8 @@ class HeatingType(models.TextChoices):
     DISTRICTHEAT = "DISTRICTHEAT"
     HEATPUMP_BOILERPEAK = "HEATPUMP_BOILERPEAK"
     HYDROGENFIRED = "HYDROGENFIRED"
+    GASFIRED_CHPPEAK = "GASFIRED_CHPPEAK"
+    LT_RESIDUAL_HEATPUMP_GASPEAK = "LT_RESIDUAL_HEATPUMP_GASPEAK"
     NONE = "NONE"
 
 
@@ -106,6 +108,7 @@ class HousingType(models.TextChoices):
     SEMIDETACHED = "SEMIDETACHED"
     TERRACED = "TERRACED"
     DETACHED = "DETACHED"
+    HIGHRISE = "HIGHRISE"
 
 
 class HouseGridConnection(BuiltEnvironmentGridConnection):
@@ -135,10 +138,11 @@ class ProductionCategory(models.TextChoices):
     WINDFARM = "WINDFARM"
     SOLARFARM = "SOLARFARM"
     GRIDBATTERY = "GRIDBATTERY"
+    RESIDUALHEAT = "RESIDUALHEAT"
 
 
 class ProductionGridConnection(GridConnection):
-    category = models.CharField(max_length=11, choices=ProductionCategory.choices)
+    category = models.CharField(max_length=25, choices=ProductionCategory.choices)
 
 
 class IndustryType(models.TextChoices):
@@ -148,12 +152,13 @@ class IndustryType(models.TextChoices):
 
 class IndustryGridConnection(UtilityGridConnection):
     category = "INDUSTRY"
-    type = models.CharField(max_length=14, choices=IndustryType.choices)
+    type = models.CharField(max_length=25, choices=IndustryType.choices)
 
 
 class DistrictHeatingType(models.TextChoices):
     MT = "MT"
     HT = "HT"
+    LT = "LT"
 
 
 class DistrictHeatingGridConnection(UtilityGridConnection):
