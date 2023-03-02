@@ -48,8 +48,8 @@ export default function ImageSlider({
           className="flex text-base font-bold">
           {label}
         </label>
-
-        {moreInformation || linkWikiPage ? (
+        {/* if selectedLevel, then you are in the holarchy view and popover is not shown */}
+        {!selectedLevel && (moreInformation || linkWikiPage) ? (
           <InteractiveInputPopover
             name={label}
             moreInformation={moreInformation}
