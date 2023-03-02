@@ -28,13 +28,13 @@ class EnergyCarrier(models.TextChoices):
 
 
 class Contract(PolymorphicModel):
-    type = models.CharField(max_length=255, choices=ContractType.choices)
-    contract_scope = models.CharField(max_length=255, choices=ContractScope.choices)
-    energy_carrier = models.CharField(
+    contractType = models.CharField(max_length=255, choices=ContractType.choices)
+    contractScope = models.CharField(max_length=255, choices=ContractScope.choices)
+    energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
     )
     actor = models.ForeignKey(Actor, on_delete=models.CASCADE, related_name="contracts")
-    annual_fee_eur = models.FloatField(default=0.0)
+    annualFee_eur = models.FloatField(default=0.0)
     wildcard_JSON = models.JSONField(
         blank=True,
         null=True,
@@ -53,9 +53,9 @@ class DeliveryContractType(models.TextChoices):
 
 
 class DeliveryContract(Contract):
-    delivery_contract_type = models.CharField(max_length=255, choices=DeliveryContractType.choices)
-    delivery_price_eurpkWh = models.FloatField()
-    feedin_price_eurpkWh = models.FloatField()
+    deliveryContractType = models.CharField(max_length=255, choices=DeliveryContractType.choices)
+    deliveryPrice_eurpkWh = models.FloatField()
+    feedinPrice_eurpkWh = models.FloatField()
 
 
 class ConnectionContractType(models.TextChoices):
@@ -64,7 +64,7 @@ class ConnectionContractType(models.TextChoices):
 
 
 class ConnectionContract(Contract):
-    connection_contract_type = models.CharField(
+    connectionContractType = models.CharField(
         max_length=255, choices=ConnectionContractType.choices
     )
     nfATO_capacity_kW = models.FloatField()
@@ -78,10 +78,10 @@ class TaxContractType(models.TextChoices):
 
 
 class TaxContract(Contract):
-    tax_contract_type = models.CharField(max_length=255, choices=TaxContractType.choices)
-    tax_delivery_eurpkWh = models.FloatField()
-    tax_feedin_eurpkWh = models.FloatField()
-    proportional_fax_pct = models.FloatField()
+    taxContractType = models.CharField(max_length=255, choices=TaxContractType.choices)
+    taxDelivery_eurpkWh = models.FloatField()
+    taxFeedin_eurpkWh = models.FloatField()
+    proportionalTax_pct = models.FloatField()
 
 
 class TransportContractType(models.TextChoices):
@@ -91,8 +91,6 @@ class TransportContractType(models.TextChoices):
 
 
 class TransportContract(Contract):
-    transport_contract_type = models.CharField(
-        max_length=255, choices=TransportContractType.choices
-    )
-    bandwidth_treshold_kW = models.FloatField()
-    bandwidth_tariff_eurpkWh = models.FloatField()
+    transportContractType = models.CharField(max_length=255, choices=TransportContractType.choices)
+    bandwidthTreshold_kW = models.FloatField()
+    bandwidthTariff_eurpkWh = models.FloatField()

@@ -110,6 +110,7 @@ class ConversionAssetType(models.TextChoices):
 class AmbientTempType(models.TextChoices):
     AIR = "AIR"
     GROUND = "GROUND"
+    WATER = "WATER"
 
 
 class ConversionAsset(EnergyAsset):
@@ -225,10 +226,12 @@ class HeatStorageAsset(StorageAsset):
     minTemp_degC = models.IntegerField()
     maxTemp_degC = models.IntegerField()
     setTemp_degC = models.IntegerField(null=True, blank=True)
-    initial_temperature_degC = models.IntegerField(null=True, blank=True)
+    initialTemperature_degC = models.IntegerField(null=True, blank=True)
     lossFactor_WpK = models.FloatField()
     heatCapacity_JpK = models.FloatField()
-    ambientTempType = models.CharField(max_length=100, null=True, blank=True)
+    ambientTempType = models.CharField(
+        choices=AmbientTempType.choices, max_length=100, null=True, blank=True
+    )
 
     def clean(self) -> None:
         if self.type == StorageAssetType.HEATMODEL:
