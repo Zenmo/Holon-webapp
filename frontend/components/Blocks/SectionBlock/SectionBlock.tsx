@@ -94,7 +94,9 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   function openHolarchyModal() {
     setHolarchyModal(true);
     myRef.current.classList.add("h-screen");
-    myRef.current.scrollIntoView();
+    setTimeout(() => {
+      myRef.current.scrollIntoView();
+    }, 0);
   }
 
   function closeHolarchyModal() {
