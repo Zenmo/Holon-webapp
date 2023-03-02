@@ -129,3 +129,43 @@ class RelationAttributeFilter(AttributeFilter):
             )
 
         return relation_field_subtype & relation_field_q
+
+
+class DiscreteAttributeFilter(AttributeFilter):
+    """Filter on attribute with discrete series"""
+
+    def clean(self):
+        super().clean()
+
+        if self.model_attribute not in self.discrete_relation_field_options():
+            raise ValidationError("Invalid model attribute, not discrete")
+
+        if self.value not in self.value_options():
+            raise ValidationError("Invalid value, not a choice for model attribute")
+
+    def discrete_relation_field_options(self) -> list[str]:
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if hasattr(field, "choices") and field.choices
+        ]
+
+    def value_options(self) -> list[str]:
+        if not self.model_attribute:
+            return []
+
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+        field = model()._meta.get_field(self.model_attribute)
+
+        if not hasattr(field, "choices") and not field.choices:
+            return []
+
+        return [choice[0] for choice in field.choices]
