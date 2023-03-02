@@ -19,6 +19,8 @@ class GridCategory(models.TextChoices):
 class ChargingMode(models.TextChoices):
     MAX_POWER = "MAX_POWER"
     MAX_SPREAD = "MAX_SPREAD"
+    CHEAP = "CHEAP"
+    SIMPLE = "SIMPLE"
 
 
 class BatteryMode(models.TextChoices):

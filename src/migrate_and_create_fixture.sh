@@ -7,6 +7,6 @@ python manage.py makemigrations
 python manage.py migrate
 
 # make fixture
-python manage.py dumpdata --natural-primary --natural-foreign holon > $
+python manage.py dumpdata --natural-primary --natural-foreign holon > $fixture
 # load fixture just to be sure
 python manage.py loaddata $fixture
