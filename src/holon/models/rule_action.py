@@ -17,6 +17,8 @@ class RuleAction(PolymorphicModel):
 
     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
 
+    panels = [FieldPanel("asset_attribute")]
+
     class Meta:
         verbose_name = "RuleAction"
         # abstract = True
@@ -48,10 +50,15 @@ class RuleAction(PolymorphicModel):
 class RuleActionFactor(RuleAction):
     """A continuous factor for scaling an input value between a certain range"""
 
-    rule = ParentalKey(ScenarioRule, on_delete=models.CASCADE, related_name="factors")
+    rule = ParentalKey(ScenarioRule, on_delete=models.CASCADE, related_name="continuous_factors")
 
     min_value = models.IntegerField()
     max_value = models.IntegerField()
+
+    panels = RuleAction.panels + [
+        FieldPanel("min_value"),
+        FieldPanel("max_value"),
+    ]
 
     class Meta:
         verbose_name = "RuleActionFactor"
@@ -78,12 +85,20 @@ class RuleActionFactor(RuleAction):
 class RuleActionChangeAttribute(RuleAction):
     """A discrete factor for setting the value of an attribute"""
 
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_attribute"
+    )
+
     class Meta:
         verbose_name = "RuleActionChangeAttribute"
 
 
 class RuleActionAddRemove(RuleAction):
     """A discrete factor for setting the value of an attribute"""
+
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_addremove"
+    )
 
     class Meta:
         verbose_name = "RuleActionAddRemove"
@@ -92,7 +107,15 @@ class RuleActionAddRemove(RuleAction):
 class RuleActionBalanceGroup(RuleAction):
     """Blans"""
 
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
+    )
+
     assets = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
+
+    panels = RuleAction.panels + [
+        FieldPanel("assets"),
+    ]
 
     class Meta:
         verbose_name = "RuleActionBalanceGroup"

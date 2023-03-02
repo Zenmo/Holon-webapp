@@ -3,21 +3,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from polymorphic.models import PolymorphicModel
+from modelcluster.fields import ParentalKey
+from holon.models.scenario_rule import ScenarioRule
 
 from holon.models.util import all_subclasses
-
-
-class Filter(PolymorphicModel):
-    """Information on how to find the objects a scenario rule should be applied to"""
-
-    rule = models.ForeignKey("holon.ScenarioRule", on_delete=models.CASCADE, related_name="filters")
-
-    class Meta:
-        abstract = True
-
-    def get_q(self) -> Q:
-        pass
 
 
 class AttributeFilterComparator(models.TextChoices):
@@ -29,15 +20,18 @@ class AttributeFilterComparator(models.TextChoices):
     NOT_EQUAL = "NOT EQUAL"
 
 
-class AttributeFilter(Filter):
-    """Filter on attribute"""
+class Filter(PolymorphicModel):
+    """Information on how to find the objects a scenario rule should be applied to"""
 
     model_attribute = models.CharField(max_length=255, null=True)
     comparator = models.CharField(max_length=255, choices=AttributeFilterComparator.choices)
     value = models.JSONField()
 
-    class Meta:
-        verbose_name = "AttributeFilter"
+    panels = [
+        FieldPanel("model_attribute"),
+        FieldPanel("comparator"),
+        FieldPanel("value"),
+    ]
 
     def clean(self):
         super().clean()
@@ -65,12 +59,37 @@ class AttributeFilter(Filter):
         if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
             return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
 
+    class Meta:
+        abstract = True
 
-class RelationAttributeFilter(AttributeFilter):
+    def get_q(self) -> Q:
+        pass
+
+
+class AttributeFilter(Filter):
+    """Filter on attribute"""
+
+    rule = ParentalKey(
+        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="attribute_filters"
+    )
+
+    class Meta:
+        verbose_name = "AttributeFilter"
+
+
+class RelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
 
+    rule = ParentalKey(
+        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="relation_attribute_filters"
+    )
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
+
+    panels = Filter.panels + [
+        FieldPanel("relation_field"),
+        FieldPanel("relation_field_subtype"),
+    ]
 
     class Meta:
         verbose_name = "RelationAttributeFilter"

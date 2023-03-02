@@ -6,7 +6,6 @@ from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from holon.models.interactive_element import InteractiveElement
-from holon.models.scenario import Scenario
 from holon.models.util import all_subclasses
 
 
@@ -36,7 +35,32 @@ class ScenarioRule(ClusterableModel):
     panels = [
         FieldPanel("model_type"),
         FieldPanel("model_subtype"),
-        InlinePanel("factors", heading="Factors", label="Factors"),
+        InlinePanel("continuous_factors", heading="Continuous factors", label="Continuous factors"),
+        InlinePanel(
+            "discrete_factors_attribute",
+            heading="Discrete attribute factors",
+            label="Discrete attribute factors",
+        ),
+        InlinePanel(
+            "discrete_factors_addremove",
+            heading="Discrete add remove attribute factors",
+            label="Discrete add remove attribute factors",
+        ),
+        InlinePanel(
+            "discrete_factors_balancegroup",
+            heading="Discrete balance group factors",
+            label="Discrete balance group factors",
+        ),
+        InlinePanel(
+            "attribute_filters",
+            heading="Attribute filters",
+            label="Attribute filters",
+        ),
+        InlinePanel(
+            "relation_attribute_filters",
+            heading="Relation attribute filters",
+            label="Relation attribute filters",
+        ),
     ]
 
     class Meta:
