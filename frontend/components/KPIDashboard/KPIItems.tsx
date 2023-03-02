@@ -1,6 +1,7 @@
 import React from "react";
 import KPIItem from "./KPIItem";
 import { KPIData } from "./types";
+import styles from "./KPIItem.module.css";
 
 type KPIItems = {
   view: string;
@@ -62,7 +63,7 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
             unit="%"></KPIItem>
         </React.Fragment>
       ) : (
-        <span className="px-2">Er is geen data op dit niveau.</span>
+        <span className={styles["kpiHolarchy__nodata"]}>Er is geen data op dit niveau.</span>
       )}
     </React.Fragment>
   );
