@@ -1,10 +1,14 @@
 from django.db import models
 from polymorphic.models import PolymorphicModel
 from django.utils.translation import gettext_lazy as _
+from django.apps import apps
+from modelcluster.models import ClusterableModel
 
 from holon.models.actor import Actor
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
 from holon.models.scenario import Scenario
+
+holon_app = apps.get_app_config("holon")
 
 
 class GridCategory(models.TextChoices):
@@ -22,7 +26,7 @@ class BatteryMode(models.TextChoices):
     PRICE = "PRICE"
 
 
-class GridConnection(PolymorphicModel):
+class GridConnection(PolymorphicModel, ClusterableModel):
     owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     capacity_kw = models.FloatField()
     parent_electric = models.ForeignKey(
@@ -105,6 +109,9 @@ class HousingType(models.TextChoices):
 class HouseGridConnection(BuiltEnvironmentGridConnection):
     category = "HOUSE"
     type = models.CharField(max_length=20, choices=HousingType.choices)
+    heatmodel = models.ForeignKey(
+        "holon.heatstorageasset", on_delete=models.SET_NULL, blank=True, null=True
+    )
 
 
 class BuildingType(models.TextChoices):
@@ -116,6 +123,9 @@ class BuildingType(models.TextChoices):
 class BuildingGridConnection(BuiltEnvironmentGridConnection):
     category = "BUILDING"
     type = models.CharField(max_length=9, choices=BuildingType.choices)
+    heatmodel = models.ForeignKey(
+        "holon.heatstorageasset", on_delete=models.SET_NULL, blank=True, null=True
+    )
 
 
 class ProductionCategory(models.TextChoices):

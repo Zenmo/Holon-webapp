@@ -208,6 +208,7 @@ class StorageAssetType(models.TextChoices):
     ELECTRIC_VEHICLE = "ELECTRIC_VEHICLE"
     STORAGE_ELECTRIC = "STORAGE_ELECTRIC"
     STORAGE_HEAT = "STORAGE_HEAT"
+    HEATMODEL = "HEATMODEL"
 
 
 class StorageAsset(EnergyAsset):
@@ -224,6 +225,7 @@ class HeatStorageAsset(StorageAsset):
     minTemp_degC = models.IntegerField()
     maxTemp_degC = models.IntegerField()
     setTemp_degC = models.IntegerField()
+    initial_temperature_degC = models.IntegerField(default=20)
     lossFactor_WpK = models.FloatField()
     heatCapacity_JpK = models.FloatField()
     ambientTempType = models.CharField(max_length=100)
