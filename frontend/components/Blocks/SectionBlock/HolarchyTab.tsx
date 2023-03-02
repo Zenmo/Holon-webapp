@@ -47,6 +47,15 @@ export default function HolarchyTab({
             <div
               key={index}
               className={`${cssClasses[index]} p-4  overflow-auto row-span-1 col-start-1 col-span-1 md:col-start-1 md:col-span-1  md:row-span-1 border-b-2 border-dashed border-holon-blue-900 `}>
+              <p className="font-semibold	">
+                {level == "national"
+                  ? textLabelNational
+                  : level == "local"
+                  ? textLabelLocal
+                  : level == "intermediate"
+                  ? textLabelIntermediate
+                  : ""}
+              </p>
               <ContentColumn
                 dataContent={dataContent}
                 content={content}
