@@ -33,17 +33,26 @@ export default function CostBenefitChart({
     return "€ " + Math.abs(tickItem);
   };
 
-  const tooltipFormatter = (value: number, name: string, props) => {
-    return [
-      convertToPositiveEuro(value),
-      (value < 0 ? "betaalt aan " : "ontvangt van ") + props.dataKey,
-    ];
+  let columnLabel: string;
+  const CustomTooltip = ({ active, payload, label }) => {
+    let activeItem = payload.find(label => label.dataKey === columnLabel);
+    if (payload.length === 1) {
+      // in case, the bar is 0
+      activeItem = payload[0];
+    }
+    if (active && activeItem) {
+      return (
+        <div className="p-2 z-10 bg-holon-blue-900 border-2 border-solid text-white rounded-md border-holon-gray-300">
+          {`${label}${
+            activeItem.value < 0
+              ? ` betaalt ${convertToPositiveEuro(activeItem.value)}  aan `
+              : ` ontvangt ${convertToPositiveEuro(activeItem.value)} van `
+          } ${activeItem.name} `}
+        </div>
+      );
+    }
+    return null;
   };
-
-  const tooltipLabelFormatter = (tooltipItemLabel: string) => {
-    return tooltipItemLabel + ":";
-  };
-
   return (
     <React.Fragment>
       {chartdata.length > 0 && (
@@ -60,11 +69,7 @@ export default function CostBenefitChart({
                   offset={-25}
                 />
               </YAxis>
-              <Tooltip
-                itemSorter={item => item.value}
-                formatter={tooltipFormatter}
-                labelFormatter={tooltipLabelFormatter}
-              />
+              <Tooltip content={<CustomTooltip />} itemSorter={item => item.value} />
               <Legend />
               <ReferenceLine y={0} stroke="#000" />
 
@@ -82,6 +87,8 @@ export default function CostBenefitChart({
                       dataKey={label}
                       fill={color.color}
                       stackId="stack"
+                      onMouseOver={() => (columnLabel = label)}
+                      onMouseLeave={() => (columnLabel = "")}
                     />
                   );
                 }
@@ -92,6 +99,8 @@ export default function CostBenefitChart({
                 dataKey="Netto kosten"
                 shape={<CustomBarWithTarget />}
                 fill="#FF1818"
+                onMouseOver={() => (columnLabel = "Netto kosten")}
+                onMouseLeave={() => (columnLabel = "")}
               />
             </BarChart>
           </ResponsiveContainer>
