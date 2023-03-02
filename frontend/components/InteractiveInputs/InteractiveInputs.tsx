@@ -83,7 +83,8 @@ function InteractiveRadios({
     <div className="mb-4 font-bold text-base">
       <div className="flex flex-row mb-2 gap-3 items-center">
         <p>{name}</p>
-        {moreInformation || linkWikiPage ? (
+        {/* if selectedLevel, then you are in the holarchy view and popover is not shown */}
+        {!selectedLevel && (moreInformation || linkWikiPage) ? (
           <InteractiveInputPopover
             name={name}
             moreInformation={moreInformation}
@@ -113,7 +114,8 @@ function InteractiveRadios({
             />
             <span className="">{inputItem.label || inputItem.option}</span>
           </label>
-          {inputItem.legalLimitation || inputItem.linkWikiPage ? (
+          {/* if selectedLevel, then you are in the holarchy view and popover is not shown */}
+          {!selectedLevel && (inputItem.legalLimitation || inputItem.linkWikiPage) ? (
             <InteractiveInputPopover
               name={inputItem.label || inputItem.option}
               legal_limitation={inputItem.legalLimitation}
