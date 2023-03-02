@@ -41,6 +41,7 @@ class ElectricGridNode(GridNode):
 class HeatGridType(models.TextChoices):
     MT = "MT"
     HT = "HT"
+    LT = "LT"
 
 
 class HeatGridNode(GridNode):
@@ -48,4 +49,4 @@ class HeatGridNode(GridNode):
     category = "HEAT"
 
     def __str__(self):
-        return f"H{self.id}"
+        return f"H{self.id} ({self.type})"
