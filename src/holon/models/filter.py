@@ -1,13 +1,12 @@
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from polymorphic.models import PolymorphicModel
 from modelcluster.fields import ParentalKey
 from holon.models.scenario_rule import ScenarioRule
-
 from holon.models.util import all_subclasses
 
 
@@ -80,10 +79,10 @@ class RelationAttributeFilter(Filter):
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
 
-    panels = Filter.panels + [
+    panels = [
         FieldPanel("relation_field"),
         FieldPanel("relation_field_subtype"),
-    ]
+    ] + Filter.panels
 
     class Meta:
         verbose_name = "RelationAttributeFilter"
@@ -91,13 +90,16 @@ class RelationAttributeFilter(Filter):
     def clean(self):
         super().clean()
 
-        if self.relation_field not in self.relation_field_options():
-            raise ValidationError("Invalid value relation_field")
-        if (
-            self.relation_field_subtype
-            and self.relation_field_subtype not in self.relation_field_subtype_options()
-        ):
-            raise ValidationError("Invalid value relation_field_subtype")
+        try:
+            if self.relation_field not in self.relation_field_options():
+                raise ValidationError("Invalid value relation_field")
+            if (
+                self.relation_field_subtype
+                and self.relation_field_subtype not in self.relation_field_subtype_options()
+            ):
+                raise ValidationError("Invalid value relation_field_subtype")
+        except ObjectDoesNotExist:
+            return
 
     def relation_field_options(self) -> list[str]:
         model_type = (

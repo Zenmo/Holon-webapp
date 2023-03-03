@@ -8,8 +8,6 @@ from wagtail.snippets.models import register_snippet
 from wagtailmodelchooser import register_model_chooser, Chooser, register_filter
 from django.core.validators import MinValueValidator
 
-from holon.models.scenario import Scenario
-
 
 class ChoiceType(models.TextChoices):
     single_select = "CHOICE_SINGLESELECT"
@@ -19,8 +17,6 @@ class ChoiceType(models.TextChoices):
 
 @register_snippet
 class InteractiveElement(ClusterableModel):
-
-    scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     type = models.CharField(
         max_length=19,
@@ -29,7 +25,6 @@ class InteractiveElement(ClusterableModel):
     )
 
     panels = [
-        FieldPanel("scenario"),
         FieldPanel("name"),
         FieldPanel("type"),
         InlinePanel(
@@ -52,9 +47,7 @@ class InteractiveElement(ClusterableModel):
 
     def __str__(self):
         name = f"{self.name}|{self.type}"
-        print(self.type)
         if self.type != ChoiceType.continuous and self.options.count() > 0:
-            print(self.options.all())
             name = f"{name}|{','.join(d.option for d in self.options.all())}"
 
         return name

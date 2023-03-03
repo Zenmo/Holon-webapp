@@ -159,7 +159,7 @@ function setAssetAttributes(model_type, model_subtype_select, data) {
     if (!model_subtype_select) return;
     const attributeInputs = model_subtype_select
         .closest(".w-panel__content")
-        .find("input[id$='-asset_attribute']");
+        .find("input[id$='-asset_attribute'], input[id$='-model_attribute']");
 
     attributeInputs.each(function () {
         convertInputToSelect(
@@ -167,13 +167,106 @@ function setAssetAttributes(model_type, model_subtype_select, data) {
             data[model_type].model_subtype[model_subtype_select.val()]
         );
     });
+
+    updateFilterInputs(model_type, model_subtype_select, data);
+}
+
+function updateFilterInputs(model_type, model_subtype_select, data) {
+    const filterInputs = model_subtype_select
+        .closest(".w-panel__content")
+        .find(" input[id$='-relation_field'], select[id$='-relation_field']");
+
+    filterInputs.each(function () {
+        const allowedRelations = Object.keys(data).map((key) =>
+            key.toLowerCase()
+        );
+        const options = data[model_type].model_subtype[
+            model_subtype_select.val()
+        ].filter((item) => allowedRelations.includes(item));
+
+        let select;
+        if ($(this).prop("tagName") !== "SELECT") {
+            select = convertInputToSelect($(this), options);
+            if ($(this).val()) {
+                convertInputToSelect(
+                    select
+                        .closest(".w-panel__content")
+                        .find(" input[id$='-relation_field_subtype']"),
+                    Object.keys(
+                        data[
+                            Object.keys(data).find(
+                                (key) => key.toLowerCase() === $(this).val()
+                            )
+                        ].model_subtype
+                    )
+                );
+            }
+        } else {
+            select = $(this);
+            updateOptions(select, options);
+            select.val("");
+        }
+        select.change(function (e) {
+            const relation_type = e.target.value;
+            const relation_subtype = $(this)
+                .closest(".w-panel__content")
+                .find("input[id$='-relation_field_subtype']");
+            const options = Object.keys(
+                data[
+                    Object.keys(data).find(
+                        (key) => key.toLowerCase() === relation_type
+                    )
+                ].model_subtype
+            );
+            let select = convertInputToSelect(relation_subtype, options);
+
+            if (!select) {
+                select = $(e.target)
+                    .closest(".w-panel__content")
+                    .find("select[id$='-relation_field_subtype']");
+
+                updateOptions(select, options);
+            }
+
+            select.change(function (e) {
+                const relation_subtype = e.target.value;
+                const relation_type = $(this)
+                    .closest(".w-panel__content")
+                    .find("select[id$='-relation_field']")
+                    .val();
+                const options =
+                    data[
+                        Object.keys(data).find(
+                            (key) => key.toLowerCase() === relation_type
+                        )
+                    ].model_subtype[relation_subtype];
+
+                const attribute_select = $(this)
+                    .closest(".w-panel__content")
+                    .find("select[id$='-model_attribute']");
+                updateOptions(attribute_select, options);
+            });
+        });
+    });
+}
+
+function updateOptions(select, options) {
+    select.find("option").remove().end();
+    for (const value of options) {
+        select.append(
+            $("<option>", {
+                value: value,
+                text: value,
+            })
+        );
+    }
 }
 
 function updateAssetAttributes(model_type, model_subtype_select, data) {
     if (!model_subtype_select) return;
     const attributeInputs = model_subtype_select
         .closest(".w-panel__content")
-        .find("select[id$='-asset_attribute']");
+        .find("select[id$='-asset_attribute'], select[id$='-model_attribute']");
 
     attributeInputs.each(function () {
         const attribute_select = $(this);
@@ -190,6 +283,8 @@ function updateAssetAttributes(model_type, model_subtype_select, data) {
             );
         }
     });
+
+    updateFilterInputs(model_type, model_subtype_select, data);
 }
 
 function convertSelectToInput(select) {
@@ -223,9 +318,8 @@ function convertInputToSelect(input, options) {
         );
     }
 
-    select.val(input.val()).change();
-
     input.replaceWith(select);
 
+    select.val(input.val()).change();
     return select;
 }

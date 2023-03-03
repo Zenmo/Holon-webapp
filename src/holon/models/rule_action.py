@@ -1,6 +1,6 @@
 from typing import Any
 from django.apps import apps
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from polymorphic.models import PolymorphicModel
@@ -22,6 +22,18 @@ class RuleAction(PolymorphicModel):
     class Meta:
         verbose_name = "RuleAction"
         # abstract = True
+
+    def clean(self):
+        super().clean()
+
+        try:
+            if not (
+                self.asset_attribute == "asset_attribute_not_supplied"
+                or self.asset_attribute in self.asset_attributes_options()
+            ):
+                raise ValidationError("Invalid value asset_attribute")
+        except ObjectDoesNotExist:
+            return
 
     def asset_attributes_options(self):
         model_type = (
