@@ -11,53 +11,80 @@ from holon.models import (
     Scenario,
 )
 
-# Remove if you don't need this anymore
-# class DatamodelRequestSerializer(serializers.Serializer):
-#     id = serializers.PrimaryKeyRelatedField(queryset=Actor.objects.all())
-
-#     class Meta:
-#         fields = ["id"]
-
-#     def __init__(self, id):
-#         self.id = id
-
-#     def create(self, validated_data):
-#         return DatamodelRequestSerializer(**validated_data)
+EXCLUDE_FIELDS = ["polymorphic_ctype", "payload"]
 
 
-class ContractSerializer(serializers.ModelSerializer):
+class AnyLogicModelSerializer(serializers.ModelSerializer):
+    def get_fields(self, exclude_fields=None):
+        # list factory outside function scope please
+        if exclude_fields is None:
+            exclude_fields = []
+
+        fields = super().get_fields()
+
+        exclude_fields += EXCLUDE_FIELDS
+        for field in exclude_fields:
+            # providing a default prevents a KeyError
+            # if the field does not exist
+            fields.pop(field, default=None)
+
+        return fields
+
+    def to_representation(self, instance):
+        representation = super(AnyLogicModelSerializer, self).to_representation(instance)
+
+        if representation["wildcard_JSON"] is not None:
+            wildcard = representation.pop("wildcard_JSON")[0]
+
+            for key, value in wildcard.items():
+                representation[key] = value
+
+        return representation
+
+
+class ContractSerializer(AnyLogicModelSerializer):
     class Meta:
         model = Contract
         fields = "__all__"
 
+    id = serializers.SerializerMethodField()
 
-class ActorSerializer(serializers.ModelSerializer):
-    contracts = ContractSerializer(many=True, read_only=True, source="contracts")
+    def get_id(self, obj):
+        return f"c{obj.id}"
+
+
+class ActorSerializer(AnyLogicModelSerializer):
+    contracts = ContractSerializer(many=True, read_only=True)
 
     class Meta:
         model = Actor
         fields = "__all__"
 
+    id = serializers.SerializerMethodField()
 
-class EnergyAssetSerializer(serializers.ModelSerializer):
+    def get_id(self, obj):
+        return f"{obj.category.lower()[:3]}{obj.id}"
+
+
+class EnergyAssetSerializer(AnyLogicModelSerializer):
     class Meta:
         model = EnergyAsset
         fields = "__all__"
 
 
-class PolicySerializer(serializers.ModelSerializer):
+class PolicySerializer(AnyLogicModelSerializer):
     class Meta:
         model = Policy
         fields = "__all__"
 
 
-class GridNodeSerializer(serializers.ModelSerializer):
+class GridNodeSerializer(AnyLogicModelSerializer):
     class Meta:
         model = GridNode
         fields = "__all__"
 
 
-class GridConnectionSerializer(serializers.ModelSerializer):
+class GridConnectionSerializer(AnyLogicModelSerializer):
     energyassets = EnergyAssetSerializer(many=True, read_only=True, source="energyasset_set")
 
     class Meta:

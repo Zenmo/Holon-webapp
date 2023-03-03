@@ -38,6 +38,6 @@
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "spellright.language": ["nl"],
+    "spellright.language": ["en", "nl"],
     "spellright.documentTypes": ["markdown", "latex", "plaintext"]
 }
