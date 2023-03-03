@@ -4,6 +4,7 @@ from pathlib import Path
 from django.db.models import Model
 from django.db import models
 
+
 base_path = Path(__file__).parent.parent / "services" / "jsons"
 base_path.mkdir(exist_ok=True, parents=True)
 
@@ -44,3 +45,10 @@ def duplicate_model(obj, attrs={}):
 
     obj.save()
     return obj
+
+
+def add_assets_from_template(gridconnection: 'GridConnection', template_asset: 'EnergyAsset', n: int):
+    """ Duplicate a template asset n times with gridconnection as their parent """
+
+    for _ in range(n):
+        duplicate_model(template_asset, {"gridconnection": gridconnection})

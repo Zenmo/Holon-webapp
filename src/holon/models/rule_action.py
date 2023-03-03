@@ -83,11 +83,40 @@ class RuleActionChangeAttribute(RuleAction):
         verbose_name = "RuleActionChangeAttribute"
 
 
-class RuleActionAddRemove(RuleAction):
-    """A discrete factor for setting the value of an attribute"""
+class RuleActionRemove(RuleAction):
+    """Remove the filtered items"""
 
     class Meta:
-        verbose_name = "RuleActionAddRemove"
+        verbose_name = "RuleActionRemove"
+
+    def apply_action_to_queryset(
+        self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
+    ):
+        """Remove the filtered items"""
+
+        filtered_queryset.delete()
+
+
+class RuleActionAdd(RuleAction):
+    """Add a set asset to the filtered items"""
+
+    class Meta:
+        verbose_name = "RuleActionAdd"
+
+    asset = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True)
+
+    def apply_action_to_queryset(
+        self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
+    ):
+        """Add an asset to the filtered gridconnections"""
+
+        n = int(value)
+
+        for filtererd_object in filtered_queryset:
+            if not isinstance(filtererd_object, GridConnection):
+                raise ValidationError("Filtered objects should all be gridconnections for Add rule action")
+
+            util.add_assets_from_template(filtererd_object, self.asset, n)
 
 
 class RuleActionBalanceGroup(RuleAction):
@@ -146,7 +175,7 @@ class RuleActionBalanceGroup(RuleAction):
         # apply removal/adding
         for template_asset, target_diff, filtered_assets in zip(self.ordered_assets, target_diff_per_asset_type, filtered_assets_in_order):
             if target_diff > 0:
-                self.add_assets(gridconnection, template_asset, target_diff)
+                util.add_assets_from_template(gridconnection, template_asset, target_diff)
 
             if target_diff < 0:
                 self.remove_assets(filtered_assets[:-target_diff])
@@ -202,19 +231,11 @@ class RuleActionBalanceGroup(RuleAction):
         
         return target_diff_per_asset_type
         
-
-    def add_assets(self, gridconnection: GridConnection, template_asset: EnergyAsset, n: int):
-        """ Duplicate a template asset n times with gridconnection_id as their parent """
-
-        for _ in range(n):
-            util.duplicate_model(template_asset, {"gridconnection": gridconnection})
-
-
     def remove_assets(self, assets: list[EnergyAsset]):
         """ Delete a set of assets """
 
         for asset in assets:
-            EnergyAsset.objects.filter(id=asset.id).delete()
+            asset.delete()
 
 
 
