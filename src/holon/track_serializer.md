@@ -1,3 +1,20 @@
+- [Exclude fields](#exclude-fields)
+- [Implementation of wildcard JSON](#implementation-of-wildcard-json)
+  - [Before](#before)
+  - [After](#after)
+- [Implementation of custom id's (scoped to models)](#implementation-of-custom-ids-scoped-to-models)
+  - [Before](#before-1)
+  - [After](#after-1)
+- [Resolve parent\_actors to same custom id's (scoped to models)](#resolve-parent_actors-to-same-custom-ids-scoped-to-models)
+  - [Before](#before-2)
+  - [After](#after-2)
+- [Resolve owner\_actor at gridconnection to custom ID's](#resolve-owner_actor-at-gridconnection-to-custom-ids)
+  - [Before](#before-3)
+  - [After](#after-3)
+- [Feature](#feature)
+  - [Before](#before-4)
+  - [After](#after-4)
+
 ## Exclude fields
 
 ```python
