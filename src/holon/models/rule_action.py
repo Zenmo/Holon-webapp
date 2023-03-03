@@ -80,11 +80,8 @@ class RuleActionFactor(RuleAction):
         value_flt = float(value)
         mapped_value = (self.max_value - self.min_value) * (value_flt / 100.0) + self.min_value
 
-        # Find index from filtered element in prefetched queryset
-        queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == filtered_object.id)
-
-        # Update object in prefetched scenario
-        setattr(queryset[queryset_index], self.asset_attribute, mapped_value)
+        setattr(filtered_object, self.asset_attribute, mapped_value)
+        filtered_object.save()
 
 
 class RuleActionChangeAttribute(RuleAction):
