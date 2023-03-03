@@ -92,6 +92,9 @@ class EnergyAssetSerializer(AnyLogicModelSerializer):
         model = EnergyAsset
         fields = "__all__"
 
+    def get_fields(self):
+        return super().get_fields(exclude_fields=["gridconnection", "gridnode"])
+
 
 class PolicySerializer(AnyLogicModelSerializer):
     class Meta:
@@ -111,6 +114,16 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
     class Meta:
         model = GridConnection
         fields = "__all__"
+
+    owner_actor = serializers.SerializerMethodField()
+
+    def get_owner_actor(self, obj):
+        # get related actor
+        if obj.owner_actor is not None:
+            obj = Actor.objects.get(id=obj.owner_actor.id)
+            return ActorSerializer().get_id(obj)
+        else:
+            return obj.owner_actor
 
 
 class ScenarioSerializer(serializers.ModelSerializer):
