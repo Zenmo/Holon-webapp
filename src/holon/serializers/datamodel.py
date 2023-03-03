@@ -33,11 +33,16 @@ class AnyLogicModelSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super(AnyLogicModelSerializer, self).to_representation(instance)
 
+        # unpack wildcard json to level key:vaue pairs
         if representation["wildcard_JSON"] is not None:
             wildcard = representation.pop("wildcard_JSON")[0]
 
             for key, value in wildcard.items():
                 representation[key] = value
+
+        # remove if null
+        else:
+            _ = representation.pop("wildcard_JSON")
 
         return representation
 
@@ -52,6 +57,13 @@ class ContractSerializer(AnyLogicModelSerializer):
     def get_id(self, obj):
         return f"c{obj.id}"
 
+    def get_fields(self):
+        return super().get_fields(
+            exclude_fields=[
+                "actor",
+            ]
+        )
+
 
 class ActorSerializer(AnyLogicModelSerializer):
     contracts = ContractSerializer(many=True, read_only=True)
@@ -61,9 +73,18 @@ class ActorSerializer(AnyLogicModelSerializer):
         fields = "__all__"
 
     id = serializers.SerializerMethodField()
+    parent_actor = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         return f"{obj.category.lower()[:3]}{obj.id}"
+
+    def get_parent_actor(self, obj):
+        # get related actor
+        if obj.parent_actor is not None:
+            obj = Actor.objects.get(id=obj.parent_actor.id)
+            return self.get_id(obj)
+        else:
+            return obj.parent_actor
 
 
 class EnergyAssetSerializer(AnyLogicModelSerializer):
