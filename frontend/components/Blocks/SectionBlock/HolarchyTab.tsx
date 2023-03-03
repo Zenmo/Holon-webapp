@@ -39,14 +39,14 @@ export default function HolarchyTab({
         {/*Interactive input -  left column */}
         {levels.map((level, index) => {
           const cssClasses = [
-            "row-start-1 bg-holon-blue-100 ",
-            "row-start-2 bg-holon-blue-200",
-            "row-start-3 bg-holon-blue-300",
+            "row-start-1 bg-holon-holarchy-national",
+            "row-start-2 bg-holon-holarchy-intermediate",
+            "row-start-3 bg-holon-holarchy-local",
           ];
           return (
             <div
               key={index}
-              className={`${cssClasses[index]} p-4  overflow-auto row-span-1 col-start-1 col-span-1 md:col-start-1 md:col-span-1  md:row-span-1 border-b-2 border-dashed border-holon-blue-900 `}>
+              className={`${cssClasses[index]} p-4  overflow-auto row-span-1 col-start-1 col-span-1 md:col-start-1 md:col-span-1  md:row-span-1  `}>
               <p className="font-semibold	">
                 {level == "national"
                   ? textLabelNational
@@ -69,21 +69,10 @@ export default function HolarchyTab({
 
         <div className="row-span-1 row-start-4 col-start-1 col-span-1 md:col-start-2  md:col-span-1  md:row-span-3 md:row-start-1 grid grid-rows grid-rows-3 overflow-hidden">
           {/*image - highest block*/}
-          <div className="relative row-start-1 bg-holon-blue-100 row-span-1 col-start-1 col-span-1">
-            <svg
-              viewBox="0 0 20 4.95"
-              className="hidden md:block md:absolute md:w-full md:top-[100%] md:fill-[#e8eeff] z-10">
-              <path
-                d="
-            M10 4.95
-            L0 0
-            L20 0 Z"
-              />
-            </svg>
-          </div>
+          <div className="row-start-1 bg-holon-holarchy-national row-span-1 col-start-1 col-span-1 "></div>
 
           {/*image - middle block showing image*/}
-          <div className="relative bg-holon-blue-200 row-start-2 row-span-1 col-start-1 col-span-1">
+          <div className="relative bg-holon-holarchy-intermediate row-start-2 row-span-1 col-start-1 col-span-1 ">
             {holarchyFeedbackImages.length > 0 && (
               <HolarchyFeedbackImage
                 holarchyfeedbackimages={holarchyFeedbackImages}
@@ -93,18 +82,7 @@ export default function HolarchyTab({
           </div>
 
           {/*image - lowest block*/}
-          <div className="relative overflow-hidden bg-holon-blue-300  row-start-3 row-span-1 col-start-1 col-span-1">
-            <svg
-              viewBox="0 0 20 4.95"
-              className="hidden md:block md:w-full md:absolute md:top-[-2px] md:fill-[#d8e3ff]">
-              <path
-                d="
-            M10 4.95
-            L0 0
-            L20 0 Z"
-              />
-            </svg>
-          </div>
+          <div className="bg-holon-holarchy-local  row-start-3 row-span-1 col-start-1 col-span-1"></div>
         </div>
         {/* KPIs - right column */}
         {/*National KPIs */}
