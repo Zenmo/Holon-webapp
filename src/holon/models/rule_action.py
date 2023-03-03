@@ -111,92 +111,99 @@ class RuleActionBalanceGroup(RuleAction):
 
     def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
         """
-        Balance the count of a set of assets
+        Balance a set of assets by removing and adding assets such that a target count for the selected asset 
+        is reached, but the total number of assets stays the same.
         """
         
         target_count = int(value)
+        gridconnection_id = filtered_queryset[0].gridconnection.id
 
-        # validate asset types in filtered_queryset
-        assets_not_in_asset_order_list = [ asset for asset in filtered_queryset if not asset.__class__.__name__ in self.asset_order]
-        if assets_not_in_asset_order_list:
-            raise ValueError(f"The following asset names were in the filtered results, but not present in the asset order: {assets_not_in_asset_order_list}")
-
-        # validate if filtered asset types all have same parent (gridconnection)
-        gridconnection_id_set = set([filtered_object.gridconnection.id for filtered_object in filtered_queryset])
-        if len(gridconnection_id_set) > 1:
-            raise ValueError("All filtered assets should have the same gridconnection")
-        
-        gridconnection_id = gridconnection_id_set.pop()
+        # validate input
+        self.validate_filtered_queryset(filtered_queryset, gridconnection_id, target_count)
 
         # get filtered assets aggregated by asset type, in the order of self.asset_order
         filtered_assets_in_order = [
-            object_list for object_list in
             [
-                [
-                    filtered_object for filtered_object in filtered_queryset if filtered_object.__class__.__name__ == asset_name
-                ] 
-                for asset_name in self.asset_order
-            ]
-            if len(object_list) > 0
+                filtered_object for filtered_object in filtered_queryset if filtered_object.__class__.__name__ == asset_name
+            ] 
+            for asset_name in self.asset_order
         ]
+
+        # calculate how many of each asset type should be removed/added
+        target_diff_per_asset_type = self.get_target_diff_per_asset_type(filtered_assets_in_order, target_count) 
+
+        # apply removal/adding
+        for asset_type, target_diff, filtered_assets in zip(self.asset_order, target_diff_per_asset_type, filtered_assets_in_order):
+            if target_diff > 0:
+                self.create_assets(gridconnection_id, asset_type, target_diff)
+
+            if target_diff < 0:
+                self.remove_assets(filtered_assets[:-target_diff])
+
+
+    def validate_filtered_queryset(self, filtered_queryset: QuerySet, gridconnection_id:int, target_count: int):
+        """ Validate the assets in the queryset on asset type, gridconnection_id and count """
+
+        # validate whether asset types in filtered_queryset are in the ordered list
+        assets_not_in_asset_order_list = [ asset for asset in filtered_queryset if not asset.__class__.__name__ in self.asset_order]
+        if assets_not_in_asset_order_list:
+            raise ValueError(f"All filtered assets should be present in the asset order. The violating assets arew: {assets_not_in_asset_order_list}")
+
+        # validate if filtered asset types all have same parent (gridconnection)
+        deviating_gridconnection_id_list = [filtered_object.gridconnection.id for filtered_object in filtered_queryset if filtered_object.gridconnection.id != gridconnection_id]
+        if deviating_gridconnection_id_list:
+            raise ValueError(f"All filtered assets should have the same GridConnection. Found GridConnection ids {[gridconnection_id]+deviating_gridconnection_id_list}.")
         
-        # filtered asset names in balancegroup order and number of filtered asset types
-        filtered_assets_in_order_types = [filtered_asset[0].__class__.__name__ for filtered_asset in filtered_assets_in_order]
-        n_filtered_asset_types = len(filtered_assets_in_order_types)
-
         # validate target count (value)
-        total_n_assets = sum([len(asset_list) for asset_list in filtered_assets_in_order])
-        if target_count > total_n_assets:
-            raise ValueError(f"target count cannot be larger than the total amount of assets")
-
-        # apply balancing
-        change_index = filtered_assets_in_order_types.index(self.selected_asset)
-        count_at_selection = len(filtered_assets_in_order[change_index])
-
-        count_diff = target_count - count_at_selection
-
-        if count_diff > 0: # increase amount
-            assets_to_add = [filtered_assets_in_order[change_index][0]] * (count_diff) # duplicate first item n times
-            self.queryset_add_assets(gridconnection_id, queryset, assets_to_add)
-
-            remove_index = n_filtered_asset_types-2 if change_index < n_filtered_asset_types-1 else n_filtered_asset_types-1
-            assets_to_remove = []
-            while len(assets_to_remove) < count_diff:
-                remainder = count_diff - len(assets_to_remove)
-                assets_to_remove += filtered_assets_in_order[remove_index][:remainder]
-                remove_index -= 1
-                # remove at index, if remove place becomse < 0 cascade upwards (remove index--)
-
-            self.queryset_remove_assets(gridconnection_id, queryset, assets_to_remove)
-
-        elif count_diff < 0: # decrease amount
-            assets_to_remove = filtered_assets_in_order[change_index][:-count_diff]
-            self.queryset_remove_assets(gridconnection_id, queryset, assets_to_remove)
-
-            if change_index == 0: # add missing to filtered_assets_in_order[change_index+1]
-                assets_to_add = [filtered_assets_in_order[change_index+1][0]] * (-count_diff) # duplicate first item n times
-                self.queryset_add_assets(gridconnection_id, queryset, assets_to_add)
-
-            else: # add missing to filtered_assets_in_order[change_index-1]
-                assets_to_add = [filtered_assets_in_order[change_index-1][0]] * (-count_diff) # duplicate first item n times
-                self.queryset_add_assets(gridconnection_id, queryset, assets_to_add)
+        if target_count > len(filtered_queryset):
+            raise ValueError(f"target count ({target_count}) cannot be larger than the total amount of assets ({len(filtered_queryset)})")
 
 
-    def queryset_add_assets(self, gridconnection_id: int, queryset: QuerySet, assets: list[EnergyAsset]):
-        """ Add a set of assets to a gridconnection in the queryset """
+    def get_target_diff_per_asset_type(self, filtered_assets_in_order: list[list[EnergyAsset]], target_count: int) -> list[int]:
+        """ Calculate per asset type in the ordered list how many should be removed or added """
 
-        gc_queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == gridconnection_id)
+        n_filtered_asset_types = len(filtered_assets_in_order)
+        target_diff_per_asset_type = [0] * n_filtered_asset_types
 
-        for asset in assets:
-            # asset.id = 0
-            queryset[gc_queryset_index].energyasset_set.add(asset)
+        # get info for selected asset type
+        selected_index = next(i for i in range(n_filtered_asset_types) if filtered_assets_in_order[i][0].__class__.__name__ == self.selected_asset)
+        count_at_selected = len(filtered_assets_in_order[selected_index])
+        count_target_diff = target_count - count_at_selected
+
+        # compute target differential per asset type
+        if count_target_diff > 0: # increase amount of selected asset type
+            target_diff_per_asset_type[selected_index] = count_target_diff # add assets of this type
+
+            # balance by removing starting from the bottom of the ordered list and moving up
+            remove_index = n_filtered_asset_types-1 if selected_index < n_filtered_asset_types-1 else n_filtered_asset_types-2
+            add_remove_sum = count_target_diff
+            while add_remove_sum > 0:
+                target_diff_per_asset_type[remove_index] = -min(add_remove_sum, len(filtered_assets_in_order[remove_index]))
+                add_remove_sum = sum(target_diff_per_asset_type)
+                remove_index -= 1 
+                
+        elif count_target_diff < 0: # decrease amount
+            target_diff_per_asset_type[selected_index] = count_target_diff # add assets of this type
+
+            # balance
+            add_index = 1 if selected_index == 0 else (selected_index-1)
+            target_diff_per_asset_type[add_index] = -count_target_diff
+        
+        return target_diff_per_asset_type
+        
+
+    def create_assets(self, gridconnection_id: int, asset_type: str, n: int):
+        """ Add a set of n assets of type `asset_type` with gridconnection_id as their parent """
+
+        asset_model = apps.get_model("holon", asset_type)
+
+        for _ in range(n):
+            asset = asset_model(gridconnection=gridconnection_id)
+            asset.save()
 
 
-    def queryset_remove_assets(self, gridconnection_id: int, queryset: QuerySet, assets: list[EnergyAsset]):
-        """ "Remove" a set of assets from a gridconnection in the queryset """
-
-        gc_queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == gridconnection_id)
+    def remove_assets(self, assets: list[EnergyAsset]):
+        """ Delete a set of assets """
 
         for asset in assets:
-            # asset.id = 0
-            queryset[gc_queryset_index].energyasset_set.remove(asset)
+            EnergyAsset.objects.filter(id=asset.id).delete()
