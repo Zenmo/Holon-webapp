@@ -6,7 +6,7 @@ from django.db.models.query import QuerySet
 from django.contrib.postgres.fields import ArrayField
 from holon.models.gridconnection import GridConnection
 
-from holon.models.asset import EnergyAsset
+from holon.models.asset import ChemicalHeatConversionAsset, ElectricHeatConversionAsset, EnergyAsset, HybridHeatCoversionAsset, TransportHeatConversionAsset, VehicleConversionAsset
 from holon.models import util
 
 from polymorphic.models import PolymorphicModel
@@ -93,17 +93,25 @@ class RuleActionAddRemove(RuleAction):
 class RuleActionBalanceGroup(RuleAction):
     """Blans"""
 
-    asset_order = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
-    selected_asset = models.CharField(max_length=255, blank=True)
+    asset_order = ArrayField(models.CharField(max_length=255, blank=True))
+    selected_asset_type = models.CharField(max_length=255, blank=True)
 
     def clean(self):
         super().clean()
 
+        # validated selected_asset_type is in asset_order
+        if not self.selected_asset_type in self.asset_order:
+            raise ValidationError(f"Asset type selected for balancing ({self.selected_asset_type}) not in ordered asset list")
+
+        # validate asset_order items exist
         asset_classnames = [asset_class.__name__ for asset_class in util.all_subclasses(EnergyAsset)]
         invalid_assetnames = [ asset for asset in self.asset_order if not asset in asset_classnames ]
 
         if invalid_assetnames:
             raise ValidationError(f"The following asset names are not recognized: {invalid_assetnames}")
+
+        # TODO validate (asset_order) > 1
+        # TODO asset_order fields match original assets
 
     class Meta:
         verbose_name = "RuleActionBalanceGroup"
@@ -116,10 +124,10 @@ class RuleActionBalanceGroup(RuleAction):
         """
         
         target_count = int(value)
-        gridconnection_id = filtered_queryset[0].gridconnection.id
+        gridconnection = filtered_queryset[0].gridconnection
 
         # validate input
-        self.validate_filtered_queryset(filtered_queryset, gridconnection_id, target_count)
+        self.validate_filtered_queryset(filtered_queryset, gridconnection, target_count)
 
         # get filtered assets aggregated by asset type, in the order of self.asset_order
         filtered_assets_in_order = [
@@ -135,24 +143,24 @@ class RuleActionBalanceGroup(RuleAction):
         # apply removal/adding
         for asset_type, target_diff, filtered_assets in zip(self.asset_order, target_diff_per_asset_type, filtered_assets_in_order):
             if target_diff > 0:
-                self.create_assets(gridconnection_id, asset_type, target_diff)
+                self.create_assets(gridconnection, asset_type, target_diff)
 
             if target_diff < 0:
                 self.remove_assets(filtered_assets[:-target_diff])
 
 
-    def validate_filtered_queryset(self, filtered_queryset: QuerySet, gridconnection_id:int, target_count: int):
+    def validate_filtered_queryset(self, filtered_queryset: QuerySet, gridconnection: GridConnection, target_count: int):
         """ Validate the assets in the queryset on asset type, gridconnection_id and count """
 
         # validate whether asset types in filtered_queryset are in the ordered list
         assets_not_in_asset_order_list = [ asset for asset in filtered_queryset if not asset.__class__.__name__ in self.asset_order]
         if assets_not_in_asset_order_list:
-            raise ValueError(f"All filtered assets should be present in the asset order. The violating assets arew: {assets_not_in_asset_order_list}")
+            raise ValueError(f"All filtered assets should be present in the asset order. The violating assets are: {assets_not_in_asset_order_list}")
 
         # validate if filtered asset types all have same parent (gridconnection)
-        deviating_gridconnection_id_list = [filtered_object.gridconnection.id for filtered_object in filtered_queryset if filtered_object.gridconnection.id != gridconnection_id]
+        deviating_gridconnection_id_list = [filtered_object.gridconnection.id for filtered_object in filtered_queryset if filtered_object.gridconnection.id != gridconnection.id]
         if deviating_gridconnection_id_list:
-            raise ValueError(f"All filtered assets should have the same GridConnection. Found GridConnection ids {[gridconnection_id]+deviating_gridconnection_id_list}.")
+            raise ValueError(f"All filtered assets should have the same GridConnection. Found GridConnection ids {[gridconnection.id]+deviating_gridconnection_id_list}.")
         
         # validate target count (value)
         if target_count > len(filtered_queryset):
@@ -162,11 +170,11 @@ class RuleActionBalanceGroup(RuleAction):
     def get_target_diff_per_asset_type(self, filtered_assets_in_order: list[list[EnergyAsset]], target_count: int) -> list[int]:
         """ Calculate per asset type in the ordered list how many should be removed or added """
 
-        n_filtered_asset_types = len(filtered_assets_in_order)
-        target_diff_per_asset_type = [0] * n_filtered_asset_types
+        n_asset_types = len(self.asset_order)
+        target_diff_per_asset_type = [0] * n_asset_types
 
         # get info for selected asset type
-        selected_index = next(i for i in range(n_filtered_asset_types) if filtered_assets_in_order[i][0].__class__.__name__ == self.selected_asset)
+        selected_index = self.asset_order.index(self.selected_asset_type)
         count_at_selected = len(filtered_assets_in_order[selected_index])
         count_target_diff = target_count - count_at_selected
 
@@ -175,7 +183,7 @@ class RuleActionBalanceGroup(RuleAction):
             target_diff_per_asset_type[selected_index] = count_target_diff # add assets of this type
 
             # balance by removing starting from the bottom of the ordered list and moving up
-            remove_index = n_filtered_asset_types-1 if selected_index < n_filtered_asset_types-1 else n_filtered_asset_types-2
+            remove_index = n_asset_types-1 if selected_index < n_asset_types-1 else n_asset_types-2
             add_remove_sum = count_target_diff
             while add_remove_sum > 0:
                 target_diff_per_asset_type[remove_index] = -min(add_remove_sum, len(filtered_assets_in_order[remove_index]))
@@ -192,13 +200,24 @@ class RuleActionBalanceGroup(RuleAction):
         return target_diff_per_asset_type
         
 
-    def create_assets(self, gridconnection_id: int, asset_type: str, n: int):
+    def create_assets(self, gridconnection: int, asset_type: str, n: int):
         """ Add a set of n assets of type `asset_type` with gridconnection_id as their parent """
 
         asset_model = apps.get_model("holon", asset_type)
 
+        # TODO
         for _ in range(n):
-            asset = asset_model(gridconnection=gridconnection_id)
+            if asset_model == HybridHeatCoversionAsset:
+                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityHeat_kW=0, ambientTempType="")
+            if asset_model == TransportHeatConversionAsset:
+                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityElectricity_kW=0, ambientTempType="")
+            if asset_model == ElectricHeatConversionAsset:
+                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityElectricity_kW=0)
+            if asset_model == ChemicalHeatConversionAsset:
+                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityHeat_kW=0)
+            if asset_model == VehicleConversionAsset:
+                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, energyConsumption_kWhpkm=0, vehicleScaling=0)
+
             asset.save()
 
 
