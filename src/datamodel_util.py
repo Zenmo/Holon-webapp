@@ -76,9 +76,16 @@ template_main_string = """
 from rest_polymorphic.serializers import PolymorphicSerializer
 {% for module in outputs %}
 {% if module.subclasses|length > 0 %}
-from {{ subseris_py_filename }} import (
+from {{ module.module }} import (
 {% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
 {% else %}        {{ subclass }}{% endif %}{% endfor %}
+)
+{% endif %}{% endfor %}
+{% for module in outputs %}
+{% if module.subclasses|length > 0 %}
+from .{{ subseris_py_filename }} import (
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}Serializer,
+{% else %}        {{ subclass }}Serializer{% endif %}{% endfor %}
 )
 {% endif %}{% endfor %}
 {% for module in outputs %}{% if module.subclasses|length > 0 %}

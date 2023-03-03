@@ -182,9 +182,16 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
             return obj.parent_electric
 
 
+from .datamodel_top import GridConnectionPolymorphicSerializer
+
+
+class MergedSerializerGridConnection(GridConnectionSerializer, GridConnectionPolymorphicSerializer):
+    pass
+
+
 class ScenarioSerializer(serializers.ModelSerializer):
     actors = ActorSerializer(many=True, read_only=True, source="actor_set")
-    gridconnections = GridConnectionSerializer(
+    gridconnections = MergedSerializerGridConnection(
         many=True, read_only=True, source="gridconnection_set"
     )
     gridnodes = GridNodeSerializer(many=True, read_only=True, source="gridnode_set")

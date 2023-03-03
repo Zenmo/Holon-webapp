@@ -14,7 +14,7 @@ django-polymorphic==3.1.0
 dj-rest-auth==2.2.7
 django-allauth==0.52.0
 djangorestframework-simplejwt==5.2.2 
-
+django-rest-polymorphic==0.1.10
 # cloudclient
 git+https://github.com/ZEnMo/HOLON-cloudclient@main#egg=cloudclient
 

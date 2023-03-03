@@ -1,3 +1,4 @@
+- [Automatic subserialization script for poly models](#automatic-subserialization-script-for-poly-models)
 - [Exclude fields](#exclude-fields)
 - [Implementation of wildcard JSON](#implementation-of-wildcard-json)
   - [Before](#before)
@@ -14,6 +15,12 @@
 - [Feature](#feature)
   - [Before](#before-4)
   - [After](#after-4)
+
+## Automatic subserialization script for poly models
+
+1. [datamodel_util.py](/src/datamodel_util.py) does the meta programming with templating and yields two files:
+   1. [datamodel_subseries.py](/src/holon/serializers/datamodel_subseries.py) contains all needed subserializers for the `PolymorphicSerializer`
+   2. [datamodel_top.py](/src/holon/serializers/datamodel_top.py) imports all models and corresponding subserializers and implements those in a `PolymorphicSerializer`
 
 ## Exclude fields
 
