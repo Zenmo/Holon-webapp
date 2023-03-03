@@ -101,11 +101,25 @@ class PolicySerializer(AnyLogicModelSerializer):
         model = Policy
         fields = "__all__"
 
+    id = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        return f"pol{obj.id}"
+
 
 class GridNodeSerializer(AnyLogicModelSerializer):
     class Meta:
         model = GridNode
         fields = "__all__"
+
+    id = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        try:
+            id = f"{obj.category[0]}{obj.id}"
+        except AttributeError:
+            id = f"grn{obj.id}"
+        return id
 
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
@@ -116,6 +130,7 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
         fields = "__all__"
 
     owner_actor = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
 
     def get_owner_actor(self, obj):
         # get related actor
@@ -124,6 +139,9 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
             return ActorSerializer().get_id(obj)
         else:
             return obj.owner_actor
+
+    def get_id(self, obj):
+        return f"grc{obj.id}"
 
 
 class ScenarioSerializer(serializers.ModelSerializer):
