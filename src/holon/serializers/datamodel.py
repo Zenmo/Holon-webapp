@@ -113,6 +113,8 @@ class GridNodeSerializer(AnyLogicModelSerializer):
         fields = "__all__"
 
     id = serializers.SerializerMethodField()
+    parent = serializers.SerializerMethodField()
+    owner_actor = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         try:
@@ -120,6 +122,22 @@ class GridNodeSerializer(AnyLogicModelSerializer):
         except AttributeError:
             id = f"grn{obj.id}"
         return id
+
+    def get_parent(self, obj):
+        # get related gridnode
+        if obj.parent is not None:
+            obj = GridNode.objects.get(id=obj.parent.id)
+            return self.get_id(obj)
+        else:
+            return obj.parent
+
+    def get_owner_actor(self, obj):
+        # get related actor
+        if obj.owner_actor is not None:
+            obj = Actor.objects.get(id=obj.owner_actor.id)
+            return ActorSerializer().get_id(obj)
+        else:
+            return obj.owner_actor
 
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
