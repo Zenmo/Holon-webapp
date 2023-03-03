@@ -7,11 +7,11 @@ from holon.models import rule_mapping
 class RuleFiltersTestClass(TestCase):
     def setUp(self) -> None:
         self.scenario: Scenario = Scenario.objects.create(name="test", etm_scenario_id=1)
-        actor: Actor = Actor.objects.create(
+        self.actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
         self.gridconnection_1: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=750.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.D,
@@ -19,7 +19,7 @@ class RuleFiltersTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         self.gridconnection_2: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=550.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.A,
@@ -27,7 +27,7 @@ class RuleFiltersTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         self.gridconnection_3: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=1000.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.B,
@@ -36,7 +36,7 @@ class RuleFiltersTestClass(TestCase):
         )
         self.gridconnection_4: DistrictHeatingGridConnection = (
             DistrictHeatingGridConnection.objects.create(
-                owner_actor=actor,
+                owner_actor=self.actor,
                 capacity_kw=550.0,
                 payload=self.scenario,
                 heating_type=HeatingType.GASBURNER,
@@ -119,3 +119,42 @@ class RuleFiltersTestClass(TestCase):
 
         # Assert
         self.assertEqual(len(filtered_queryset), 1)
+
+    def test_relation_discrete_filter_greater_than(self) -> None:
+        # Arange
+        # Add gridconnection with insulationtype none, which should be ignored
+        BuildingGridConnection.objects.create(
+            owner_actor=self.actor,
+            capacity_kw=550.0,
+            payload=self.scenario,
+            insulation_label=InsulationLabel.NONE,
+            heating_type=HeatingType.GASBURNER,
+            type=BuildingType.LOGISTICS,
+        )
+
+        rule_gridconnection = ScenarioRule.objects.create(
+            interactive_element=self.interactive_element,
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="BuildingGridConnection",
+        )
+
+        scenario: Scenario = rule_mapping.get_prefetched_scenario(self.scenario.id)
+        queryset = rule_mapping.get_queryset_for_rule(rule_gridconnection, scenario)
+        DiscreteAttributeFilter.objects.create(
+            rule=rule_gridconnection,
+            model_attribute="insulation_label",
+            comparator=AttributeFilterComparator.GREATER_THAN,
+            value=InsulationLabel.C,
+        )
+
+        # Act
+        filtered_queryset = rule_mapping.apply_rule_filters_to_queryset(
+            queryset, rule_gridconnection
+        )
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 2)
+        for gridconnection in filtered_queryset:
+            self.assertTrue(
+                gridconnection.insulation_label in [InsulationLabel.A, InsulationLabel.B]
+            )
