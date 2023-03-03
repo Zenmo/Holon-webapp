@@ -93,29 +93,28 @@ class RuleActionAddRemove(RuleAction):
 class RuleActionBalanceGroup(RuleAction):
     """Blans"""
 
-    asset_order = ArrayField(models.CharField(max_length=255, blank=True))
+    # asset_order = models.ManyToManyField(EnergyAsset, through="BalanceGroupAssetOrder")
     selected_asset_type = models.CharField(max_length=255, blank=True)
 
     def clean(self):
         super().clean()
 
+        asset_types = [asset.__class__.__name__ for asset in self.get_assets_ordered()]
+
         # validated selected_asset_type is in asset_order
-        if not self.selected_asset_type in self.asset_order:
+        if not self.selected_asset_type in asset_types:
             raise ValidationError(f"Asset type selected for balancing ({self.selected_asset_type}) not in ordered asset list")
 
-        # validate asset_order items exist
-        asset_classnames = [asset_class.__name__ for asset_class in util.all_subclasses(EnergyAsset)]
-        invalid_assetnames = [ asset for asset in self.asset_order if not asset in asset_classnames ]
+        if len(asset_types) > len(set(asset_types)):
+            raise ValidationError(f"Duplicate asset types not allowed: {asset_types}")
 
-        if invalid_assetnames:
-            raise ValidationError(f"The following asset names are not recognized: {invalid_assetnames}")
-
-        # TODO validate (asset_order) > 1
-        # TODO asset_order fields match original assets
 
     class Meta:
         verbose_name = "RuleActionBalanceGroup"
 
+    def get_assets_ordered(self):
+        """ Get the linked assets in order from the linking table """
+        return [bgao.asset for bgao in BalanceGroupAssetOrder.objects.filter(balance_group=self).order_by('order')] 
 
     def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
         """
@@ -123,37 +122,41 @@ class RuleActionBalanceGroup(RuleAction):
         is reached, but the total number of assets stays the same.
         """
         
+        self.ordered_assets = self.get_assets_ordered()
+
         target_count = int(value)
         gridconnection = filtered_queryset[0].gridconnection
 
+        asset_types_in_order = [asset.__class__.__name__ for asset in self.ordered_assets]
+
         # validate input
-        self.validate_filtered_queryset(filtered_queryset, gridconnection, target_count)
+        self.validate_filtered_queryset(asset_types_in_order, filtered_queryset, gridconnection, target_count)
 
         # get filtered assets aggregated by asset type, in the order of self.asset_order
         filtered_assets_in_order = [
             [
                 filtered_object for filtered_object in filtered_queryset if filtered_object.__class__.__name__ == asset_name
             ] 
-            for asset_name in self.asset_order
+            for asset_name in asset_types_in_order
         ]
 
         # calculate how many of each asset type should be removed/added
-        target_diff_per_asset_type = self.get_target_diff_per_asset_type(filtered_assets_in_order, target_count) 
+        target_diff_per_asset_type = self.get_target_diff_per_asset_type(asset_types_in_order, filtered_assets_in_order, target_count) 
 
         # apply removal/adding
-        for asset_type, target_diff, filtered_assets in zip(self.asset_order, target_diff_per_asset_type, filtered_assets_in_order):
+        for template_asset, target_diff, filtered_assets in zip(self.ordered_assets, target_diff_per_asset_type, filtered_assets_in_order):
             if target_diff > 0:
-                self.create_assets(gridconnection, asset_type, target_diff)
+                self.add_assets(gridconnection, template_asset, target_diff)
 
             if target_diff < 0:
                 self.remove_assets(filtered_assets[:-target_diff])
 
 
-    def validate_filtered_queryset(self, filtered_queryset: QuerySet, gridconnection: GridConnection, target_count: int):
+    def validate_filtered_queryset(self, asset_types_in_order: list[str], filtered_queryset: QuerySet, gridconnection: GridConnection, target_count: int):
         """ Validate the assets in the queryset on asset type, gridconnection_id and count """
 
         # validate whether asset types in filtered_queryset are in the ordered list
-        assets_not_in_asset_order_list = [ asset for asset in filtered_queryset if not asset.__class__.__name__ in self.asset_order]
+        assets_not_in_asset_order_list = [ asset for asset in filtered_queryset if not asset.__class__.__name__ in asset_types_in_order]
         if assets_not_in_asset_order_list:
             raise ValueError(f"All filtered assets should be present in the asset order. The violating assets are: {assets_not_in_asset_order_list}")
 
@@ -167,14 +170,14 @@ class RuleActionBalanceGroup(RuleAction):
             raise ValueError(f"target count ({target_count}) cannot be larger than the total amount of assets ({len(filtered_queryset)})")
 
 
-    def get_target_diff_per_asset_type(self, filtered_assets_in_order: list[list[EnergyAsset]], target_count: int) -> list[int]:
+    def get_target_diff_per_asset_type(self, asset_types_in_order: list[str], filtered_assets_in_order: list[list[EnergyAsset]], target_count: int) -> list[int]:
         """ Calculate per asset type in the ordered list how many should be removed or added """
 
-        n_asset_types = len(self.asset_order)
+        n_asset_types = len(asset_types_in_order)
         target_diff_per_asset_type = [0] * n_asset_types
 
         # get info for selected asset type
-        selected_index = self.asset_order.index(self.selected_asset_type)
+        selected_index = asset_types_in_order.index(self.selected_asset_type)
         count_at_selected = len(filtered_assets_in_order[selected_index])
         count_target_diff = target_count - count_at_selected
 
@@ -200,25 +203,11 @@ class RuleActionBalanceGroup(RuleAction):
         return target_diff_per_asset_type
         
 
-    def create_assets(self, gridconnection: int, asset_type: str, n: int):
-        """ Add a set of n assets of type `asset_type` with gridconnection_id as their parent """
+    def add_assets(self, gridconnection: GridConnection, template_asset: EnergyAsset, n: int):
+        """ Duplicate a template asset n times with gridconnection_id as their parent """
 
-        asset_model = apps.get_model("holon", asset_type)
-
-        # TODO
         for _ in range(n):
-            if asset_model == HybridHeatCoversionAsset:
-                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityHeat_kW=0, ambientTempType="")
-            if asset_model == TransportHeatConversionAsset:
-                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityElectricity_kW=0, ambientTempType="")
-            if asset_model == ElectricHeatConversionAsset:
-                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityElectricity_kW=0)
-            if asset_model == ChemicalHeatConversionAsset:
-                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, deliveryTemp_degc=0, capacityHeat_kW=0)
-            if asset_model == VehicleConversionAsset:
-                asset = asset_model(gridconnection=gridconnection, name=f"{asset_type}_generated", eta_r=0, energyConsumption_kWhpkm=0, vehicleScaling=0)
-
-            asset.save()
+            util.duplicate_model(template_asset, {"gridconnection": gridconnection})
 
 
     def remove_assets(self, assets: list[EnergyAsset]):
@@ -226,3 +215,16 @@ class RuleActionBalanceGroup(RuleAction):
 
         for asset in assets:
             EnergyAsset.objects.filter(id=asset.id).delete()
+
+
+
+class BalanceGroupAssetOrder(models.Model):
+    """ Linking table for RuleActionBalanceGroup and EnergyAsset """
+
+    balance_group = models.ForeignKey(RuleActionBalanceGroup, on_delete=models.CASCADE)
+    asset = models.ForeignKey(EnergyAsset, on_delete=models.CASCADE)
+    order = models.IntegerField()
+
+    class Meta:
+        verbose_name = "BalanceGroupAssetOrder"
+        ordering = ['order']

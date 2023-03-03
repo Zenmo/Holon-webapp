@@ -6,7 +6,7 @@ from holon.models.gridconnection import GridConnection
 
 
 class EnergyAsset(PolymorphicModel):
-    gridconnection = models.ForeignKey(GridConnection, on_delete=models.CASCADE)
+    gridconnection = models.ForeignKey(GridConnection, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
 
     def __str__(self):
