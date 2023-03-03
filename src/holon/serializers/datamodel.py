@@ -131,6 +131,8 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
 
     owner_actor = serializers.SerializerMethodField()
     id = serializers.SerializerMethodField()
+    parent_electric = serializers.SerializerMethodField()
+    parent_heat = serializers.SerializerMethodField()
 
     def get_owner_actor(self, obj):
         # get related actor
@@ -142,6 +144,24 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
 
     def get_id(self, obj):
         return f"grc{obj.id}"
+
+    def get_parent_node(self, id):
+        obj = GridNode.objects.get(id=id)
+        return GridNodeSerializer().get_id(obj)
+
+    def get_parent_heat(self, obj):
+        if obj.parent_heat is not None:
+            id = obj.parent_heat.id
+            return self.get_parent_node(id=id)
+        else:
+            return obj.parent_heat
+
+    def get_parent_electric(self, obj):
+        if obj.parent_electric is not None:
+            id = obj.parent_electric.id
+            return self.get_parent_node(id=id)
+        else:
+            return obj.parent_electric
 
 
 class ScenarioSerializer(serializers.ModelSerializer):
