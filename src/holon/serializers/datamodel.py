@@ -33,7 +33,7 @@ class AnyLogicModelSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super(AnyLogicModelSerializer, self).to_representation(instance)
 
-        # unpack wildcard json to level key:vaue pairs
+        # unpack wildcard json to level key:value pairs
         if representation["wildcard_JSON"] is not None:
             wildcard = representation.pop("wildcard_JSON")[0]
 
