@@ -51,7 +51,13 @@ class InteractiveElement(ClusterableModel):
     ]
 
     def __str__(self):
-        return f"{self.name}|{self.scenario.id}"
+        name = f"{self.name}|{self.type}"
+        print(self.type)
+        if self.type != ChoiceType.continuous and self.options.count() > 0:
+            print(self.options.all())
+            name = f"{name}|{','.join(d.option for d in self.options.all())}"
+
+        return name
 
     class Meta:
         verbose_name = "Interactive Element"
@@ -67,7 +73,7 @@ class InteractiveElementOptions(Orderable):
         blank=True,
     )
     default = models.BooleanField(
-        null=True, blank=True, help_text=_("Should this option be default selected?")
+        default=False, help_text=_("Should this option be default selected?")
     )
 
     def __str__(self):

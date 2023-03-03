@@ -23,7 +23,7 @@ class AttributeFilterComparator(models.TextChoices):
 class Filter(PolymorphicModel):
     """Information on how to find the objects a scenario rule should be applied to"""
 
-    model_attribute = models.CharField(max_length=255, null=True)
+    model_attribute = models.CharField(max_length=255)
     comparator = models.CharField(max_length=255, choices=AttributeFilterComparator.choices)
     value = models.JSONField()
 
@@ -32,12 +32,6 @@ class Filter(PolymorphicModel):
         FieldPanel("comparator"),
         FieldPanel("value"),
     ]
-
-    def clean(self):
-        super().clean()
-
-        if self.model_attribute not in self.model_attribute_options():
-            raise ValidationError("Invalid value model_attribute")
 
     def model_attribute_options(self) -> list[str]:
         model_type = (

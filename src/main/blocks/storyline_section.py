@@ -50,11 +50,7 @@ class InteractiveInputBlock(blocks.StructBlock):
     )
 
     interactive_input = ModelChooserBlock(InteractiveElement)
-    display = blocks.ChoiceBlock(
-        choices=DISPLAY_CHOICES,
-        default=DISPLAY_CHECKBOXRADIO,
-        help_text="Only applies if the interactive input is a Select type",
-    )
+    display = DISPLAY_CHECKBOXRADIO
     visible = blocks.BooleanBlock(required=False, default=True)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(

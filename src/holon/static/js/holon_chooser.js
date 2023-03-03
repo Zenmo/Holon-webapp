@@ -5,78 +5,74 @@ const contiuousSection = "#panel-continuous_values-section";
 const ruleModelTypeSelect = "";
 
 $(document).ready(function () {
-    function setModelSubtypeSelectors(data) {
-        $("select[id$='-model_type']").change(function (e) {
+    function setModelSubtypeSelectors(model_type_select, data) {
+        let model_type = model_type_select.val();
+
+        const model_subtype_select = convertInputToSelect(
+            $(model_type_select)
+                .closest(".w-panel__content")
+                .find("input[id$='-model_subtype']"),
+            Object.keys(model_type ? data[model_type].model_subtype : [])
+        );
+        $(model_type_select)
+            .closest(".w-panel__content")
+            .find("button[id$='-ADD'")
+            .click(function (e) {
+                setAssetAttributes(model_type, model_subtype_select, data);
+            });
+        if (!model_subtype_select) return;
+        setAssetAttributes(model_type, model_subtype_select, data);
+        model_subtype_select.change(function (e) {
+            model_type = $(e.target)
+                .closest(".w-panel__content")
+                .find("select[id$='-model_type']")
+                .val();
+            updateAssetAttributes(model_type, model_subtype_select, data);
+        });
+
+        model_type_select.change(function (e) {
             const model_type = e.target.value;
+            let model_subtype_select;
 
-            const input = $(e.target)
-                .closest(".w-panel__content")
-                .find("input[id$='-model_subtype']");
-            let select;
-            if (input) {
-                const attributes = input.prop("attributes");
+            model_subtype_select =
+                convertInputToSelect(
+                    $(e.target)
+                        .closest(".w-panel__content")
+                        .find("input[id$='-model_subtype']"),
+                    Object.keys(data[model_type].model_subtype)
+                ) ||
+                $(e.target)
+                    .closest(".w-panel__content")
+                    .find("select[id$='-model_subtype']");
 
-                select = $("<select></select>");
-
-                $.each(attributes, function () {
-                    $(select).attr(this.name, this.value);
-                });
-
-                input.replaceWith(select);
-            }
-
-            select = $(e.target)
-                .closest(".w-panel__content")
-                .find("select[id$='-model_subtype']");
-            select.find("option").remove().end();
+            model_subtype_select.find("option").remove().end();
             if (!data[model_type]) return;
 
-            for (const [key, value] of Object.entries(
-                data[model_type].model_subtype
-            )) {
-                select.append(
+            for (const value of Object.keys(data[model_type].model_subtype)) {
+                model_subtype_select.append(
                     $("<option>", {
-                        value: key,
-                        text: key,
+                        value: value,
+                        text: value,
                     })
                 );
             }
-            select.change(function (e) {
-                const attributeInputs = select
-                    .closest(".w-panel__content")
-                    .find("input[id$='-asset_attribute']");
-
-                attributeInputs.each(function () {
-                    const attributes = $(this).prop("attributes");
-
-                    select = $("<select></select>");
-
-                    $.each(attributes, function () {
-                        $(select).attr(this.name, this.value);
-                    });
-
-                    $(this).replaceWith(select);
-
-                    data[model_type].model_subtype[e.target.value].forEach(
-                        (element) => {
-                            select.append(
-                                $("<option>", {
-                                    value: element,
-                                    text: element,
-                                })
-                            );
-                        }
-                    );
-                });
+            updateAssetAttributes(model_type, model_subtype_select, data);
+            model_subtype_select.change(function (e) {
+                updateAssetAttributes(model_type, model_subtype_select, data);
             });
         });
+        // setAssetAttributes(select, data, model_type, select.target.value);
     }
     $.ajax({
         url: "/wt/cms/modelconfig",
         success: function (data, status) {
-            setModelSubtypeSelectors(data);
+            $("select[id$='-model_type']").each(function () {
+                setModelSubtypeSelectors($(this), data);
+            });
             $("#id_rules-ADD").click(function (e) {
-                setModelSubtypeSelectors(data);
+                $("select[id$='-model_type']").each(function () {
+                    setModelSubtypeSelectors($(this), data);
+                });
             });
         },
     });
@@ -103,4 +99,133 @@ $(document).ready(function () {
                 break;
         }
     }
+
+    var checkEverySeconds = 1;
+    const interactiveElementInputs = {};
+
+    if ($("#panel-child-content-storyline-heading")) {
+        setInterval(function () {
+            $("input[id$=-value-interactive_input]").each(function () {
+                const element = $(this);
+                if (!interactiveElementInputs[element.attr("id")]) {
+                    interactiveElementInputs[element.attr("id")] = "";
+                }
+                if (
+                    element.val() &&
+                    interactiveElementInputs[element.attr("id")] !==
+                        element.val()
+                ) {
+                    const defaultValueInput = $(element)
+                        .closest(".w-panel__content")
+                        .find(
+                            "input[id$='-value-default_value'],select[id$='-value-default_value']"
+                        );
+                    const label = $(
+                        "label[for='" + $(defaultValueInput).attr("id") + "']"
+                    );
+
+                    const interactiveElementName = $(element)
+                        .closest(".w-panel__content")
+                        .find("span.title")[0];
+
+                    let name, type, options;
+                    [name, type, options] =
+                        interactiveElementName.innerText.split("|");
+                    interactiveElementName.innerText = name;
+                    if (type === "CHOICE_CONTINUOUS") {
+                        if (defaultValueInput.prop("tagName") !== "INPUT")
+                            convertSelectToInput(defaultValueInput);
+                        defaultValueInput.attr("type", "number");
+                        defaultValueInput.attr("min", "0");
+                        defaultValueInput.attr("max", "100");
+                        label.text("Default value (between 0 and 100)");
+                    } else {
+                        convertInputToSelect(
+                            defaultValueInput,
+                            options.split(",")
+                        );
+                        label.text("Default value (choose one of the options)");
+                    }
+
+                    interactiveElementInputs[element.attr("id")] =
+                        element.val();
+                }
+            });
+        }, checkEverySeconds * 1000);
+    }
 });
+
+function setAssetAttributes(model_type, model_subtype_select, data) {
+    if (!model_subtype_select) return;
+    const attributeInputs = model_subtype_select
+        .closest(".w-panel__content")
+        .find("input[id$='-asset_attribute']");
+
+    attributeInputs.each(function () {
+        convertInputToSelect(
+            $(this),
+            data[model_type].model_subtype[model_subtype_select.val()]
+        );
+    });
+}
+
+function updateAssetAttributes(model_type, model_subtype_select, data) {
+    if (!model_subtype_select) return;
+    const attributeInputs = model_subtype_select
+        .closest(".w-panel__content")
+        .find("select[id$='-asset_attribute']");
+
+    attributeInputs.each(function () {
+        const attribute_select = $(this);
+        attribute_select.find("option").remove().end();
+        const options =
+            data[model_type].model_subtype[model_subtype_select.val()] ||
+            Object.values(data[model_type].model_subtype)[0];
+        for (const value of options) {
+            attribute_select.append(
+                $("<option>", {
+                    value: value,
+                    text: value,
+                })
+            );
+        }
+    });
+}
+
+function convertSelectToInput(select) {
+    if (!select.length) return;
+    const attributes = select.prop("attributes");
+
+    const input = $("<input></input>");
+    $.each(attributes, function () {
+        $(input).attr(this.name, this.value);
+    });
+    select.replaceWith(input);
+    return input;
+}
+
+function convertInputToSelect(input, options) {
+    if (!input.length) return;
+    const attributes = input.prop("attributes");
+
+    const select = $("<select></select>");
+
+    $.each(attributes, function () {
+        $(select).attr(this.name, this.value);
+    });
+
+    for (const value of options) {
+        select.append(
+            $("<option>", {
+                value: value,
+                text: value,
+            })
+        );
+    }
+
+    select.val(input.val()).change();
+
+    input.replaceWith(select);
+
+    return select;
+}
