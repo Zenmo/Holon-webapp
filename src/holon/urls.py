@@ -2,8 +2,12 @@ import imp
 
 from django.urls import path
 
-from .views import HolonService, HolonV2Service
+from holon.views.holon import HolonService, HolonV2Service
+from holon.views.datamodel import DatamodelService
 
 urlpatterns = [path("holon/", HolonService.as_view())]
 
-urlpatterns_v2 = [path("holon/", HolonV2Service.as_view())]
+urlpatterns_v2 = [
+    path("holon/", HolonV2Service.as_view()),
+    path("datamodel/", DatamodelService.as_view()),
+]

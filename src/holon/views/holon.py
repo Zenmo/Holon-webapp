@@ -4,8 +4,8 @@ from rest_framework.response import Response
 
 from holon.models import rule_mapping
 
-from .models.pepe import Pepe
-from .serializers import HolonRequestSerializer
+from holon.models.pepe import Pepe
+from holon.serializers.interactive_element import HolonRequestSerializer
 
 RESULTS = [
     "SystemHourlyElectricityImport_MWh",
@@ -18,11 +18,9 @@ class HolonService(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
     def post(self, request):
-
         serializer = HolonRequestSerializer(data=request.data)
 
         if serializer.is_valid():
-
             scenario = rule_mapping.get_scenario_and_apply_rules(
                 serializer.scenario, serializer.interactive_elements
             )
@@ -79,7 +77,6 @@ class HolonV2Service(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
     def post(self, request):
-
         serializer = HolonRequestSerializer(data=request.data)
 
         if serializer.is_valid():
