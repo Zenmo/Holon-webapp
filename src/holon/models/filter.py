@@ -1,11 +1,12 @@
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models import Q
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from polymorphic.models import PolymorphicModel
 from modelcluster.fields import ParentalKey
+from polymorphic.models import PolymorphicModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+
 from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses
 
@@ -40,18 +41,6 @@ class Filter(PolymorphicModel):
 
         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
-    def get_q(self) -> Q:
-        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
-
-        if self.comparator == AttributeFilterComparator.EQUAL.value:
-            return Q(**{f"{model_type}___{self.model_attribute}": self.value})
-        if self.comparator == AttributeFilterComparator.LESS_THAN.value:
-            return Q(**{f"{model_type}___{self.model_attribute}__lt": self.value})
-        if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
-            return Q(**{f"{model_type}___{self.model_attribute}__gt": self.value})
-        if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
-            return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
-
     class Meta:
         abstract = True
 
@@ -68,6 +57,18 @@ class AttributeFilter(Filter):
 
     class Meta:
         verbose_name = "AttributeFilter"
+
+    def get_q(self) -> Q:
+        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+
+        if self.comparator == AttributeFilterComparator.EQUAL.value:
+            return Q(**{f"{model_type}___{self.model_attribute}": self.value})
+        if self.comparator == AttributeFilterComparator.LESS_THAN.value:
+            return Q(**{f"{model_type}___{self.model_attribute}__lt": self.value})
+        if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
+            return Q(**{f"{model_type}___{self.model_attribute}__gt": self.value})
+        if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
+            return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
 
 
 class RelationAttributeFilter(Filter):

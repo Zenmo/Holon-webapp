@@ -1,10 +1,10 @@
 from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
-
-from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+
 from holon.models.interactive_element import InteractiveElement
 from holon.models.util import all_subclasses
 
@@ -79,3 +79,14 @@ class ScenarioRule(ClusterableModel):
     def model_subtype_options(self):
         model_type_class = apps.get_model("holon", self.model_type)
         return [subclass.__name__ for subclass in all_subclasses(model_type_class)]
+
+    def get_filters(self):
+        return list(self.attribute_filters.all()) + list(self.relation_attribute_filters.all())
+
+    def get_actions(self):
+        return (
+            list(self.continuous_factors.all())
+            + list(self.discrete_factors_attribute.all())
+            + list(self.discrete_factors_addremove.all())
+            + list(self.discrete_factors_balancegroup.all())
+        )

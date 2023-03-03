@@ -1,15 +1,17 @@
+import logging
 from typing import Any
+
 from django.apps import apps
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from polymorphic.models import PolymorphicModel
-from django.db.models.query import QuerySet
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import models
+from django.db.models.query import QuerySet
+from modelcluster.fields import ParentalKey
+from polymorphic.models import PolymorphicModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from holon.models.scenario_rule import ScenarioRule
-from modelcluster.fields import ParentalKey
-import logging
+
 
 # Create your models here.
 class RuleAction(PolymorphicModel):
