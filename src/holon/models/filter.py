@@ -112,7 +112,7 @@ class RelationAttributeFilter(Filter):
 
     def relation_field_subtype_options(self) -> list[str]:
 
-        model = apps.get_model(self.rule.model_type)
+        model = apps.get_model("holon", self.rule.model_type)
         related_model = model()._meta.get_field(self.relation_field).related_model
 
         return [subclass.__name__ for subclass in all_subclasses(related_model)]
