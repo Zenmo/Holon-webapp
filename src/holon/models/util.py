@@ -19,3 +19,13 @@ def all_subclasses(cls) -> set[Model]:
     return set(cls.__subclasses__()).union(
         [s for c in cls.__subclasses__() for s in all_subclasses(c)]
     )
+
+
+def duplicate_model(obj, attrs={}):
+    obj.pk = None
+
+    for key, value in attrs.items():
+        setattr(obj, key, value)
+
+    obj.save()
+    return obj

@@ -1,10 +1,7 @@
+import logging
 from typing import Any
+
 from django.apps import apps
-from django.core.exceptions import ValidationError
-from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from polymorphic.models import PolymorphicModel
-from django.db.models.query import QuerySet
 from django.contrib.postgres.fields import ArrayField
 from holon.models.gridconnection import GridConnection
 
@@ -13,13 +10,23 @@ from holon.models.asset import EnergyAsset
 from holon.models import util
 
 import logging
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import models
+from django.db.models.query import QuerySet
+from modelcluster.fields import ParentalKey
+from polymorphic.models import PolymorphicModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+
+from holon.models.scenario_rule import ScenarioRule
+
 
 # Create your models here.
 class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 
     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
+
+    panels = [FieldPanel("asset_attribute")]
 
     class Meta:
         verbose_name = "RuleAction"
@@ -28,11 +35,14 @@ class RuleAction(PolymorphicModel):
     def clean(self):
         super().clean()
 
-        if not (
-            self.asset_attribute == "asset_attribute_not_supplied"
-            or self.asset_attribute in self.asset_attributes_options()
-        ):
-            raise ValidationError("Invalid value asset_attribute")
+        try:
+            if not (
+                self.asset_attribute == "asset_attribute_not_supplied"
+                or self.asset_attribute in self.asset_attributes_options()
+            ):
+                raise ValidationError("Invalid value asset_attribute")
+        except ObjectDoesNotExist:
+            return
 
     def asset_attributes_options(self):
         model_type = (
@@ -52,8 +62,15 @@ class RuleAction(PolymorphicModel):
 class RuleActionFactor(RuleAction):
     """A continuous factor for scaling an input value between a certain range"""
 
+    rule = ParentalKey(ScenarioRule, on_delete=models.CASCADE, related_name="continuous_factors")
+
     min_value = models.IntegerField()
     max_value = models.IntegerField()
+
+    panels = RuleAction.panels + [
+        FieldPanel("min_value"),
+        FieldPanel("max_value"),
+    ]
 
     class Meta:
         verbose_name = "RuleActionFactor"
@@ -71,16 +88,16 @@ class RuleActionFactor(RuleAction):
         mapped_value = (self.max_value - self.min_value) * (value_flt / 100.0) + self.min_value
 
         for filtered_object in filtered_queryset:
-
-            # Find index from filtered element in prefetched queryset
-            queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == filtered_object.id)
-
-            # Update object in prefetched scenario
-            setattr(queryset[queryset_index], self.asset_attribute, mapped_value)
+            setattr(filtered_object, self.asset_attribute, mapped_value)
+            filtered_object.save()
 
 
 class RuleActionChangeAttribute(RuleAction):
     """A discrete factor for setting the value of an attribute"""
+
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_attribute"
+    )
 
     class Meta:
         verbose_name = "RuleActionChangeAttribute"
@@ -89,6 +106,10 @@ class RuleActionChangeAttribute(RuleAction):
 class RuleActionAddRemove(RuleAction):
     """A discrete factor for setting the value of an attribute"""
 
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_addremove"
+    )
+
     class Meta:
         verbose_name = "RuleActionAddRemove"
 
@@ -96,17 +117,15 @@ class RuleActionAddRemove(RuleAction):
 class RuleActionBalanceGroup(RuleAction):
     """Blans"""
 
-    asset_order = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
-    selected_asset = models.CharField(max_length=255, blank=True)
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
+    )
 
-    def clean(self):
-        super().clean()
+    assets = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
 
-        asset_classnames = [asset_class.__name__ for asset_class in util.all_subclasses(EnergyAsset)]
-        invalid_assetnames = [ asset for asset in self.asset_order if not asset in asset_classnames ]
-
-        if invalid_assetnames:
-            raise ValidationError(f"The following asset names are not recognized: {invalid_assetnames}")
+    panels = RuleAction.panels + [
+        FieldPanel("assets"),
+    ]
 
     class Meta:
         verbose_name = "RuleActionBalanceGroup"
