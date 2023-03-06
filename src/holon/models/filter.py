@@ -158,17 +158,24 @@ class RelationAttributeFilter(Filter):
         return relation_field_subtype & relation_field_q
 
 
-class DiscreteAttributeFilter(AttributeFilter):
+class DiscreteAttributeFilter(Filter):
     """Filter on attribute with discrete series"""
+
+    rule = ParentalKey(
+        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="discrete_attribute_filters"
+    )
 
     def clean(self):
         super().clean()
 
-        if self.model_attribute not in self.discrete_relation_field_options():
-            raise ValidationError("Invalid model attribute, not discrete")
+        try:
+            if self.model_attribute not in self.discrete_relation_field_options():
+                raise ValidationError("Invalid model attribute, not discrete")
 
-        if self.value not in self.value_options():
-            raise ValidationError("Invalid value, not a choice for model attribute")
+            if self.value not in self.value_options():
+                raise ValidationError("Invalid value, not a choice for model attribute")
+        except ObjectDoesNotExist:
+            return
 
     def discrete_relation_field_options(self) -> list[str]:
         model_type = (

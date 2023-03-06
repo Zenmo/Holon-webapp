@@ -53,8 +53,13 @@ class ScenarioRule(ClusterableModel):
         ),
         InlinePanel(
             "attribute_filters",
-            heading="Attribute filters",
-            label="Attribute filters",
+            heading="Continuous attribute filters",
+            label="Continuous attribute filters",
+        ),
+        InlinePanel(
+            "discrete_attribute_filters",
+            heading="Discrete attribute filters",
+            label="Discrete attribute filters",
         ),
         InlinePanel(
             "relation_attribute_filters",
