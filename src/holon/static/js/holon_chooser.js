@@ -12,26 +12,32 @@ $(document).ready(function () {
             $(model_type_select)
                 .closest(".w-panel__content")
                 .find("input[id$='-model_subtype']"),
-            Object.keys(model_type ? data[model_type].model_subtype : [])
+            Object.keys(model_type ? data[model_type].model_subtype : []),
+            true
         );
         $(model_type_select)
             .closest(".w-panel__content")
             .find("button[id$='-ADD'")
             .click(function (e) {
-                setAssetAttributes(model_type, model_subtype_select, data);
+                setAssetAttributes(
+                    model_type_select,
+                    model_subtype_select,
+                    data
+                );
             });
         if (!model_subtype_select) return;
-        setAssetAttributes(model_type, model_subtype_select, data);
+        setAssetAttributes(model_type_select, model_subtype_select, data);
         model_subtype_select.change(function (e) {
-            model_type = $(e.target)
-                .closest(".w-panel__content")
-                .find("select[id$='-model_type']")
-                .val();
-            updateAssetAttributes(model_type, model_subtype_select, data);
+            updateAssetAttributes(
+                model_type_select,
+                model_subtype_select,
+                data
+            );
         });
 
         model_type_select.change(function (e) {
             const model_type = e.target.value;
+            const model_type_select = $(this);
             let model_subtype_select;
 
             model_subtype_select =
@@ -39,7 +45,8 @@ $(document).ready(function () {
                     $(e.target)
                         .closest(".w-panel__content")
                         .find("input[id$='-model_subtype']"),
-                    Object.keys(data[model_type].model_subtype)
+                    Object.keys(data[model_type].model_subtype),
+                    true
                 ) ||
                 $(e.target)
                     .closest(".w-panel__content")
@@ -48,17 +55,22 @@ $(document).ready(function () {
             model_subtype_select.find("option").remove().end();
             if (!data[model_type]) return;
 
-            for (const value of Object.keys(data[model_type].model_subtype)) {
-                model_subtype_select.append(
-                    $("<option>", {
-                        value: value,
-                        text: value,
-                    })
-                );
-            }
-            updateAssetAttributes(model_type, model_subtype_select, data);
+            updateOptions(
+                model_subtype_select,
+                Object.keys(data[model_type].model_subtype),
+                true
+            );
+            updateAssetAttributes(
+                model_type_select,
+                model_subtype_select,
+                data
+            );
             model_subtype_select.change(function (e) {
-                updateAssetAttributes(model_type, model_subtype_select, data);
+                updateAssetAttributes(
+                    model_type_select,
+                    model_subtype_select,
+                    data
+                );
             });
         });
         // setAssetAttributes(select, data, model_type, select.target.value);
@@ -155,17 +167,19 @@ $(document).ready(function () {
     }
 });
 
-function setAssetAttributes(model_type, model_subtype_select, data) {
+function setAssetAttributes(model_type_select, model_subtype_select, data) {
     if (!model_subtype_select) return;
+    const model_type = model_type_select.val();
     const attributeInputs = model_subtype_select
         .closest(".w-panel__content")
         .find("input[id$='-asset_attribute'], input[id$='-model_attribute']");
 
+    const options = model_subtype_select.val()
+        ? data[model_type].model_subtype[model_subtype_select.val()]
+        : data[model_type].attributes;
+
     attributeInputs.each(function () {
-        convertInputToSelect(
-            $(this),
-            data[model_type].model_subtype[model_subtype_select.val()]
-        );
+        convertInputToSelect($(this), options);
     });
 
     updateFilterInputs(model_type, model_subtype_select, data);
@@ -180,9 +194,13 @@ function updateFilterInputs(model_type, model_subtype_select, data) {
         const allowedRelations = Object.keys(data).map((key) =>
             key.toLowerCase()
         );
-        const options = data[model_type].model_subtype[
-            model_subtype_select.val()
-        ].filter((item) => allowedRelations.includes(item));
+        const options = model_subtype_select.val()
+            ? data[model_type].model_subtype[model_subtype_select.val()].filter(
+                  (item) => allowedRelations.includes(item)
+              )
+            : data[model_type].attributes.filter((item) =>
+                  allowedRelations.includes(item)
+              );
 
         let select;
         if ($(this).prop("tagName") !== "SELECT") {
@@ -218,14 +236,14 @@ function updateFilterInputs(model_type, model_subtype_select, data) {
                     )
                 ].model_subtype
             );
-            let select = convertInputToSelect(relation_subtype, options);
+            let select = convertInputToSelect(relation_subtype, options, true);
 
             if (!select) {
                 select = $(e.target)
                     .closest(".w-panel__content")
                     .find("select[id$='-relation_field_subtype']");
 
-                updateOptions(select, options);
+                updateOptions(select, options, true);
             }
 
             select.change(function (e) {
@@ -250,7 +268,7 @@ function updateFilterInputs(model_type, model_subtype_select, data) {
     });
 }
 
-function updateOptions(select, options) {
+function updateOptions(select, options, allowNull = false) {
     select.find("option").remove().end();
     for (const value of options) {
         select.append(
@@ -260,10 +278,21 @@ function updateOptions(select, options) {
             })
         );
     }
+
+    if (allowNull) {
+        select.append(
+            $("<option>", {
+                value: "",
+                text: "----",
+            })
+        );
+        select.val("").change();
+    }
 }
 
-function updateAssetAttributes(model_type, model_subtype_select, data) {
+function updateAssetAttributes(model_type_select, model_subtype_select, data) {
     if (!model_subtype_select) return;
+    const model_type = model_type_select.val();
     const attributeInputs = model_subtype_select
         .closest(".w-panel__content")
         .find("select[id$='-asset_attribute'], select[id$='-model_attribute']");
@@ -271,9 +300,11 @@ function updateAssetAttributes(model_type, model_subtype_select, data) {
     attributeInputs.each(function () {
         const attribute_select = $(this);
         attribute_select.find("option").remove().end();
-        const options =
-            data[model_type].model_subtype[model_subtype_select.val()] ||
-            Object.values(data[model_type].model_subtype)[0];
+
+        const options = model_subtype_select.val()
+            ? data[model_type].model_subtype[model_subtype_select.val()]
+            : data[model_type].attributes;
+
         for (const value of options) {
             attribute_select.append(
                 $("<option>", {
@@ -299,7 +330,7 @@ function convertSelectToInput(select) {
     return input;
 }
 
-function convertInputToSelect(input, options) {
+function convertInputToSelect(input, options, allowNull = false) {
     if (!input.length) return;
     const attributes = input.prop("attributes");
 
@@ -317,9 +348,20 @@ function convertInputToSelect(input, options) {
             })
         );
     }
-
     input.replaceWith(select);
 
-    select.val(input.val()).change();
+    if (allowNull) {
+        select.append(
+            $("<option>", {
+                value: "",
+                text: "----",
+            })
+        );
+
+        select.val("").change();
+    } else {
+        select.val(input.val()).change();
+    }
+
     return select;
 }
