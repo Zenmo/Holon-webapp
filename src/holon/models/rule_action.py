@@ -102,6 +102,15 @@ class RuleActionRemove(RuleAction):
 class RuleActionAdd(RuleAction):
     """Add a set asset to the filtered items"""
 
+    # one of these should be selected
+    asset = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True)
+    gridconnection = models.ForeignKey(GridConnection, on_delete=models.SET_NULL, null=True)
+    contract = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "RuleActionAdd"
+
+
     def __init__(self, *args, **kwargs):
         super(RuleActionAdd, self).__init__(*args, **kwargs)
 
@@ -153,24 +162,17 @@ class RuleActionAdd(RuleAction):
             return [(Actor, "owner_actor")]
     
 
-    class Meta:
-        verbose_name = "RuleActionAdd"
-
-    # one of these should be selected
-    asset = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True)
-    gridconnection = models.ForeignKey(GridConnection, on_delete=models.SET_NULL, null=True)
-    contract = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True)
-
-
     def apply_action_to_queryset(
         self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
     ):
         """Add an asset to the first n items in the the filtered objects"""
 
+        # parse value
         n = int(value)
         if n < 0:
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
+        # get parent type and foreign key field name
         parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
         try:
             parent_fk_field_name = next(parent_fieldname[1] for parent_fieldname in self.valid_parent_fk_fieldname_pairs if parent_type == parent_fieldname[0])
@@ -179,7 +181,7 @@ class RuleActionAdd(RuleAction):
 
         # only take first n objects
         for filtererd_object in filtered_queryset[:n]:
-            # add 
+            # add model_to_add to filtered object
             util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
 
 
