@@ -88,7 +88,7 @@ class RuleMappingTestClass(TestCase):
             ambientTempType=""
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            scenario=self.scenario, name="Input 1", type=ChoiceType.continuous
+            name="Input 1", type=ChoiceType.continuous
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
@@ -135,22 +135,22 @@ class RuleMappingTestClass(TestCase):
         BalanceGroupAssetOrder.objects.create(
             balance_group=self.balance_group,
             asset=default_chc,
-            order=0
+            sort_order=0
         )
         BalanceGroupAssetOrder.objects.create(
             balance_group=self.balance_group,
             asset=default_ehc,
-            order=1
+            sort_order=1
         )
         BalanceGroupAssetOrder.objects.create(
             balance_group=self.balance_group,
             asset=default_hhc,
-            order=2
+            sort_order=2
         )
         BalanceGroupAssetOrder.objects.create(
             balance_group=self.balance_group,
             asset=default_thc,
-            order=4
+            sort_order=4
         )
 
     # TODO
@@ -354,7 +354,7 @@ class RuleMappingTestClass(TestCase):
         BalanceGroupAssetOrder.objects.create(
             balance_group=self.balance_group,
             asset=default_vc,
-            order=3
+            sort_order=3
         )
 
         self.balance_group.selected_asset_type = 'TransportHeatConversionAsset'

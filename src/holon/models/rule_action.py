@@ -49,7 +49,7 @@ class RuleAction(PolymorphicModel):
 
         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
-    def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Apply a rule action to an object in the queryset"""
         pass
 
@@ -70,7 +70,7 @@ class RuleActionFactor(RuleAction):
     class Meta:
         verbose_name = "RuleActionFactor"
 
-    def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
         Apply rescaling of an atribute of filtered_object according to value.
         May throw ValueError if value cannot be parsed to float.
@@ -111,26 +111,9 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     """Blans"""
 
     selected_asset_type = models.CharField(max_length=255, blank=True)
-
-    def clean(self):
-        super().clean()
-
-        asset_types = [asset.__class__.__name__ for asset in self.get_assets_ordered()]
-
-        # validated selected_asset_type is in asset_order
-        if not self.selected_asset_type in asset_types:
-            raise ValidationError(
-                f"Asset type selected for balancing ({self.selected_asset_type}) not in ordered asset list"
-            )
-
-        if len(asset_types) > len(set(asset_types)):
-            raise ValidationError(f"Duplicate asset types not allowed: {asset_types}")
-
     rule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
     )
-
-    assets = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
 
     panels = RuleAction.panels + [
         FieldPanel("selected_asset_type"),
@@ -149,7 +132,7 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
             )
         ]
 
-    def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
         Balance a set of assets by removing and adding assets such that a target count for the selected asset
         is reached, but the total number of assets stays the same.
@@ -192,6 +175,7 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
             if target_diff < 0:
                 self.remove_assets(filtered_assets[:-target_diff])
 
+
     def validate_filtered_queryset(
         self,
         asset_types_in_order: list[str],
@@ -200,6 +184,16 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         target_count: int,
     ):
         """Validate the assets in the queryset on asset type, gridconnection_id and count"""
+
+        # validated selected_asset_type is in asset_order
+        if not self.selected_asset_type in asset_types_in_order:
+            raise ValidationError(
+                f"Asset type selected for balancing ({self.selected_asset_type}) not in ordered asset list"
+            )
+
+        # check for duplicate asset types
+        if len(asset_types_in_order) > len(set(asset_types_in_order)):
+            raise ValidationError(f"Duplicate asset types not allowed. Given asset types: {asset_types_in_order}")
 
         # validate whether asset types in filtered_queryset are in the ordered list
         assets_not_in_asset_order_list = [
