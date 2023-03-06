@@ -26,11 +26,12 @@ INTERNAL_IPS = get_env("INTERNAL_IPS", default="").split(",")
 if get_env_bool("DEBUG_TOOLBAR", default=True):
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-    INSTALLED_APPS += ["debug_toolbar"]
+    INSTALLED_APPS += ["debug_toolbar", "django_extensions"]
 
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": "pipit.settings.local.show_toolbar"}
+
 
 # Allow django-debug-bar under docker
 def show_toolbar(request):

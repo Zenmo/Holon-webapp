@@ -8,15 +8,38 @@ from api.models import (
 )
 from wagtail.core import blocks
 from api.models.interactive_input import CHOICE_CONTINUOUS, CHOICE_MULTISELECT, CHOICE_SINGLESELECT
+from holon.models import InteractiveElement
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
+from wagtailmodelchooser.blocks import ModelChooserBlock
+from wagtailmodelchooser import register_model_chooser, Chooser
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 from .holarchyfeedbackimages import HolarchyFeedbackImage
 
 
 def get_interactive_inputs():
-    return [(ii.pk, ii.__str__) for ii in InteractiveInput.objects.all()]
+    pass
+
+
+@register_model_chooser
+class InteractiveElementChooser(Chooser):
+    model = InteractiveElement
+
+    def get_queryset(self, request):
+        from main.pages.casus import CasusPage
+        from wagtail.models import Page
+
+        qs = super().get_queryset(request)
+        casus_id = request.META.get("HTTP_REFERER").split("/")[-2]
+
+        if casus_id == "edit":
+            page_id = request.META.get("HTTP_REFERER").split("/")[-3]
+            casus_id = Page.objects.get(pk=page_id).get_parent().id
+
+        scenario = CasusPage.objects.get(pk=casus_id).scenario
+
+        return qs.filter(scenario=scenario)
 
 
 class InteractiveInputBlock(blocks.StructBlock):
@@ -27,12 +50,8 @@ class InteractiveInputBlock(blocks.StructBlock):
         (DISPLAY_BUTTON, "Show as button(s)"),
     )
 
-    interactive_input = blocks.ChoiceBlock(choices=get_interactive_inputs)
-    display = blocks.ChoiceBlock(
-        choices=DISPLAY_CHOICES,
-        default=DISPLAY_CHECKBOXRADIO,
-        help_text="Only applies if the interactive input is a Select type",
-    )
+    interactive_input = ModelChooserBlock(InteractiveElement)
+    display = DISPLAY_CHECKBOXRADIO
     visible = blocks.BooleanBlock(required=False, default=True)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(
