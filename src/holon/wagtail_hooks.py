@@ -5,6 +5,9 @@ from holon.models.factor import Factor
 from holon.models.gridconnection import GridConnection
 from holon.models.asset import EnergyAsset
 from holon.models.scenario import Scenario
+from django.templatetags.static import static
+from django.utils.html import format_html
+from wagtail import hooks
 
 
 class FactorAdmin(ModelAdmin):
@@ -55,3 +58,11 @@ modeladmin_register(FactorAdmin)
 modeladmin_register(GridconnectionAdmin)
 modeladmin_register(AssetAdmin)
 modeladmin_register(ScenarioAdmin)
+
+
+@hooks.register("insert_editor_js")
+def editor_js():
+    return format_html(
+        '<script type="module" src="{}"></script>',
+        static("js/holon_chooser.js"),
+    )

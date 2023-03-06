@@ -1,11 +1,14 @@
+from django.apps import apps
 from cloudclient.experiments import AnyLogicExperiment, prepare_scenario_as_experiment
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 from holon.models import rule_mapping
+from holon.models.scenario_rule import ModelType
 
 from .models.pepe import Pepe
 from .serializers import HolonRequestSerializer
+from holon.models.util import all_subclasses
 
 RESULTS = [
     "SystemHourlyElectricityImport_MWh",
@@ -104,3 +107,22 @@ class HolonV2Service(generics.CreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
+
+
+class HolonCMSLogic(generics.RetrieveAPIView):
+    def get(self, request):
+        response = {}
+        for model in ModelType.choices:
+            model_name = model[0]
+            model_type_class = apps.get_model("holon", model_name)
+            response[model_name] = {
+                "attributes": [field.name for field in model_type_class()._meta.get_fields()],
+                "model_subtype": {},
+            }
+
+            for subclass in all_subclasses(model_type_class):
+                response[model_name]["model_subtype"][subclass.__name__] = [
+                    field.name for field in subclass()._meta.get_fields()
+                ]
+
+        return Response(response)

@@ -63,8 +63,8 @@ def apply_rule_filters_to_queryset(queryset: QuerySet, rule: ScenarioRule) -> Qu
     # filter with dict destructering doesn't have not equal operator
     queryset_filter = Q()
 
-    filter: Filter
-    for filter in rule.filters.all():
+    # filter: Filter
+    for filter in rule.get_filters():
         queryset_filter &= filter.get_q()
 
     if rule.model_subtype:
@@ -80,6 +80,6 @@ def apply_rule_actions(
     """Apply rule actions to filtered objects"""
 
     rule_action: RuleAction
-    for rule_action in rule.ruleaction_set.all():
+    for rule_action in rule.get_actions():
         for filtered_object in filtered_queryset:
             rule_action.apply_action_to_queryset(queryset, filtered_object, value)
