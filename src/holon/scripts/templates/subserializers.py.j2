@@ -1,4 +1,10 @@
 from rest_framework import serializers
+{# import custom serializers #}
+from {{ custom_serializer_module }} import (
+{% for module in outputs %}{% if module.subclasses|length > 0 %}{% if not loop.last %}    {{ module.main_class}}Serializer,
+{% else %}        {{ module.main_class}}Serializer{% endif %}{% endif %}{% endfor %}
+)
+{# import make subserializers #}
 {% for module in outputs %}
 {% if module.subclasses|length > 0 %}
 from {{ module.module }} import (
@@ -7,7 +13,7 @@ from {{ module.module }} import (
 )
 {% endif %}{% endfor %}
 {% for module in outputs %}{% if module.subclasses|length > 0 %}{% for subclass in module.subclasses %}
-class {{ subclass }}Serializer(serializers.ModelSerializer):
+class {{ subclass }}Serializer({{ module.main_class}}Serializer):
 
     class Meta:
         model = {{ subclass }}

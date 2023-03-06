@@ -17,6 +17,7 @@ def run():
     ]
 
     fp_serializer = Path("holon/serializers/datamodel").resolve()
+    fp_templates = Path("holon/scripts/templates").resolve()
     fp_subserializers = fp_serializer / "subserializers.py"
     fp_mapper = fp_serializer / "mapper.py"
     custom_serializer_module = "custom"
@@ -42,16 +43,21 @@ def run():
 
         outputs.append({"module": module_name, "main_class": main_class, "subclasses": subclasses})
 
-
     ## Write to files
-    with open("subserializers.py.j2", "r") as infile:
+    with open(fp_templates / "subserializers.py.j2", "r") as infile:
         template_string_sub = infile.read()
         template_sub = Template(template_string_sub)
         with open(fp_subserializers, "w") as outfile:
-            outfile.write(template_sub.render(outputs=outputs))
+            outfile.write(
+                template_sub.render(
+                    outputs=outputs, custom_serializer_module=custom_serializer_module
+                )
+            )
 
-    with open("mapper.py.j2", "r") as infile:
+    with open(fp_templates / "mapper.py.j2", "r") as infile:
         template_string_main = infile.read()
         template_main = Template(template_string_main)
         with open(fp_mapper, "w") as outfile:
-            outfile.write(template_main.render(subserializers=fp_subserializers.stem, outputs=outputs)))
+            outfile.write(
+                template_main.render(subserializers=fp_subserializers.stem, outputs=outputs)
+            )
