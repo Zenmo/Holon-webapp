@@ -11,6 +11,7 @@ from holon.models import util
 
 from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from holon.models.gridnode import GridNode
 
 from holon.models.scenario_rule import ScenarioRule
 
@@ -89,9 +90,7 @@ class RuleActionRemove(RuleAction):
     class Meta:
         verbose_name = "RuleActionRemove"
 
-    def apply_action_to_queryset(
-        self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
-    ):
+    def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
         """Remove the filtered items"""
 
         filtered_queryset.delete()
@@ -104,15 +103,6 @@ class RuleActionAdd(RuleAction):
         verbose_name = "RuleActionAdd"
 
     asset = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True)
-    invert_add_value = models.BooleanField(default=False, null=False)
-    interactive_element_max_value = models.IntegerField(null=True)
-
-    def clean(self):
-        super().clean()
-
-        if self.invert_add_value and not self.interactive_element_max_value:
-            raise ValidationError(f"Interactive element max value should be indicated if you wish to add according to the inverted interactive element value")
-
 
     def apply_action_to_queryset(
         self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
@@ -120,12 +110,10 @@ class RuleActionAdd(RuleAction):
         """Add an asset to the filtered gridconnections"""
 
         n = int(value)
-        if self.invert_add_value:
-            n = self.interactive_element_max_value - n
 
         for filtererd_object in filtered_queryset:
-            if not isinstance(filtererd_object, GridConnection):
-                raise ValidationError("Filtered objects should all be gridconnections for Add rule action")
+            if not isinstance(filtererd_object, GridConnection) and not isinstance(filtererd_object, GridNode):
+                raise ValidationError("Filtered objects should all be gridconnections or gridnodes for Add rule action")
 
             util.add_assets_from_template(filtererd_object, self.asset, n)
 
