@@ -48,7 +48,10 @@ def duplicate_model(obj, attrs={}):
 
 
 def add_assets_from_template(gridconnection: 'GridConnection', template_asset: 'EnergyAsset', n: int):
-    """ Duplicate a template asset n times with gridconnection as their parent """
+    """ Duplicate a template asset n times with gridconnection as their parent. Raises a ValueError if n < 0. """
+
+    if n < 0:
+        raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
     for _ in range(n):
         duplicate_model(template_asset, {"gridconnection": gridconnection})
