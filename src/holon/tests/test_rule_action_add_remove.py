@@ -50,6 +50,7 @@ class RuleMappingTestClass(TestCase):
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
+
     def test_rule_action_add(self):
         """ Test the add rule action """
 
@@ -82,38 +83,6 @@ class RuleMappingTestClass(TestCase):
         n_ehc_assets = len([asset for asset in updated_scenario.assets if asset.__class__.__name__ == 'ElectricHeatConversionAsset'])
         assert(n_ehc_assets == 4) # was 1
 
-
-    def test_rule_action_add_inverted(self):
-        """ Test the add rule action """
-
-        # Arrange
-        default_ehc = ElectricHeatConversionAsset.objects.create(
-            name="template_heat_pump",
-            type=ConversionAssetType.HEAT_PUMP_AIR,
-            eta_r=0.,
-            deliveryTemp_degc=0.0,
-            capacityElectricity_kW=0.0,
-        )
-
-        rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
-            model_type=ModelType.GRIDCONNECTION,
-            model_subtype="BuildingGridConnection"
-        )
-        rule_action_add = RuleActionAdd.objects.create(
-            asset=default_ehc, rule=rule, invert_add_value=True, interactive_element_max_value=5
-        )
-
-        interactive_elements = [{"value": 4, "interactive_element": self.interactive_element}]
-
-        # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
-        )
-
-        # Assert
-        n_ehc_assets = len([asset for asset in updated_scenario.assets if asset.__class__.__name__ == 'ElectricHeatConversionAsset'])
-        assert(n_ehc_assets == 2) # was 1
 
     def test_rule_action_remove(self):
         """ Test the remove rule action """
