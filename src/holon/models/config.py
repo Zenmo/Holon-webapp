@@ -199,7 +199,7 @@ class ETMQuery(ClusterableModel):
     related_config = ParentalKey(QueryAndConvertConfig, related_name="etm_query")
 
     related_interactive_element = models.ForeignKey(
-        "api.InteractiveInput",
+        "holon.InteractiveElement",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
