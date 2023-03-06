@@ -1,18 +1,53 @@
 from django.db import models, transaction
+from modelcluster.models import ClusterableModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from django.utils.translation import gettext_lazy as _
 
 from holon.models.util import duplicate_model
 
 
-class Scenario(models.Model):
+class Scenario(ClusterableModel):
     name = models.CharField(max_length=255)
-    etm_scenario_id = models.IntegerField()
+    version = models.IntegerField(default=1)
+    comment = models.TextField(blank=True)
+
+    panels = [
+        FieldPanel("name"),
+        FieldPanel(
+            "version",
+            help_text=_(
+                "Symbolic, allows for multiple versions of the scenario to live (synchronise this with the AnyLogic version)"
+            ),
+        ),
+        FieldPanel(
+            "comment",
+            help_text=_(
+                "Use this field to describe the content of this version such that you can use the version in version control"
+            ),
+        ),
+        InlinePanel(
+            "anylogic_config",
+            heading="Anylogic cloudclient configuration",
+            label="Anylogic cloudclient configuration",
+            max_num=1,
+            min_num=1,
+        ),
+        InlinePanel(
+            "query_and_convert_config",
+            heading="ETM module configuration",
+            label="ETM module configuration",
+            max_num=3,
+            min_num=2,
+        ),
+    ]
+
     _assets = None
 
     class Meta:
         verbose_name = "Scenario"
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - versie {self.version}"
 
     @property
     def assets(self) -> "list[EnergyAsset]":
@@ -27,8 +62,6 @@ class Scenario(models.Model):
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
-
-        return assets
 
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
