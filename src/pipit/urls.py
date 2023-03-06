@@ -14,6 +14,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from api.router import api_router as rest_api_router
 from holon.urls import urlpatterns as holon_urls
 from holon.urls import urlpatterns_v2 as holon_urls_v2
+from holon.views import HolonCMSLogic
 from main.views.csfr import get_csrf
 from main.views.error_500 import error_500_view
 from main.views.page_not_found import PageNotFoundView
@@ -57,6 +58,7 @@ urlpatterns += [
     path("wt/api/nextjs/v1/", include(holon_urls)),
     path("wt/api/nextjs/v2/", include(holon_urls_v2)),
     path("wt/cms/", include(wagtailadmin_urls)),
+    path("wt/cms/modelconfig", HolonCMSLogic.as_view()),
     path("wt/documents/", include(wagtaildocs_urls)),
     path("wt/sitemap.xml", sitemap, name="sitemap"),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
