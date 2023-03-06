@@ -8,7 +8,6 @@ from holon.models import (
     GridConnection,
     GridNode,
     Policy,
-    Scenario,
 )
 
 EXCLUDE_FIELDS = ["polymorphic_ctype", "payload"]
@@ -19,6 +18,7 @@ class AnyLogicModelSerializer(serializers.ModelSerializer):
 
     def get_fields(self, exclude_fields=None):
         """extends the get_fields method by wrapping. Pops unwanted fields after fetching"""
+
         # list factory outside function scope please
         if exclude_fields is None:
             exclude_fields = []
@@ -35,7 +35,9 @@ class AnyLogicModelSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         """renames the scenario ID to the scenario name and unpacks or removes the wildcard JSON field"""
-        representation = super(AnyLogicModelSerializer, self).to_representation(instance)
+        representation = super(AnyLogicModelSerializer, self).to_representation(
+            instance
+        )
 
         # unpack wildcard json to level key:value pairs
         if representation["wildcard_JSON"] is not None:

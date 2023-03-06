@@ -1,8 +1,8 @@
 from rest_framework import serializers
 {# import custom serializers #}
 from {{ custom_serializer_module }} import (
-{% for module in outputs %}{% if module.subclasses|length > 0 %}{% if not loop.last %}    {{ module.main_class}}Serializer,
-{% else %}        {{ module.main_class}}Serializer{% endif %}{% endif %}{% endfor %}
+{% for module in outputs %}{% if not loop.last %}    {{ module.main_class}}Serializer,{% else %}
+    {{ module.main_class}}Serializer{% endif %}{% endfor %}
 )
 {# import make subserializers #}
 {% for module in outputs %}

@@ -11,8 +11,8 @@ from .custom import (
     GridConnectionSerializer,
     GridNodeSerializer,
     PolicySerializer,
-    Scenario,
 )
+from holon.models import Scenario
 
 
 class ScenarioSerializer(serializers.ModelSerializer):
