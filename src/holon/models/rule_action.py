@@ -10,11 +10,12 @@ from holon.models.asset import EnergyAsset
 from holon.models import util
 
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-
+from wagtail.core.models import Orderable
 from holon.models.scenario_rule import ScenarioRule
-
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 
 # Create your models here.
 class RuleAction(PolymorphicModel):
@@ -106,10 +107,9 @@ class RuleActionAddRemove(RuleAction):
         verbose_name = "RuleActionAddRemove"
 
 
-class RuleActionBalanceGroup(RuleAction):
+class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     """Blans"""
 
-    # asset_order = models.ManyToManyField(EnergyAsset, through="BalanceGroupAssetOrder")
     selected_asset_type = models.CharField(max_length=255, blank=True)
 
     def clean(self):
@@ -133,7 +133,8 @@ class RuleActionBalanceGroup(RuleAction):
     assets = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
 
     panels = RuleAction.panels + [
-        FieldPanel("assets"),
+        FieldPanel("selected_asset_type"),
+        InlinePanel("balance_group_asset_order", label="Assets for balancing in order"),
     ]
 
     class Meta:
@@ -143,7 +144,9 @@ class RuleActionBalanceGroup(RuleAction):
         """Get the linked assets in order from the linking table"""
         return [
             bgao.asset
-            for bgao in BalanceGroupAssetOrder.objects.filter(balance_group=self).order_by("order")
+            for bgao in BalanceGroupAssetOrder.objects.filter(balance_group=self).order_by(
+                "sort_order"
+            )
         ]
 
     def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
@@ -284,13 +287,11 @@ class RuleActionBalanceGroup(RuleAction):
             EnergyAsset.objects.filter(id=asset.id).delete()
 
 
-class BalanceGroupAssetOrder(models.Model):
+class BalanceGroupAssetOrder(Orderable):
     """Linking table for RuleActionBalanceGroup and EnergyAsset"""
 
-    balance_group = models.ForeignKey(RuleActionBalanceGroup, on_delete=models.CASCADE)
+    balance_group = ParentalKey(RuleActionBalanceGroup, related_name="balance_group_asset_order")
     asset = models.ForeignKey(EnergyAsset, on_delete=models.CASCADE)
-    order = models.IntegerField()
 
     class Meta:
         verbose_name = "BalanceGroupAssetOrder"
-        ordering = ["order"]
