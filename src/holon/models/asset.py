@@ -10,7 +10,9 @@ class EnergyAsset(PolymorphicModel):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.name} - {self.id} ({self.gridconnection.category}{self.gridconnection.id})"
+        if self.gridconnection:
+            return f"{self.name} - {self.id} ({self.gridconnection.category}{self.gridconnection.id})"
+        return f"{self.name} - {self.id} (no gridconnection)"
 
 
 # %% Consumption assets

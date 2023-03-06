@@ -12,7 +12,7 @@ class RuleMappingTestClass(TestCase):
         actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
-        gridconnection: BuildingGridConnection = BuildingGridConnection.objects.create(
+        gridconnection_0: BuildingGridConnection = BuildingGridConnection.objects.create(
             owner_actor=actor,
             capacity_kw=750.0,
             payload=self.scenario,
@@ -20,39 +20,57 @@ class RuleMappingTestClass(TestCase):
             heating_type=HeatingType.GASBURNER,
             type=BuildingType.LOGISTICS,
         )
-        ChemicalHeatConversionAsset.objects.create(
-            gridconnection=gridconnection,
-            name="building_gas_burner",
-            type=ConversionAssetType.GAS_BURNER,
-            eta_r=0.95,
-            deliveryTemp_degc=90.0,
-            capacityHeat_kW=60.0,
+        gridconnection_1: BuildingGridConnection = BuildingGridConnection.objects.create(
+            owner_actor=actor,
+            capacity_kw=750.0,
+            payload=self.scenario,
+            insulation_label=InsulationLabel.A,
+            heating_type=HeatingType.GASBURNER,
+            type=BuildingType.LOGISTICS,
         )
-        ElectricHeatConversionAsset.objects.create(
-            gridconnection=gridconnection,
-            name="building_heat_pump",
-            type=ConversionAssetType.HEAT_PUMP_AIR,
-            eta_r=0.95,
-            deliveryTemp_degc=70.0,
-            capacityElectricity_kW=30.0,
+        gridconnection_2: BuildingGridConnection = BuildingGridConnection.objects.create(
+            owner_actor=actor,
+            capacity_kw=750.0,
+            payload=self.scenario,
+            insulation_label=InsulationLabel.A,
+            heating_type=HeatingType.GASBURNER,
+            type=BuildingType.LOGISTICS,
         )
-        HybridHeatCoversionAsset.objects.create(
-            gridconnection=gridconnection,
-            name="building_hybrid_heat_pump",
-            type=ConversionAssetType.HEAT_DELIVERY_SET,
-            eta_r=0.95,
-            deliveryTemp_degc=80.0,
-            capacityHeat_kW=30.0,
-            ambientTempType=20.0
-        )
+        # ChemicalHeatConversionAsset.objects.create(
+        #     gridconnection=gridconnection,
+        #     name="building_gas_burner",
+        #     type=ConversionAssetType.GAS_BURNER,
+        #     eta_r=0.95,
+        #     deliveryTemp_degc=90.0,
+        #     capacityHeat_kW=60.0,
+        # )
+        # ElectricHeatConversionAsset.objects.create(
+        #     gridconnection=gridconnection,
+        #     name="building_heat_pump",
+        #     type=ConversionAssetType.HEAT_PUMP_AIR,
+        #     eta_r=0.95,
+        #     deliveryTemp_degc=70.0,
+        #     capacityElectricity_kW=30.0,
+        # )
+        # HybridHeatCoversionAsset.objects.create(
+        #     gridconnection=gridconnection,
+        #     name="building_hybrid_heat_pump",
+        #     type=ConversionAssetType.HEAT_DELIVERY_SET,
+        #     eta_r=0.95,
+        #     deliveryTemp_degc=80.0,
+        #     capacityHeat_kW=30.0,
+        #     ambientTempType=20.0
+        # )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
             scenario=self.scenario, name="Input 1", type=ChoiceType.continuous
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
 
-    def test_rule_action_add(self):
+    def test_rule_action_add_asset(self):
         """ Test the add rule action """
+
+        print("\n\n")
 
         # Arrange
         default_ehc = ElectricHeatConversionAsset.objects.create(
@@ -72,7 +90,7 @@ class RuleMappingTestClass(TestCase):
             asset=default_ehc, rule=rule
         )
 
-        interactive_elements = [{"value": 3, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": 2, "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -81,7 +99,7 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         n_ehc_assets = len([asset for asset in updated_scenario.assets if asset.__class__.__name__ == 'ElectricHeatConversionAsset'])
-        assert(n_ehc_assets == 4) # was 1
+        assert(n_ehc_assets == 2) # was 1
 
 
     def test_rule_action_remove(self):

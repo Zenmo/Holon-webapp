@@ -4,12 +4,15 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.query import QuerySet
 from django.contrib.postgres.fields import ArrayField
+from holon.models.actor import Actor
+from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 
 from holon.models.asset import ChemicalHeatConversionAsset, ElectricHeatConversionAsset, EnergyAsset, HybridHeatCoversionAsset, TransportHeatConversionAsset, VehicleConversionAsset
 from holon.models import util
 
 from polymorphic.models import PolymorphicModel
+from polymorphic import utils
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from holon.models.gridnode import GridNode
 
@@ -99,23 +102,85 @@ class RuleActionRemove(RuleAction):
 class RuleActionAdd(RuleAction):
     """Add a set asset to the filtered items"""
 
+    def __init__(self, *args, **kwargs):
+        super(RuleActionAdd, self).__init__(*args, **kwargs)
+
+        self.__validate_and_set_model()
+
+
+    def __validate_and_set_model(self):
+        """ Validate the RuleActionAdd and set self variables """
+
+        # thy shall count to one. Not zero, nor two, one is the number to which thy shalt count
+        if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) < 1:
+            raise ValidationError(f"Assign an object to either the asset, gridconnection or contract field for RuleActionAdd")
+
+        if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) > 1:
+            raise ValidationError(f"Only one of the child models can be set for RuleActionAdd")
+
+        # choose which model type is filled in and put it in more general self.model_to_add
+        if self.asset:
+            assert(not (self.gridconnection or self.contract))
+            self.model_to_add = self.asset
+
+        elif self.gridconnection:
+            assert(not (self.asset or self.contract))
+            self.model_to_add = self.gridconnection
+
+        elif self.contract:
+            assert(not (self.asset or self.gridconnection))
+            self.model_to_add = self.contract
+
+        # get the parent type and foreign key field for the model to add
+        self.valid_parent_fk_fieldname_pairs = self.__get_parent_classes_and_field_names(self.model_to_add.__class__)
+
+
+    def __get_parent_classes_and_field_names(self, model_type: type) -> list[tuple[type, str]]:
+        """ 
+        Get the class type and field name of the foreign key fields of the child class. 
+        For example, returns (GridConnection, 'gridconnection') for EnergyAsset. 
+        """
+
+        base_class = utils.get_base_polymorphic_model(model_type)
+
+        if base_class == EnergyAsset:
+            return [(GridConnection, "gridconnection")]
+
+        if base_class == GridConnection:
+            return [(Actor, "owner_actor")]
+        
+        if base_class  == Contract:
+            return [(Actor, "owner_actor")]
+    
+
     class Meta:
         verbose_name = "RuleActionAdd"
 
+    # one of these should be selected
     asset = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True)
+    gridconnection = models.ForeignKey(GridConnection, on_delete=models.SET_NULL, null=True)
+    contract = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True)
+
 
     def apply_action_to_queryset(
         self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
     ):
-        """Add an asset to the filtered gridconnections"""
+        """Add an asset to the first n items in the the filtered objects"""
 
         n = int(value)
+        if n < 0:
+            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
-        for filtererd_object in filtered_queryset:
-            if not isinstance(filtererd_object, GridConnection) and not isinstance(filtererd_object, GridNode):
-                raise ValidationError("Filtered objects should all be gridconnections or gridnodes for Add rule action")
+        parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        try:
+            parent_fk_field_name = next(parent_fieldname[1] for parent_fieldname in self.valid_parent_fk_fieldname_pairs if parent_type == parent_fieldname[0])
+        except:
+            raise ValueError(f"Parent type {parent_type} is not a valid parent for selected model type {self.model_to_add.__class__.__name__}. {self.valid_parent_fk_fieldname_pairs}")
 
-            util.add_assets_from_template(filtererd_object, self.asset, n)
+        # only take first n objects
+        for filtererd_object in filtered_queryset[:n]:
+            # add 
+            util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
 
 
 class RuleActionBalanceGroup(RuleAction):
