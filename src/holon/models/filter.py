@@ -70,6 +70,15 @@ class AttributeFilter(Filter):
         if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
             return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
 
+    def clean(self):
+        super().clean()
+
+        try:
+            if self.model_attribute not in self.model_attribute_options():
+                raise ValidationError("Invalid value model_attribute")
+        except ObjectDoesNotExist:
+            return
+
 
 class RelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
@@ -92,6 +101,8 @@ class RelationAttributeFilter(Filter):
         super().clean()
 
         try:
+            if self.model_attribute not in self.model_attribute_options():
+                raise ValidationError("Invalid value model_attribute")
             if self.relation_field not in self.relation_field_options():
                 raise ValidationError("Invalid value relation_field")
             if (
