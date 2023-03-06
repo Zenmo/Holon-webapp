@@ -8,3 +8,5 @@ Should import from mappers
 
 
 """
+
+from .custom import ScenarioSerializer
