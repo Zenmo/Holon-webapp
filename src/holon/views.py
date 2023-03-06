@@ -86,7 +86,6 @@ class HolonV2Service(generics.CreateAPIView):
             if serializer.is_valid():
                 data = serializer.validated_data
 
-                # TODO add try catch with 422 response if failed
                 scenario = rule_mapping.get_scenario_and_apply_rules(
                     data["scenario"].id, data["interactive_elements"]
                 )
@@ -105,4 +104,3 @@ class HolonV2Service(generics.CreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
-            
