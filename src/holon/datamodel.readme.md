@@ -1,4 +1,6 @@
 - [Automatic subserialization script for poly models](#automatic-subserialization-script-for-poly-models)
+  - [Files](#files)
+  - [How to use](#how-to-use)
 - [Exclude fields](#exclude-fields)
 - [Implementation of wildcard JSON](#implementation-of-wildcard-json)
   - [Before](#before)
@@ -18,9 +20,19 @@
 
 ## Automatic subserialization script for poly models
 
-1. [datamodel_util.py](/src/datamodel_util.py) does the meta programming with templating and yields two files:
-   1. [datamodel_subseries.py](/src/holon/serializers/datamodel_subseries.py) contains all needed subserializers for the `PolymorphicSerializer`
-   2. [datamodel_top.py](/src/holon/serializers/datamodel_top.py) imports all models and corresponding subserializers and implements those in a `PolymorphicSerializer`
+### Files
+
+1. [update_datamodel_serializers.py](/src/holon/scripts/update_datamodel_serializers.py) does the meta programming with templating and yields two files:
+   1. [subserializers.py](/src/holon/serializers/subserializers.py) contains all needed subserializers for the `PolymorphicSerializer`
+   2. [mapper.py](/src/holon/serializers/mapper.py) imports all models and corresponding subserializers and implements those in a `PolymorphicSerializer`
+
+### How to use
+
+Run the script in the Django shell using the `django-extensions` command `runscript` like so:
+
+```bash
+python manage.py runscript update_datamodel_serializers
+```
 
 ## Exclude fields
 
