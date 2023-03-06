@@ -1,2 +1,2 @@
-from .datamodel import *  # NOQA
+from .datamodel.top import *  # NOQA
 from .interactive_element import *  # NOQA
