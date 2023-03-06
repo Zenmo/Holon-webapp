@@ -2,7 +2,6 @@
 ## Note! This script is automatically generated! ##
 ###################################################
 
-from rest_framework import serializers
 
 from .custom import (
     ContractSerializer,
