@@ -1,5 +1,6 @@
 import black
 from black import WriteBack
+from black.parsing import InvalidInput
 import importlib
 from django.db import models
 import inspect
@@ -51,7 +52,7 @@ def run():
         outputs.append({"module": module_name, "main_class": main_class, "subclasses": subclasses})
 
     ## Write to files
-    pprint("...Populating templates \U0001F4C3")
+    pprint("...Populating templates \U0001F4D1")
     with open(fp_templates / "subserializers.py.j2", "r") as infile:
         template_string_sub = infile.read()
         template_sub = Template(template_string_sub)
@@ -71,8 +72,18 @@ def run():
             )
 
     pprint("...Formatting \U0001F9D0")
-    mode = black.Mode(line_length=100)
-    black.format_file_in_place(fp_mapper, mode=mode, fast=False, write_back=WriteBack.YES)
-    black.format_file_in_place(fp_subserializers, mode=mode, fast=False, write_back=WriteBack.YES)
-
-    pprint("Done! \U0001F973")
+    try:
+        mode = black.Mode(line_length=100)
+        black.format_file_in_place(fp_mapper, mode=mode, fast=False, write_back=WriteBack.YES)
+        black.format_file_in_place(
+            fp_subserializers, mode=mode, fast=False, write_back=WriteBack.YES
+        )
+        pprint("Done! \U0001F973")
+    except InvalidInput as e:
+        pprint(
+            "\U00002757 formatting failed, probably the output is not functional Python \U00002757"
+        )
+        pprint(str(e))
+        pprint(
+            "\U00002757 formatting failed, probably the output is not functional Python \U00002757"
+        )

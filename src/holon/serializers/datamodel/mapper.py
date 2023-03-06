@@ -5,10 +5,11 @@
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 
-from holon.models.actor import NonFirmActor
+from holon.models.actor import Actor, NonFirmActor
 
 
 from holon.models.contract import (
+    Contract,
     DeliveryContract,
     ConnectionContract,
     TaxContract,
@@ -17,6 +18,7 @@ from holon.models.contract import (
 
 
 from holon.models.gridconnection import (
+    GridConnection,
     BuiltEnvironmentGridConnection,
     UtilityGridConnection,
     HouseGridConnection,
@@ -28,6 +30,7 @@ from holon.models.gridconnection import (
 
 
 from holon.models.asset import (
+    EnergyAsset,
     ConsumptionAsset,
     DieselVehicleAsset,
     HeatConsumptionAsset,
@@ -53,7 +56,7 @@ from holon.models.asset import (
 )
 
 
-from holon.models.gridnode import ElectricGridNode, HeatGridNode
+from holon.models.gridnode import GridNode, ElectricGridNode, HeatGridNode
 
 
 from .subserializers import NonFirmActorSerializer
@@ -108,11 +111,12 @@ from .subserializers import ElectricGridNodeSerializer, HeatGridNodeSerializer
 
 
 class ActorPolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {NonFirmActor: NonFirmActorSerializer}
+    model_serializer_mapping = {Actor: ActorSerializer, NonFirmActor: NonFirmActorSerializer}
 
 
 class ContractPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
+        Contract: ContractSerializer,
         DeliveryContract: DeliveryContractSerializer,
         ConnectionContract: ConnectionContractSerializer,
         TaxContract: TaxContractSerializer,
@@ -122,6 +126,7 @@ class ContractPolymorphicSerializer(PolymorphicSerializer):
 
 class GridConnectionPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
+        GridConnection: GridConnectionSerializer,
         BuiltEnvironmentGridConnection: BuiltEnvironmentGridConnectionSerializer,
         UtilityGridConnection: UtilityGridConnectionSerializer,
         HouseGridConnection: HouseGridConnectionSerializer,
@@ -134,6 +139,7 @@ class GridConnectionPolymorphicSerializer(PolymorphicSerializer):
 
 class EnergyAssetPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
+        EnergyAsset: EnergyAssetSerializer,
         ConsumptionAsset: ConsumptionAssetSerializer,
         DieselVehicleAsset: DieselVehicleAssetSerializer,
         HeatConsumptionAsset: HeatConsumptionAssetSerializer,
@@ -161,6 +167,13 @@ class EnergyAssetPolymorphicSerializer(PolymorphicSerializer):
 
 class GridNodePolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
+        GridNode: GridNodeSerializer,
         ElectricGridNode: ElectricGridNodeSerializer,
         HeatGridNode: HeatGridNodeSerializer,
+    }
+
+
+class PolicyPolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        Policy: PolicySerializer,
     }
