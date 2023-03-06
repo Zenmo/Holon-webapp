@@ -31,7 +31,7 @@ class Contract(PolymorphicModel):
     contractType = models.CharField(
         max_length=255, choices=ContractType.choices, default=ContractType.DELIVERY
     )
-    contractScope = models.CharField(max_length=255, choices=ContractScope.choices)
+    contractScope = models.ForeignKey(Actor, default=4, on_delete=models.PROTECT)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
     )

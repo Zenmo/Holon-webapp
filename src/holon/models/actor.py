@@ -28,7 +28,6 @@ class Actor(PolymorphicModel):
     category = models.CharField(max_length=255, choices=ActorType.choices)
     group = models.CharField(max_length=255, choices=Group.choices, null=True, blank=True)
     subgroup = models.CharField(max_length=255, choices=SubGroup.choices, null=True, blank=True)
-    parent_actor = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     wildcard_JSON = models.JSONField(
         blank=True,
