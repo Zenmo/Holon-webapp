@@ -5,27 +5,12 @@
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 
-from holon.models.actor import Actor, NonFirmActor
-
-
 from holon.models.contract import (
     Contract,
     DeliveryContract,
     ConnectionContract,
     TaxContract,
     TransportContract,
-)
-
-
-from holon.models.gridconnection import (
-    GridConnection,
-    BuiltEnvironmentGridConnection,
-    UtilityGridConnection,
-    HouseGridConnection,
-    BuildingGridConnection,
-    ProductionGridConnection,
-    IndustryGridConnection,
-    DistrictHeatingGridConnection,
 )
 
 
@@ -56,10 +41,37 @@ from holon.models.asset import (
 )
 
 
+from holon.models.actor import Actor, NonFirmActor
+
+
+from holon.models.gridconnection import (
+    GridConnection,
+    BuiltEnvironmentGridConnection,
+    UtilityGridConnection,
+    HouseGridConnection,
+    BuildingGridConnection,
+    ProductionGridConnection,
+    IndustryGridConnection,
+    DistrictHeatingGridConnection,
+)
+
+
 from holon.models.gridnode import GridNode, ElectricGridNode, HeatGridNode
 
 
-from .subserializers import NonFirmActorSerializer
+from holon.models.policy import (
+    Policy,
+)
+
+
+from .custom import (
+    ContractSerializer,
+    EnergyAssetSerializer,
+    ActorSerializer,
+    GridConnectionSerializer,
+    GridNodeSerializer,
+    PolicySerializer,
+)
 
 
 from .subserializers import (
@@ -67,17 +79,6 @@ from .subserializers import (
     ConnectionContractSerializer,
     TaxContractSerializer,
     TransportContractSerializer,
-)
-
-
-from .subserializers import (
-    BuiltEnvironmentGridConnectionSerializer,
-    UtilityGridConnectionSerializer,
-    HouseGridConnectionSerializer,
-    BuildingGridConnectionSerializer,
-    ProductionGridConnectionSerializer,
-    IndustryGridConnectionSerializer,
-    DistrictHeatingGridConnectionSerializer,
 )
 
 
@@ -107,11 +108,21 @@ from .subserializers import (
 )
 
 
+from .subserializers import NonFirmActorSerializer
+
+
+from .subserializers import (
+    BuiltEnvironmentGridConnectionSerializer,
+    UtilityGridConnectionSerializer,
+    HouseGridConnectionSerializer,
+    BuildingGridConnectionSerializer,
+    ProductionGridConnectionSerializer,
+    IndustryGridConnectionSerializer,
+    DistrictHeatingGridConnectionSerializer,
+)
+
+
 from .subserializers import ElectricGridNodeSerializer, HeatGridNodeSerializer
-
-
-class ActorPolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {Actor: ActorSerializer, NonFirmActor: NonFirmActorSerializer}
 
 
 class ContractPolymorphicSerializer(PolymorphicSerializer):
@@ -121,19 +132,6 @@ class ContractPolymorphicSerializer(PolymorphicSerializer):
         ConnectionContract: ConnectionContractSerializer,
         TaxContract: TaxContractSerializer,
         TransportContract: TransportContractSerializer,
-    }
-
-
-class GridConnectionPolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {
-        GridConnection: GridConnectionSerializer,
-        BuiltEnvironmentGridConnection: BuiltEnvironmentGridConnectionSerializer,
-        UtilityGridConnection: UtilityGridConnectionSerializer,
-        HouseGridConnection: HouseGridConnectionSerializer,
-        BuildingGridConnection: BuildingGridConnectionSerializer,
-        ProductionGridConnection: ProductionGridConnectionSerializer,
-        IndustryGridConnection: IndustryGridConnectionSerializer,
-        DistrictHeatingGridConnection: DistrictHeatingGridConnectionSerializer,
     }
 
 
@@ -165,6 +163,27 @@ class EnergyAssetPolymorphicSerializer(PolymorphicSerializer):
     }
 
 
+class ActorPolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {Actor: ActorSerializer, NonFirmActor: NonFirmActorSerializer}
+
+    contracts = ContractPolymorphicSerializer(many=True, read_only=True, source="contract_set")
+
+
+class GridConnectionPolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        GridConnection: GridConnectionSerializer,
+        BuiltEnvironmentGridConnection: BuiltEnvironmentGridConnectionSerializer,
+        UtilityGridConnection: UtilityGridConnectionSerializer,
+        HouseGridConnection: HouseGridConnectionSerializer,
+        BuildingGridConnection: BuildingGridConnectionSerializer,
+        ProductionGridConnection: ProductionGridConnectionSerializer,
+        IndustryGridConnection: IndustryGridConnectionSerializer,
+        DistrictHeatingGridConnection: DistrictHeatingGridConnectionSerializer,
+    }
+
+    assets = EnergyAssetPolymorphicSerializer(many=True, read_only=True, source="asset_set")
+
+
 class GridNodePolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         GridNode: GridNodeSerializer,
@@ -172,8 +191,15 @@ class GridNodePolymorphicSerializer(PolymorphicSerializer):
         HeatGridNode: HeatGridNodeSerializer,
     }
 
+    assets = EnergyAssetPolymorphicSerializer(many=True, read_only=True, source="asset_set")
+
 
 class PolicyPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Policy: PolicySerializer,
     }
+
+
+###################################################
+## Note! This script is automatically generated! ##
+###################################################

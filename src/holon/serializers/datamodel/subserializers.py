@@ -1,16 +1,17 @@
+###################################################
+## Note! This script is automatically generated! ##
+###################################################
+
 from rest_framework import serializers
 
-from custom import (
-    ActorSerializer,
+from .custom import (
     ContractSerializer,
-    GridConnectionSerializer,
     EnergyAssetSerializer,
+    ActorSerializer,
+    GridConnectionSerializer,
     GridNodeSerializer,
     PolicySerializer,
 )
-
-
-from holon.models.actor import NonFirmActor
 
 
 from holon.models.contract import (
@@ -18,17 +19,6 @@ from holon.models.contract import (
     ConnectionContract,
     TaxContract,
     TransportContract,
-)
-
-
-from holon.models.gridconnection import (
-    BuiltEnvironmentGridConnection,
-    UtilityGridConnection,
-    HouseGridConnection,
-    BuildingGridConnection,
-    ProductionGridConnection,
-    IndustryGridConnection,
-    DistrictHeatingGridConnection,
 )
 
 
@@ -58,13 +48,21 @@ from holon.models.asset import (
 )
 
 
+from holon.models.actor import NonFirmActor
+
+
+from holon.models.gridconnection import (
+    BuiltEnvironmentGridConnection,
+    UtilityGridConnection,
+    HouseGridConnection,
+    BuildingGridConnection,
+    ProductionGridConnection,
+    IndustryGridConnection,
+    DistrictHeatingGridConnection,
+)
+
+
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
-
-
-class NonFirmActorSerializer(ActorSerializer):
-    class Meta:
-        model = NonFirmActor
-        fields = "__all__"
 
 
 class DeliveryContractSerializer(ContractSerializer):
@@ -88,48 +86,6 @@ class TaxContractSerializer(ContractSerializer):
 class TransportContractSerializer(ContractSerializer):
     class Meta:
         model = TransportContract
-        fields = "__all__"
-
-
-class BuiltEnvironmentGridConnectionSerializer(GridConnectionSerializer):
-    class Meta:
-        model = BuiltEnvironmentGridConnection
-        fields = "__all__"
-
-
-class UtilityGridConnectionSerializer(GridConnectionSerializer):
-    class Meta:
-        model = UtilityGridConnection
-        fields = "__all__"
-
-
-class HouseGridConnectionSerializer(GridConnectionSerializer):
-    class Meta:
-        model = HouseGridConnection
-        fields = "__all__"
-
-
-class BuildingGridConnectionSerializer(GridConnectionSerializer):
-    class Meta:
-        model = BuildingGridConnection
-        fields = "__all__"
-
-
-class ProductionGridConnectionSerializer(GridConnectionSerializer):
-    class Meta:
-        model = ProductionGridConnection
-        fields = "__all__"
-
-
-class IndustryGridConnectionSerializer(GridConnectionSerializer):
-    class Meta:
-        model = IndustryGridConnection
-        fields = "__all__"
-
-
-class DistrictHeatingGridConnectionSerializer(GridConnectionSerializer):
-    class Meta:
-        model = DistrictHeatingGridConnection
         fields = "__all__"
 
 
@@ -265,6 +221,54 @@ class VehicleElectricStorageAssetSerializer(EnergyAssetSerializer):
         fields = "__all__"
 
 
+class NonFirmActorSerializer(ActorSerializer):
+    class Meta:
+        model = NonFirmActor
+        fields = "__all__"
+
+
+class BuiltEnvironmentGridConnectionSerializer(GridConnectionSerializer):
+    class Meta:
+        model = BuiltEnvironmentGridConnection
+        fields = "__all__"
+
+
+class UtilityGridConnectionSerializer(GridConnectionSerializer):
+    class Meta:
+        model = UtilityGridConnection
+        fields = "__all__"
+
+
+class HouseGridConnectionSerializer(GridConnectionSerializer):
+    class Meta:
+        model = HouseGridConnection
+        fields = "__all__"
+
+
+class BuildingGridConnectionSerializer(GridConnectionSerializer):
+    class Meta:
+        model = BuildingGridConnection
+        fields = "__all__"
+
+
+class ProductionGridConnectionSerializer(GridConnectionSerializer):
+    class Meta:
+        model = ProductionGridConnection
+        fields = "__all__"
+
+
+class IndustryGridConnectionSerializer(GridConnectionSerializer):
+    class Meta:
+        model = IndustryGridConnection
+        fields = "__all__"
+
+
+class DistrictHeatingGridConnectionSerializer(GridConnectionSerializer):
+    class Meta:
+        model = DistrictHeatingGridConnection
+        fields = "__all__"
+
+
 class ElectricGridNodeSerializer(GridNodeSerializer):
     class Meta:
         model = ElectricGridNode
@@ -275,3 +279,8 @@ class HeatGridNodeSerializer(GridNodeSerializer):
     class Meta:
         model = HeatGridNode
         fields = "__all__"
+
+
+###################################################
+## Note! This script is automatically generated! ##
+###################################################

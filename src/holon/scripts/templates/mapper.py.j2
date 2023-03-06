@@ -11,7 +11,16 @@ from {{ module.module }} import (
 {% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
 {% else %}        {{ subclass }}{% endif %}{% endfor %}
 )
+{% else %}
+from {{ module.module }} import (
+    {{ module.main_class }},
+)
 {% endif %}{% endfor %}
+
+{# import all serializers #}
+from .{{ custom_serializer_module }} import (
+{% for module in outputs %}     {{ module.main_class }}Serializer,{% endfor %}
+)
 
 {# import all subserializers #}
 {% for module in outputs %}
@@ -30,4 +39,13 @@ class {{ module.main_class }}PolymorphicSerializer(PolymorphicSerializer):
 {% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}: {{ subclass }}Serializer,
 {% else %}        {{ subclass }}: {{ subclass }}Serializer{% endif %}{% endfor %}
     }
+
+    {# Add the fields that need to be resolved to viewsets #}
+    {% if module.viewset_fieldname is defined and module.viewset_mainclass is defined %}
+    {{ module.viewset_fieldname }} = {{ module.viewset_mainclass }}PolymorphicSerializer(many=True, read_only=True, source="{{ module.viewset_fieldname[:-1] }}_set")
+    {% endif %}
 {% endfor %}
+
+###################################################
+## Note! This script is automatically generated! ##
+###################################################

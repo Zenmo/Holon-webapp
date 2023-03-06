@@ -1,6 +1,10 @@
+###################################################
+## Note! This script is automatically generated! ##
+###################################################
+
 from rest_framework import serializers
 {# import custom serializers #}
-from {{ custom_serializer_module }} import (
+from .{{ custom_serializer_module }} import (
 {% for module in outputs %}{% if not loop.last %}    {{ module.main_class}}Serializer,{% else %}
     {{ module.main_class}}Serializer{% endif %}{% endfor %}
 )
@@ -20,3 +24,7 @@ class {{ subclass }}Serializer({{ module.main_class}}Serializer):
         fields = '__all__'
 
 {% endfor %}{% endif %}{% endfor %}
+
+###################################################
+## Note! This script is automatically generated! ##
+###################################################

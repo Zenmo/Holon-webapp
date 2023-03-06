@@ -15,12 +15,20 @@ def pprint(msg: str) -> None:
 def run():
     ## GLOBALS
     MODS = [
-        ("actor", "Actor"),
-        ("contract", "Contract"),
-        ("gridconnection", "GridConnection"),
-        ("asset", "EnergyAsset"),
-        ("gridnode", "GridNode"),
-        ("policy", "Policy"),
+        ("contract", "Contract", None),
+        ("asset", "EnergyAsset", None),
+        ("actor", "Actor", {"viewset_fieldname": "contracts", "viewset_mainclass": "Contract"}),
+        (
+            "gridconnection",
+            "GridConnection",
+            {"viewset_fieldname": "assets", "viewset_mainclass": "EnergyAsset"},
+        ),
+        (
+            "gridnode",
+            "GridNode",
+            {"viewset_fieldname": "assets", "viewset_mainclass": "EnergyAsset"},
+        ),
+        ("policy", "Policy", None),
     ]
 
     fp_serializer = Path("holon/serializers/datamodel").resolve()
@@ -33,7 +41,7 @@ def run():
 
     ## LOOP
     pprint("Autoserializer activated bleep bloop \U0001F916")
-    for module_name, main_class in MODS:
+    for module_name, main_class, viewset in MODS:
         module_name = f"holon.models.{module_name}"
 
         module = importlib.import_module(module_name)
@@ -49,7 +57,10 @@ def run():
                 if is_model and is_this_module and is_not_main_cls:
                     subclasses.append(object.__name__)
 
-        outputs.append({"module": module_name, "main_class": main_class, "subclasses": subclasses})
+        output = {"module": module_name, "main_class": main_class, "subclasses": subclasses}
+        if viewset is not None:
+            output.update(viewset)
+        outputs.append(output)
 
     ## Write to files
     pprint("...Populating templates \U0001F4D1")
@@ -68,7 +79,11 @@ def run():
         template_main = Template(template_string_main)
         with open(fp_mapper, "w") as outfile:
             outfile.write(
-                template_main.render(subserializers=fp_subserializers.stem, outputs=outputs)
+                template_main.render(
+                    subserializers=fp_subserializers.stem,
+                    outputs=outputs,
+                    custom_serializer_module=custom_serializer_module,
+                )
             )
 
     pprint("...Formatting \U0001F9D0")
