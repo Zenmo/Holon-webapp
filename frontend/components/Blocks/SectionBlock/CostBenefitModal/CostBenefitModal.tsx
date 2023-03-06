@@ -1,15 +1,52 @@
-import KostenBatenChart from "@/components/Charts/KostenBatenChart";
+import { useState, useEffect } from "react";
+import CostBenefitChart from "@/components/CostBenefit/CostBenefitChart";
+import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import CostBenefitTable from "@/components/Charts/CostBenefitTable";
+import {
+  getHolonDataSegments,
+  getHolonDataSegmentsDetail,
+  getHolonGraphColor,
+} from "../../../../api/holon";
+
+import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 
 export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
+  const [data, setData] = useState([]);
+  const [detailData, setDetailData] = useState([]);
+  const [dataColors, setDataColors] = useState([]);
+  const ignoredLabels = ["name", "Netto kosten"];
+
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     handleClose();
   };
 
+  const convertGraphData = data => {
+    const returnArr: unknown[] = [];
+    Object.entries(data).map(value => {
+      const constructObj = { ...value[1] };
+      constructObj.name = value[0].replace(/['"]+/g, "");
+      returnArr.push(constructObj);
+    });
+
+    return returnArr;
+  };
+
+  useEffect(() => {
+    getHolonDataSegments()
+      .then(data => setData(data))
+      .catch(err => console.log(err));
+
+    getHolonDataSegmentsDetail()
+      .then(data => setDetailData(data))
+      .catch(err => console.log(err));
+
+    getHolonGraphColor()
+      .then(result => setDataColors(result.items))
+      .catch(err => console.log(err));
+  }, []);
   const tabItems = ["Grafiek", "Tabel", "Detail"];
 
   return (
@@ -22,7 +59,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                 <Tab.List>
                   {tabItems.map((tabItem, index) => (
                     <Tab
-                      key={index}
+                      key={tabItem + index}
                       className={({ selected }) =>
                         classNames(
                           "p-3 mr-px ",
@@ -40,16 +77,29 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                 </button>
               </div>
 
-              <Tab.Panels className="flex flex-1 h-full flex-col">
-                <Tab.Panel className="flex flex-1 h-full flex-col">
-                  <h2 className="text-center">Kosten en baten per groep</h2>
-                  <KostenBatenChart />
+              <Tab.Panels className="flex flex-1 flex-col min-h-0">
+                <Tab.Panel className="flex flex-1 max-h-full flex-col">
+                  <h2 className="text-center">Kosten en baten per segment</h2>
+                  <CostBenefitChart
+                    chartdata={convertGraphData(data)}
+                    dataColors={dataColors}
+                    ignoredLabels={ignoredLabels}
+                  />
                 </Tab.Panel>
-                <Tab.Panel>
+                <Tab.Panel className="flex  max-h-full flex-col">
                   <h2 className="text-center">Kosten en baten per groep</h2>
-                  <CostBenefitTable></CostBenefitTable>
+                  <CostBenefitTable tableData={data} />
                 </Tab.Panel>
-                <Tab.Panel>Content 3</Tab.Panel>
+
+                <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0">
+                  <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
+                  <CostBenefitDetail
+                    chartdata={convertGraphData(data)}
+                    detailData={detailData}
+                    dataColors={dataColors}
+                    ignoredLabels={ignoredLabels}
+                  />
+                </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
           </div>

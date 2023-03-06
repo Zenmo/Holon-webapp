@@ -37,8 +37,10 @@ export default function ContentColumn({
           break;
       }
     });
-
-    handleContentChange([...contentArr]);
+    // Only trigger api-call when input has changed
+    if (JSON.stringify(content) !== JSON.stringify(contentArr)) {
+      handleContentChange([...contentArr]);
+    }
   }, [dataContent]);
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {

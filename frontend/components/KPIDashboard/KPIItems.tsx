@@ -1,6 +1,7 @@
 import React from "react";
 import KPIItem from "./KPIItem";
 import { KPIData } from "./types";
+import styles from "./KPIItem.module.css";
 
 type KPIItems = {
   view: string;
@@ -32,32 +33,38 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
 
   return (
     <React.Fragment>
-      <KPIItem
-        view={view}
-        title="Netbelasting"
-        label="netload"
-        value={valueCheck(data[level].netload)}
-        unit="%"
-      />
-      <KPIItem
-        view={view}
-        title="Betaalbaarheid"
-        label="costs"
-        unit={level === "local" ? "k.EUR/jaar" : "mld.EUR/jaar"}
-        value={valueCosts(level)}></KPIItem>
-      <KPIItem
-        view={view}
-        title="Duurzaamheid"
-        label="sustainability"
-        value={valueCheck(data[level].sustainability)}
-        unit="%"
-      />
-      <KPIItem
-        view={view}
-        title="Zelfvoorzienendheid"
-        label="selfSufficiency"
-        value={valueCheck(data[level].selfSufficiency)}
-        unit="%"></KPIItem>
+      {data[level] ? (
+        <React.Fragment>
+          <KPIItem
+            view={view}
+            title="Netbelasting"
+            label="netload"
+            value={valueCheck(data[level].netload)}
+            unit="%"
+          />
+          <KPIItem
+            view={view}
+            title="Betaalbaarheid"
+            label="costs"
+            unit={level === "local" ? "k.EUR/jaar" : "mld.EUR/jaar"}
+            value={valueCosts(level)}></KPIItem>
+          <KPIItem
+            view={view}
+            title="Duurzaamheid"
+            label="sustainability"
+            value={valueCheck(data[level].sustainability)}
+            unit="%"
+          />
+          <KPIItem
+            view={view}
+            title="Zelfvoorzienendheid"
+            label="selfSufficiency"
+            value={valueCheck(data[level].selfSufficiency)}
+            unit="%"></KPIItem>
+        </React.Fragment>
+      ) : (
+        <span className={styles["kpiHolarchy__nodata"]}>Er is geen data op dit niveau.</span>
+      )}
     </React.Fragment>
   );
 }

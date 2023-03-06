@@ -54,7 +54,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
 
-  const myRef = useRef(null);
+  const sectionContainerRef = useRef(null);
 
   const backgroundFullcolor =
     data.value.background.size == "bg__full" ? data.value.background.color : "";
@@ -93,12 +93,14 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
 
   function openHolarchyModal() {
     setHolarchyModal(true);
-    myRef.current.classList.add("h-screen");
-    myRef.current.scrollIntoView();
+    sectionContainerRef.current.classList.add("h-screen");
+    setTimeout(() => {
+      sectionContainerRef.current.scrollIntoView();
+    }, 0);
   }
 
   function closeHolarchyModal() {
-    myRef.current.classList.remove("h-screen");
+    sectionContainerRef.current.classList.remove("h-screen");
     setHolarchyModal(false);
   }
 
@@ -129,7 +131,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   }
 
   return (
-    <div className={`sectionContainer`} ref={myRef}>
+    <div className={`sectionContainer`} ref={sectionContainerRef}>
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
