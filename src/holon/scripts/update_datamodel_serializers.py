@@ -17,8 +17,9 @@ def run():
     ]
 
     fp_serializer = Path("holon/serializers/datamodel").resolve()
-    fp_subseries = fp_serializer / "subserializers.py"
-    fp_top = fp_serializer / "mapper.py"
+    fp_subserializers = fp_serializer / "subserializers.py"
+    fp_mapper = fp_serializer / "mapper.py"
+    custom_serializer_module = "custom"
 
     outputs = []
 
@@ -41,62 +42,16 @@ def run():
 
         outputs.append({"module": module_name, "main_class": main_class, "subclasses": subclasses})
 
-    template_string = """
-###################################################
-## Note! This script is automatically generated! ##
-###################################################
 
-from rest_framework import serializers
-{% for module in outputs %}
-{% if module.subclasses|length > 0 %}
-from {{ module.module }} import (
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
-{% else %}        {{ subclass }}{% endif %}{% endfor %}
-)
-{% endif %}{% endfor %}
-{% for module in outputs %}{% if module.subclasses|length > 0 %}{% for subclass in module.subclasses %}
-class {{ subclass }}Serializer(serializers.ModelSerializer):
+    ## Write to files
+    with open("subserializers.py.j2", "r") as infile:
+        template_string_sub = infile.read()
+        template_sub = Template(template_string_sub)
+        with open(fp_subserializers, "w") as outfile:
+            outfile.write(template_sub.render(outputs=outputs))
 
-    class Meta:
-        model = {{ subclass }}
-        fields = '__all__'
-
-{% endfor %}{% endif %}{% endfor %}
-    """
-
-    template = Template(template_string)
-    with open(fp_subseries, "w") as outfile:
-        outfile.write(template.render(outputs=outputs))
-
-    template_main_string = """
-###################################################
-## Note! This script is automatically generated! ##
-###################################################
-
-from rest_polymorphic.serializers import PolymorphicSerializer
-{% for module in outputs %}
-{% if module.subclasses|length > 0 %}
-from {{ module.module }} import (
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
-{% else %}        {{ subclass }}{% endif %}{% endfor %}
-)
-{% endif %}{% endfor %}
-{% for module in outputs %}
-{% if module.subclasses|length > 0 %}
-from .{{ subseris_py_filename }} import (
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}Serializer,
-{% else %}        {{ subclass }}Serializer{% endif %}{% endfor %}
-)
-{% endif %}{% endfor %}
-{% for module in outputs %}{% if module.subclasses|length > 0 %}
-class {{ module.main_class }}PolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}: {{ subclass }}Serializer,
-{% else %}        {{ subclass }}: {{ subclass }}Serializer{% endif %}{% endfor %}
-    }
-{% endif %}{% endfor %}
-    """
-
-    template = Template(template_main_string)
-    with open(fp_top, "w") as outfile:
-        outfile.write(template.render(subseris_py_filename=fp_subseries.stem, outputs=outputs))
+    with open("mapper.py.j2", "r") as infile:
+        template_string_main = infile.read()
+        template_main = Template(template_string_main)
+        with open(fp_mapper, "w") as outfile:
+            outfile.write(template_main.render(subserializers=fp_subserializers.stem, outputs=outputs)))

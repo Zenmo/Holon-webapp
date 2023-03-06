@@ -1,0 +1,26 @@
+###################################################
+## Note! This script is automatically generated! ##
+###################################################
+
+from rest_polymorphic.serializers import PolymorphicSerializer
+{% for module in outputs %}
+{% if module.subclasses|length > 0 %}
+from {{ module.module }} import (
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
+{% else %}        {{ subclass }}{% endif %}{% endfor %}
+)
+{% endif %}{% endfor %}
+{% for module in outputs %}
+{% if module.subclasses|length > 0 %}
+from .{{ subserializers }} import (
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}Serializer,
+{% else %}        {{ subclass }}Serializer{% endif %}{% endfor %}
+)
+{% endif %}{% endfor %}
+{% for module in outputs %}{% if module.subclasses|length > 0 %}
+class {{ module.main_class }}PolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}: {{ subclass }}Serializer,
+{% else %}        {{ subclass }}: {{ subclass }}Serializer{% endif %}{% endfor %}
+    }
+{% endif %}{% endfor %}
