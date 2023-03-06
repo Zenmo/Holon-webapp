@@ -15,7 +15,10 @@ EXCLUDE_FIELDS = ["polymorphic_ctype", "payload"]
 
 
 class AnyLogicModelSerializer(serializers.ModelSerializer):
+    """base AnyLogicModelSerializer. Implements some methods that are used by subclasses.="""
+
     def get_fields(self, exclude_fields=None):
+        """extends the get_fields method by wrapping. Pops unwanted fields after fetching"""
         # list factory outside function scope please
         if exclude_fields is None:
             exclude_fields = []
@@ -31,6 +34,7 @@ class AnyLogicModelSerializer(serializers.ModelSerializer):
         return fields
 
     def to_representation(self, instance):
+        """renames the scenario ID to the scenario name and unpacks or removes the wildcard JSON field"""
         representation = super(AnyLogicModelSerializer, self).to_representation(instance)
 
         # unpack wildcard json to level key:value pairs
@@ -66,25 +70,16 @@ class ContractSerializer(AnyLogicModelSerializer):
 
 
 class ActorSerializer(AnyLogicModelSerializer):
-    contracts = ContractSerializer(many=True, read_only=True)
+    # contracts = ContractSerializer(many=True, read_only=True)
 
     class Meta:
         model = Actor
         fields = "__all__"
 
     id = serializers.SerializerMethodField()
-    parent_actor = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         return f"{obj.category.lower()[:3]}{obj.id}"
-
-    def get_parent_actor(self, obj):
-        # get related actor
-        if obj.parent_actor is not None:
-            obj = Actor.objects.get(id=obj.parent_actor.id)
-            return self.get_id(obj)
-        else:
-            return obj.parent_actor
 
 
 class EnergyAssetSerializer(AnyLogicModelSerializer):
@@ -141,7 +136,7 @@ class GridNodeSerializer(AnyLogicModelSerializer):
 
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
-    energyassets = EnergyAssetSerializer(many=True, read_only=True, source="energyasset_set")
+    # energyassets = EnergyAssetSerializer(many=True, read_only=True, source="energyasset_set")
 
     class Meta:
         model = GridConnection
@@ -180,25 +175,3 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
             return self.get_parent_node(id=id)
         else:
             return obj.parent_electric
-
-
-
-class ScenarioSerializer(serializers.ModelSerializer):
-    actors = ActorSerializer(many=True, read_only=True, source="actor_set")
-    gridconnections = GridConnectionSerializer(
-        many=True, read_only=True, source="gridconnection_set"
-    )
-    gridnodes = GridNodeSerializer(many=True, read_only=True, source="gridnode_set")
-    policies = PolicySerializer(many=True, read_only=True, source="policy_set")
-
-    class Meta:
-        model = Scenario
-        fields = "__all__"
-
-    def to_representation(self, instance):
-        representation = super(ScenarioSerializer, self).to_representation(instance)
-
-        # changes to the json after serialization can be done here
-        representation["id"] = str(instance)
-
-        return representation
