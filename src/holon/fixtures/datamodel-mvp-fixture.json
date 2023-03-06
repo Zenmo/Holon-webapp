@@ -16,7 +16,6 @@
             "category": "OPERATORGRID",
             "group": null,
             "subgroup": null,
-            "parent_actor": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -29,7 +28,6 @@
             "category": "HOLONENERGY",
             "group": null,
             "subgroup": null,
-            "parent_actor": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -42,7 +40,6 @@
             "category": "CONNECTIONOWNER",
             "group": "COMMERCIAL",
             "subgroup": null,
-            "parent_actor": 5,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -55,7 +52,6 @@
             "category": "CONNECTIONOWNER",
             "group": "COMMERCIAL",
             "subgroup": null,
-            "parent_actor": 5,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -68,7 +64,6 @@
             "category": "CONNECTIONOWNER",
             "group": "commercial",
             "subgroup": null,
-            "parent_actor": 5,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -81,7 +76,6 @@
             "category": "CONNECTIONOWNER",
             "group": "commercial",
             "subgroup": null,
-            "parent_actor": 5,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -94,7 +88,6 @@
             "category": "SUPPLIERENERGY",
             "group": null,
             "subgroup": null,
-            "parent_actor": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -547,7 +540,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "contract"],
             "contractType": "FIXED",
-            "contractScope": "ENERGYSUPPLIER",
+            "contractScope": 10,
             "energyCarrier": "ELECTRICITY",
             "actor": 6,
             "annualFee_eur": 0.0,
@@ -560,7 +553,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "contract"],
             "contractType": "FIXED",
-            "contractScope": "ENERGYSUPPLIER",
+            "contractScope": 10,
             "energyCarrier": "ELECTRICITY",
             "actor": 7,
             "annualFee_eur": 0.0,
@@ -573,7 +566,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "contract"],
             "contractType": "FIXED",
-            "contractScope": "ENERGYSUPPLIER",
+            "contractScope": 10,
             "energyCarrier": "ELECTRICITY",
             "actor": 8,
             "annualFee_eur": 0.0,
@@ -586,7 +579,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "contract"],
             "contractType": "FIXED",
-            "contractScope": "ENERGYSUPPLIER",
+            "contractScope": 10,
             "energyCarrier": "ELECTRICITY",
             "actor": 9,
             "annualFee_eur": 0.0,
