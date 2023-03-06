@@ -82,18 +82,25 @@ class HolonV2Service(generics.CreateAPIView):
 
         serializer = HolonRequestSerializer(data=request.data)
 
-        if serializer.is_valid():
-            data = serializer.validated_data
+        try:
+            if serializer.is_valid():
+                data = serializer.validated_data
 
-            # TODO add try catch with 422 response if failed
-            scenario = rule_mapping.get_scenario_and_apply_rules(
-                data["scenario"].id, data["interactive_elements"]
-            )
+                scenario = rule_mapping.get_scenario_and_apply_rules(
+                    data["scenario"].id, data["interactive_elements"]
+                )
 
-            return Response(
-                "success",
-                status=status.HTTP_200_OK,
-            )
+                # TODO serialize and send to anylogic
 
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                # Delete duplicated scenario
+                scenario.delete()
+
+                return Response(
+                    "success",
+                    status=status.HTTP_200_OK,
+                )
+
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)

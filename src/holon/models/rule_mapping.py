@@ -2,8 +2,8 @@ from django.apps import apps
 from django.db.models import Q
 from django.db.models.query import QuerySet
 
-from holon.models.rule_action import RuleAction
 from holon.models.filter import Filter
+from holon.models.rule_action import RuleAction
 from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ModelType, ScenarioRule
 from holon.serializers import InteractiveElementInput
@@ -14,7 +14,7 @@ def get_scenario_and_apply_rules(
 ) -> Scenario:
     """Load a scenario, apply rules from interactive elements and return with mapped fields"""
 
-    scenario = get_prefetched_scenario(scenario_id)
+    scenario = get_cloned_scenario(scenario_id=scenario_id)
 
     for interactive_element_input in interactive_element_inputs:
         interactive_element = interactive_element_input["interactive_element"]
@@ -31,18 +31,11 @@ def get_scenario_and_apply_rules(
     return scenario
 
 
-def get_prefetched_scenario(scenario_id: int) -> Scenario:
-    """Load scenario object from database and return with prefetched fields"""
+def get_cloned_scenario(scenario_id: int) -> Scenario:
+    """Load scenario object from database and clone it"""
 
-    scenario = (
-        Scenario.objects.prefetch_related("actor_set")
-        .prefetch_related("gridconnection_set")
-        .prefetch_related("gridconnection_set__energyasset_set")
-        .prefetch_related("gridnode_set")
-        .prefetch_related("policy_set")
-        .get(id=scenario_id)
-    )
-    return scenario
+    scenario = Scenario.objects.get(id=scenario_id)
+    return scenario.clone()
 
 
 def get_queryset_for_rule(rule: ScenarioRule, scenario: Scenario) -> QuerySet:
