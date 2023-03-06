@@ -1,23 +1,14 @@
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models import Q
+from modelcluster.fields import ParentalKey
 from polymorphic.models import PolymorphicModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
+from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses
-
-
-class Filter(PolymorphicModel):
-    """Information on how to find the objects a scenario rule should be applied to"""
-
-    rule = models.ForeignKey("holon.ScenarioRule", on_delete=models.CASCADE, related_name="filters")
-
-    class Meta:
-        abstract = True
-
-    def get_q(self) -> Q:
-        pass
 
 
 class AttributeFilterComparator(models.TextChoices):
@@ -29,21 +20,18 @@ class AttributeFilterComparator(models.TextChoices):
     NOT_EQUAL = "NOT EQUAL"
 
 
-class AttributeFilter(Filter):
-    """Filter on attribute"""
+class Filter(PolymorphicModel):
+    """Information on how to find the objects a scenario rule should be applied to"""
 
-    model_attribute = models.CharField(max_length=255, null=True)
+    model_attribute = models.CharField(max_length=255)
     comparator = models.CharField(max_length=255, choices=AttributeFilterComparator.choices)
     value = models.JSONField()
 
-    class Meta:
-        verbose_name = "AttributeFilter"
-
-    def clean(self):
-        super().clean()
-
-        if self.model_attribute not in self.model_attribute_options():
-            raise ValidationError("Invalid value model_attribute")
+    panels = [
+        FieldPanel("model_attribute"),
+        FieldPanel("comparator"),
+        FieldPanel("value"),
+    ]
 
     def model_attribute_options(self) -> list[str]:
         model_type = (
@@ -52,6 +40,23 @@ class AttributeFilter(Filter):
         model = apps.get_model("holon", model_type)
 
         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
+
+    class Meta:
+        abstract = True
+
+    def get_q(self) -> Q:
+        pass
+
+
+class AttributeFilter(Filter):
+    """Filter on attribute"""
+
+    rule = ParentalKey(
+        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="attribute_filters"
+    )
+
+    class Meta:
+        verbose_name = "AttributeFilter"
 
     def get_q(self) -> Q:
         model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
@@ -65,12 +70,29 @@ class AttributeFilter(Filter):
         if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
             return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
 
+    def clean(self):
+        super().clean()
 
-class RelationAttributeFilter(AttributeFilter):
+        try:
+            if self.model_attribute not in self.model_attribute_options():
+                raise ValidationError("Invalid value model_attribute")
+        except ObjectDoesNotExist:
+            return
+
+
+class RelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
 
+    rule = ParentalKey(
+        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="relation_attribute_filters"
+    )
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
+
+    panels = [
+        FieldPanel("relation_field"),
+        FieldPanel("relation_field_subtype"),
+    ] + Filter.panels
 
     class Meta:
         verbose_name = "RelationAttributeFilter"
@@ -78,13 +100,18 @@ class RelationAttributeFilter(AttributeFilter):
     def clean(self):
         super().clean()
 
-        if self.relation_field not in self.relation_field_options():
-            raise ValidationError("Invalid value relation_field")
-        if (
-            self.relation_field_subtype
-            and self.relation_field_subtype not in self.relation_field_subtype_options()
-        ):
-            raise ValidationError("Invalid value relation_field_subtype")
+        try:
+            if self.model_attribute not in self.model_attribute_options():
+                raise ValidationError("Invalid value model_attribute")
+            if self.relation_field not in self.relation_field_options():
+                raise ValidationError("Invalid value relation_field")
+            if (
+                self.relation_field_subtype
+                and self.relation_field_subtype not in self.relation_field_subtype_options()
+            ):
+                raise ValidationError("Invalid value relation_field_subtype")
+        except ObjectDoesNotExist:
+            return
 
     def relation_field_options(self) -> list[str]:
         model_type = (
@@ -96,7 +123,7 @@ class RelationAttributeFilter(AttributeFilter):
 
     def relation_field_subtype_options(self) -> list[str]:
 
-        model = apps.get_model(self.rule.model_type)
+        model = apps.get_model("holon", self.rule.model_type)
         related_model = model()._meta.get_field(self.relation_field).related_model
 
         return [subclass.__name__ for subclass in all_subclasses(related_model)]
