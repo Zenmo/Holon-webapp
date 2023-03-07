@@ -142,16 +142,14 @@ class GenericRuleActionAdd(RuleAction):
 
         self.__set_model()
 
-
     def clean(self):
         super().clean()
 
         self.__validate_model_selection()
         self.__set_model()
 
-
     def __validate_model_selection(self):
-        """ Validate only a single model type is selected"""
+        """Validate only a single model type is selected"""
 
         # thy shall count to one. Not zero, nor two, one is the number to which thy shalt count
         if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) < 1:
@@ -161,10 +159,9 @@ class GenericRuleActionAdd(RuleAction):
 
         if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) > 1:
             raise ValidationError(f"Only one of the child models can be set for RuleActionAdd")
-        
 
     def __set_model(self):
-        """ Set addition RuleActionAdd attributes according to selected model"""
+        """Set addition RuleActionAdd attributes according to selected model"""
 
         # choose which model type is filled in and put it in more general self.model_to_add
         if self.asset:
@@ -181,7 +178,7 @@ class GenericRuleActionAdd(RuleAction):
 
         else:
             return
-        
+
         # get the parent type and foreign key field for the model to add
         self.valid_parent_fk_fieldname_pairs = self.__get_parent_classes_and_field_names(
             self.model_to_add.__class__
