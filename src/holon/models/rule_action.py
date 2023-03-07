@@ -24,7 +24,7 @@ class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 
     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
+    rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = "RuleAction"
@@ -87,6 +87,7 @@ class RuleActionChangeAttribute(RuleAction):
         verbose_name = "RuleActionChangeAttribute"
 
 
+
 class RuleActionRemove(RuleAction):
     """Remove the filtered items"""
 
@@ -143,6 +144,9 @@ class RuleActionAdd(RuleAction):
         # get the parent type and foreign key field for the model to add
         self.valid_parent_fk_fieldname_pairs = self.__get_parent_classes_and_field_names(self.model_to_add.__class__)
 
+        # distinction between set_count and add
+        self.reset_models_before_add = False
+
 
     def __get_parent_classes_and_field_names(self, model_type: type) -> list[tuple[type, str]]:
         """ 
@@ -179,10 +183,36 @@ class RuleActionAdd(RuleAction):
         except:
             raise ValueError(f"Parent type {parent_type} is not a valid parent for selected model type {self.model_to_add.__class__.__name__}. {self.valid_parent_fk_fieldname_pairs}")
 
+        objects_added = 0
+
         # only take first n objects
-        for filtererd_object in filtered_queryset[:n]:
-            # add model_to_add to filtered object
-            util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
+        for filtererd_object in filtered_queryset:
+
+            if not self.model_to_add.__class__.objects.filter(**{parent_fk_field_name: filtererd_object}).exists():
+                if objects_added < n:
+                    # add model_to_add to filtered object
+                    util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
+                    objects_added += 1
+            
+            # `set_count` mode
+            elif self.reset_models_before_add:
+                self.model_to_add.__class__.objects.filter(**{parent_fk_field_name: filtererd_object}).delete()
+
+
+class RuleActionSetCount(RuleAction):
+
+    rule_action_add =  models.ForeignKey(RuleActionAdd, on_delete=models.CASCADE, null=False)
+
+    class Meta:
+        verbose_name = "RuleActionSetCount"
+
+    def apply_action_to_queryset(
+        self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
+    ):
+        """ Set the number of filtered objects with the model specified in rule_action_add to value """
+
+        self.rule_action_add.reset_models_before_add = True
+        self.rule_action_add.apply_action_to_queryset(queryset, filtered_queryset, value)
 
 
 class RuleActionBalanceGroup(RuleAction):
