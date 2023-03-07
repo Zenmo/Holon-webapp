@@ -12,8 +12,8 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from holon.models.scenario_rule import ScenarioRule
 
+# Don't forget to register new actions in get_actions() of ScenarioRule
 
-# Create your models here.
 class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 

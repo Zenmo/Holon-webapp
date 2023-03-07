@@ -62,6 +62,8 @@ class Scenario(ClusterableModel):
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
+        
+        return assets
 
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""

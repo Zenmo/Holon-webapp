@@ -11,6 +11,8 @@ from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses
 
 
+# Don't forget to register new filters in get_filters() of ScenarioRule
+
 class AttributeFilterComparator(models.TextChoices):
     """Types of supported comparators"""
 

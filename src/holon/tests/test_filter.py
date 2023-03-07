@@ -6,7 +6,7 @@ from holon.models import rule_mapping
 
 class RuleFiltersTestClass(TestCase):
     def setUp(self) -> None:
-        self.scenario: Scenario = Scenario.objects.create(name="test", etm_scenario_id=1)
+        self.scenario: Scenario = Scenario.objects.create(name="test")
         self.actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
@@ -55,7 +55,7 @@ class RuleFiltersTestClass(TestCase):
 
     def test_attribute_filter_greater_than(self) -> None:
         # Arange
-        scenario: Scenario = rule_mapping.get_prefetched_scenario(self.scenario.id)
+        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
         queryset = rule_mapping.get_queryset_for_rule(self.rule, scenario)
         AttributeFilter.objects.create(
             rule=self.rule,
@@ -74,7 +74,7 @@ class RuleFiltersTestClass(TestCase):
         # Arange
         self.rule.model_subtype = ""
         self.rule.save()
-        scenario: Scenario = rule_mapping.get_prefetched_scenario(self.scenario.id)
+        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
         queryset = rule_mapping.get_queryset_for_rule(self.rule, scenario)
         AttributeFilter.objects.create(
             rule=self.rule,
@@ -103,7 +103,7 @@ class RuleFiltersTestClass(TestCase):
             model_subtype="",
         )
 
-        scenario: Scenario = rule_mapping.get_prefetched_scenario(self.scenario.id)
+        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
         queryset = rule_mapping.get_queryset_for_rule(rule_asset, scenario)
         RelationAttributeFilter.objects.create(
             rule=rule_asset,
@@ -116,7 +116,6 @@ class RuleFiltersTestClass(TestCase):
 
         # Act
         filtered_queryset = rule_mapping.apply_rule_filters_to_queryset(queryset, rule_asset)
-
         # Assert
         self.assertEqual(len(filtered_queryset), 1)
 
@@ -138,7 +137,7 @@ class RuleFiltersTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
 
-        scenario: Scenario = rule_mapping.get_prefetched_scenario(self.scenario.id)
+        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
         queryset = rule_mapping.get_queryset_for_rule(rule_gridconnection, scenario)
         DiscreteAttributeFilter.objects.create(
             rule=rule_gridconnection,
