@@ -34,20 +34,18 @@ class Scenario(ClusterableModel):
             "query_and_convert_config",
             heading="ETM module configuration",
             label="ETM module configuration",
-            max_num=3,
-            min_num=2,
+            max_num=4,
+            min_num=4,
         ),
     ]
 
     _assets = None
-
 
     class Meta:
         verbose_name = "Scenario"
 
     def __str__(self):
         return f"{self.name} - versie {self.version}"
-
 
     @property
     def assets(self) -> "list[EnergyAsset]":

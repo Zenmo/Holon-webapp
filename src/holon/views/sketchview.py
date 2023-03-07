@@ -16,11 +16,16 @@ class CloudClient:
         pass
 
 
-class PostProcessor:
-    pass
+class DashboardResults:
+    @property.setter
+    def costs(self, value):
+        def parse():
+            pass
 
-    def add():
-        pass
+        self._costs = parse(value)
+
+    def as_json(self):
+        return self.results
 
 
 def Endpoint(request):
@@ -48,25 +53,42 @@ def Endpoint(request):
     # COST ETM
     cost_results, cost_queries = etm_service.retrieve_results()
 
-    # UPSCALING ETM
-    cost_results, cost_queries = etm_service.retrieve_results()
+    # UPSCALING ETM - national
+    upscaling_results = etm_service.retrieve_results()
+
+    # UPSCALING ETM - intermediate
+    upscaling_results = etm_service.retrieve_results()
 
     # COST&BENIFIT
-    cost_results, cost_queries = etm_service.retrieve_results()
+    cost_benefit_result_json = etm_service.retrieve_results()
     # ------- ASYNC ----- #
 
-    postprocessor = PostProcessor()
-    dashboard_results = postprocessor.add(
-        costs=cost_results,
+    dashboard_results = DashboardResults(
+        costs=cost_results, anylogic=anylogic_results, upscaling=upscaling_results
     )
 
-    return dashboard_results, cost_benefit_results
+    return {"dashboard": dashboard_results.as_json(), "costbenifit": cost_benefit_result_json}
 
+
+cost_benefit_result_json = {"overview": {"zoals_dummydata"}, "detail": {"zoals_dummydata"}}
 
 cost_results = {
-    "national": int,
-    "intermediate": int,
-    "local": int,
+    "local": {"costs": float},
+}
+
+upscaling_results = {
+    "intermediate": {
+        "costs": float,
+        "netload": float,
+        "sustainability": float,
+        "self_sufficiency": float,
+    },
+    "national": {
+        "costs": float,
+        "netload": float,
+        "sustainability": float,
+        "self_sufficiency": float,
+    },
 }
 
 
@@ -76,6 +98,12 @@ target_result = {
         "costs": 50500000000.0,
         "sustainability": 21.3,
         "self_sufficiency": 27.6,
+    },
+    "intermediate": {
+        "costs": 1527000.0,
+        "sustainability": 16.6,
+        "self_sufficiency": 5.0,
+        "netload": 50.0,
     },
     "local": {"costs": 1527000.0, "sustainability": 16.6, "self_sufficiency": 5.0, "netload": 50.0},
 }

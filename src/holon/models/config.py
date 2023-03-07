@@ -99,6 +99,7 @@ class AnylogicCloudOutput(models.Model):
 class QueryCovertModuleType(models.TextChoices):
     UPSCALING = "upscaling"
     COST = "cost"
+    COSTBENIFIT = "costbenifit"
 
 
 class QueryAndConvertConfig(ClusterableModel):
@@ -436,15 +437,3 @@ class DatamodelConversion(models.Model):
             )
 
         return super().clean()
-
-
-class CostBenifitConfig(models.Model):
-    # casus wide scope
-
-    panels = []
-
-    class Meta:
-        verbose_name = "Kosten&baten configuratie"
-
-    def __str__(self):
-        return "Kosten&baten configuratie"
