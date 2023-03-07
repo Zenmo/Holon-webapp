@@ -1,4 +1,10 @@
 from django.apps import apps
+from holon.models.gridconnection import GridConnection
+
+from holon.models.scenario_rule import ScenarioRule
+from holon.models.asset import EnergyAsset
+from holon.models import util
+
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models.query import QuerySet
