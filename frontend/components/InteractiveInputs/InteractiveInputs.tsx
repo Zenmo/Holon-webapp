@@ -176,7 +176,7 @@ function InteractiveInputs({
       tooltip={true}
       selectedLevel={selectedLevel}
       locked={false}></ImageSlider>
-  ) : display === "checkbox_radio" && visibleOptions.length ? (
+  ) : visibleOptions.length ? (
     <InteractiveRadios
       setValue={setValue}
       defaultValue={currentValue ? currentValue : defaultValue}
@@ -187,14 +187,6 @@ function InteractiveInputs({
       titleWikiPage={titleWikiPage}
       linkWikiPage={linkWikiPage}
       selectedLevel={selectedLevel}
-      options={visibleOptions}
-    />
-  ) : display === "button" && visibleOptions.length ? (
-    <InteractiveButtons
-      setValue={setValue}
-      contentId={contentId}
-      name={name}
-      type={type}
       options={visibleOptions}
     />
   ) : (

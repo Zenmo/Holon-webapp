@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef, useContext } from "react";
 import { debounce } from "lodash";
 import { Content, InteractiveContent, Feedbackmodals } from "./types";
 import { StaticImage } from "@/components/ImageSelector/types";
@@ -11,6 +11,7 @@ import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { ScenarioContext } from "@/containers/StorylinePage/StorylinePage";
 
 type Props = {
   data: {
@@ -53,6 +54,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   const [loading, setLoading] = useState<boolean>(false);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
+  const scenario = useContext<number>(ScenarioContext);
 
   const sectionContainerRef = useRef(null);
 
@@ -116,11 +118,14 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
       .map((element): InteractiveElement => {
         return {
           interactiveElement: element.value.id,
-          value: element.currentValue,
+          value: Array.isArray(element.currentValue)
+            ? element.currentValue.join(",")
+            : element.currentValue,
         };
       });
     if (!interactiveElements || interactiveElements.length === 0) return;
-    getHolonKPIs({ interactiveElements: interactiveElements })
+
+    getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {
         setKPIs(res);
         setLoading(false);
