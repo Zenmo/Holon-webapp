@@ -7,7 +7,7 @@ from holon.models.rule_action import RuleActionFactor
 
 class RuleMappingTestClass(TestCase):
     def setUp(self) -> None:
-        self.scenario: Scenario = Scenario.objects.create(name="test", etm_scenario_id=1)
+        self.scenario: Scenario = Scenario.objects.create(name="test")
         actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
@@ -28,7 +28,7 @@ class RuleMappingTestClass(TestCase):
             capacityHeat_kW=60.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            scenario=self.scenario, name="Input 1", type=ChoiceType.continuous
+            name="Input 1", type=ChoiceType.continuous
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
