@@ -6,11 +6,18 @@ from holon.models.gridconnection import GridConnection
 
 
 class EnergyAsset(PolymorphicModel):
-    gridconnection = models.ForeignKey(GridConnection, on_delete=models.CASCADE)
+    gridconnection = models.ForeignKey(
+        GridConnection, on_delete=models.CASCADE, null=True, blank=True
+    )
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.name} - {self.id} ({self.gridconnection.category}{self.gridconnection.id})"
+        if self.gridconnection:
+            return (
+                f"{self.name} - {self.id} ({self.gridconnection.category}{self.gridconnection.id})"
+            )
+        else:
+            return f"{self.name} - {self.id} ({self.__class__.__name__})"
 
 
 # %% Consumption assets

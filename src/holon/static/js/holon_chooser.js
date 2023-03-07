@@ -24,9 +24,11 @@ $(document).ready(function () {
                     model_subtype_select,
                     data
                 );
+                setAssetTypes(model_type_select, model_subtype_select, data);
             });
         if (!model_subtype_select) return;
         setAssetAttributes(model_type_select, model_subtype_select, data);
+        setAssetTypes(model_type_select, model_subtype_select, data);
         model_subtype_select.change(function (e) {
             updateAssetAttributes(
                 model_type_select,
@@ -168,7 +170,7 @@ $(document).ready(function () {
 });
 
 function setAssetAttributes(model_type_select, model_subtype_select, data) {
-    if (!model_subtype_select) return;
+    if (!model_subtype_select || model_type_select.val() === "") return;
     const model_type = model_type_select.val();
     const attributeInputs = model_subtype_select
         .closest(".w-panel__content")
@@ -183,6 +185,18 @@ function setAssetAttributes(model_type_select, model_subtype_select, data) {
     });
 
     updateFilterInputs(model_type, model_subtype_select, data);
+}
+
+function setAssetTypes(model_type_select, model_subtype_select, data) {
+    const assetTypeInputs = model_type_select
+        .closest(".w-panel__content")
+        .find("input[id$='-selected_asset_type']");
+
+    const options = Object.keys(data["EnergyAsset"].model_subtype);
+
+    assetTypeInputs.each(function () {
+        convertInputToSelect($(this), options);
+    });
 }
 
 function updateFilterInputs(model_type, model_subtype_select, data) {
@@ -359,9 +373,9 @@ function convertInputToSelect(input, options, allowNull = false) {
         );
 
         select.val("").change();
-    } else {
-        select.val(input.val()).change();
     }
+
+    select.val(input.val()).change();
 
     return select;
 }

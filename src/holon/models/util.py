@@ -15,7 +15,7 @@ def write_payload_to_jsons(payload_dict: dict, name: str) -> None:
             json.dump(json_output, outfile, indent=2)
 
 
-def all_subclasses(cls) -> list[Model]:
+def all_subclasses(cls) -> set[Model]:
     return set(cls.__subclasses__()).union(
         [s for c in cls.__subclasses__() for s in all_subclasses(c)]
     )
