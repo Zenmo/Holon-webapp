@@ -1,0 +1,29 @@
+[
+{
+    "model": "main.storylinepageroletype",
+    "pk": 1,
+    "fields": {
+        "name": "Gemeente",
+        "slug": "gemeente",
+        "icon": "green"
+    }
+},
+{
+    "model": "main.storylinepageroletype",
+    "pk": 2,
+    "fields": {
+        "name": "Nationaal",
+        "slug": "nationaal",
+        "icon": "green"
+    }
+},
+{
+    "model": "main.storylinepageroletype",
+    "pk": 3,
+    "fields": {
+        "name": "Regionaal",
+        "slug": "regionaal",
+        "icon": "green"
+    }
+}
+]

@@ -92,3 +92,15 @@ In Azure the following variables are configured for the App Service:
 - DBNAME: Database name
 - DBPASS: Database password
 - DBUSER: Database user name
+
+## Export and import data
+
+```
+python manage.py dumpdata [appname.modelname] --indent 4 > [filelocation/file].json
+
+Example: python manage.py dumpdata main.casusoverviewpage --indent 4 > holon/fixtures/casusoverview-fixture.json
+```
+
+```
+python manage.py loaddata holon/fixtures/casusoverview-fixture.json
+```

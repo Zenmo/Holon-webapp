@@ -1,0 +1,20 @@
+[
+{
+    "model": "main.storylinepageinformationtype",
+    "pk": 1,
+    "fields": {
+        "name": "Challenge",
+        "slug": "challenge",
+        "icon": "book"
+    }
+},
+{
+    "model": "main.storylinepageinformationtype",
+    "pk": 2,
+    "fields": {
+        "name": "Storyline",
+        "slug": "storyline",
+        "icon": "book"
+    }
+}
+]
