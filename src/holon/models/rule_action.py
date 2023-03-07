@@ -1,26 +1,30 @@
-import logging
-from typing import Any
-
 from django.apps import apps
-from django.contrib.postgres.fields import ArrayField
 from holon.models.gridconnection import GridConnection
 
 from holon.models.scenario_rule import ScenarioRule
 from holon.models.asset import EnergyAsset
 from holon.models import util
 
-import logging
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models.query import QuerySet
+from holon.models.gridconnection import GridConnection
+from django.core.exceptions import ValidationError
+
+from holon.models.asset import EnergyAsset
+from holon.models import util
+
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-
+from wagtail.core.models import Orderable
 from holon.models.scenario_rule import ScenarioRule
 
 
-# Create your models here.
+# Don't forget to register new actions in get_actions() of ScenarioRule
+
+
 class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 
@@ -52,9 +56,7 @@ class RuleAction(PolymorphicModel):
 
         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
-    def apply_action_to_queryset(
-        self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
-    ):
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Apply a rule action to an object in the queryset"""
         pass
 
@@ -75,9 +77,7 @@ class RuleActionFactor(RuleAction):
     class Meta:
         verbose_name = "RuleActionFactor"
 
-    def apply_action_to_queryset(
-        self, queryset: QuerySet, filtered_queryset: QuerySet, value: str
-    ):
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
         Apply rescaling of an atribute of filtered_object according to value.
         May throw ValueError if value cannot be parsed to float.
@@ -114,111 +114,186 @@ class RuleActionAddRemove(RuleAction):
         verbose_name = "RuleActionAddRemove"
 
 
-class RuleActionBalanceGroup(RuleAction):
+class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     """Blans"""
 
+    selected_asset_type = models.CharField(max_length=255, blank=True)
     rule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
     )
 
-    assets = ArrayField(ArrayField(models.CharField(max_length=255, blank=True)))
-
     panels = RuleAction.panels + [
-        FieldPanel("assets"),
+        FieldPanel("selected_asset_type"),
+        InlinePanel("balance_group_asset_order", label="Assets for balancing in order"),
     ]
 
     class Meta:
         verbose_name = "RuleActionBalanceGroup"
 
+    def get_assets_ordered(self):
+        """Get the linked assets in order from the linking table"""
+        return [
+            bgao.asset
+            for bgao in BalanceGroupAssetOrder.objects.filter(balance_group=self).order_by(
+                "sort_order"
+            )
+        ]
 
-    def apply_action_to_queryset(self, queryset: QuerySet, filtered_queryset: QuerySet, value: str):
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
-        Balance the count of a set of assets
+        Balance a set of assets by removing and adding assets such that a target count for the selected asset
+        is reached, but the total number of assets stays the same.
         """
-        
+
+        self.ordered_assets = self.get_assets_ordered()
+
         target_count = int(value)
+        gridconnection = filtered_queryset[0].gridconnection
 
-        # validate asset types in filtered_queryset
-        assets_not_in_asset_order_list = [ asset for asset in filtered_queryset if not asset.__class__.__name__ in self.asset_order]
-        if assets_not_in_asset_order_list:
-            raise ValueError(f"The following asset names were in the filtered results, but not present in the asset order: {assets_not_in_asset_order_list}")
+        asset_types_in_order = [asset.__class__.__name__ for asset in self.ordered_assets]
 
-        # validate if filtered asset types all have same parent (gridconnection)
-        gridconnection_id_set = set([filtered_object.gridconnection.id for filtered_object in filtered_queryset])
-        if len(gridconnection_id_set) > 1:
-            raise ValueError("All filtered assets should have the same gridconnection")
-        
-        gridconnection_id = gridconnection_id_set.pop()
+        # validate input
+        self.validate_filtered_queryset(
+            asset_types_in_order, filtered_queryset, gridconnection, target_count
+        )
 
         # get filtered assets aggregated by asset type, in the order of self.asset_order
         filtered_assets_in_order = [
-            object_list for object_list in
             [
-                [
-                    filtered_object for filtered_object in filtered_queryset if filtered_object.__class__.__name__ == asset_name
-                ] 
-                for asset_name in self.asset_order
+                filtered_object
+                for filtered_object in filtered_queryset
+                if filtered_object.__class__.__name__ == asset_name
             ]
-            if len(object_list) > 0
+            for asset_name in asset_types_in_order
         ]
-        
-        # filtered asset names in balancegroup order and number of filtered asset types
-        filtered_assets_in_order_types = [filtered_asset[0].__class__.__name__ for filtered_asset in filtered_assets_in_order]
-        n_filtered_asset_types = len(filtered_assets_in_order_types)
+
+        # calculate how many of each asset type should be removed/added
+        target_diff_per_asset_type = self.get_target_diff_per_asset_type(
+            asset_types_in_order, filtered_assets_in_order, target_count
+        )
+
+        # apply removal/adding
+        for template_asset, target_diff, filtered_assets in zip(
+            self.ordered_assets, target_diff_per_asset_type, filtered_assets_in_order
+        ):
+            if target_diff > 0:
+                self.add_assets(gridconnection, template_asset, target_diff)
+
+            if target_diff < 0:
+                self.remove_assets(filtered_assets[:-target_diff])
+
+    def validate_filtered_queryset(
+        self,
+        asset_types_in_order: list[str],
+        filtered_queryset: QuerySet,
+        gridconnection: GridConnection,
+        target_count: int,
+    ):
+        """Validate the assets in the queryset on asset type, gridconnection_id and count"""
+
+        # validated selected_asset_type is in asset_order
+        if not self.selected_asset_type in asset_types_in_order:
+            raise ValidationError(
+                f"Asset type selected for balancing ({self.selected_asset_type}) not in ordered asset list"
+            )
+
+        # check for duplicate asset types
+        if len(asset_types_in_order) > len(set(asset_types_in_order)):
+            raise ValidationError(
+                f"Duplicate asset types not allowed. Given asset types: {asset_types_in_order}"
+            )
+
+        # validate whether asset types in filtered_queryset are in the ordered list
+        assets_not_in_asset_order_list = [
+            asset
+            for asset in filtered_queryset
+            if not asset.__class__.__name__ in asset_types_in_order
+        ]
+        if assets_not_in_asset_order_list:
+            raise ValueError(
+                f"All filtered assets should be present in the asset order. The violating assets are: {assets_not_in_asset_order_list}"
+            )
+
+        # validate if filtered asset types all have same parent (gridconnection)
+        deviating_gridconnection_id_list = [
+            filtered_object.gridconnection.id
+            for filtered_object in filtered_queryset
+            if filtered_object.gridconnection.id != gridconnection.id
+        ]
+        if deviating_gridconnection_id_list:
+            raise ValueError(
+                f"All filtered assets should have the same GridConnection. Found GridConnection ids {[gridconnection.id]+deviating_gridconnection_id_list}."
+            )
 
         # validate target count (value)
-        total_n_assets = sum([len(asset_list) for asset_list in filtered_assets_in_order])
-        if target_count > total_n_assets:
-            raise ValueError(f"target count cannot be larger than the total amount of assets")
+        if target_count > len(filtered_queryset):
+            raise ValueError(
+                f"target count ({target_count}) cannot be larger than the total amount of assets ({len(filtered_queryset)})"
+            )
 
-        # apply balancing
-        change_index = filtered_assets_in_order_types.index(self.selected_asset)
-        count_at_selection = len(filtered_assets_in_order[change_index])
+    def get_target_diff_per_asset_type(
+        self,
+        asset_types_in_order: list[str],
+        filtered_assets_in_order: list[list[EnergyAsset]],
+        target_count: int,
+    ) -> list[int]:
+        """Calculate per asset type in the ordered list how many should be removed or added"""
 
-        count_diff = target_count - count_at_selection
+        n_asset_types = len(asset_types_in_order)
+        target_diff_per_asset_type = [0] * n_asset_types
 
-        if count_diff > 0: # increase amount
-            assets_to_add = [filtered_assets_in_order[change_index][0]] * (count_diff) # duplicate first item n times
-            self.queryset_add_assets(gridconnection_id, queryset, assets_to_add)
+        # get info for selected asset type
+        selected_index = asset_types_in_order.index(self.selected_asset_type)
+        count_at_selected = len(filtered_assets_in_order[selected_index])
+        count_target_diff = target_count - count_at_selected
 
-            remove_index = n_filtered_asset_types-2 if change_index < n_filtered_asset_types-1 else n_filtered_asset_types-1
-            assets_to_remove = []
-            while len(assets_to_remove) < count_diff:
-                remainder = count_diff - len(assets_to_remove)
-                assets_to_remove += filtered_assets_in_order[remove_index][:remainder]
+        # compute target differential per asset type
+        if count_target_diff > 0:  # increase amount of selected asset type
+            target_diff_per_asset_type[
+                selected_index
+            ] = count_target_diff  # add assets of this type
+
+            # balance by removing starting from the bottom of the ordered list and moving up
+            remove_index = (
+                n_asset_types - 1 if selected_index < n_asset_types - 1 else n_asset_types - 2
+            )
+            add_remove_sum = count_target_diff
+            while add_remove_sum > 0:
+                target_diff_per_asset_type[remove_index] = -min(
+                    add_remove_sum, len(filtered_assets_in_order[remove_index])
+                )
+                add_remove_sum = sum(target_diff_per_asset_type)
                 remove_index -= 1
-                # remove at index, if remove place becomse < 0 cascade upwards (remove index--)
 
-            self.queryset_remove_assets(gridconnection_id, queryset, assets_to_remove)
+        elif count_target_diff < 0:  # decrease amount
+            target_diff_per_asset_type[
+                selected_index
+            ] = count_target_diff  # add assets of this type
 
-        elif count_diff < 0: # decrease amount
-            assets_to_remove = filtered_assets_in_order[change_index][:-count_diff]
-            self.queryset_remove_assets(gridconnection_id, queryset, assets_to_remove)
+            # balance
+            add_index = 1 if selected_index == 0 else (selected_index - 1)
+            target_diff_per_asset_type[add_index] = -count_target_diff
 
-            if change_index == 0: # add missing to filtered_assets_in_order[change_index+1]
-                assets_to_add = [filtered_assets_in_order[change_index+1][0]] * (-count_diff) # duplicate first item n times
-                self.queryset_add_assets(gridconnection_id, queryset, assets_to_add)
+        return target_diff_per_asset_type
 
-            else: # add missing to filtered_assets_in_order[change_index-1]
-                assets_to_add = [filtered_assets_in_order[change_index-1][0]] * (-count_diff) # duplicate first item n times
-                self.queryset_add_assets(gridconnection_id, queryset, assets_to_add)
+    def add_assets(self, gridconnection: GridConnection, template_asset: EnergyAsset, n: int):
+        """Duplicate a template asset n times with gridconnection_id as their parent"""
 
+        for _ in range(n):
+            util.duplicate_model(template_asset, {"gridconnection": gridconnection})
 
-    def queryset_add_assets(self, gridconnection_id: int, queryset: QuerySet, assets: list[EnergyAsset]):
-        """ Add a set of assets to a gridconnection in the queryset """
-
-        gc_queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == gridconnection_id)
-
-        for asset in assets:
-            # asset.id = 0
-            queryset[gc_queryset_index].energyasset_set.add(asset)
-
-
-    def queryset_remove_assets(self, gridconnection_id: int, queryset: QuerySet, assets: list[EnergyAsset]):
-        """ "Remove" a set of assets from a gridconnection in the queryset """
-
-        gc_queryset_index = next(idx for idx, x in enumerate(queryset) if x.id == gridconnection_id)
+    def remove_assets(self, assets: list[EnergyAsset]):
+        """Delete a set of assets"""
 
         for asset in assets:
-            # asset.id = 0
-            queryset[gc_queryset_index].energyasset_set.remove(asset)
+            EnergyAsset.objects.filter(id=asset.id).delete()
+
+
+class BalanceGroupAssetOrder(Orderable):
+    """Linking table for RuleActionBalanceGroup and EnergyAsset"""
+
+    balance_group = ParentalKey(RuleActionBalanceGroup, related_name="balance_group_asset_order")
+    asset = models.ForeignKey(EnergyAsset, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "BalanceGroupAssetOrder"

@@ -24,9 +24,7 @@ def get_scenario_and_apply_rules(
 
             filtered_queryset = apply_rule_filters_to_queryset(queryset, rule)
 
-            apply_rule_actions(
-                rule, queryset, filtered_queryset, interactive_element_input["value"]
-            )
+            apply_rule_actions(rule, filtered_queryset, interactive_element_input["value"])
 
     return scenario
 
@@ -74,11 +72,9 @@ def apply_rule_filters_to_queryset(queryset: QuerySet, rule: ScenarioRule) -> Qu
     return queryset.filter(queryset_filter)
 
 
-def apply_rule_actions(
-    rule: ScenarioRule, queryset: QuerySet, filtered_queryset: QuerySet, value: str
-):
+def apply_rule_actions(rule: ScenarioRule, filtered_queryset: QuerySet, value: str):
     """Apply rule actions to filtered objects"""
 
     rule_action: RuleAction
-    for rule_action in rule.ruleaction_set.all():
-        rule_action.apply_action_to_queryset(queryset, filtered_queryset, value)
+    for rule_action in rule.get_actions():
+        rule_action.apply_action_to_queryset(filtered_queryset, value)
