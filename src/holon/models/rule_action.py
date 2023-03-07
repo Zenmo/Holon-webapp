@@ -134,13 +134,21 @@ class GenericRuleActionAdd(RuleAction):
         verbose_name = "GenericRuleActionAdd"
         abstract = True
 
+    def __init__(self, *args, **kwargs):
+        super(GenericRuleActionAdd, self).__init__(*args, **kwargs)
+
+        self.__set_model()
+
+
     def clean(self):
         super().clean()
 
-        self.__validate_and_set_model()
+        self.__validate_model_selection()
+        self.__set_model()
 
-    def __validate_and_set_model(self):
-        """Validate the RuleActionAdd and set self variables"""
+
+    def __validate_model_selection(self):
+        """ Validate only a single model type is selected"""
 
         # thy shall count to one. Not zero, nor two, one is the number to which thy shalt count
         if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) < 1:
@@ -150,6 +158,10 @@ class GenericRuleActionAdd(RuleAction):
 
         if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) > 1:
             raise ValidationError(f"Only one of the child models can be set for RuleActionAdd")
+        
+
+    def __set_model(self):
+        """ Set addition RuleActionAdd attributes according to selected model"""
 
         # choose which model type is filled in and put it in more general self.model_to_add
         if self.asset:
@@ -164,6 +176,9 @@ class GenericRuleActionAdd(RuleAction):
             assert not (self.asset or self.gridconnection)
             self.model_to_add = self.contract
 
+        else:
+            return
+        
         # get the parent type and foreign key field for the model to add
         self.valid_parent_fk_fieldname_pairs = self.__get_parent_classes_and_field_names(
             self.model_to_add.__class__
@@ -189,8 +204,10 @@ class GenericRuleActionAdd(RuleAction):
         if base_class == Contract:
             return [(Actor, "owner_actor")]
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
+    def add_or_set_items(self, filtered_queryset: QuerySet, value: str):
         """Add an asset to the first n items in the the filtered objects"""
+
+        self.__set_model()
 
         # parse value
         n = int(value)
@@ -240,6 +257,12 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
     class Meta:
         verbose_name = "RuleActionAdd"
 
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
+        """Set the number of filtered objects with the model specified in rule_action_add to value"""
+
+        self.reset_models_before_add = False
+        self.add_or_set_items(filtered_queryset, value)
+
 
 class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
 
@@ -253,8 +276,8 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
-        self.rule_action_add.reset_models_before_add = True
-        self.rule_action_add.apply_action_to_queryset(filtered_queryset, value)
+        self.reset_models_before_add = True
+        self.add_or_set_items(filtered_queryset, value)
 
 
 class RuleActionBalanceGroup(RuleAction, ClusterableModel):

@@ -97,6 +97,8 @@ class ScenarioRule(ClusterableModel):
         return (
             list(self.continuous_factors.all())
             + list(self.discrete_factors_attribute.all())
-            + list(self.discrete_factors_addremove.all())
+            + list(self.discrete_factors_add.all())
+            + list(self.discrete_factors_remove.all())
+            + list(self.discrete_factors_set_count.all())
             + list(self.discrete_factors_balancegroup.all())
         )

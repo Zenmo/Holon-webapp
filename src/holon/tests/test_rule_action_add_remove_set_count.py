@@ -8,7 +8,7 @@ from holon.models.rule_action import RuleActionFactor
 
 class RuleMappingTestClass(TestCase):
     def setUp(self) -> None:
-        self.scenario: Scenario = Scenario.objects.create(name="test", etm_scenario_id=1)
+        self.scenario: Scenario = Scenario.objects.create(name="test")
         actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
@@ -62,7 +62,7 @@ class RuleMappingTestClass(TestCase):
         #     ambientTempType=20.0
         # )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            scenario=self.scenario, name="Input 1", type=ChoiceType.continuous
+            name="Input 1", type=ChoiceType.continuous
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
@@ -118,7 +118,7 @@ class RuleMappingTestClass(TestCase):
             self.scenario.id, interactive_elements
         )
 
-        # Assert
+        # Assert      
         n_hhc_assets = len([asset for asset in updated_scenario.assets if asset.__class__.__name__ == 'HybridHeatCoversionAsset'])
         assert(n_hhc_assets == 0) # was 1
 
@@ -140,12 +140,8 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection"
         )
-        rule_action_add = RuleActionAdd.objects.create(
-            asset=default_ehc
-        )
-
         rule_action_set_count = RuleActionSetCount.objects.create(
-            rule_action_add=rule_action_add,
+            asset=default_ehc,
             rule=rule
         )
 
