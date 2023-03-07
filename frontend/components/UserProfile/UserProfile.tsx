@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import UpdatePassword from "./UpdatePassword";
 import useUser from "@/utils/useUser";
-import { updateProfile, updatePassword } from "@/api/auth";
+import { updateProfile, updatePassword } from "../../api/auth";
 
 export type UserData = {
   first_name: string;

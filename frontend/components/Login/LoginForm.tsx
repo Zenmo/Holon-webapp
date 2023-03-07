@@ -2,7 +2,7 @@ import { useState } from "react";
 import Link from "next/link";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
-import { logIn } from "@/api/auth";
+import { logIn } from "../../api/auth";
 
 export default function LoginForm() {
   const [userData, setUserData] = useState({ username: "", password: "" });
