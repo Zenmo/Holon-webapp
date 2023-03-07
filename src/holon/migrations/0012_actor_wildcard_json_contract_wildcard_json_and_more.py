@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("holon", "0011_remove_ruleactionbalancegroup_assets_and_more"),
+        ("holon", "0010_merge_20230301_1216"),
     ]
 
     operations = [
