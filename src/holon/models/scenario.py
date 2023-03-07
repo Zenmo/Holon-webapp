@@ -63,6 +63,8 @@ class Scenario(ClusterableModel):
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
 
+        return assets
+
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
         from holon.models import Actor, EnergyAsset, GridConnection, GridNode, Policy
@@ -80,17 +82,6 @@ class Scenario(ClusterableModel):
                 new_actor = duplicate_model(actor, {"payload": new_scenario})
 
                 actor_id_to_new_model_mapping[actor_id] = new_actor
-
-            # Update parent_actor field to newly updated actor model
-            updated_actors = Actor.objects.filter(
-                payload_id=new_scenario.id, parent_actor__isnull=False
-            )
-
-            for updated_actor in updated_actors:
-                updated_actor.parent_actor = actor_id_to_new_model_mapping[
-                    updated_actor.parent_actor.id
-                ]
-                updated_actor.save()
 
             gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
             for gridconnection in gridconnections:

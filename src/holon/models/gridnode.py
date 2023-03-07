@@ -1,8 +1,9 @@
 from django.db import models
-from holon.models.actor import Actor
-
-from holon.models.scenario import Scenario
 from polymorphic.models import PolymorphicModel
+from django.utils.translation import gettext_lazy as _
+
+from holon.models.actor import Actor
+from holon.models.scenario import Scenario
 
 
 class EnergyType(models.TextChoices):
@@ -15,6 +16,13 @@ class GridNode(PolymorphicModel):
     capacity_kw = models.FloatField()
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    wildcard_JSON = models.JSONField(
+        blank=True,
+        null=True,
+        help_text=_(
+            "Use this field to define parameters that are not currently available in the datamodel."
+        ),
+    )
 
 
 class ElectricGridType(models.TextChoices):
@@ -33,6 +41,7 @@ class ElectricGridNode(GridNode):
 class HeatGridType(models.TextChoices):
     MT = "MT"
     HT = "HT"
+    LT = "LT"
 
 
 class HeatGridNode(GridNode):
@@ -40,4 +49,4 @@ class HeatGridNode(GridNode):
     category = "HEAT"
 
     def __str__(self):
-        return f"H{self.id}"
+        return f"H{self.id} ({self.type})"

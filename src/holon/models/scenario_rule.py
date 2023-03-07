@@ -63,8 +63,13 @@ class ScenarioRule(ClusterableModel):
         ),
         InlinePanel(
             "attribute_filters",
-            heading="Attribute filters",
-            label="Attribute filters",
+            heading="Continuous attribute filters",
+            label="Continuous attribute filters",
+        ),
+        InlinePanel(
+            "discrete_attribute_filters",
+            heading="Discrete attribute filters",
+            label="Discrete attribute filters",
         ),
         InlinePanel(
             "relation_attribute_filters",
@@ -91,7 +96,7 @@ class ScenarioRule(ClusterableModel):
         return [subclass.__name__ for subclass in all_subclasses(model_type_class)]
 
     def get_filters(self):
-        return list(self.attribute_filters.all()) + list(self.relation_attribute_filters.all())
+        return list(self.attribute_filters.all()) + list(self.relation_attribute_filters.all()) + list(self.discrete_attribute_filters.all())
 
     def get_actions(self):
         return (

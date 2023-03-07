@@ -1,9 +1,10 @@
 from django.apps import apps
+from holon.models.actor import Actor
+from holon.models.contract import Contract
+
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models.query import QuerySet
-from holon.models.actor import Actor
-from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 
 from holon.models.asset import EnergyAsset
@@ -17,9 +18,11 @@ from polymorphic import utils
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.models import Orderable
 from holon.models.scenario_rule import ScenarioRule
-from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 
-# Create your models here.
+
+# Don't forget to register new actions in get_actions() of ScenarioRule
+
+
 class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 

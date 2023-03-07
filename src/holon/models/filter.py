@@ -11,6 +11,8 @@ from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses
 
 
+# Don't forget to register new filters in get_filters() of ScenarioRule
+
 class AttributeFilterComparator(models.TextChoices):
     """Types of supported comparators"""
 
@@ -156,3 +158,70 @@ class RelationAttributeFilter(Filter):
             )
 
         return relation_field_subtype & relation_field_q
+
+
+class DiscreteAttributeFilter(Filter):
+    """Filter on attribute with discrete series"""
+
+    rule = ParentalKey(
+        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="discrete_attribute_filters"
+    )
+
+    def clean(self):
+        super().clean()
+
+        try:
+            if self.model_attribute not in self.discrete_relation_field_options():
+                raise ValidationError("Invalid model attribute, not discrete")
+
+            if self.value not in self.value_options():
+                raise ValidationError("Invalid value, not a choice for model attribute")
+        except ObjectDoesNotExist:
+            return
+
+    def discrete_relation_field_options(self) -> list[str]:
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if hasattr(field, "choices") and field.choices
+        ]
+
+    def value_options(self) -> list[str]:
+        if not self.model_attribute:
+            return []
+
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+        field = model()._meta.get_field(self.model_attribute)
+
+        if not hasattr(field, "choices") and not field.choices:
+            return []
+
+        return [choice[0] for choice in field.choices]
+
+    def get_q(self) -> Q:
+        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+
+        if self.comparator == AttributeFilterComparator.EQUAL.value:
+            return Q(**{f"{model_type}___{self.model_attribute}": self.value})
+        if self.comparator == AttributeFilterComparator.LESS_THAN.value:
+            ignore_none_value_q = ~Q(**{f"{model_type}___{self.model_attribute}": -1})
+            return (
+                Q(**{f"{model_type}___{self.model_attribute}__lt": self.value})
+                & ignore_none_value_q
+            )
+        if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
+            ignore_none_value_q = ~Q(**{f"{model_type}___{self.model_attribute}": -1})
+            return (
+                Q(**{f"{model_type}___{self.model_attribute}__gt": self.value})
+                & ignore_none_value_q
+            )
+        if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
+            return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
