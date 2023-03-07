@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
 import useUser from "@/utils/useUser";
-import { registerUser } from "@/api/auth";
+import { registerUser } from "../../api/auth";
 
 export default function RegistrationForm() {
   const [userData, setUserData] = useState({
