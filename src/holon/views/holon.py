@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from holon.models import rule_mapping
 from holon.models.scenario_rule import ModelType
 
-from .models.pepe import Pepe
-from .serializers import HolonRequestSerializer
+from holon.models.pepe import Pepe
+from holon.serializers import HolonRequestSerializer
 from holon.models.util import all_subclasses
 
 RESULTS = [
