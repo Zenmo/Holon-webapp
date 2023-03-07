@@ -9,7 +9,7 @@ export default function LoginForm() {
   const [userData, setUserData] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Er is iets fout gegaan met het inloggen.");
-  const { mutateUser } = useUser({ redirectTo: "/profiel", redirectIfFound: true });
+  const { mutateUser } = useUser({ redirectTo: "/", redirectIfFound: true });
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
