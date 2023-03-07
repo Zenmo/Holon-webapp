@@ -210,8 +210,6 @@ class GenericRuleActionAdd(RuleAction):
     def add_or_set_items(self, filtered_queryset: QuerySet, value: str):
         """Add an asset to the first n items in the the filtered objects"""
 
-        self.__set_model()
-
         # parse value
         n = int(value)
         if n < 0:
