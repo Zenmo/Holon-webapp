@@ -1,2 +1,3 @@
 from .datamodel.top import *  # NOQA
 from .interactive_element import *  # NOQA
+from .config import *  # NOQA
