@@ -7,7 +7,7 @@ from holon.models.rule_action import RuleActionFactor
 
 class RuleMappingTestClass(TestCase):
     def setUp(self) -> None:
-        self.scenario: Scenario = Scenario.objects.create(name="test", etm_scenario_id=1)
+        self.scenario: Scenario = Scenario.objects.create(name="test")
         actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )

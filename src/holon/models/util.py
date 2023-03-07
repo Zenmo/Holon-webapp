@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-
 from django.db.models import Model
 from django.db import models
 
@@ -44,3 +43,37 @@ def duplicate_model(obj, attrs={}):
 
     obj.save()
     return obj
+
+
+from django.db.migrations.operations.models import ModelOptionOperation
+
+
+class RemoveModelBasesOptions(ModelOptionOperation):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def deconstruct(self):
+        kwargs = {
+            "name": self.name,
+        }
+        return (self.__class__.__qualname__, [], kwargs)
+
+    def state_forwards(self, app_label, state):
+        from ..models.filter import Filter
+
+        model_state = state.models[app_label, self.name_lower]
+        model_state.bases = (Filter,)
+        state.reload_model(app_label, self.name_lower, delay=True)
+
+    def database_forwards(self, app_label, schema_editor, from_state, to_state):
+        pass
+
+    def database_backwards(self, app_label, schema_editor, from_state, to_state):
+        pass
+
+    def describe(self):
+        return "Remove bases from the model %s" % self.name
+
+    @property
+    def migration_name_fragment(self):
+        return "remove_%s_bases" % self.name_lower

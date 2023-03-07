@@ -50,15 +50,15 @@ class GridConnection(PolymorphicModel):
         return f"b{self.id} {self.category}"
 
 
-class InsulationLabel(models.TextChoices):
-    A = "A"
-    B = "B"
-    C = "C"
-    D = "D"
-    E = "E"
-    F = "F"
-    G = "G"
-    NONE = "NONE"
+class InsulationLabel(models.IntegerChoices):
+    A = 7, "A"
+    B = 6, "B"
+    C = 5, "C"
+    D = 4, "D"
+    E = 3, "E"
+    F = 2, "F"
+    G = 1, "G"
+    NONE = -1, "NONE"
 
 
 class HeatingType(models.TextChoices):
@@ -73,8 +73,7 @@ class HeatingType(models.TextChoices):
 
 class BuiltEnvironmentGridConnection(GridConnection):
     category = "BUILT_ENVIRONMENT"
-    insulation_label = models.CharField(
-        max_length=100,
+    insulation_label = models.IntegerField(
         choices=InsulationLabel.choices,
     )
     heating_type = models.CharField(
