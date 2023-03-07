@@ -211,7 +211,7 @@ class RuleActionSetCount(RuleAction):
     ):
         """ Set the number of filtered objects with the model specified in rule_action_add to value """
 
-        self.rule_action_add.reset_models_before_add = True
+        self.rule_action_add.reset_models_before_add = True # TODO STAM4 KIJK HIER - RIJMT - het verschil tussen add en set_count -tavm
         self.rule_action_add.apply_action_to_queryset(queryset, filtered_queryset, value)
 
 
