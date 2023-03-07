@@ -42,9 +42,19 @@ class ScenarioRule(ClusterableModel):
             label="Discrete attribute factors",
         ),
         InlinePanel(
-            "discrete_factors_addremove",
-            heading="Discrete add remove attribute factors",
-            label="Discrete add remove attribute factors",
+            "discrete_factors_remove",
+            heading="Discrete remove attribute factors",
+            label="Discrete remove attribute factors",
+        ),
+        InlinePanel(
+            "discrete_factors_add",
+            heading="Discrete add attribute factors",
+            label="Discrete add attribute factors",
+        ),
+        InlinePanel(
+            "discrete_factors_set_count",
+            heading="Discrete add and set count attribute factors",
+            label="Discrete add and set count attribute factors",
         ),
         InlinePanel(
             "discrete_factors_balancegroup",

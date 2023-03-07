@@ -101,6 +101,10 @@ class RuleActionChangeAttribute(RuleAction):
 class RuleActionRemove(RuleAction):
     """Remove the filtered items"""
 
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_remove"
+    )
+
     class Meta:
         verbose_name = "RuleActionRemove"
 
@@ -110,75 +114,82 @@ class RuleActionRemove(RuleAction):
         filtered_queryset.delete()
 
 
-class RuleActionAdd(RuleAction):
+class GenericRuleActionAdd(RuleAction):
     """Add a set asset to the filtered items"""
 
     # one of these should be selected
-    asset = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True)
-    gridconnection = models.ForeignKey(GridConnection, on_delete=models.SET_NULL, null=True)
-    contract = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True)
+    asset = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True, blank=True)
+    gridconnection = models.ForeignKey(
+        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    contract = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True, blank=True)
+
+    panels = RuleAction.panels + [
+        FieldPanel("asset"),
+        FieldPanel("gridconnection"),
+        FieldPanel("contract"),
+    ]
 
     class Meta:
-        verbose_name = "RuleActionAdd"
+        verbose_name = "GenericRuleActionAdd"
+        abstract = True
 
-
-    def __init__(self, *args, **kwargs):
-        super(RuleActionAdd, self).__init__(*args, **kwargs)
+    def clean(self):
+        super().clean()
 
         self.__validate_and_set_model()
 
-
     def __validate_and_set_model(self):
-        """ Validate the RuleActionAdd and set self variables """
+        """Validate the RuleActionAdd and set self variables"""
 
         # thy shall count to one. Not zero, nor two, one is the number to which thy shalt count
         if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) < 1:
-            raise ValidationError(f"Assign an object to either the asset, gridconnection or contract field for RuleActionAdd")
+            raise ValidationError(
+                f"Assign an object to either the asset, gridconnection or contract field for RuleActionAdd"
+            )
 
         if (bool(self.asset) + bool(self.gridconnection) + bool(self.contract)) > 1:
             raise ValidationError(f"Only one of the child models can be set for RuleActionAdd")
 
         # choose which model type is filled in and put it in more general self.model_to_add
         if self.asset:
-            assert(not (self.gridconnection or self.contract))
+            assert not (self.gridconnection or self.contract)
             self.model_to_add = self.asset
 
         elif self.gridconnection:
-            assert(not (self.asset or self.contract))
+            assert not (self.asset or self.contract)
             self.model_to_add = self.gridconnection
 
         elif self.contract:
-            assert(not (self.asset or self.gridconnection))
+            assert not (self.asset or self.gridconnection)
             self.model_to_add = self.contract
 
         # get the parent type and foreign key field for the model to add
-        self.valid_parent_fk_fieldname_pairs = self.__get_parent_classes_and_field_names(self.model_to_add.__class__)
+        self.valid_parent_fk_fieldname_pairs = self.__get_parent_classes_and_field_names(
+            self.model_to_add.__class__
+        )
 
         # distinction between set_count and add
         self.reset_models_before_add = False
 
-
     def __get_parent_classes_and_field_names(self, model_type: type) -> list[tuple[type, str]]:
-        """ 
-        Get the class type and field name of the foreign key fields of the child class. 
-        For example, returns (GridConnection, 'gridconnection') for EnergyAsset. 
+        """
+        Get the class type and field name of the foreign key fields of the child class.
+        For example, returns (GridConnection, 'gridconnection') for EnergyAsset.
         """
 
         base_class = utils.get_base_polymorphic_model(model_type)
 
         if base_class == EnergyAsset:
-            return [(GridConnection, "gridconnection")] # TODO should include GridNode after merge
+            return [(GridConnection, "gridconnection")]  # TODO should include GridNode after merge
 
         if base_class == GridConnection:
             return [(Actor, "owner_actor")]
-        
-        if base_class  == Contract:
-            return [(Actor, "owner_actor")]
-    
 
-    def apply_action_to_queryset(
-        self, filtered_queryset: QuerySet, value: str
-    ):
+        if base_class == Contract:
+            return [(Actor, "owner_actor")]
+
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Add an asset to the first n items in the the filtered objects"""
 
         # parse value
@@ -189,39 +200,60 @@ class RuleActionAdd(RuleAction):
         # get parent type and foreign key field name
         parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
         try:
-            parent_fk_field_name = next(parent_fieldname[1] for parent_fieldname in self.valid_parent_fk_fieldname_pairs if parent_type == parent_fieldname[0])
+            parent_fk_field_name = next(
+                parent_fieldname[1]
+                for parent_fieldname in self.valid_parent_fk_fieldname_pairs
+                if parent_type == parent_fieldname[0]
+            )
         except:
-            raise ValueError(f"Parent type {parent_type} is not a valid parent for selected model type {self.model_to_add.__class__.__name__}. {self.valid_parent_fk_fieldname_pairs}")
+            raise ValueError(
+                f"Parent type {parent_type} is not a valid parent for selected model type {self.model_to_add.__class__.__name__}. {self.valid_parent_fk_fieldname_pairs}"
+            )
 
         objects_added = 0
 
         # only take first n objects
         for filtererd_object in filtered_queryset:
 
-            if not self.model_to_add.__class__.objects.filter(**{parent_fk_field_name: filtererd_object}).exists():
+            if not self.model_to_add.__class__.objects.filter(
+                **{parent_fk_field_name: filtererd_object}
+            ).exists():
                 if objects_added < n:
                     # add model_to_add to filtered object
-                    util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
+                    util.duplicate_model(
+                        self.model_to_add, {parent_fk_field_name: filtererd_object}
+                    )
                     objects_added += 1
-            
+
             # `set_count` mode
             elif self.reset_models_before_add:
-                self.model_to_add.__class__.objects.filter(**{parent_fk_field_name: filtererd_object}).delete()
+                self.model_to_add.__class__.objects.filter(
+                    **{parent_fk_field_name: filtererd_object}
+                ).delete()
 
 
-class RuleActionSetCount(RuleAction):
+class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
+    """Add a set asset to the filtered items"""
 
-    rule_action_add =  models.ForeignKey(RuleActionAdd, on_delete=models.CASCADE, null=False)
+    rule = ParentalKey(ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_add")
+
+    class Meta:
+        verbose_name = "RuleActionAdd"
+
+
+class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
+
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_set_count"
+    )
 
     class Meta:
         verbose_name = "RuleActionSetCount"
 
-    def apply_action_to_queryset(
-        self, filtered_queryset: QuerySet, value: str
-    ):
-        """ Set the number of filtered objects with the model specified in rule_action_add to value """
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
+        """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
-        self.rule_action_add.reset_models_before_add = True # TODO STAM4 KIJK HIER - RIJMT - het verschil tussen add en set_count -tavm
+        self.rule_action_add.reset_models_before_add = True
         self.rule_action_add.apply_action_to_queryset(filtered_queryset, value)
 
 
@@ -293,7 +325,6 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
             if target_diff < 0:
                 self.remove_assets(filtered_assets[:-target_diff])
 
-
     def validate_filtered_queryset(
         self,
         asset_types_in_order: list[str],
@@ -311,7 +342,9 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
 
         # check for duplicate asset types
         if len(asset_types_in_order) > len(set(asset_types_in_order)):
-            raise ValidationError(f"Duplicate asset types not allowed. Given asset types: {asset_types_in_order}")
+            raise ValidationError(
+                f"Duplicate asset types not allowed. Given asset types: {asset_types_in_order}"
+            )
 
         # validate whether asset types in filtered_queryset are in the ordered list
         assets_not_in_asset_order_list = [
@@ -404,6 +437,8 @@ class BalanceGroupAssetOrder(Orderable):
 
     balance_group = ParentalKey(RuleActionBalanceGroup, related_name="balance_group_asset_order")
     asset = models.ForeignKey(EnergyAsset, on_delete=models.CASCADE)
+
+    content_panels = [FieldPanel("asset")]
 
     class Meta:
         verbose_name = "BalanceGroupAssetOrder"
