@@ -26,7 +26,10 @@ export default function UserProfile() {
     email: "",
   });
   const [messageProfileUpdate, setMessageProfileUpdate] = useState("");
-  const [messagePasswordUpdate, setMessagePasswordUpdate] = useState("");
+  const [messagePasswordUpdate, setMessagePasswordUpdate] = useState({
+    message: "",
+    color: "text-holon-blue-900",
+  });
 
   useEffect(() => {
     user &&
@@ -83,7 +86,7 @@ export default function UserProfile() {
   async function handleUpdatePassword(e: React.SyntheticEvent<HTMLInputElement, SubmitEvent>) {
     e.preventDefault();
 
-    const response = await fetch(`${API_URL}dj-rest-auth/password/change/`, {
+    const response = await fetch(`${API_URL}/dj-rest-auth/password/change/`, {
       method: "POST",
       body: JSON.stringify({
         old_password: userData.currentPassword,
@@ -101,15 +104,26 @@ export default function UserProfile() {
 
     if (message.old_password) {
       if (message.old_password[0].includes("incorrectly")) {
-        setMessagePasswordUpdate(
-          "Je huidige wachtwoord is niet correct. Hierdoor kunnen we geen nieuw wachtwoord aanmaken."
-        );
+        setMessagePasswordUpdate({
+          ...messagePasswordUpdate,
+          message:
+            "Je huidige wachtwoord is niet correct. Hierdoor kunnen wij helaas geen nieuw wachtwoord aanmaken.",
+          color: "text-holon-red",
+        });
       }
     } else if (res.ok) {
-      setMessagePasswordUpdate("Je nieuwe wachtwoord is succesvol aangemaakt.");
+      setMessagePasswordUpdate({
+        ...messagePasswordUpdate,
+        message: "Je nieuwe wachtwoord is succesvol aangemaakt.",
+        color: "text-holon-blue-900",
+      });
       setUserData({ ...userData, currentPassword: "", password: "", verifyPassword: "" });
     } else {
-      setMessagePasswordUpdate("Er is iets mis gegaan met het updaten van je wachtwoord");
+      setMessagePasswordUpdate({
+        ...messagePasswordUpdate,
+        message: "Er is iets mis gegaan met het updaten van je wachtwoord",
+        color: "text-holon-red",
+      });
     }
   }
 
@@ -186,8 +200,8 @@ export default function UserProfile() {
             handleSubmit={handleUpdatePassword}
             input={userData}
             setMessage={setMessagePasswordUpdate}
+            message={messagePasswordUpdate}
           />
-          <p>{messagePasswordUpdate}</p>
         </div>
 
         {/*}
