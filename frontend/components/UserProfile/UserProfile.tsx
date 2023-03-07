@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import UpdatePassword from "./UpdatePassword";
 import useUser from "@/utils/useUser";
-import TokenService from "@/services/token";
+import { updateProfile, updatePassword } from "@/api/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "/wt";
-
-type UserData = {
+export type UserData = {
   first_name: string;
   last_name: string;
   currentPassword: string;
@@ -52,30 +50,14 @@ export default function UserProfile() {
 
   async function handleUpdateProfile(e: React.SyntheticEvent<HTMLInputElement, SubmitEvent>) {
     e.preventDefault();
-    const response = await fetch(`${API_URL}/dj-rest-auth/user/`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        first_name: userData.first_name,
-        last_name: userData.last_name,
-        email: userData.email,
-        currentPassword: userData.currentPassword,
-        newPassword: userData.password,
-        verifyNewPassword: userData.verifyPassword,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + TokenService.getAccessToken(),
-      },
-      credentials: "include",
+    updateProfile(userData).then(res => {
+      if (res.ok) {
+        setMessageProfileUpdate("Je profiel is succesvol geupdate");
+        setIsDisabled(true);
+      } else {
+        setMessageProfileUpdate("Er is iets mis gegaan met het updaten van je profiel");
+      }
     });
-
-    const message = await response;
-    if (message.ok) {
-      setMessageProfileUpdate("Je profiel is succesvol geupdate");
-      setIsDisabled(true);
-    } else {
-      setMessageProfileUpdate("Er is iets mis gegaan met het updaten van je profiel");
-    }
   }
 
   function handlePasswordChange(input: UserData) {
@@ -86,52 +68,37 @@ export default function UserProfile() {
   async function handleUpdatePassword(e: React.SyntheticEvent<HTMLInputElement, SubmitEvent>) {
     e.preventDefault();
 
-    const response = await fetch(`${API_URL}/dj-rest-auth/password/change/`, {
-      method: "POST",
-      body: JSON.stringify({
-        old_password: userData.currentPassword,
-        new_password1: userData.password,
-        new_password2: userData.verifyPassword,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + TokenService.getAccessToken(),
-      },
-      credentials: "include",
-    });
-    const res = await response;
-    const message = await response.json();
-
-    if (message.old_password) {
-      if (message.old_password[0].includes("incorrectly")) {
+    updatePassword(userData).then(res => {
+      if (res.ok) {
         setMessagePasswordUpdate({
           ...messagePasswordUpdate,
-          message:
-            "Je huidige wachtwoord is niet correct. Hierdoor kunnen wij helaas geen nieuw wachtwoord aanmaken.",
-          color: "text-holon-red",
+          message: "Je nieuwe wachtwoord is succesvol aangemaakt.",
+          color: "text-holon-blue-900",
+        });
+        setUserData({ ...userData, currentPassword: "", password: "", verifyPassword: "" });
+      } else {
+        res.json().then(message => {
+          console.log(message);
+          if (message.old_password) {
+            if (message.old_password[0].includes("incorrectly")) {
+              setMessagePasswordUpdate({
+                ...messagePasswordUpdate,
+                message:
+                  "Je huidige wachtwoord is niet correct. Hierdoor kunnen wij helaas geen nieuw wachtwoord aanmaken.",
+                color: "text-holon-red",
+              });
+            }
+          } else {
+            setMessagePasswordUpdate({
+              ...messagePasswordUpdate,
+              message: "Er is iets mis gegaan met het updaten van je wachtwoord",
+              color: "text-holon-red",
+            });
+          }
         });
       }
-    } else if (res.ok) {
-      setMessagePasswordUpdate({
-        ...messagePasswordUpdate,
-        message: "Je nieuwe wachtwoord is succesvol aangemaakt.",
-        color: "text-holon-blue-900",
-      });
-      setUserData({ ...userData, currentPassword: "", password: "", verifyPassword: "" });
-    } else {
-      setMessagePasswordUpdate({
-        ...messagePasswordUpdate,
-        message: "Er is iets mis gegaan met het updaten van je wachtwoord",
-        color: "text-holon-red",
-      });
-    }
+    });
   }
-
-  /*deze functie wordt later toegevoegd
-  function handleRemoveProfile(e) {
-    console.log("profiel verwijderd");
-  }
-  */
 
   return (
     <div className="flex flex-col items-center m-8">
