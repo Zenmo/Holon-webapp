@@ -28,7 +28,7 @@ class RuleMappingTestClass(TestCase):
             capacityHeat_kW=60.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            name="Input 1", type=ChoiceType.continuous
+            name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
