@@ -11,4 +11,3 @@ from .config import *  # NOQA
 from .policy import *  # NOQA
 from .scenario import *  # NOQA
 from .scenario_rule import *  # NOQA
-
