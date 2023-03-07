@@ -78,7 +78,6 @@ class InteractiveInput(ClusterableModel):
         FieldPanel("name"),
         FieldPanel("type"),
         FieldPanel("animation_tag"),
-        FieldPanel("asset_type"),
         FieldPanel("etm_key"),
         FieldPanel(
             "more_information",
