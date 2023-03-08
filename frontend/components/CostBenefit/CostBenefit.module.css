@@ -1,0 +1,64 @@
+.Table tfoot {
+  border-top-width: 4px;
+}
+.Table tfoot td {
+  background-color: transparent !important;
+  font-weight: bold;
+  border-top-width: 4px;
+}
+
+.Table abbr + span {
+  opacity: 0;
+  pointer-events: none;
+}
+.Table th,
+.Table td {
+  position: relative;
+  z-index: 0;
+  padding: 1rem;
+}
+
+.Table th:hover,
+.Table td:hover {
+  filter: brightness(0.9);
+  z-index: 1;
+}
+.Table abbr {
+  text-decoration: none;
+}
+.Table th:hover abbr + span,
+.Table td:hover abbr + span {
+  opacity: 1;
+  transition: 0s all;
+  transition-delay: 0.3s;
+}
+
+@media (max-width: 1599px) {
+  .CompactTable th,
+  .CompactTable td {
+    padding-right: 0.25rem;
+    padding-left: 0.25rem;
+    font-size: 13px;
+  }
+  .CompactTable th + th span {
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    padding: 1rem 0;
+  }
+}
+@media (max-height: 800px) {
+  .CompactTable th,
+  .CompactTable td {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 13px;
+  }
+}
+
+@media (max-height: 1000px) {
+  .CompactTable th,
+  .CompactTable td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}

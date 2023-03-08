@@ -1,3 +1,5 @@
+import { StaticImage } from "../../ImageSelector/types";
+
 /* eslint-disable @next/next/no-img-element */
 type Props = {
   data: {
@@ -5,16 +7,7 @@ type Props = {
     value: {
       title: string;
       size: React.ElementType;
-      imageSelector: {
-        id: number;
-        title: string;
-        img: {
-          src: string;
-          width: number;
-          height: number;
-          alt: string;
-        };
-      };
+      imageSelector: StaticImage;
       altText: string;
     };
     id: string;

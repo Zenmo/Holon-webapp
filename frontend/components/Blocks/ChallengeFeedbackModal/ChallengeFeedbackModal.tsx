@@ -2,71 +2,23 @@ import React, { Fragment, useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "@/components/Button/Button";
+import { FeedbackModal } from "./types";
+import { KPIData } from "../../KPIDashboard/types";
+import { Content } from "../SectionBlock/types";
 
-export type StaticImage = {
-  id?: number;
-  title?: string;
-  img: {
-    alt: string;
-    height: number;
-    width: number;
-    src: string;
-  };
-};
-
-type KPIDashboardProps = {
-  data: Data;
+type ChallengeFeedbackModalProps = {
+  kpis: KPIData;
   loading: boolean;
   dashboardId: string;
-  feedbackmodals: [
-    {
-      id: string;
-      type: string;
-      value: {
-        modaltitle: string;
-        modaltext: string;
-        modaltheme: string;
-        imageSelector: {
-          id: string;
-          title: string;
-          img: StaticImage;
-        };
-        conditions: [
-          {
-            id: string;
-            type: string;
-            value: {
-              parameter: string;
-              operator: string;
-              value: string;
-            };
-          }
-        ];
-      };
-    }
-  ];
-};
-
-type Data = {
-  local: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
-  national: {
-    netload: number;
-    costs: number;
-    sustainability: number;
-    selfSufficiency: number;
-  };
+  content: Content;
+  feedbackmodals: FeedbackModal[];
 };
 
 export default function ChallengeFeedbackModal({
   kpis,
   content,
   feedbackmodals,
-}: KPIDashboardProps) {
+}: ChallengeFeedbackModalProps) {
   const [modal, setModal] = useState<{
     isOpen: boolean;
   }>({
@@ -91,7 +43,7 @@ export default function ChallengeFeedbackModal({
               conditionItem.type == "interactive_input_condition"
                 ? content?.find(
                     content => content.value.id == parseFloat(conditionItem.value.parameter)
-                  ).currentValue
+                  )?.currentValue
                 : kpis[splittedParameter[0]][splittedParameter[1]];
 
             const conditionValue = parseFloat(conditionItem.value.value);
@@ -133,8 +85,6 @@ export default function ChallengeFeedbackModal({
   const modalstyling =
     selectedModal?.value?.modaltheme === "green"
       ? "bg-holon-green"
-      : selectedModal?.value?.modaltheme === "greenwithconfetti"
-      ? "bg-holon-green"
       : selectedModal?.value?.modaltheme === "orange"
       ? "bg-holon-orange"
       : "bg-holon-red";
@@ -167,7 +117,7 @@ export default function ChallengeFeedbackModal({
                   leaveTo="opacity-0 scale-95">
                   <Dialog.Panel
                     className={`w-full p-relative max-w-md min-w-[50vw] transform overflow-hidden rounded p-6 text-center align-middle shadow-xl transition-all text-white flex flex-col gap-4 ${modalstyling}`}>
-                    {selectedModal.value.modaltheme === "greenwithconfetti" && <Confetti />}
+                    {selectedModal.value.modaltheme === "green" && <Confetti />}
                     <Dialog.Title as="h2" className="leading-6 text-2xl font-bold">
                       {selectedModal.value.modaltitle}
                     </Dialog.Title>
