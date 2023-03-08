@@ -15,6 +15,7 @@ from wagtailmodelchooser.blocks import ModelChooserBlock
 from wagtailmodelchooser import register_model_chooser, Chooser
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
+from .holarchyfeedbackimages import HolarchyFeedbackImage
 
 
 def get_interactive_inputs():
@@ -81,6 +82,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "default": option_default,
                         "label": option.label,
                         "legal_limitation": option.legal_limitation,
+                        "level": option.level,
                         "color": option.color,
                     }
                     if option.link_wiki_page is not None:
@@ -105,6 +107,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "id": interactive_input.id,
                 "name": interactive_input.name,
                 "type": interactive_input.type,
+                "level": interactive_input.level,
                 "more_information": interactive_input.more_information,
                 "animation_tag": interactive_input.animation_tag,
                 "title_wiki_page": "",
@@ -135,11 +138,16 @@ class StorylineSectionBlock(blocks.StructBlock):
     background = BackgroundChooserBlock()
     grid_layout = GridChooserBlock(required=True)
 
+    text_label_national = blocks.CharBlock(default="Nationaal", required=True)
+    text_label_intermediate = blocks.CharBlock(default="Regionaal", required=True)
+    text_label_local = blocks.CharBlock(default="Lokaal", required=True)
+
     content = blocks.StreamBlock(
         [
             ("text", RichtextBlock()),
             ("interactive_input", InteractiveInputBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
+            ("holarchy_feedback_image", HolarchyFeedbackImage()),
         ],
         block_counts={"static_image": {"max_num": 1}},
     )

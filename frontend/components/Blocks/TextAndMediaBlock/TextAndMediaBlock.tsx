@@ -2,19 +2,15 @@ import RawHtml from "@/components/RawHtml";
 import MediaContent from "@/components/MediaContent/MediaContent";
 import ButtonBlock from "@/components/Button/ButtonBlock";
 import { getGrid } from "services/grid";
+import { GridLayout, Background } from "../types";
 
 type Props = {
   data: {
     type: string;
     value: {
-      gridLayout: {
-        grid: string;
-      };
+      gridLayout: GridLayout;
       columnOrder: string;
-      background: {
-        color: string;
-        size: string;
-      };
+      background: Background;
       text: string;
       media: React.ComponentProps<typeof MediaContent>["media"];
       altText: string;

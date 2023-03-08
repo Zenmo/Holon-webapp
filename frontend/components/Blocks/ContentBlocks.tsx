@@ -16,12 +16,23 @@ import HeaderFullImageBlock from "./HeaderFullImageBlock/HeaderFullImageBlock";
 import ParagraphBlock from "./ParagraphBlock";
 import TableBlock from "./TableBlock/TableBlock";
 import SectionBlock from "./SectionBlock/SectionBlock";
+import { FeedbackModal } from "./ChallengeFeedbackModal/types";
+
+export type Feedbackmodals = [FeedbackModal];
 
 type ContentBlockProps = PageProps<
   TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
 >;
 
-const ContentBlocks = ({ content }: { content: ContentBlockProps[] }) => {
+const ContentBlocks = ({
+  content,
+  pagetype,
+  feedbackmodals,
+}: {
+  content: ContentBlockProps[];
+  feedbackmodals?: Feedbackmodals[];
+  pagetype?: string;
+}) => {
   return (
     <React.Fragment>
       {content?.map(contentItem => {
@@ -45,7 +56,14 @@ const ContentBlocks = ({ content }: { content: ContentBlockProps[] }) => {
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            return <SectionBlock key={`section ${contentItem.id}`} data={contentItem} />;
+            return (
+              <SectionBlock
+                key={`section ${contentItem.id}`}
+                data={contentItem}
+                pagetype={pagetype}
+                feedbackmodals={feedbackmodals}
+              />
+            );
             break;
           case "buttons_and_media_block":
             return (

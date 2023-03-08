@@ -1,18 +1,14 @@
 import RawHtml from "@/components/RawHtml";
 import { getGrid } from "services/grid";
+import { GridLayout, Background } from "../types";
 
 type Props = {
   ignoreLayout?: boolean;
   data: {
     type: string;
     value: {
-      gridLayout: {
-        grid: string;
-      };
-      background: {
-        color: string;
-        size: string;
-      };
+      gridLayout: GridLayout;
+      background: Background;
       text: string;
     };
     id: string;

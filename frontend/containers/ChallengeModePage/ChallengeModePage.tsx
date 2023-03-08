@@ -4,36 +4,22 @@ import React from "react";
 
 import { PageProps, SectionVariant, TextAndMediaVariant } from "../types";
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
+import { FeedbackModal } from "@/components/Blocks/ChallengeFeedbackModal/types";
 
 type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
-export type Scenario = {
-  id: string;
-  type: string;
-  value: { content: Slider[] };
-};
+export type Feedbackmodals = [FeedbackModal];
 
-export type Slider = {
-  id: string;
-  type: string;
-  value: ChallengeModeScenario;
-};
-
-export type ChallengeModeScenario = {
-  id: number;
-  name: string;
-  description?: string;
-  tag: string;
-  sliderValueDefault: number;
-  sliderValueMin: number;
-  sliderValueMax: number;
-  sliderLocked: boolean;
-};
-
-const ChallengeModePage = ({ storyline }: { storyline: Storyline[] }) => {
+const ChallengeModePage = ({
+  storyline,
+  feedbackmodals,
+}: {
+  storyline: Storyline[];
+  feedbackmodals: Feedbackmodals[];
+}) => {
   return (
     <div className={styles["ChallengeModePage"]}>
-      <ContentBlocks content={storyline} />
+      <ContentBlocks content={storyline} feedbackmodals={feedbackmodals} pagetype="Challenge" />
     </div>
   );
 };

@@ -27,3 +27,25 @@ export type TitleBlockVariant = {
 export type PageProps<Types> = {
   id: string;
 } & Types;
+
+export type StorylineScenario = {
+  id: number;
+  name: string;
+  description?: string;
+  tag: string;
+  sliderValueDefault: number;
+  sliderValueMin: number;
+  sliderValueMax: number;
+  sliderLocked: boolean;
+};
+export type StorylineSlider = {
+  id: string;
+  type: string;
+  value: StorylineScenario;
+};
+
+export type Scenario = {
+  id: string;
+  type: string;
+  value: { content: StorylineSlider[] };
+};

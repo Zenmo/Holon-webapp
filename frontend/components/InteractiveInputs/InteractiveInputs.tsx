@@ -10,7 +10,10 @@ export type Props = {
   linkWikiPage?: string;
   options: InteractiveInputOptions[];
   display?: string;
-  defaultValue?: string | number;
+  defaultValue?: string | number | [];
+  currentValue?: string | number;
+  level?: string;
+  selectedLevel?: string;
   setValue: (id: string, value: number | string | boolean, optionId?: number) => void;
 };
 
@@ -26,6 +29,7 @@ export type InteractiveInputOptions = {
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
+  level?: string;
 };
 function InteractiveButtons({ contentId, name, type, options, setValue }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
@@ -63,7 +67,9 @@ function InteractiveRadios({
   titleWikiPage,
   linkWikiPage,
   options,
+  selectedLevel,
   setValue,
+  defaultValue,
 }: Props) {
   const inputType = type === "single_select" ? "radio" : "checkbox";
   const cssClass =
@@ -71,11 +77,14 @@ function InteractiveRadios({
       ? "rounded-full after:checked:content-['●'] after:mt-[-2px]  flex-[0_0_20px]"
       : "rounded-none after:checked:content-['✔'] ";
 
+  const defaultCheckedValue = type === "single_select" ? [defaultValue] : defaultValue;
+
   return (
     <div className="mb-4 font-bold text-base">
       <div className="flex flex-row mb-2 gap-3 items-center">
         <p>{name}</p>
-        {moreInformation || linkWikiPage ? (
+        {/* if selectedLevel, then you are in the holarchy view and popover is not shown */}
+        {!selectedLevel && (moreInformation || linkWikiPage) ? (
           <InteractiveInputPopover
             name={name}
             moreInformation={moreInformation}
@@ -85,18 +94,19 @@ function InteractiveRadios({
           ""
         )}
       </div>
-
       {options.map((inputItem, index) => (
         <div key={index} className="flex flex-row mb-2 gap-3 items-center">
           <label
             key={index}
-            htmlFor={contentId + inputItem.id + "input"}
+            htmlFor={
+              contentId + inputItem.id + (selectedLevel ? "holarchy" : "storyline") + "input"
+            }
             className="flex flex-row mb-2 gap-4 items-center">
             <input
-              defaultChecked={inputItem.default ? true : false}
+              defaultChecked={defaultCheckedValue.includes(inputItem.option)}
               type={inputType}
               name={name + contentId}
-              id={contentId + inputItem.id + "input"}
+              id={contentId + inputItem.id + (selectedLevel ? "holarchy" : "storyline") + "input"}
               data-testid={name + inputItem.id}
               onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
               // checked={}
@@ -104,7 +114,8 @@ function InteractiveRadios({
             />
             <span className="">{inputItem.label || inputItem.option}</span>
           </label>
-          {inputItem.legalLimitation || inputItem.linkWikiPage ? (
+          {/* if selectedLevel, then you are in the holarchy view and popover is not shown */}
+          {!selectedLevel && (inputItem.legalLimitation || inputItem.linkWikiPage) ? (
             <InteractiveInputPopover
               name={inputItem.label || inputItem.option}
               legal_limitation={inputItem.legalLimitation}
@@ -136,13 +147,22 @@ function InteractiveInputs({
   options,
   display,
   defaultValue,
+  currentValue,
+  selectedLevel,
+  level,
   setValue,
 }: Props) {
-  return type === "continuous" ? (
+  const visibleOptions = selectedLevel
+    ? options.filter(option => option.level == selectedLevel)
+    : options;
+
+  //if there is a selectedlevel, it should match, the slider,
+  //for interactive radios and interactive buttons, the sepeartion is done in InteractiveRadios and  InteractiveButtons
+  return type === "continuous" && (!selectedLevel || selectedLevel == level) ? (
     <ImageSlider
       inputId={contentId}
       datatestid={name}
-      defaultValue={Number(defaultValue)}
+      defaultValue={currentValue ? currentValue : Number(defaultValue)}
       setValue={setValue}
       min={options[0].sliderValueMin}
       max={options[0].sliderValueMax}
@@ -154,28 +174,31 @@ function InteractiveInputs({
       linkWikiPage={linkWikiPage}
       unit="%"
       tooltip={true}
+      selectedLevel={selectedLevel}
       locked={false}></ImageSlider>
-  ) : display === "checkbox_radio" ? (
+  ) : display === "checkbox_radio" && visibleOptions.length ? (
     <InteractiveRadios
       setValue={setValue}
+      defaultValue={currentValue ? currentValue : defaultValue}
       contentId={contentId}
       name={name}
       type={type}
       moreInformation={moreInformation}
       titleWikiPage={titleWikiPage}
       linkWikiPage={linkWikiPage}
-      options={options}
+      selectedLevel={selectedLevel}
+      options={visibleOptions}
     />
-  ) : display === "button" ? (
+  ) : display === "button" && visibleOptions.length ? (
     <InteractiveButtons
       setValue={setValue}
       contentId={contentId}
       name={name}
       type={type}
-      options={options}
+      options={visibleOptions}
     />
   ) : (
-    <p>Another one {name}</p>
+    <></>
   );
 }
 

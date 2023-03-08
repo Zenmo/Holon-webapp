@@ -4,7 +4,9 @@ export default function NewPasswordRequest() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    fetch("http://localhost:8000/password/reset/", {
+    const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "/wt";
+
+    fetch(`${API_URL}password/reset/`, {
       method: "POST",
       body: {
         email: e.target.email.value,

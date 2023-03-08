@@ -2,7 +2,6 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.snippets.models import register_snippet
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.fields import StreamField
 from django.db import models
@@ -13,27 +12,12 @@ from holon.models.scenario import Scenario
 
 from .base import BasePage
 from .base_card import BaseCard
-from .base_storyline_challengemode import StorylinePageFilter
 
 from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 
+from main.snippets.casus_filter import CasusFilter
 
 new_table_options = {"renderer": "text", "startRows": 3, "editor": "text"}
-
-
-@register_snippet
-class CasusFilter(StorylinePageFilter):
-    panels = [
-        FieldPanel("name"),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("CasusFilter")
-        verbose_name_plural = _("CasusFilters")
-        ordering = ["name"]
 
 
 class CasusPage(HeadlessPreviewMixin, BaseCard):
