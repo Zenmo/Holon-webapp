@@ -14,7 +14,7 @@ class Factor(PolymorphicModel):
     """Abstract base class for factors"""
 
     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
+    # rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
 
     min_value = models.IntegerField()
     max_value = models.IntegerField()
