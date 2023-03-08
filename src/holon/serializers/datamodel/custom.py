@@ -35,9 +35,7 @@ class AnyLogicModelSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         """renames the scenario ID to the scenario name and unpacks or removes the wildcard JSON field"""
-        representation = super(AnyLogicModelSerializer, self).to_representation(
-            instance
-        )
+        representation = super(AnyLogicModelSerializer, self).to_representation(instance)
 
         # unpack wildcard json to level key:value pairs
         if representation["wildcard_JSON"] is not None:

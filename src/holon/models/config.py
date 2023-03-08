@@ -173,7 +173,7 @@ class FloatKeyValuePair(models.Model):
 class EndPoint(models.TextChoices):
     INPUT = "input"
     QUERY = "query"
-    CURVE = "curve"  
+    CURVE = "curve"
 
 
 class DataType(models.TextChoices):
