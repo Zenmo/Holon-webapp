@@ -101,7 +101,7 @@
             "data_type": "value",
             "etm_key": "share_of_electric_trucks",
             "related_config": 1,
-            "related_interactive_element": 1,
+            "related_interactive_element": null,
             "interactive_upscaling_comment": "Elektrische trucks worden opgeschaald op basis van het aandeel van woonwijken in het geheel. Dit komt neer op {{final_value}}."
         }
     },

@@ -12,13 +12,6 @@ class ContractType(models.TextChoices):
     TAX = "TAX"
 
 
-class ContractScope(models.TextChoices):
-    ENERGYSUPPLIER = "ENERGYSUPPLIER"
-    GRIDOPERATOR = "GRIDOPERATOR"
-    ENERGYHOLON = "ENERGYHOLON"
-    ADMINISTRATIVEHOLON = "ADMINISTRATIVEHOLON"
-
-
 class EnergyCarrier(models.TextChoices):
     ELECTRICITY = "ELECTRICITY"
     HEAT = "HEAT"

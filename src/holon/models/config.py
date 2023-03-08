@@ -99,6 +99,7 @@ class AnylogicCloudOutput(models.Model):
 class QueryCovertModuleType(models.TextChoices):
     UPSCALING = "upscaling"
     COST = "cost"
+    COSTBENEFIT = "costbenefit"
 
 
 class QueryAndConvertConfig(ClusterableModel):
@@ -172,7 +173,7 @@ class FloatKeyValuePair(models.Model):
 class EndPoint(models.TextChoices):
     INPUT = "input"
     QUERY = "query"
-    CURVE = "curve"  # TODO: This seems weird to me
+    CURVE = "curve"  
 
 
 class DataType(models.TextChoices):
@@ -436,15 +437,3 @@ class DatamodelConversion(models.Model):
             )
 
         return super().clean()
-
-
-class CostBenifitConfig(models.Model):
-    # casus wide scope
-
-    panels = []
-
-    class Meta:
-        verbose_name = "Kosten&baten configuratie"
-
-    def __str__(self):
-        return "Kosten&baten configuratie"

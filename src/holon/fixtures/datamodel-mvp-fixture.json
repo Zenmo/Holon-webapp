@@ -590,7 +590,7 @@
         "model": "holon.policy",
         "pk": 1,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Grid_MS_congestion_allowance_level_kW",
             "value": "0",
             "unit": "kW",
@@ -603,7 +603,7 @@
         "model": "holon.policy",
         "pk": 2,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Grid_MS_congestion_price_eurpkWh",
             "value": "0.3",
             "unit": "eurpkWh",
@@ -616,7 +616,7 @@
         "model": "holon.policy",
         "pk": 3,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Grid_MS_congestion_threshold_fr",
             "value": "0.5",
             "unit": "fr",
@@ -629,7 +629,7 @@
         "model": "holon.policy",
         "pk": 4,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Grid_MS_congestion_pricing_consumption_eurpkWh",
             "value": "TRUE",
             "unit": null,
@@ -642,7 +642,7 @@
         "model": "holon.policy",
         "pk": 5,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Grid_MS_congestion_pricing_production_eurpkWh",
             "value": "TRUE",
             "unit": null,
@@ -655,7 +655,7 @@
         "model": "holon.policy",
         "pk": 6,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Fixed_electricity_price_eurpkWh",
             "value": "0.21",
             "unit": "EUR p kWh",
@@ -668,7 +668,7 @@
         "model": "holon.policy",
         "pk": 7,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Fixed_heat_price_eurpkWh",
             "value": "0.10",
             "unit": "EUR p kWh",
@@ -681,7 +681,7 @@
         "model": "holon.policy",
         "pk": 8,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Fixed_methane_price_eurpkWh",
             "value": "0.05",
             "unit": "EUR p kWh",
@@ -694,7 +694,7 @@
         "model": "holon.policy",
         "pk": 9,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Fixed_hydrogen_price_eurpkWh",
             "value": "0.3",
             "unit": "EUR p kWh",
@@ -707,7 +707,7 @@
         "model": "holon.policy",
         "pk": 10,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Energy_supplier_electricity_price_margin_eurpkWh",
             "value": "0.17",
             "unit": "fr",
@@ -720,7 +720,7 @@
         "model": "holon.policy",
         "pk": 11,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Fixed_electricity_feed_in_tariff_eurpkWh",
             "value": "0.1",
             "unit": "EUR_pKWh",
@@ -733,7 +733,7 @@
         "model": "holon.policy",
         "pk": 12,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Fixed_diesel_price_eurpkWh",
             "value": "0.2",
             "unit": "EUR_pKWh",
@@ -746,7 +746,7 @@
         "model": "holon.policy",
         "pk": 13,
         "fields": {
-            "polymorphic_ctype": null,
+            "polymorphic_ctype": ["holon", "policy"],
             "parameter": "Time_buffer_for_spread_charging_min",
             "value": "60",
             "unit": "minutes",

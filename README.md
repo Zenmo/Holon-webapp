@@ -92,3 +92,11 @@ In Azure the following variables are configured for the App Service:
 - DBNAME: Database name
 - DBPASS: Database password
 - DBUSER: Database user name
+
+## Datamodel
+
+Refer to the datamodel readme: [datamodel.readme.md](src/holon/datamodel.readme.md)
+
+### Development on datamodel
+
+Use convenience `migrate_and_create_fixture.sh` before every commit to make sure that the fixtures or present datamodels survive the changes you are making to the datamodel.
