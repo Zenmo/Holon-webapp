@@ -99,7 +99,7 @@ class AnylogicCloudOutput(models.Model):
 class QueryCovertModuleType(models.TextChoices):
     UPSCALING = "upscaling"
     COST = "cost"
-    COSTBENIFIT = "costbenifit"
+    COSTBENEFIT = "costbenefit"
 
 
 class QueryAndConvertConfig(ClusterableModel):
@@ -173,7 +173,7 @@ class FloatKeyValuePair(models.Model):
 class EndPoint(models.TextChoices):
     INPUT = "input"
     QUERY = "query"
-    CURVE = "curve"  # TODO: This seems weird to me
+    CURVE = "curve"  
 
 
 class DataType(models.TextChoices):
