@@ -1,0 +1,29 @@
+###################################################
+## Note! This script is automatically generated! ##
+###################################################
+
+{# import custom serializers #}
+from .{{ custom_serializer_module }} import (
+{% for module in outputs %}{% if not loop.last %}    {{ module.main_class}}Serializer,{% else %}
+    {{ module.main_class}}Serializer{% endif %}{% endfor %}
+)
+{# import make subserializers #}
+{% for module in outputs %}
+{% if module.subclasses|length > 0 %}
+from {{ module.module }} import (
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
+{% else %}        {{ subclass }}{% endif %}{% endfor %}
+)
+{% endif %}{% endfor %}
+{% for module in outputs %}{% if module.subclasses|length > 0 %}{% for subclass in module.subclasses %}
+class {{ subclass }}Serializer({{ module.main_class}}Serializer):
+
+    class Meta:
+        model = {{ subclass }}
+        fields = '__all__'
+
+{% endfor %}{% endif %}{% endfor %}
+
+###################################################
+## Note! This script is automatically generated! ##
+###################################################

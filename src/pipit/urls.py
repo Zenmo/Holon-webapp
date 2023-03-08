@@ -1,26 +1,24 @@
 import typing
 
-from django.contrib import admin
 from django.conf import settings
-from django.urls import include, path, re_path, URLResolver, URLPattern
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import URLPattern, URLResolver, include, path, re_path
 from django.views import defaults as default_views
-from wagtail.admin import urls as wagtailadmin_urls
-from wagtail.documents import urls as wagtaildocs_urls
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from wagtail import urls as wagtail_urls
+from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
+from wagtail.documents import urls as wagtaildocs_urls
 
-from main.views.page_not_found import PageNotFoundView
-from main.views.error_500 import error_500_view
-from main.views.csfr import get_csrf
-from nextjs.api import api_router
 from api.router import api_router as rest_api_router
 from holon.urls import urlpatterns as holon_urls
-
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from holon.urls import urlpatterns_v2 as holon_urls_v2
+from holon.views import HolonCMSLogic
+from main.views.csfr import get_csrf
+from main.views.error_500 import error_500_view
+from main.views.page_not_found import PageNotFoundView
+from nextjs.api import api_router
 
 handler404 = PageNotFoundView.as_view()
 handler500 = error_500_view
@@ -58,7 +56,9 @@ urlpatterns += [
     path("wt/api/nextjs/v1/", api_router.urls),
     path("wt/api/nextjs/v1/", include(rest_api_router.urls)),
     path("wt/api/nextjs/v1/", include(holon_urls)),
+    path("wt/api/nextjs/v2/", include(holon_urls_v2)),
     path("wt/cms/", include(wagtailadmin_urls)),
+    path("wt/cms/modelconfig", HolonCMSLogic.as_view()),
     path("wt/documents/", include(wagtaildocs_urls)),
     path("wt/sitemap.xml", sitemap, name="sitemap"),
     path("wt/dj-rest-auth/", include("dj_rest_auth.urls")),

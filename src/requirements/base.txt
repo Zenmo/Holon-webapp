@@ -6,13 +6,16 @@ sentry_sdk==1.9
 python-dotenv==0.21
 wagtail>=4.1,<4.2
 wagtail-meta-preview
+wagtail-modelchooser
 wagtail_headless_preview==0.4
 django-cors-headers==3.13
 django-autoslug==1.9.8
 Wand==0.6.11
+django-polymorphic==3.1.0
 dj-rest-auth==2.2.7
 django-allauth==0.52.0
-djangorestframework-simplejwt==5.2.2
+djangorestframework-simplejwt==5.2.2 
+django-rest-polymorphic==0.1.10
 wagtail-color-panel==1.4.1
 
 

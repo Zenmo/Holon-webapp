@@ -76,9 +76,10 @@ class InteractiveInput(ClusterableModel):
         choices=ANIMATION_CHOICES,
         default=ANIMATION_NONE,
     )
-    asset_type = models.ForeignKey(
-        "holon.Asset", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
-    )
+    # asset_type = models.ForeignKey(
+    #     "holon.Asset", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
+    # )
+
     more_information = models.CharField(max_length=100, blank=True)
     link_wiki_page = models.ForeignKey(
         "main.WikiPage",
@@ -94,7 +95,6 @@ class InteractiveInput(ClusterableModel):
         FieldPanel("type"),
         FieldPanel("level"),
         FieldPanel("animation_tag"),
-        FieldPanel("asset_type"),
         FieldPanel("etm_key"),
         FieldPanel(
             "more_information",
