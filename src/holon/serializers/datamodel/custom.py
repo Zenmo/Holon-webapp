@@ -81,6 +81,13 @@ class ActorSerializer(AnyLogicModelSerializer):
     def get_id(self, obj):
         return f"{obj.category.lower()[:3]}{obj.id}"
 
+    contracts = serializers.SerializerMethodField()
+
+    def get_contracts(self, obj: Actor):
+        from .mapper import ContractPolymorphicSerializer
+
+        return ContractPolymorphicSerializer(obj.contracts.all(), many=True, read_only=True).data
+
 
 class EnergyAssetSerializer(AnyLogicModelSerializer):
     class Meta:
@@ -110,6 +117,7 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     id = serializers.SerializerMethodField()
     parent = serializers.SerializerMethodField()
     owner_actor = serializers.SerializerMethodField()
+    assets = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         try:
@@ -134,6 +142,15 @@ class GridNodeSerializer(AnyLogicModelSerializer):
         else:
             return obj.owner_actor
 
+    def get_assets(self, obj: GridNode):
+        from .mapper import EnergyAssetPolymorphicSerializer
+
+        print("triggered")
+
+        return EnergyAssetPolymorphicSerializer(
+            obj.energyasset_set.all(), many=True, read_only=True
+        ).data
+
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
     # energyassets = EnergyAssetSerializer(many=True, read_only=True, source="energyasset_set")
@@ -146,6 +163,7 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
     id = serializers.SerializerMethodField()
     parent_electric = serializers.SerializerMethodField()
     parent_heat = serializers.SerializerMethodField()
+    assets = serializers.SerializerMethodField()
 
     def get_owner_actor(self, obj):
         # get related actor
@@ -175,3 +193,10 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
             return self.get_parent_node(id=id)
         else:
             return obj.parent_electric
+
+    def get_assets(self, obj: GridConnection):
+        from .mapper import EnergyAssetPolymorphicSerializer
+
+        return EnergyAssetPolymorphicSerializer(
+            obj.energyasset_set.all(), many=True, read_only=True
+        ).data

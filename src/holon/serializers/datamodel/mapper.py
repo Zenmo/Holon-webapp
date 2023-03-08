@@ -166,8 +166,6 @@ class EnergyAssetPolymorphicSerializer(PolymorphicSerializer):
 class ActorPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {Actor: ActorSerializer, NonFirmActor: NonFirmActorSerializer}
 
-    contracts = ContractPolymorphicSerializer(many=True, read_only=True, source="contract_set")
-
 
 class GridConnectionPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
@@ -181,8 +179,6 @@ class GridConnectionPolymorphicSerializer(PolymorphicSerializer):
         DistrictHeatingGridConnection: DistrictHeatingGridConnectionSerializer,
     }
 
-    assets = EnergyAssetPolymorphicSerializer(many=True, read_only=True, source="asset_set")
-
 
 class GridNodePolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
@@ -190,8 +186,6 @@ class GridNodePolymorphicSerializer(PolymorphicSerializer):
         ElectricGridNode: ElectricGridNodeSerializer,
         HeatGridNode: HeatGridNodeSerializer,
     }
-
-    assets = EnergyAssetPolymorphicSerializer(many=True, read_only=True, source="asset_set")
 
 
 class PolicyPolymorphicSerializer(PolymorphicSerializer):

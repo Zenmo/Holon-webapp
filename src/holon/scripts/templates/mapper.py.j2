@@ -40,10 +40,6 @@ class {{ module.main_class }}PolymorphicSerializer(PolymorphicSerializer):
 {% else %}        {{ subclass }}: {{ subclass }}Serializer{% endif %}{% endfor %}
     }
 
-    {# Add the fields that need to be resolved to viewsets #}
-    {% if module.viewset_fieldname is defined and module.viewset_mainclass is defined %}
-    {{ module.viewset_fieldname }} = {{ module.viewset_mainclass }}PolymorphicSerializer(many=True, read_only=True, source="{{ module.viewset_fieldname[:-1] }}_set")
-    {% endif %}
 {% endfor %}
 
 ###################################################
