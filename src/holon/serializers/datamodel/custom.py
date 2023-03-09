@@ -148,6 +148,7 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     parent = serializers.SerializerMethodField()
     owner_actor = serializers.SerializerMethodField()
     assets = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         try:
@@ -175,11 +176,12 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     def get_assets(self, obj: GridNode):
         from .mapper import EnergyAssetPolymorphicSerializer
 
-        print("triggered")
-
         return EnergyAssetPolymorphicSerializer(
             obj.energyasset_set.all(), many=True, read_only=True
         ).data
+
+    def get_category(self, obj: GridNode):
+        return obj.category
 
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
