@@ -2,6 +2,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from holon.models import (
+    ActorGroup,
+    ActorSubGroup,
     Actor,
     Contract,
     EnergyAsset,
@@ -86,6 +88,8 @@ class ActorSerializer(AnyLogicModelSerializer):
         fields = "__all__"
 
     id = serializers.SerializerMethodField()
+    group = serializers.SerializerMethodField()
+    subgroup = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         return f"{obj.category.lower()[:3]}{obj.id}"
@@ -96,6 +100,18 @@ class ActorSerializer(AnyLogicModelSerializer):
         from .mapper import ContractPolymorphicSerializer
 
         return ContractPolymorphicSerializer(obj.contracts.all(), many=True, read_only=True).data
+
+    def get_group(self, obj: Actor):
+        if obj.group is not None:
+            return ActorGroup.objects.get(id=obj.group.id).name
+        else:
+            return None
+
+    def get_subgroup(self, obj: Actor):
+        if obj.subgroup is not None:
+            return ActorSubGroup.objects.get(id=obj.subgroup.id).name
+        else:
+            return None
 
 
 class EnergyAssetSerializer(AnyLogicModelSerializer):
