@@ -1,0 +1,464 @@
+[
+    {
+        "id": "grc1",
+        "owner_actor": "con4",
+        "parent_electric": "E2",
+        "parent_heat": null,
+        "assets": [
+            {
+                "id": 900,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 901,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 902,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 903,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 904,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 905,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 906,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 907,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 908,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 909,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 910,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 911,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 912,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 913,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 914,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 915,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 916,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 917,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 918,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 919,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            }
+        ],
+        "category": "BUILDING",
+        "insulation_label": "NONE",
+        "capacity_kw": 1250.0,
+        "charging_mode": "SIMPLE",
+        "battery_mode": null,
+        "electrolyser_mode": null,
+        "heating_type": "NONE",
+        "type": "LOGISTICS",
+        "resourcetype": "BuildingGridConnection"
+    },
+    {
+        "id": "grc2",
+        "owner_actor": "con5",
+        "parent_electric": "E2",
+        "parent_heat": null,
+        "assets": [
+            {
+                "id": 1000,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1001,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1002,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1003,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1004,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1005,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1006,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1007,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1008,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1009,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1010,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1011,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1012,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1013,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1014,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1015,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1016,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1017,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1018,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            },
+            {
+                "id": 1019,
+                "category": "CONSUMPTION",
+                "name": "Diesel_Truck",
+                "type": "DIESEL_VEHICLE",
+                "energyConsumption_kWhpkm": 3.0,
+                "vehicleScaling": 5,
+                "resourcetype": "DieselVehicleAsset"
+            }
+        ],
+        "category": "BUILDING",
+        "insulation_label": "NONE",
+        "capacity_kw": 1250.0,
+        "charging_mode": "SIMPLE",
+        "battery_mode": null,
+        "electrolyser_mode": null,
+        "heating_type": "NONE",
+        "type": "LOGISTICS",
+        "resourcetype": "BuildingGridConnection"
+    },
+    {
+        "id": "grc3",
+        "owner_actor": "con6",
+        "parent_electric": "E2",
+        "parent_heat": null,
+        "assets": [
+            {
+                "id": 4,
+                "category": "CONSUMPTION",
+                "name": "INDUSTRY_OTHER_HEAT_DEMAND",
+                "type": "HEAT_DEMAND",
+                "yearlyDemandHeat_kWh": 6000000.0,
+                "resourcetype": "HeatConsumptionAsset"
+            },
+            {
+                "id": 5,
+                "category": "CONSUMPTION",
+                "name": "Office_other_electricity",
+                "type": "ELECTRICITY_DEMAND",
+                "yearlyDemandElectricity_kWh": 10000000.0,
+                "resourcetype": "ElectricConsumptionAsset"
+            },
+            {
+                "id": 6,
+                "category": "CONVERSION",
+                "name": "Building_gas_burner",
+                "type": "GAS_BURNER",
+                "eta_r": 0.95,
+                "deliveryTemp_degc": 100.0,
+                "capacityHeat_kW": 1000.0,
+                "resourcetype": "ChemicalHeatConversionAsset"
+            }
+        ],
+        "category": "INDUSTRY",
+        "capacity_kw": 3000.0,
+        "charging_mode": null,
+        "battery_mode": null,
+        "electrolyser_mode": null,
+        "heating_type": "GASBURNER",
+        "type": "INDUSTRY_OTHER",
+        "resourcetype": "IndustryGridConnection"
+    },
+    {
+        "id": "grc4",
+        "owner_actor": "con7",
+        "parent_electric": "E2",
+        "parent_heat": null,
+        "assets": [],
+        "category": "WINDFARM",
+        "capacity_kw": 5000.0,
+        "charging_mode": null,
+        "battery_mode": null,
+        "electrolyser_mode": null,
+        "resourcetype": "ProductionGridConnection"
+    },
+    {
+        "id": "grc5",
+        "owner_actor": "con8",
+        "parent_electric": "E2",
+        "parent_heat": null,
+        "assets": [],
+        "category": "GRIDBATTERY",
+        "capacity_kw": 10000.0,
+        "charging_mode": null,
+        "battery_mode": "BALANCE",
+        "electrolyser_mode": null,
+        "resourcetype": "ProductionGridConnection"
+    }
+]
