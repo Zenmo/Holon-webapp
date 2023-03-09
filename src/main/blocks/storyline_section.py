@@ -1,15 +1,10 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
 
-from api.models import (
-    InteractiveInput,
-    InteractiveInputOptions,
-    InteractiveInputContinuousValues,
-)
 from wagtail.core import blocks
-from api.models.interactive_input import CHOICE_CONTINUOUS, CHOICE_MULTISELECT, CHOICE_SINGLESELECT
 from holon.models import InteractiveElement
 from holon.models.interactive_element import (
+    ChoiceType,
     InteractiveElementContinuousValues,
     InteractiveElementOptions,
 )
@@ -67,8 +62,8 @@ class InteractiveInputBlock(blocks.StructBlock):
             interactive_input = InteractiveElement.objects.get(pk=value["interactive_input"].id)
             options_arr = []
             if (
-                interactive_input.type == CHOICE_SINGLESELECT
-                or interactive_input.type == CHOICE_MULTISELECT
+                interactive_input.type == ChoiceType.CHOICE_SINGLESELECT
+                or interactive_input.type == ChoiceType.CHOICE_MULTISELECT
             ):
                 options = InteractiveElementOptions.objects.filter(input_id=interactive_input.id)
 
@@ -93,7 +88,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         option_dict["link_wiki_page"] = option.link_wiki_page.get_url_parts()[2]
                     options_arr.append(option_dict)
 
-            if interactive_input.type == CHOICE_CONTINUOUS:
+            if interactive_input.type == ChoiceType.CHOICE_CONTINUOUS:
                 options = InteractiveElementContinuousValues.objects.filter(
                     input_id=interactive_input.id
                 )
