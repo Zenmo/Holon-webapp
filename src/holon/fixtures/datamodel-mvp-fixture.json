@@ -9,6 +9,12 @@
         }
     },
     {
+        "model": "holon.actorgroup",
+        "pk": 1,
+        "fields": { "name": "households" }
+    },
+    { "model": "holon.actorsubgroup", "pk": 1, "fields": { "name": "poor" } },
+    {
         "model": "holon.actor",
         "pk": 4,
         "fields": {
@@ -87,8 +93,8 @@
             "polymorphic_ctype": ["holon", "actor"],
             "category": "SUPPLIERENERGY",
             "payload": 1,
-            "group": null,
-            "subgroup": null,
+            "group": 1,
+            "subgroup": 1,
             "wildcard_JSON": null
         }
     },
@@ -185,7 +191,7 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": "BALANCE",
-            "electrolyser_mode": null,
+            "electrolyser_mode": "BALANCE",
             "payload": 1,
             "wildcard_JSON": null
         }
