@@ -45,7 +45,7 @@ class RuleMappingTestClass(TestCase):
             capacityElectricity_kW=30.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            name="Input 1", type=ChoiceType.continuous
+            name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
@@ -68,7 +68,7 @@ class RuleMappingTestClass(TestCase):
         )
         rule_action_add = RuleActionAdd.objects.create(asset=default_ehc, rule=rule)
 
-        interactive_elements = [{"value": 2, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -96,7 +96,7 @@ class RuleMappingTestClass(TestCase):
         )
         rule_action_remove = RuleActionRemove.objects.create(rule=rule)
 
-        interactive_elements = [{"value": 0, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -132,7 +132,7 @@ class RuleMappingTestClass(TestCase):
         )
         rule_action_set_count = RuleActionSetCount.objects.create(asset=default_ehc, rule=rule)
 
-        interactive_elements = [{"value": 2, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(

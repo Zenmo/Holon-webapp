@@ -45,7 +45,7 @@ class RuleFiltersTestClass(TestCase):
         )
 
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS
+            name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
         )
         self.rule = ScenarioRule.objects.create(
             interactive_element=self.interactive_element,
