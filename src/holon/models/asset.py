@@ -8,6 +8,7 @@ from holon.models.gridnode import GridNode
 
 
 class EnergyAsset(PolymorphicModel):
+    category = "GENERIC"
     gridconnection = models.ForeignKey(
         GridConnection, on_delete=models.SET_NULL, null=True, blank=True
     )
