@@ -3,6 +3,8 @@ from polymorphic.models import PolymorphicModel
 from django.utils.translation import gettext_lazy as _
 from django.apps import apps
 from modelcluster.models import ClusterableModel
+from django.core.exceptions import ValidationError
+
 
 from holon.models.actor import Actor
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
@@ -40,7 +42,6 @@ class GridConnection(PolymorphicModel, ClusterableModel):
         ElectricGridNode, on_delete=models.SET_NULL, null=True, blank=True
     )
     parent_heat = models.ForeignKey(HeatGridNode, on_delete=models.SET_NULL, null=True, blank=True)
-    category = "GENERIC"
     charging_mode = models.CharField(
         max_length=100,
         choices=ChargingMode.choices,
@@ -70,6 +71,11 @@ class GridConnection(PolymorphicModel, ClusterableModel):
 
     def __str__(self):
         return f"b{self.id} {self.category}"
+
+    def clean(self):
+        return ValidationError(
+            "Should not be implemented at top level! Use a specific class for this case."
+        )
 
 
 class InsulationLabel(models.IntegerChoices):
@@ -107,7 +113,7 @@ class BuiltEnvironmentGridConnection(GridConnection):
 
 
 class UtilityGridConnection(GridConnection):
-    category = "UTILITY"
+    category = models.CharField(max_length=100, "UTILITY"
     heating_type = models.CharField(max_length=100, choices=HeatingType.choices)
 
 
