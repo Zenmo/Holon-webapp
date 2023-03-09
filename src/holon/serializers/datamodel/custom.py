@@ -57,6 +57,7 @@ class ContractSerializer(AnyLogicModelSerializer):
         fields = "__all__"
 
     id = serializers.SerializerMethodField()
+    contractScope = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         return f"c{obj.id}"
@@ -67,6 +68,14 @@ class ContractSerializer(AnyLogicModelSerializer):
                 "actor",
             ]
         )
+
+    def get_contractScope(self, obj):
+        # get related actor
+        if obj.contractScope is not None:
+            obj = Actor.objects.get(id=obj.contractScope.id)
+            return ActorSerializer().get_id(obj)
+        else:
+            return obj.contractScope
 
 
 class ActorSerializer(AnyLogicModelSerializer):
