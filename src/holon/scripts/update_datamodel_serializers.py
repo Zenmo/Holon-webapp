@@ -6,6 +6,7 @@ from django.db import models
 import inspect
 from jinja2 import Template
 from pathlib import Path
+from holon.models import BuiltEnvironmentGridConnection
 
 
 def pprint(msg: str) -> None:
@@ -15,20 +16,12 @@ def pprint(msg: str) -> None:
 def run():
     ## GLOBALS
     MODS = [
-        ("contract", "Contract", None),
-        ("asset", "EnergyAsset", None),
-        ("actor", "Actor", {"viewset_fieldname": "contracts", "viewset_mainclass": "Contract"}),
-        (
-            "gridconnection",
-            "GridConnection",
-            {"viewset_fieldname": "assets", "viewset_mainclass": "EnergyAsset"},
-        ),
-        (
-            "gridnode",
-            "GridNode",
-            {"viewset_fieldname": "assets", "viewset_mainclass": "EnergyAsset"},
-        ),
-        ("policy", "Policy", None),
+        ("contract", "Contract"),
+        ("asset", "EnergyAsset"),
+        ("actor", "Actor"),
+        ("gridconnection", "GridConnection"),
+        ("gridnode", "GridNode"),
+        ("policy", "Policy"),
     ]
 
     fp_serializer = Path("holon/serializers/datamodel").resolve()
@@ -41,7 +34,7 @@ def run():
 
     ## LOOP
     pprint("Autoserializer activated bleep bloop \U0001F916")
-    for module_name, main_class, viewset in MODS:
+    for module_name, main_class in MODS:
         module_name = f"holon.models.{module_name}"
 
         module = importlib.import_module(module_name)
@@ -55,11 +48,15 @@ def run():
                 is_not_main_cls = object.__name__ != main_class
 
                 if is_model and is_this_module and is_not_main_cls:
-                    subclasses.append(object.__name__)
+                    has_insulation_label = isinstance(
+                        object, BuiltEnvironmentGridConnection
+                    ) or issubclass(object, BuiltEnvironmentGridConnection)
+
+                    subclasses.append(
+                        {"name": object.__name__, "has_insulation_label": has_insulation_label}
+                    )
 
         output = {"module": module_name, "main_class": main_class, "subclasses": subclasses}
-        if viewset is not None:
-            output.update(viewset)
         outputs.append(output)
 
     ## Write to files
