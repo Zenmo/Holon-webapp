@@ -1,5 +1,9 @@
 from wagtail.test.utils import WagtailPageTests
 from wagtail_factories import SiteFactory
+from holon.models.scenario import Scenario
+from main.factories.casuspage_page import CasusPageFactory
+
+from main.pages.casus_serializer import CasusPageSerializer
 
 from ..factories.base_page import BasePageFactory
 from ..factories.storyline_page import StorylinePageFactory
@@ -16,7 +20,10 @@ class StorylinePageTest(WagtailPageTests):
         self.assertEqual(page.get_serializer_class(), StorylinePageSerializer)
 
     def test_to_react_representation(self):
-        page = StorylinePageFactory.create(title="Storyline", parent=self.root_page)
+        scenario = Scenario(name="test")
+        scenario.save()
+        casus = CasusPageFactory.create(title="Casus", scenario_id=1, parent=self.root_page)
+        page = StorylinePageFactory.create(title="Storyline", parent=casus)
 
         data = page.get_component_data({})
 
