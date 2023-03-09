@@ -5,6 +5,14 @@ from polymorphic.models import PolymorphicModel
 from holon.models.scenario import Scenario
 
 
+class ActorGroup(models.Model):
+    name = models.CharField(max_length=255)
+
+
+class ActorSubGroup(models.Model):
+    name = models.CharField(max_length=255)
+
+
 class ActorType(models.TextChoices):
     OPERATORGRID = "OPERATORGRID"
     GOVHOLON = "GOVHOLON"
@@ -26,9 +34,9 @@ class SubGroup(models.TextChoices):
 
 class Actor(PolymorphicModel):
     category = models.CharField(max_length=255, choices=ActorType.choices)
-    group = models.CharField(max_length=255, choices=Group.choices, null=True, blank=True)
-    subgroup = models.CharField(max_length=255, choices=SubGroup.choices, null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    group = models.ForeignKey(ActorGroup, on_delete=models.PROTECT, blank=True, null=True)
+    subgroup = models.ForeignKey(ActorSubGroup, on_delete=models.PROTECT, blank=True, null=True)
     wildcard_JSON = models.JSONField(
         blank=True,
         null=True,
