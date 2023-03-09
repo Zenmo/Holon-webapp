@@ -22,7 +22,9 @@ class StorylinePageTest(WagtailPageTests):
     def test_to_react_representation(self):
         scenario = Scenario(name="test")
         scenario.save()
-        casus = CasusPageFactory.create(title="Casus", scenario_id=1, parent=self.root_page)
+        casus = CasusPageFactory.create(
+            title="Casus", scenario_id=scenario.id, parent=self.root_page
+        )
         page = StorylinePageFactory.create(title="Storyline", parent=casus)
 
         data = page.get_component_data({})

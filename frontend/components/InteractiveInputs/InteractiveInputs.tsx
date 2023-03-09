@@ -31,34 +31,6 @@ export type InteractiveInputOptions = {
   sliderValueMin?: number;
   level?: string;
 };
-function InteractiveButtons({ contentId, name, type, options, setValue }: Props) {
-  const inputType = type === "single_select" ? "radio" : "checkbox";
-
-  return (
-    <div className="grid grid-cols-2 gap-2 mb-4">
-      {options.map((inputItem, index) => (
-        <div key={index}>
-          <input
-            type={inputType}
-            name={name}
-            defaultChecked={inputItem.default}
-            id={contentId + "" + inputItem.id}
-            data-testid={name + inputItem.id}
-            onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
-            // checked={}
-            className="hidden peer"
-          />
-          <label
-            key={index}
-            htmlFor={contentId + "" + inputItem.id}
-            className="flex h-full flex-row items-center justify-center peer-checked:bg-white peer-checked:text-blue-900 peer-checked:border-blue-900 border-white text-white bg-holon-blue-900 hover:bg-holon-blue-500 relative rounded border-2 px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50">
-            <span>{inputItem.label || inputItem.option}</span>
-          </label>
-        </div>
-      ))}
-    </div>
-  );
-}
 function InteractiveRadios({
   contentId,
   name,
@@ -145,7 +117,6 @@ function InteractiveInputs({
   titleWikiPage,
   linkWikiPage,
   options,
-  display,
   defaultValue,
   currentValue,
   selectedLevel,
@@ -156,8 +127,7 @@ function InteractiveInputs({
     ? options.filter(option => option.level == selectedLevel)
     : options;
 
-  //if there is a selectedlevel, it should match, the slider,
-  //for interactive radios and interactive buttons, the sepeartion is done in InteractiveRadios and  InteractiveButtons
+  //if there is a selectedlevel, it should match, the slider
   return type === "continuous" && (!selectedLevel || selectedLevel == level) ? (
     <ImageSlider
       inputId={contentId}
