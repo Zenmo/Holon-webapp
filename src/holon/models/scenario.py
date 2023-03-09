@@ -123,4 +123,4 @@ class Scenario(ClusterableModel):
             delete_individualy(self.gridnode_set.all())
             delete_individualy(self.actor_set.all())
 
-            return self.delete()
+            return super().delete()
