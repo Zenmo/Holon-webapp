@@ -25,7 +25,7 @@ class {{ subclass.name }}Serializer({{ module.main_class}}Serializer):
     {% if subclass.has_insulation_label  is sameas true %}
     insulation_label = serializers.SerializerMethodField()
     def get_insulation_label(self, obj):
-        return obj.get_insulation_label__display()
+        return obj.get_insulation_label_display()
     {% endif %}
 {% endfor %}{% endif %}{% endfor %}
 

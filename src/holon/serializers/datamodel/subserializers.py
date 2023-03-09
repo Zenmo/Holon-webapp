@@ -240,7 +240,7 @@ class BuiltEnvironmentGridConnectionSerializer(GridConnectionSerializer):
     insulation_label = serializers.SerializerMethodField()
 
     def get_insulation_label(self, obj):
-        return obj.get_insulation_label__display()
+        return obj.get_insulation_label_display()
 
 
 class UtilityGridConnectionSerializer(GridConnectionSerializer):
@@ -257,7 +257,7 @@ class HouseGridConnectionSerializer(GridConnectionSerializer):
     insulation_label = serializers.SerializerMethodField()
 
     def get_insulation_label(self, obj):
-        return obj.get_insulation_label__display()
+        return obj.get_insulation_label_display()
 
 
 class BuildingGridConnectionSerializer(GridConnectionSerializer):
@@ -268,7 +268,7 @@ class BuildingGridConnectionSerializer(GridConnectionSerializer):
     insulation_label = serializers.SerializerMethodField()
 
     def get_insulation_label(self, obj):
-        return obj.get_insulation_label__display()
+        return obj.get_insulation_label_display()
 
 
 class ProductionGridConnectionSerializer(GridConnectionSerializer):
