@@ -60,7 +60,7 @@ class DeliveryContract(Contract):
 
     def clean(self) -> None:
         if self.contractType != ContractType.DELIVERY:
-            raise ValidationError(f"ContractType should be 'Delivery' for {self.__name__}")
+            raise ValidationError(f"ContractType should be 'Delivery' for DeliveryContract")
 
         return super().clean()
 
@@ -80,7 +80,7 @@ class ConnectionContract(Contract):
 
     def clean(self) -> None:
         if self.contractType != ContractType.CONNECTION:
-            raise ValidationError(f"ContractType should be 'Connection' for {self.__name__}")
+            raise ValidationError(f"ContractType should be 'Connection' for ConnectionContract")
 
         return super().clean()
 
@@ -98,7 +98,7 @@ class TaxContract(Contract):
 
     def clean(self) -> None:
         if self.contractType != ContractType.TAX:
-            raise ValidationError(f"ContractType should be 'Tax' for {self.__name__}")
+            raise ValidationError(f"ContractType should be 'Tax' for TaxContract")
 
         return super().clean()
 
@@ -116,6 +116,6 @@ class TransportContract(Contract):
 
     def clean(self) -> None:
         if self.contractType != ContractType.TRANSPORT:
-            raise ValidationError(f"ContractType should be 'Transport' for {self.__name__}")
+            raise ValidationError(f"ContractType should be 'Transport' for TransportContract")
 
         return super().clean()

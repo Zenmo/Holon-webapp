@@ -14,9 +14,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "OPERATORGRID",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -26,9 +26,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "HOLONENERGY",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -38,9 +38,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "SUPPLIERENERGY",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -50,9 +50,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -62,9 +62,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -74,9 +74,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -86,9 +86,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -98,9 +98,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -110,9 +110,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "GOVHOLON",
-            "payload": 1,
             "group": null,
             "subgroup": null,
+            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -161,7 +161,9 @@
             "parent_heat": null,
             "charging_mode": "SIMPLE",
             "battery_mode": null,
-            "electrolyser_mode": null,
+            "nfATO_capacity_kw": null,
+            "nfATO_starttime": null,
+            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -177,7 +179,9 @@
             "parent_heat": null,
             "charging_mode": "SIMPLE",
             "battery_mode": null,
-            "electrolyser_mode": null,
+            "nfATO_capacity_kw": null,
+            "nfATO_starttime": null,
+            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -193,7 +197,9 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": null,
-            "electrolyser_mode": null,
+            "nfATO_capacity_kw": null,
+            "nfATO_starttime": null,
+            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -209,7 +215,9 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": null,
-            "electrolyser_mode": null,
+            "nfATO_capacity_kw": null,
+            "nfATO_starttime": null,
+            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -225,7 +233,9 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": "BALANCE",
-            "electrolyser_mode": null,
+            "nfATO_capacity_kw": null,
+            "nfATO_starttime": null,
+            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }
