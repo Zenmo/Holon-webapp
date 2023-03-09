@@ -28,6 +28,11 @@ class BatteryMode(models.TextChoices):
     PRICE = "PRICE"
 
 
+class ElectrolyserMode(models.TextChoices):
+    BALANCE = "BALANCE"
+    PRICE = "PRICE"
+
+
 class GridConnection(PolymorphicModel, ClusterableModel):
     owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     capacity_kw = models.FloatField()
@@ -45,6 +50,12 @@ class GridConnection(PolymorphicModel, ClusterableModel):
     battery_mode = models.CharField(
         max_length=100,
         choices=BatteryMode.choices,
+        null=True,
+        blank=True,
+    )
+    electrolyser_mode = models.CharField(
+        max_length=100,
+        choices=ElectrolyserMode.choices,
         null=True,
         blank=True,
     )

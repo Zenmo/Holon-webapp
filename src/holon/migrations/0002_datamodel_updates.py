@@ -88,4 +88,14 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name="NonFirmActor",
         ),
+        migrations.AddField(
+            model_name="gridconnection",
+            name="electrolyser_mode",
+            field=models.CharField(
+                blank=True,
+                choices=[("BALANCE", "Balance"), ("PRICE", "Price")],
+                max_length=100,
+                null=True,
+            ),
+        ),
     ]
