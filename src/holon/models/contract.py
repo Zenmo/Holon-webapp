@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
+from django.core.exceptions import ValidationError
 
 from holon.models.actor import Actor
 
@@ -21,9 +22,6 @@ class EnergyCarrier(models.TextChoices):
 
 
 class Contract(PolymorphicModel):
-    contractType = models.CharField(
-        max_length=255, choices=ContractType.choices, default=ContractType.DELIVERY
-    )
     contractScope = models.ForeignKey(Actor, on_delete=models.PROTECT)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
@@ -48,6 +46,13 @@ class DeliveryContractType(models.TextChoices):
 
 
 class DeliveryContract(Contract):
+
+    def clean(self) -> None:
+        if self.contractType != ContractType.DELIVERY:
+            raise ValidationError(f"ContractType should be {Delivery} for {self.__name__}")
+
+        return super().clean()
+
     deliveryContractType = models.CharField(max_length=255, choices=DeliveryContractType.choices)
     deliveryPrice_eurpkWh = models.FloatField()
     feedinPrice_eurpkWh = models.FloatField()
@@ -59,6 +64,13 @@ class ConnectionContractType(models.TextChoices):
 
 
 class ConnectionContract(Contract):
+
+    def clean(self) -> None:
+        if self.contractType != ContractType.CONNECTION:
+            raise ValidationError(f"ContractType should be {Connection} for {self.__name__}")
+
+        return super().clean()
+
     connectionContractType = models.CharField(
         max_length=255, choices=ConnectionContractType.choices
     )
@@ -73,6 +85,13 @@ class TaxContractType(models.TextChoices):
 
 
 class TaxContract(Contract):
+
+    def clean(self) -> None:
+        if self.contractType != ContractType.TAX:
+            raise ValidationError(f"ContractType should be {Tax} for {self.__name__}")
+
+        return super().clean()
+
     taxContractType = models.CharField(max_length=255, choices=TaxContractType.choices)
     taxDelivery_eurpkWh = models.FloatField()
     taxFeedin_eurpkWh = models.FloatField()
@@ -86,6 +105,13 @@ class TransportContractType(models.TextChoices):
 
 
 class TransportContract(Contract):
+
+    def clean(self) -> None:
+        if self.contractType != ContractType.TRANSPORT:
+            raise ValidationError(f"ContractType should be {Transport} for {self.__name__}")
+
+        return super().clean()
+
     transportContractType = models.CharField(max_length=255, choices=TransportContractType.choices)
     bandwidthTreshold_kW = models.FloatField()
     bandwidthTariff_eurpkWh = models.FloatField()
