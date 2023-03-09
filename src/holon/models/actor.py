@@ -58,9 +58,3 @@ class Actor(PolymorphicModel):
             string = f"actor{self.id} ({self.category})"
 
         return string
-
-
-class NonFirmActor(Actor):
-    nfATO_capacity_kw = models.FloatField()
-    nfATO_starttime = models.FloatField()
-    nfATO_endtime = models.FloatField()

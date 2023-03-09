@@ -47,7 +47,7 @@ from holon.models.asset import (
 )
 
 
-from holon.models.actor import NonFirmActor
+from holon.models.actor import ActorGroup, ActorSubGroup
 
 
 from holon.models.gridconnection import (
@@ -220,9 +220,15 @@ class VehicleElectricStorageAssetSerializer(EnergyAssetSerializer):
         fields = "__all__"
 
 
-class NonFirmActorSerializer(ActorSerializer):
+class ActorGroupSerializer(ActorSerializer):
     class Meta:
-        model = NonFirmActor
+        model = ActorGroup
+        fields = "__all__"
+
+
+class ActorSubGroupSerializer(ActorSerializer):
+    class Meta:
+        model = ActorSubGroup
         fields = "__all__"
 
 

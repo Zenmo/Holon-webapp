@@ -38,7 +38,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "COMMERCIAL",
+            "group": null,
             "subgroup": null,
             "payload": 1,
             "wildcard_JSON": null
@@ -50,7 +50,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "COMMERCIAL",
+            "group": null,
             "subgroup": null,
             "payload": 1,
             "wildcard_JSON": null
@@ -62,7 +62,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "commercial",
+            "group": null,
             "subgroup": null,
             "payload": 1,
             "wildcard_JSON": null
@@ -74,7 +74,7 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "commercial",
+            "group": null,
             "subgroup": null,
             "payload": 1,
             "wildcard_JSON": null
@@ -137,9 +137,6 @@
             "parent_heat": null,
             "charging_mode": "MAX_POWER",
             "battery_mode": "BALANCE",
-            "nfATO_capacity_kw": 900.0,
-            "nfATO_starttime": 18.0,
-            "nfATO_endtime": 7.0,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -155,9 +152,6 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": null,
-            "nfATO_capacity_kw": null,
-            "nfATO_starttime": null,
-            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -173,9 +167,6 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": null,
-            "nfATO_capacity_kw": null,
-            "nfATO_starttime": null,
-            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -191,9 +182,6 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": "BALANCE",
-            "nfATO_capacity_kw": null,
-            "nfATO_starttime": null,
-            "nfATO_endtime": null,
             "payload": 1,
             "wildcard_JSON": null
         }

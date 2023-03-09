@@ -73,4 +73,19 @@ class Migration(migrations.Migration):
                 to="holon.actorsubgroup",
             ),
         ),
+        migrations.RemoveField(
+            model_name="gridconnection",
+            name="nfATO_capacity_kw",
+        ),
+        migrations.RemoveField(
+            model_name="gridconnection",
+            name="nfATO_endtime",
+        ),
+        migrations.RemoveField(
+            model_name="gridconnection",
+            name="nfATO_starttime",
+        ),
+        migrations.DeleteModel(
+            name="NonFirmActor",
+        ),
     ]

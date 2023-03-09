@@ -48,9 +48,6 @@ class GridConnection(PolymorphicModel, ClusterableModel):
         null=True,
         blank=True,
     )
-    nfATO_capacity_kw = models.FloatField(null=True, blank=True)
-    nfATO_starttime = models.FloatField(null=True, blank=True)
-    nfATO_endtime = models.FloatField(null=True, blank=True)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     wildcard_JSON = models.JSONField(
         blank=True,
