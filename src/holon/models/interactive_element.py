@@ -26,9 +26,9 @@ class Colors(models.TextChoices):
 
 
 class Levels(models.TextChoices):
-    LEVEL_NATIONAL = "National"
-    LEVEL_INTERMEDIATE = "Intermediate"
-    LEVEL_LOCAL = "Local"
+    LEVEL_NATIONAL = "national"
+    LEVEL_INTERMEDIATE = "intermediate"
+    LEVEL_LOCAL = "local"
 
 
 @register_snippet

@@ -124,11 +124,12 @@ function InteractiveInputs({
   setValue,
 }: Props) {
   const visibleOptions = selectedLevel
-    ? options.filter(option => option.level == selectedLevel)
+    ? options.filter(option => option.level.toLowerCase() == selectedLevel.toLowerCase())
     : options;
 
   //if there is a selectedlevel, it should match, the slider
-  return type === "continuous" && (!selectedLevel || selectedLevel == level) ? (
+  return type === "continuous" &&
+    (!selectedLevel || selectedLevel.toLowerCase() == level?.toLowerCase()) ? (
     <ImageSlider
       inputId={contentId}
       datatestid={name}
