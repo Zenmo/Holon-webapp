@@ -11,11 +11,6 @@ wait_for_db () {
     done
 }
 
-setup_submodules () {
-  echo Setup submodules
-  (cd holon/services && cloudclient_init -tf . )
-}
-
 setup_django () {
     echo Running migrations
     python manage.py migrate --noinput
@@ -35,7 +30,6 @@ load_fixture_data() {
   python manage.py loaddata holon/fixtures/api-fixture.json
 }
 
-setup_submodules
 wait_for_db
 setup_django
 load_fixture_data

@@ -17,10 +17,6 @@ wait_for_db () {
   fi
 }
 
-setup_submodules () {
-  cd /workspace/src/holon/services
-  cloudclient_init -tf .
-}
 
 setup_django () {
   cd /workspace/src
@@ -57,7 +53,6 @@ setup_frontend () {
 }
 
 wait_for_db
-setup_submodules
 setup_django
 load_fixture_data
 setup_frontend
