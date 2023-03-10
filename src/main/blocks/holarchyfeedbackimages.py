@@ -4,7 +4,6 @@ from django.db import models
 from wagtail.fields import StreamBlock
 from wagtail.core import blocks
 
-from api.models import InteractiveInput
 from .holon_image_chooser import HolonImageChooserBlock
 
 from .feedbackmodals import FeedbackModalInteractiveInputCondition

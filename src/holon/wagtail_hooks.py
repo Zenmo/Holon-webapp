@@ -54,9 +54,9 @@ class ScenarioAdmin(ModelAdmin):
     add_to_admin_menu = True
 
 
-modeladmin_register(FactorAdmin)
-modeladmin_register(GridconnectionAdmin)
-modeladmin_register(AssetAdmin)
+# modeladmin_register(FactorAdmin)
+# modeladmin_register(GridconnectionAdmin)
+# modeladmin_register(AssetAdmin)
 modeladmin_register(ScenarioAdmin)
 
 
