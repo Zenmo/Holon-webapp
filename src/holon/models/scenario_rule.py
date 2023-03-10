@@ -110,4 +110,6 @@ class ScenarioRule(ClusterableModel):
             + list(self.discrete_factors_remove.all())
             + list(self.discrete_factors_set_count.all())
             + list(self.discrete_factors_balancegroup.all())
+
+            asdkjbasdkn todo add all actions
         )

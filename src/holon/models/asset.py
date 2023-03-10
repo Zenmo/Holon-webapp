@@ -5,9 +5,10 @@ from polymorphic.models import PolymorphicModel
 
 from holon.models.gridconnection import GridConnection
 from holon.models.gridnode import GridNode
+from holon.models.rule_actions.rule_action_model import RuleActionModel
 
 
-class EnergyAsset(PolymorphicModel):
+class EnergyAsset(PolymorphicModel, RuleActionModel):
     gridconnection = models.ForeignKey(
         GridConnection, on_delete=models.SET_NULL, null=True, blank=True
     )

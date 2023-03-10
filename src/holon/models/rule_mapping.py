@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.db.models.query import QuerySet
 
 from holon.models.filter import Filter
-from holon.models.rule_action import RuleAction
+from holon.models.rule_actions.rule_action import RuleAction
 from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ModelType, ScenarioRule
 from holon.serializers import InteractiveElementInput

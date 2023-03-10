@@ -3,7 +3,7 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.models.rule_action import RuleActionFactor
+from holon.models.rule_actions.rule_action import RuleActionFactor
 
 
 class RuleMappingTestClass(TestCase):
@@ -129,16 +129,16 @@ class RuleMappingTestClass(TestCase):
         )
         self.balance_group = RuleActionBalanceGroup.objects.create(rule=rule)
 
-        BalanceGroupAssetOrder.objects.create(
+        BalanceGroupModelOrder.objects.create(
             balance_group=self.balance_group, asset=default_chc, sort_order=0
         )
-        BalanceGroupAssetOrder.objects.create(
+        BalanceGroupModelOrder.objects.create(
             balance_group=self.balance_group, asset=default_ehc, sort_order=1
         )
-        BalanceGroupAssetOrder.objects.create(
+        BalanceGroupModelOrder.objects.create(
             balance_group=self.balance_group, asset=default_hhc, sort_order=2
         )
-        BalanceGroupAssetOrder.objects.create(
+        BalanceGroupModelOrder.objects.create(
             balance_group=self.balance_group, asset=default_thc, sort_order=4
         )
 
@@ -500,7 +500,7 @@ class RuleMappingTestClass(TestCase):
             vehicleScaling=0.0,
         )
 
-        BalanceGroupAssetOrder.objects.create(
+        BalanceGroupModelOrder.objects.create(
             balance_group=self.balance_group, asset=default_vc, sort_order=3
         )
 

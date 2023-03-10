@@ -44,7 +44,6 @@ def duplicate_model(obj, attrs={}):
     obj.save()
     return obj
 
-
 from django.db.migrations.operations.models import ModelOptionOperation
 
 
@@ -77,3 +76,4 @@ class RemoveModelBasesOptions(ModelOptionOperation):
     @property
     def migration_name_fragment(self):
         return "remove_%s_bases" % self.name_lower
+
