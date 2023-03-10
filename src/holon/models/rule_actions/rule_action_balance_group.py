@@ -56,54 +56,59 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         """
 
         target_count = int(value)
-        ordered_models = self.get_ruleaction_models_ordered()
-        model_types_in_order = [model.__class__ for model in ordered_models]
-        selected_model_type = next(model_type for model_type in model_types_in_order if model_type.__name__ == self.selected_model_type_name)
+        template_models_in_order = self.get_ruleaction_models_ordered()
+        model_types_in_order = [model.__class__ for model in template_models_in_order]
+        model_type_names_in_order = [model_type.__name__ for model_type in model_types_in_order]
+        selected_model_type = next(model_type_name for model_type_name in model_type_names_in_order if model_type_name == self.selected_model_type_name)
 
-        # validate input # TODO
-        self.validate_filtered_queryset(
-            model_types_in_order, filtered_queryset, target_count
-        )
+        # validate input
+        self.validate_filtered_queryset(model_type_names_in_order, filtered_queryset, target_count)
 
         # get parent foreign key field name
         parent_fk_field_name = self.get_parent_fk_fieldname(filtered_queryset, selected_model_type)
 
         # determine the model type counts (in order)
-        model_type_count = self.get_model_count_per_type(model_types_in_order, filtered_queryset, parent_fk_field_name)
+        model_counts_per_type = [self.get_count_for_model_type(model_type, filtered_queryset, parent_fk_field_name) for model_type in model_types_in_order]
+
+        # validate whether total model count is equal to size of filtered query
+        if sum(model_counts_per_type) != filtered_queryset.count():
+            raise ValidationError(f"Each filtered object should have exactly one of the models indicated for balancing. Current sum of models present is {sum(model_counts_per_type)}, while the number of filtered object is {filtered_queryset.count()}")
+
+        # calculate the target counts of each model type as an effect of balancing
+        target_count_per_model_type = self.get_target_count_per_model_type(model_counts_per_type, model_type_names_in_order, target_count)
         
-        # [
-        #     len([
-        #         filtered_object
-        #         for filtered_object in filtered_queryset
-        #         if filtered_object.__class__.__name__ == model_type
-        #     ])
-        #     for model_type in model_types_in_order
-        # ]
+        # reset model instances from queryset
+        self.reset_models_in_queryset(model_types_in_order, filtered_queryset, parent_fk_field_name)
 
-        # # get filtered assets aggregated by asset type, in the order of self.asset_order
-        # filtered_model_lists_in_order = [
-        #     [
-        #         filtered_object
-        #         for filtered_object in filtered_queryset
-        #         if filtered_object.__class__.__name__ == asset_name
-        #     ]
-        #     for asset_name in model_types_in_order
-        # ]
+        # add models to filtered queryset according to target count
+        self.add_models_according_to_target_count(self, template_models_in_order, filtered_queryset, target_count_per_model_type, parent_fk_field_name)
 
-        # # calculate how many of each asset type should be removed/added
-        # target_change_per_asset_type = self.get_count_change_per_model_type(
-        #     model_types_in_order, filtered_model_lists_in_order, target_count
-        # )
 
-        # # apply removal/adding
-        # for template_model, target_change, filtered_assets in zip(
-        #     ordered_models, target_change_per_asset_type, filtered_model_lists_in_order
-        # ):
-        #     if target_change > 0:
-        #         self.add_assets(gridconnection, template_model, target_change)
+    def validate_filtered_queryset(
+        self,
+        model_type_names_in_order: list[str],
+        filtered_queryset: QuerySet,
+        target_count: int,
+    ):
+        """Validate the assets in the queryset on asset type, gridconnection_id and count"""
 
-        #     if target_change < 0:
-        #         self.remove_assets(filtered_assets[:-target_change])
+        # validated selected_asset_type is in asset_order
+        if not self.selected_model_type_name in model_type_names_in_order:
+            raise ValidationError(
+                f"Model type selected for balancing ({self.selected_model_type_name}) not in ordered model list"
+            )
+
+        # check for duplicate asset types
+        if len(model_type_names_in_order) > len(set(model_type_names_in_order)):
+            raise ValidationError(
+                f"Duplicate model types not allowed. Given model types: {model_type_names_in_order}"
+            )
+
+        # validate target count (value)
+        if target_count > filtered_queryset.count():
+            raise ValueError(
+                f"target count ({target_count}) for a single model type cannot be larger than the total amount of filtered objects ({filtered_queryset.count()})"
+            )
 
 
     def get_parent_fk_fieldname(self, filtered_queryset: QuerySet, selected_model_type) -> str:
@@ -125,177 +130,85 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         return parent_fk_field_name
 
 
-    def get_model_count_per_type(self, model_types_in_order: list[str], filtered_queryset: QuerySet, selected_model_type, parent_fk_field_name:str) -> list[int]:
+    def get_count_for_model_type(self, model_type: type[RuleActionModel], filtered_queryset: QuerySet, parent_fk_field_name:str) -> int:
+        """ Get the number of occurences of model_type within the filtered objects """
 
-        model_count_per_type = [0] * len(model_types_in_order)
-
-        # only take first n objects
-        for filtererd_object in filtered_queryset:
-
-
- 
-            if not self.model_to_add.__class__.objects.filter(
+        return sum(
+            [
+            int(model_type.objects.filter(
                 **{parent_fk_field_name: filtererd_object}
-            ).exists():
-                if objects_added < n:
-                    # add model_to_add to filtered object
-                    util.duplicate_model(
-                        self.model_to_add, {parent_fk_field_name: filtererd_object}
-                    )
-                    objects_added += 1
+                ).exists())
+            for filtererd_object in filtered_queryset]
+        )
+    
 
-            # `set_count` mode, delete the objects of the model class under the filtered objects
-            elif reset_models_before_add:
-                self.model_to_add.__class__.objects.filter(
-                    **{parent_fk_field_name: filtererd_object}
-                ).delete()
+    def reset_models_in_queryset(self, model_types_in_order: list[type[RuleActionModel]], filtered_queryset: QuerySet, parent_fk_field_name:str):
+        """ Delete all instances of the model types in the filtered queryset """
+
+        for model_type in model_types_in_order:
+            for filtererd_object in filtered_queryset:
+                model_type.objects.filter(**{parent_fk_field_name: filtererd_object}).delete()
 
 
-        pass
-
-
-    def validate_filtered_queryset(
+    def get_target_count_per_model_type(
         self,
-        model_types_in_order: list[RuleActionModel],
-        filtered_queryset: QuerySet,
-        target_count: int,
-    ):
-        """Validate the assets in the queryset on asset type, gridconnection_id and count"""
-
-        model_type_names_in_order = [model_type.__name__ for model_type in model_types_in_order]
-
-        # validated selected_asset_type is in asset_order
-        if not self.selected_model_type_name in model_type_names_in_order:
-            raise ValidationError(
-                f"Model type selected for balancing ({self.selected_model_type_name}) not in ordered model list"
-            )
-
-        # check for duplicate asset types
-        if len(model_type_names_in_order) > len(set(model_type_names_in_order)):
-            raise ValidationError(
-                f"Duplicate model types not allowed. Given model types: {model_type_names_in_order}"
-            )
-
-        # validate whether model types in filtered_queryset are in the ordered list
-        models_not_in_model_order_list = [
-            model
-            for model in filtered_queryset
-            if not model.__class__.__name__ in model_type_names_in_order
-        ]
-        if models_not_in_model_order_list:
-            raise ValueError(
-                f"All filtered models should be present in the asset order. The violating assets are: {models_not_in_model_order_list}"
-            )
-
-        # validate target count (value)
-        if target_count > len(filtered_queryset):
-            raise ValueError(
-                f"target count ({target_count}) cannot be larger than the total amount of assets ({len(filtered_queryset)})"
-            )
-
-
-    def get_count_change_per_model_type(
-        self,
-        asset_types_in_order: list[str],
-        filtered_assets_in_order: list[list[EnergyAsset]],
+        model_counts_per_type: list[int],
+        model_type_names_in_order: list[str],
         target_count: int,
     ) -> list[int]:
-        """Calculate per model type in the ordered list how many should be removed or added"""
+        """Calculate the target counts of each model type as an effect of balancing"""
 
-        n_asset_types = len(asset_types_in_order)
-        target_diff_per_asset_type = [0] * n_asset_types
+        n_model_types = len(model_type_names_in_order)
+        target_diff_per_model_type = [0] * n_model_types
 
-        # get info for selected asset type
-        selected_index = asset_types_in_order.index(self.selected_asset_type)
-        count_at_selected = len(filtered_assets_in_order[selected_index])
+        # get info for selected model type
+        selected_index = model_type_names_in_order.index(self.selected_model_type_name)
+        count_at_selected = model_counts_per_type[selected_index]
         count_target_diff = target_count - count_at_selected
 
         # compute target differential per asset type
         if count_target_diff > 0:  # increase amount of selected asset type
-            target_diff_per_asset_type[
-                selected_index
-            ] = count_target_diff  # add assets of this type
+            target_diff_per_model_type[selected_index] = count_target_diff  # add models of this type
 
             # balance by removing starting from the bottom of the ordered list and moving up
-            remove_index = (
-                n_asset_types - 1 if selected_index < n_asset_types - 1 else n_asset_types - 2
-            )
+            remove_index = (n_model_types - 1 if selected_index < n_model_types - 1 else n_model_types - 2)
             add_remove_sum = count_target_diff
             while add_remove_sum > 0:
-                target_diff_per_asset_type[remove_index] = -min(
-                    add_remove_sum, len(filtered_assets_in_order[remove_index])
+                target_diff_per_model_type[remove_index] = -min(
+                    add_remove_sum, model_counts_per_type[remove_index]
                 )
-                add_remove_sum = sum(target_diff_per_asset_type)
+                add_remove_sum = sum(target_diff_per_model_type)
                 remove_index -= 1
 
         elif count_target_diff < 0:  # decrease amount
-            target_diff_per_asset_type[
-                selected_index
-            ] = count_target_diff  # add assets of this type
+            target_diff_per_model_type[selected_index] = count_target_diff  # add models of this type
 
             # balance
             add_index = 1 if selected_index == 0 else (selected_index - 1)
-            target_diff_per_asset_type[add_index] = -count_target_diff
+            target_diff_per_model_type[add_index] = -count_target_diff
 
-        return target_diff_per_asset_type
+        # add target differential to model type counts
+        return [count + diff for count, diff in zip(model_counts_per_type, target_diff_per_model_type)]
 
 
-    def balance_models(self, filtered_queryset: QuerySet, value: str):
-        """Add an asset to the first n items in the the filtered objects"""
+    def add_models_according_to_target_count(self, template_models_in_order: list[RuleActionModel], filtered_queryset: QuerySet, target_count_per_model_type:list[int], parent_fk_field_name:str):
+        """ Add duplicates of the template model to the filtered queryset in accordance with the target count per model type """
 
-        # parse value
-        n = int(value)
-        if n < 0:
-            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
+        model_add_count = 0
+        current_template_model_i = 0
 
-        # get parent type and foreign key field name
-        parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
-        try:
-            parent_fk_field_name = next(
-                parent_fieldname[1]
-                for parent_fieldname in self.valid_parent_fk_fieldname_pairs
-                if parent_type == parent_fieldname[0]
-            )
-        except:
-            raise ValueError(
-                f"Parent type {parent_type} is not a valid parent for selected model type {self.model_to_add.__class__.__name__}. {self.valid_parent_fk_fieldname_pairs}"
-            )
-
-        objects_added = 0
-
-        # only take first n objects
         for filtererd_object in filtered_queryset:
+            while model_add_count == target_count_per_model_type[current_template_model_i]:
+                current_template_model_i += 1
+                model_add_count = 0
 
-            if not self.model_to_add.__class__.objects.filter(
-                **{parent_fk_field_name: filtererd_object}
-            ).exists():
-                if objects_added < n:
-                    # add model_to_add to filtered object
-                    util.duplicate_model(
-                        self.model_to_add, {parent_fk_field_name: filtererd_object}
-                    )
-                    objects_added += 1
+            util.duplicate_model(
+                template_models_in_order[current_template_model_i],
+                {parent_fk_field_name: filtererd_object}
+            )
 
-            # `set_count` mode, delete the objects of the model class under the filtered objects
-            elif reset_models_before_add:
-                self.model_to_add.__class__.objects.filter(
-                    **{parent_fk_field_name: filtererd_object}
-                ).delete()
+            model_add_count += 1
 
-
-
-
-    def add_assets(self, gridconnection: GridConnection, template_asset: EnergyAsset, n: int):
-        """Duplicate a template asset n times with gridconnection_id as their parent"""
-
-        for _ in range(n):
-            util.duplicate_model(template_asset, {"gridconnection": gridconnection})
-
-    def remove_assets(self, assets: list[EnergyAsset]):
-        """Delete a set of assets"""
-
-        for asset in assets:
-            EnergyAsset.objects.filter(id=asset.id).delete()
 
 
 class BalanceGroupModelOrder(Orderable):
