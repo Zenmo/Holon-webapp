@@ -134,8 +134,8 @@ function InteractiveInputs({
       datatestid={name}
       defaultValue={currentValue ? currentValue : Number(defaultValue)}
       setValue={setValue}
-      min={options[0].sliderValueMin}
-      max={options[0].sliderValueMax}
+      min={options[0]?.sliderValueMin ? options[0].sliderValueMin : 0}
+      max={options[0]?.sliderValueMax ? options[0].sliderValueMax : 100}
       step={1}
       label={name}
       type="range"
