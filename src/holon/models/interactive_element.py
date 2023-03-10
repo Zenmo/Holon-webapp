@@ -60,6 +60,7 @@ class InteractiveElement(ClusterableModel):
     panels = [
         FieldPanel("scenario"),
         FieldPanel("name"),
+        FieldPanel("level"),
         FieldPanel("type"),
         FieldPanel(
             "more_information",
