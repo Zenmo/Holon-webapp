@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("holon", "0002_interactiveelement_level_and_more"),
         ("main", "0048_casuspage_scenario_alter_challengemodepage_storyline_and_more"),
     ]
 
