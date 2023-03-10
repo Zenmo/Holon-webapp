@@ -113,7 +113,7 @@ class BuiltEnvironmentGridConnection(GridConnection):
 
 
 class UtilityGridConnection(GridConnection):
-    category = models.CharField(max_length=100, "UTILITY"
+    category = "UTILITY"
     heating_type = models.CharField(max_length=100, choices=HeatingType.choices)
 
 

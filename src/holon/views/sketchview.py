@@ -9,7 +9,6 @@ from holon.services.cloudclient import CloudClient
 ### DUMMY SECTION
 
 
-
 def apply_rules(
     scenario_template: Scenario, interactive_inputs: Iterable[InteractiveElement]
 ) -> Scenario:
@@ -42,6 +41,7 @@ class Cost:
         # etm_service.retrieve_results()
         return
 
+
 class Upscaling:
     def __init__(self, scenario_copy: Scenario) -> None:
         scenario = scenario_copy
@@ -51,6 +51,7 @@ class Upscaling:
         # etm_service.retrieve_results()
         return
 
+
 class CostBenifit:
     def __init__(self, scenario_copy: Scenario) -> None:
         scenario = scenario_copy
@@ -59,6 +60,7 @@ class CostBenifit:
         # some combination of various upscale and manipulations
         # etm_service.retrieve_results()
         return
+
 
 ### DUMMY SECTION
 
@@ -85,7 +87,7 @@ def Endpoint(request):
     # COST ETM
     cost_results, cost_queries = Cost(scenario_copy=scenario_copy).run()
 
-    # UPSCALING ETM 
+    # UPSCALING ETM
     upscaling_results = cost_results, cost_queries = Cost(scenario_copy=scenario_copy).run()
 
     # COST&BENIFIT
@@ -98,4 +100,5 @@ def Endpoint(request):
     dashboard_result_json = dashboard_results.as_json()
 
     from .dummies import costbenefit_result_json, dashboard_result_json
+
     return {"dashboard": dashboard_result_json, "costbenifit": costbenefit_result_json}

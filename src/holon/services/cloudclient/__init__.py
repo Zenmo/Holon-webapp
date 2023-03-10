@@ -1,1 +1,1 @@
-from .client import CloudClient
+from .client import CloudClient  # noqa
