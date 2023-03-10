@@ -122,6 +122,11 @@ class EnergyAssetSerializer(AnyLogicModelSerializer):
     def get_fields(self):
         return super().get_fields(exclude_fields=["gridconnection", "gridnode"])
 
+    category = serializers.SerializerMethodField()
+
+    def get_category(self, obj: EnergyAsset):
+        return obj.category
+
 
 class PolicySerializer(AnyLogicModelSerializer):
     class Meta:
@@ -143,6 +148,7 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     parent = serializers.SerializerMethodField()
     owner_actor = serializers.SerializerMethodField()
     assets = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         try:
@@ -170,11 +176,12 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     def get_assets(self, obj: GridNode):
         from .mapper import EnergyAssetPolymorphicSerializer
 
-        print("triggered")
-
         return EnergyAssetPolymorphicSerializer(
             obj.energyasset_set.all(), many=True, read_only=True
         ).data
+
+    def get_category(self, obj: GridNode):
+        return obj.category
 
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
@@ -189,6 +196,7 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
     parent_electric = serializers.SerializerMethodField()
     parent_heat = serializers.SerializerMethodField()
     assets = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
 
     def get_owner_actor(self, obj):
         # get related actor
@@ -225,3 +233,6 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
         return EnergyAssetPolymorphicSerializer(
             obj.energyasset_set.all(), many=True, read_only=True
         ).data
+
+    def get_category(self, obj: GridConnection):
+        return obj.category
