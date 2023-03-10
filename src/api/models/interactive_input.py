@@ -9,7 +9,6 @@ from wagtail.models import Page
 from wagtail.admin.panels import PageChooserPanel
 
 # from django.core.validators import MinValueValidator
-from wagtail.snippets.models import register_snippet
 
 CHOICE_SINGLESELECT = "single_select"
 CHOICE_MULTISELECT = "multi_select"
@@ -52,7 +51,6 @@ LEVEL_CHOICES = (
     (LEVEL_LOCAL, "Local"),
 )
 # Create your models here.
-@register_snippet
 class InteractiveInput(ClusterableModel):
 
     etm_key = models.CharField(max_length=100, blank=True)

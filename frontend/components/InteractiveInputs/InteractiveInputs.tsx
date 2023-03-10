@@ -124,7 +124,7 @@ function InteractiveInputs({
   setValue,
 }: Props) {
   const visibleOptions = selectedLevel
-    ? options.filter(option => option.level.toLowerCase() == selectedLevel.toLowerCase())
+    ? options.filter(option => option.level?.toLowerCase() == selectedLevel.toLowerCase())
     : options;
 
   //if there is a selectedlevel, it should match, the slider
