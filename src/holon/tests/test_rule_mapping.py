@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.models.rule_action import RuleActionFactor
+from holon.models.rule_actions.rule_action import RuleActionFactor
 
 
 class RuleMappingTestClass(TestCase):
