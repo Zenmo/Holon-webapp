@@ -10,6 +10,7 @@ import {
   HeroBlockVariant,
   TitleBlockVariant,
   CardBlockVariant,
+  Graphcolor,
 } from "../../containers/types";
 import React from "react";
 import HeaderFullImageBlock from "./HeaderFullImageBlock/HeaderFullImageBlock";
@@ -28,10 +29,12 @@ const ContentBlocks = ({
   content,
   pagetype,
   feedbackmodals,
+  graphcolors,
 }: {
   content: ContentBlockProps[];
   feedbackmodals?: Feedbackmodals[];
   pagetype?: string;
+  graphcolors?: Graphcolor[];
 }) => {
   return (
     <React.Fragment>
@@ -62,6 +65,7 @@ const ContentBlocks = ({
                 data={contentItem}
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
+                graphcolors={graphcolors ?? []}
               />
             );
             break;

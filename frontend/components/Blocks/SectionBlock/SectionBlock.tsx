@@ -12,6 +12,7 @@ import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { ScenarioContext } from "@/containers/StorylinePage/StorylinePage";
+import { Graphcolor } from "@/containers/types";
 
 type Props = {
   data: {
@@ -28,6 +29,7 @@ type Props = {
   };
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
+  graphcolors?: Graphcolor[];
 };
 
 const initialData = {
@@ -44,7 +46,7 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) {
+export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [content, setContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
@@ -140,7 +142,10 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
-      {costBenefitModal && <CostBenefitModal handleClose={closeCostBenefitModal} />}
+
+      {costBenefitModal && (
+        <CostBenefitModal graphcolors={graphcolors ?? []} handleClose={closeCostBenefitModal} />
+      )}
 
       <div className="holonContentContainer">
         <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">

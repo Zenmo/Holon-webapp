@@ -4,18 +4,20 @@ import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import {
-  getHolonDataSegments,
-  getHolonDataSegmentsDetail,
-  getHolonGraphColor,
-} from "../../../../api/holon";
+import { getHolonDataSegments, getHolonDataSegmentsDetail } from "../../../../api/holon";
 
 import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
+import { Graphcolor } from "@/containers/types";
 
-export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
+export default function CostBenefitModal({
+  handleClose,
+  graphcolors,
+}: {
+  handleClose: () => void;
+  graphcolors?: Graphcolor[];
+}) {
   const [data, setData] = useState([]);
   const [detailData, setDetailData] = useState([]);
-  const [dataColors, setDataColors] = useState([]);
   const ignoredLabels = ["name", "Netto kosten"];
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -41,10 +43,6 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
 
     getHolonDataSegmentsDetail()
       .then(data => setDetailData(data))
-      .catch(err => console.log(err));
-
-    getHolonGraphColor()
-      .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
   }, []);
   const tabItems = ["Grafiek", "Tabel", "Detail"];
@@ -82,7 +80,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                   <h2 className="text-center">Kosten en baten per segment</h2>
                   <CostBenefitChart
                     chartdata={convertGraphData(data)}
-                    dataColors={dataColors}
+                    dataColors={graphcolors ?? []}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
@@ -96,7 +94,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                   <CostBenefitDetail
                     chartdata={convertGraphData(data)}
                     detailData={detailData}
-                    dataColors={dataColors}
+                    dataColors={graphcolors ?? []}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
