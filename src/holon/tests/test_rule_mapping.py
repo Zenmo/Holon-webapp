@@ -30,12 +30,14 @@ class RuleMappingTestClass(TestCase):
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
             name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
         )
-        InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
+        self.interactive_element_continuous_values = (
+            InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
+        )
 
     def test_rule_mapping_gridconnection(self) -> None:
         # Arange
         rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
@@ -56,7 +58,7 @@ class RuleMappingTestClass(TestCase):
     def test_rule_mapping_assets(self) -> None:
         # Arange
         rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.ENERGYASSET,
             model_subtype="ChemicalHeatConversionAsset",
         )
