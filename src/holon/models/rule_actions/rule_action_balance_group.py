@@ -26,9 +26,7 @@ from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     """Blans"""
 
-    selected_model_type_name = models.CharField(
-        max_length=255, blank=True
-    )  # TODO Should be selection of RuleActionModel subtypes in frontend - TAVM
+    selected_model_type_name = models.CharField(max_length=255, blank=True)
     rule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
     )

@@ -35,20 +35,23 @@ class RuleActionChangeAttribute(RuleAction):
     def __apply_operator(self, value_old, input_value):
         """Cast the input value to the same type of the old value and apply the chosen operator"""
 
-        # cast the value to the same type as the old one
-        cast_value = type(value_old)(input_value)
+        # return input value if set
+        if self.operator == ChangeAttributeOperator.SET:
+            return input_value
+
+        # cast to float to make all operators work as expected
+        val_a_flt = float(value_old)
+        val_b_flt = float(input_value)
 
         # apply operator
-        if self.operator == ChangeAttributeOperator.SET:
-            return cast_value
         if self.operator == ChangeAttributeOperator.ADD:
-            return value_old + cast_value
+            return val_a_flt + val_b_flt
         if self.operator == ChangeAttributeOperator.SUBTRACT:
-            return value_old - cast_value
+            return val_a_flt - val_b_flt
         if self.operator == ChangeAttributeOperator.MULTIPLY:
-            return value_old * cast_value
+            return val_a_flt * val_b_flt
         if self.operator == ChangeAttributeOperator.DIVIDE:
-            return value_old / cast_value
+            return val_a_flt / val_b_flt
 
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
@@ -60,5 +63,8 @@ class RuleActionChangeAttribute(RuleAction):
             old_value = getattr(filtered_object, self.model_attribute)
             new_value = self.__apply_operator(old_value, value)
 
-            setattr(filtered_object, self.model_attribute, new_value)
+            # change the new value type to the same as the old one
+            cast_new_value = type(old_value)(new_value)
+
+            setattr(filtered_object, self.model_attribute, cast_new_value)
             filtered_object.save()
