@@ -1,13 +1,30 @@
-from anylogiccloudclient.client.cloud_client import CloudClient as ALCloucClient
+from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
+from anylogiccloudclient.client.cloud_client import Inputs
+from holon.models.scenario import Scenario
 
 
 class CloudClient:
     """a more convient way of working with the AnyLogic cloud client"""
 
-    def __init__(self, api_key: str, url: str, model_name: str, model_version: int) -> None:
+    def __init__(
+        self,
+        scenario: Scenario,
+        api_key: str,
+        model_name: str,
+        model_version: int,
+        url: str = "https://engine.holontool.nl",
+    ) -> None:
+        
+        # value attributes
         self.url = url
-        self.client = ALCloucClient(api_key, url)
-        self.connect_to_model(model_name=model_name, model_version=model_version)
+        self.scenario = scenario
+        self.client = ALCloudClient(api_key, url)
+        
+        # method attributes
+        self.model_version = self.connect_to_model(
+            model_name=model_name, model_version=model_version
+        )
+        self.payload = self.get_scenario_json(scenario)
 
     def connect_to_model(
         self,
@@ -16,17 +33,31 @@ class CloudClient:
     ) -> None:
         """connect to model"""
 
-        if model_name not in self.client.get_models():
+        model_names = [m.name for m in self.client.get_models()]
+
+        if model_name not in model_names:
             raise ValueError(
                 f"Supplied model name '{model_name}' not in available models (check "
                 + f"the rights for the provided 'api_key' if this doesn't feel right): "
-                + f"{self.client.get_models()}"
+                + f"{model_names}"
             )
 
         _model = self.client.get_model_by_name(model_name)
-        self.model = self.client.get_model_version_by_number(
-            model=_model, version_number=model_version
-        )
+        return self.client.get_model_version_by_number(model=_model, version_number=model_version)
 
-    def run():
-        pass
+    def get_scenario_json(self, scenario: Scenario) -> dict:
+        """gets AnyLogic safe serialized version of datamodel (import due to circular)"""
+        from holon.serializers import ScenarioSerializer
+
+        return ScenarioSerializer(scenario).data
+
+    def run(self):
+        """run the scenario"""
+
+        inputs: Inputs = self.client.create_default_inputs(self.model_version)
+
+        inputs.set_input("P grid connection config JSON", self.payload["gridconnections"])
+        inputs.set_input("P grid node config JSON", self.payload["gridnodes"])
+        inputs.set_input("P policies config JSON", self.payload["policies"])
+
+        return self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
