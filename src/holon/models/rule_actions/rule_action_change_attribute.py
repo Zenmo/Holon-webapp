@@ -4,6 +4,7 @@ from django.db import models
 from modelcluster.fields import ParentalKey
 from holon.models.scenario_rule import ScenarioRule
 
+
 class RuleActionChangeAttribute(RuleAction):
     """A discrete factor for setting the value of an attribute"""
 
@@ -13,4 +14,3 @@ class RuleActionChangeAttribute(RuleAction):
 
     class Meta:
         verbose_name = "RuleActionChangeAttribute"
-

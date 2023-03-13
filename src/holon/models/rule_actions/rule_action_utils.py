@@ -7,9 +7,9 @@ from holon.models.gridnode import GridNode
 
 from polymorphic import utils
 
-class RuleActionUtils():
-    """ Collection to select a class that is addable/balanceable in a RuleAction """
 
+class RuleActionUtils:
+    """Collection to select a class that is addable/balanceable in a RuleAction"""
 
     def get_parent_classes_and_field_names(model_type: type) -> list[tuple[type, str]]:
         """

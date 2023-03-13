@@ -26,7 +26,9 @@ from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     """Blans"""
 
-    selected_model_type_name = models.CharField(max_length=255, blank=True) # TODO Should be selection of RuleActionModel subtypes in frontend - TAVM
+    selected_model_type_name = models.CharField(
+        max_length=255, blank=True
+    )  # TODO Should be selection of RuleActionModel subtypes in frontend - TAVM
     rule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
     )
@@ -39,7 +41,6 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     class Meta:
         verbose_name = "RuleActionBalanceGroup"
 
-
     def get_balance_models_ordered(self) -> list:
         """Get the linked RuleActionModel objects in order from the linking table"""
         return [
@@ -48,7 +49,6 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
                 "sort_order"
             )
         ]
-
 
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
@@ -59,8 +59,12 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         target_count = int(value)
         template_models_in_order = self.get_balance_models_ordered()
         model_types_in_order = [model.__class__ for model in template_models_in_order]
-        model_type_names_in_order = [model_type.__name__ for model_type in model_types_in_order]       
-        selected_model_type = next(model_type for model_type in model_types_in_order if model_type.__name__ == self.selected_model_type_name)
+        model_type_names_in_order = [model_type.__name__ for model_type in model_types_in_order]
+        selected_model_type = next(
+            model_type
+            for model_type in model_types_in_order
+            if model_type.__name__ == self.selected_model_type_name
+        )
 
         # validate input=
         self.validate_filtered_queryset(model_type_names_in_order, filtered_queryset, target_count)
@@ -69,21 +73,32 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         parent_fk_field_name = self.get_parent_fk_fieldname(filtered_queryset, selected_model_type)
 
         # determine the model type counts (in order)
-        model_counts_per_type = [self.get_count_for_model_type(model_type, filtered_queryset, parent_fk_field_name) for model_type in model_types_in_order]
+        model_counts_per_type = [
+            self.get_count_for_model_type(model_type, filtered_queryset, parent_fk_field_name)
+            for model_type in model_types_in_order
+        ]
 
         # validate whether total model count is equal to size of filtered query
         if sum(model_counts_per_type) != filtered_queryset.count():
-            raise ValidationError(f"Each filtered object should have exactly one of the models indicated for balancing. Current sum of models present is {sum(model_counts_per_type)}, while the number of filtered objects is {filtered_queryset.count()}")
+            raise ValidationError(
+                f"Each filtered object should have exactly one of the models indicated for balancing. Current sum of models present is {sum(model_counts_per_type)}, while the number of filtered objects is {filtered_queryset.count()}"
+            )
 
         # calculate the target counts of each model type as an effect of balancing
-        target_count_per_model_type = self.get_target_count_per_model_type(model_counts_per_type, model_type_names_in_order, target_count)
-        
+        target_count_per_model_type = self.get_target_count_per_model_type(
+            model_counts_per_type, model_type_names_in_order, target_count
+        )
+
         # reset model instances from queryset
         self.reset_models_in_queryset(model_types_in_order, filtered_queryset, parent_fk_field_name)
 
         # add models to filtered queryset according to target count
-        self.add_models_according_to_target_count(template_models_in_order, filtered_queryset, target_count_per_model_type, parent_fk_field_name)
-
+        self.add_models_according_to_target_count(
+            template_models_in_order,
+            filtered_queryset,
+            target_count_per_model_type,
+            parent_fk_field_name,
+        )
 
     def validate_filtered_queryset(
         self,
@@ -111,28 +126,32 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
                 f"target count ({target_count}) for a single model type cannot be larger than the total amount of filtered objects ({filtered_queryset.count()})"
             )
 
-
-    def get_parent_fk_fieldname(self, filtered_queryset: QuerySet, selected_model_type: type) -> str:
-        """ Get the fieldname of the model that refers to its parent object """
+    def get_parent_fk_fieldname(
+        self, filtered_queryset: QuerySet, selected_model_type: type
+    ) -> str:
+        """Get the fieldname of the model that refers to its parent object"""
 
         base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
-        
+
         try:
             parent_fk_field_name = next(
                 fk_field_name
-                for parent_type, fk_field_name in RuleActionUtils.get_parent_classes_and_field_names(selected_model_type)
+                for parent_type, fk_field_name in RuleActionUtils.get_parent_classes_and_field_names(
+                    selected_model_type
+                )
                 if base_parent_type == parent_type
             )
         except:
             raise ValueError(
                 f"Type {base_parent_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(selected_model_type)} for model type {self.selected_model_type_name}"
             )
-        
+
         return parent_fk_field_name
 
-
-    def get_count_for_model_type(self, model_type: type, filtered_queryset: QuerySet, parent_fk_field_name:str) -> int:
-        """ Get the number of occurences of model_type within the filtered objects """
+    def get_count_for_model_type(
+        self, model_type: type, filtered_queryset: QuerySet, parent_fk_field_name: str
+    ) -> int:
+        """Get the number of occurences of model_type within the filtered objects"""
 
         model_type_count = 0
 
@@ -143,13 +162,17 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
 
         return model_type_count
 
-    def reset_models_in_queryset(self, model_types_in_order: list[type], filtered_queryset: QuerySet, parent_fk_field_name:str):
-        """ Delete all instances of the model types in the filtered queryset """
+    def reset_models_in_queryset(
+        self,
+        model_types_in_order: list[type],
+        filtered_queryset: QuerySet,
+        parent_fk_field_name: str,
+    ):
+        """Delete all instances of the model types in the filtered queryset"""
 
         for model_type in model_types_in_order:
             for filtererd_object in filtered_queryset:
                 model_type.objects.filter(**{parent_fk_field_name: filtererd_object}).delete()
-
 
     def get_target_count_per_model_type(
         self,
@@ -169,10 +192,14 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
 
         # compute target differential per asset type
         if count_target_diff > 0:  # increase amount of selected asset type
-            target_diff_per_model_type[selected_index] = count_target_diff  # add models of this type
+            target_diff_per_model_type[
+                selected_index
+            ] = count_target_diff  # add models of this type
 
             # balance by removing starting from the bottom of the ordered list and moving up
-            remove_index = (n_model_types - 1 if selected_index < n_model_types - 1 else n_model_types - 2)
+            remove_index = (
+                n_model_types - 1 if selected_index < n_model_types - 1 else n_model_types - 2
+            )
             add_remove_sum = count_target_diff
             while add_remove_sum > 0:
                 target_diff_per_model_type[remove_index] = -min(
@@ -182,18 +209,27 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
                 remove_index -= 1
 
         elif count_target_diff < 0:  # decrease amount
-            target_diff_per_model_type[selected_index] = count_target_diff  # add models of this type
+            target_diff_per_model_type[
+                selected_index
+            ] = count_target_diff  # add models of this type
 
             # balance
             add_index = 1 if selected_index == 0 else (selected_index - 1)
             target_diff_per_model_type[add_index] = -count_target_diff
 
         # add target differential to model type counts
-        return [count + diff for count, diff in zip(model_counts_per_type, target_diff_per_model_type)]
+        return [
+            count + diff for count, diff in zip(model_counts_per_type, target_diff_per_model_type)
+        ]
 
-
-    def add_models_according_to_target_count(self, template_models_in_order: list, filtered_queryset: QuerySet, target_count_per_model_type:list[int], parent_fk_field_name:str):
-        """ Add duplicates of the template model to the filtered queryset in accordance with the target count per model type """
+    def add_models_according_to_target_count(
+        self,
+        template_models_in_order: list,
+        filtered_queryset: QuerySet,
+        target_count_per_model_type: list[int],
+        parent_fk_field_name: str,
+    ):
+        """Add duplicates of the template model to the filtered queryset in accordance with the target count per model type"""
 
         model_add_count = 0
         current_template_model_i = 0
@@ -205,27 +241,32 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
 
             util.duplicate_model(
                 template_models_in_order[current_template_model_i],
-                {parent_fk_field_name: filtererd_object}
+                {parent_fk_field_name: filtererd_object},
             )
 
             model_add_count += 1
-
 
 
 class BalanceGroupModelOrder(Orderable):
     """Linking table for RuleActionBalanceGroup and EnergyAsset"""
 
     balance_group = ParentalKey(RuleActionBalanceGroup, related_name="balance_group_model_order")
-    
-    asset_to_balance = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True, blank=True)
-    gridconnection_to_balance = models.ForeignKey(GridConnection, on_delete=models.SET_NULL, null=True, blank=True)
-    contract_to_balance = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True, blank=True)
+
+    asset_to_balance = models.ForeignKey(
+        EnergyAsset, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    gridconnection_to_balance = models.ForeignKey(
+        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    contract_to_balance = models.ForeignKey(
+        Contract, on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     content_panels = [
-        FieldPanel("asset_to_balance"), 
+        FieldPanel("asset_to_balance"),
         FieldPanel("gridconnection_to_balance"),
         FieldPanel("contract_to_balance"),
-        ]
+    ]
 
     def __init__(self, *args, **kwargs):
         super(Orderable, self).__init__(*args, **kwargs)
@@ -238,19 +279,25 @@ class BalanceGroupModelOrder(Orderable):
         self.__validate_model_selection()
         self.__set_model()
 
-
     def __validate_model_selection(self):
         """Validate only a single model type is selected"""
 
         # thy shall count to one. Not zero, nor two, one is the number to which thy shalt count
-        if (bool(self.asset_to_balance) + bool(self.gridconnection_to_balance) + bool(self.contract_to_balance)) < 1:
+        if (
+            bool(self.asset_to_balance)
+            + bool(self.gridconnection_to_balance)
+            + bool(self.contract_to_balance)
+        ) < 1:
             raise AssertionError(
                 f"Assign an object to either the asset, gridconnection or contract field for RuleActionAdd"
             )
 
-        if (bool(self.asset_to_balance) + bool(self.gridconnection_to_balance) + bool(self.contract_to_balance)) > 1:
+        if (
+            bool(self.asset_to_balance)
+            + bool(self.gridconnection_to_balance)
+            + bool(self.contract_to_balance)
+        ) > 1:
             raise AssertionError(f"Only one of the child models can be set for RuleActionAdd")
-
 
     def __set_model(self):
         """Set addition RuleActionAdd attributes according to selected model"""
@@ -268,11 +315,9 @@ class BalanceGroupModelOrder(Orderable):
             assert not (self.asset_to_balance or self.gridconnection_to_balance)
             self.model_to_balance = self.contract_to_balance
 
-
     def get_model_to_balance(self) -> Union[EnergyAsset, GridConnection, Contract]:
-        """ Return the model to balance """
+        """Return the model to balance"""
         return self.model_to_balance
-
 
     class Meta:
         verbose_name = "BalanceGroupModelOrder"

@@ -10,6 +10,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 # Don't forget to register new actions in get_actions() of ScenarioRule
 
+
 class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 

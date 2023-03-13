@@ -129,7 +129,9 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
-        rule_action_set_count = RuleActionSetCount.objects.create(asset_to_add=default_ehc, rule=rule)
+        rule_action_set_count = RuleActionSetCount.objects.create(
+            asset_to_add=default_ehc, rule=rule
+        )
 
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 

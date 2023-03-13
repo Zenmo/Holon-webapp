@@ -6,6 +6,7 @@ from django.db.models.query import QuerySet
 
 from modelcluster.fields import ParentalKey
 
+
 class RuleActionRemove(RuleAction):
     """Remove the filtered items"""
 

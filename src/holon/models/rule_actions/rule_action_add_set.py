@@ -18,19 +18,22 @@ from holon.models.asset import EnergyAsset
 from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 
+
 class GenericRuleActionAdd(RuleAction):
     """Class containing functionality for adding models to the filtered objects or setting the amount of specific type of model"""
 
     # one of these should be selected
     asset_to_add = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True, blank=True)
-    gridconnection_to_add = models.ForeignKey(GridConnection, on_delete=models.SET_NULL, null=True, blank=True)
+    gridconnection_to_add = models.ForeignKey(
+        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+    )
     contract_to_add = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True, blank=True)
 
     content_panels = [
-        FieldPanel("asset_to_add"), 
+        FieldPanel("asset_to_add"),
         FieldPanel("gridconnection_to_add"),
         FieldPanel("contract_to_add"),
-        ]
+    ]
 
     def __init__(self, *args, **kwargs):
         super(RuleAction, self).__init__(*args, **kwargs)
@@ -43,19 +46,21 @@ class GenericRuleActionAdd(RuleAction):
         self.__validate_model_selection()
         self.__set_model()
 
-
     def __validate_model_selection(self):
         """Validate only a single model type is selected"""
 
         # thy shall count to one. Not zero, nor two, one is the number to which thy shalt count
-        if (bool(self.asset_to_add) + bool(self.gridconnection_to_add) + bool(self.contract_to_add)) < 1:
+        if (
+            bool(self.asset_to_add) + bool(self.gridconnection_to_add) + bool(self.contract_to_add)
+        ) < 1:
             raise AssertionError(
                 f"Assign an object to either the asset, gridconnection or contract field for RuleActionAdd"
             )
 
-        if (bool(self.asset_to_add) + bool(self.gridconnection_to_add) + bool(self.contract_to_add)) > 1:
+        if (
+            bool(self.asset_to_add) + bool(self.gridconnection_to_add) + bool(self.contract_to_add)
+        ) > 1:
             raise AssertionError(f"Only one of the child models can be set for RuleActionAdd")
-
 
     def __set_model(self):
         """Set addition RuleActionAdd attributes according to selected model"""
@@ -73,7 +78,6 @@ class GenericRuleActionAdd(RuleAction):
             assert not (self.asset_to_add or self.gridconnection_to_add)
             self.model_to_add = self.contract_to_add
 
-
     panels = RuleAction.panels + [
         FieldPanel("model_to_add"),
     ]
@@ -82,8 +86,9 @@ class GenericRuleActionAdd(RuleAction):
         verbose_name = "GenericRuleActionAdd"
         abstract = True
 
-
-    def add_or_set_items(self, filtered_queryset: QuerySet, value: str, reset_models_before_add: bool):
+    def add_or_set_items(
+        self, filtered_queryset: QuerySet, value: str, reset_models_before_add: bool
+    ):
         """Add an asset to the first n items in the the filtered objects"""
 
         # parse value
@@ -96,7 +101,9 @@ class GenericRuleActionAdd(RuleAction):
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
-                for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)
+                for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(
+                    self.model_to_add.__class__
+                )
                 if base_parent_type == parent_type
             )
         except:
@@ -129,7 +136,9 @@ class GenericRuleActionAdd(RuleAction):
 class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
     """Add a set of n models to the filtered items"""
 
-    rule = ParentalKey(ScenarioRule, on_delete=models.SET_NULL, null=True, related_name="discrete_factors_add")
+    rule = ParentalKey(
+        ScenarioRule, on_delete=models.SET_NULL, null=True, related_name="discrete_factors_add"
+    )
 
     class Meta:
         verbose_name = "RuleActionAdd"
@@ -141,9 +150,13 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
 
 
 class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
-    """ Set the number of models within the filtered objects """
+    """Set the number of models within the filtered objects"""
+
     rule = ParentalKey(
-        ScenarioRule, on_delete=models.SET_NULL, null=True, related_name="discrete_factors_set_count"
+        ScenarioRule,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="discrete_factors_set_count",
     )
 
     class Meta:
@@ -153,4 +166,3 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
         self.add_or_set_items(filtered_queryset, value, True)
-
