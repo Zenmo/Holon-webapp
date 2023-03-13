@@ -1,24 +1,12 @@
 from django.apps import apps
-from holon.models.contract import Contract
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models.query import QuerySet
-from holon.models.gridconnection import GridConnection
 
-from holon.models.asset import EnergyAsset
-from holon.models import util
-
-from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
 from polymorphic.models import PolymorphicModel
-from polymorphic import utils
 
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from wagtail.core.models import Orderable
-from holon.models.rule_actions.rule_action_model import RuleActionModel
-from holon.models.scenario_rule import ScenarioRule
-
+from wagtail.admin.edit_handlers import FieldPanel
 
 # Don't forget to register new actions in get_actions() of ScenarioRule
 

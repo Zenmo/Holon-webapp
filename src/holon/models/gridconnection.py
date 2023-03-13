@@ -6,7 +6,6 @@ from modelcluster.models import ClusterableModel
 
 from holon.models.actor import Actor
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
-from holon.models.rule_actions.rule_action_model import RuleActionModel
 from holon.models.scenario import Scenario
 
 holon_app = apps.get_app_config("holon")
@@ -29,7 +28,8 @@ class BatteryMode(models.TextChoices):
     PRICE = "PRICE"
 
 
-class GridConnection(PolymorphicModel, ClusterableModel, RuleActionModel):
+class GridConnection(PolymorphicModel, ClusterableModel):
+
     owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     capacity_kw = models.FloatField()
     parent_electric = models.ForeignKey(

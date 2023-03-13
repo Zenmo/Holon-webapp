@@ -1,13 +1,15 @@
-from polymorphic import utils
-
-from holon.models.actor import Actor
+from django.db import models
 from holon.models.asset import EnergyAsset
 from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
+from holon.models.actor import Actor
 from holon.models.gridnode import GridNode
-        
-class RuleActionUtils:
-    """ A collection of util functions for rule actions """ 
+
+from polymorphic import utils
+
+class RuleActionUtils():
+    """ Collection to select a class that is addable/balanceable in a RuleAction """
+
 
     def get_parent_classes_and_field_names(model_type: type) -> list[tuple[type, str]]:
         """
