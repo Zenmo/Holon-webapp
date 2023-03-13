@@ -7,9 +7,9 @@ from cloudclient.datamodel.contracts import Contract, ContractTypeEnum, Contract
 from cloudclient.datamodel.actors import ActorTypeEnum
 from cloudclient.datamodel.gridconnections import ChargingModeEnum, BatteryModeEnum
 
-from api.models.interactive_input import InteractiveInput
 from holon.anylogic_kpi import calculate_holon_kpis
 from holon.economic.im_sorry import calculate_total_costs
+from holon.models.interactive_element import InteractiveElement
 
 from .util import write_payload_to_jsons
 from .factor import Factor
@@ -147,7 +147,7 @@ class PreProcessor:
         """
         policies = {}
         for user_input in self.interactive_elements:
-            interactive_el: InteractiveInput = user_input["interactive_element"]
+            interactive_el: InteractiveElement = user_input["interactive_element"]
             input_value: float | str = user_input["value"]
 
             try:
@@ -511,7 +511,7 @@ class PreProcessor:
         """
         sliders = {}
         for user_input in self.interactive_elements:
-            interactive_el: InteractiveInput = user_input["interactive_element"]
+            interactive_el: InteractiveElement = user_input["interactive_element"]
             input_value: float | str = user_input["value"]
 
             try:

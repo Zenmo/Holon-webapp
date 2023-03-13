@@ -1,14 +1,13 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
 
-from api.models import (
-    InteractiveInput,
-    InteractiveInputOptions,
-    InteractiveInputContinuousValues,
-)
 from wagtail.core import blocks
-from api.models.interactive_input import CHOICE_CONTINUOUS, CHOICE_MULTISELECT, CHOICE_SINGLESELECT
 from holon.models import InteractiveElement
+from holon.models.interactive_element import (
+    ChoiceType,
+    InteractiveElementContinuousValues,
+    InteractiveElementOptions,
+)
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from wagtailmodelchooser.blocks import ModelChooserBlock
@@ -60,14 +59,13 @@ class InteractiveInputBlock(blocks.StructBlock):
 
     def get_api_representation(self, value, context=None):
         if value:
-            interactive_input = InteractiveInput.objects.get(pk=value["interactive_input"])
-
+            interactive_input = InteractiveElement.objects.get(pk=value["interactive_input"].id)
             options_arr = []
             if (
-                interactive_input.type == CHOICE_SINGLESELECT
-                or interactive_input.type == CHOICE_MULTISELECT
+                interactive_input.type == ChoiceType.CHOICE_SINGLESELECT
+                or interactive_input.type == ChoiceType.CHOICE_MULTISELECT
             ):
-                options = InteractiveInputOptions.objects.filter(input_id=interactive_input.id)
+                options = InteractiveElementOptions.objects.filter(input_id=interactive_input.id)
 
                 for option in options:
                     option_default = False
@@ -90,8 +88,8 @@ class InteractiveInputBlock(blocks.StructBlock):
                         option_dict["link_wiki_page"] = option.link_wiki_page.get_url_parts()[2]
                     options_arr.append(option_dict)
 
-            if interactive_input.type == CHOICE_CONTINUOUS:
-                options = InteractiveInputContinuousValues.objects.filter(
+            if interactive_input.type == ChoiceType.CHOICE_CONTINUOUS:
+                options = InteractiveElementContinuousValues.objects.filter(
                     input_id=interactive_input.id
                 )
                 for option in options:
@@ -109,18 +107,15 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "type": interactive_input.type,
                 "level": interactive_input.level,
                 "more_information": interactive_input.more_information,
-                "animation_tag": interactive_input.animation_tag,
                 "title_wiki_page": "",
                 "link_wiki_page": "",
                 "options": options_arr,
-                "display": value["display"],
                 "visible": value["visible"],
                 "locked": value["locked"],
                 "default_value_override": value["default_value"],
             }
 
             if interactive_input.link_wiki_page is not None:
-                print(interactive_input.link_wiki_page.title)
                 interactive_input_info["title_wiki_page"] = interactive_input.link_wiki_page.title
                 interactive_input_info[
                     "link_wiki_page"

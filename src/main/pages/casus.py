@@ -25,9 +25,7 @@ class CasusPage(HeadlessPreviewMixin, BaseCard):
         CasusFilter, on_delete=models.DO_NOTHING, related_name="+", null=True, blank=True
     )
 
-    scenario = ForeignKey(
-        Scenario, on_delete=models.SET_NULL, related_name="+", null=True, blank=True
-    )
+    scenario = ForeignKey(Scenario, on_delete=models.SET_NULL, related_name="+", null=True)
 
     linked_best_practices = ParentalManyToManyField("main.bestpracticepage", blank=True)
 
