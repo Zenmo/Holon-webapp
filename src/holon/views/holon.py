@@ -27,15 +27,14 @@ class HolonV2Service(generics.CreateAPIView):
 
                 # TODO serialize and send to anylogic
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
-                result: SingleRunOutputs = CloudClient(original_scenario).run()
+                cc = CloudClient(original_scenario)
+                cc.run()
 
                 # Delete duplicated scenario
                 # scenario.delete()
 
-                result = {key: result.value(key) for key in result.names()}
-
                 return Response(
-                    result,
+                    cc.outputs,
                     status=status.HTTP_200_OK,
                 )
 

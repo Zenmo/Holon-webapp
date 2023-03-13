@@ -1,6 +1,8 @@
 from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
 from anylogiccloudclient.client.cloud_client import Inputs
+from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from holon.models.scenario import Scenario
+import json
 
 
 class CloudClient:
@@ -12,7 +14,10 @@ class CloudClient:
     ) -> None:
         from holon.models.config import AnylogicCloudConfig
 
+        # db lookup
         config: AnylogicCloudConfig = scenario.anylogic_config.get()
+        self.config = config
+
         # value attributes
         self.url = config.url
         self.scenario = scenario
@@ -23,6 +28,9 @@ class CloudClient:
             model_name=config.model_name, model_version=config.model_version_number
         )
         self.payload = self.get_scenario_json(scenario)
+
+        # initials
+        self._outputs = None
 
     def connect_to_model(
         self,
@@ -49,8 +57,8 @@ class CloudClient:
 
         return ScenarioSerializer(scenario).data
 
-    def run(self):
-        """run the scenario"""
+    def run(self) -> None:
+        """run the scenario, outputs are set to the .outputs attribute"""
 
         inputs: Inputs = self.client.create_default_inputs(self.model_version)
 
@@ -58,4 +66,15 @@ class CloudClient:
         inputs.set_input("P grid node config JSON", self.payload["gridnodes"])
         inputs.set_input("P policies config JSON", self.payload["policies"])
 
-        return self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
+        self.outputs = self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
+
+    @property
+    def outputs(self) -> dict:
+        return self._outputs
+
+    @outputs.setter
+    def outputs(self, anylogic_outputs: SingleRunOutputs):
+        self._outputs = {
+            co.internal_key: json.loads(anylogic_outputs.value(co.anylogic_key))
+            for co in self.config.anylogic_cloud_output.all()
+        }
