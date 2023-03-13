@@ -9,20 +9,18 @@ class CloudClient:
     def __init__(
         self,
         scenario: Scenario,
-        api_key: str,
-        model_name: str,
-        model_version: int,
-        url: str = "https://engine.holontool.nl",
     ) -> None:
-        
+        from holon.models.config import AnylogicCloudConfig
+
+        config: AnylogicCloudConfig = scenario.anylogic_config.get()
         # value attributes
-        self.url = url
+        self.url = config.url
         self.scenario = scenario
-        self.client = ALCloudClient(api_key, url)
-        
+        self.client = ALCloudClient(config.api_key, config.url)
+
         # method attributes
         self.model_version = self.connect_to_model(
-            model_name=model_name, model_version=model_version
+            model_name=config.model_name, model_version=config.model_version_number
         )
         self.payload = self.get_scenario_json(scenario)
 
