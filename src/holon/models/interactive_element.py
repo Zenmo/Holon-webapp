@@ -136,10 +136,16 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
         help_text=_("Use this to link to an internal page."),
     )
 
-    # panels = [ TODO
-    #     ...,
-    #     InlinePanel("rules", heading="Rules", label="Rules"),
-    # ]
+    panels = [
+        FieldPanel("option"),
+        FieldPanel("label"),
+        FieldPanel("default"),
+        FieldPanel("legal_limitation"),
+        FieldPanel("level"),
+        FieldPanel("color"),
+        FieldPanel("link_wiki_page"),
+        InlinePanel("rules", heading="Rules", label="Rules"),
+    ]
 
     def __str__(self):
         if self.label:
@@ -173,9 +179,9 @@ class InteractiveElementContinuousValues(ClusterableModel):
         help_text=_("Maximum amount of the continuous input"),
     )
 
-    # panels = [ TODO
-    #     FieldPanel("slider_value_default"),
-    #     FieldPanel("slider_value_min"),
-    #     FieldPanel("slider_value_max"),
-    #     InlinePanel("rules", heading="Rules", label="Rules"),
-    # ]
+    panels = [
+        FieldPanel("slider_value_default"),
+        FieldPanel("slider_value_min"),
+        FieldPanel("slider_value_max"),
+        InlinePanel("rules", heading="Rules", label="Rules"),
+    ]
