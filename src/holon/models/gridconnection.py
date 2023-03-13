@@ -110,6 +110,12 @@ class BuiltEnvironmentGridConnection(GridConnection):
         max_length=100,
         choices=HeatingType.choices,
     )
+    tempSetpointNight_degC = models.FloatField(default=16.0)
+    tempSetpointNight_start_hr = models.FloatField(default=20.0)
+    tempSetpointDay_degC = models.FloatField(default=20.0)
+    tempSetpointDay_start_hr = models.FloatField(default=8.0)
+    pricelevelLowDifFromAvg_eurpkWh = models.FloatField(blank=True, null=True)
+    pricelevelHighDifFromAvg_eurpkWh = models.FloatField(blank=True, null=True)
 
 
 class UtilityGridConnection(GridConnection):
@@ -128,12 +134,6 @@ class HouseGridConnection(BuiltEnvironmentGridConnection):
     category = "HOUSE"
     type = models.CharField(max_length=100, choices=HousingType.choices)
     smart_assets = models.BooleanField(null=True, blank=True)
-    tempSetpointNight_degC = models.FloatField(blank=True, null=True)
-    tempSetpointNight_start_hr = models.FloatField(blank=True, null=True)
-    tempSetpointDay_degC = models.FloatField(blank=True, null=True)
-    tempSetpointDay_start_hr = models.FloatField(blank=True, null=True)
-    pricelevelLowDifFromAvg_eurpkWh = models.FloatField(blank=True, null=True)
-    pricelevelHighDifFromAvg_eurpkWh = models.FloatField(blank=True, null=True)
 
 
 class BuildingType(models.TextChoices):
