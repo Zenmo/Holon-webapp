@@ -22,7 +22,7 @@ class HolonService(generics.CreateAPIView):
         serializer = HolonRequestSerializer(data=request.data)
 
         return Response(
-            "This endpoint is no longer in use, upgrade to the new endpoin!",
+            "This endpoint is no longer in use, upgrade to the new endpoint!",
             status=status.HTTP_418_IM_A_TEAPOT,
         )
 
