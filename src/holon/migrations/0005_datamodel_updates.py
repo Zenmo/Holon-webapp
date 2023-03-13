@@ -6,7 +6,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("holon", "0001_initial"),
+        ("holon", "0004_alter_interactiveelement_level_and_more"),
     ]
 
     operations = [
