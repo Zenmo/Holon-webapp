@@ -107,3 +107,20 @@ class Scenario(ClusterableModel):
                 duplicate_model(policy, {"payload": new_scenario})
 
             return new_scenario
+
+    def delete(self) -> None:
+        """Delete scenario and all its relations"""
+
+        def delete_individualy(queryset):
+            for object in queryset:
+                object.delete()
+
+        with transaction.atomic():
+            # Delete polymorphic models individually
+            # django-polymorphic can't handle deletion of mixed object types
+            delete_individualy(self.assets)
+            delete_individualy(self.gridconnection_set.all())
+            delete_individualy(self.gridnode_set.all())
+            delete_individualy(self.actor_set.all())
+
+            return super().delete()

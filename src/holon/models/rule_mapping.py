@@ -24,7 +24,8 @@ def get_scenario_and_apply_rules(
 
             filtered_queryset = apply_rule_filters_to_queryset(queryset, rule)
 
-            apply_rule_actions(rule, filtered_queryset, interactive_element_input["value"])
+            for value in interactive_element_input["value"].split(","):
+                apply_rule_actions(rule, filtered_queryset, value)
 
     return scenario
 
