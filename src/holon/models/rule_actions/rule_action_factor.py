@@ -11,12 +11,15 @@ from wagtail.admin.edit_handlers import FieldPanel
 class RuleActionFactor(RuleAction):
     """A continuous factor for scaling an input value between a certain range"""
 
+    model_attribute = models.CharField(max_length=255, null=False)
+
     rule = ParentalKey(ScenarioRule, on_delete=models.CASCADE, related_name="continuous_factors")
 
     min_value = models.IntegerField()
     max_value = models.IntegerField()
 
-    panels = RuleAction.panels + [
+    panels = [
+        FieldPanel("model_attribute"),
         FieldPanel("min_value"),
         FieldPanel("max_value"),
     ]
@@ -35,5 +38,5 @@ class RuleActionFactor(RuleAction):
         mapped_value = (self.max_value - self.min_value) * (value_flt / 100.0) + self.min_value
 
         for filtered_object in filtered_queryset:
-            setattr(filtered_object, self.asset_attribute, mapped_value)
+            setattr(filtered_object, self.model_attribute, mapped_value)
             filtered_object.save()

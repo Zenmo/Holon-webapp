@@ -33,7 +33,7 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
     )
 
-    panels = RuleAction.panels + [
+    panels = [
         FieldPanel("selected_asset_type"),
         InlinePanel("balance_group_model_order", label="Assets for balancing in order"),
     ]
