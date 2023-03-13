@@ -11,7 +11,7 @@ class CloudClient:
     def __init__(
         self,
         scenario: Scenario,
-    ) -> None:
+    ):
         from holon.models.config import AnylogicCloudConfig
 
         # db lookup
@@ -24,7 +24,7 @@ class CloudClient:
         self.client = ALCloudClient(config.api_key, config.url)
 
         # method attributes
-        self.model_version = self.connect_to_model(
+        self.model_version = self._get_model_version(
             model_name=config.model_name, model_version=config.model_version_number
         )
         self.payload = self.get_scenario_json(scenario)
@@ -32,12 +32,12 @@ class CloudClient:
         # initials
         self._outputs = None
 
-    def connect_to_model(
+    def _get_model_version(
         self,
         model_name: str,
         model_version: int,
     ) -> None:
-        """connect to model"""
+        """connect to the cloud and get the right model version"""
 
         model_names = [m.name for m in self.client.get_models()]
 
@@ -52,7 +52,8 @@ class CloudClient:
         return self.client.get_model_version_by_number(model=_model, version_number=model_version)
 
     def get_scenario_json(self, scenario: Scenario) -> dict:
-        """gets AnyLogic safe serialized version of datamodel (import due to circular)"""
+        """gets AnyLogic safe serialized version of the copied datamodel (import here due to circulars)"""
+        # TODO has hardcoded values for input mapping
         from holon.serializers import ScenarioSerializer
 
         return ScenarioSerializer(scenario).data
