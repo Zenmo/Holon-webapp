@@ -7,6 +7,7 @@ from holon.models.rule_action import RuleAction
 from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ModelType, ScenarioRule
 from holon.serializers import InteractiveElementInput
+from holon.models import ChoiceType
 
 
 def get_scenario_and_apply_rules(
@@ -19,12 +20,23 @@ def get_scenario_and_apply_rules(
     for interactive_element_input in interactive_element_inputs:
         interactive_element = interactive_element_input["interactive_element"]
 
-        for rule in interactive_element.rules.all():
-            queryset = get_queryset_for_rule(rule, scenario)
+        if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS:
+            interactive_element_options = interactive_element.continuous_values.all()
+        else:
+            ids = interactive_element_input["value"].split(",")
+            interactive_element_options = interactive_element.options.filter(id__in=ids)
 
-            filtered_queryset = apply_rule_filters_to_queryset(queryset, rule)
+        for option in interactive_element_options:
+            value = (
+                interactive_element_input["value"]
+                if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS
+                else option.option
+            )
+            for rule in option.rules.all():
+                queryset = get_queryset_for_rule(rule, scenario)
 
-            for value in interactive_element_input["value"].split(","):
+                filtered_queryset = apply_rule_filters_to_queryset(queryset, rule)
+
                 apply_rule_actions(rule, filtered_queryset, value)
 
     return scenario
