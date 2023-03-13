@@ -236,7 +236,9 @@ class HeatStorageAsset(StorageAsset):
 
     def clean(self) -> None:
         if self.type == StorageAssetType.HEATMODEL:
-            if self.initial_temperature_degC is None:
+            if self.ambientTempType != AmbientTempType.AIR:
+                raise ValidationError(f"AmbientTempType can only be air for type '{self.type}'")
+            if self.initialTemperature_degC is None:
                 raise ValidationError(
                     f"Must supply 'initial_temperature_degC' for type '{self.type}'"
                 )
