@@ -54,7 +54,6 @@ class RuleMappingTestClass(TestCase):
 
     def test_rule_mapping_single_select_option_1(self) -> None:
         # Arange
-
         interactive_elements = [
             {
                 "value": str(self.interactive_element_option_1.id),
