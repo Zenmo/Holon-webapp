@@ -2,6 +2,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from holon.models import (
+    ActorGroup,
+    ActorSubGroup,
     Actor,
     Contract,
     EnergyAsset,
@@ -57,6 +59,7 @@ class ContractSerializer(AnyLogicModelSerializer):
         fields = "__all__"
 
     id = serializers.SerializerMethodField()
+    contractScope = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         return f"c{obj.id}"
@@ -68,6 +71,14 @@ class ContractSerializer(AnyLogicModelSerializer):
             ]
         )
 
+    def get_contractScope(self, obj):
+        # get related actor
+        if obj.contractScope is not None:
+            obj = Actor.objects.get(id=obj.contractScope.id)
+            return ActorSerializer().get_id(obj)
+        else:
+            return obj.contractScope
+
 
 class ActorSerializer(AnyLogicModelSerializer):
     # contracts = ContractSerializer(many=True, read_only=True)
@@ -77,6 +88,8 @@ class ActorSerializer(AnyLogicModelSerializer):
         fields = "__all__"
 
     id = serializers.SerializerMethodField()
+    group = serializers.SerializerMethodField()
+    subgroup = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         return f"{obj.category.lower()[:3]}{obj.id}"
@@ -88,6 +101,18 @@ class ActorSerializer(AnyLogicModelSerializer):
 
         return ContractPolymorphicSerializer(obj.contracts.all(), many=True, read_only=True).data
 
+    def get_group(self, obj: Actor):
+        if obj.group is not None:
+            return ActorGroup.objects.get(id=obj.group.id).name
+        else:
+            return None
+
+    def get_subgroup(self, obj: Actor):
+        if obj.subgroup is not None:
+            return ActorSubGroup.objects.get(id=obj.subgroup.id).name
+        else:
+            return None
+
 
 class EnergyAssetSerializer(AnyLogicModelSerializer):
     class Meta:
@@ -96,6 +121,11 @@ class EnergyAssetSerializer(AnyLogicModelSerializer):
 
     def get_fields(self):
         return super().get_fields(exclude_fields=["gridconnection", "gridnode"])
+
+    category = serializers.SerializerMethodField()
+
+    def get_category(self, obj: EnergyAsset):
+        return obj.category
 
 
 class PolicySerializer(AnyLogicModelSerializer):
@@ -118,6 +148,7 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     parent = serializers.SerializerMethodField()
     owner_actor = serializers.SerializerMethodField()
     assets = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
 
     def get_id(self, obj):
         try:
@@ -145,11 +176,12 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     def get_assets(self, obj: GridNode):
         from .mapper import EnergyAssetPolymorphicSerializer
 
-        print("triggered")
-
         return EnergyAssetPolymorphicSerializer(
             obj.energyasset_set.all(), many=True, read_only=True
         ).data
+
+    def get_category(self, obj: GridNode):
+        return obj.category
 
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
@@ -164,6 +196,7 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
     parent_electric = serializers.SerializerMethodField()
     parent_heat = serializers.SerializerMethodField()
     assets = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
 
     def get_owner_actor(self, obj):
         # get related actor
@@ -200,3 +233,6 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
         return EnergyAssetPolymorphicSerializer(
             obj.energyasset_set.all(), many=True, read_only=True
         ).data
+
+    def get_category(self, obj: GridConnection):
+        return obj.category

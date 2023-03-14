@@ -17,10 +17,6 @@ wait_for_db () {
   fi
 }
 
-setup_submodules () {
-  cd /workspace/src/holon/services
-  cloudclient_init -tf .
-}
 
 setup_django () {
   cd /workspace/src
@@ -43,10 +39,20 @@ setup_django () {
 
 load_fixture_data() {
   cd /workspace/src
+
+  echo Install fixtures
   python manage.py loaddata holon/fixtures/holon-fixture.json
   python manage.py loaddata holon/fixtures/api-fixture.json
   python manage.py loaddata holon/fixtures/main-casusfilter-fixture.json
   python manage.py loaddata holon/fixtures/graph-colors-fixture.json
+  python manage.py loaddata holon/fixtures/storylinepageroletype-fixture.json
+  python manage.py loaddata holon/fixtures/storylinepageinformationtype-fixture.json
+  python manage.py loaddata holon/fixtures/wagtailcore-fixture.json
+  python manage.py loaddata holon/fixtures/basepage-fixture.json
+  python manage.py loaddata holon/fixtures/casusoverview-fixture.json
+  python manage.py loaddata holon/fixtures/casus-fixture.json
+  python manage.py loaddata holon/fixtures/storyline-fixture.json
+  echo Fixtures loaded
 }
 
 setup_frontend () {
@@ -57,7 +63,6 @@ setup_frontend () {
 }
 
 wait_for_db
-setup_submodules
 setup_django
 load_fixture_data
 setup_frontend

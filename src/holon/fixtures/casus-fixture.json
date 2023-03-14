@@ -1,0 +1,26 @@
+[
+{
+    "model": "main.casuspage",
+    "pk": 5,
+    "fields": {
+        "thumbnail": null,
+        "description": "Integer consectetur arcu vitae lacus sollicitudin, sit amet consectetur erat lacinia. Vestibulum ac lorem ipsum. Sed consectetur pellentesque sem",
+        "card_color": "card__bg-blue",
+        "casus_filter": 1,
+        "content": "[{\"id\": \"281a0b2c-2bac-45bd-9c92-38687b5bf4c9\", \"type\": \"paragraph_block\", \"value\": {\"text\": \"<p data-block-key=\\\"1ewdu\\\">Benut de lessen van wind op zee aanlanding bij \\u00e9\\u00e9n industriecluster om via het landelijke hoogspanningsnet en de waterstofbackbone alle zes industrieclusters van energie te voorzien.</p><p data-block-key=\\\"83u14\\\">Met biedzonesplitsing in drie zones of nodal pricing kan worden gezorgd dat P2G uitsluitend aan de kust komt en dat er landinwaarts hybride wordt ge\\u00eblektrificeerd, zodat het hoogspanningsnet niet overbelast raakt.</p>\", \"background\": {\"size\": \"bg__full\", \"color\": \"block__bg-white\"}, \"grid_layout\": {\"grid\": \"50_50\"}}}]",
+        "linked_best_practices": []
+    }
+},
+{
+    "model": "main.casuspage",
+    "pk": 6,
+    "fields": {
+        "thumbnail": null,
+        "description": "Lorem Ipsum",
+        "card_color": "card__bg-blue",
+        "casus_filter": 3,
+        "content": "[{\"id\": \"4c3070ea-4299-492d-827c-4141b41bf4af\", \"type\": \"paragraph_block\", \"value\": {\"text\": \"<p data-block-key=\\\"pgxam\\\">Leer hoe je middels slimme beleidssturing power-to-gas (P2G) en power-to-heat (P2H) in een industriecluster aan de kust meer offshore wind aanlanding kan accommoderen.</p><p data-block-key=\\\"21sbm\\\">Het hand in hand uitrollen van wind op zee en de conversie van elektriciteit naar een andere energiedrager (P2X) in de industrie is cruciaal voor het succes.</p>\", \"background\": {\"size\": \"bg__full\", \"color\": \"block__bg-white\"}, \"grid_layout\": {\"grid\": \"50_50\"}}}]",
+        "linked_best_practices": []
+    }
+}
+]

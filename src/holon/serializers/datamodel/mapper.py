@@ -41,7 +41,7 @@ from holon.models.asset import (
 )
 
 
-from holon.models.actor import Actor, NonFirmActor
+from holon.models.actor import Actor, ActorGroup, ActorSubGroup
 
 
 from holon.models.gridconnection import (
@@ -108,7 +108,7 @@ from .subserializers import (
 )
 
 
-from .subserializers import NonFirmActorSerializer
+from .subserializers import ActorGroupSerializer, ActorSubGroupSerializer
 
 
 from .subserializers import (
@@ -164,7 +164,11 @@ class EnergyAssetPolymorphicSerializer(PolymorphicSerializer):
 
 
 class ActorPolymorphicSerializer(PolymorphicSerializer):
-    model_serializer_mapping = {Actor: ActorSerializer, NonFirmActor: NonFirmActorSerializer}
+    model_serializer_mapping = {
+        Actor: ActorSerializer,
+        ActorGroup: ActorGroupSerializer,
+        ActorSubGroup: ActorSubGroupSerializer,
+    }
 
 
 class GridConnectionPolymorphicSerializer(PolymorphicSerializer):

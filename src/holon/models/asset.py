@@ -8,6 +8,7 @@ from holon.models.gridnode import GridNode
 
 
 class EnergyAsset(PolymorphicModel):
+    category = "GENERIC"
     gridconnection = models.ForeignKey(
         GridConnection, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -104,6 +105,7 @@ class ConversionAssetType(models.TextChoices):
     METHANE_FURNACE = "METHANE_FURNACE"
     ELECTROLYSER = "ELECTROLYSER"
     CURTAILER = "CURTAILER"
+    CURTAILER_HEAT = "CURTAILER_HEAT"
     METHANE_CHP = "METHANE_CHP"
 
 
@@ -171,6 +173,7 @@ class TransportHeatConversionAsset(ElectricHeatConversionAsset):
 class HybridHeatCoversionAsset(HeatConversionAsset):
     ambientTempType = models.CharField(max_length=255, choices=AmbientTempType.choices)
     capacityHeat_kW = models.FloatField()
+    capacityElectricity_kW = models.FloatField()
 
 
 # %% Production assets
@@ -218,7 +221,6 @@ class StorageAsset(EnergyAsset):
         max_length=50,
         choices=StorageAssetType.choices,
     )
-    stateOfCharge_r = models.FloatField()
 
 
 class HeatStorageAsset(StorageAsset):
@@ -235,7 +237,9 @@ class HeatStorageAsset(StorageAsset):
 
     def clean(self) -> None:
         if self.type == StorageAssetType.HEATMODEL:
-            if self.initial_temperature_degC is None:
+            if self.ambientTempType != AmbientTempType.AIR:
+                raise ValidationError(f"AmbientTempType can only be air for type '{self.type}'")
+            if self.initialTemperature_degC is None:
                 raise ValidationError(
                     f"Must supply 'initial_temperature_degC' for type '{self.type}'"
                 )
@@ -252,6 +256,7 @@ class HeatStorageAsset(StorageAsset):
 class ElectricStorageAsset(StorageAsset):
     capacityElectricity_kW = models.FloatField()
     storageCapacity_kWh = models.FloatField()
+    stateOfCharge_r = models.FloatField()
 
 
 class VehicleElectricStorageAsset(ElectricStorageAsset):

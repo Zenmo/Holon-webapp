@@ -6,7 +6,8 @@ from django.core.exceptions import ValidationError
 
 from holon.models.scenario import Scenario
 from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.fields import ParentalKey
+from holon.services.cloudclient import CloudClient
 
 
 class AnylogicCloudConfig(ClusterableModel):
@@ -47,11 +48,17 @@ class AnylogicCloudConfig(ClusterableModel):
         verbose_name = "Anylogic cloudclient configuratie"
 
     def clean(self) -> None:
-        # TODO use holon.cloud.client to validate:
-        # 1) API access for model
-        # 2) Specified model version
+        try:
+            CloudClient(
+                api_key=self.api_key,
+                url=self.url,
+                model_name=self.model_name,
+                model_version=self.model_version,
+            )
+        except ValueError as e:
+            raise ValidationError(e)
 
-        pass
+        return super().clean()
 
     def __str__(self):
         return f"{self.model_name} / version {self.model_version_number}"
