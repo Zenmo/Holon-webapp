@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
+from django.core.exceptions import ValidationError
 
 from holon.models.actor import Actor
 
@@ -24,7 +25,7 @@ class Contract(PolymorphicModel):
     contractType = models.CharField(
         max_length=255, choices=ContractType.choices, default=ContractType.DELIVERY
     )
-    contractScope = models.ForeignKey(Actor, default=4, on_delete=models.PROTECT)
+    contractScope = models.ForeignKey(Actor, on_delete=models.PROTECT)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
     )
@@ -41,6 +42,11 @@ class Contract(PolymorphicModel):
     def __str__(self):
         return f"c{self.id} - {self.contractType.lower()}"
 
+    def clean(self):
+        return ValidationError(
+            "Should not be implemented at top level! Use a specific class for this case."
+        )
+
 
 class DeliveryContractType(models.TextChoices):
     FIXED = "ELECTRICITY_FIXED"
@@ -51,6 +57,12 @@ class DeliveryContract(Contract):
     deliveryContractType = models.CharField(max_length=255, choices=DeliveryContractType.choices)
     deliveryPrice_eurpkWh = models.FloatField()
     feedinPrice_eurpkWh = models.FloatField()
+
+    def clean(self) -> None:
+        if self.contractType != ContractType.DELIVERY:
+            raise ValidationError(f"ContractType should be 'Delivery' for DeliveryContract")
+
+        return super().clean()
 
 
 class ConnectionContractType(models.TextChoices):
@@ -66,6 +78,12 @@ class ConnectionContract(Contract):
     nfATO_starttime_h = models.FloatField()
     nfATO_endtime_h = models.FloatField()
 
+    def clean(self) -> None:
+        if self.contractType != ContractType.CONNECTION:
+            raise ValidationError(f"ContractType should be 'Connection' for ConnectionContract")
+
+        return super().clean()
+
 
 class TaxContractType(models.TextChoices):
     SALDEREN = "SALDEREN"
@@ -78,6 +96,12 @@ class TaxContract(Contract):
     taxFeedin_eurpkWh = models.FloatField()
     proportionalTax_pct = models.FloatField()
 
+    def clean(self) -> None:
+        if self.contractType != ContractType.TAX:
+            raise ValidationError(f"ContractType should be 'Tax' for TaxContract")
+
+        return super().clean()
+
 
 class TransportContractType(models.TextChoices):
     DEFAULT = "DEFAULT"
@@ -89,3 +113,9 @@ class TransportContract(Contract):
     transportContractType = models.CharField(max_length=255, choices=TransportContractType.choices)
     bandwidthTreshold_kW = models.FloatField()
     bandwidthTariff_eurpkWh = models.FloatField()
+
+    def clean(self) -> None:
+        if self.contractType != ContractType.TRANSPORT:
+            raise ValidationError(f"ContractType should be 'Transport' for TransportContract")
+
+        return super().clean()

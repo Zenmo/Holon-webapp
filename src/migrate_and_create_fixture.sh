@@ -1,6 +1,6 @@
 # Just a little convience script for the lazy (and gives some certainty with regards to the fixture)
 set -eux
-fixture='latest-datamodel-mvp-fixture.json'
+fixture='holon/fixtures/latest-datamodel-mvp-fixture.json'
 
 # Migrate and apply
 python manage.py makemigrations

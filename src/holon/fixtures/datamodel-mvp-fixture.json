@@ -9,14 +9,20 @@
         }
     },
     {
+        "model": "holon.actorgroup",
+        "pk": 1,
+        "fields": { "name": "households" }
+    },
+    { "model": "holon.actorsubgroup", "pk": 1, "fields": { "name": "poor" } },
+    {
         "model": "holon.actor",
         "pk": 4,
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "OPERATORGRID",
+            "payload": 1,
             "group": null,
             "subgroup": null,
-            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -26,9 +32,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "HOLONENERGY",
+            "payload": 1,
             "group": null,
             "subgroup": null,
-            "payload": 1,
             "wildcard_JSON": null
         }
     },
@@ -38,9 +44,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "COMMERCIAL",
-            "subgroup": null,
             "payload": 1,
+            "group": null,
+            "subgroup": null,
             "wildcard_JSON": null
         }
     },
@@ -50,9 +56,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "COMMERCIAL",
-            "subgroup": null,
             "payload": 1,
+            "group": null,
+            "subgroup": null,
             "wildcard_JSON": null
         }
     },
@@ -62,9 +68,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "commercial",
-            "subgroup": null,
             "payload": 1,
+            "group": null,
+            "subgroup": null,
             "wildcard_JSON": null
         }
     },
@@ -74,9 +80,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
-            "group": "commercial",
-            "subgroup": null,
             "payload": 1,
+            "group": null,
+            "subgroup": null,
             "wildcard_JSON": null
         }
     },
@@ -86,9 +92,9 @@
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "SUPPLIERENERGY",
-            "group": null,
-            "subgroup": null,
             "payload": 1,
+            "group": 1,
+            "subgroup": 1,
             "wildcard_JSON": null
         }
     },
@@ -137,9 +143,7 @@
             "parent_heat": null,
             "charging_mode": "MAX_POWER",
             "battery_mode": "BALANCE",
-            "nfATO_capacity_kw": 900.0,
-            "nfATO_starttime": 18.0,
-            "nfATO_endtime": 7.0,
+            "electrolyser_mode": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -155,9 +159,7 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": null,
-            "nfATO_capacity_kw": null,
-            "nfATO_starttime": null,
-            "nfATO_endtime": null,
+            "electrolyser_mode": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -173,9 +175,7 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": null,
-            "nfATO_capacity_kw": null,
-            "nfATO_starttime": null,
-            "nfATO_endtime": null,
+            "electrolyser_mode": null,
             "payload": 1,
             "wildcard_JSON": null
         }
@@ -191,9 +191,7 @@
             "parent_heat": null,
             "charging_mode": null,
             "battery_mode": "BALANCE",
-            "nfATO_capacity_kw": null,
-            "nfATO_starttime": null,
-            "nfATO_endtime": null,
+            "electrolyser_mode": "BALANCE",
             "payload": 1,
             "wildcard_JSON": null
         }

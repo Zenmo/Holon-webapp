@@ -1,0 +1,25 @@
+{
+    "model": "holon.energyasset",
+    "pk": {{ pk }},
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": {{ gridconnection }},
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": {{ pk }},
+    "fields": { "energyasset_ptr": {{ pk }}, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": {{ pk }},
+    "fields": {
+        "consumptionasset_ptr": {{ pk }},
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
