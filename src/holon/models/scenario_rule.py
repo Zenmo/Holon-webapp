@@ -81,7 +81,7 @@ class ScenarioRule(ClusterableModel):
                 InlinePanel(
                     "discrete_factors_add",
                     heading="Discrete rule actions - add child models",
-                    label="Discrete rule action - add child models",
+                    label="Discrete rule action - add child models (Select only one of the three options per model to add)",
                 ),
                 InlinePanel(
                     "discrete_factors_set_count",
