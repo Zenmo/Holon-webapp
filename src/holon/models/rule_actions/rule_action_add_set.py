@@ -1,4 +1,6 @@
 from typing import Union
+
+from django.forms import ValidationError
 from holon.models.rule_actions import RuleAction
 
 from django.db import models
@@ -53,14 +55,14 @@ class GenericRuleActionAdd(RuleAction):
         if (
             bool(self.asset_to_add) + bool(self.gridconnection_to_add) + bool(self.contract_to_add)
         ) < 1:
-            raise AssertionError(
+            raise ValidationError(
                 f"Assign an object to either the asset, gridconnection or contract field for RuleActionAdd"
             )
 
         if (
             bool(self.asset_to_add) + bool(self.gridconnection_to_add) + bool(self.contract_to_add)
         ) > 1:
-            raise AssertionError(f"Only one of the child models can be set for RuleActionAdd")
+            raise ValidationError(f"Only one of the child models can be set for RuleActionAdd")
 
     def __set_model(self):
         """Set addition RuleActionAdd attributes according to selected model"""
@@ -77,8 +79,6 @@ class GenericRuleActionAdd(RuleAction):
         elif self.contract_to_add:
             assert not (self.asset_to_add or self.gridconnection_to_add)
             self.model_to_add = self.contract_to_add
-
-    panels = [FieldPanel("model_to_add")]
 
     class Meta:
         verbose_name = "GenericRuleActionAdd"
@@ -113,7 +113,6 @@ class GenericRuleActionAdd(RuleAction):
 
         # only take first n objects
         for filtererd_object in filtered_queryset:
-
             if not self.model_to_add.__class__.objects.filter(
                 **{parent_fk_field_name: filtererd_object}
             ).exists():

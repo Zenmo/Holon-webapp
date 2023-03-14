@@ -1,4 +1,5 @@
 from typing import Union
+
 from holon.models.rule_actions import RuleAction
 
 from django.core.exceptions import ValidationError
@@ -20,19 +21,28 @@ from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 from django.db.models import Q
 
+
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils
+
+
+class ChoiceListIterator(object):
+    def __iter__(self):
+        dropdown_list = RuleActionUtils.get_balanceable_subtypes()
+        return dropdown_list.__iter__()
 
 
 class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     """Blans"""
 
-    selected_model_type_name = models.CharField(max_length=255, blank=True)
+    choice_list = ChoiceListIterator()
+
+    selected_model_type_name = models.CharField(max_length=255, blank=True, choices=choice_list)
     rule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_balancegroup"
     )
 
     panels = [
-        FieldPanel("selected_asset_type"),
+        FieldPanel("selected_model_type_name"),
         InlinePanel("balance_group_model_order", label="Assets for balancing in order"),
     ]
 

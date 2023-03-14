@@ -4,8 +4,11 @@ from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 from holon.models.actor import Actor
 from holon.models.gridnode import GridNode
+from django.apps import apps
+from django.forms import ModelForm
 
 from polymorphic import utils
+from holon.models.util import all_subclasses
 
 
 class RuleActionUtils:
@@ -26,3 +29,15 @@ class RuleActionUtils:
 
         if base_class == Contract:
             return [(Actor, "owner_actor")]
+
+    def get_balanceable_subtypes():
+        base_classes = [EnergyAsset, GridConnection, Contract]
+        choices = []
+
+        for base_class in base_classes:
+            model = apps.get_model("holon", base_class.__name__)
+            choices = choices + [
+                (subclass.__name__, subclass.__name__) for subclass in all_subclasses(model)
+            ]
+
+        return choices

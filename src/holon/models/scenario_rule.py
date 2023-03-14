@@ -35,31 +35,33 @@ class ScenarioRule(ClusterableModel):
     panels = [
         FieldPanel("model_type"),
         FieldPanel("model_subtype"),
-        InlinePanel("continuous_factors", heading="Continuous factors", label="Continuous factors"),
         InlinePanel(
-            "discrete_factors_attribute",
-            heading="Discrete attribute factors",
-            label="Discrete attribute factors",
+            "continuous_factors", heading="Continuous rule actions", label="Continuous rule actions"
+        ),
+        InlinePanel(
+            "discrete_factors_change_attribute",
+            heading="Discrete attribute rule actions",
+            label="Discrete attribute rule actions",
         ),
         InlinePanel(
             "discrete_factors_remove",
-            heading="Discrete remove attribute factors",
-            label="Discrete remove attribute factors",
+            heading="Discrete remove attribute rule actions",
+            label="Discrete remove attribute rule actions",
         ),
         InlinePanel(
             "discrete_factors_add",
-            heading="Discrete add attribute factors",
-            label="Discrete add attribute factors",
+            heading="Discrete add attribute rule actions",
+            label="Discrete add attribute rule actions",
         ),
         InlinePanel(
             "discrete_factors_set_count",
-            heading="Discrete add and set count attribute factors",
-            label="Discrete add and set count attribute factors",
+            heading="Discrete add and set count attribute rule actions",
+            label="Discrete add and set count attribute rule actions",
         ),
         InlinePanel(
             "discrete_factors_balancegroup",
-            heading="Discrete balance group factors",
-            label="Discrete balance group factors",
+            heading="Discrete balance group rule actions",
+            label="Discrete balance group rule actions",
         ),
         InlinePanel(
             "attribute_filters",
