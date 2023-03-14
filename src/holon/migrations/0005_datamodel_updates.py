@@ -6,7 +6,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("holon", "0001_initial"),
+        ("holon", "0004_alter_interactiveelement_level_and_more"),
     ]
 
     operations = [
@@ -97,5 +97,59 @@ class Migration(migrations.Migration):
                 max_length=100,
                 null=True,
             ),
+        ),
+        migrations.RemoveField(
+            model_name="housegridconnection",
+            name="pricelevelHighDifFromAvg_eurpkWh",
+        ),
+        migrations.RemoveField(
+            model_name="housegridconnection",
+            name="pricelevelLowDifFromAvg_eurpkWh",
+        ),
+        migrations.RemoveField(
+            model_name="housegridconnection",
+            name="tempSetpointDay_degC",
+        ),
+        migrations.RemoveField(
+            model_name="housegridconnection",
+            name="tempSetpointDay_start_hr",
+        ),
+        migrations.RemoveField(
+            model_name="housegridconnection",
+            name="tempSetpointNight_degC",
+        ),
+        migrations.RemoveField(
+            model_name="housegridconnection",
+            name="tempSetpointNight_start_hr",
+        ),
+        migrations.AddField(
+            model_name="builtenvironmentgridconnection",
+            name="pricelevelHighDifFromAvg_eurpkWh",
+            field=models.FloatField(blank=True, null=True),
+        ),
+        migrations.AddField(
+            model_name="builtenvironmentgridconnection",
+            name="pricelevelLowDifFromAvg_eurpkWh",
+            field=models.FloatField(blank=True, null=True),
+        ),
+        migrations.AddField(
+            model_name="builtenvironmentgridconnection",
+            name="tempSetpointDay_degC",
+            field=models.FloatField(default=20.0),
+        ),
+        migrations.AddField(
+            model_name="builtenvironmentgridconnection",
+            name="tempSetpointDay_start_hr",
+            field=models.FloatField(default=8.0),
+        ),
+        migrations.AddField(
+            model_name="builtenvironmentgridconnection",
+            name="tempSetpointNight_degC",
+            field=models.FloatField(default=16.0),
+        ),
+        migrations.AddField(
+            model_name="builtenvironmentgridconnection",
+            name="tempSetpointNight_start_hr",
+            field=models.FloatField(default=20.0),
         ),
     ]

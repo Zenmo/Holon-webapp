@@ -98,12 +98,12 @@ $(document).ready(function () {
 
     function setVisibleElements(type) {
         switch (type) {
-            case "CHOICE_SINGLESELECT":
-            case "CHOICE_MULTISELECT":
+            case "single_select":
+            case "multi_select":
                 $(selectSection).show();
                 $(contiuousSection).hide();
                 break;
-            case "CHOICE_CONTINUOUS":
+            case "continuous":
                 $(selectSection).hide();
                 $(contiuousSection).show();
                 break;
@@ -146,7 +146,7 @@ $(document).ready(function () {
                     [name, type, options] =
                         interactiveElementName.innerText.split("|");
                     interactiveElementName.innerText = name;
-                    if (type === "CHOICE_CONTINUOUS") {
+                    if (type === "continuous") {
                         if (defaultValueInput.prop("tagName") !== "INPUT")
                             convertSelectToInput(defaultValueInput);
                         defaultValueInput.attr("type", "number");

@@ -67,6 +67,7 @@ class RuleMappingTestClass(TestCase):
             eta_r=0.95,
             deliveryTemp_degc=80.0,
             capacityHeat_kW=30.0,
+            capacityElectricity_kW=40.0,
             ambientTempType=20.0,
         )
         TransportHeatConversionAsset.objects.create(
@@ -88,7 +89,7 @@ class RuleMappingTestClass(TestCase):
             ambientTempType="",
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            name="Input 1", type=ChoiceType.continuous
+            name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
         )
         InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
 
@@ -106,6 +107,7 @@ class RuleMappingTestClass(TestCase):
             eta_r=0.0,
             deliveryTemp_degc=0.0,
             capacityHeat_kW=0.0,
+            capacityElectricity_kW=0.0,
             ambientTempType=0.0,
         )
         default_chc = ChemicalHeatConversionAsset.objects.create(
@@ -152,7 +154,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "ChemicalHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 4, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -201,7 +203,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "HybridHeatCoversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 2, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -250,7 +252,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "TransportHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 3, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "3", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -299,7 +301,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "ChemicalHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 1, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -348,7 +350,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "ElectricHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 0, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -397,7 +399,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "TransportHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 1, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -446,7 +448,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "ElectricHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 5, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "5", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -507,7 +509,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "TransportHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 0, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
         updated_scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -563,7 +565,7 @@ class RuleMappingTestClass(TestCase):
         self.balance_group.selected_asset_type = "ChemicalHeatConversionAsset"
         self.balance_group.save()
 
-        interactive_elements = [{"value": 20, "interactive_element": self.interactive_element}]
+        interactive_elements = [{"value": "20", "interactive_element": self.interactive_element}]
 
         # Act
         with pytest.raises(ValueError) as e:

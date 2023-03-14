@@ -37,7 +37,16 @@ class StorylinePageInformationTypeSerializer(serializers.ModelSerializer):
 class StorylinePageSerializer(BasePageSerializer):
     roles = StorylinePageRoleTypeSerializer(many=True)
     information_types = StorylinePageInformationTypeSerializer(many=True)
+    scenario = serializers.SerializerMethodField()
+
+    def get_scenario(self, obj):
+        return obj.get_parent().specific.scenario_id
 
     class Meta:
         model = StorylinePage
-        fields = ["storyline", "roles", "information_types"] + BasePageSerializer.Meta.fields
+        fields = [
+            "storyline",
+            "roles",
+            "information_types",
+            "scenario",
+        ] + BasePageSerializer.Meta.fields
