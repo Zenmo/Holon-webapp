@@ -26,7 +26,7 @@ class RuleActionChangeAttribute(RuleAction):
 
     panels = [FieldPanel("model_attribute"), FieldPanel("operator")]
     rule = ParentalKey(
-        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_attribute"
+        ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_change_attribute"
     )
 
     class Meta:
