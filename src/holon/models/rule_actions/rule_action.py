@@ -14,10 +14,6 @@ from wagtail.admin.edit_handlers import FieldPanel
 class RuleAction(PolymorphicModel):
     """Abstract base class for factors"""
 
-    asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-
-    panels = [FieldPanel("asset_attribute")]
-
     class Meta:
         verbose_name = "RuleAction"
         # abstract = True

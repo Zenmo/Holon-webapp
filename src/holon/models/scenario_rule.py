@@ -105,7 +105,7 @@ class ScenarioRule(ClusterableModel):
     def get_actions(self):
         return (
             list(self.continuous_factors.all())
-            + list(self.discrete_factors_attribute.all())
+            + list(self.discrete_factors_change_attribute.all())
             + list(self.discrete_factors_add.all())
             + list(self.discrete_factors_remove.all())
             + list(self.discrete_factors_set_count.all())

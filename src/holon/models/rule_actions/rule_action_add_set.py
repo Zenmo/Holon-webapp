@@ -78,9 +78,7 @@ class GenericRuleActionAdd(RuleAction):
             assert not (self.asset_to_add or self.gridconnection_to_add)
             self.model_to_add = self.contract_to_add
 
-    panels = RuleAction.panels + [
-        FieldPanel("model_to_add"),
-    ]
+    panels = [FieldPanel("model_to_add")]
 
     class Meta:
         verbose_name = "GenericRuleActionAdd"
