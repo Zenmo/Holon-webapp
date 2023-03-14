@@ -4,7 +4,9 @@ from django.db import models
 from wagtail.fields import StreamBlock
 from wagtail.core import blocks
 
-from api.models import InteractiveInput
+from holon.models.interactive_element import InteractiveElement
+
+from wagtailmodelchooser.blocks import ModelChooserBlock
 from .holon_image_chooser import HolonImageChooserBlock
 
 
@@ -52,14 +54,9 @@ class FeedbackModalKPICondition(blocks.StructBlock):
 
 class FeedbackModalInteractiveInputCondition(blocks.StructBlock):
     def get_interactive_inputs():
-        return [(ii.pk, ii.__str__) for ii in InteractiveInput.objects.all()]
+        pass
 
-    parameter = blocks.ChoiceBlock(
-        choices=get_interactive_inputs,
-        help_text=_(
-            "Please make sure the parameter is present in this section. Otherwise you assert something that doesn't exist"
-        ),
-    )
+    parameter = ModelChooserBlock(InteractiveElement)
 
     operator = blocks.ChoiceBlock(
         max_length=50,

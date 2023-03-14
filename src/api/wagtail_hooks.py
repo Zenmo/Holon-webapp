@@ -21,9 +21,3 @@ class ScenarioAdmin(ModelAdmin):
 
 
 modeladmin_register(ScenarioAdmin)
-
-
-@hooks.register("insert_global_admin_js", order=100)
-def global_admin_js():
-    """Add /static/css/custom.js to the admin."""
-    return format_html('<script src="{}"></script>', static("/js/custom.js"))

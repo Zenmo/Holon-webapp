@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import * as Cookies from "es-cookie";
 import PasswordInput from "../PasswordInput/PasswordInput";
 import SuccessModal from "./SuccessModal";
-import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
-
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "/wt";
+import { registerUser } from "../../api/auth";
 
 export default function RegistrationForm() {
   const [userData, setUserData] = useState({
@@ -43,30 +40,15 @@ export default function RegistrationForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    TokenService.setCSRFToken();
 
-    const response = await fetch(`${API_URL}/dj-rest-auth/registration/`, {
-      method: "POST",
-      body: JSON.stringify({
-        username: userData.username,
-        password1: userData.password,
-        password2: userData.verifyPassword,
-        email: userData.email,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-      },
-      credentials: "include",
+    registerUser(userData).then(res => {
+      if (res.ok) {
+        setShowSuccessModal(true);
+        setUserData({ username: "", email: "", password: "", verifyPassword: "" });
+      } else {
+        setErrorMessage("Er is iets fout gegaan met je registratie.");
+      }
     });
-
-    const message = await response;
-    if (message.ok) {
-      setShowSuccessModal(true);
-      setUserData({ username: "", email: "", password: "", verifyPassword: "" });
-    } else {
-      setErrorMessage("Er is iets fout gegaan met je registratie.");
-    }
   }
 
   return (

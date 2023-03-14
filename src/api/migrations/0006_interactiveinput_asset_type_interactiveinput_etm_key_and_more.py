@@ -8,7 +8,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("holon", "0001_initial"),
         ("api", "0005_merge_20221122_1044"),
     ]
 
@@ -16,12 +15,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="interactiveinput",
             name="asset_type",
-            field=models.ForeignKey(
+            field=models.IntegerField(
                 blank=True,
+                default=None,
                 null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
-                related_name="+",
-                to="holon.asset",
             ),
         ),
         migrations.AddField(

@@ -9,7 +9,7 @@ export default function SuccessModal({ onClose }) {
 
   return (
     <div>
-      <div className="z-10 overflow-y-auto bg-gray-100 w-3/4 md:w-2/3 lg:w-1/3 h-[300px] absolute top-[15%] left-1/2 translate-x-[-50%] border-2 border-gray-700 border-solid rounded">
+      <div className="z-10 overflow-y-auto bg-gray-100 w-3/4 md:w-2/3 lg:w-1/3 h-[300px] absolute  left-1/2 translate-x-[-50%] border-2 border-gray-700 border-solid rounded">
         <div className="flex flow-row justify-end m-4  sm:p-0">
           <button type="button" className="text-gray-800" onClick={handleCloseClick}>
             X
