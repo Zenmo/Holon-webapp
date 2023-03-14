@@ -93,14 +93,22 @@ In Azure the following variables are configured for the App Service:
 - DBPASS: Database password
 - DBUSER: Database user name
 
-## Export and import data
+## Datamodel
 
-```
-python manage.py dumpdata [appname.modelname] --indent 4 > [filelocation/file].json
+Refer to the datamodel readme: [datamodel.readme.md](src/holon/datamodel.readme.md)
 
-Example: python manage.py dumpdata main.casusoverviewpage --indent 4 > holon/fixtures/casusoverview-fixture.json
-```
+### Development on datamodel
 
-```
-python manage.py loaddata holon/fixtures/casusoverview-fixture.json
-```
+Use convenience `migrate_and_create_fixture.sh` before every commit to make sure that the fixtures or present datamodels survive the changes you are making to the datamodel.
+
+# Resetting database and building project
+
+When you first start the project, fixtures will be automatically loaded via the .devcontainer/docker-entrypoint.sh script.
+To reset your database while developing, you can do the following steps:
+
+- Make sure your backend server is not running
+- Go to localhost:5000 and login with the credentials given in the .devcontainer/docker-compose file or your own .env file. Look for PGADMIN_DEFAULT_EMAIL
+- Add the server with the credentials given in the docker-compose file. Add for the hostname: db.
+- Open your added server and delete the db holontool with right-click > delete.
+- Add a new db by rightclicking and name it holontool
+- Or rebuild the whole project or execute the .devcontainer/docker-entrypoint.sh by executing the following commands: cd .devcontainer and second ./docker-entrypoint.sh
