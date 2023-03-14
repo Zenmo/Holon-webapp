@@ -111,4 +111,7 @@ To reset your database while developing, you can do the following steps:
 - Add the server with the credentials given in the docker-compose file. Add for the hostname: db.
 - Open your added server and delete the db holontool with right-click > delete.
 - Add a new db by rightclicking and name it holontool
-- Or rebuild the whole project or execute the .devcontainer/docker-entrypoint.sh by executing the following commands: cd .devcontainer and second ./docker-entrypoint.sh
+- Now you can do two things:
+
+1. Rebuild the whole project OR...
+2. execute the .devcontainer/docker-entrypoint.sh by executing the following commands: cd .devcontainer and second ./docker-entrypoint.sh
