@@ -21,9 +21,9 @@ class HolonV2Service(generics.CreateAPIView):
             if serializer.is_valid():
                 data = serializer.validated_data
 
-                # scenario = rule_mapping.get_scenario_and_apply_rules(
-                #     data["scenario"].id, data["interactive_elements"]
-                # )
+                scenario = rule_mapping.get_scenario_and_apply_rules(
+                    data["scenario"].id, data["interactive_elements"]
+                )
 
                 # TODO serialize and send to anylogic
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
@@ -31,7 +31,7 @@ class HolonV2Service(generics.CreateAPIView):
                 cc.run()
 
                 # Delete duplicated scenario
-                # scenario.delete()
+                scenario.delete()
 
                 return Response(
                     cc.outputs,
@@ -67,5 +67,5 @@ class HolonService(generics.CreateAPIView):
     def post(self, request):
         return Response(
             "This endpoint is no longer in use, upgrade to the new endpoin!",
-            status=status.HTTP_418_IM_A_TEAPOT,
+            status=status.HTTP_410_GONE,
         )
