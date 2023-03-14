@@ -22,7 +22,7 @@ def get_scenario_and_apply_rules(
 
         if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS:
             interactive_element_options = interactive_element.continuous_values.all()
-        else:
+        else:  # single and multi select
             ids = interactive_element_input["value"].split(",")
             interactive_element_options = interactive_element.options.filter(id__in=ids)
 
