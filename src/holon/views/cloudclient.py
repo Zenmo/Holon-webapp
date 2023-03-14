@@ -1,15 +1,24 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
-from holon.models import Scenario
-from holon.serializers.cloudclientconfig import ScenarioAnylogicConfigSerializer
+from holon.serializers.cloudclient import CloudclientRequestSerializer
 
 
-class CloudclientService(generics.RetrieveAPIView):
-    serializer_class = ScenarioAnylogicConfigSerializer
+class CloudclientService(generics.CreateAPIView):
+    serializer_class = CloudclientRequestSerializer
 
-    queryset = (
-        Scenario.objects.prefetch_related("anylogic_config")
-        .prefetch_related("anylogic_config__anylogic_cloud_input")
-        .prefetch_related("anylogic_config__anylogic_cloud_output")
-        .all()
-    )
+    def post(self, request):
+        serializer = CloudclientRequestSerializer(data=request.data)
+        try:
+            if serializer.is_valid():
+                data = serializer.validated_data
+
+                """
+                IMPLEMENT SAME CLOUDCLIENT LOGIC HERE!
+                """
+                return Response
+
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)

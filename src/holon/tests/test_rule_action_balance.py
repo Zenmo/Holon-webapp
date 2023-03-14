@@ -61,6 +61,7 @@ class RuleMappingTestClass(TestCase):
                 deliveryTemp_degc=80.0,
                 capacityHeat_kW=30.0,
                 ambientTempType=20.0,
+                capacityElectricity_kW=2.0,
             )
             asset_count += 1
 
@@ -95,6 +96,7 @@ class RuleMappingTestClass(TestCase):
             eta_r=0.0,
             deliveryTemp_degc=0.0,
             capacityHeat_kW=0.0,
+            capacityElectricity_kW=0.0,
             ambientTempType=0.0,
         )
         default_chc = ChemicalHeatConversionAsset.objects.create(
