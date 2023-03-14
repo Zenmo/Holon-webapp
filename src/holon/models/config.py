@@ -228,6 +228,7 @@ class ETMQuery(ClusterableModel):
         FieldPanel("endpoint"),
         FieldPanel("data_type"),
         FieldPanel("etm_key"),
+        FieldPanel("internal_key"),
         InlinePanel(
             "static_conversion_step",
             heading="Convert inputs/queries with static values",
