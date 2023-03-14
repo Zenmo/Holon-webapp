@@ -46,7 +46,7 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert updated_scenario.assets[0].capacity_kw == 250.0  # was 750.0
+        assert updated_scenario.gridconnection_set.first().capacity_kw == 250.0  # was 750.0
 
     def test_change_attribute_add(self):
         """Test the change attribute add operator"""
@@ -69,7 +69,7 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert updated_scenario.assets[0].capacity_kw == 1000.0  # was 750.0
+        assert updated_scenario.gridconnection_set.first().capacity_kw == 1000.0  # was 750.0
 
     def test_change_attribute_subtract(self):
         """Test the change attribute subtract operator"""
@@ -92,7 +92,7 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert updated_scenario.assets[0].capacity_kw == 500.0  # was 750.0
+        assert updated_scenario.gridconnection_set.first().capacity_kw == 500.0  # was 750.0
 
     def test_change_attribute_multiply(self):
         """Test the change attribute multiply operator"""
@@ -115,7 +115,7 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert updated_scenario.assets[0].capacity_kw == 1500.0  # was 750.0
+        assert updated_scenario.gridconnection_set.first().capacity_kw == 1500.0  # was 750.0
 
     def test_change_attribute_divide(self):
         """Test the change attribute divide operator"""
@@ -138,4 +138,4 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert updated_scenario.assets[0].capacity_kw == 250.0  # was 750.0
+        assert updated_scenario.gridconnection_set.first().capacity_kw == 250.0  # was 750.0
