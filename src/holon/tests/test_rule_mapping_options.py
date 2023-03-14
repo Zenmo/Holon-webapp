@@ -49,7 +49,7 @@ class RuleMappingTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
         self.factor_option_3 = RuleActionFactor.objects.create(
-            asset_attribute="nfATO_capacity_kw", min_value=5, max_value=55, rule=rule_option_3
+            asset_attribute="tempSetpointNight_degC", min_value=5, max_value=55, rule=rule_option_3
         )
 
     def test_rule_mapping_single_select_option_1(self) -> None:
@@ -70,7 +70,8 @@ class RuleMappingTestClass(TestCase):
         updated_gridconnection = updated_scenario.gridconnection_set.all()[0]
         self.assertEqual(updated_gridconnection.capacity_kw, self.factor_option_1.min_value)
         self.assertEqual(
-            updated_gridconnection.nfATO_capacity_kw, self.gridconnection.nfATO_capacity_kw
+            updated_gridconnection.tempSetpointNight_degC,
+            self.gridconnection.tempSetpointNight_degC,
         )
 
     def test_rule_mapping_single_select_option_3(self) -> None:
@@ -90,7 +91,9 @@ class RuleMappingTestClass(TestCase):
         # Assert
         updated_gridconnection = updated_scenario.gridconnection_set.all()[0]
         self.assertEqual(updated_gridconnection.capacity_kw, self.gridconnection.capacity_kw)
-        self.assertEqual(updated_gridconnection.nfATO_capacity_kw, self.factor_option_3.max_value)
+        self.assertEqual(
+            updated_gridconnection.tempSetpointNight_degC, self.factor_option_3.max_value
+        )
 
     def test_rule_mapping_single_select_multiselect(self) -> None:
         # Arange
@@ -109,4 +112,6 @@ class RuleMappingTestClass(TestCase):
         # Assert
         updated_gridconnection = updated_scenario.gridconnection_set.all()[0]
         self.assertEqual(updated_gridconnection.capacity_kw, self.factor_option_1.min_value)
-        self.assertEqual(updated_gridconnection.nfATO_capacity_kw, self.factor_option_3.max_value)
+        self.assertEqual(
+            updated_gridconnection.tempSetpointNight_degC, self.factor_option_3.max_value
+        )
