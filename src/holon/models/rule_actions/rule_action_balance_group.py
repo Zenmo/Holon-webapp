@@ -298,7 +298,7 @@ class BalanceGroupModelOrder(Orderable):
             + bool(self.gridconnection_to_balance)
             + bool(self.contract_to_balance)
         ) < 1:
-            raise AssertionError(
+            raise ValidationError(
                 f"Assign an object to either the asset, gridconnection or contract field for RuleActionAdd"
             )
 
@@ -307,7 +307,7 @@ class BalanceGroupModelOrder(Orderable):
             + bool(self.gridconnection_to_balance)
             + bool(self.contract_to_balance)
         ) > 1:
-            raise AssertionError(f"Only one of the child models can be set for RuleActionAdd")
+            raise ValidationError(f"Only one of the child models can be set for RuleActionAdd")
 
     def __set_model(self):
         """Set addition RuleActionAdd attributes according to selected model"""

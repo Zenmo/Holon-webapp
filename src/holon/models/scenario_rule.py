@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 
 from holon.models.interactive_element import InteractiveElement
 from holon.models.util import all_subclasses
@@ -33,50 +33,67 @@ class ScenarioRule(ClusterableModel):
     )  # bijv industry terrain of photovoltaic
 
     panels = [
-        FieldPanel("model_type"),
-        FieldPanel("model_subtype"),
-        InlinePanel(
-            "continuous_factors", heading="Continuous rule actions", label="Continuous rule actions"
+        MultiFieldPanel(
+            heading="Model type and subtype",
+            children=[
+                FieldPanel("model_type"),
+                FieldPanel("model_subtype"),
+            ],
         ),
-        InlinePanel(
-            "discrete_factors_change_attribute",
-            heading="Discrete attribute rule actions",
-            label="Discrete attribute rule actions",
+        MultiFieldPanel(
+            heading="Filters",
+            children=[
+                InlinePanel(
+                    "attribute_filters",
+                    heading="Continuous attribute filters",
+                    label="Continuous attribute filters",
+                ),
+                InlinePanel(
+                    "discrete_attribute_filters",
+                    heading="Discrete attribute filters",
+                    label="Discrete attribute filters",
+                ),
+                InlinePanel(
+                    "relation_attribute_filters",
+                    heading="Relation attribute filters",
+                    label="Relation attribute filters",
+                ),
+            ],
         ),
-        InlinePanel(
-            "discrete_factors_remove",
-            heading="Discrete remove attribute rule actions",
-            label="Discrete remove attribute rule actions",
-        ),
-        InlinePanel(
-            "discrete_factors_add",
-            heading="Discrete add attribute rule actions",
-            label="Discrete add attribute rule actions",
-        ),
-        InlinePanel(
-            "discrete_factors_set_count",
-            heading="Discrete add and set count attribute rule actions",
-            label="Discrete add and set count attribute rule actions",
-        ),
-        InlinePanel(
-            "discrete_factors_balancegroup",
-            heading="Discrete balance group rule actions",
-            label="Discrete balance group rule actions",
-        ),
-        InlinePanel(
-            "attribute_filters",
-            heading="Continuous attribute filters",
-            label="Continuous attribute filters",
-        ),
-        InlinePanel(
-            "discrete_attribute_filters",
-            heading="Discrete attribute filters",
-            label="Discrete attribute filters",
-        ),
-        InlinePanel(
-            "relation_attribute_filters",
-            heading="Relation attribute filters",
-            label="Relation attribute filters",
+        MultiFieldPanel(
+            heading="Rule actions",
+            children=[
+                InlinePanel(
+                    "continuous_factors",
+                    heading="Continuous rule actions - factors",
+                    label="Continuous rule action - factor",
+                ),
+                InlinePanel(
+                    "discrete_factors_change_attribute",
+                    heading="Discrete rule actions - change attribute",
+                    label="Discrete rule action - change attribute",
+                ),
+                InlinePanel(
+                    "discrete_factors_remove",
+                    heading="Discrete rule actions - remove filtered objects",
+                    label="Discrete rule action - remove filtered objects",
+                ),
+                InlinePanel(
+                    "discrete_factors_add",
+                    heading="Discrete rule actions - add child models",
+                    label="Discrete rule action - add child models",
+                ),
+                InlinePanel(
+                    "discrete_factors_set_count",
+                    heading="Discrete rule actions - set model count",
+                    label="Discrete rule action - set model count",
+                ),
+                InlinePanel(
+                    "discrete_factors_balancegroup",
+                    heading="Discrete rule actions - balance child models",
+                    label="Discrete rule action - balance child models",
+                ),
+            ],
         ),
     ]
 
