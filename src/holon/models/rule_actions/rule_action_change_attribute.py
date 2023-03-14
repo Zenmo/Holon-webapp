@@ -1,8 +1,9 @@
-from typing import Union
 from holon.models.rule_actions import RuleAction
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from django.db import models
 from modelcluster.fields import ParentalKey
+from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 from holon.models.scenario_rule import ScenarioRule
 from wagtail.admin.edit_handlers import FieldPanel
 from django.db.models.query import QuerySet
@@ -31,6 +32,15 @@ class RuleActionChangeAttribute(RuleAction):
 
     class Meta:
         verbose_name = "RuleActionChangeAttribute"
+
+    def clean(self):
+        super().clean()
+
+        try:
+            if not self.model_attribute in RuleActionUtils.get_model_attributes_options(self.rule):
+                raise ValidationError(f"Invalid value {self.model_attribute} for model_attribute")
+        except ObjectDoesNotExist:
+            return
 
     def __apply_operator(self, value_old, input_value):
         """Cast the input value to the same type of the old value and apply the chosen operator"""

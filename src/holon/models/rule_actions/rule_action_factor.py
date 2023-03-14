@@ -1,4 +1,5 @@
 from holon.models.rule_actions import RuleAction
+from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 from holon.models.scenario_rule import ScenarioRule
 
 from django.db import models
@@ -6,6 +7,7 @@ from django.db.models.query import QuerySet
 from modelcluster.fields import ParentalKey
 
 from wagtail.admin.edit_handlers import FieldPanel
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 
 class RuleActionFactor(RuleAction):
@@ -26,6 +28,15 @@ class RuleActionFactor(RuleAction):
 
     class Meta:
         verbose_name = "RuleActionFactor"
+
+    def clean(self):
+        super().clean()
+
+        try:
+            if not self.model_attribute in RuleActionUtils.get_model_attributes_options(self.rule):
+                raise ValidationError(f"Invalid value {self.model_attribute} for model_attribute")
+        except ObjectDoesNotExist:
+            return
 
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """

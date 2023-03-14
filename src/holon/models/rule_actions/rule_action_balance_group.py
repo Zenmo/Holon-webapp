@@ -19,8 +19,6 @@ from holon.models.scenario_rule import ScenarioRule
 from holon.models.asset import EnergyAsset
 from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
-from django.db.models import Q
-
 
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 
