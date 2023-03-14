@@ -41,7 +41,11 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
 
     panels = [
         FieldPanel("selected_model_type_name"),
-        InlinePanel("balance_group_model_order", label="Assets for balancing in order"),
+        InlinePanel(
+            "balance_group_model_order",
+            heading="Models for balancing in order (Select only one of the three options per model to balance)",
+            label="Model to balance",
+        ),
     ]
 
     class Meta:
