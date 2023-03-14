@@ -100,3 +100,21 @@ Refer to the datamodel readme: [datamodel.readme.md](src/holon/datamodel.readme.
 ### Development on datamodel
 
 Use convenience `migrate_and_create_fixture.sh` before every commit to make sure that the fixtures or present datamodels survive the changes you are making to the datamodel.
+
+# Resetting database and building project
+
+When you first start the project, fixtures will be automatically loaded via the .devcontainer/docker-entrypoint.sh script.
+To reset your database while developing, you can do the following steps:
+
+- Make sure your backend server is not running
+- Go to localhost:5000 and login with the credentials given in the .devcontainer/docker-compose.yml file or your own ./devcontainer/.env file. (credentials in ./devcontainer/.env are leading)
+- Email Adress / Username: in .devcontainer/docker-compose.yml or ./devcontainer/.env file Look for PGADMIN_DEFAULT_EMAIL
+- Password: in .devcontainer/docker-compose.yml or ./devcontainer/.env file look for PGADMIN_DEFAULT_PASSWORD
+
+- After login open the Holontool server with the credentials given in the docker-compose file. Add for the hostname: db.
+- Open your added server and delete the db holontool with right-click > delete.
+- Add a new db by rightclicking and name it holontool
+- Now you can do two things:
+
+1. Rebuild the whole project OR...
+2. execute the .devcontainer/docker-entrypoint.sh by executing the following commands: cd .devcontainer and second ./docker-entrypoint.sh

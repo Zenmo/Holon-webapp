@@ -1,0 +1,10 @@
+[
+{
+    "model": "main.casusoverviewpage",
+    "pk": 4,
+    "fields": {
+        "hero": "[{\"id\": \"5435761e-4065-4340-94eb-255450587415\", \"type\": \"hero_block\", \"value\": {\"text\": \"<p data-block-key=\\\"d8m9z\\\">Curabitur euismod bibendum turpis, at ornare justo lacinia eu. Aenean  porttitor enim ac purus auctor pellentesque. Pellentesque luctus euismod  elit, in eleifend felis suscipit non. Mauris at lacus justo. Proin vel  ullamcorper magna, non euismod enim.  </p>\", \"media\": [{\"id\": \"198d3a1a-1a6a-4a7e-ab51-0e78f6fe4aae\", \"type\": \"image\", \"value\": 1}], \"title\": \"Alle casussen\", \"alt_text\": \"\", \"button_block\": [], \"background_color\": \"\"}}]",
+        "content": "[{\"id\": \"9c1e00c8-083c-4e85-8c0c-232d7be542cc\", \"type\": \"paragraph_block\", \"value\": {\"text\": \"<p data-block-key=\\\"lggdl\\\"> Fusce a neque enim. Fusce quis magna iaculis, fermentum augue eget,  fermentum sem. Fusce scelerisque enim eros, vitae iaculis lacus  condimentum eget. Donec nec arcu quis mauris ultricies varius. Sed nunc  felis, pretium et dictum et, molestie eu est. In vel metus facilisis  sapien convallis molestie. Aliquam consectetur lorem sit amet pretium  condimentum. Maecenas mollis volutpat mauris. Fusce viverra condimentum  erat sed consectetur. Maecenas non dictum lectus, sit amet laoreet  lorem. Vestibulum porta sollicitudin velit, id sodales mi lacinia nec.  </p>\", \"background\": {\"size\": \"bg__full\", \"color\": \"block__bg-white\"}, \"grid_layout\": {\"grid\": \"50_50\"}}}]"
+    }
+}
+]
