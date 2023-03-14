@@ -2,14 +2,13 @@ import { useState } from "react";
 import Link from "next/link";
 import TokenService from "@/services/token";
 import useUser from "@/utils/useUser";
-
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL || "/wt";
+import { logIn } from "../../api/auth";
 
 export default function LoginForm() {
   const [userData, setUserData] = useState({ username: "", password: "" });
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Er is iets fout gegaan met het inloggen.");
-  const { mutateUser } = useUser({ redirectTo: "/profiel", redirectIfFound: true });
+  const { mutateUser } = useUser({ redirectTo: "/", redirectIfFound: true });
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     e.preventDefault();
@@ -24,17 +23,7 @@ export default function LoginForm() {
     e.preventDefault();
 
     mutateUser(
-      await fetch(`${API_URL}/api/token/`, {
-        method: "POST",
-        body: JSON.stringify({
-          username: userData.username,
-          password: userData.password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      })
+      logIn(userData)
         .then(res => {
           if (res.status == 401) {
             setErrorMessage("Uw gebruikersnaam/wachtwoord is niet correct");

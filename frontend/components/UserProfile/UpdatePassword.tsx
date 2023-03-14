@@ -5,9 +5,19 @@ type Props = {
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
   input: object;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
+  message: {
+    color: string;
+    message: string;
+  };
 };
 
-export default function UpdatePassword({ handleChange, handleSubmit, input, setMessage }: Props) {
+export default function UpdatePassword({
+  handleChange,
+  handleSubmit,
+  input,
+  setMessage,
+  message,
+}: Props) {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     handleChange({ ...input, [e.target.name]: e.target.value });
@@ -34,10 +44,13 @@ export default function UpdatePassword({ handleChange, handleSubmit, input, setM
 
         <PasswordInput inputChange={handleChange} input={input} setParentMessage={setMessage} />
 
-        <div className="flex justify-end">
-          <button type="submit" className="buttonDark mt-8">
-            Wachtwoord updaten
-          </button>
+        <div className="flex flex-col">
+          <p className={`${message.color} mt-2`}>{message.message}</p>
+          <div className="flex justify-end">
+            <button type="submit" className="buttonDark mt-6">
+              Wachtwoord updaten
+            </button>
+          </div>
         </div>
       </form>
     </div>

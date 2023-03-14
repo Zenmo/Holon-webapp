@@ -8,6 +8,8 @@ from django.db import models
 
 from modelcluster.fields import ParentalManyToManyField, ForeignKey
 
+from holon.models.scenario import Scenario
+
 from .base import BasePage
 from .base_card import BaseCard
 
@@ -22,6 +24,8 @@ class CasusPage(HeadlessPreviewMixin, BaseCard):
     casus_filter = ForeignKey(
         CasusFilter, on_delete=models.DO_NOTHING, related_name="+", null=True, blank=True
     )
+
+    scenario = ForeignKey(Scenario, on_delete=models.SET_NULL, related_name="+", null=True)
 
     linked_best_practices = ParentalManyToManyField("main.bestpracticepage", blank=True)
 
@@ -54,6 +58,7 @@ class CasusPage(HeadlessPreviewMixin, BaseCard):
     serializer_class = "main.pages.CasusPageSerializer"
 
     content_panels = BaseCard.content_panels + [
+        FieldPanel("scenario"),
         FieldPanel("casus_filter"),
         FieldPanel("linked_best_practices"),
         FieldPanel("content"),

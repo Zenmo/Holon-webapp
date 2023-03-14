@@ -52,7 +52,9 @@ export default function ContentColumn({
             option => option.option === defaultValue || option.label === defaultValue
           )?.option;
         } else {
-          return content.value.options.find(option => option.default)?.option;
+          const option = content.value.options.find(option => option.default);
+          console.log(option, content.value.options);
+          return option ? option.option : content.value.options[0].option;
         }
       case "continuous":
         if (defaultValue !== undefined && defaultValue !== "") {
@@ -73,7 +75,7 @@ export default function ContentColumn({
             defaultValueArray?.includes(option.option) ||
             defaultValueArray?.includes(option.label)
         );
-        return defaultOptions.length ? defaultOptions.map(option => option.option) : undefined;
+        return defaultOptions.length ? defaultOptions.map(option => option.option) : [];
     }
   }
 

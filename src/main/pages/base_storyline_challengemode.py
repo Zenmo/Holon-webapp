@@ -8,7 +8,6 @@ from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 from wagtail.fields import StreamField
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
-from api.models.scenario import Scenario
 from .base import BasePage
 from .base_card import BaseCard
 from ..blocks import (
@@ -70,14 +69,6 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
     roles = ParentalManyToManyField(StorylinePageRoleType, blank=True)
     information_types = ParentalManyToManyField(StorylinePageInformationType, blank=True)
 
-    scenario = models.ForeignKey(
-        Scenario,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-
     storyline = StreamField(
         [
             ("header_full_image_block", HeaderFullImageBlock()),
@@ -102,7 +93,6 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
             ],
             heading="Page data",
         ),
-        FieldPanel("scenario"),
         FieldPanel("storyline"),
     ]
 

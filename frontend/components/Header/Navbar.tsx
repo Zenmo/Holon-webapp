@@ -56,8 +56,16 @@ export default function Navbar({
       })}
 
       {loggedIn && nameUser ? (
-        <li className="px-2 py-3 md:py-2 text-xl text-holon-blue-900 dark:text-white sm:p-0">
-          {nameUser}
+        <li>
+          <Link href="/profiel">
+            <a
+              className={`w-full cursor-pointer px-2 py-3 md:py-2 text-xl text-holon-blue-900 dark:text-white hover:underline hover:decoration-gray-300 hover:decoration-2 hover:underline-offset-4 sm:p-0 ${
+                router.asPath === `/profiel` &&
+                "underline decoration-holon-blue-900 decoration-2 underline-offset-4"
+              }`}>
+              {nameUser}
+            </a>
+          </Link>
         </li>
       ) : (
         ""

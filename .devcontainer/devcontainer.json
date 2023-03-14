@@ -17,7 +17,8 @@
                 "esbenp.prettier-vscode",
                 "dbaeumer.vscode-eslint",
                 "wix.vscode-import-cost",
-                "bradlc.vscode-tailwindcss"
+                "bradlc.vscode-tailwindcss",
+                "samuelcolvin.jinjahtml"
             ]
         }
     },

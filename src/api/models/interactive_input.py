@@ -9,7 +9,6 @@ from wagtail.models import Page
 from wagtail.admin.panels import PageChooserPanel
 
 # from django.core.validators import MinValueValidator
-from wagtail.snippets.models import register_snippet
 
 CHOICE_SINGLESELECT = "single_select"
 CHOICE_MULTISELECT = "multi_select"
@@ -52,7 +51,6 @@ LEVEL_CHOICES = (
     (LEVEL_LOCAL, "Local"),
 )
 # Create your models here.
-@register_snippet
 class InteractiveInput(ClusterableModel):
 
     etm_key = models.CharField(max_length=100, blank=True)
@@ -76,9 +74,9 @@ class InteractiveInput(ClusterableModel):
         choices=ANIMATION_CHOICES,
         default=ANIMATION_NONE,
     )
-    asset_type = models.ForeignKey(
-        "holon.Asset", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
-    )
+
+    asset_type = models.IntegerField(null=True, blank=True)  # ugly fix to prevent migration errors
+
     more_information = models.CharField(max_length=100, blank=True)
     link_wiki_page = models.ForeignKey(
         "main.WikiPage",
@@ -94,7 +92,6 @@ class InteractiveInput(ClusterableModel):
         FieldPanel("type"),
         FieldPanel("level"),
         FieldPanel("animation_tag"),
-        FieldPanel("asset_type"),
         FieldPanel("etm_key"),
         FieldPanel(
             "more_information",
