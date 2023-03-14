@@ -1,5 +1,10 @@
 from holon.models.scenario import Scenario
-from holon.models.config import QueryAndConvertConfig, KeyValuePairCollection, FloatKeyValuePair, ETMQuery
+from holon.models.config import (
+    QueryAndConvertConfig,
+    KeyValuePairCollection,
+    FloatKeyValuePair,
+    ETMQuery,
+)
 from django.db import models
 
 models.prefetch_related_objects
@@ -40,10 +45,8 @@ def run():
 
         for query in c.etm_query.all():
             query: ETMQuery = query
-            
+
             query.internal_key
             query.data_type
             query.endpoint
             query.etm_key
-
-
