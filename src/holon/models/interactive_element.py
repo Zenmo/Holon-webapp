@@ -82,7 +82,6 @@ class InteractiveElement(ClusterableModel):
             help_text=_("Fill in the options for the continuous input"),
             max_num=1,
         ),
-        InlinePanel("rules", heading="Rules", label="Rules"),
     ]
 
     def __str__(self):
@@ -96,7 +95,7 @@ class InteractiveElement(ClusterableModel):
         verbose_name = "Interactive Element"
 
 
-class InteractiveElementOptions(Orderable):
+class InteractiveElementOptions(ClusterableModel, Orderable):
     input = ParentalKey(InteractiveElement, on_delete=models.CASCADE, related_name="options")
     option = models.CharField(max_length=255, help_text=_("Fill in your option"))
     label = models.CharField(
@@ -137,6 +136,17 @@ class InteractiveElementOptions(Orderable):
         help_text=_("Use this to link to an internal page."),
     )
 
+    panels = [
+        FieldPanel("option"),
+        FieldPanel("label"),
+        FieldPanel("default"),
+        FieldPanel("legal_limitation"),
+        FieldPanel("level"),
+        FieldPanel("color"),
+        FieldPanel("link_wiki_page"),
+        InlinePanel("rules", heading="Rules", label="Rules"),
+    ]
+
     def __str__(self):
         if self.label:
             return self.label
@@ -144,7 +154,7 @@ class InteractiveElementOptions(Orderable):
             return self.option
 
 
-class InteractiveElementContinuousValues(models.Model):
+class InteractiveElementContinuousValues(ClusterableModel):
     input = ParentalKey(
         InteractiveElement, on_delete=models.CASCADE, related_name="continuous_values"
     )
@@ -168,3 +178,10 @@ class InteractiveElementContinuousValues(models.Model):
         default=100,
         help_text=_("Maximum amount of the continuous input"),
     )
+
+    panels = [
+        FieldPanel("slider_value_default"),
+        FieldPanel("slider_value_min"),
+        FieldPanel("slider_value_max"),
+        InlinePanel("rules", heading="Rules", label="Rules"),
+    ]
