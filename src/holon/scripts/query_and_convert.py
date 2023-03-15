@@ -10,12 +10,14 @@ from holon.models.config import (
     ETMQuery,
 )
 from typing import List
+from dataclasses import dataclass
 
 
 class QConfig:
-    def __init__(self, config_db: QueryAndConvertConfig) -> None:
+    def __init__(self, config_db: QueryAndConvertConfig, anylogic_outcomes: dict) -> None:
         # static references
         self.config_db = config_db
+        self.anylogic_outcomes = anylogic_outcomes
 
         # method based setters
         self.vars = config_db
@@ -37,13 +39,27 @@ class QConfig:
         except:
             pass
 
+    @property
+    def queries(self):
+        try:
+            return self._queries
+        except AttributeError:
+            self.unpack_queries()
+            return self._queries
+
+    def unpack_queries(self):
+        self._queries = []
+        for q in self.config_db.etm_query.all():
+            self._queries.append(Query(q, self))
+
 
 class Query:
-    def __init__(self, query: ETMQuery) -> None:
+    def __init__(self, query: ETMQuery, config: QConfig) -> None:
         self.internal_key = query.internal_key
         self.data_type = query.data_type
         self.endpoint = query.endpoint
         self.etm_key = query.etm_key
+        self.config = config
 
     @property
     def convert_with(self) -> List[dict]:
@@ -55,6 +71,7 @@ class Query:
     @convert_with.setter
     def convert_with(self, query: ETMQuery) -> None:
         self._convert_with = []
+
         conversions: List[ETMQuery] = [
             *query.static_conversion_step.all(),
             *query.etm_conversion_step.all(),
@@ -74,27 +91,57 @@ class Query:
             else:
                 raise NotImplementedError(f"Conversion of type {c.__name__} is not implemented!")
 
-    def set_static(self, conversion: StaticConversion):
-        return conversion
+    def set_static(self, c: StaticConversion):
+        """tries to get local vars, if not than resort to direct value"""
+        try:
+            value = self.config.vars[c.local_variable]
+        except KeyError:
+            value = c.value
 
-    def set_etm(self, conversion: ETMConversion):
-        return conversion
+        return {
+            "type": "static",
+            "key": c.shadow_key,
+            "value": value,
+            "conversion": c.conversion,
+        }
 
-    def set_anylogic(self, conversion: AnyLogicConversion):
-        return conversion
+    def set_etm(self, c: ETMConversion):
+        return {
+            "type": "etm",
+            "key": c.shadow_key,
+            "etm_key": c.etm_key,
+            "value_type": c.conversion_value_type,
+            "conversion": c.conversion,
+        }
 
-    def set_datamodel(self, conversion: DatamodelConversion):
-        return conversion
+    def set_anylogic(self, c: AnyLogicConversion):
+        try:
+            value = self.config.anylogic_outcomes[c.anylogic_key]
+        except KeyError:
+            # raise KeyError(f"Key '{c.anylogic_key}' cannot be found in AnyLogic outcomes")
+            value = None
+        return {
+            "type": "anylogic",
+            "key": c.shadow_key,
+            "value_type": c.conversion_value_type,
+            "conversion": c.conversion,
+            "value": value,
+        }
+
+    def set_datamodel(self, c: DatamodelConversion):
+        return c
 
 
 def run():
+    from holon.services import CloudClient
+
     scenario = Scenario.objects.get(id=1)
     configs: list[QueryAndConvertConfig] = scenario.query_and_convert_config.all()
 
+    cc = CloudClient(scenario)
+    cc.run()
+    cc.outputs
+
     for c in configs:
-        qc = QConfig(c)
-
-        for query in c.etm_query.all():
-            query: ETMQuery = query
-
-            print()
+        qc = QConfig(c, anylogic_outcomes=cc.outputs)
+        print(qc.queries)

@@ -9,4 +9,4 @@ def run():
 
     cc.run()
 
-    print(cc.outputs)
+    cc.outputs
