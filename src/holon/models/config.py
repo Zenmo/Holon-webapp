@@ -86,10 +86,10 @@ class AnylogicCloudOutput(models.Model):
     """supports configurable mapping from AnyLogic resuls to guaranteed internal keys"""
 
     anylogic_key = models.CharField(
-        max_length=50, help_text=_("Key as provided in the AnyLogic Cloud response JSON")
+        max_length=255, help_text=_("Key as provided in the AnyLogic Cloud response JSON")
     )
     internal_key = models.CharField(
-        max_length=50,
+        max_length=255,
         help_text=_(
             "Key that is used internally to access the data associated with this AnyLogic key"
         ),
@@ -190,7 +190,7 @@ class DataType(models.TextChoices):
 
 class ETMQuery(ClusterableModel):
     internal_key = models.CharField(
-        max_length=35,
+        max_length=255,
         help_text=_(
             "Key that is used internally (downstream) to access the data associated with this query result"
         ),
@@ -216,7 +216,7 @@ class ETMQuery(ClusterableModel):
         ),
     )
     interactive_upscaling_comment = models.CharField(
-        max_length=350,
+        max_length=255,
         blank=True,
         null=True,
         help_text=_(
