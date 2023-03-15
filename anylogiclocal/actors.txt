@@ -1,0 +1,345 @@
+[
+    {
+        "id": "ope1",
+        "group": null,
+        "subgroup": null,
+        "contracts": [],
+        "category": "OPERATORGRID",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "sup3",
+        "group": null,
+        "subgroup": null,
+        "contracts": [],
+        "category": "SUPPLIERENERGY",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "gov9",
+        "group": null,
+        "subgroup": null,
+        "contracts": [],
+        "category": "GOVHOLON",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "con8",
+        "group": null,
+        "subgroup": null,
+        "contracts": [
+            {
+                "id": "c8",
+                "contractScope": "ope1",
+                "contractType": "CONNECTION",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "connectionContractType": "DEFAULT",
+                "nfATO_capacity_kW": 0.0,
+                "nfATO_starttime_h": 0.0,
+                "nfATO_endtime_h": 0.0,
+                "resourcetype": "ConnectionContract"
+            },
+            {
+                "id": "c10",
+                "contractScope": "sup3",
+                "contractType": "DELIVERY",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "deliveryContractType": "ELECTRICITY_VARIABLE",
+                "deliveryPrice_eurpkWh": 0.0,
+                "feedinPrice_eurpkWh": 0.0,
+                "resourcetype": "DeliveryContract"
+            },
+            {
+                "id": "c15",
+                "contractScope": "gov9",
+                "contractType": "TAX",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "taxContractType": "SALDEREN",
+                "taxDelivery_eurpkWh": 0.15,
+                "taxFeedin_eurpkWh": 0.15,
+                "proportionalTax_pct": 0.21,
+                "resourcetype": "TaxContract"
+            },
+            {
+                "id": "c20",
+                "contractScope": "ope1",
+                "contractType": "TRANSPORT",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "transportContractType": "DEFAULT",
+                "bandwidthTreshold_kW": 0.0,
+                "bandwidthTariff_eurpkWh": 0.0,
+                "resourcetype": "TransportContract"
+            }
+        ],
+        "category": "CONNECTIONOWNER",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "con7",
+        "group": "Commercieel bedrijf 1",
+        "subgroup": null,
+        "contracts": [
+            {
+                "id": "c7",
+                "contractScope": "ope1",
+                "contractType": "CONNECTION",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "connectionContractType": "DEFAULT",
+                "nfATO_capacity_kW": 0.0,
+                "nfATO_starttime_h": 0.0,
+                "nfATO_endtime_h": 0.0,
+                "resourcetype": "ConnectionContract"
+            },
+            {
+                "id": "c9",
+                "contractScope": "sup3",
+                "contractType": "DELIVERY",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "deliveryContractType": "ELECTRICITY_VARIABLE",
+                "deliveryPrice_eurpkWh": 0.0,
+                "feedinPrice_eurpkWh": 0.0,
+                "resourcetype": "DeliveryContract"
+            },
+            {
+                "id": "c14",
+                "contractScope": "gov9",
+                "contractType": "TAX",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "taxContractType": "SALDEREN",
+                "taxDelivery_eurpkWh": 0.15,
+                "taxFeedin_eurpkWh": 0.15,
+                "proportionalTax_pct": 0.21,
+                "resourcetype": "TaxContract"
+            },
+            {
+                "id": "c19",
+                "contractScope": "ope1",
+                "contractType": "TRANSPORT",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "transportContractType": "DEFAULT",
+                "bandwidthTreshold_kW": 0.0,
+                "bandwidthTariff_eurpkWh": 0.0,
+                "resourcetype": "TransportContract"
+            }
+        ],
+        "category": "CONNECTIONOWNER",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "con6",
+        "group": "Commercieel bedrijf 2",
+        "subgroup": null,
+        "contracts": [
+            {
+                "id": "c3",
+                "contractScope": "sup3",
+                "contractType": "DELIVERY",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "deliveryContractType": "ELECTRICITY_VARIABLE",
+                "deliveryPrice_eurpkWh": 0.0,
+                "feedinPrice_eurpkWh": 0.0,
+                "resourcetype": "DeliveryContract"
+            },
+            {
+                "id": "c6",
+                "contractScope": "ope1",
+                "contractType": "CONNECTION",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "connectionContractType": "DEFAULT",
+                "nfATO_capacity_kW": 0.0,
+                "nfATO_starttime_h": 0.0,
+                "nfATO_endtime_h": 0.0,
+                "resourcetype": "ConnectionContract"
+            },
+            {
+                "id": "c13",
+                "contractScope": "gov9",
+                "contractType": "TAX",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "taxContractType": "SALDEREN",
+                "taxDelivery_eurpkWh": 0.15,
+                "taxFeedin_eurpkWh": 0.15,
+                "proportionalTax_pct": 0.21,
+                "resourcetype": "TaxContract"
+            },
+            {
+                "id": "c18",
+                "contractScope": "ope1",
+                "contractType": "TRANSPORT",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "transportContractType": "DEFAULT",
+                "bandwidthTreshold_kW": 0.0,
+                "bandwidthTariff_eurpkWh": 0.0,
+                "resourcetype": "TransportContract"
+            }
+        ],
+        "category": "CONNECTIONOWNER",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "con5",
+        "group": "Commercieel bedrijf 3",
+        "subgroup": null,
+        "contracts": [
+            {
+                "id": "c2",
+                "contractScope": "sup3",
+                "contractType": "DELIVERY",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "deliveryContractType": "ELECTRICITY_VARIABLE",
+                "deliveryPrice_eurpkWh": 0.0,
+                "feedinPrice_eurpkWh": 0.0,
+                "resourcetype": "DeliveryContract"
+            },
+            {
+                "id": "c5",
+                "contractScope": "ope1",
+                "contractType": "CONNECTION",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "connectionContractType": "DEFAULT",
+                "nfATO_capacity_kW": 2000.0,
+                "nfATO_starttime_h": 20.0,
+                "nfATO_endtime_h": 7.0,
+                "resourcetype": "ConnectionContract"
+            },
+            {
+                "id": "c12",
+                "contractScope": "gov9",
+                "contractType": "TAX",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "taxContractType": "SALDEREN",
+                "taxDelivery_eurpkWh": 0.15,
+                "taxFeedin_eurpkWh": 0.15,
+                "proportionalTax_pct": 0.21,
+                "resourcetype": "TaxContract"
+            },
+            {
+                "id": "c17",
+                "contractScope": "ope1",
+                "contractType": "TRANSPORT",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "transportContractType": "DEFAULT",
+                "bandwidthTreshold_kW": 0.0,
+                "bandwidthTariff_eurpkWh": 0.0,
+                "resourcetype": "TransportContract"
+            }
+        ],
+        "category": "CONNECTIONOWNER",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "con4",
+        "group": "Commercieel bedrijf 4",
+        "subgroup": null,
+        "contracts": [
+            {
+                "id": "c1",
+                "contractScope": "sup3",
+                "contractType": "DELIVERY",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "deliveryContractType": "ELECTRICITY_VARIABLE",
+                "deliveryPrice_eurpkWh": 0.0,
+                "feedinPrice_eurpkWh": 0.0,
+                "resourcetype": "DeliveryContract"
+            },
+            {
+                "id": "c4",
+                "contractScope": "ope1",
+                "contractType": "CONNECTION",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 100.0,
+                "connectionContractType": "DEFAULT",
+                "nfATO_capacity_kW": 2000.0,
+                "nfATO_starttime_h": 20.0,
+                "nfATO_endtime_h": 7.0,
+                "resourcetype": "ConnectionContract"
+            },
+            {
+                "id": "c11",
+                "contractScope": "gov9",
+                "contractType": "TAX",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "taxContractType": "SALDEREN",
+                "taxDelivery_eurpkWh": 0.15,
+                "taxFeedin_eurpkWh": 0.15,
+                "proportionalTax_pct": 0.21,
+                "resourcetype": "TaxContract"
+            },
+            {
+                "id": "c16",
+                "contractScope": "ope1",
+                "contractType": "TRANSPORT",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "transportContractType": "DEFAULT",
+                "bandwidthTreshold_kW": 0.0,
+                "bandwidthTariff_eurpkWh": 0.0,
+                "resourcetype": "TransportContract"
+            }
+        ],
+        "category": "CONNECTIONOWNER",
+        "resourcetype": "Actor"
+    },
+    {
+        "id": "hol2",
+        "group": "Bedrijventerrein HOLON",
+        "subgroup": null,
+        "contracts": [
+            {
+                "id": "c21",
+                "contractScope": "sup3",
+                "contractType": "DELIVERY",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "deliveryContractType": "ELECTRICITY_VARIABLE",
+                "deliveryPrice_eurpkWh": 0.0,
+                "feedinPrice_eurpkWh": 0.0,
+                "resourcetype": "DeliveryContract"
+            },
+            {
+                "id": "c22",
+                "contractScope": "ope1",
+                "contractType": "TRANSPORT",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "transportContractType": "DEFAULT",
+                "bandwidthTreshold_kW": 0.0,
+                "bandwidthTariff_eurpkWh": 0.0,
+                "resourcetype": "TransportContract"
+            },
+            {
+                "id": "c23",
+                "contractScope": "gov9",
+                "contractType": "TAX",
+                "energyCarrier": "ELECTRICITY",
+                "annualFee_eur": 0.0,
+                "taxContractType": "SALDEREN",
+                "taxDelivery_eurpkWh": 0.15,
+                "taxFeedin_eurpkWh": 0.15,
+                "proportionalTax_pct": 0.21,
+                "resourcetype": "TaxContract"
+            }
+        ],
+        "category": "HOLONENERGY",
+        "p_gridNodeUnderResponsibility": "E2",
+        "resourcetype": "Actor"
+    }
+]

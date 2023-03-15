@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from holon.models.scenario import Scenario
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
-from holon.services.cloudclient import CloudClient
 
 
 class AnylogicCloudConfig(ClusterableModel):
@@ -48,6 +47,7 @@ class AnylogicCloudConfig(ClusterableModel):
         verbose_name = "Anylogic cloudclient configuratie"
 
     # def clean(self) -> None:
+    #     from holon.services.cloudclient import CloudClient
     #     try:
     #         CloudClient(
     #             api_key=self.api_key,

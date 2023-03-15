@@ -1,0 +1,22 @@
+[
+    {
+        "id": "E1",
+        "parent": null,
+        "owner_actor": "ope1",
+        "assets": [],
+        "category": "ELECTRICITY",
+        "capacity_kw": 5000.0,
+        "type": "HSMS",
+        "resourcetype": "ElectricGridNode"
+    },
+    {
+        "id": "E2",
+        "parent": "E1",
+        "owner_actor": "ope1",
+        "assets": [],
+        "category": "ELECTRICITY",
+        "capacity_kw": 5000.0,
+        "type": "MSLS",
+        "resourcetype": "ElectricGridNode"
+    }
+]
