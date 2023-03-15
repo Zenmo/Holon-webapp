@@ -113,7 +113,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
         (element): element is InteractiveContent =>
           element.type == "interactive_input" &&
           element.currentValue !== undefined &&
-          element.currentValue !== null
+          element.currentValue !== null &&
+          element.currentValue.length !== 0
       )
       .map((element): InteractiveElement => {
         return {
