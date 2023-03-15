@@ -93,9 +93,7 @@ class Migration(migrations.Migration):
                 ("api_key", models.CharField(max_length=40)),
                 (
                     "url",
-                    models.URLField(
-                        default="https://engine.holontool.nl", max_length=100
-                    ),
+                    models.URLField(default="https://engine.holontool.nl", max_length=100),
                 ),
                 ("model_name", models.CharField(max_length=100)),
                 (
@@ -261,9 +259,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "etm_key",
-                    models.CharField(
-                        help_text="Key as defined in the ETM", max_length=255
-                    ),
+                    models.CharField(help_text="Key as defined in the ETM", max_length=255),
                 ),
                 (
                     "interactive_upscaling_comment",
@@ -466,9 +462,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "asset_attribute",
-                    models.CharField(
-                        default="asset_attribute_not_supplied", max_length=100
-                    ),
+                    models.CharField(default="asset_attribute_not_supplied", max_length=100),
                 ),
                 (
                     "polymorphic_ctype",
@@ -504,25 +498,6 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Scenario",
             },
-        ),
-        migrations.AlterModelOptions(
-            name="factor",
-            options={"base_manager_name": "objects"},
-        ),
-        migrations.AlterUniqueTogether(
-            name="factor",
-            unique_together=set(),
-        ),
-        migrations.AddField(
-            model_name="factor",
-            name="polymorphic_ctype",
-            field=models.ForeignKey(
-                editable=False,
-                null=True,
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="polymorphic_%(app_label)s.%(class)s_set+",
-                to="contenttypes.contenttype",
-            ),
         ),
         migrations.CreateModel(
             name="BuiltEnvironmentGridConnection",
@@ -772,9 +747,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "type",
-                    models.CharField(
-                        choices=[("MSLS", "Msls"), ("HSMS", "Hsms")], max_length=4
-                    ),
+                    models.CharField(choices=[("MSLS", "Msls"), ("HSMS", "Hsms")], max_length=4),
                 ),
             ],
             options={
@@ -1684,9 +1657,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "etm_key",
-                    models.CharField(
-                        help_text="Key as defined in the ETM", max_length=255
-                    ),
+                    models.CharField(help_text="Key as defined in the ETM", max_length=255),
                 ),
                 (
                     "shadow_key",
@@ -2068,14 +2039,6 @@ class Migration(migrations.Migration):
                 related_name="polymorphic_%(app_label)s.%(class)s_set+",
                 to="contenttypes.contenttype",
             ),
-        ),
-        migrations.RemoveField(
-            model_name="factor",
-            name="asset",
-        ),
-        migrations.RemoveField(
-            model_name="factor",
-            name="grid_connection",
         ),
         migrations.CreateModel(
             name="BuildingGridConnection",
