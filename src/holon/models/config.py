@@ -363,10 +363,6 @@ class AnyLogicConversion(models.Model):
     )
 
     def clean(self) -> None:
-        # conversion type is curve or query but no key is supplied
-        if self.conversion_value_type == AnyLogicConversionValueType.CURVE and self.key is None:
-            raise ValidationError("Conversion type is curve or query but no key is supplied!")
-
         # conversion operation is in product but no curves are supplied
         if (
             self.conversion == ConversionOperationType.IN_PRODUCT
