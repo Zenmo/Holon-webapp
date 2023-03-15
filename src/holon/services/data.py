@@ -14,13 +14,15 @@ class Results:
         inter_upscaling_outcomes: dict,
         nat_upscaling_outcomes: dict,
         cost_outcome: float,
-        costbenefit_outcomes: dict,
+        cost_benefit_overview: dict,
+        cost_benefit_detail: dict,
     ) -> None:
         self.anylogic_outcomes = anylogic_outcomes
         self.inter_upscaling_outcomes = inter_upscaling_outcomes
         self.nat_upscaling_outcomes = nat_upscaling_outcomes
         self.cost_outcome = cost_outcome
-        self.costbenefit_outcomes = costbenefit_outcomes
+        self.cost_benefit_overview = cost_benefit_overview
+        self.cost_benefit_detail = cost_benefit_detail
 
     @property
     def anylogic_outcomes(self):
@@ -41,8 +43,8 @@ class Results:
                 "national": self.nat_upscaling_outcomes,
             },
             "cost_benefit_results": {
-                "overview": self.costbenefit_outcomes["overview"],
-                "detail": self.costbenefit_outcomes["detail"],
+                "overview": self.cost_benefit_overview,
+                "detail": self.cost_benefit_detail,
             },
         }
 
