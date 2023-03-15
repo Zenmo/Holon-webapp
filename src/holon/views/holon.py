@@ -5,10 +5,14 @@ from rest_framework.response import Response
 from holon.models import rule_mapping, Scenario
 from holon.models.scenario_rule import ModelType
 from holon.services.cloudclient import CloudClient
-from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
+from holon.services import CostBenedict
+from holon.services.data import Results
 
 from holon.serializers import HolonRequestSerializer
 from holon.models.util import all_subclasses
+
+DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
+DUMMY_COST = 42
 
 
 class HolonV2Service(generics.CreateAPIView):
@@ -25,16 +29,28 @@ class HolonV2Service(generics.CreateAPIView):
                     data["scenario"].id, data["interactive_elements"]
                 )
 
-                # TODO serialize and send to anylogic
+                # TODO hand over the original_scenario for configs and the edited scenario for datamodel
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(original_scenario)
                 cc.run()
 
+                cost_benefit_results = CostBenedict(
+                    actors=cc.outputs["actors"]
+                ).determine_group_costs()
+
+                results = Results(
+                    scenario=scenario,
+                    anylogic_outcomes=cc.outputs,
+                    inter_upscaling_outcomes=DUMMY_UPSCALE,
+                    nat_upscaling_outcomes=DUMMY_UPSCALE,
+                    cost_outcomes=DUMMY_COST,
+                    costbenefit_outcomes=cost_benefit_results,
+                )
+
                 # Delete duplicated scenario
                 scenario.delete()
-
                 return Response(
-                    cc.outputs,
+                    results.to_dict(),
                     status=status.HTTP_200_OK,
                 )
 
