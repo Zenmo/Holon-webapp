@@ -5,6 +5,8 @@ from holon.models.filter import Filter
 
 
 class FilterAggregation:
+    """Collection of functions for aggregating on filter results"""
+
     def get_filters_object_count(filters: list[Filter]) -> int:
         """Get the number of objects in the combined filter resutls"""
         filtered_queryset = FilterAggregation.get_queryset_from_filters(filters)
@@ -26,7 +28,12 @@ class FilterAggregation:
 
         return attr_sum
 
-    def get_queryset_from_filters(filters: list[Filter]) -> QuerySet:
+        # TODO on what model are we filtering? And do we want models within a specific scenario, or all models in the database? - TAVM
+
+    def get_queryset_from_filters(
+        filters: list[Filter],
+    ) -> QuerySet:
+        """Get a queryset from a list of filters"""
         queryset_filter = Q()
 
         # filter: Filter
