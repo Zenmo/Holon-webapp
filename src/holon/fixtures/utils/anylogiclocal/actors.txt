@@ -9,7 +9,7 @@
     },
     {
         "id": "hol2",
-        "group": null,
+        "group": "Bedrijventerrein HOLON",
         "subgroup": null,
         "contracts": [
             {
@@ -61,7 +61,7 @@
     },
     {
         "id": "con4",
-        "group": null,
+        "group": "Commercieel bedrijf 4",
         "subgroup": null,
         "contracts": [
             {
@@ -116,7 +116,7 @@
     },
     {
         "id": "con5",
-        "group": null,
+        "group": "Commercieel bedrijf 3",
         "subgroup": null,
         "contracts": [
             {
@@ -171,7 +171,7 @@
     },
     {
         "id": "con6",
-        "group": null,
+        "group": "Commercieel bedrijf 2",
         "subgroup": null,
         "contracts": [
             {
@@ -226,7 +226,7 @@
     },
     {
         "id": "con7",
-        "group": null,
+        "group": "Commercieel bedrijf 1",
         "subgroup": null,
         "contracts": [
             {
@@ -281,8 +281,8 @@
     },
     {
         "id": "con8",
-        "group": "households",
-        "subgroup": "poor",
+        "group": null,
+        "subgroup": null,
         "contracts": [
             {
                 "id": "c8",
