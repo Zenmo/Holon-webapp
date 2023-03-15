@@ -24,7 +24,7 @@ class RuleMappingTestClass(TestCase):
             name="building_gas_burner",
             type=ConversionAssetType.GAS_BURNER,
             eta_r=0.95,
-            deliveryTemp_degc=90.0,
+            deliveryTemp_degC=90.0,
             capacityHeat_kW=60.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
@@ -61,7 +61,7 @@ class RuleMappingTestClass(TestCase):
             model_subtype="ChemicalHeatConversionAsset",
         )
         factor = RuleActionFactor.objects.create(
-            asset_attribute="deliveryTemp_degc", min_value=5, max_value=55, rule=rule
+            asset_attribute="deliveryTemp_degC", min_value=5, max_value=55, rule=rule
         )
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
@@ -72,4 +72,4 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         updated_asset = updated_scenario.assets[0]
-        self.assertEqual(updated_asset.deliveryTemp_degc, factor.min_value)
+        self.assertEqual(updated_asset.deliveryTemp_degC, factor.min_value)

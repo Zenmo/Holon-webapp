@@ -41,7 +41,7 @@ class RuleMappingTestClass(TestCase):
             name="building_heat_pump",
             type=ConversionAssetType.HEAT_PUMP_AIR,
             eta_r=0.95,
-            deliveryTemp_degc=70.0,
+            deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
@@ -57,7 +57,7 @@ class RuleMappingTestClass(TestCase):
             name="template_heat_pump",
             type=ConversionAssetType.HEAT_PUMP_AIR,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityElectricity_kW=0.0,
         )
 
@@ -121,7 +121,7 @@ class RuleMappingTestClass(TestCase):
             name="template_heat_pump",
             type=ConversionAssetType.HEAT_PUMP_AIR,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityElectricity_kW=0.0,
         )
 

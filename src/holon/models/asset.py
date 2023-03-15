@@ -136,6 +136,7 @@ class CookingConversionAssetTypes(models.TextChoices):
 
 
 class CookingConversionAsset(EnergyAsset):
+    category = "CONVERSION"
     type = models.CharField(max_length=255, choices=CookingConversionAssetTypes.choices)
     capacityHeat_kW = models.FloatField(blank=True, null=True)
     capacityElectricity_kW = models.FloatField(blank=True, null=True)
@@ -155,7 +156,7 @@ class CookingConversionAsset(EnergyAsset):
 
 
 class HeatConversionAsset(ConversionAsset):
-    deliveryTemp_degc = models.FloatField()
+    deliveryTemp_degC = models.FloatField()
 
 
 class ChemicalHeatConversionAsset(HeatConversionAsset):

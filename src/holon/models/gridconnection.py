@@ -176,6 +176,6 @@ class DistrictHeatingType(models.TextChoices):
 
 
 class DistrictHeatingGridConnection(UtilityGridConnection):
-    category = "DISTRICT_HEATING"
+    category = "DISTRICTHEATING"
     type = models.CharField(max_length=2, choices=DistrictHeatingType.choices)
     smart_assets = models.BooleanField(null=True, blank=True)
