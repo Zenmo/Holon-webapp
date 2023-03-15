@@ -67,7 +67,7 @@ class CloudClient:
         inputs.set_input("P grid connection config JSON", self.payload["gridconnections"])
         inputs.set_input("P grid node config JSON", self.payload["gridnodes"])
         inputs.set_input("P policies config JSON", self.payload["policies"])
-        inputs.set_input("P actors config JSON", self.payload["policies"])
+        inputs.set_input("P actors config JSON", self.payload["actors"])
 
         # Oh lord why!
         inputs.set_input("P import local config jsons", False)
