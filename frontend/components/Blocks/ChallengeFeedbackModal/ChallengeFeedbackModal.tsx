@@ -99,7 +99,8 @@ export default function ChallengeFeedbackModal({
   }
 
   const modalstyling =
-    selectedModal?.value?.modaltheme === "green"
+    selectedModal?.value?.modaltheme === "green" ||
+    selectedModal?.value?.modaltheme === "greenwithconfetti"
       ? "bg-holon-green"
       : selectedModal?.value?.modaltheme === "orange"
       ? "bg-holon-orange"
@@ -133,7 +134,7 @@ export default function ChallengeFeedbackModal({
                   leaveTo="opacity-0 scale-95">
                   <Dialog.Panel
                     className={`w-full p-relative max-w-md min-w-[50vw] transform overflow-hidden rounded p-6 text-center align-middle shadow-xl transition-all text-white flex flex-col gap-4 ${modalstyling}`}>
-                    {selectedModal.value.modaltheme === "green" && <Confetti />}
+                    {selectedModal.value.modaltheme === "greenwithconfetti" && <Confetti />}
                     <Dialog.Title as="h2" className="leading-6 text-2xl font-bold">
                       {selectedModal.value.modaltitle}
                     </Dialog.Title>
