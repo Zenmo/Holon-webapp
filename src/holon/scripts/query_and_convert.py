@@ -2,7 +2,6 @@ from holon.models.scenario import Scenario
 from holon.models.config import (
     QueryAndConvertConfig,
     KeyValuePairCollection,
-    FloatKeyValuePair,
     AnyLogicConversion,
     DatamodelConversion,
     StaticConversion,
@@ -10,7 +9,6 @@ from holon.models.config import (
     ETMQuery,
 )
 from typing import List
-from dataclasses import dataclass
 
 
 class QConfig:
@@ -50,7 +48,7 @@ class QConfig:
     def unpack_queries(self):
         self._queries = []
         for q in self.config_db.etm_query.all():
-            self._queries.append(Query(q, self))
+            self._queries.append(Query(q, self).to_dict())
 
 
 class Query:
@@ -60,17 +58,16 @@ class Query:
         self.endpoint = query.endpoint
         self.etm_key = query.etm_key
         self.config = config
+        self.query_db = query
 
     @property
     def convert_with(self) -> List[dict]:
+        query = self.query_db
+        # early return if the property was called before
         try:
             return self._convert_with
         except AttributeError:
-            return list()
-
-    @convert_with.setter
-    def convert_with(self, query: ETMQuery) -> None:
-        self._convert_with = []
+            self._convert_with = []
 
         conversions: List[ETMQuery] = [
             *query.static_conversion_step.all(),
@@ -90,6 +87,8 @@ class Query:
                 self._convert_with.append(self.set_datamodel(c))
             else:
                 raise NotImplementedError(f"Conversion of type {c.__name__} is not implemented!")
+
+        return self._convert_with
 
     def set_static(self, c: StaticConversion):
         """tries to get local vars, if not than resort to direct value"""
@@ -115,6 +114,7 @@ class Query:
         }
 
     def set_anylogic(self, c: AnyLogicConversion):
+        # TODO: map AnyLogic outputs based on snippets that we can validate!
         try:
             value = self.config.anylogic_outcomes[c.anylogic_key]
         except KeyError:
@@ -129,19 +129,32 @@ class Query:
         }
 
     def set_datamodel(self, c: DatamodelConversion):
-        return c
+        """"""
+        # TODO TO IMPLEMENT!
+        return {"self_conversion": c.self_conversion}
+
+    def to_dict(self):
+        return {
+            self.internal_key: {
+                "data_type": self.data_type,
+                "endpoint": self.endpoint,
+                "etm_key": self.etm_key,
+                "convert_with": self.convert_with,
+            }
+        }
 
 
 def run():
     from holon.services import CloudClient
+    import json
 
     scenario = Scenario.objects.get(id=1)
     configs: list[QueryAndConvertConfig] = scenario.query_and_convert_config.all()
 
-    cc = CloudClient(scenario)
-    cc.run()
-    cc.outputs
+    with open("output-fixture.json", "r") as infile:
+        cc_outputs = json.load(infile)
 
     for c in configs:
-        qc = QConfig(c, anylogic_outcomes=cc.outputs)
-        print(qc.queries)
+        qc = QConfig(c, anylogic_outcomes=cc_outputs)
+
+        print(json.dumps(qc.queries, indent=2))
