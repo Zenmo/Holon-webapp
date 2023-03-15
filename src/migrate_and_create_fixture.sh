@@ -1,6 +1,6 @@
 # Just a little convience script for the lazy (and gives some certainty with regards to the fixture)
 set -eux
-fixture='holon/fixtures/dorine-datamodel-ehub-fixture.json'
+fixture='holon/fixtures/latest-datamodel-tvw-fixture.json'
 
 # Migrate and apply
 python manage.py makemigrations
