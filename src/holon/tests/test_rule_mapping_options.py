@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.models.rule_action import RuleActionFactor
+from holon.models.rule_actions import RuleActionFactor
 
 
 class RuleMappingTestClass(TestCase):
@@ -41,7 +41,7 @@ class RuleMappingTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
         self.factor_option_1 = RuleActionFactor.objects.create(
-            asset_attribute="capacity_kw", min_value=5, max_value=55, rule=rule_option_1
+            model_attribute="capacity_kw", min_value=5, max_value=55, rule=rule_option_1
         )
         rule_option_3 = ScenarioRule.objects.create(
             interactive_element_option=self.interactive_element_option_3,
@@ -49,7 +49,7 @@ class RuleMappingTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
         self.factor_option_3 = RuleActionFactor.objects.create(
-            asset_attribute="tempSetpointNight_degC", min_value=5, max_value=55, rule=rule_option_3
+            model_attribute="tempSetpointNight_degC", min_value=5, max_value=55, rule=rule_option_3
         )
 
     def test_rule_mapping_single_select_option_1(self) -> None:

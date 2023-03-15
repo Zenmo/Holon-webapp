@@ -14,8 +14,8 @@
         "fields": {
             "api_key": "7a3563c1-ea1c-41d6-8009-b7abfd93f7ba",
             "url": "https://engine.holontool.nl",
-            "model_name": "Base_5dec",
-            "model_version_number": 5,
+            "model_name": "Base_9mar",
+            "model_version_number": 1,
             "scenario": 1,
             "owner_email": ""
         }
@@ -24,8 +24,8 @@
         "model": "holon.anylogiccloudoutput",
         "pk": 1,
         "fields": {
-            "anylogic_key": "O output runSettings",
-            "internal_key": "APIOutputRunData",
+            "anylogic_key": "O output actorData",
+            "internal_key": "actors",
             "anylogic_model_configuration": 1
         }
     },
@@ -33,8 +33,17 @@
         "model": "holon.anylogiccloudoutput",
         "pk": 2,
         "fields": {
-            "anylogic_key": "O total cost data",
-            "internal_key": "APIOutputTotalCostData",
+            "anylogic_key": "O simulation results",
+            "internal_key": "simulation_results",
+            "anylogic_model_configuration": 1
+        }
+    },
+    {
+        "model": "holon.anylogiccloudoutput",
+        "pk": 3,
+        "fields": {
+            "anylogic_key": "O hourly curves data",
+            "internal_key": "curves",
             "anylogic_model_configuration": 1
         }
     },

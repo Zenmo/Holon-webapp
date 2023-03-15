@@ -1,32 +1,81 @@
-from anylogiccloudclient.client.cloud_client import CloudClient as ALCloucClient
+from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
+from anylogiccloudclient.client.cloud_client import Inputs
+from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
+from holon.models.scenario import Scenario
+import json
 
 
 class CloudClient:
     """a more convient way of working with the AnyLogic cloud client"""
 
-    def __init__(self, api_key: str, url: str, model_name: str, model_version: int) -> None:
-        self.url = url
-        self.client = ALCloucClient(api_key, url)
-        self.connect_to_model(model_name=model_name, model_version=model_version)
+    def __init__(
+        self,
+        scenario: Scenario,
+    ):
+        from holon.models.config import AnylogicCloudConfig
 
-    def connect_to_model(
+        # db lookup
+        config: AnylogicCloudConfig = scenario.anylogic_config.get()
+        self.config = config
+
+        # value attributes
+        self.url = config.url
+        self.scenario = scenario
+        self.client = ALCloudClient(config.api_key, config.url)
+
+        # method attributes
+        self.model_version = self._get_model_version(
+            model_name=config.model_name, model_version=config.model_version_number
+        )
+        self.payload = self.get_scenario_json(scenario)
+
+        # initials
+        self._outputs = None
+
+    def _get_model_version(
         self,
         model_name: str,
         model_version: int,
     ) -> None:
-        """connect to model"""
+        """connect to the cloud and get the right model version"""
 
-        if model_name not in self.client.get_models():
+        model_names = [m.name for m in self.client.get_models()]
+
+        if model_name not in model_names:
             raise ValueError(
                 f"Supplied model name '{model_name}' not in available models (check "
                 + f"the rights for the provided 'api_key' if this doesn't feel right): "
-                + f"{self.client.get_models()}"
+                + f"{model_names}"
             )
 
         _model = self.client.get_model_by_name(model_name)
-        self.model = self.client.get_model_version_by_number(
-            model=_model, version_number=model_version
-        )
+        return self.client.get_model_version_by_number(model=_model, version_number=model_version)
 
-    def run():
-        pass
+    def get_scenario_json(self, scenario: Scenario) -> dict:
+        """gets AnyLogic safe serialized version of the copied datamodel (import here due to circulars)"""
+        # TODO has hardcoded values for input mapping
+        from holon.serializers import ScenarioSerializer
+
+        return ScenarioSerializer(scenario).data
+
+    def run(self) -> None:
+        """run the scenario, outputs are set to the .outputs attribute"""
+
+        inputs: Inputs = self.client.create_default_inputs(self.model_version)
+
+        inputs.set_input("P grid connection config JSON", self.payload["gridconnections"])
+        inputs.set_input("P grid node config JSON", self.payload["gridnodes"])
+        inputs.set_input("P policies config JSON", self.payload["policies"])
+
+        self.outputs = self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
+
+    @property
+    def outputs(self) -> dict:
+        return self._outputs
+
+    @outputs.setter
+    def outputs(self, anylogic_outputs: SingleRunOutputs):
+        self._outputs = {
+            co.internal_key: json.loads(anylogic_outputs.value(co.anylogic_key))
+            for co in self.config.anylogic_cloud_output.all()
+        }

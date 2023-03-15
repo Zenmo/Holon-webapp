@@ -36,6 +36,7 @@ class ElectrolyserMode(models.TextChoices):
 
 
 class GridConnection(PolymorphicModel, ClusterableModel):
+
     owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     capacity_kw = models.FloatField()
     parent_electric = models.ForeignKey(

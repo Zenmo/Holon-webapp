@@ -47,18 +47,18 @@ class AnylogicCloudConfig(ClusterableModel):
     class Meta:
         verbose_name = "Anylogic cloudclient configuratie"
 
-    def clean(self) -> None:
-        try:
-            CloudClient(
-                api_key=self.api_key,
-                url=self.url,
-                model_name=self.model_name,
-                model_version=self.model_version,
-            )
-        except ValueError as e:
-            raise ValidationError(e)
+    # def clean(self) -> None:
+    #     try:
+    #         CloudClient(
+    #             api_key=self.api_key,
+    #             url=self.url,
+    #             model_name=self.model_name,
+    #             model_version=self.model_version,
+    #         )
+    #     except ValueError as e:
+    #         raise ValidationError(e)
 
-        return super().clean()
+    #     return super().clean()
 
     def __str__(self):
         return f"{self.model_name} / version {self.model_version_number}"
@@ -228,6 +228,7 @@ class ETMQuery(ClusterableModel):
         FieldPanel("endpoint"),
         FieldPanel("data_type"),
         FieldPanel("etm_key"),
+        FieldPanel("internal_key"),
         InlinePanel(
             "static_conversion_step",
             heading="Convert inputs/queries with static values",

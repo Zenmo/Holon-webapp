@@ -3,7 +3,6 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.models.rule_action import RuleActionFactor
 
 
 class RuleMappingTestClass(TestCase):
@@ -68,7 +67,7 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
-        rule_action_add = RuleActionAdd.objects.create(asset=default_ehc, rule=rule)
+        rule_action_add = RuleActionAdd.objects.create(asset_to_add=default_ehc, rule=rule)
 
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
@@ -132,7 +131,9 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
-        rule_action_set_count = RuleActionSetCount.objects.create(asset=default_ehc, rule=rule)
+        rule_action_set_count = RuleActionSetCount.objects.create(
+            asset_to_add=default_ehc, rule=rule
+        )
 
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 

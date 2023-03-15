@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from modelcluster.fields import ParentalKey
 from polymorphic.models import PolymorphicModel
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import FieldPanel
 
 from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses

@@ -2,29 +2,13 @@ from django.apps import apps
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from holon.models import rule_mapping
+from holon.models import rule_mapping, Scenario
 from holon.models.scenario_rule import ModelType
+from holon.services.cloudclient import CloudClient
+from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 
 from holon.serializers import HolonRequestSerializer
 from holon.models.util import all_subclasses
-
-RESULTS = [
-    "SystemHourlyElectricityImport_MWh",
-    "APIOutputTotalCostData",
-    "totalEHGVHourlyChargingProfile_kWh",
-]
-
-
-class HolonService(generics.CreateAPIView):
-    serializer_class = HolonRequestSerializer
-
-    def post(self, request):
-        serializer = HolonRequestSerializer(data=request.data)
-
-        return Response(
-            "This endpoint is no longer in use, upgrade to the new endpoint!",
-            status=status.HTTP_418_IM_A_TEAPOT,
-        )
 
 
 class HolonV2Service(generics.CreateAPIView):
@@ -42,12 +26,15 @@ class HolonV2Service(generics.CreateAPIView):
                 )
 
                 # TODO serialize and send to anylogic
+                original_scenario = Scenario.objects.get(id=data["scenario"].id)
+                cc = CloudClient(original_scenario)
+                cc.run()
 
                 # Delete duplicated scenario
                 scenario.delete()
 
                 return Response(
-                    "success",
+                    cc.outputs,
                     status=status.HTTP_200_OK,
                 )
 
@@ -74,3 +61,11 @@ class HolonCMSLogic(generics.RetrieveAPIView):
                 ]
 
         return Response(response)
+
+
+class HolonService(generics.CreateAPIView):
+    def post(self, request):
+        return Response(
+            "This endpoint is no longer in use, upgrade to the new endpoin!",
+            status=status.HTTP_410_GONE,
+        )
