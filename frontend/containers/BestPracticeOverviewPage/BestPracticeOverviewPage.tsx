@@ -22,7 +22,7 @@ const BestPracticeOverviewPage = ({
 
       <div className="holonContentContainer">
         <div className="defaultBlockPadding">
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row justify-center flex-wrap py-12 mx-[-1rem]">
             {childPractices?.map((practice: any, index: number) => {
               return (
                 <div
