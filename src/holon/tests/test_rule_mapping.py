@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.models.rule_action import RuleActionFactor
+from holon.models.rule_actions.rule_action_factor import RuleActionFactor
 
 
 class RuleMappingTestClass(TestCase):
@@ -40,7 +40,7 @@ class RuleMappingTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
         factor = RuleActionFactor.objects.create(
-            asset_attribute="capacity_kw", min_value=5, max_value=55, rule=rule
+            model_attribute="capacity_kw", min_value=5, max_value=55, rule=rule
         )
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
@@ -61,7 +61,7 @@ class RuleMappingTestClass(TestCase):
             model_subtype="ChemicalHeatConversionAsset",
         )
         factor = RuleActionFactor.objects.create(
-            asset_attribute="deliveryTemp_degc", min_value=5, max_value=55, rule=rule
+            model_attribute="deliveryTemp_degc", min_value=5, max_value=55, rule=rule
         )
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
