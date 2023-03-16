@@ -24,7 +24,7 @@ class RuleMappingTestClass(TestCase):
             name="building_gas_burner",
             type=ConversionAssetType.GAS_BURNER,
             eta_r=0.95,
-            deliveryTemp_degc=90.0,
+            deliveryTemp_degC=90.0,
             capacityHeat_kW=60.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
@@ -74,4 +74,4 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         updated_asset = updated_scenario.assets[0]
-        self.assertEqual(updated_asset.deliveryTemp_degc, factor.min_value)
+        self.assertEqual(updated_asset.deliveryTemp_degC, factor.min_value)

@@ -193,6 +193,12 @@
         "battery_mode": null,
         "electrolyser_mode": null,
         "heating_type": "NONE",
+        "tempSetpointNight_degC": 16.0,
+        "tempSetpointNight_start_hr": 20.0,
+        "tempSetpointDay_degC": 20.0,
+        "tempSetpointDay_start_hr": 8.0,
+        "pricelevelLowDifFromAvg_eurpkWh": null,
+        "pricelevelHighDifFromAvg_eurpkWh": null,
         "type": "LOGISTICS",
         "resourcetype": "BuildingGridConnection"
     },
@@ -390,6 +396,12 @@
         "battery_mode": null,
         "electrolyser_mode": null,
         "heating_type": "NONE",
+        "tempSetpointNight_degC": 16.0,
+        "tempSetpointNight_start_hr": 20.0,
+        "tempSetpointDay_degC": 20.0,
+        "tempSetpointDay_start_hr": 8.0,
+        "pricelevelLowDifFromAvg_eurpkWh": null,
+        "pricelevelHighDifFromAvg_eurpkWh": null,
         "type": "LOGISTICS",
         "resourcetype": "BuildingGridConnection"
     },
@@ -421,7 +433,7 @@
                 "name": "Building_gas_burner",
                 "type": "GAS_BURNER",
                 "eta_r": 0.95,
-                "deliveryTemp_degc": 100.0,
+                "deliveryTemp_degC": 100.0,
                 "capacityHeat_kW": 1000.0,
                 "resourcetype": "ChemicalHeatConversionAsset"
             }

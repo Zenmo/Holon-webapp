@@ -89,14 +89,14 @@ class RuleMappingTestClass(TestCase):
             name="template_heat_pump",
             type=ConversionAssetType.HEAT_PUMP_AIR,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityElectricity_kW=0.0,
         )
         default_hhc = HybridHeatCoversionAsset.objects.create(
             name="template_hybrid_heat_pump",
             type=ConversionAssetType.HEAT_DELIVERY_SET,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityHeat_kW=0.0,
             capacityElectricity_kW=0.0,
             ambientTempType=0.0,
@@ -105,14 +105,14 @@ class RuleMappingTestClass(TestCase):
             name="template_gas_burner",
             type=ConversionAssetType.GAS_BURNER,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityHeat_kW=0.0,
         )
         default_thc = TransportHeatConversionAsset.objects.create(
             name="template_hybrid_heat_pump",
             type=ConversionAssetType.HEAT_DELIVERY_SET,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityElectricity_kW=0.0,
             ambientTempType="",
         )
