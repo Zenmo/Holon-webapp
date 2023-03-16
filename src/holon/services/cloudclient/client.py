@@ -2,6 +2,7 @@ from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
 from anylogiccloudclient.client.cloud_client import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from holon.models.scenario import Scenario
+from holon.models.config import AnylogicCloudInput
 import json
 
 
@@ -66,6 +67,16 @@ class CloudClient:
         inputs.set_input("P grid connection config JSON", self.payload["gridconnections"])
         inputs.set_input("P grid node config JSON", self.payload["gridnodes"])
         inputs.set_input("P policies config JSON", self.payload["policies"])
+        inputs.set_input("P actors config JSON", self.payload["actors"])
+
+        # Oh lord why!
+        inputs.set_input("P import local config jsons", False)
+
+        additional_inputs = self.config.anylogic_cloud_input.all()
+        if len(additional_inputs) > 0:
+            for additional_input in additional_inputs:
+                ai: AnylogicCloudInput = additional_input
+                inputs.set_input(ai.anylogic_key, ai.anylogic_value)
 
         self.outputs = self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
 

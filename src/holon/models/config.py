@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from holon.models.scenario import Scenario
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
-from holon.services.cloudclient import CloudClient
 
 
 class AnylogicCloudConfig(ClusterableModel):
@@ -48,6 +47,7 @@ class AnylogicCloudConfig(ClusterableModel):
         verbose_name = "Anylogic cloudclient configuratie"
 
     # def clean(self) -> None:
+    #     from holon.services.cloudclient import CloudClient
     #     try:
     #         CloudClient(
     #             api_key=self.api_key,
@@ -86,10 +86,10 @@ class AnylogicCloudOutput(models.Model):
     """supports configurable mapping from AnyLogic resuls to guaranteed internal keys"""
 
     anylogic_key = models.CharField(
-        max_length=50, help_text=_("Key as provided in the AnyLogic Cloud response JSON")
+        max_length=255, help_text=_("Key as provided in the AnyLogic Cloud response JSON")
     )
     internal_key = models.CharField(
-        max_length=50,
+        max_length=255,
         help_text=_(
             "Key that is used internally to access the data associated with this AnyLogic key"
         ),
@@ -190,7 +190,7 @@ class DataType(models.TextChoices):
 
 class ETMQuery(ClusterableModel):
     internal_key = models.CharField(
-        max_length=35,
+        max_length=255,
         help_text=_(
             "Key that is used internally (downstream) to access the data associated with this query result"
         ),
@@ -216,7 +216,7 @@ class ETMQuery(ClusterableModel):
         ),
     )
     interactive_upscaling_comment = models.CharField(
-        max_length=350,
+        max_length=255,
         blank=True,
         null=True,
         help_text=_(
@@ -363,10 +363,6 @@ class AnyLogicConversion(models.Model):
     )
 
     def clean(self) -> None:
-        # conversion type is curve or query but no key is supplied
-        if self.conversion_value_type == AnyLogicConversionValueType.CURVE and self.key is None:
-            raise ValidationError("Conversion type is curve or query but no key is supplied!")
-
         # conversion operation is in product but no curves are supplied
         if (
             self.conversion == ConversionOperationType.IN_PRODUCT
