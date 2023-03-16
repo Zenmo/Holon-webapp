@@ -2,12 +2,13 @@
 
 import requests
 import json
-import os
+from pathlib import Path
 
 # change this to the desired ID
 SCENARIO_ID = 1
 folder = "anylogiclocal"
-os.mkdir(folder)
+FOLDER = Path(__file__).parent / folder
+FOLDER.mkdir(exist_ok=True)
 
 
 r = requests.get(f"http://localhost:8000/wt/api/nextjs/v2/datamodel/{SCENARIO_ID}/")
@@ -16,5 +17,5 @@ dicto = r.json()
 
 outputs = ["actors", "gridconnections", "gridnodes", "policies"]
 for output in outputs:
-    with open(f"{folder}/{output}.txt", "w") as outfile:
+    with open(FOLDER / f"{output}.txt", "w") as outfile:
         outfile.write(json.dumps(dicto[output], indent=4))

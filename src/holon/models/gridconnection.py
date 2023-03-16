@@ -36,7 +36,7 @@ class ElectrolyserMode(models.TextChoices):
 
 
 class GridConnection(PolymorphicModel, ClusterableModel):
-
+    category = "GENERIC"
     owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
     capacity_kw = models.FloatField()
     parent_electric = models.ForeignKey(
@@ -177,6 +177,6 @@ class DistrictHeatingType(models.TextChoices):
 
 
 class DistrictHeatingGridConnection(UtilityGridConnection):
-    category = "DISTRICT_HEATING"
+    category = "DISTRICTHEATING"
     type = models.CharField(max_length=2, choices=DistrictHeatingType.choices)
     smart_assets = models.BooleanField(null=True, blank=True)
