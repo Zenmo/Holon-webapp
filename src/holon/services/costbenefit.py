@@ -65,7 +65,7 @@ class CostBenedict:
                         inverse_transactions[receiving_party].update({party: 0})
                 finally:
                     inverse_transactions[receiving_party][party] -= value
-        
+
         # merge dicts
         for party, transactions in inverse_transactions.items():
             try:
