@@ -70,6 +70,7 @@ class Query:
         self.config = config
         self.query_db = query
         self.copied_scenario = copied_scenario
+        self.anylogic_outcomes = config.anylogic_outcomes
 
     @property
     def convert_with(self) -> List[dict]:
@@ -129,14 +130,13 @@ class Query:
         }
 
     def set_anylogic(self, c: AnyLogicConversion):
-        print("set anylogic")
-
         # TODO: map AnyLogic outputs based on snippets that we can validate!
-        try:
-            value = self.config.anylogic_outcomes[c.anylogic_key]
-        except KeyError:
-            # raise KeyError(f"Key '{c.anylogic_key}' cannot be found in AnyLogic outcomes")
-            value = None
+        value = None
+        for subdict in self.anylogic_outcomes.values():
+            try:
+                value = subdict[0][c.anylogic_key]  # TODO why is this like this? Seems like jackson artefact
+            except KeyError:
+                pass
         return {
             "type": "static",  # all non-query conversions are considered static
             "type_actual": "anylogic",
