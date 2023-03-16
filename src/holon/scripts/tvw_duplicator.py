@@ -3,9 +3,14 @@ from functools import partial
 import numpy as np
 from django.db.models import Q
 
-from holon.models import (BuildingGridConnection,
-                          DistrictHeatingGridConnection, ElectricGridNode,
-                          EnergyAsset, HouseGridConnection, Scenario)
+from holon.models import (
+    BuildingGridConnection,
+    DistrictHeatingGridConnection,
+    ElectricGridNode,
+    EnergyAsset,
+    HouseGridConnection,
+    Scenario,
+)
 from holon.models.util import duplicate_model
 
 np.random.seed(0)
