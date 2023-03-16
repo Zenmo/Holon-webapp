@@ -12,6 +12,10 @@ from holon.models import DatamodelQueryRule, Scenario
 from typing import List
 
 
+def pprint(msg: str):
+    print(f"[QConfig]: {msg}")
+
+
 class QConfig:
     def __init__(
         self, config_db: QueryAndConvertConfig, anylogic_outcomes: dict, copied_scenario: Scenario
@@ -131,12 +135,27 @@ class Query:
 
     def set_anylogic(self, c: AnyLogicConversion):
         # TODO: map AnyLogic outputs based on snippets that we can validate!
-        value = None
+        value = 1
         for subdict in self.anylogic_outcomes.values():
             try:
-                value = subdict[0][c.anylogic_key]  # TODO why is this like this? Seems like jackson artefact
+                value = subdict[0][
+                    c.anylogic_key
+                ]  # TODO why is this like this? Seems like jackson artefact
             except KeyError:
                 pass
+
+        try:
+            value = float(value)
+            if value == 1:
+                pprint(
+                    f"Couldn't find the specified key '{c.anylogic_key}' in any of the AnyLogic results (resort to convert with 1)"
+                )
+        except:
+            pprint(
+                f"Found the key '{c.anylogic_key}' but the result does not parse to a float (resort to convert with 1)"
+            )
+            value = 1
+
         return {
             "type": "static",  # all non-query conversions are considered static
             "type_actual": "anylogic",
