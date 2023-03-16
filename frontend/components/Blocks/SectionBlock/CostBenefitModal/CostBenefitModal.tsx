@@ -4,19 +4,22 @@ import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import {
-  getHolonDataSegments,
-  getHolonDataSegmentsDetail,
-  getHolonGraphColor,
-} from "../../../../api/holon";
+import { getHolonGraphColor } from "../../../../api/holon";
 
 import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 
-export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
-  const [data, setData] = useState([]);
-  const [detailData, setDetailData] = useState([]);
+type Props = {
+  handleClose: () => void;
+  costBenefitData: {
+    detail: Record<string, unknown>;
+    overview: Record<string, unknown>;
+  };
+};
+
+export default function CostBenefitModal({ handleClose, costBenefitData }: Props) {
   const [dataColors, setDataColors] = useState([]);
   const ignoredLabels = ["name", "Netto kosten"];
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -35,31 +38,28 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
   };
 
   useEffect(() => {
-    getHolonDataSegments()
-      .then(data => setData(data))
-      .catch(err => console.log(err));
-
-    getHolonDataSegmentsDetail()
-      .then(data => setDetailData(data))
-      .catch(err => console.log(err));
-
     getHolonGraphColor()
       .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
   }, []);
-  const tabItems = ["Grafiek", "Tabel", "Detail"];
+
+  const tabItems = [
+    { tabName: "Grafiek", tabTitle: "Kosten en baten per categorie" },
+    { tabName: "Tabel", tabTitle: "Kosten en baten per categorie" },
+    { tabName: "Detail", tabTitle: "Kosten en baten per subcategorie" },
+  ];
 
   return (
     <div className="h-screen bg-white">
       <div className="bg-white py-6 px-10 lg:px-16 fixed top-[4.5rem] md:top-28 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-7rem)] z-20">
         <div className="block h-full w-full">
           <div className="flex flex-1 flex-col h-full">
-            <Tab.Group>
+            <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
               <div className="flex flex-row justify-between">
                 <Tab.List>
                   {tabItems.map((tabItem, index) => (
                     <Tab
-                      key={tabItem + index}
+                      key={tabItem.tabName + index}
                       className={({ selected }) =>
                         classNames(
                           "p-3 mr-px ",
@@ -68,34 +68,33 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                             : "bg-holon-gray-200 text-holon-blue-900"
                         )
                       }>
-                      {tabItem}
+                      {tabItem.tabName}
                     </Tab>
                   ))}
                 </Tab.List>
+                <h2>{tabItems[selectedIndex].tabTitle}</h2>
                 <button type="button" className="text-holon-blue-900 w-8" onClick={handleClick}>
                   <XMarkIcon />
                 </button>
               </div>
 
               <Tab.Panels className="flex flex-1 flex-col min-h-0">
-                <Tab.Panel className="flex flex-1 max-h-full flex-col">
-                  <h2 className="text-center">Kosten en baten per segment</h2>
+                <Tab.Panel className="flex flex-1 max-h-full flex-col pt-2">
                   <CostBenefitChart
-                    chartdata={convertGraphData(data)}
+                    chartdata={convertGraphData(costBenefitData.overview)}
                     dataColors={dataColors}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
                 <Tab.Panel className="flex  max-h-full flex-col">
                   <h2 className="text-center">Kosten en baten per groep</h2>
-                  <CostBenefitTable tableData={data} />
+                  <CostBenefitTable tableData={costBenefitData.overview} />
                 </Tab.Panel>
 
-                <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0">
-                  <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
+                <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0 pt-2">
                   <CostBenefitDetail
-                    chartdata={convertGraphData(data)}
-                    detailData={detailData}
+                    chartdata={convertGraphData(costBenefitData.detail)}
+                    detailData={costBenefitData.detail}
                     dataColors={dataColors}
                     ignoredLabels={ignoredLabels}
                   />
