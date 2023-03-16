@@ -1,12 +1,11 @@
-from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from holon.models.scenario import Scenario
-from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey
 
 
 class AnylogicCloudConfig(ClusterableModel):
@@ -29,6 +28,7 @@ class AnylogicCloudConfig(ClusterableModel):
         FieldPanel("url"),
         FieldPanel("model_name"),
         FieldPanel("model_version_number"),
+        FieldPanel("owner_email"),
         FieldPanel("scenario"),
         InlinePanel(
             "anylogic_cloud_output",
