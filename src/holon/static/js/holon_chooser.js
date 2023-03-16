@@ -221,19 +221,15 @@ function updateFilterInputs(
         if ($(this).prop("tagName") !== "SELECT") {
             select = convertInputToSelect($(this), options, false, true);
             if ($(this).val()) {
+                const model_type = select
+                    .find("option:selected")
+                    .text()
+                    .split("|")[0];
                 convertInputToSelect(
                     select
                         .closest(".w-panel__content")
                         .find(" input[id$='-relation_field_subtype']"),
-                    Object.keys(
-                        data[
-                            Object.keys(data).find(
-                                (key) => key.toLowerCase() === $(this).val()
-                            )
-                        ].model_subtype
-                    ),
-                    false,
-                    true
+                    Object.keys(data[model_type].model_subtype)
                 );
             }
         } else {
