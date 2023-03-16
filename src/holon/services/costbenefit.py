@@ -1,5 +1,6 @@
 # start class script
 from functools import partial
+from typing import Union
 
 
 class CostBenedict:
@@ -49,7 +50,7 @@ class CostBenedict:
         return result
 
     @staticmethod
-    def filter_on_key(dicto: dict, key: str = None, value: str | float | int = None) -> bool:
+    def filter_on_key(dicto: dict, key: str = None, value: Union[str, float, int] = None) -> bool:
         if dicto[key] == value:
             return True
         else:
