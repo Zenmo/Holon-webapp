@@ -16,34 +16,28 @@ class QConfig:
     def __init__(
         self, config_db: QueryAndConvertConfig, anylogic_outcomes: dict, copied_scenario: Scenario
     ) -> None:
-        # static references
         self.config_db = config_db
         self.module = config_db.module
         self.name = config_db.name
         self.api_url = config_db.api_url
         self.etm_scenario_id = config_db.etm_scenario_id
         self.anylogic_outcomes = anylogic_outcomes
-
-        # method based setters
-        self.vars = config_db
         self.copied_scenario = copied_scenario
 
     @property
     def vars(self) -> dict:
+        c = self.config_db
         try:
             return self._vars
         except AttributeError:
-            return dict()
-
-    @vars.setter
-    def vars(self, c: QueryAndConvertConfig):
-        try:
-            key_values: KeyValuePairCollection = (
-                c.key_value_pair_collection.get().float_key_value_pair.all()
-            )
-            self._vars = {o.key: o.value for o in key_values}
-        except:
-            pass
+            self._vars = {}
+            try:
+                key_values: KeyValuePairCollection = (
+                    c.key_value_pair_collection.get().float_key_value_pair.all()
+                )
+                self._vars = {o.key: o.value for o in key_values}
+            except:
+                return self._vars
 
     @property
     def queries(self):
@@ -111,12 +105,14 @@ class Query:
         """tries to get local vars, if not than resort to direct value"""
         if c.value is None:
             value = c.local_variable.value
+            type_actual = "static - local variable"
         else:
             value = c.value
+            type_actual = "static - static"
 
         return {
             "type": "static",  # all non-query conversions are considered static
-            "type_actual": "static",
+            "type_actual": type_actual,
             "conversion": c.conversion,
             "data": "value",  # NOT implemented in module!
             "value": value,
