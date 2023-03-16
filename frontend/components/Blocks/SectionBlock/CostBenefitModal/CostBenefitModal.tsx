@@ -11,8 +11,8 @@ import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 type Props = {
   handleClose: () => void;
   costBenefitData: {
-    detail: {};
-    overview: {};
+    detail: Record<string, unknown>;
+    overview: Record<string, unknown>;
   };
 };
 
