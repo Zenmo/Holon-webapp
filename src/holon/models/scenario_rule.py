@@ -244,7 +244,7 @@ class DatamodelQueryRule(Rule):
     panels = (
         Rule.panels
         + [  # TODO order these panels between the model_(sub)type panels and the filter panels
-            FieldPanel(self_conversion),
+            FieldPanel("self_conversion"),
             FieldPanel("attribute_to_sum"),  # TODO only show if self_conversion is SUM
         ]
     )

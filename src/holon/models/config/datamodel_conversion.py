@@ -20,9 +20,9 @@ class DatamodelConversionOperationType(models.TextChoices):
 class DatamodelConversion(ClusterableModel):
     etm_query = ParentalKey(ETMQuery, related_name="datamodel_conversion_step")
 
-    conversion = models.CharField(max_length=255, choices=DatamodelConversionValueType.choices)
+    conversion = models.CharField(max_length=255, choices=DatamodelConversionOperationType.choices)
     conversion_value_type = models.CharField(
-        max_length=255, choices=DatamodelConversionOperationType.choices
+        max_length=255, choices=DatamodelConversionValueType.choices
     )
 
     shadow_key = models.CharField(
@@ -31,9 +31,9 @@ class DatamodelConversion(ClusterableModel):
     )
 
     panels = [
-        FieldPanel(conversion),
-        FieldPanel(conversion_value_type),
-        FieldPanel(shadow_key),
+        FieldPanel("conversion"),
+        FieldPanel("conversion_value_type"),
+        FieldPanel("shadow_key"),
         InlinePanel(
             "datamodel_query_rule",
             label="Datamodel Query Rule",

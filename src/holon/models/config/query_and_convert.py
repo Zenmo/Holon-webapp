@@ -47,5 +47,7 @@ class QueryAndConvertConfig(ClusterableModel):
             return f"ETM opschalingsconfiguratie ({self.name})"
         if self.module == QueryCovertModuleType.COST:
             return f"Kostenmodule configuratie ({self.name})"
+        if self.module == QueryCovertModuleType.COSTBENEFIT:
+            return f"Kosten&Baten configuratie ({self.name})"
 
         raise NotImplementedError(f"__str__ is not implemented for {self.module}")

@@ -32,7 +32,7 @@ class StaticConversion(models.Model):
         FloatKeyValuePair,
         null=True,
         blank=True,
-        # limit_choices_to=limit_float_keys,
+        # limit_choices_to=limit_float_keys, # TODO ???
         on_delete=models.SET_NULL,
     )
 

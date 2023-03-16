@@ -42,19 +42,7 @@ class AnyLogicConversion(models.Model):
 
         return super().clean()
 
-    if False:  # TODO!
-
+    if False: 
         def clean() -> None:
-            # left hand side ETM key should be querried
-            if False:
-                raise ("AnyLogic result not found!")
-
-            # right hand side is datamodel attr
-            if False:
-                raise ("AnyLogic result not found!")
-
-            # right hand sight is anylogic result
-            if False:
-                raise ("AnyLogic result not found!")
-
+            # TODO!
             return super().clean()
