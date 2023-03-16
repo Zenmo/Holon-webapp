@@ -30,6 +30,9 @@ load_fixture_data() {
   python manage.py loaddata holon/fixtures/api-fixture.json
 }
 
+echo Starting ssh service
+/usr/sbin/sshd
+
 wait_for_db
 setup_django
 load_fixture_data
