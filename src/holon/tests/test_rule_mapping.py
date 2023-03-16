@@ -63,7 +63,7 @@ class RuleMappingTestClass(TestCase):
             model_subtype="ChemicalHeatConversionAsset",
         )
         factor = RuleActionFactor.objects.create(
-            model_attribute="deliveryTemp_degc", min_value=5, max_value=55, rule=rule
+            model_attribute="deliveryTemp_degC", min_value=5, max_value=55, rule=rule
         )
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
