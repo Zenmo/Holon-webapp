@@ -81,6 +81,11 @@ class DatamodelQueryRule(ClusterableModel):
         super().clean()
 
         if (
+            self.self_conversion == SelfConversionType.SUM.value and not self.attribute_to_sum
+        ):  # TODO SUM.value hier?? - TAVM
+            raise ValidationError("attribute_to_sum field should be set if self_conversion is SUM")
+
+        if (
             self.model_subtype is not None
             and self.model_subtype != ""
             and self.model_subtype not in self.model_subtype_options()
