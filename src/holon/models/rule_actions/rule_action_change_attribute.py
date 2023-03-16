@@ -3,7 +3,6 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from django.db import models
 from modelcluster.fields import ParentalKey
-from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 from holon.models.scenario_rule import ScenarioRule
 from wagtail.admin.edit_handlers import FieldPanel
 from django.db.models.query import QuerySet
@@ -26,7 +25,7 @@ class RuleActionChangeAttribute(RuleAction):
     operator = models.CharField(max_length=255, choices=ChangeAttributeOperator.choices)
 
     panels = [FieldPanel("model_attribute"), FieldPanel("operator")]
-    rule = ParentalKey(
+    rule: ScenarioRule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_change_attribute"
     )
 
@@ -37,7 +36,7 @@ class RuleActionChangeAttribute(RuleAction):
         super().clean()
 
         try:
-            if not self.model_attribute in RuleActionUtils.get_model_attributes_options(self.rule):
+            if not self.model_attribute in self.rule.get_model_attributes_options():
                 raise ValidationError(f"Invalid value {self.model_attribute} for model_attribute")
         except ObjectDoesNotExist:
             return

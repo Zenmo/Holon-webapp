@@ -44,50 +44,44 @@ class RuleFiltersTestClass(TestCase):
             )
         )
 
-        self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
-            name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
-        )
-        self.interactive_element_continuous_values = (
-            InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
-        )
-        self.rule = ScenarioRule.objects.create(
-            interactive_element_continuous_values=self.interactive_element_continuous_values,
+    def test_attribute_filter_greater_than(self) -> None:
+        # Arange
+
+        rule: Rule = Rule.objects.create(
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
 
-    def test_attribute_filter_greater_than(self) -> None:
-        # Arange
-        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
-        queryset = rule_mapping.get_queryset_for_rule(self.rule, scenario)
         AttributeFilter.objects.create(
-            rule=self.rule,
+            rule=rule,
             model_attribute="capacity_kw",
             comparator=AttributeFilterComparator.GREATER_THAN,
             value=700.0,
         )
 
         # Act
-        filtered_queryset = rule_mapping.apply_rule_filters_to_queryset(queryset, self.rule)
+        filtered_queryset = rule.get_filtered_queryset(self.scenario)
 
         # Assert
         self.assertEqual(len(filtered_queryset), 2)
 
     def test_attribute_filter_without_rule_subtype(self) -> None:
         # Arange
-        self.rule.model_subtype = ""
-        self.rule.save()
-        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
-        queryset = rule_mapping.get_queryset_for_rule(self.rule, scenario)
+
+        rule: Rule = Rule.objects.create(
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="",
+        )
+
         AttributeFilter.objects.create(
-            rule=self.rule,
+            rule=rule,
             model_attribute="capacity_kw",
             comparator=AttributeFilterComparator.GREATER_THAN,
             value=0.0,
         )
 
         # Act
-        filtered_queryset = rule_mapping.apply_rule_filters_to_queryset(queryset, self.rule)
+        filtered_queryset = rule.get_filtered_queryset(self.scenario)
 
         # Assert
         self.assertEqual(len(filtered_queryset), 4)
@@ -100,14 +94,11 @@ class RuleFiltersTestClass(TestCase):
         asset_2: EnergyAsset = EnergyAsset.objects.create(
             gridconnection=self.gridconnection_2, name="asset 2"
         )
-        rule_asset = ScenarioRule.objects.create(
-            interactive_element_continuous_values=self.interactive_element_continuous_values,
+        rule_asset = Rule.objects.create(
             model_type=ModelType.ENERGYASSET,
             model_subtype="",
         )
 
-        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
-        queryset = rule_mapping.get_queryset_for_rule(rule_asset, scenario)
         RelationAttributeFilter.objects.create(
             rule=rule_asset,
             model_attribute="capacity_kw",
@@ -118,7 +109,8 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        filtered_queryset = rule_mapping.apply_rule_filters_to_queryset(queryset, rule_asset)
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
+
         # Assert
         self.assertEqual(len(filtered_queryset), 1)
 
@@ -135,13 +127,10 @@ class RuleFiltersTestClass(TestCase):
         )
 
         rule_gridconnection = ScenarioRule.objects.create(
-            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
 
-        scenario: Scenario = rule_mapping.get_cloned_scenario(self.scenario.id)
-        queryset = rule_mapping.get_queryset_for_rule(rule_gridconnection, scenario)
         DiscreteAttributeFilter.objects.create(
             rule=rule_gridconnection,
             model_attribute="insulation_label",
@@ -150,9 +139,7 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        filtered_queryset = rule_mapping.apply_rule_filters_to_queryset(
-            queryset, rule_gridconnection
-        )
+        filtered_queryset = rule_gridconnection.get_filtered_queryset(self.scenario)
 
         # Assert
         self.assertEqual(len(filtered_queryset), 2)

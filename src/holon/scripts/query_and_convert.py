@@ -134,6 +134,7 @@ class Query:
         return {"self_conversion": c.self_conversion}
 
     def to_dict(self):
+        """Return a dict of this Query instance"""
         return {
             self.internal_key: {
                 "data_type": self.data_type,

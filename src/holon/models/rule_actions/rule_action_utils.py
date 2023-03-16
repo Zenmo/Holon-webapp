@@ -1,14 +1,11 @@
-from django.db import models
 from holon.models.asset import EnergyAsset
 from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 from holon.models.actor import Actor
 from holon.models.gridnode import GridNode
 from django.apps import apps
-from django.forms import ModelForm
 
 from polymorphic import utils
-from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses
 
 
@@ -44,11 +41,3 @@ class RuleActionUtils:
             ]
 
         return choices
-
-    def get_model_attributes_options(rule: ScenarioRule) -> list[str]:
-        """Get the possible asset attributes for a certain model type"""
-
-        model_type = rule.model_type if rule.model_subtype is None else rule.model_subtype
-        model = apps.get_model("holon", model_type)
-
-        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
