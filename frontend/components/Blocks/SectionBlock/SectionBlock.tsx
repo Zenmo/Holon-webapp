@@ -37,6 +37,12 @@ const initialData = {
     sustainability: null,
     selfSufficiency: null,
   },
+  intermediate: {
+    netload: null,
+    costs: null,
+    sustainability: null,
+    selfSufficiency: null,
+  },
   national: {
     netload: null,
     costs: null,
