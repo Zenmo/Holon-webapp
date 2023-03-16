@@ -70,34 +70,43 @@ scenario = Scenario.objects.get(id=1)
 
 def run():
     for m in multis:
-        gn = scenario.gridnode_set.get(id=m["id"])
-
+        gridnode = scenario.gridnode_set.get(id=m["id"])
         for ma in m["action"]:
             if ma["type"] is None:
-                gc = gn.gridconnection_set.instance_of(ma["model"]).get()
+                gridconnection = gridnode.gridconnection_set.instance_of(ma["model"]).get()
             else:
-                gc = (
-                    gn.gridconnection_set.instance_of(ma["model"])
+                gridconnection = (
+                    gridnode.gridconnection_set.instance_of(ma["model"])
                     .filter(Q(HouseGridConnection___type=ma["type"]))
                     .get()
                 )
 
+            print(f"gridconnection {gridconnection.id}")
+
+            gridconnection_assets = gridconnection.energyasset_set.all()
+            print(f"found {len(gridconnection_assets)} assets for gridconnection {gridconnection.id}")
+
+            gridconnection_actor = gridconnection.owner_actor
+            print(f"found actor {gridconnection_actor.id}")
+
+            actor_contracts = gridconnection_actor.contracts.all()
+            print(f"found {len(actor_contracts)} contracts for actor")
+
             for _ in range(ma["factor"]):
-                dupe_assets = [
-                    duplicate_model(
-                        asset, attrs={field: int(ndf()) for field, ndf in ma["ndf"].items()}
-                    )
-                    for asset in gc.energyasset_set.all()
-                ]
+                
+                # duplicate actors
+                dupe_actor = duplicate_model(gridconnection_actor)
+                
+                for contract in actor_contracts:
+                    duplicate_model(contract, {"actor": dupe_actor})
+                                    
+                # duplicate gridconnection
+                ndf_field_dict = {field: int(ndf()) for field, ndf in ma["ndf"].items()}
+                attr_dict = {"owner_actor": dupe_actor}
+                ndf_field_dict.update(attr_dict)
 
-                dupe_gc = duplicate_model(gc)
-                # restore relations
-                dupe_gc.save()
+                dupe_gridconnection = duplicate_model(gridconnection, attrs=ndf_field_dict)
 
-                for asset in dupe_assets:
-                    asset: EnergyAsset = asset
-                    asset.id = None
-                    asset.gridconnection = dupe_gc
-                    asset.save()
-
-                # actors and their contracts
+                # duplicate asset
+                for asset in gridconnection_assets:
+                    duplicate_model(asset, {"gridconnection": dupe_gridconnection})
