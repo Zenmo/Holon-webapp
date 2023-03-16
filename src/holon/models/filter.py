@@ -104,7 +104,7 @@ class RelationAttributeFilter(Filter):
         super().clean()
 
         try:
-            if self.model_attribute not in self.model_attribute_options():
+            if self.model_attribute not in self.relation_model_attribute_options():
                 raise ValidationError("Invalid value model_attribute")
             if self.relation_field not in self.relation_field_options():
                 raise ValidationError("Invalid value relation_field")
@@ -115,6 +115,18 @@ class RelationAttributeFilter(Filter):
                 raise ValidationError("Invalid value relation_field_subtype")
         except ObjectDoesNotExist:
             return
+
+    def relation_model_attribute_options(self) -> list[str]:
+
+        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+        relation_model_type = (
+            self.relation_field_subtype
+            if self.relation_field_subtype
+            else model_type._meta.get_field(self.relation_field).name
+        )
+        model = apps.get_model("holon", relation_model_type)
+
+        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
     def relation_field_options(self) -> list[str]:
         model_type = (
