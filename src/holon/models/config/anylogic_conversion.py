@@ -1,7 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
-
 from modelcluster.fields import ParentalKey
 
 from holon.models.config.conversion_operation_type import ConversionOperationType
@@ -42,7 +41,8 @@ class AnyLogicConversion(models.Model):
 
         return super().clean()
 
-    if False: 
+    if False:
+
         def clean() -> None:
             # TODO!
             return super().clean()

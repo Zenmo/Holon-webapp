@@ -1,14 +1,11 @@
-from holon.models import (
-    Scenario,
-    ElectricGridNode,
-    DistrictHeatingGridConnection,
-    HouseGridConnection,
-    BuildingGridConnection,
-    EnergyAsset,
-)
-from django.db.models import Q
 from functools import partial
+
 import numpy as np
+from django.db.models import Q
+
+from holon.models import (BuildingGridConnection,
+                          DistrictHeatingGridConnection, ElectricGridNode,
+                          EnergyAsset, HouseGridConnection, Scenario)
 from holon.models.util import duplicate_model
 
 np.random.seed(0)
@@ -84,7 +81,9 @@ def run():
             print(f"gridconnection {gridconnection.id}")
 
             gridconnection_assets = gridconnection.energyasset_set.all()
-            print(f"found {len(gridconnection_assets)} assets for gridconnection {gridconnection.id}")
+            print(
+                f"found {len(gridconnection_assets)} assets for gridconnection {gridconnection.id}"
+            )
 
             gridconnection_actor = gridconnection.owner_actor
             print(f"found actor {gridconnection_actor.id}")
@@ -93,13 +92,12 @@ def run():
             print(f"found {len(actor_contracts)} contracts for actor")
 
             for _ in range(ma["factor"]):
-                
                 # duplicate actors
                 dupe_actor = duplicate_model(gridconnection_actor)
-                
+
                 for contract in actor_contracts:
                     duplicate_model(contract, {"actor": dupe_actor})
-                                    
+
                 # duplicate gridconnection
                 ndf_field_dict = {field: int(ndf()) for field, ndf in ma["ndf"].items()}
                 attr_dict = {"owner_actor": dupe_actor}
