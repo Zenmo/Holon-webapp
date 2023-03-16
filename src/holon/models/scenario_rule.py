@@ -5,7 +5,10 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 
-from holon.models.interactive_element import InteractiveElement
+from holon.models.interactive_element import (
+    InteractiveElementOptions,
+    InteractiveElementContinuousValues,
+)
 from holon.models.util import all_subclasses
 
 
@@ -22,8 +25,14 @@ class ModelType(models.TextChoices):
 class ScenarioRule(ClusterableModel):
     """A rule that finds a selection of objects and updates an attribute according to user input"""
 
-    interactive_element = ParentalKey(
-        InteractiveElement, on_delete=models.CASCADE, related_name="rules"
+    interactive_element_option = ParentalKey(
+        InteractiveElementOptions, on_delete=models.CASCADE, related_name="rules", null=True
+    )
+    interactive_element_continuous_values = ParentalKey(
+        InteractiveElementContinuousValues,
+        on_delete=models.CASCADE,
+        related_name="rules",
+        null=True,
     )
     model_type = models.CharField(
         max_length=255, choices=ModelType.choices

@@ -47,8 +47,11 @@ class RuleFiltersTestClass(TestCase):
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
             name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
         )
+        self.interactive_element_continuous_values = (
+            InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
+        )
         self.rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
@@ -98,7 +101,7 @@ class RuleFiltersTestClass(TestCase):
             gridconnection=self.gridconnection_2, name="asset 2"
         )
         rule_asset = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.ENERGYASSET,
             model_subtype="",
         )
@@ -132,7 +135,7 @@ class RuleFiltersTestClass(TestCase):
         )
 
         rule_gridconnection = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
