@@ -396,33 +396,21 @@ class AnyLogicConversion(models.Model):
             return super().clean()
 
 
-class DatamodelConversionOperationType(models.TextChoices):
-    """Applied to the resulting set of objects attribute values before conversion"""
+class DatamodelConversionValueType(models.TextChoices):
+    VALUE = "value"
 
-    SUM = "sum"
-    COUNT = "count"
+
+class DatamodelConversionOperationType(models.TextChoices):
+    MULTIPLY = "multiply"
+    DIVIDE = "divide"
 
 
 class DatamodelConversion(models.Model):
     etm_query = ParentalKey(ETMQuery, related_name="datamodel_conversion_step")
 
-    conversion = models.CharField(max_length=255, choices=ConversionOperationType.choices)
+    conversion = models.CharField(max_length=255, choices=DatamodelConversionValueType.choices)
     conversion_value_type = models.CharField(
-        max_length=255, choices=AnyLogicConversionValueType.choices
-    )
-
-    filter = models.CharField(
-        max_length=255,
-        default="not_implemented",
-        help_text=_(
-            "Should be implemented as an inline panel that allows you to filter and select parts of the datamodel as you would"
-        ),
-    )
-
-    self_conversion = models.CharField(
-        max_length=255,
-        choices=DatamodelConversionOperationType.choices,
-        help_text=_("Operation that is applied to the query set that results from the filter"),
+        max_length=255, choices=DatamodelConversionOperationType.choices
     )
 
     shadow_key = models.CharField(
@@ -430,18 +418,20 @@ class DatamodelConversion(models.Model):
         help_text=_("Internal key, not used by humans but might occur in logs when errors occur"),
     )
 
+    panels = [
+        FieldPanel(conversion),
+        FieldPanel(conversion_value_type),
+        FieldPanel(shadow_key),
+        InlinePanel(
+            "datamodel_query_rule",
+            label="Datamodel Query Rule",
+            heading="One rule should be enough",
+            min_num=1,
+            max_num=1
+        ),
+    ]
+
     def clean(self) -> None:
+        # TODO!
         # conversion type is curve or query but no key is supplied
-        if self.conversion_value_type == AnyLogicConversionValueType.CURVE and self.key is None:
-            raise ValidationError("Conversion type is curve or query but no key is supplied!")
-
-        # conversion operation is in product but no curves are supplied
-        if (
-            self.conversion == ConversionOperationType.IN_PRODUCT
-            and self.conversion_value_type != AnyLogicConversionValueType.CURVE
-        ):
-            raise ValidationError(
-                "Conversion operation is 'in product' but no curves are supplied!"
-            )
-
         return super().clean()
