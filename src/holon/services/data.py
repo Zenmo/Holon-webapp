@@ -1,3 +1,56 @@
+from holon.models import Scenario
+
+
+class Results:
+    # TODO:
+    # accept etm data
+    # do something on the datamodel (grid node something)
+    # check this with the model bois
+
+    def __init__(
+        self,
+        scenario: Scenario,
+        anylogic_outcomes: dict,
+        inter_upscaling_outcomes: dict,
+        nat_upscaling_outcomes: dict,
+        cost_outcome: float,
+        cost_benefit_overview: dict,
+        cost_benefit_detail: dict,
+    ) -> None:
+        self.anylogic_outcomes = anylogic_outcomes
+        self.inter_upscaling_outcomes = inter_upscaling_outcomes
+        self.nat_upscaling_outcomes = nat_upscaling_outcomes
+        self.cost_outcome = cost_outcome
+        self.cost_benefit_overview = cost_benefit_overview
+        self.cost_benefit_detail = cost_benefit_detail
+
+    @property
+    def anylogic_outcomes(self):
+        return self._anylogic_outcomes
+
+    @anylogic_outcomes.setter
+    def anylogic_outcomes(self, anylogic_outcomes: dict):
+        # TODO should actually be based on calculation
+        # self._anylogic_outcomes = calculate_holon_kpis(anylogic_outcomes)
+
+        self._anylogic_outcomes = {"sustainability": 42, "self_sufficiency": 42, "netload": 42}
+
+    def to_dict(self):
+        return {
+            "dashboard_results": {
+                "local": {**self.anylogic_outcomes, "cost": self.cost_outcome},
+                "intermediate": self.inter_upscaling_outcomes,
+                "national": self.nat_upscaling_outcomes,
+            },
+            "cost_benefit_results": {
+                "overview": self.cost_benefit_overview,
+                "detail": self.cost_benefit_detail,
+            },
+        }
+
+
+### This shite comes from holon.anylogic_kpi, bah
+
 import numpy as np
 
 
