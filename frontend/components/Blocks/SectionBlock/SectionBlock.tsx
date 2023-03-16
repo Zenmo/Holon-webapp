@@ -46,6 +46,7 @@ const initialData = {
 };
 export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) {
   const [kpis, setKPIs] = useState(initialData);
+  const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
     HolarchyFeedbackImageProps[]
@@ -128,7 +129,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
 
     getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {
-        setKPIs(res);
+        setCostBenefitData(res.costBenefitResults);
+        setKPIs(res.dashboardResults);
         setLoading(false);
       })
       .catch(() => {
@@ -141,7 +143,9 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
-      {costBenefitModal && <CostBenefitModal handleClose={closeCostBenefitModal} />}
+      {costBenefitModal && costBenefitData && (
+        <CostBenefitModal handleClose={closeCostBenefitModal} costBenefitData={costBenefitData} />
+      )}
 
       <div className="holonContentContainer">
         <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">

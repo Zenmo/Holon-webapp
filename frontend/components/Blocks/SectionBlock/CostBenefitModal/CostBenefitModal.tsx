@@ -4,17 +4,19 @@ import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import {
-  getHolonDataSegments,
-  getHolonDataSegmentsDetail,
-  getHolonGraphColor,
-} from "../../../../api/holon";
+import { getHolonGraphColor } from "../../../../api/holon";
 
 import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 
-export default function CostBenefitModal({ handleClose }: { handleClose: () => void }) {
-  const [data, setData] = useState([]);
-  const [detailData, setDetailData] = useState([]);
+type Props = {
+  handleClose: () => void;
+  costBenefitData: {
+    detail: {};
+    overview: {};
+  };
+};
+
+export default function CostBenefitModal({ handleClose, costBenefitData }: Props) {
   const [dataColors, setDataColors] = useState([]);
   const ignoredLabels = ["name", "Netto kosten"];
 
@@ -35,14 +37,6 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
   };
 
   useEffect(() => {
-    getHolonDataSegments()
-      .then(data => setData(data))
-      .catch(err => console.log(err));
-
-    getHolonDataSegmentsDetail()
-      .then(data => setDetailData(data))
-      .catch(err => console.log(err));
-
     getHolonGraphColor()
       .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
@@ -81,21 +75,21 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                 <Tab.Panel className="flex flex-1 max-h-full flex-col">
                   <h2 className="text-center">Kosten en baten per segment</h2>
                   <CostBenefitChart
-                    chartdata={convertGraphData(data)}
+                    chartdata={convertGraphData(costBenefitData.overview)}
                     dataColors={dataColors}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
                 <Tab.Panel className="flex  max-h-full flex-col">
                   <h2 className="text-center">Kosten en baten per groep</h2>
-                  <CostBenefitTable tableData={data} />
+                  <CostBenefitTable tableData={costBenefitData.overview} />
                 </Tab.Panel>
 
                 <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0">
                   <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
                   <CostBenefitDetail
-                    chartdata={convertGraphData(data)}
-                    detailData={detailData}
+                    chartdata={convertGraphData(costBenefitData.detail)}
+                    detailData={costBenefitData.detail}
                     dataColors={dataColors}
                     ignoredLabels={ignoredLabels}
                   />
