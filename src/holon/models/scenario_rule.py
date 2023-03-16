@@ -1,3 +1,4 @@
+from typing import Union
 from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -290,3 +291,14 @@ class DatamodelQueryRule(Rule):
                 )
 
         return attr_sum
+
+    def get_filter_aggregation_result(self, scenario: Scenario) -> Union[int, float]:
+        """Get the filter aggregation result based on the datamodel query rule's conversion type"""
+
+        if self.self_conversion == SelfConversionType.COUNT.value:
+            return self.get_filters_object_count(scenario)
+
+        elif self.self_conversion == SelfConversionType.SUM.value:
+            return self.get_filters_attribute_sum(scenario)
+
+        raise ValidationError("No valid conversion type set")
