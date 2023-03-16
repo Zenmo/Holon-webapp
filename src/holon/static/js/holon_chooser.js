@@ -199,26 +199,25 @@ function setAssetTypes(model_type_select, model_subtype_select, data) {
     });
 }
 
-function updateFilterInputs(model_type, model_subtype_select, data) {
+function updateFilterInputs(
+    model_type,
+    model_subtype_select,
+    data,
+    reset = false
+) {
     const filterInputs = model_subtype_select
         .closest(".w-panel__content")
         .find(" input[id$='-relation_field'], select[id$='-relation_field']");
 
     filterInputs.each(function () {
-        const allowedRelations = Object.keys(data).map((key) =>
-            key.toLowerCase()
-        );
-        const options = model_subtype_select.val()
-            ? data[model_type].model_subtype[model_subtype_select.val()].filter(
-                  (item) => allowedRelations.includes(item)
-              )
-            : data[model_type].attributes.filter((item) =>
-                  allowedRelations.includes(item)
-              );
+        let options = model_subtype_select.val()
+            ? data[model_type].model_subtype[model_subtype_select.val()]
+            : data[model_type].attributes;
 
+        options = options.filter((option) => !!option.relation);
         let select;
         if ($(this).prop("tagName") !== "SELECT") {
-            select = convertInputToSelect($(this), options);
+            select = convertInputToSelect($(this), options, false, true);
             if ($(this).val()) {
                 convertInputToSelect(
                     select
@@ -230,65 +229,116 @@ function updateFilterInputs(model_type, model_subtype_select, data) {
                                 (key) => key.toLowerCase() === $(this).val()
                             )
                         ].model_subtype
-                    )
+                    ),
+                    false,
+                    true
                 );
             }
         } else {
             select = $(this);
-            updateOptions(select, options);
-            select.val("");
+            updateOptions(select, options, false, true);
+            reset && select.val("");
         }
         select.change(function (e) {
-            const relation_type = e.target.value;
+            const relation_type = $(this)
+                .find("option:selected")
+                .text()
+                .split("|")[0];
             const relation_subtype = $(this)
                 .closest(".w-panel__content")
-                .find("input[id$='-relation_field_subtype']");
-            const options = Object.keys(
-                data[
-                    Object.keys(data).find(
-                        (key) => key.toLowerCase() === relation_type
-                    )
-                ].model_subtype
-            );
-            let select = convertInputToSelect(relation_subtype, options, true);
+                .find(
+                    "input[id$='-relation_field_subtype'], select[id$='-relation_field_subtype']"
+                );
+            relation_subtype.show();
+            if (Object.keys(data).includes(relation_type)) {
+                const options = Object.keys(data[relation_type].model_subtype);
+                let select;
+                if ($(relation_subtype).prop("tagName") !== "SELECT") {
+                    select = convertInputToSelect(
+                        relation_subtype,
+                        options,
+                        true
+                    );
+                }
 
-            if (!select) {
-                select = $(e.target)
-                    .closest(".w-panel__content")
-                    .find("select[id$='-relation_field_subtype']");
+                if (!select) {
+                    select = $(e.target)
+                        .closest(".w-panel__content")
+                        .find("select[id$='-relation_field_subtype']");
 
-                updateOptions(select, options, true);
-            }
+                    updateOptions(select, options, true);
+                }
+                select.change(function (e) {
+                    const relation_subtype = $(this)
+                        .find("option:selected")
+                        .text()
+                        .split("|")[0];
+                    const relation_type = $(this)
+                        .closest(".w-panel__content")
+                        .find("select[id$='-relation_field']")
+                        .find("option:selected")
+                        .text()
+                        .split("|")[0];
 
-            select.change(function (e) {
-                const relation_subtype = e.target.value;
-                const relation_type = $(this)
-                    .closest(".w-panel__content")
-                    .find("select[id$='-relation_field']")
-                    .val();
-                const options =
-                    data[
-                        Object.keys(data).find(
-                            (key) => key.toLowerCase() === relation_type
-                        )
-                    ].model_subtype[relation_subtype];
+                    const options =
+                        relation_subtype !== "----"
+                            ? data[relation_type].model_subtype[
+                                  relation_subtype
+                              ]
+                            : data[relation_type].attributes;
+
+                    const attribute_select = $(this)
+                        .closest(".w-panel__content")
+                        .find("select[id$='-model_attribute']");
+                    updateOptions(attribute_select, options);
+                });
+            } else {
+                relation_subtype.hide();
+                options = Object.keys(data)
+                    .map((key) => data[key])
+                    .find((type) =>
+                        Object.keys(type.model_subtype).includes(relation_type)
+                    ).model_subtype[relation_type];
 
                 const attribute_select = $(this)
                     .closest(".w-panel__content")
                     .find("select[id$='-model_attribute']");
                 updateOptions(attribute_select, options);
-            });
+            }
         });
     });
 }
 
-function updateOptions(select, options, allowNull = false) {
+function updateOptions(
+    select,
+    options,
+    allowNull = false,
+    useRelationAsValue = false
+) {
+    const currentOptions = select
+        .find("option")
+        .map(function () {
+            return this.value;
+        })
+        .get();
+
+    if (
+        options.every(function (option) {
+            return (
+                currentOptions.includes(option.name) ||
+                currentOptions.includes(option)
+            );
+        })
+    )
+        return;
     select.find("option").remove().end();
     for (const value of options) {
         select.append(
             $("<option>", {
-                value: value,
-                text: value,
+                value: value.name || value,
+                text: useRelationAsValue
+                    ? `${value.relation}|${value.name}`
+                    : value.name || value,
             })
         );
     }
@@ -322,14 +372,14 @@ function updateAssetAttributes(model_type_select, model_subtype_select, data) {
         for (const value of options) {
             attribute_select.append(
                 $("<option>", {
-                    value: value,
-                    text: value,
+                    value: value.name || value,
+                    text: value.name || value,
                 })
             );
         }
     });
 
-    updateFilterInputs(model_type, model_subtype_select, data);
+    updateFilterInputs(model_type, model_subtype_select, data, true);
 }
 
 function convertSelectToInput(select) {
@@ -344,7 +394,12 @@ function convertSelectToInput(select) {
     return input;
 }
 
-function convertInputToSelect(input, options, allowNull = false) {
+function convertInputToSelect(
+    input,
+    options,
+    allowNull = false,
+    useRelationAsValue = false
+) {
     if (!input.length) return;
     const attributes = input.prop("attributes");
 
@@ -357,8 +412,10 @@ function convertInputToSelect(input, options, allowNull = false) {
     for (const value of options) {
         select.append(
             $("<option>", {
-                value: value,
-                text: value,
+                value: value.name || value,
+                text: useRelationAsValue
+                    ? `${value.relation}|${value.name}`
+                    : value.name || value,
             })
         );
     }
