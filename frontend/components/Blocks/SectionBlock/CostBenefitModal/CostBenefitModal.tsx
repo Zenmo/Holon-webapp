@@ -17,6 +17,7 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
   const [detailData, setDetailData] = useState([]);
   const [dataColors, setDataColors] = useState([]);
   const ignoredLabels = ["name", "Netto kosten"];
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -47,19 +48,24 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
       .then(result => setDataColors(result.items))
       .catch(err => console.log(err));
   }, []);
-  const tabItems = ["Grafiek", "Tabel", "Detail"];
+
+  const tabItems = [
+    { tabName: "Grafiek", tabTitle: "Kosten en baten per categorie" },
+    { tabName: "Tabel", tabTitle: "Kosten en baten per categorie" },
+    { tabName: "Detail", tabTitle: "Kosten en baten per subcategorie" },
+  ];
 
   return (
     <div className="h-screen bg-white">
       <div className="bg-white py-6 px-10 lg:px-16 fixed top-[4.5rem] md:top-28 inset-x-0 mx-auto h-[calc(100%-4.5rem)] md:h-[calc(100%-7rem)] z-20">
         <div className="block h-full w-full">
           <div className="flex flex-1 flex-col h-full">
-            <Tab.Group>
+            <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
               <div className="flex flex-row justify-between">
                 <Tab.List>
                   {tabItems.map((tabItem, index) => (
                     <Tab
-                      key={tabItem + index}
+                      key={tabItem.tabName + index}
                       className={({ selected }) =>
                         classNames(
                           "p-3 mr-px ",
@@ -68,31 +74,29 @@ export default function CostBenefitModal({ handleClose }: { handleClose: () => v
                             : "bg-holon-gray-200 text-holon-blue-900"
                         )
                       }>
-                      {tabItem}
+                      {tabItem.tabName}
                     </Tab>
                   ))}
                 </Tab.List>
+                <h2>{tabItems[selectedIndex].tabTitle}</h2>
                 <button type="button" className="text-holon-blue-900 w-8" onClick={handleClick}>
                   <XMarkIcon />
                 </button>
               </div>
 
               <Tab.Panels className="flex flex-1 flex-col min-h-0">
-                <Tab.Panel className="flex flex-1 max-h-full flex-col">
-                  <h2 className="text-center">Kosten en baten per segment</h2>
+                <Tab.Panel className="flex flex-1 max-h-full flex-col pt-2">
                   <CostBenefitChart
                     chartdata={convertGraphData(data)}
                     dataColors={dataColors}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
-                <Tab.Panel className="flex  max-h-full flex-col">
-                  <h2 className="text-center">Kosten en baten per groep</h2>
+                <Tab.Panel className="flex  max-h-full flex-col pt-2">
                   <CostBenefitTable tableData={data} />
                 </Tab.Panel>
 
-                <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0">
-                  <h2 className="text-center">Kosten en baten per subtype huishouden</h2>
+                <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0 pt-2">
                   <CostBenefitDetail
                     chartdata={convertGraphData(data)}
                     detailData={detailData}
