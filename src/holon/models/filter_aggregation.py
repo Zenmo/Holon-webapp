@@ -37,12 +37,17 @@ class DatamodelQueryRule(ClusterableModel):
         max_length=255, null=True, blank=True
     )  # bijv industry terrain of photovoltaic
 
+    attribute_to_sum = models.CharField(
+        max_length=255, null=True, blank=True
+    )  # bijv capacityEletricity_kW
+
     panels = [
         MultiFieldPanel(
             heading="Model type and subtype",
             children=[
                 FieldPanel("model_type"),
                 FieldPanel("model_subtype"),
+                FieldPanel("attribute_to_sum"),
             ],
         ),
         FieldPanel(self_conversion),
@@ -72,6 +77,7 @@ class DatamodelQueryRule(ClusterableModel):
         verbose_name = "DatamodelQueryRule"
 
     def clean(self):
+        # TODO: check als je sumt dat je dan wel een attribuut heb
         super().clean()
 
         if (
