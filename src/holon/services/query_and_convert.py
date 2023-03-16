@@ -6,6 +6,7 @@ from holon.models.config import (
     StaticConversion,
     ETMConversion,
     ETMQuery,
+    FloatKeyValuePair,
 )
 from holon.models import DatamodelQueryRule, Scenario
 from typing import List
@@ -17,6 +18,10 @@ class QConfig:
     ) -> None:
         # static references
         self.config_db = config_db
+        self.module = config_db.module
+        self.name = config_db.name
+        self.api_url = config_db.api_url
+        self.etm_scenario_id = config_db.etm_scenario_id
         self.anylogic_outcomes = anylogic_outcomes
 
         # method based setters
@@ -49,9 +54,15 @@ class QConfig:
             return self._queries
 
     def unpack_queries(self):
-        self._queries = {}
+        self._queries = {
+            "module": self.module,
+            "name": self.name,
+            "api_url": self.api_url,
+            "etm_scenario_id": self.etm_scenario_id,
+            "config": {},
+        }
         for q in self.config_db.etm_query.all():
-            self._queries.update(
+            self._queries["config"].update(
                 Query(query=q, config=self, copied_scenario=self.copied_scenario).to_dict()
             )
 
@@ -98,13 +109,14 @@ class Query:
 
     def set_static(self, c: StaticConversion):
         """tries to get local vars, if not than resort to direct value"""
-        try:
-            value = self.config.vars[c.local_variable]
-        except KeyError:
+        if c.value is None:
+            value = c.local_variable.value
+        else:
             value = c.value
 
         return {
             "type": "static",  # all non-query conversions are considered static
+            "type_actual": "static",
             "conversion": c.conversion,
             "data": "value",  # NOT implemented in module!
             "value": value,
@@ -121,6 +133,8 @@ class Query:
         }
 
     def set_anylogic(self, c: AnyLogicConversion):
+        print("set anylogic")
+
         # TODO: map AnyLogic outputs based on snippets that we can validate!
         try:
             value = self.config.anylogic_outcomes[c.anylogic_key]
@@ -129,6 +143,7 @@ class Query:
             value = None
         return {
             "type": "static",  # all non-query conversions are considered static
+            "type_actual": "anylogic",
             "conversion": c.conversion,  # NOT implemented in module!
             "data": c.conversion_value_type,  # NOT implemented in module!
             "value": value,
@@ -142,6 +157,7 @@ class Query:
 
         return {
             "type": "static",  # all non-query conversions are considered static
+            "type_actual": "datamodel",
             "conversion": c.conversion,  # NOT implemented in module!
             "data": c.conversion_value_type,  # NOT implemented in module!
             "value": value,

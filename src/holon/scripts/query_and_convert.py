@@ -19,7 +19,6 @@ def run():
     for c in configs:
         qc = QConfig(c, anylogic_outcomes=cc_outputs, copied_scenario=scenario)
 
-        print(c.name)
         print("------")
-        print(json.dumps(qc.queries, indent=2))
+        print(json.dumps(qc.queries, indent=4))
         print("------", "\n")
