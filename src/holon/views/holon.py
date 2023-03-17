@@ -60,22 +60,37 @@ class HolonV2Service(generics.CreateAPIView):
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
+    valid_relations = [apps.get_model("holon", model[0]) for model in ModelType.choices]
+
     def get(self, request):
         response = {}
+
         for model in ModelType.choices:
             model_name = model[0]
             model_type_class = apps.get_model("holon", model_name)
+
+            attributes = self.get_attributes_and_relations(model_type_class)
+
             response[model_name] = {
-                "attributes": [field.name for field in model_type_class()._meta.get_fields()],
+                "attributes": attributes,
                 "model_subtype": {},
             }
 
             for subclass in all_subclasses(model_type_class):
-                response[model_name]["model_subtype"][subclass.__name__] = [
-                    field.name for field in subclass()._meta.get_fields()
-                ]
+                response[model_name]["model_subtype"][
+                    subclass.__name__
+                ] = self.get_attributes_and_relations(subclass)
 
         return Response(response)
+
+    def get_attributes_and_relations(self, model_type_class):
+        attributes = []
+        for field in model_type_class()._meta.get_fields():
+            attribute = {"name": field.name}
+            if field.is_relation and issubclass(field.related_model, tuple(self.valid_relations)):
+                attribute["relation"] = field.related_model.__name__
+            attributes.append(attribute)
+        return attributes
 
 
 class HolonService(generics.CreateAPIView):

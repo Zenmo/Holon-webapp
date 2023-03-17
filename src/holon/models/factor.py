@@ -1,12 +1,7 @@
-import logging
-
 from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from polymorphic.models import PolymorphicModel
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-
-from holon.models.scenario_rule import ScenarioRule
 
 
 # Create your models here.

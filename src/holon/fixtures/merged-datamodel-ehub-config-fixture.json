@@ -10,35 +10,46 @@
     },
     {
         "model": "holon.actorgroup",
-        "pk": 1,
-        "fields": { "name": "households" }
-    },
-    {
-        "model": "holon.actorgroup",
         "pk": 2,
-        "fields": { "name": "Commercieel bedrijf 1" }
+        "fields": {
+            "name": "Commercieel bedrijf 1"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 3,
-        "fields": { "name": "Commercieel bedrijf 2" }
+        "fields": {
+            "name": "Commercieel bedrijf 2"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 4,
-        "fields": { "name": "Commercieel bedrijf 3" }
+        "fields": {
+            "name": "Commercieel bedrijf 3"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 5,
-        "fields": { "name": "Commercieel bedrijf 4" }
+        "fields": {
+            "name": "Commercieel bedrijf 4"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 6,
-        "fields": { "name": "Bedrijventerrein HOLON" }
+        "fields": {
+            "name": "Bedrijventerrein HOLON"
+        }
     },
-    { "model": "holon.actorsubgroup", "pk": 1, "fields": { "name": "poor" } },
+    {
+        "model": "holon.actorsubgroup",
+        "pk": 1,
+        "fields": {
+            "name": "poor"
+        }
+    },
     {
         "model": "holon.actor",
         "pk": 1,
@@ -60,7 +71,11 @@
             "payload": 1,
             "group": 6,
             "subgroup": null,
-            "wildcard_JSON": [{ "p_gridNodeUnderResponsibility": "E2" }]
+            "wildcard_JSON": [
+                {
+                    "p_gridNodeUnderResponsibility": "E2"
+                }
+            ]
         }
     },
     {
@@ -174,12 +189,18 @@
     {
         "model": "holon.electricgridnode",
         "pk": 1,
-        "fields": { "gridnode_ptr": 1, "type": "HSMS" }
+        "fields": {
+            "gridnode_ptr": 1,
+            "type": "HSMS"
+        }
     },
     {
         "model": "holon.electricgridnode",
         "pk": 2,
-        "fields": { "gridnode_ptr": 2, "type": "MSLS" }
+        "fields": {
+            "gridnode_ptr": 2,
+            "type": "MSLS"
+        }
     },
     {
         "model": "holon.gridconnection",
@@ -294,7 +315,10 @@
     {
         "model": "holon.utilitygridconnection",
         "pk": 3,
-        "fields": { "gridconnection_ptr": 3, "heating_type": "GASBURNER" }
+        "fields": {
+            "gridconnection_ptr": 3,
+            "heating_type": "GASBURNER"
+        }
     },
     {
         "model": "holon.buildinggridconnection",
@@ -315,17 +339,26 @@
     {
         "model": "holon.productiongridconnection",
         "pk": 4,
-        "fields": { "gridconnection_ptr": 4, "category": "WINDFARM" }
+        "fields": {
+            "gridconnection_ptr": 4,
+            "category": "WINDFARM"
+        }
     },
     {
         "model": "holon.productiongridconnection",
         "pk": 5,
-        "fields": { "gridconnection_ptr": 5, "category": "GRIDBATTERY" }
+        "fields": {
+            "gridconnection_ptr": 5,
+            "category": "GRIDBATTERY"
+        }
     },
     {
         "model": "holon.industrygridconnection",
         "pk": 3,
-        "fields": { "utilitygridconnection_ptr": 3, "type": "INDUSTRY_OTHER" }
+        "fields": {
+            "utilitygridconnection_ptr": 3,
+            "type": "INDUSTRY_OTHER"
+        }
     },
     {
         "model": "holon.energyasset",
@@ -803,212 +836,338 @@
     {
         "model": "holon.consumptionasset",
         "pk": 4,
-        "fields": { "energyasset_ptr": 4, "type": "HEAT_DEMAND" }
+        "fields": {
+            "energyasset_ptr": 4,
+            "type": "HEAT_DEMAND"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 5,
-        "fields": { "energyasset_ptr": 5, "type": "ELECTRICITY_DEMAND" }
+        "fields": {
+            "energyasset_ptr": 5,
+            "type": "ELECTRICITY_DEMAND"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 900,
-        "fields": { "energyasset_ptr": 900, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 900,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 901,
-        "fields": { "energyasset_ptr": 901, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 901,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 902,
-        "fields": { "energyasset_ptr": 902, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 902,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 903,
-        "fields": { "energyasset_ptr": 903, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 903,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 904,
-        "fields": { "energyasset_ptr": 904, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 904,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 905,
-        "fields": { "energyasset_ptr": 905, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 905,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 906,
-        "fields": { "energyasset_ptr": 906, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 906,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 907,
-        "fields": { "energyasset_ptr": 907, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 907,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 908,
-        "fields": { "energyasset_ptr": 908, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 908,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 909,
-        "fields": { "energyasset_ptr": 909, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 909,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 910,
-        "fields": { "energyasset_ptr": 910, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 910,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 911,
-        "fields": { "energyasset_ptr": 911, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 911,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 912,
-        "fields": { "energyasset_ptr": 912, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 912,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 913,
-        "fields": { "energyasset_ptr": 913, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 913,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 914,
-        "fields": { "energyasset_ptr": 914, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 914,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 915,
-        "fields": { "energyasset_ptr": 915, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 915,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 916,
-        "fields": { "energyasset_ptr": 916, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 916,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 917,
-        "fields": { "energyasset_ptr": 917, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 917,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 918,
-        "fields": { "energyasset_ptr": 918, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 918,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 919,
-        "fields": { "energyasset_ptr": 919, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 919,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1000,
-        "fields": { "energyasset_ptr": 1000, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1000,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1001,
-        "fields": { "energyasset_ptr": 1001, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1001,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1002,
-        "fields": { "energyasset_ptr": 1002, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1002,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1003,
-        "fields": { "energyasset_ptr": 1003, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1003,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1004,
-        "fields": { "energyasset_ptr": 1004, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1004,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1005,
-        "fields": { "energyasset_ptr": 1005, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1005,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1006,
-        "fields": { "energyasset_ptr": 1006, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1006,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1007,
-        "fields": { "energyasset_ptr": 1007, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1007,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1008,
-        "fields": { "energyasset_ptr": 1008, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1008,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1009,
-        "fields": { "energyasset_ptr": 1009, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1009,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1010,
-        "fields": { "energyasset_ptr": 1010, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1010,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1011,
-        "fields": { "energyasset_ptr": 1011, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1011,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1012,
-        "fields": { "energyasset_ptr": 1012, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1012,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1013,
-        "fields": { "energyasset_ptr": 1013, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1013,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1014,
-        "fields": { "energyasset_ptr": 1014, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1014,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1015,
-        "fields": { "energyasset_ptr": 1015, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1015,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1016,
-        "fields": { "energyasset_ptr": 1016, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1016,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1017,
-        "fields": { "energyasset_ptr": 1017, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1017,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1018,
-        "fields": { "energyasset_ptr": 1018, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1018,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1019,
-        "fields": { "energyasset_ptr": 1019, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1019,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.dieselvehicleasset",
@@ -1389,17 +1548,27 @@
     {
         "model": "holon.conversionasset",
         "pk": 6,
-        "fields": { "energyasset_ptr": 6, "type": "GAS_BURNER", "eta_r": 0.95 }
+        "fields": {
+            "energyasset_ptr": 6,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
     },
     {
         "model": "holon.heatconversionasset",
         "pk": 6,
-        "fields": { "conversionasset_ptr": 6, "deliveryTemp_degC": 100.0 }
+        "fields": {
+            "conversionasset_ptr": 6,
+            "deliveryTemp_degC": 100.0
+        }
     },
     {
         "model": "holon.chemicalheatconversionasset",
         "pk": 6,
-        "fields": { "heatconversionasset_ptr": 6, "capacityHeat_kW": 1000.0 }
+        "fields": {
+            "heatconversionasset_ptr": 6,
+            "capacityHeat_kW": 1000.0
+        }
     },
     {
         "model": "holon.contract",
@@ -1942,15 +2111,146 @@
         }
     },
     {
+        "model": "holon.queryandconvertconfig",
+        "pk": 1,
+        "fields": {
+            "scenario": 1,
+            "module": "upscaling",
+            "name": "National upscaling",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 2203642
+        }
+    },
+    {
+        "model": "holon.queryandconvertconfig",
+        "pk": 2,
+        "fields": {
+            "scenario": 1,
+            "module": "cost",
+            "name": "Cost module",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 2175158
+        }
+    },
+    {
+        "model": "holon.queryandconvertconfig",
+        "pk": 3,
+        "fields": {
+            "scenario": 1,
+            "module": "upscaling",
+            "name": "Regional upscaling",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 2203666
+        }
+    },
+    {
+        "model": "holon.queryandconvertconfig",
+        "pk": 4,
+        "fields": {
+            "scenario": 1,
+            "module": "costbenefit",
+            "name": "",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 987511684
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 1,
+        "fields": {
+            "internal_key": "energy_hub_installed_capacity_wind_turbines_on_land",
+            "endpoint": "input",
+            "data_type": "value",
+            "etm_key": "capacity_of_energy_power_wind_turbine_inland",
+            "related_config": 1,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 8,
+        "fields": {
+            "internal_key": "price_of_natural_gas_per_mwh",
+            "endpoint": "query",
+            "data_type": "value",
+            "etm_key": "price_of_natural_gas_per_mwh",
+            "related_config": 2,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 20,
+        "fields": {
+            "internal_key": "energy_hub_installed_capacity_wind_turbines_on_land",
+            "endpoint": "input",
+            "data_type": "value",
+            "etm_key": "capacity_of_energy_power_wind_turbine_inland",
+            "related_config": 3,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 21,
+        "fields": {
+            "internal_key": "shadow_tester_etm_key",
+            "endpoint": "input",
+            "data_type": "value",
+            "etm_key": "tester_etm_key",
+            "related_config": 4,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 22,
+        "fields": {
+            "internal_key": "hourly_price_of_electricity_per_mwh",
+            "endpoint": "query",
+            "data_type": "curve",
+            "etm_key": "hourly_price_of_electricity_per_mwh",
+            "related_config": 2,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.anylogicconversion",
+        "pk": 1,
+        "fields": {
+            "etm_query": 8,
+            "conversion": "multiply",
+            "conversion_value_type": "value",
+            "anylogic_key": "totalMethaneImport_MWh",
+            "shadow_key": "totalMethaneImport_MWh_shadow"
+        }
+    },
+    {
+        "model": "holon.anylogicconversion",
+        "pk": 2,
+        "fields": {
+            "etm_query": 22,
+            "conversion": "in_product",
+            "conversion_value_type": "curve",
+            "anylogic_key": "SystemHourlyElectricityImport_MWh",
+            "shadow_key": "SystemHourlyElectricityImport_MWh_shadow"
+        }
+    },
+    {
         "model": "holon.anylogiccloudconfig",
         "pk": 1,
         "fields": {
             "api_key": "7a3563c1-ea1c-41d6-8009-b7abfd93f7ba",
             "url": "https://engine.holontool.nl",
             "model_name": "15mrt_branch_ehobs",
-            "model_version_number": 1,
+            "model_version_number": 2,
             "scenario": 1,
-            "owner_email": ""
+            "owner_email": "gillis@zenmo.com"
         }
     },
     {
@@ -1990,352 +2290,35 @@
         }
     },
     {
-        "model": "holon.queryandconvertconfig",
+        "model": "holon.keyvaluepaircollection",
         "pk": 1,
         "fields": {
-            "scenario": 1,
-            "module": "upscaling",
-            "name": "National upscaling",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
-            "etm_scenario_id": 2171095
-        }
-    },
-    {
-        "model": "holon.queryandconvertconfig",
-        "pk": 2,
-        "fields": {
-            "scenario": 1,
-            "module": "cost",
-            "name": "Cost module",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
-            "etm_scenario_id": 2175158
-        }
-    },
-    {
-        "model": "holon.queryandconvertconfig",
-        "pk": 3,
-        "fields": {
-            "scenario": 1,
-            "module": "upscaling",
-            "name": "",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
-            "etm_scenario_id": 84651
-        }
-    },
-    {
-        "model": "holon.queryandconvertconfig",
-        "pk": 4,
-        "fields": {
-            "scenario": 1,
-            "module": "upscaling",
-            "name": "",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
-            "etm_scenario_id": 987511684
+            "related_config": 1
         }
     },
     {
         "model": "holon.keyvaluepaircollection",
-        "pk": 1,
-        "fields": { "related_config": 1 }
-    },
-    {
-        "model": "holon.floatkeyvaluepair",
-        "pk": 1,
-        "fields": {
-            "related_key_value_collection": 1,
-            "key": "factor_of_holon_to_national_households",
-            "value": 50.0
-        }
-    },
-    {
-        "model": "holon.floatkeyvaluepair",
         "pk": 2,
         "fields": {
-            "related_key_value_collection": 1,
-            "key": "share_of_national_terraced_houses_in_national_total_houses",
-            "value": 0.301
+            "related_config": 3
         }
     },
     {
         "model": "holon.floatkeyvaluepair",
-        "pk": 3,
-        "fields": {
-            "related_key_value_collection": 1,
-            "key": "share_of_national_households_cars_in_national_total_cars",
-            "value": 0.6
-        }
-    },
-    {
-        "model": "holon.etmquery",
         "pk": 1,
         "fields": {
-            "internal_key": "share_of_electric_trucks_shadow",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "share_of_electric_trucks",
-            "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": "Elektrische trucks worden opgeschaald op basis van het aandeel van woonwijken in het geheel. Dit komt neer op {{final_value}}."
+            "related_key_value_collection": 1,
+            "key": "energy_hub_scaling_factor_holon_in_national",
+            "value": 1700.0
         }
     },
     {
-        "model": "holon.etmquery",
-        "pk": 2,
-        "fields": {
-            "internal_key": "price_natural_gas",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "price_of_natural_gas_per_mwh",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 3,
-        "fields": {
-            "internal_key": "price_diesel",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "price_of_diesel_per_mwh",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
+        "model": "holon.floatkeyvaluepair",
         "pk": 4,
         "fields": {
-            "internal_key": "price_hydrogen",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "price_of_hydrogen_per_mwh",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 5,
-        "fields": {
-            "internal_key": "hourly_electricity_price",
-            "endpoint": "query",
-            "data_type": "curve",
-            "etm_key": "hourly_price_of_electricity_per_mwh",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 6,
-        "fields": {
-            "internal_key": "depreciation_costs",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "depreciation_costs_grid_battery_per_mwh",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 7,
-        "fields": {
-            "internal_key": "depreciation_cost_solar_farm",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "depreciation_costs_solar_farm_per_kw",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 8,
-        "fields": {
-            "internal_key": "depreciation_costs_buildings_gas_bu",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "depreciation_costs_buildings_gas_burner_per_kw",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 9,
-        "fields": {
-            "internal_key": "depreciation_costs_buildings_solar_",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "depreciation_costs_buildings_solar_panels_per_kw",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 10,
-        "fields": {
-            "internal_key": "depreciation_costs_industry_solar_p",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "depreciation_costs_industry_solar_panels_per_kw",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 11,
-        "fields": {
-            "internal_key": "depreciation_costs_industry_gas_bur",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "depreciation_costs_industry_gas_burner_per_kw",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 12,
-        "fields": {
-            "internal_key": "electricity_grid_expansion_costs_lv",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "electricity_grid_expansion_costs_lv_mv_trafo_per_kw",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 13,
-        "fields": {
-            "internal_key": "electricity_grid_expansion_costs_mv",
-            "endpoint": "query",
-            "data_type": "value",
-            "etm_key": "electricity_grid_expansion_costs_mv_hv_trafo_per_kw",
-            "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 14,
-        "fields": {
-            "internal_key": "shadow_key_households",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "households_heater_heatpump_air_water_electricity_share",
-            "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 15,
-        "fields": {
-            "internal_key": "households_heater_hybrid_heatpump",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "households_heater_hybrid_heatpump_air_water_electricity_share",
-            "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 16,
-        "fields": {
-            "internal_key": "households_solar_pv_solar_radiation",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "households_solar_pv_solar_radiation_market_penetration",
-            "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 17,
-        "fields": {
-            "internal_key": "households_flexibility_p2p_electric",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "households_flexibility_p2p_electricity_market_penetration",
-            "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 18,
-        "fields": {
-            "internal_key": "households_cooker_induction_electri",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "households_cooker_induction_electricity_share",
-            "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 19,
-        "fields": {
-            "internal_key": "shadow_mv_batteries",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "capacity_of_energy_flexibility_mv_batteries_electricity",
-            "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 20,
-        "fields": {
-            "internal_key": "tester_etm_key_value_input",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "tester_etm_key_value_input",
-            "related_config": 3,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
-        }
-    },
-    {
-        "model": "holon.etmquery",
-        "pk": 21,
-        "fields": {
-            "internal_key": "shadow_tester_etm_key",
-            "endpoint": "input",
-            "data_type": "value",
-            "etm_key": "tester_etm_key",
-            "related_config": 4,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
+            "related_key_value_collection": 2,
+            "key": "energy_hub_scaling_factor_holon_in_regional",
+            "value": 80.0
         }
     },
     {
@@ -2343,99 +2326,21 @@
         "pk": 1,
         "fields": {
             "etm_query": 1,
-            "value": null,
-            "local_variable": 3,
-            "conversion": "multiply",
-            "shadow_key": "scaling_buurtelektrificatie"
-        }
-    },
-    {
-        "model": "holon.staticconversion",
-        "pk": 2,
-        "fields": {
-            "etm_query": 14,
-            "value": null,
-            "local_variable": 2,
-            "conversion": "multiply",
-            "shadow_key": "share_of_households_heat_pumps"
-        }
-    },
-    {
-        "model": "holon.staticconversion",
-        "pk": 3,
-        "fields": {
-            "etm_query": 15,
-            "value": null,
-            "local_variable": 2,
-            "conversion": "multiply",
-            "shadow_key": "share_of_households_hybrid_heat_pumps"
-        }
-    },
-    {
-        "model": "holon.staticconversion",
-        "pk": 4,
-        "fields": {
-            "etm_query": 16,
-            "value": null,
-            "local_variable": 2,
-            "conversion": "multiply",
-            "shadow_key": "scaling_buurtelektrificatie"
-        }
-    },
-    {
-        "model": "holon.staticconversion",
-        "pk": 5,
-        "fields": {
-            "etm_query": 17,
-            "value": null,
-            "local_variable": 2,
-            "conversion": "multiply",
-            "shadow_key": "share_of_households_batteries"
-        }
-    },
-    {
-        "model": "holon.staticconversion",
-        "pk": 6,
-        "fields": {
-            "etm_query": 18,
-            "value": null,
-            "local_variable": 2,
-            "conversion": "multiply",
-            "shadow_key": "share_of_households_induction_cooking"
-        }
-    },
-    {
-        "model": "holon.staticconversion",
-        "pk": 7,
-        "fields": {
-            "etm_query": 19,
             "value": null,
             "local_variable": 1,
             "conversion": "multiply",
-            "shadow_key": "installed_energy_grid_battery"
+            "shadow_key": "energy_hub_scaling_factor_holon_in_national_shadow"
         }
     },
     {
-        "model": "holon.etmconversion",
-        "pk": 1,
+        "model": "holon.staticconversion",
+        "pk": 8,
         "fields": {
-            "etm_query": 1,
+            "etm_query": 20,
+            "value": null,
+            "local_variable": 4,
             "conversion": "multiply",
-            "conversion_value_type": "value",
-            "etm_key": "Tester_convert_with_etm",
-            "shadow_key": "shadow_tester_convert_with_etm"
-        }
-    },
-    {
-        "model": "holon.datamodelconversion",
-        "pk": 1,
-        "fields": {
-            "etm_query": 1,
-            "conversion": "multiply",
-            "conversion_value_type": "value",
-            "filter": "not_implemented",
-            "self_conversion": "sum",
-            "shadow_key": "Tester_datamodel_conversion"
+            "shadow_key": "energy_hub_scaling_factor_holon_in_regional_shadow"
         }
     },
     {

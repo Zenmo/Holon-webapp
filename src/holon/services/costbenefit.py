@@ -1,5 +1,11 @@
 # start class script
+import json
 from functools import partial
+from typing import Union
+
+
+def dprint(d: dict) -> None:
+    print(json.dumps(d, indent=2))
 
 
 class CostBenedict:
@@ -29,7 +35,7 @@ class CostBenedict:
         return self.determine_cost(groupby="group", want_to_know=self.want_to_know)
 
     def determine_cost(self, groupby: str, want_to_know: dict):
-        result = {}
+        direct_transactions = {}
         groups = set()
         for actor in self.actors:
             if actor[groupby]:
@@ -39,17 +45,45 @@ class CostBenedict:
             filter_on_groupby = partial(self.filter_on_key, key=groupby, value=group)
             group_members = list(filter(filter_on_groupby, self.actors))
 
-            result.update(
+            direct_transactions.update(
                 self.sum_values(group=group, group_members=group_members, want_to_know=want_to_know)
             )
 
-        # sort to make sure we give the front end the same order always
-        result = dict(sorted(result.items()))
+        ## This can be implemented cleverly with filters and maps I think, but not now
+        # obtain inverse transactions
+        inverse_transactions = {}
+        for party, transactions in direct_transactions.items():
+            for receiving_party, value in transactions.items():
+                try:
+                    inverse_transactions[receiving_party][party]
+                except KeyError:
+                    try:
+                        inverse_transactions[receiving_party]
+                        inverse_transactions[receiving_party].update({party: 0})
+                    except KeyError:
+                        inverse_transactions.update({receiving_party: {}})
+                        inverse_transactions[receiving_party].update({party: 0})
+                finally:
+                    inverse_transactions[receiving_party][party] -= value
 
-        return result
+        # merge dicts
+        for party, transactions in inverse_transactions.items():
+            try:
+                direct_transactions[party].update(transactions)
+            except KeyError:
+                direct_transactions.update({party: {}})
+                direct_transactions[party].update(transactions)
+
+        # round all transactions
+        for party, transactions in direct_transactions.items():
+            for party, transaction in transactions.items():
+                transactions[party] = round(transaction)
+
+        # sort to make sure we give the front end the same order always
+        return dict(sorted(direct_transactions.items()))
 
     @staticmethod
-    def filter_on_key(dicto: dict, key: str = None, value: str | float | int = None) -> bool:
+    def filter_on_key(dicto: dict, key: str = None, value: Union[str, float, int] = None) -> bool:
         if dicto[key] == value:
             return True
         else:

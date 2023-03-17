@@ -49,3 +49,8 @@ export type Scenario = {
   type: string;
   value: { content: StorylineSlider[] };
 };
+
+export type Graphcolor = {
+  name: string;
+  color: string;
+}

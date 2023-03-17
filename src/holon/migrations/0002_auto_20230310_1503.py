@@ -9,4 +9,7 @@ class Migration(migrations.Migration):
         ("holon", "0001_initial"),
     ]
 
-    operations = [migrations.DeleteModel(name="GridConnection")]
+    operations = [
+        migrations.DeleteModel(name="GridConnection"),
+        migrations.DeleteModel(name="Factor"),
+    ]

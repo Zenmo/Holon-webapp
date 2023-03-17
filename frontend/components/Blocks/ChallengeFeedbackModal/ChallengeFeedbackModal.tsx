@@ -9,6 +9,7 @@ import { Content } from "../SectionBlock/types";
 type ChallengeFeedbackModalProps = {
   kpis: KPIData;
   loading: boolean;
+  modalshowonce: boolean;
   dashboardId: string;
   content: Content;
   feedbackmodals: FeedbackModal[];
@@ -26,55 +27,70 @@ export default function ChallengeFeedbackModal({
   });
   const [selectedModal, setSelectedModal] = useState({});
 
+  //list of id's of modals that should be ignored
+  const [ignoredModals, setIgnoredModals] = useState([]);
+
   useEffect(() => {
     setSelectedModal({});
 
     setSelectedModal(
       //loop through al configured modals
-      feedbackmodals.filter(modal => {
-        if (modal.value.conditions.length > 0 && content.length) {
-          //loop through all conditions within modal...
-          for (const conditionItem of modal.value.conditions) {
-            //split parameter into [local/national] and [kpi]
-            const splittedParameter = conditionItem.value.parameter.split("|");
+      feedbackmodals
+        .filter(modal => !ignoredModals.includes(modal.id))
+        .filter(modal => {
+          if (modal.value.conditions.length > 0 && content.length) {
+            //loop through all conditions within modal...
+            for (const conditionItem of modal.value.conditions) {
+              //split parameter into [local/national] and [kpi]
+              const splittedParameter = conditionItem.value.parameter.split("|");
 
-            //kpivalue is the vaule of the assessed validator
-            const kpivalue =
-              conditionItem.type == "interactive_input_condition"
-                ? content?.find(
-                    content => content.value.id == parseFloat(conditionItem.value.parameter)
-                  )?.currentValue
-                : kpis[splittedParameter[0]][splittedParameter[1]];
+              //kpivalue is the vaule of the assessed validator
+              const kpivalue =
+                conditionItem.type == "interactive_input_condition"
+                  ? content?.find(
+                      content => content.value.id == parseFloat(conditionItem.value.parameter)
+                    )?.currentValue
+                  : kpis[splittedParameter[0]][splittedParameter[1]];
 
-            const conditionValue = parseFloat(conditionItem.value.value);
+              const conditionValue = parseFloat(conditionItem.value.value);
 
-            if (kpivalue == null || kpivalue == undefined) {
-              return false;
-            } else if (conditionItem.value.operator == "bigger" && kpivalue <= conditionValue) {
-              return false;
-            } else if (conditionItem.value.operator == "biggerequal" && kpivalue < conditionValue) {
-              return false;
-            } else if (
-              conditionItem.value.operator == "equal" &&
-              kpivalue != conditionItem.value.value
-            ) {
-              return false;
-            } else if (
-              conditionItem.value.operator == "notequal" &&
-              kpivalue == conditionItem.value.value
-            ) {
-              return false;
-            } else if (conditionItem.value.operator == "lower" && kpivalue >= conditionValue) {
-              return false;
-            } else if (conditionItem.value.operator == "lowerequal" && kpivalue > conditionValue) {
-              return false;
-            } else {
+              if (kpivalue == null || kpivalue == undefined) {
+                return false;
+              } else if (conditionItem.value.operator == "bigger" && kpivalue <= conditionValue) {
+                return false;
+              } else if (
+                conditionItem.value.operator == "biggerequal" &&
+                kpivalue < conditionValue
+              ) {
+                return false;
+              } else if (
+                conditionItem.value.operator == "equal" &&
+                kpivalue != conditionItem.value.value
+              ) {
+                return false;
+              } else if (
+                conditionItem.value.operator == "notequal" &&
+                kpivalue == conditionItem.value.value
+              ) {
+                return false;
+              } else if (conditionItem.value.operator == "lower" && kpivalue >= conditionValue) {
+                return false;
+              } else if (
+                conditionItem.value.operator == "lowerequal" &&
+                kpivalue > conditionValue
+              ) {
+                return false;
+              } else {
+              }
             }
+            if (modal.value.modalshowonce) {
+              setIgnoredModals(ignoredModals => [...ignoredModals, modal.id]);
+            }
+
+            setModal({ isOpen: true });
+            return true;
           }
-          setModal({ isOpen: true });
-          return true;
-        }
-      })[0]
+        })[0]
     );
   }, [kpis]);
 
@@ -83,7 +99,8 @@ export default function ChallengeFeedbackModal({
   }
 
   const modalstyling =
-    selectedModal?.value?.modaltheme === "green"
+    selectedModal?.value?.modaltheme === "green" ||
+    selectedModal?.value?.modaltheme === "greenwithconfetti"
       ? "bg-holon-green"
       : selectedModal?.value?.modaltheme === "orange"
       ? "bg-holon-orange"
@@ -117,7 +134,7 @@ export default function ChallengeFeedbackModal({
                   leaveTo="opacity-0 scale-95">
                   <Dialog.Panel
                     className={`w-full p-relative max-w-md min-w-[50vw] transform overflow-hidden rounded p-6 text-center align-middle shadow-xl transition-all text-white flex flex-col gap-4 ${modalstyling}`}>
-                    {selectedModal.value.modaltheme === "green" && <Confetti />}
+                    {selectedModal.value.modaltheme === "greenwithconfetti" && <Confetti />}
                     <Dialog.Title as="h2" className="leading-6 text-2xl font-bold">
                       {selectedModal.value.modaltitle}
                     </Dialog.Title>
