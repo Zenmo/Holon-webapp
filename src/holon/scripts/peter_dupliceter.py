@@ -23,7 +23,7 @@ np.random.seed(0)
 
 A = 0.2
 
-house_ndf = {
+house_pdf = {
     "tempSetpointNight_degC": partial(np.random.normal, loc=15, scale=0.5, size=1),
     "tempSetpointNight_start_hr": partial(np.random.normal, loc=22, scale=1, size=1),
     "tempSetpointDay_degC": partial(np.random.normal, loc=20, scale=0.5, size=1),
@@ -35,9 +35,9 @@ house_ndf = {
 
 multis = [
     {
-        "id": 14,
+        "id": 3,
         "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": None, "factor": 39, "pdf": house_pdf},
         ],
     }
 ]
@@ -81,7 +81,7 @@ def run():
                     duplicate_model(contract, {"actor": dupe_actor})
 
                 # duplicate gridconnection
-                ndf_field_dict = {field: int(ndf()) for field, ndf in ma["ndf"].items()}
+                ndf_field_dict = {field: int(ndf()) for field, ndf in ma["pdf"].items()}
                 attr_dict = {"owner_actor": dupe_actor}
                 ndf_field_dict.update(attr_dict)
 
@@ -91,7 +91,8 @@ def run():
                 for asset in gridconnection_assets:
 
                     verbruik_field = get_verbruik_field(asset)
-                    if verbruik_field:
+
+                    if verbruik_field:  # wel consumptionasset
                         random_verbruik = np.random.uniform(low=1500, high=4500)
                         print(
                             f"Asset {asset.__class__.__name__} found, set field {verbruik_field} to {random_verbruik}"
@@ -103,7 +104,7 @@ def run():
                                 verbruik_field: random_verbruik,
                             },
                         )
-                    else:
+                    else:  # geen consumptionasset
                         duplicate_model(
                             asset,
                             {"gridconnection": dupe_gridconnection},
