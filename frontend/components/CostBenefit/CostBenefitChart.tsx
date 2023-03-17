@@ -2,15 +2,15 @@ import React from "react";
 
 import {
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
+  Label,
   Legend,
   ReferenceLine,
-  Label,
-  BarChart,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 import { CostBenefitChartProps } from "./types";
 
@@ -37,7 +37,6 @@ export default function CostBenefitChart({
   const numberValues = values.map(Number).filter(Number.isFinite);
   const [minValue, maxValue] = [Math.min(...numberValues), Math.max(...numberValues)];
   const [newMin, newMax] = [Math.floor(minValue * 1.1), Math.ceil(maxValue * 1.1)];
-  console.log(values, newMin, newMax);
 
   /*
   const values = chartdata.flatMap(innerArr => Object.values(innerArr).flat());

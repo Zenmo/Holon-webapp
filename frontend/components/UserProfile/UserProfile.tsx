@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import UpdatePassword from "./UpdatePassword";
 import useUser from "@/utils/useUser";
-import { updateProfile, updatePassword } from "../../api/auth";
+import React, { useEffect, useState } from "react";
+import { updatePassword, updateProfile } from "../../api/auth";
+import UpdatePassword from "./UpdatePassword";
 
 export type UserData = {
   first_name: string;
@@ -78,7 +78,6 @@ export default function UserProfile() {
         setUserData({ ...userData, currentPassword: "", password: "", verifyPassword: "" });
       } else {
         res.json().then(message => {
-          console.log(message);
           if (message.old_password) {
             if (message.old_password[0].includes("incorrectly")) {
               setMessagePasswordUpdate({

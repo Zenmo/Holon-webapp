@@ -317,20 +317,3 @@ class RedirectByPathAPIViewSet(BaseAPIViewSet):
 
 
 api_router.register_endpoint("redirect_by_path", RedirectByPathAPIViewSet)
-
-
-class GraphColorsAPIEndpoint(BaseAPIViewSet):
-    model = GraphColors
-
-    body_fields = PagesAPIViewSet.body_fields + [
-        "name",
-        "color",
-    ]
-
-    listing_default_fields = PagesAPIViewSet.listing_default_fields = [
-        "name",
-        "color",
-    ]
-
-
-api_router.register_endpoint("graph-colors", GraphColorsAPIEndpoint)

@@ -1,22 +1,23 @@
+import ButtonsAndMediaBlock from "./ButtonsAndMediaBlock/ButtonsAndMediaBlock";
 import CardBlock from "./CardsBlock/CardBlock";
 import HeroBlock from "./HeroBlock/HeroBlock";
-import TitleBlock from "./TitleBlock/TitleBlock";
 import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock";
-import ButtonsAndMediaBlock from "./ButtonsAndMediaBlock/ButtonsAndMediaBlock";
+import TitleBlock from "./TitleBlock/TitleBlock";
 
+import React from "react";
 import {
+  CardBlockVariant,
+  Graphcolor,
+  HeroBlockVariant,
   PageProps,
   TextAndMediaVariant,
-  HeroBlockVariant,
   TitleBlockVariant,
-  CardBlockVariant,
 } from "../../containers/types";
-import React from "react";
+import { FeedbackModal } from "./ChallengeFeedbackModal/types";
 import HeaderFullImageBlock from "./HeaderFullImageBlock/HeaderFullImageBlock";
 import ParagraphBlock from "./ParagraphBlock";
-import TableBlock from "./TableBlock/TableBlock";
 import SectionBlock from "./SectionBlock/SectionBlock";
-import { FeedbackModal } from "./ChallengeFeedbackModal/types";
+import TableBlock from "./TableBlock/TableBlock";
 
 export type Feedbackmodals = [FeedbackModal];
 
@@ -28,10 +29,12 @@ const ContentBlocks = ({
   content,
   pagetype,
   feedbackmodals,
+  graphcolors,
 }: {
   content: ContentBlockProps[];
   feedbackmodals?: Feedbackmodals[];
   pagetype?: string;
+  graphcolors?: Graphcolor[];
 }) => {
   return (
     <React.Fragment>
@@ -62,6 +65,7 @@ const ContentBlocks = ({
                 data={contentItem}
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
+                graphcolors={graphcolors ?? []}
               />
             );
             break;
