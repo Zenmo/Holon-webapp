@@ -72,7 +72,7 @@ export default function CostBenefitChart({
   };
   return (
     <React.Fragment>
-      {chartdata.length > 0 && (
+      {chartdata.length > 0 ? (
         <div className="flex-1">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart barGap={-70} data={chartdata} stackOffset="sign">
@@ -123,6 +123,10 @@ export default function CostBenefitChart({
               />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      ) : (
+        <div>
+          <p>Er is geen data om te tonen</p>
         </div>
       )}
     </React.Fragment>
