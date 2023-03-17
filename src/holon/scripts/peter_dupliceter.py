@@ -17,18 +17,13 @@ np.random.seed(0)
 
 A = 0.2
 
-price_udf = {
-    "low": partial(np.random.uniform, low=0.01, high=A, size=1),
-    "high": partial(np.random.uniform, low=0, high=A - 0.01, size=1),
-}
-
 house_ndf = {
     "tempSetpointNight_degC": partial(np.random.normal, loc=15, scale=0.5, size=1),
     "tempSetpointNight_start_hr": partial(np.random.normal, loc=22, scale=1, size=1),
     "tempSetpointDay_degC": partial(np.random.normal, loc=20, scale=0.5, size=1),
     "tempSetpointDay_start_hr": partial(np.random.normal, loc=8, scale=0.5, size=1),
-    "pricelevelLowDifFromAvg_eurpkWh": partial(np.random.normal, loc=0.018, scale=0.004, size=1),
-    "pricelevelHighDifFromAvg_eurpkWh": partial(np.random.normal, loc=0.009, scale=0.002, size=1),
+    "pricelevelLowDifFromAvg_eurpkWh": partial(np.random.uniform, low=0.01, high=A, size=1),
+    "pricelevelHighDifFromAvg_eurpkWh": partial(np.random.uniform, low=0, high=A - 0.01, size=1),
 }
 
 
