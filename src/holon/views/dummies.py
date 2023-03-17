@@ -1,0 +1,80 @@
+cost_benefit = {
+    "Huishouden": {
+        "Afschrijving": "-60",
+        "Huishouden": None,
+        "Commercieel bedrijf": "0",
+        "Overheidsinstelling": "0",
+        "Energieleverancier": "-200",
+        "Netbeheerder": "-200",
+        "Overheid": "125",
+        "Netto kosten": "-335",
+    },
+    "Commercieel bedrijf": {
+        "Afschrijving": "0",
+        "Huishouden": "0",
+        "Commercieel bedrijf": None,
+        "Overheidsinstelling": "0",
+        "Energieleverancier": "-200",
+        "Netbeheerder": "-100",
+        "Overheid": "-50",
+        "Netto kosten": "-350",
+    },
+    "Overheidsinstelling": {
+        "Afschrijving": "-20",
+        "Huishouden": "0",
+        "Commercieel bedrijf": "0",
+        "Overheidsinstelling": None,
+        "Energieleverancier": "-100",
+        "Netbeheerder": "-200",
+        "Overheid": "-75",
+        "Netto kosten": "-395",
+    },
+    "Energieleverancier": {
+        "Afschrijving": "0",
+        "Huishouden": "200",
+        "Commercieel bedrijf": "200",
+        "Overheidsinstelling": "100",
+        "Energieleverancier": None,
+        "Netbeheerder": "0",
+        "Overheid": "0",
+        "Netto kosten": "500",
+    },
+    "Netbeheerder": {
+        "Afschrijving": "-500",
+        "Huishouden": "200",
+        "Commercieel bedrijf": "100",
+        "Overheidsinstelling": "200",
+        "Energieleverancier": "0",
+        "Netbeheerder": None,
+        "Overheid": "0",
+        "Netto kosten": "0",
+    },
+    "Overheid": {
+        "Afschrijving": "0",
+        "Huishouden": "-125",
+        "Commercieel bedrijf": "50",
+        "Overheidsinstelling": "75",
+        "Energieleverancier": "0",
+        "Netbeheerder": "0",
+        "Overheid": None,
+        "Netto kosten": "0",
+    },
+}
+
+costbenefit_result_json = {"overview": cost_benefit, "detail": cost_benefit}
+
+dashboard_result_json = {
+    "national": {
+        "netload": 102.4,
+        "costs": 50500000000.0,
+        "sustainability": 21.3,
+        "self_sufficiency": 27.6,
+    },
+    "intermediate": {
+        "costs": 1527000.0,
+        "sustainability": 16.6,
+        "self_sufficiency": 5.0,
+        "netload": 50.0,
+    },
+    "local": {"costs": 1527000.0, "sustainability": 16.6, "self_sufficiency": 5.0, "netload": 50.0},
+}

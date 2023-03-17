@@ -23,7 +23,7 @@ export default function KPIDashboard({
 
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
-      <div className="flex flex-row justify-between items-center px-10 lg:px-16">
+      <div className="flex flex-row justify-around items-center">
         <KPIRadioButtons updateValue={setLevel} loading={loading} dashboardId={dashboardId} />
         <Button onClick={handleClickCostBen}>Kosten en Baten</Button>
       </div>

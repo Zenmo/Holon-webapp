@@ -1,0 +1,517 @@
+[
+    {
+        "model": "holon.scenario",
+        "pk": 1,
+        "fields": {
+            "name": "start buurtelektrificatie",
+            "version": 1,
+            "comment": "Peter doet dit zo"
+        }
+    },
+    {
+        "model": "holon.actorgroup",
+        "pk": 1,
+        "fields": {
+            "name": "HOLON (energie)"
+        }
+    },
+    {
+        "model": "holon.actorgroup",
+        "pk": 2,
+        "fields": {
+            "name": "HOLON (administratief)"
+        }
+    },
+    {
+        "model": "holon.actorgroup",
+        "pk": 3,
+        "fields": {
+            "name": "Huishouden"
+        }
+    },
+    {
+        "model": "holon.actorgroup",
+        "pk": 4,
+        "fields": {
+            "name": "Energieleverancier"
+        }
+    },
+    {
+        "model": "holon.actorgroup",
+        "pk": 5,
+        "fields": {
+            "name": "Netbeheerder"
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "OPERATORGRID",
+            "payload": 1,
+            "group": 5,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "SUPPLIERENERGY",
+            "payload": 1,
+            "group": 4,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 3,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 3,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 4,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "GOVHOLON",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 6,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": 1,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 3,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 100.0,
+            "parent": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 3,
+        "fields": {
+            "gridnode_ptr": 3,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 3,
+            "capacity_kw": 17.0,
+            "parent_electric": 3,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 2,
+        "fields": {
+            "gridconnection_ptr": 2,
+            "insulation_label": 3,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 22.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": 0.05,
+            "pricelevelHighDifFromAvg_eurpkWh": 0.1
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 2,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 2,
+            "type": "TERRACED",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "diesel vehicel",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 3,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "Household heatmodel",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 4,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "Household electricity profile",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 5,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "Hot water demand profile",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 6,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "Gas burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 1,
+        "fields": {
+            "energyasset_ptr": 1,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 4,
+        "fields": {
+            "energyasset_ptr": 4,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 5,
+        "fields": {
+            "energyasset_ptr": 5,
+            "type": "HOT_WATER_CONSUMPTION"
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 1,
+        "fields": {
+            "consumptionasset_ptr": 1,
+            "energyConsumption_kWhpkm": 0.08,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 5,
+        "fields": {
+            "consumptionasset_ptr": 5,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 4,
+        "fields": {
+            "consumptionasset_ptr": 4,
+            "yearlyDemandElectricity_kWh": 2800.0
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 6,
+        "fields": {
+            "energyasset_ptr": 6,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 2,
+        "fields": {
+            "energyasset_ptr": 2,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 5.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.4
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 6,
+        "fields": {
+            "conversionasset_ptr": 6,
+            "deliveryTemp_degC": 90.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 6,
+        "fields": {
+            "heatconversionasset_ptr": 6,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 3,
+        "fields": {
+            "energyasset_ptr": 3,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 3,
+        "fields": {
+            "storageasset_ptr": 3,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": null,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 120.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.contract",
+        "pk": 3,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "transportcontract"
+            ],
+            "contractType": "TRANSPORT",
+            "contractScope": 1,
+            "energyCarrier": "ELECTRICITY",
+            "actor": 3,
+            "annualFee_eur": 100.0,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.contract",
+        "pk": 4,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "deliverycontract"
+            ],
+            "contractType": "DELIVERY",
+            "contractScope": 2,
+            "energyCarrier": "ELECTRICITY",
+            "actor": 3,
+            "annualFee_eur": 0.0,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.contract",
+        "pk": 5,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "taxcontract"
+            ],
+            "contractType": "TAX",
+            "contractScope": 4,
+            "energyCarrier": "ELECTRICITY",
+            "actor": 3,
+            "annualFee_eur": 0.0,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.contract",
+        "pk": 6,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "connectioncontract"
+            ],
+            "contractType": "CONNECTION",
+            "contractScope": 1,
+            "energyCarrier": "ELECTRICITY",
+            "actor": 3,
+            "annualFee_eur": 0.0,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.deliverycontract",
+        "pk": 4,
+        "fields": {
+            "contract_ptr": 4,
+            "deliveryContractType": "ELECTRICITY_FIXED",
+            "deliveryPrice_eurpkWh": 0.08,
+            "feedinPrice_eurpkWh": 0.08
+        }
+    },
+    {
+        "model": "holon.connectioncontract",
+        "pk": 6,
+        "fields": {
+            "contract_ptr": 6,
+            "connectionContractType": "DEFAULT",
+            "nfATO_capacity_kW": 0.0,
+            "nfATO_starttime_h": 0.0,
+            "nfATO_endtime_h": 0.0
+        }
+    },
+    {
+        "model": "holon.taxcontract",
+        "pk": 5,
+        "fields": {
+            "contract_ptr": 5,
+            "taxContractType": "SALDEREN",
+            "taxDelivery_eurpkWh": 0.15,
+            "taxFeedin_eurpkWh": 0.15,
+            "proportionalTax_pct": 0.21
+        }
+    },
+    {
+        "model": "holon.transportcontract",
+        "pk": 3,
+        "fields": {
+            "contract_ptr": 3,
+            "transportContractType": "DEFAULT",
+            "bandwidthTreshold_kW": 0.0,
+            "bandwidthTariff_eurpkWh": 0.0
+        }
+    },
+    {
+        "model": "holon.policy",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "policy"
+            ],
+            "parameter": "Fixed_methane_price_eurpkWh",
+            "value": "0.1",
+            "unit": "europkWh",
+            "comment": "fixed methane price",
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.policy",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "policy"
+            ],
+            "parameter": "Time_buffer_for_spread_charging_min",
+            "value": "60",
+            "unit": "minutes",
+            "comment": "Required for charging of EVs",
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    }
+]

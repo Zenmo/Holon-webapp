@@ -1,6 +1,5 @@
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import styles from "./CostBenefit.module.css";
-import React from "react";
 
 export default function CostBenefitTable({ tableData }: { tableData: Array<object> }) {
   const backgroundCell = {
@@ -20,7 +19,7 @@ export default function CostBenefitTable({ tableData }: { tableData: Array<objec
   };
 
   const getHeadings = data => {
-    return Object.keys(data);
+    return data !== undefined ? Object.keys(data) : [];
   };
 
   const headings = getHeadings(tableData);

@@ -24,7 +24,6 @@ def determine_share_of_renewables(etm_data: dict) -> np.ndarray:
 
 
 def calculate_holon_kpis(total_cost_data: dict, etm_data: dict, gridnode_config: dict) -> dict:
-
     import_curve_MWh = np.array(
         list(total_cost_data["SystemHourlyElectricityImport_MWh"].values())[:8760]
     )

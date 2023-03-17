@@ -1,0 +1,130 @@
+[
+    {
+        "id": "pol2",
+        "parameter": "Grid_MS_congestion_allowance_level_kW",
+        "value": "0",
+        "unit": "kW",
+        "comment": "gridOperator policy variable",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol3",
+        "parameter": "Grid_MS_congestion_price_eurpkWh",
+        "value": "10.0",
+        "unit": "eurpkWh",
+        "comment": "gridOperator policy value",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol4",
+        "parameter": "Grid_MS_congestion_threshold_fr",
+        "value": "0.1",
+        "unit": "fr",
+        "comment": "gridOperator policy value",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol5",
+        "parameter": "Grid_MS_congestion_pricing_consumption_eurpkWh",
+        "value": "TRUE",
+        "unit": "null",
+        "comment": "gridOperator policy value",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol6",
+        "parameter": "Grid_MS_congestion_pricing_production_eurpkWh",
+        "value": "TRUE",
+        "unit": "null",
+        "comment": "gridOperator policy value",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol7",
+        "parameter": "Fixed_electricity_price_eurpkWh",
+        "value": "0.21",
+        "unit": "EUR p kWh",
+        "comment": "Fixed_electricity_price",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol8",
+        "parameter": "Fixed_heat_price_eurpkWh",
+        "value": "0.1",
+        "unit": "EUR p kWh",
+        "comment": "Fixed_heat_price",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol9",
+        "parameter": "Fixed_methane_price_eurpkWh",
+        "value": "0.05",
+        "unit": "EUR p kWh",
+        "comment": "Fixed_methane_price",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol10",
+        "parameter": "Fixed_hydrogen_price_eurpkWh",
+        "value": "0.3",
+        "unit": "EUR p kWh",
+        "comment": "Fixed_hydrogen_price",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol11",
+        "parameter": "Energy_supplier_electricity_price_margin_eurpkWh",
+        "value": "0.17",
+        "unit": "fr",
+        "comment": "p_variableElectricityPriceOverNational_eurpkWh",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol12",
+        "parameter": "Fixed_electricity_feed_in_tariff_eurpkWh",
+        "value": "0.1",
+        "unit": "EUR_pKWh",
+        "comment": "p_fixedFeedinTariff_eurpkWh",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol13",
+        "parameter": "Fixed_diesel_price_eurpkWh",
+        "value": "0.2",
+        "unit": "EUR_pKWh",
+        "comment": "Fixed_diesel_price",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol14",
+        "parameter": "Time_buffer_for_spread_charging_min",
+        "value": "60",
+        "unit": "minutes",
+        "comment": "Time_buffer_for_spread_charging, Integer value",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol15",
+        "parameter": "Salderen",
+        "value": "false",
+        "unit": "boolean",
+        "comment": "switch for salderen",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol16",
+        "parameter": "Capacitypricing_households_kW",
+        "value": "5",
+        "unit": "int",
+        "comment": "power level at which capacity pricing kicks in",
+        "resourcetype": "Policy"
+    },
+    {
+        "id": "pol17",
+        "parameter": "Capacitypricing_households_eur",
+        "value": "0.5",
+        "unit": "float",
+        "comment": "capacity price value for households",
+        "resourcetype": "Policy"
+    }
+]

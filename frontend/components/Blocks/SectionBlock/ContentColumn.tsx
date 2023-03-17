@@ -52,7 +52,8 @@ export default function ContentColumn({
             option => option.option === defaultValue || option.label === defaultValue
           )?.option;
         } else {
-          return content.value.options.find(option => option.default)?.option;
+          const option = content.value.options.find(option => option.default);
+          return option ? option.id : content.value.options[0].id;
         }
       case "continuous":
         if (defaultValue !== undefined && defaultValue !== "") {
@@ -73,7 +74,7 @@ export default function ContentColumn({
             defaultValueArray?.includes(option.option) ||
             defaultValueArray?.includes(option.label)
         );
-        return defaultOptions.length ? defaultOptions.map(option => option.option) : undefined;
+        return defaultOptions.length ? defaultOptions.map(option => option.id) : [];
     }
   }
 
@@ -96,7 +97,7 @@ export default function ContentColumn({
       case "single_select":
         const selectedOption = currentElement.value.options.find(option => option.id === optionId);
         if (!selectedOption) break;
-        currentElement.currentValue = selectedOption.option;
+        currentElement.currentValue = selectedOption.id;
         break;
       case "continuous":
         currentElement.currentValue = Number(value);
@@ -107,9 +108,9 @@ export default function ContentColumn({
         if (!currentOption) break;
         const tempArray = new Set(currentElement.currentValue);
         if (value) {
-          tempArray.add(currentOption.option);
+          tempArray.add(currentOption.id);
         } else {
-          tempArray.delete(currentOption.option);
+          tempArray.delete(currentOption.id);
         }
         currentElement.currentValue = [...tempArray];
         break;

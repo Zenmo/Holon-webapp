@@ -1,0 +1,19 @@
+[
+{
+    "model": "main.storylinepage",
+    "pk": 7,
+    "fields": {
+        "thumbnail": null,
+        "description": "In vel metus facilisis sapien convallis molestie. Aliquam consectetur lorem sit amet pretium condimentum. Maecenas mollis volutpat mauris. Fusce viverra condimentum erat sed consectetur. Maecenas non dictum lectus, sit amet laoreet lorem. Vestibulum porta sollicitudin velit, id sodales mi lacinia nec.",
+        "card_color": "card__bg-blue",
+        "scenario": null,
+        "storyline": "[{\"id\": \"140153c4-2c34-4928-ba8e-84caea394a09\", \"type\": \"header_full_image_block\", \"value\": {\"size\": \"h2\", \"title\": \"Lorem ipsum dolor\", \"alt_text\": \"\", \"image_selector\": 1}}, {\"id\": \"693ec203-9084-4305-a9bc-19633f03bf83\", \"type\": \"section\", \"value\": {\"content\": [{\"id\": \"a358ffa1-aa2a-4beb-aef0-89ceba213db3\", \"type\": \"interactive_input\", \"value\": {\"locked\": false, \"display\": \"checkbox_radio\", \"visible\": true, \"default_value\": \"\", \"interactive_input\": \"2\"}}, {\"id\": \"2f12e346-11fe-468b-91c7-27e6a5d251aa\", \"type\": \"interactive_input\", \"value\": {\"locked\": false, \"display\": \"checkbox_radio\", \"visible\": true, \"default_value\": \"\", \"interactive_input\": \"3\"}}, {\"id\": \"c35263ef-9ff6-4f08-9bb8-c08b84d168ea\", \"type\": \"interactive_input\", \"value\": {\"locked\": false, \"display\": \"checkbox_radio\", \"visible\": true, \"default_value\": \"\", \"interactive_input\": \"5\"}}], \"background\": {\"size\": \"bg__full\", \"color\": \"block__bg-white\"}, \"grid_layout\": {\"grid\": \"50_50\"}, \"text_label_local\": \"Lokaal\", \"text_label_national\": \"Nationaal\", \"text_label_intermediate\": \"Regionaal\"}}]",
+        "roles": [
+            1
+        ],
+        "information_types": [
+            1
+        ]
+    }
+}
+]

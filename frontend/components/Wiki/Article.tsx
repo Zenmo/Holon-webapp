@@ -1,9 +1,9 @@
+import TableBlock from "@/components/Blocks/TableBlock/TableBlock";
 import Head from "next/head";
-import { unified } from "unified";
 import rehypeParse from "rehype-parse";
 import rehypeStringify from "rehype-stringify";
+import { unified } from "unified";
 import { visit } from "unist-util-visit";
-import TableBlock from "@/components/Blocks/TableBlock/TableBlock";
 import ParagraphBlock from "../Blocks/ParagraphBlock";
 
 type Content = PageProps<TextAndMediaVariant | TitleBlockVariant | CardBlockVariant>;
