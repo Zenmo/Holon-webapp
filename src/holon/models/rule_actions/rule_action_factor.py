@@ -1,5 +1,4 @@
 from holon.models.rule_actions import RuleAction
-from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 from holon.models.scenario_rule import ScenarioRule
 
 from django.db import models
@@ -15,7 +14,9 @@ class RuleActionFactor(RuleAction):
 
     model_attribute = models.CharField(max_length=255, null=False)
 
-    rule = ParentalKey(ScenarioRule, on_delete=models.CASCADE, related_name="continuous_factors")
+    rule: ScenarioRule = ParentalKey(
+        ScenarioRule, on_delete=models.CASCADE, related_name="continuous_factors"
+    )
 
     min_value = models.IntegerField()
     max_value = models.IntegerField()
@@ -33,7 +34,7 @@ class RuleActionFactor(RuleAction):
         super().clean()
 
         try:
-            if not self.model_attribute in RuleActionUtils.get_model_attributes_options(self.rule):
+            if not self.model_attribute in self.rule.get_model_attributes_options():
                 raise ValidationError(f"Invalid value {self.model_attribute} for model_attribute")
         except ObjectDoesNotExist:
             return

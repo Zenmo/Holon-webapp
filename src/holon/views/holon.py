@@ -5,10 +5,14 @@ from rest_framework.response import Response
 from holon.models import rule_mapping, Scenario
 from holon.models.scenario_rule import ModelType
 from holon.services.cloudclient import CloudClient
-from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
+from holon.services import CostBenedict
+from holon.services.data import Results
 
 from holon.serializers import HolonRequestSerializer
 from holon.models.util import all_subclasses
+
+DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
+DUMMY_COST = 42
 
 
 class HolonV2Service(generics.CreateAPIView):
@@ -17,31 +21,42 @@ class HolonV2Service(generics.CreateAPIView):
     def post(self, request):
         serializer = HolonRequestSerializer(data=request.data)
 
-        try:
-            if serializer.is_valid():
-                data = serializer.validated_data
+        # try:
+        if serializer.is_valid():
+            data = serializer.validated_data
 
-                scenario = rule_mapping.get_scenario_and_apply_rules(
-                    data["scenario"].id, data["interactive_elements"]
-                )
+            scenario = rule_mapping.get_scenario_and_apply_rules(
+                data["scenario"].id, data["interactive_elements"]
+            )
 
-                # TODO serialize and send to anylogic
-                original_scenario = Scenario.objects.get(id=data["scenario"].id)
-                cc = CloudClient(original_scenario)
-                cc.run()
+            # TODO hand over the original_scenario for configs and the edited scenario for datamodel
+            original_scenario = Scenario.objects.get(id=data["scenario"].id)
+            cc = CloudClient(original_scenario)
+            cc.run()
 
-                # Delete duplicated scenario
-                scenario.delete()
+            cost_benefit_results = CostBenedict(actors=cc.outputs["actors"]).determine_group_costs()
 
-                return Response(
-                    cc.outputs,
-                    status=status.HTTP_200_OK,
-                )
+            results = Results(
+                scenario=scenario,
+                anylogic_outcomes=cc.outputs,
+                inter_upscaling_outcomes=DUMMY_UPSCALE,
+                nat_upscaling_outcomes=DUMMY_UPSCALE,
+                cost_outcome=DUMMY_COST,
+                cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
+                cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
+            )
 
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
+            # Delete duplicated scenario
+            scenario.delete()
+            return Response(
+                results.to_dict(),
+                status=status.HTTP_200_OK,
+            )
+
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # except Exception as e:
+        #     return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):

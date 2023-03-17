@@ -7,7 +7,6 @@ from modelcluster.fields import ParentalKey
 from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel
 
-from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses
 
 
@@ -54,9 +53,7 @@ class Filter(PolymorphicModel):
 class AttributeFilter(Filter):
     """Filter on attribute"""
 
-    rule = ParentalKey(
-        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="attribute_filters"
-    )
+    rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="attribute_filters")
 
     class Meta:
         verbose_name = "AttributeFilter"
@@ -87,7 +84,7 @@ class RelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
 
     rule = ParentalKey(
-        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="relation_attribute_filters"
+        "holon.Rule", on_delete=models.CASCADE, related_name="relation_attribute_filters"
     )
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
@@ -177,7 +174,7 @@ class DiscreteAttributeFilter(Filter):
     """Filter on attribute with discrete series"""
 
     rule = ParentalKey(
-        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="discrete_attribute_filters"
+        "holon.Rule", on_delete=models.CASCADE, related_name="discrete_attribute_filters"
     )
 
     def clean(self):
