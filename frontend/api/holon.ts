@@ -1,6 +1,6 @@
+import { httpGet } from "@/utils/Http";
 import * as Cookies from "es-cookie";
 import { postRequest } from "./wagtail";
-import { httpGet } from "@/utils/Http";
 
 const API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL || "/wt/api/nextjs";
 
@@ -10,7 +10,7 @@ export type InteractiveElement = {
 };
 
 export async function getHolonKPIs(data: { interactiveElements: InteractiveElement[] }) {
-  const { json } = await postRequest(`${API_URL}/v1/holon/`, data, {
+  const { json } = await postRequest(`${API_URL}/v2/holon/`, data, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken"),
     },
@@ -25,8 +25,4 @@ export async function getHolonDataSegments() {
 
 export async function getHolonDataSegmentsDetail() {
   return await httpGet(`/api/dummy-kosten-baten`);
-}
-
-export async function getHolonGraphColor() {
-  return await httpGet(`${API_URL}/v1/graph-colors/`);
 }

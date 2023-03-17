@@ -8,7 +8,7 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const { user, mutateUser } = useUser({});
-  const nameUser = user ? user.username : "";
+  const nameUser = user ? (user.first_name ? user.first_name : user.username) : "";
 
   useEffect(() => {
     if (user && user.username) {

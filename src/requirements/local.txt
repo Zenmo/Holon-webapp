@@ -9,3 +9,4 @@ pipdeptree
 ptvsd
 django-stubs>=1.12,<1.13
 djangorestframework-stubs>=1.7,<1.8
+django-extensions

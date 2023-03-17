@@ -40,6 +40,9 @@
     padding-left: 0.25rem;
     font-size: 13px;
   }
+}
+
+@media (max-width: 1850px) {
   .CompactTable th + th span {
     writing-mode: vertical-rl;
     rotate: 180deg;

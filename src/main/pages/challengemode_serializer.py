@@ -1,17 +1,8 @@
-from .base_serializer import BasePageSerializer
-from .storyline_serializer import (
-    StorylinePageSerializer,
-    StorylinePageRoleTypeSerializer,
-    StorylinePageInformationTypeSerializer,
-)
-
+from .storyline_serializer import StorylinePageSerializer
 from . import ChallengeModePage
 
 
-class ChallengeModePageSerializer(BasePageSerializer):
-    roles = StorylinePageRoleTypeSerializer(many=True)
-    information_types = StorylinePageInformationTypeSerializer(many=True)
-
+class ChallengeModePageSerializer(StorylinePageSerializer):
     class Meta:
         model = ChallengeModePage
         fields = StorylinePageSerializer.Meta.fields + ["feedbackmodals"]

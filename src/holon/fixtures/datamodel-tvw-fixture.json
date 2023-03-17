@@ -1,0 +1,2915 @@
+[
+    {
+        "model": "holon.scenario",
+        "pk": 1,
+        "fields": {
+            "name": "Basis - Gasburner for all",
+            "version": 1,
+            "comment": "Basis-scenario - huidige toestand met cv-ketels voor iedereen. Dieselauto's en geen Zon-pv. Restwarmtebronnen wel aanwezige."
+        }
+    },
+    {
+        "model": "holon.actorgroup",
+        "pk": 1,
+        "fields": {
+            "name": "COMMERCIAL"
+        }
+    },
+    {
+        "model": "holon.actorgroup",
+        "pk": 2,
+        "fields": {
+            "name": "HOUSEHOLD"
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "OPERATORGRID",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 3,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 4,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 5,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 6,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 7,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 8,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "HOLONENERGY",
+            "payload": 1,
+            "group": null,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 10,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 11,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 1,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 12,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 13,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 14,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 15,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 16,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 18,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 1,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 19,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 1,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 20,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 1,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 21,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 1,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 22,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "actor"
+            ],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": null,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 13,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 14,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 15,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 16,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 17,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 18,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 19,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 20,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 21,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 5000.0,
+            "parent": 13,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 23,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 500000.0,
+            "parent": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridnode",
+        "pk": 24,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatgridnode"
+            ],
+            "owner_actor": 1,
+            "capacity_kw": 500000.0,
+            "parent": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 13,
+        "fields": {
+            "gridnode_ptr": 13,
+            "type": "HSMS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 14,
+        "fields": {
+            "gridnode_ptr": 14,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 15,
+        "fields": {
+            "gridnode_ptr": 15,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 16,
+        "fields": {
+            "gridnode_ptr": 16,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 17,
+        "fields": {
+            "gridnode_ptr": 17,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 18,
+        "fields": {
+            "gridnode_ptr": 18,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 19,
+        "fields": {
+            "gridnode_ptr": 19,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 20,
+        "fields": {
+            "gridnode_ptr": 20,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.electricgridnode",
+        "pk": 21,
+        "fields": {
+            "gridnode_ptr": 21,
+            "type": "MSLS"
+        }
+    },
+    {
+        "model": "holon.heatgridnode",
+        "pk": 23,
+        "fields": {
+            "gridnode_ptr": 23,
+            "type": "HT"
+        }
+    },
+    {
+        "model": "holon.heatgridnode",
+        "pk": 24,
+        "fields": {
+            "gridnode_ptr": 24,
+            "type": "MT"
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 10,
+            "capacity_kw": 17.0,
+            "parent_electric": 14,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "buildinggridconnection"
+            ],
+            "owner_actor": 11,
+            "capacity_kw": 30.0,
+            "parent_electric": 14,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 3,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 12,
+            "capacity_kw": 17.0,
+            "parent_electric": 15,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 4,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 13,
+            "capacity_kw": 17.0,
+            "parent_electric": 16,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 5,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 14,
+            "capacity_kw": 17.0,
+            "parent_electric": 17,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 6,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 15,
+            "capacity_kw": 17.0,
+            "parent_electric": 18,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 7,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 16,
+            "capacity_kw": 17.0,
+            "parent_electric": 19,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 8,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "industrygridconnection"
+            ],
+            "owner_actor": 18,
+            "capacity_kw": 1000.0,
+            "parent_electric": 20,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 9,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "productiongridconnection"
+            ],
+            "owner_actor": 19,
+            "capacity_kw": 1000.0,
+            "parent_electric": 20,
+            "parent_heat": 23,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 10,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "districtheatinggridconnection"
+            ],
+            "owner_actor": 20,
+            "capacity_kw": 1000.0,
+            "parent_electric": 20,
+            "parent_heat": 23,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 11,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "districtheatinggridconnection"
+            ],
+            "owner_actor": 21,
+            "capacity_kw": 1000.0,
+            "parent_electric": 21,
+            "parent_heat": 24,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.gridconnection",
+        "pk": 12,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "housegridconnection"
+            ],
+            "owner_actor": 22,
+            "capacity_kw": 17.0,
+            "parent_electric": 18,
+            "parent_heat": null,
+            "charging_mode": "SIMPLE",
+            "battery_mode": null,
+            "electrolyser_mode": null,
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 1,
+        "fields": {
+            "gridconnection_ptr": 1,
+            "insulation_label": 4,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 20.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": 0.018,
+            "pricelevelHighDifFromAvg_eurpkWh": 0.009
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 2,
+        "fields": {
+            "gridconnection_ptr": 2,
+            "insulation_label": 4,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 20.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": null,
+            "pricelevelHighDifFromAvg_eurpkWh": null
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 3,
+        "fields": {
+            "gridconnection_ptr": 3,
+            "insulation_label": 6,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 15.0,
+            "tempSetpointNight_start_hr": 23.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 7.0,
+            "pricelevelLowDifFromAvg_eurpkWh": 0.018,
+            "pricelevelHighDifFromAvg_eurpkWh": 0.09
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 4,
+        "fields": {
+            "gridconnection_ptr": 4,
+            "insulation_label": 7,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 20.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": null,
+            "pricelevelHighDifFromAvg_eurpkWh": null
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 5,
+        "fields": {
+            "gridconnection_ptr": 5,
+            "insulation_label": 5,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 20.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": 0.018,
+            "pricelevelHighDifFromAvg_eurpkWh": 0.009
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 6,
+        "fields": {
+            "gridconnection_ptr": 6,
+            "insulation_label": 5,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 20.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": 0.018,
+            "pricelevelHighDifFromAvg_eurpkWh": 0.09
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 7,
+        "fields": {
+            "gridconnection_ptr": 7,
+            "insulation_label": 2,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 20.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": 0.018,
+            "pricelevelHighDifFromAvg_eurpkWh": 0.09
+        }
+    },
+    {
+        "model": "holon.builtenvironmentgridconnection",
+        "pk": 12,
+        "fields": {
+            "gridconnection_ptr": 12,
+            "insulation_label": 5,
+            "heating_type": "GASBURNER",
+            "tempSetpointNight_degC": 16.0,
+            "tempSetpointNight_start_hr": 20.0,
+            "tempSetpointDay_degC": 20.0,
+            "tempSetpointDay_start_hr": 8.0,
+            "pricelevelLowDifFromAvg_eurpkWh": 0.018,
+            "pricelevelHighDifFromAvg_eurpkWh": 0.09
+        }
+    },
+    {
+        "model": "holon.utilitygridconnection",
+        "pk": 8,
+        "fields": {
+            "gridconnection_ptr": 8,
+            "heating_type": "GASBURNER"
+        }
+    },
+    {
+        "model": "holon.utilitygridconnection",
+        "pk": 10,
+        "fields": {
+            "gridconnection_ptr": 10,
+            "heating_type": "GASFIRED_CHPPEAK"
+        }
+    },
+    {
+        "model": "holon.utilitygridconnection",
+        "pk": 11,
+        "fields": {
+            "gridconnection_ptr": 11,
+            "heating_type": "LT_RESIDUAL_HEATPUMP_GASPEAK"
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 1,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 1,
+            "type": "APPARTMENT",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 3,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 3,
+            "type": "SEMIDETACHED",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 4,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 4,
+            "type": "APPARTMENT",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 5,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 5,
+            "type": "HIGHRISE",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 6,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 6,
+            "type": "TERRACED",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 7,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 7,
+            "type": "DETACHED",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.housegridconnection",
+        "pk": 12,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 12,
+            "type": "SEMIDETACHED",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.buildinggridconnection",
+        "pk": 2,
+        "fields": {
+            "builtenvironmentgridconnection_ptr": 2,
+            "type": "STORE"
+        }
+    },
+    {
+        "model": "holon.productiongridconnection",
+        "pk": 9,
+        "fields": {
+            "gridconnection_ptr": 9,
+            "category": "RESIDUALHEAT"
+        }
+    },
+    {
+        "model": "holon.industrygridconnection",
+        "pk": 8,
+        "fields": {
+            "utilitygridconnection_ptr": 8,
+            "type": "INDUSTRY_OTHER"
+        }
+    },
+    {
+        "model": "holon.districtheatinggridconnection",
+        "pk": 10,
+        "fields": {
+            "utilitygridconnection_ptr": 10,
+            "type": "HT",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.districtheatinggridconnection",
+        "pk": 11,
+        "fields": {
+            "utilitygridconnection_ptr": 11,
+            "type": "MT",
+            "smart_assets": false
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "productionasset"
+            ],
+            "gridconnection": 9,
+            "gridnode": null,
+            "name": "Residual_heat",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "productionasset"
+            ],
+            "gridconnection": 11,
+            "gridnode": null,
+            "name": "Residual_heat",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 6,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 11,
+            "gridnode": null,
+            "name": "District_Heating_heat_buffer_MT_S",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 9,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 10,
+            "gridnode": null,
+            "name": "District_Heating_heat_buffer_HT_S",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 10,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatproductionasset"
+            ],
+            "gridconnection": 9,
+            "gridnode": null,
+            "name": "Residual_heat",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 12,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 9,
+            "gridnode": null,
+            "name": "CurtailerHeat",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 13,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatproductionasset"
+            ],
+            "gridconnection": 11,
+            "gridnode": null,
+            "name": "Residual_heat",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 14,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricheatconversionasset"
+            ],
+            "gridconnection": 11,
+            "gridnode": null,
+            "name": "DH_heat_pump_water_MT_M",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 15,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 11,
+            "gridnode": null,
+            "name": "DH_boiler_L",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 17,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": null,
+            "gridnode": 23,
+            "name": "District_Heating_network_HT_M",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 18,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": null,
+            "gridnode": 24,
+            "name": "District_Heating_network_MT_S",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 19,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 1,
+            "gridnode": null,
+            "name": "House_heatmodel_D",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 20,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 1,
+            "gridnode": null,
+            "name": "House_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 21,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 1,
+            "gridnode": null,
+            "name": "House_hot_water",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 22,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 1,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 23,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 1,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 24,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 1,
+            "gridnode": null,
+            "name": "Diesel_Vehicle",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 25,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "House_heatmodel_D",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 26,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "Store_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 27,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 2,
+            "gridnode": null,
+            "name": "Building_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 28,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 3,
+            "gridnode": null,
+            "name": "House_heatmodel_B",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 29,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 3,
+            "gridnode": null,
+            "name": "House_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 30,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 3,
+            "gridnode": null,
+            "name": "House_hot_wate",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 31,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 3,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 32,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 3,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 33,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 3,
+            "gridnode": null,
+            "name": "Diesel_Vehicle",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 34,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 4,
+            "gridnode": null,
+            "name": "House_heatmodel_A",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 35,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 4,
+            "gridnode": null,
+            "name": "House_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 36,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 4,
+            "gridnode": null,
+            "name": "House_hot_water",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 37,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 4,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 38,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 4,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 39,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 4,
+            "gridnode": null,
+            "name": "Diesel_Vehicle",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 40,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 5,
+            "gridnode": null,
+            "name": "House_heatmodel_C",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 41,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 5,
+            "gridnode": null,
+            "name": "House_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 42,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 5,
+            "gridnode": null,
+            "name": "House_hot_water",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 43,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 5,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 44,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 5,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 45,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 5,
+            "gridnode": null,
+            "name": "Diesel_Vehicle",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 46,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 6,
+            "gridnode": null,
+            "name": "House_heatmodel_C",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 47,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 6,
+            "gridnode": null,
+            "name": "House_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 48,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 6,
+            "gridnode": null,
+            "name": "House_hot_water",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 49,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 6,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 50,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 6,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 51,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 6,
+            "gridnode": null,
+            "name": "Diesel_Vehicle",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 52,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 12,
+            "gridnode": null,
+            "name": "House_heatmodel_C",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 53,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 12,
+            "gridnode": null,
+            "name": "House_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 54,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 12,
+            "gridnode": null,
+            "name": "House_hot_water",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 55,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 12,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 56,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 12,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 57,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 12,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 58,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 12,
+            "gridnode": null,
+            "name": "Diesel_Vehicle",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 59,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatstorageasset"
+            ],
+            "gridconnection": 7,
+            "gridnode": null,
+            "name": "House_heatmodel_F",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 60,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "electricconsumptionasset"
+            ],
+            "gridconnection": 7,
+            "gridnode": null,
+            "name": "House_other_electricity",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 61,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "heatconsumptionasset"
+            ],
+            "gridconnection": 7,
+            "gridnode": null,
+            "name": "House_hot_water",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 62,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "cookingconversionasset"
+            ],
+            "gridconnection": 7,
+            "gridnode": null,
+            "name": "Gas pit",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 63,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "chemicalheatconversionasset"
+            ],
+            "gridconnection": 7,
+            "gridnode": null,
+            "name": "House_gas_burner",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.energyasset",
+        "pk": 64,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "dieselvehicleasset"
+            ],
+            "gridconnection": 7,
+            "gridnode": null,
+            "name": "Diesel_Vehicle",
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 20,
+        "fields": {
+            "energyasset_ptr": 20,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 21,
+        "fields": {
+            "energyasset_ptr": 21,
+            "type": "HEAT_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 24,
+        "fields": {
+            "energyasset_ptr": 24,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 26,
+        "fields": {
+            "energyasset_ptr": 26,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 29,
+        "fields": {
+            "energyasset_ptr": 29,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 30,
+        "fields": {
+            "energyasset_ptr": 30,
+            "type": "HEAT_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 33,
+        "fields": {
+            "energyasset_ptr": 33,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 35,
+        "fields": {
+            "energyasset_ptr": 35,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 36,
+        "fields": {
+            "energyasset_ptr": 36,
+            "type": "HOT_WATER_CONSUMPTION"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 39,
+        "fields": {
+            "energyasset_ptr": 39,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 41,
+        "fields": {
+            "energyasset_ptr": 41,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 42,
+        "fields": {
+            "energyasset_ptr": 42,
+            "type": "HEAT_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 45,
+        "fields": {
+            "energyasset_ptr": 45,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 47,
+        "fields": {
+            "energyasset_ptr": 47,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 48,
+        "fields": {
+            "energyasset_ptr": 48,
+            "type": "HEAT_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 51,
+        "fields": {
+            "energyasset_ptr": 51,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 53,
+        "fields": {
+            "energyasset_ptr": 53,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 54,
+        "fields": {
+            "energyasset_ptr": 54,
+            "type": "HEAT_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 58,
+        "fields": {
+            "energyasset_ptr": 58,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 60,
+        "fields": {
+            "energyasset_ptr": 60,
+            "type": "ELECTRICITY_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 61,
+        "fields": {
+            "energyasset_ptr": 61,
+            "type": "HEAT_DEMAND"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 64,
+        "fields": {
+            "energyasset_ptr": 64,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 24,
+        "fields": {
+            "consumptionasset_ptr": 24,
+            "energyConsumption_kWhpkm": 0.8,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 33,
+        "fields": {
+            "consumptionasset_ptr": 33,
+            "energyConsumption_kWhpkm": 0.8,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 39,
+        "fields": {
+            "consumptionasset_ptr": 39,
+            "energyConsumption_kWhpkm": 0.8,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 45,
+        "fields": {
+            "consumptionasset_ptr": 45,
+            "energyConsumption_kWhpkm": 0.8,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 51,
+        "fields": {
+            "consumptionasset_ptr": 51,
+            "energyConsumption_kWhpkm": 0.8,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 58,
+        "fields": {
+            "consumptionasset_ptr": 58,
+            "energyConsumption_kWhpkm": 0.8,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.dieselvehicleasset",
+        "pk": 64,
+        "fields": {
+            "consumptionasset_ptr": 64,
+            "energyConsumption_kWhpkm": 0.8,
+            "vehicleScaling": 1
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 21,
+        "fields": {
+            "consumptionasset_ptr": 21,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 30,
+        "fields": {
+            "consumptionasset_ptr": 30,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 36,
+        "fields": {
+            "consumptionasset_ptr": 36,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 42,
+        "fields": {
+            "consumptionasset_ptr": 42,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 48,
+        "fields": {
+            "consumptionasset_ptr": 48,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 54,
+        "fields": {
+            "consumptionasset_ptr": 54,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.heatconsumptionasset",
+        "pk": 61,
+        "fields": {
+            "consumptionasset_ptr": 61,
+            "yearlyDemandHeat_kWh": 2000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 20,
+        "fields": {
+            "consumptionasset_ptr": 20,
+            "yearlyDemandElectricity_kWh": 11000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 26,
+        "fields": {
+            "consumptionasset_ptr": 26,
+            "yearlyDemandElectricity_kWh": 35000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 29,
+        "fields": {
+            "consumptionasset_ptr": 29,
+            "yearlyDemandElectricity_kWh": 11000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 35,
+        "fields": {
+            "consumptionasset_ptr": 35,
+            "yearlyDemandElectricity_kWh": 11000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 41,
+        "fields": {
+            "consumptionasset_ptr": 41,
+            "yearlyDemandElectricity_kWh": 11000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 47,
+        "fields": {
+            "consumptionasset_ptr": 47,
+            "yearlyDemandElectricity_kWh": 11000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 53,
+        "fields": {
+            "consumptionasset_ptr": 53,
+            "yearlyDemandElectricity_kWh": 11000.0
+        }
+    },
+    {
+        "model": "holon.electricconsumptionasset",
+        "pk": 60,
+        "fields": {
+            "consumptionasset_ptr": 60,
+            "yearlyDemandElectricity_kWh": 11000.0
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 12,
+        "fields": {
+            "energyasset_ptr": 12,
+            "type": "CURTAILER_HEAT",
+            "eta_r": 0.0
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 14,
+        "fields": {
+            "energyasset_ptr": 14,
+            "type": "HEAT_PUMP_WATER",
+            "eta_r": 0.5
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 15,
+        "fields": {
+            "energyasset_ptr": 15,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 23,
+        "fields": {
+            "energyasset_ptr": 23,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 27,
+        "fields": {
+            "energyasset_ptr": 27,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 32,
+        "fields": {
+            "energyasset_ptr": 32,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 38,
+        "fields": {
+            "energyasset_ptr": 38,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 44,
+        "fields": {
+            "energyasset_ptr": 44,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 50,
+        "fields": {
+            "energyasset_ptr": 50,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 56,
+        "fields": {
+            "energyasset_ptr": 56,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 57,
+        "fields": {
+            "energyasset_ptr": 57,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.conversionasset",
+        "pk": 63,
+        "fields": {
+            "energyasset_ptr": 63,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 22,
+        "fields": {
+            "energyasset_ptr": 22,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 8.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.75
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 31,
+        "fields": {
+            "energyasset_ptr": 31,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 8.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.75
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 37,
+        "fields": {
+            "energyasset_ptr": 37,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 8.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.75
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 43,
+        "fields": {
+            "energyasset_ptr": 43,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 8.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.75
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 49,
+        "fields": {
+            "energyasset_ptr": 49,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 8.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.75
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 55,
+        "fields": {
+            "energyasset_ptr": 55,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 8.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.75
+        }
+    },
+    {
+        "model": "holon.cookingconversionasset",
+        "pk": 62,
+        "fields": {
+            "energyasset_ptr": 62,
+            "type": "GAS_PIT",
+            "capacityHeat_kW": 8.0,
+            "capacityElectricity_kW": null,
+            "eta_r": 0.75
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 12,
+        "fields": {
+            "conversionasset_ptr": 12,
+            "deliveryTemp_degc": 0.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 14,
+        "fields": {
+            "conversionasset_ptr": 14,
+            "deliveryTemp_degc": 60.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 15,
+        "fields": {
+            "conversionasset_ptr": 15,
+            "deliveryTemp_degc": 100.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 23,
+        "fields": {
+            "conversionasset_ptr": 23,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 27,
+        "fields": {
+            "conversionasset_ptr": 27,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 32,
+        "fields": {
+            "conversionasset_ptr": 32,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 38,
+        "fields": {
+            "conversionasset_ptr": 38,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 44,
+        "fields": {
+            "conversionasset_ptr": 44,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 50,
+        "fields": {
+            "conversionasset_ptr": 50,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 56,
+        "fields": {
+            "conversionasset_ptr": 56,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 57,
+        "fields": {
+            "conversionasset_ptr": 57,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.heatconversionasset",
+        "pk": 63,
+        "fields": {
+            "conversionasset_ptr": 63,
+            "deliveryTemp_degc": 90.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 12,
+        "fields": {
+            "heatconversionasset_ptr": 12,
+            "capacityHeat_kW": 600.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 15,
+        "fields": {
+            "heatconversionasset_ptr": 15,
+            "capacityHeat_kW": 600.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 23,
+        "fields": {
+            "heatconversionasset_ptr": 23,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 27,
+        "fields": {
+            "heatconversionasset_ptr": 27,
+            "capacityHeat_kW": 60.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 32,
+        "fields": {
+            "heatconversionasset_ptr": 32,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 38,
+        "fields": {
+            "heatconversionasset_ptr": 38,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 44,
+        "fields": {
+            "heatconversionasset_ptr": 44,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 50,
+        "fields": {
+            "heatconversionasset_ptr": 50,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 56,
+        "fields": {
+            "heatconversionasset_ptr": 56,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 57,
+        "fields": {
+            "heatconversionasset_ptr": 57,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.chemicalheatconversionasset",
+        "pk": 63,
+        "fields": {
+            "heatconversionasset_ptr": 63,
+            "capacityHeat_kW": 30.0
+        }
+    },
+    {
+        "model": "holon.electricheatconversionasset",
+        "pk": 14,
+        "fields": {
+            "heatconversionasset_ptr": 14,
+            "capacityElectricity_kW": 200.0
+        }
+    },
+    {
+        "model": "holon.productionasset",
+        "pk": 1,
+        "fields": {
+            "energyasset_ptr": 1,
+            "type": "RESIDUALHEATHT"
+        }
+    },
+    {
+        "model": "holon.productionasset",
+        "pk": 2,
+        "fields": {
+            "energyasset_ptr": 2,
+            "type": "RESIDUALHEATLT"
+        }
+    },
+    {
+        "model": "holon.productionasset",
+        "pk": 10,
+        "fields": {
+            "energyasset_ptr": 10,
+            "type": "RESIDUALHEATHT"
+        }
+    },
+    {
+        "model": "holon.productionasset",
+        "pk": 13,
+        "fields": {
+            "energyasset_ptr": 13,
+            "type": "RESIDUALHEATLT"
+        }
+    },
+    {
+        "model": "holon.heatproductionasset",
+        "pk": 10,
+        "fields": {
+            "productionasset_ptr": 10,
+            "capacityHeat_kW": 600.0,
+            "deliveryTemp_degC": 100.0
+        }
+    },
+    {
+        "model": "holon.heatproductionasset",
+        "pk": 13,
+        "fields": {
+            "productionasset_ptr": 13,
+            "capacityHeat_kW": 300.0,
+            "deliveryTemp_degC": 15.0
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 6,
+        "fields": {
+            "energyasset_ptr": 6,
+            "type": "STORAGE_HEAT"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 9,
+        "fields": {
+            "energyasset_ptr": 9,
+            "type": "STORAGE_HEAT"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 17,
+        "fields": {
+            "energyasset_ptr": 17,
+            "type": "STORAGE_HEAT"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 18,
+        "fields": {
+            "energyasset_ptr": 18,
+            "type": "STORAGE_HEAT"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 19,
+        "fields": {
+            "energyasset_ptr": 19,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 25,
+        "fields": {
+            "energyasset_ptr": 25,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 28,
+        "fields": {
+            "energyasset_ptr": 28,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 34,
+        "fields": {
+            "energyasset_ptr": 34,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 40,
+        "fields": {
+            "energyasset_ptr": 40,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 46,
+        "fields": {
+            "energyasset_ptr": 46,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 52,
+        "fields": {
+            "energyasset_ptr": 52,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.storageasset",
+        "pk": 59,
+        "fields": {
+            "energyasset_ptr": 59,
+            "type": "HEATMODEL"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 6,
+        "fields": {
+            "storageasset_ptr": 6,
+            "capacityHeat_kW": 2000.0,
+            "minTemp_degC": 60,
+            "maxTemp_degC": 80,
+            "setTemp_degC": 70,
+            "initialTemperature_degC": 70,
+            "lossFactor_WpK": 3.0,
+            "heatCapacity_JpK": 120000000.0,
+            "ambientTempType": "GROUND"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 9,
+        "fields": {
+            "storageasset_ptr": 9,
+            "capacityHeat_kW": 2000.0,
+            "minTemp_degC": 70,
+            "maxTemp_degC": 1000,
+            "setTemp_degC": 90,
+            "initialTemperature_degC": 90,
+            "lossFactor_WpK": 3.0,
+            "heatCapacity_JpK": 120000000.0,
+            "ambientTempType": "GROUND"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 17,
+        "fields": {
+            "storageasset_ptr": 17,
+            "capacityHeat_kW": 2000.0,
+            "minTemp_degC": 70,
+            "maxTemp_degC": 100,
+            "setTemp_degC": 90,
+            "initialTemperature_degC": 90,
+            "lossFactor_WpK": 100.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "GROUND"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 18,
+        "fields": {
+            "storageasset_ptr": 18,
+            "capacityHeat_kW": 2000.0,
+            "minTemp_degC": 60,
+            "maxTemp_degC": 80,
+            "setTemp_degC": 70,
+            "initialTemperature_degC": 70,
+            "lossFactor_WpK": 100.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "GROUND"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 19,
+        "fields": {
+            "storageasset_ptr": 19,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 80.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 25,
+        "fields": {
+            "storageasset_ptr": 25,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 80.0,
+            "heatCapacity_JpK": 20000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 28,
+        "fields": {
+            "storageasset_ptr": 28,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 60.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 34,
+        "fields": {
+            "storageasset_ptr": 34,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 50.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 40,
+        "fields": {
+            "storageasset_ptr": 40,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 70.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 46,
+        "fields": {
+            "storageasset_ptr": 46,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 70.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 52,
+        "fields": {
+            "storageasset_ptr": 52,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 70.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    },
+    {
+        "model": "holon.heatstorageasset",
+        "pk": 59,
+        "fields": {
+            "storageasset_ptr": 59,
+            "capacityHeat_kW": 100.0,
+            "minTemp_degC": -10,
+            "maxTemp_degC": 50,
+            "setTemp_degC": 20,
+            "initialTemperature_degC": 20,
+            "lossFactor_WpK": 100.0,
+            "heatCapacity_JpK": 10000000.0,
+            "ambientTempType": "AIR"
+        }
+    }
+]

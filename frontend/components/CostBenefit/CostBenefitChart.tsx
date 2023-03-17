@@ -2,15 +2,15 @@ import React from "react";
 
 import {
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
+  Label,
   Legend,
   ReferenceLine,
-  Label,
-  BarChart,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 import { CostBenefitChartProps } from "./types";
 
@@ -24,7 +24,7 @@ export default function CostBenefitChart({
 
     return (
       <svg>
-        <line x1={x - (width - 30)} x2={x + 30} y1={y} y2={y} stroke={fill} strokeWidth={8} />
+        <line x1={x - (width - 75)} x2={x + 75} y1={y} y2={y} stroke={fill} strokeWidth={7} />
       </svg>
     );
   };
@@ -32,6 +32,23 @@ export default function CostBenefitChart({
   const convertToPositiveEuro = (tickItem: number) => {
     return "€ " + Math.abs(tickItem);
   };
+
+  const values = chartdata.flatMap(innerArr => Object.values(innerArr).flat());
+  const numberValues = values.map(Number).filter(Number.isFinite);
+  const [minValue, maxValue] = [Math.min(...numberValues), Math.max(...numberValues)];
+  const [newMin, newMax] = [Math.floor(minValue * 1.1), Math.ceil(maxValue * 1.1)];
+
+  /*
+  const values = chartdata.flatMap(innerArr => Object.values(innerArr).flat());
+  const numberValues = values.map(Number).filter(Number.isFinite); 
+
+  const minValue = Math.min(...filteredValues);
+  const maxValue = Math.max(...filteredValues);
+  console.log(values, filteredValues, minValue, maxValue);
+
+  const newMin = Math.floor(minValue * 1.1);
+  const newMax = Math.ceil(maxValue * 1.1);
+*/
 
   let columnLabel: string;
   const CustomTooltip = ({ active, payload, label }) => {
@@ -58,14 +75,14 @@ export default function CostBenefitChart({
       {chartdata.length > 0 && (
         <div className="flex-1">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart barGap={-40} data={chartdata} stackOffset="sign">
+            <BarChart barGap={-70} data={chartdata} stackOffset="sign">
               <CartesianGrid strokeDasharray="2" vertical={false} />
               <XAxis orientation="top" dataKey="name" axisLine={false} />
-              <YAxis tickFormatter={convertToPositiveEuro}>
+              <YAxis tickFormatter={convertToPositiveEuro} domain={[newMin, newMax]}>
                 <Label
                   position="center"
                   angle={-90}
-                  value="← Kosten &nbsp;  &nbsp; &nbsp;  Baten &nbsp;  →"
+                  value="← Kosten &nbsp;  &nbsp; &nbsp; &nbsp;  Baten &nbsp;  →"
                   offset={-25}
                 />
               </YAxis>
@@ -89,18 +106,20 @@ export default function CostBenefitChart({
                       stackId="stack"
                       onMouseOver={() => (columnLabel = label)}
                       onMouseLeave={() => (columnLabel = "")}
+                      isAnimationActive={false}
                     />
                   );
                 }
               })}
 
               <Bar
-                barSize={40}
+                barSize={70}
                 dataKey="Netto kosten"
                 shape={<CustomBarWithTarget />}
                 fill="#FF1818"
                 onMouseOver={() => (columnLabel = "Netto kosten")}
                 onMouseLeave={() => (columnLabel = "")}
+                isAnimationActive={false}
               />
             </BarChart>
           </ResponsiveContainer>

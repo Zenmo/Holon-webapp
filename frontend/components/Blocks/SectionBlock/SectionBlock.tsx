@@ -1,16 +1,18 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
-import { debounce } from "lodash";
-import { Content, InteractiveContent, Feedbackmodals } from "./types";
-import { StaticImage } from "@/components/ImageSelector/types";
-import { Background, GridLayout } from "../types";
-import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
-import ContentColumn from "./ContentColumn";
-import HolarchyTab from "./HolarchyTab";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
+import { StaticImage } from "@/components/ImageSelector/types";
+import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
+import { ScenarioContext } from "@/containers/StorylinePage/StorylinePage";
+import { Graphcolor } from "@/containers/types";
+import { debounce } from "lodash";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
-import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { Background, GridLayout } from "../types";
+import ContentColumn from "./ContentColumn";
+import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
+import HolarchyTab from "./HolarchyTab";
+import { Content, Feedbackmodals, InteractiveContent } from "./types";
 
 type Props = {
   data: {
@@ -27,10 +29,17 @@ type Props = {
   };
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
+  graphcolors?: Graphcolor[];
 };
 
 const initialData = {
   local: {
+    netload: null,
+    costs: null,
+    sustainability: null,
+    selfSufficiency: null,
+  },
+  intermediate: {
     netload: null,
     costs: null,
     sustainability: null,
@@ -43,8 +52,9 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) {
+export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors }: Props) {
   const [kpis, setKPIs] = useState(initialData);
+  const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
     HolarchyFeedbackImageProps[]
@@ -53,6 +63,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
   const [loading, setLoading] = useState<boolean>(false);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
+  const scenario = useContext<number>(ScenarioContext);
 
   const sectionContainerRef = useRef(null);
 
@@ -111,18 +122,23 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
         (element): element is InteractiveContent =>
           element.type == "interactive_input" &&
           element.currentValue !== undefined &&
-          element.currentValue !== null
+          element.currentValue !== null &&
+          element.currentValue.length !== 0
       )
       .map((element): InteractiveElement => {
         return {
           interactiveElement: element.value.id,
-          value: element.currentValue,
+          value: Array.isArray(element.currentValue)
+            ? element.currentValue.join(",")
+            : element.currentValue,
         };
       });
     if (!interactiveElements || interactiveElements.length === 0) return;
-    getHolonKPIs({ interactiveElements: interactiveElements })
+
+    getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {
-        setKPIs(res);
+        setCostBenefitData(res.costBenefitResults);
+        setKPIs(res.dashboardResults);
         setLoading(false);
       })
       .catch(() => {
@@ -135,7 +151,13 @@ export default function SectionBlock({ data, pagetype, feedbackmodals }: Props) 
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
-      {costBenefitModal && <CostBenefitModal handleClose={closeCostBenefitModal} />}
+      {costBenefitModal && costBenefitData && (
+        <CostBenefitModal
+          handleClose={closeCostBenefitModal}
+          graphcolors={graphcolors ?? []}
+          costBenefitData={costBenefitData}
+        />
+      )}
 
       <div className="holonContentContainer">
         <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
