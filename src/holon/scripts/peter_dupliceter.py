@@ -11,60 +11,35 @@ from holon.models import (
     HouseGridConnection,
     Scenario,
 )
+from holon.models.asset import (
+    DieselVehicleAsset,
+    ElectricConsumptionAsset,
+    HeatConsumptionAsset,
+    HybridConsumptionAsset,
+)
 from holon.models.util import duplicate_model
 
 np.random.seed(0)
 
+A = 0.2
 
-house_ndf = {
+house_pdf = {
     "tempSetpointNight_degC": partial(np.random.normal, loc=15, scale=0.5, size=1),
     "tempSetpointNight_start_hr": partial(np.random.normal, loc=22, scale=1, size=1),
     "tempSetpointDay_degC": partial(np.random.normal, loc=20, scale=0.5, size=1),
     "tempSetpointDay_start_hr": partial(np.random.normal, loc=8, scale=0.5, size=1),
-    "pricelevelLowDifFromAvg_eurpkWh": partial(np.random.normal, loc=0.018, scale=0.004, size=1),
-    "pricelevelHighDifFromAvg_eurpkWh": partial(np.random.normal, loc=0.009, scale=0.002, size=1),
+    "pricelevelLowDifFromAvg_eurpkWh": partial(np.random.uniform, low=0.01, high=A, size=1),
+    "pricelevelHighDifFromAvg_eurpkWh": partial(np.random.uniform, low=0, high=A - 0.01, size=1),
 }
 
 
 multis = [
     {
-        "id": 14,
+        "id": 3,
         "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 19, "ndf": house_ndf},
-            {"model": BuildingGridConnection, "type": None, "factor": 19, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": None, "factor": 39, "pdf": house_pdf},
         ],
-    },
-    {
-        "id": 15,
-        "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
-        ],
-    },
-    {
-        "id": 16,
-        "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
-        ],
-    },
-    {
-        "id": 17,
-        "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
-        ],
-    },
-    {
-        "id": 18,
-        "action": [
-            {"model": HouseGridConnection, "type": "TERRACED", "factor": 29, "ndf": house_ndf},
-            {"model": HouseGridConnection, "type": "SEMIDETACHED", "factor": 9, "ndf": house_ndf},
-        ],
-    },
-    {
-        "id": 19,
-        "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
-        ],
-    },
+    }
 ]
 
 scenario = Scenario.objects.get(id=1)
@@ -73,6 +48,7 @@ scenario = Scenario.objects.get(id=1)
 def run():
     for m in multis:
         gridnode = scenario.gridnode_set.get(id=m["id"])
+
         for ma in m["action"]:
             if ma["type"] is None:
                 gridconnection = gridnode.gridconnection_set.instance_of(ma["model"]).get()
@@ -104,7 +80,7 @@ def run():
                     duplicate_model(contract, {"actor": dupe_actor})
 
                 # duplicate gridconnection
-                ndf_field_dict = {field: int(ndf()) for field, ndf in ma["ndf"].items()}
+                ndf_field_dict = {field: int(ndf()) for field, ndf in ma["pdf"].items()}
                 attr_dict = {"owner_actor": dupe_actor}
                 ndf_field_dict.update(attr_dict)
 
@@ -112,4 +88,29 @@ def run():
 
                 # duplicate asset
                 for asset in gridconnection_assets:
-                    duplicate_model(asset, {"gridconnection": dupe_gridconnection})
+                    verbruik_field = get_verbruik_field(asset)
+
+                    if verbruik_field:  # wel consumptionasset
+                        random_verbruik = np.random.uniform(low=1500, high=4500)
+                        print(
+                            f"Asset {asset.__class__.__name__} found, set field {verbruik_field} to {random_verbruik}"
+                        )
+                        duplicate_model(
+                            asset,
+                            {
+                                "gridconnection": dupe_gridconnection,
+                                verbruik_field: random_verbruik,
+                            },
+                        )
+                    else:  # geen consumptionasset
+                        duplicate_model(
+                            asset,
+                            {"gridconnection": dupe_gridconnection},
+                        )
+
+
+def get_verbruik_field(asset: EnergyAsset) -> str:
+    """Get the verbruikfield of the asset in question"""
+
+    if isinstance(asset, ElectricConsumptionAsset):
+        return "yearlyDemandElectricity_kWh"

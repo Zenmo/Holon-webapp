@@ -1,13 +1,11 @@
 import { basePageWrap } from "@/containers/BasePage";
-import { createContext } from "react";
 import styles from "./StorylinePage.module.css";
 
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
+import { ScenarioContext } from "context/ScenarioContext";
 import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant } from "../types";
 
 type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
-
-export const ScenarioContext = createContext(0);
 
 const StorylinePage = ({
   storyline,
