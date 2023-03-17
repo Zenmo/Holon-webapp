@@ -114,11 +114,6 @@ def run():
 def get_verbruik_field(asset: EnergyAsset) -> str:
     """Get the verbruikfield of the asset in question"""
 
-    if isinstance(asset, DieselVehicleAsset):
-        return "energyConsumption_kWhpkm"
-    if isinstance(asset, HeatConsumptionAsset):
-        return "yearlyDemandHeat_kWh"
+
     if isinstance(asset, ElectricConsumptionAsset):
         return "yearlyDemandElectricity_kWh"
-    if isinstance(asset, HybridConsumptionAsset):
-        return "yearlyDemandHeat_kWh"  # TODO OF IS DIT "yearlyDemandElectricity_kWh" ?? - TAVM

@@ -172,7 +172,7 @@
             "tempSetpointDay_degC": 20.0,
             "tempSetpointDay_start_hr": 8.0,
             "pricelevelLowDifFromAvg_eurpkWh": 0.05,
-            "pricelevelHighDifFromAvg_eurpkWh": 0.3
+            "pricelevelHighDifFromAvg_eurpkWh": 0.1
         }
     },
     {
