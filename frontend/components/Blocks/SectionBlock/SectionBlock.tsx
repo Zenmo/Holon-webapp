@@ -133,7 +133,6 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
             : element.currentValue,
         };
       });
-    if (!interactiveElements || interactiveElements.length === 0) return;
 
     getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {
