@@ -1,7 +1,7 @@
 ###################################################
 ## Note! This script is automatically generated! ##
 ###################################################
-
+from rest_framework import serializers
 
 from .custom import (
     ContractSerializer,
@@ -47,7 +47,7 @@ from holon.models.asset import (
 )
 
 
-from holon.models.actor import NonFirmActor
+from holon.models.actor import ActorGroup, ActorSubGroup
 
 
 from holon.models.gridconnection import (
@@ -220,9 +220,15 @@ class VehicleElectricStorageAssetSerializer(EnergyAssetSerializer):
         fields = "__all__"
 
 
-class NonFirmActorSerializer(ActorSerializer):
+class ActorGroupSerializer(ActorSerializer):
     class Meta:
-        model = NonFirmActor
+        model = ActorGroup
+        fields = "__all__"
+
+
+class ActorSubGroupSerializer(ActorSerializer):
+    class Meta:
+        model = ActorSubGroup
         fields = "__all__"
 
 
@@ -230,6 +236,11 @@ class BuiltEnvironmentGridConnectionSerializer(GridConnectionSerializer):
     class Meta:
         model = BuiltEnvironmentGridConnection
         fields = "__all__"
+
+    insulation_label = serializers.SerializerMethodField()
+
+    def get_insulation_label(self, obj):
+        return obj.get_insulation_label_display()
 
 
 class UtilityGridConnectionSerializer(GridConnectionSerializer):
@@ -243,11 +254,21 @@ class HouseGridConnectionSerializer(GridConnectionSerializer):
         model = HouseGridConnection
         fields = "__all__"
 
+    insulation_label = serializers.SerializerMethodField()
+
+    def get_insulation_label(self, obj):
+        return obj.get_insulation_label_display()
+
 
 class BuildingGridConnectionSerializer(GridConnectionSerializer):
     class Meta:
         model = BuildingGridConnection
         fields = "__all__"
+
+    insulation_label = serializers.SerializerMethodField()
+
+    def get_insulation_label(self, obj):
+        return obj.get_insulation_label_display()
 
 
 class ProductionGridConnectionSerializer(GridConnectionSerializer):

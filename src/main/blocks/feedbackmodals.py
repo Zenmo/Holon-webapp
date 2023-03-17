@@ -96,6 +96,11 @@ class FeedbackModal(blocks.StructBlock):
         required=True,
         help_text=_("Set the theme of this modal"),
     )
+
+    modalshowonce = blocks.BooleanBlock(
+        required=False, default=True, help_text="If checked, this feedback modal will appear once"
+    )
+
     image_selector = HolonImageChooserBlock()
 
     conditions = StreamBlock(

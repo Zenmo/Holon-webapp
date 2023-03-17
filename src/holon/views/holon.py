@@ -1,79 +1,18 @@
 from django.apps import apps
-from cloudclient.experiments import AnyLogicExperiment, prepare_scenario_as_experiment
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from holon.models import rule_mapping
+from holon.models import rule_mapping, Scenario
 from holon.models.scenario_rule import ModelType
+from holon.services.cloudclient import CloudClient
+from holon.services import CostBenedict
+from holon.services.data import Results
 
-from holon.models.pepe import Pepe
 from holon.serializers import HolonRequestSerializer
 from holon.models.util import all_subclasses
 
-RESULTS = [
-    "SystemHourlyElectricityImport_MWh",
-    "APIOutputTotalCostData",
-    "totalEHGVHourlyChargingProfile_kWh",
-]
-
-
-class HolonService(generics.CreateAPIView):
-    serializer_class = HolonRequestSerializer
-
-    def post(self, request):
-        serializer = HolonRequestSerializer(data=request.data)
-
-        if serializer.is_valid():
-            scenario = rule_mapping.get_scenario_and_apply_rules(
-                serializer.scenario, serializer.interactive_elements
-            )
-
-            pepe = Pepe()
-
-            data = serializer.validated_data
-
-            # TODO: this is hardcoded; should be a result from the DB::scenario linked to the storyline
-            # NOTE: other things (like balancer in ETM_service) are now also hardcoded to work with
-            # this specific scenario, please notify @noracto when you change this. Scenario = KEV
-            data["scenario"] = {"etm_scenario_id": 2175158, "model_name": "technical_debt"}
-            pepe.preprocessor = data
-
-            # holon_results = {}
-            scenario: AnyLogicExperiment = prepare_scenario_as_experiment(
-                data.get("scenario")["model_name"]
-            )
-            pepe.preprocessor.holon_payload = scenario.client.datamodel_payload
-            pepe.preprocessor.apply_interactive_to_payload()
-
-            holon_results = scenario.runScenario()
-
-            temp_holon_results = {
-                key: value for key, value in holon_results.items() if key in RESULTS
-            }
-            temp_holon_results.update(
-                {
-                    key: value
-                    for key, value in holon_results["APIOutputTotalCostData"][0].items()
-                    if key in RESULTS
-                }
-            )
-
-            holon_results = temp_holon_results
-
-            pepe.postprocessor = (holon_results, pepe.preprocessor.holon_payload)
-
-            pepe.upscale_to_etm()
-            pepe.calculate_costs()
-
-            results = pepe.postprocessor.results()
-
-            print(results)
-            return Response(
-                results,
-                status=status.HTTP_200_OK,
-            )
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
+DUMMY_COST = 42
 
 
 class HolonV2Service(generics.CreateAPIView):
@@ -82,44 +21,81 @@ class HolonV2Service(generics.CreateAPIView):
     def post(self, request):
         serializer = HolonRequestSerializer(data=request.data)
 
-        try:
-            if serializer.is_valid():
-                data = serializer.validated_data
+        # try:
+        if serializer.is_valid():
+            data = serializer.validated_data
 
-                scenario = rule_mapping.get_scenario_and_apply_rules(
-                    data["scenario"].id, data["interactive_elements"]
-                )
+            scenario = rule_mapping.get_scenario_and_apply_rules(
+                data["scenario"].id, data["interactive_elements"]
+            )
 
-                # TODO serialize and send to anylogic
+            # TODO hand over the original_scenario for configs and the edited scenario for datamodel
+            original_scenario = Scenario.objects.get(id=data["scenario"].id)
+            cc = CloudClient(original_scenario)
+            cc.run()
 
-                # Delete duplicated scenario
-                scenario.delete()
+            cost_benefit_results = CostBenedict(actors=cc.outputs["actors"]).determine_group_costs()
 
-                return Response(
-                    "success",
-                    status=status.HTTP_200_OK,
-                )
+            results = Results(
+                scenario=scenario,
+                anylogic_outcomes=cc.outputs,
+                inter_upscaling_outcomes=DUMMY_UPSCALE,
+                nat_upscaling_outcomes=DUMMY_UPSCALE,
+                cost_outcome=DUMMY_COST,
+                cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
+                cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
+            )
 
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
+            # Delete duplicated scenario
+            scenario.delete()
+            return Response(
+                results.to_dict(),
+                status=status.HTTP_200_OK,
+            )
+
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # except Exception as e:
+        #     return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
+    valid_relations = [apps.get_model("holon", model[0]) for model in ModelType.choices]
+
     def get(self, request):
         response = {}
+
         for model in ModelType.choices:
             model_name = model[0]
             model_type_class = apps.get_model("holon", model_name)
+
+            attributes = self.get_attributes_and_relations(model_type_class)
+
             response[model_name] = {
-                "attributes": [field.name for field in model_type_class()._meta.get_fields()],
+                "attributes": attributes,
                 "model_subtype": {},
             }
 
             for subclass in all_subclasses(model_type_class):
-                response[model_name]["model_subtype"][subclass.__name__] = [
-                    field.name for field in subclass()._meta.get_fields()
-                ]
+                response[model_name]["model_subtype"][
+                    subclass.__name__
+                ] = self.get_attributes_and_relations(subclass)
 
         return Response(response)
+
+    def get_attributes_and_relations(self, model_type_class):
+        attributes = []
+        for field in model_type_class()._meta.get_fields():
+            attribute = {"name": field.name}
+            if field.is_relation and issubclass(field.related_model, tuple(self.valid_relations)):
+                attribute["relation"] = field.related_model.__name__
+            attributes.append(attribute)
+        return attributes
+
+
+class HolonService(generics.CreateAPIView):
+    def post(self, request):
+        return Response(
+            "This endpoint is no longer in use, upgrade to the new endpoin!",
+            status=status.HTTP_410_GONE,
+        )

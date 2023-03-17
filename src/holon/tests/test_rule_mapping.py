@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.models.rule_action import RuleActionFactor
+from holon.models.rule_actions.rule_action_factor import RuleActionFactor
 
 
 class RuleMappingTestClass(TestCase):
@@ -24,23 +24,25 @@ class RuleMappingTestClass(TestCase):
             name="building_gas_burner",
             type=ConversionAssetType.GAS_BURNER,
             eta_r=0.95,
-            deliveryTemp_degc=90.0,
+            deliveryTemp_degC=90.0,
             capacityHeat_kW=60.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
             name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
         )
-        InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
+        self.interactive_element_continuous_values = (
+            InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
+        )
 
     def test_rule_mapping_gridconnection(self) -> None:
         # Arange
         rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
         factor = RuleActionFactor.objects.create(
-            asset_attribute="capacity_kw", min_value=5, max_value=55, rule=rule
+            model_attribute="capacity_kw", min_value=5, max_value=55, rule=rule
         )
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
@@ -56,12 +58,12 @@ class RuleMappingTestClass(TestCase):
     def test_rule_mapping_assets(self) -> None:
         # Arange
         rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.ENERGYASSET,
             model_subtype="ChemicalHeatConversionAsset",
         )
         factor = RuleActionFactor.objects.create(
-            asset_attribute="deliveryTemp_degc", min_value=5, max_value=55, rule=rule
+            model_attribute="deliveryTemp_degC", min_value=5, max_value=55, rule=rule
         )
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
@@ -72,4 +74,4 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         updated_asset = updated_scenario.assets[0]
-        self.assertEqual(updated_asset.deliveryTemp_degc, factor.min_value)
+        self.assertEqual(updated_asset.deliveryTemp_degC, factor.min_value)

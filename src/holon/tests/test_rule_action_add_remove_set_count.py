@@ -3,7 +3,6 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.models.rule_action import RuleActionFactor
 
 
 class RuleMappingTestClass(TestCase):
@@ -41,13 +40,15 @@ class RuleMappingTestClass(TestCase):
             name="building_heat_pump",
             type=ConversionAssetType.HEAT_PUMP_AIR,
             eta_r=0.95,
-            deliveryTemp_degc=70.0,
+            deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
         )
         self.interactive_element: InteractiveElement = InteractiveElement.objects.create(
             name="Input 1", type=ChoiceType.CHOICE_CONTINUOUS, scenario=self.scenario
         )
-        InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
+        self.interactive_element_continuous_values = (
+            InteractiveElementContinuousValues.objects.create(input=self.interactive_element)
+        )
 
     def test_rule_action_add_asset(self):
         """Test the add rule action"""
@@ -57,16 +58,16 @@ class RuleMappingTestClass(TestCase):
             name="template_heat_pump",
             type=ConversionAssetType.HEAT_PUMP_AIR,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityElectricity_kW=0.0,
         )
 
         rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
-        rule_action_add = RuleActionAdd.objects.create(asset=default_ehc, rule=rule)
+        rule_action_add = RuleActionAdd.objects.create(asset_to_add=default_ehc, rule=rule)
 
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
@@ -90,7 +91,7 @@ class RuleMappingTestClass(TestCase):
 
         # Arrange
         rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.ENERGYASSET,
             model_subtype="HybridHeatCoversionAsset",
         )
@@ -121,16 +122,18 @@ class RuleMappingTestClass(TestCase):
             name="template_heat_pump",
             type=ConversionAssetType.HEAT_PUMP_AIR,
             eta_r=0.0,
-            deliveryTemp_degc=0.0,
+            deliveryTemp_degC=0.0,
             capacityElectricity_kW=0.0,
         )
 
         rule = ScenarioRule.objects.create(
-            interactive_element=self.interactive_element,
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
             model_type=ModelType.GRIDCONNECTION,
             model_subtype="BuildingGridConnection",
         )
-        rule_action_set_count = RuleActionSetCount.objects.create(asset=default_ehc, rule=rule)
+        rule_action_set_count = RuleActionSetCount.objects.create(
+            asset_to_add=default_ehc, rule=rule
+        )
 
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 

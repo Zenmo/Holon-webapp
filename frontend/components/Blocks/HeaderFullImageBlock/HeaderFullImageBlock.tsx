@@ -16,7 +16,7 @@ type Props = {
 
 export default function HeaderFullImageBlock({ data }: Props) {
   const Tag = data.value.size;
-  const ima = data.value.imageSelector.img.src;
+  const ima = data.value.imageSelector?.img.src;
 
   return (
     <div

@@ -1,18 +1,18 @@
-import React, { useEffect, useMemo, useState, useRef, useContext } from "react";
-import { debounce } from "lodash";
-import { Content, InteractiveContent, Feedbackmodals } from "./types";
-import { StaticImage } from "@/components/ImageSelector/types";
-import { Background, GridLayout } from "../types";
-import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
-import ContentColumn from "./ContentColumn";
-import HolarchyTab from "./HolarchyTab";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
-import { getGrid } from "services/grid";
-import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
-import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
-import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { StaticImage } from "@/components/ImageSelector/types";
+import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { ScenarioContext } from "@/containers/StorylinePage/StorylinePage";
 import { Graphcolor } from "@/containers/types";
+import { debounce } from "lodash";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { getGrid } from "services/grid";
+import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { Background, GridLayout } from "../types";
+import ContentColumn from "./ContentColumn";
+import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
+import HolarchyTab from "./HolarchyTab";
+import { Content, Feedbackmodals, InteractiveContent } from "./types";
 
 type Props = {
   data: {
@@ -34,6 +34,12 @@ type Props = {
 
 const initialData = {
   local: {
+    netload: null,
+    costs: null,
+    sustainability: null,
+    selfSufficiency: null,
+  },
+  intermediate: {
     netload: null,
     costs: null,
     sustainability: null,
@@ -115,7 +121,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
         (element): element is InteractiveContent =>
           element.type == "interactive_input" &&
           element.currentValue !== undefined &&
-          element.currentValue !== null
+          element.currentValue !== null &&
+          element.currentValue.length !== 0
       )
       .map((element): InteractiveElement => {
         return {
@@ -129,7 +136,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
 
     getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {
-        setKPIs(res);
+        setKPIs(res.dashboardResults);
         setLoading(false);
       })
       .catch(() => {

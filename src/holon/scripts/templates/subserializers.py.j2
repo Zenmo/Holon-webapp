@@ -1,7 +1,7 @@
 ###################################################
 ## Note! This script is automatically generated! ##
 ###################################################
-
+from rest_framework import serializers
 {# import custom serializers #}
 from .{{ custom_serializer_module }} import (
 {% for module in outputs %}{% if not loop.last %}    {{ module.main_class}}Serializer,{% else %}
@@ -11,17 +11,22 @@ from .{{ custom_serializer_module }} import (
 {% for module in outputs %}
 {% if module.subclasses|length > 0 %}
 from {{ module.module }} import (
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
-{% else %}        {{ subclass }}{% endif %}{% endfor %}
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass.name }},
+{% else %}        {{ subclass.name }}{% endif %}{% endfor %}
 )
 {% endif %}{% endfor %}
 {% for module in outputs %}{% if module.subclasses|length > 0 %}{% for subclass in module.subclasses %}
-class {{ subclass }}Serializer({{ module.main_class}}Serializer):
+class {{ subclass.name }}Serializer({{ module.main_class}}Serializer):
 
     class Meta:
-        model = {{ subclass }}
+        model = {{ subclass.name }}
         fields = '__all__'
 
+    {% if subclass.has_insulation_label  is sameas true %}
+    insulation_label = serializers.SerializerMethodField()
+    def get_insulation_label(self, obj):
+        return obj.get_insulation_label_display()
+    {% endif %}
 {% endfor %}{% endif %}{% endfor %}
 
 ###################################################

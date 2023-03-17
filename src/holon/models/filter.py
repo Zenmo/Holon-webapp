@@ -5,9 +5,8 @@ from django.db import models
 from django.db.models import Q
 from modelcluster.fields import ParentalKey
 from polymorphic.models import PolymorphicModel
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import FieldPanel
 
-from holon.models.scenario_rule import ScenarioRule
 from holon.models.util import all_subclasses
 
 
@@ -54,9 +53,7 @@ class Filter(PolymorphicModel):
 class AttributeFilter(Filter):
     """Filter on attribute"""
 
-    rule = ParentalKey(
-        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="attribute_filters"
-    )
+    rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="attribute_filters")
 
     class Meta:
         verbose_name = "AttributeFilter"
@@ -87,7 +84,7 @@ class RelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
 
     rule = ParentalKey(
-        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="relation_attribute_filters"
+        "holon.Rule", on_delete=models.CASCADE, related_name="relation_attribute_filters"
     )
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
@@ -104,7 +101,7 @@ class RelationAttributeFilter(Filter):
         super().clean()
 
         try:
-            if self.model_attribute not in self.model_attribute_options():
+            if self.model_attribute not in self.relation_model_attribute_options():
                 raise ValidationError("Invalid value model_attribute")
             if self.relation_field not in self.relation_field_options():
                 raise ValidationError("Invalid value relation_field")
@@ -115,6 +112,18 @@ class RelationAttributeFilter(Filter):
                 raise ValidationError("Invalid value relation_field_subtype")
         except ObjectDoesNotExist:
             return
+
+    def relation_model_attribute_options(self) -> list[str]:
+
+        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+        relation_model_type = (
+            self.relation_field_subtype
+            if self.relation_field_subtype
+            else model_type._meta.get_field(self.relation_field).name
+        )
+        model = apps.get_model("holon", relation_model_type)
+
+        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
 
     def relation_field_options(self) -> list[str]:
         model_type = (
@@ -165,7 +174,7 @@ class DiscreteAttributeFilter(Filter):
     """Filter on attribute with discrete series"""
 
     rule = ParentalKey(
-        "holon.ScenarioRule", on_delete=models.CASCADE, related_name="discrete_attribute_filters"
+        "holon.Rule", on_delete=models.CASCADE, related_name="discrete_attribute_filters"
     )
 
     def clean(self):

@@ -1,0 +1,315 @@
+[
+    {
+        "model": "holon.scenario",
+        "pk": 1,
+        "fields": {
+            "name": "Case bedrijventerrein",
+            "version": 1,
+            "comment": ""
+        }
+    },
+    {
+        "model": "holon.anylogiccloudconfig",
+        "pk": 1,
+        "fields": {
+            "api_key": "7a3563c1-ea1c-41d6-8009-b7abfd93f7ba",
+            "url": "https://engine.holontool.nl",
+            "model_name": "15mrt_branch_ehobs",
+            "model_version_number": 2,
+            "scenario": 1,
+            "owner_email": "gillis@zenmo.com"
+        }
+    },
+    {
+        "model": "holon.anylogiccloudoutput",
+        "pk": 1,
+        "fields": {
+            "anylogic_key": "O output actorData",
+            "internal_key": "actors",
+            "anylogic_model_configuration": 1
+        }
+    },
+    {
+        "model": "holon.anylogiccloudoutput",
+        "pk": 2,
+        "fields": {
+            "anylogic_key": "O simulation results",
+            "internal_key": "simulation_results",
+            "anylogic_model_configuration": 1
+        }
+    },
+    {
+        "model": "holon.anylogiccloudoutput",
+        "pk": 3,
+        "fields": {
+            "anylogic_key": "O hourly curves data",
+            "internal_key": "curves",
+            "anylogic_model_configuration": 1
+        }
+    },
+    {
+        "model": "holon.queryandconvertconfig",
+        "pk": 1,
+        "fields": {
+            "scenario": 1,
+            "module": "upscaling",
+            "name": "National upscaling",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 2203642
+        }
+    },
+    {
+        "model": "holon.queryandconvertconfig",
+        "pk": 2,
+        "fields": {
+            "scenario": 1,
+            "module": "cost",
+            "name": "Cost module",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 2175158
+        }
+    },
+    {
+        "model": "holon.queryandconvertconfig",
+        "pk": 3,
+        "fields": {
+            "scenario": 1,
+            "module": "upscaling",
+            "name": "Regional upscaling",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 2203666
+        }
+    },
+    {
+        "model": "holon.queryandconvertconfig",
+        "pk": 4,
+        "fields": {
+            "scenario": 1,
+            "module": "costbenefit",
+            "name": "",
+            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "etm_scenario_id": 987511684
+        }
+    },
+    {
+        "model": "holon.keyvaluepaircollection",
+        "pk": 1,
+        "fields": {
+            "related_config": 1
+        }
+    },
+    {
+        "model": "holon.keyvaluepaircollection",
+        "pk": 2,
+        "fields": {
+            "related_config": 3
+        }
+    },
+    {
+        "model": "holon.floatkeyvaluepair",
+        "pk": 1,
+        "fields": {
+            "related_key_value_collection": 1,
+            "key": "energy_hub_scaling_factor_holon_in_national",
+            "value": 1700.0
+        }
+    },
+    {
+        "model": "holon.floatkeyvaluepair",
+        "pk": 4,
+        "fields": {
+            "related_key_value_collection": 2,
+            "key": "energy_hub_scaling_factor_holon_in_regional",
+            "value": 80.0
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 1,
+        "fields": {
+            "internal_key": "energy_hub_installed_capacity_wind_turbines_on_land",
+            "endpoint": "input",
+            "data_type": "value",
+            "etm_key": "capacity_of_energy_power_wind_turbine_inland",
+            "related_config": 1,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 8,
+        "fields": {
+            "internal_key": "price_of_natural_gas_per_mwh",
+            "endpoint": "query",
+            "data_type": "value",
+            "etm_key": "price_of_natural_gas_per_mwh",
+            "related_config": 2,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 20,
+        "fields": {
+            "internal_key": "energy_hub_installed_capacity_wind_turbines_on_land",
+            "endpoint": "input",
+            "data_type": "value",
+            "etm_key": "capacity_of_energy_power_wind_turbine_inland",
+            "related_config": 3,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 21,
+        "fields": {
+            "internal_key": "shadow_tester_etm_key",
+            "endpoint": "input",
+            "data_type": "value",
+            "etm_key": "tester_etm_key",
+            "related_config": 4,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
+        "pk": 22,
+        "fields": {
+            "internal_key": "hourly_price_of_electricity_per_mwh",
+            "endpoint": "query",
+            "data_type": "curve",
+            "etm_key": "hourly_price_of_electricity_per_mwh",
+            "related_config": 2,
+            "related_interactive_element": null,
+            "interactive_upscaling_comment": null
+        }
+    },
+    {
+        "model": "holon.staticconversion",
+        "pk": 1,
+        "fields": {
+            "etm_query": 1,
+            "value": null,
+            "local_variable": 1,
+            "conversion": "multiply",
+            "shadow_key": "energy_hub_scaling_factor_holon_in_national_shadow"
+        }
+    },
+    {
+        "model": "holon.staticconversion",
+        "pk": 8,
+        "fields": {
+            "etm_query": 20,
+            "value": null,
+            "local_variable": 4,
+            "conversion": "multiply",
+            "shadow_key": "energy_hub_scaling_factor_holon_in_regional_shadow"
+        }
+    },
+    {
+        "model": "holon.anylogicconversion",
+        "pk": 1,
+        "fields": {
+            "etm_query": 8,
+            "conversion": "multiply",
+            "conversion_value_type": "value",
+            "anylogic_key": "totalMethaneImport_MWh",
+            "shadow_key": "totalMethaneImport_MWh_shadow"
+        }
+    },
+    {
+        "model": "holon.anylogicconversion",
+        "pk": 2,
+        "fields": {
+            "etm_query": 22,
+            "conversion": "in_product",
+            "conversion_value_type": "curve",
+            "anylogic_key": "SystemHourlyElectricityImport_MWh",
+            "shadow_key": "SystemHourlyElectricityImport_MWh_shadow"
+        }
+    },
+    {
+        "model": "holon.policy",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "policy"
+            ],
+            "parameter": "Time_buffer_for_spread_charging_min",
+            "value": "60",
+            "unit": "minutes",
+            "comment": "Time_buffer_for_spread_charging, Integer value",
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.policy",
+        "pk": 2,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "policy"
+            ],
+            "parameter": "Grid_MS_congestion_allowance_level_kW",
+            "value": "0",
+            "unit": "kW",
+            "comment": "gridOperator policy variable",
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.policy",
+        "pk": 3,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "policy"
+            ],
+            "parameter": "Grid_MS_congestion_price_eurpkWh",
+            "value": "0.2",
+            "unit": "eurpkWh",
+            "comment": "gridOperator policy value",
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.policy",
+        "pk": 4,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "policy"
+            ],
+            "parameter": "Grid_MS_congestion_threshold_fr",
+            "value": "0.5",
+            "unit": "fr",
+            "comment": "gridOperator policy value",
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.policy",
+        "pk": 5,
+        "fields": {
+            "polymorphic_ctype": [
+                "holon",
+                "policy"
+            ],
+            "parameter": "Grid_MS_congestion_pricing_consumption_eurpkWh",
+            "value": "TRUE",
+            "unit": null,
+            "comment": "gridOperator policy value",
+            "payload": 1,
+            "wildcard_JSON": null
+        }
+    }
+]

@@ -1,0 +1,500 @@
+{
+    "model": "holon.energyasset",
+    "pk": 900,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 900,
+    "fields": { "energyasset_ptr": 900, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 900,
+    "fields": {
+        "consumptionasset_ptr": 900,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 901,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 901,
+    "fields": { "energyasset_ptr": 901, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 901,
+    "fields": {
+        "consumptionasset_ptr": 901,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 902,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 902,
+    "fields": { "energyasset_ptr": 902, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 902,
+    "fields": {
+        "consumptionasset_ptr": 902,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 903,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 903,
+    "fields": { "energyasset_ptr": 903, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 903,
+    "fields": {
+        "consumptionasset_ptr": 903,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 904,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 904,
+    "fields": { "energyasset_ptr": 904, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 904,
+    "fields": {
+        "consumptionasset_ptr": 904,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 905,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 905,
+    "fields": { "energyasset_ptr": 905, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 905,
+    "fields": {
+        "consumptionasset_ptr": 905,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 906,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 906,
+    "fields": { "energyasset_ptr": 906, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 906,
+    "fields": {
+        "consumptionasset_ptr": 906,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 907,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 907,
+    "fields": { "energyasset_ptr": 907, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 907,
+    "fields": {
+        "consumptionasset_ptr": 907,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 908,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 908,
+    "fields": { "energyasset_ptr": 908, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 908,
+    "fields": {
+        "consumptionasset_ptr": 908,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 909,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 909,
+    "fields": { "energyasset_ptr": 909, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 909,
+    "fields": {
+        "consumptionasset_ptr": 909,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 910,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 910,
+    "fields": { "energyasset_ptr": 910, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 910,
+    "fields": {
+        "consumptionasset_ptr": 910,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 911,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 911,
+    "fields": { "energyasset_ptr": 911, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 911,
+    "fields": {
+        "consumptionasset_ptr": 911,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 912,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 912,
+    "fields": { "energyasset_ptr": 912, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 912,
+    "fields": {
+        "consumptionasset_ptr": 912,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 913,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 913,
+    "fields": { "energyasset_ptr": 913, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 913,
+    "fields": {
+        "consumptionasset_ptr": 913,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 914,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 914,
+    "fields": { "energyasset_ptr": 914, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 914,
+    "fields": {
+        "consumptionasset_ptr": 914,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 915,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 915,
+    "fields": { "energyasset_ptr": 915, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 915,
+    "fields": {
+        "consumptionasset_ptr": 915,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 916,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 916,
+    "fields": { "energyasset_ptr": 916, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 916,
+    "fields": {
+        "consumptionasset_ptr": 916,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 917,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 917,
+    "fields": { "energyasset_ptr": 917, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 917,
+    "fields": {
+        "consumptionasset_ptr": 917,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 918,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 918,
+    "fields": { "energyasset_ptr": 918, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 918,
+    "fields": {
+        "consumptionasset_ptr": 918,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},
+{
+    "model": "holon.energyasset",
+    "pk": 919,
+    "fields": {
+        "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+        "gridconnection": 1,
+        "gridnode": null,
+        "name": "Diesel_Truck",
+        "wildcard_JSON": null
+    }
+},
+{
+    "model": "holon.consumptionasset",
+    "pk": 919,
+    "fields": { "energyasset_ptr": 919, "type": "DIESEL_VEHICLE" }
+},
+{
+    "model": "holon.dieselvehicleasset",
+    "pk": 919,
+    "fields": {
+        "consumptionasset_ptr": 919,
+        "energyConsumption_kWhpkm": 3.0,
+        "vehicleScaling": 1
+    }
+},

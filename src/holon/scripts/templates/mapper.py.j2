@@ -8,8 +8,8 @@ from rest_polymorphic.serializers import PolymorphicSerializer
 {% if module.subclasses|length > 0 %}
 from {{ module.module }} import (
     {{ module.main_class }},
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }},
-{% else %}        {{ subclass }}{% endif %}{% endfor %}
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass.name }},
+{% else %}        {{ subclass.name }}{% endif %}{% endfor %}
 )
 {% else %}
 from {{ module.module }} import (
@@ -26,8 +26,8 @@ from .{{ custom_serializer_module }} import (
 {% for module in outputs %}
 {% if module.subclasses|length > 0 %}
 from .{{ subserializers }} import (
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}Serializer,
-{% else %}        {{ subclass }}Serializer{% endif %}{% endfor %}
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass.name }}Serializer,
+{% else %}        {{ subclass.name }}Serializer{% endif %}{% endfor %}
 )
 {% endif %}{% endfor %}
 
@@ -36,8 +36,8 @@ from .{{ subserializers }} import (
 class {{ module.main_class }}PolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         {{ module.main_class }}: {{ module.main_class }}Serializer,
-{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass }}: {{ subclass }}Serializer,
-{% else %}        {{ subclass }}: {{ subclass }}Serializer{% endif %}{% endfor %}
+{% for subclass in module.subclasses %}{% if not loop.last %}        {{ subclass.name }}: {{ subclass.name }}Serializer,
+{% else %}        {{ subclass.name }}: {{ subclass.name }}Serializer{% endif %}{% endfor %}
     }
 
 {% endfor %}
