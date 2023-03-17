@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
 import CostBenefitChart from "@/components/CostBenefit/CostBenefitChart";
 import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
+import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
+import { Graphcolor } from "@/containers/types";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { getHolonGraphColor } from "../../../../api/holon";
-
-import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
+import { useState } from "react";
 
 type Props = {
   handleClose: () => void;
@@ -14,10 +13,10 @@ type Props = {
     detail: Record<string, unknown>;
     overview: Record<string, unknown>;
   };
+  graphcolors: Graphcolor[];
 };
 
-export default function CostBenefitModal({ handleClose, costBenefitData }: Props) {
-  const [dataColors, setDataColors] = useState([]);
+export default function CostBenefitModal({ handleClose, costBenefitData, graphcolors }: Props) {
   const ignoredLabels = ["name", "Netto kosten"];
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -28,20 +27,16 @@ export default function CostBenefitModal({ handleClose, costBenefitData }: Props
 
   const convertGraphData = data => {
     const returnArr: unknown[] = [];
-    Object.entries(data).map(value => {
-      const constructObj = { ...value[1] };
-      constructObj.name = value[0].replace(/['"]+/g, "");
-      returnArr.push(constructObj);
-    });
+    if (data !== undefined) {
+      Object.entries(data).map(value => {
+        const constructObj = { ...value[1] };
+        constructObj.name = value[0].replace(/['"]+/g, "");
+        returnArr.push(constructObj);
+      });
+    }
 
     return returnArr;
   };
-
-  useEffect(() => {
-    getHolonGraphColor()
-      .then(result => setDataColors(result.items))
-      .catch(err => console.log(err));
-  }, []);
 
   const tabItems = [
     { tabName: "Grafiek", tabTitle: "Kosten en baten per categorie" },
@@ -82,12 +77,11 @@ export default function CostBenefitModal({ handleClose, costBenefitData }: Props
                 <Tab.Panel className="flex flex-1 max-h-full flex-col pt-2">
                   <CostBenefitChart
                     chartdata={convertGraphData(costBenefitData.overview)}
-                    dataColors={dataColors}
+                    dataColors={graphcolors ?? []}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
                 <Tab.Panel className="flex  max-h-full flex-col">
-                  <h2 className="text-center">Kosten en baten per groep</h2>
                   <CostBenefitTable tableData={costBenefitData.overview} />
                 </Tab.Panel>
 
@@ -95,7 +89,7 @@ export default function CostBenefitModal({ handleClose, costBenefitData }: Props
                   <CostBenefitDetail
                     chartdata={convertGraphData(costBenefitData.detail)}
                     detailData={costBenefitData.detail}
-                    dataColors={dataColors}
+                    dataColors={graphcolors ?? []}
                     ignoredLabels={ignoredLabels}
                   />
                 </Tab.Panel>
