@@ -1,10 +1,10 @@
 import json
 
-fp = "../peter-datamodel-fixture.json"
-fp_out = "../peter-datamodel-fixture_clean_keys.json"
+fp = "../peter-dupliceter-datamodel-fixture.json"
+fp_out = "../peter-dupliceter-datamodel-fixture_clean_keys.json"
 
-fp = "../datamodel-tvw-fixture.json"
-fp_out = "../datamodel-tvw-fixture_clean_keys.json"
+# fp = "../datamodel-tvw-fixture.json"
+# fp_out = "../datamodel-tvw-fixture_clean_keys.json"
 
 BASE_INT = 321000  # change me!
 
