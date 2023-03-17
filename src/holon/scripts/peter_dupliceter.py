@@ -73,7 +73,6 @@ def run():
             print(f"found {len(actor_contracts)} contracts for actor")
 
             for _ in range(ma["factor"]):
-
                 # duplicate actors
                 dupe_actor = duplicate_model(gridconnection_actor)
 
@@ -89,7 +88,6 @@ def run():
 
                 # duplicate asset
                 for asset in gridconnection_assets:
-
                     verbruik_field = get_verbruik_field(asset)
 
                     if verbruik_field:  # wel consumptionasset
@@ -113,7 +111,6 @@ def run():
 
 def get_verbruik_field(asset: EnergyAsset) -> str:
     """Get the verbruikfield of the asset in question"""
-
 
     if isinstance(asset, ElectricConsumptionAsset):
         return "yearlyDemandElectricity_kWh"
