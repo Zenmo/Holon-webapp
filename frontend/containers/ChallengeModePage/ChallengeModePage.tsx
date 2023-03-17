@@ -3,7 +3,7 @@ import styles from "./ChallengeModePage.module.css";
 
 import { FeedbackModal } from "@/components/Blocks/ChallengeFeedbackModal/types";
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
-import { ScenarioContext } from "@/context/ScenarioContext";
+import { ScenarioContext } from "context/ScenarioContext";
 import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant } from "../types";
 
 type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;

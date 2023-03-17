@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/context/*": ["./context/*"],
       "@/components/*": ["./components/*"],
       "@/containers/*": ["./containers/*"],
       "@/pages/*": ["./pages/*"],

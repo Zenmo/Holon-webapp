@@ -2,7 +2,7 @@ import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/C
 import { StaticImage } from "@/components/ImageSelector/types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
-import { ScenarioContext } from "@/context/ScenarioContext";
+import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
