@@ -11,6 +11,12 @@ from holon.models import (
     HouseGridConnection,
     Scenario,
 )
+from holon.models.asset import (
+    DieselVehicleAsset,
+    ElectricConsumptionAsset,
+    HeatConsumptionAsset,
+    HybridConsumptionAsset,
+)
 from holon.models.util import duplicate_model
 
 np.random.seed(0)
@@ -83,4 +89,35 @@ def run():
 
                 # duplicate asset
                 for asset in gridconnection_assets:
-                    duplicate_model(asset, {"gridconnection": dupe_gridconnection})
+
+                    verbruik_field = get_verbruik_field(asset)
+                    if verbruik_field:
+                        random_verbruik = np.random.uniform(low=1500, high=4500)
+                        print(
+                            f"Asset {asset.__class__.__name__} found, set field {verbruik_field} to {random_verbruik}"
+                        )
+                        duplicate_model(
+                            asset,
+                            {
+                                "gridconnection": dupe_gridconnection,
+                                verbruik_field: random_verbruik,
+                            },
+                        )
+                    else:
+                        duplicate_model(
+                            asset,
+                            {"gridconnection": dupe_gridconnection},
+                        )
+
+
+def get_verbruik_field(asset: EnergyAsset) -> str:
+    """Get the verbruikfield of the asset in question"""
+
+    if isinstance(asset, DieselVehicleAsset):
+        return "energyConsumption_kWhpkm"
+    if isinstance(asset, HeatConsumptionAsset):
+        return "yearlyDemandHeat_kWh"
+    if isinstance(asset, ElectricConsumptionAsset):
+        return "yearlyDemandElectricity_kWh"
+    if isinstance(asset, HybridConsumptionAsset):
+        return "yearlyDemandHeat_kWh"  # TODO OF IS DIT "yearlyDemandElectricity_kWh" ?? - TAVM
