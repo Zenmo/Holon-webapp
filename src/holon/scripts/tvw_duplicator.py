@@ -28,39 +28,39 @@ multis = [
     {
         "id": 14,
         "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 20, "ndf": house_ndf},
-            {"model": BuildingGridConnection, "type": None, "factor": 20, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": None, "factor": 19, "ndf": house_ndf},
+            {"model": BuildingGridConnection, "type": None, "factor": 19, "ndf": house_ndf},
         ],
     },
     {
         "id": 15,
         "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 40, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
         ],
     },
     {
         "id": 16,
         "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 40, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
         ],
     },
     {
         "id": 17,
         "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 40, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
         ],
     },
     {
         "id": 18,
         "action": [
-            {"model": HouseGridConnection, "type": "TERRACED", "factor": 30, "ndf": house_ndf},
-            {"model": HouseGridConnection, "type": "SEMIDETACHED", "factor": 10, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": "TERRACED", "factor": 29, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": "SEMIDETACHED", "factor": 9, "ndf": house_ndf},
         ],
     },
     {
         "id": 19,
         "action": [
-            {"model": HouseGridConnection, "type": None, "factor": 40, "ndf": house_ndf},
+            {"model": HouseGridConnection, "type": None, "factor": 39, "ndf": house_ndf},
         ],
     },
 ]
