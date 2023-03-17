@@ -83,17 +83,19 @@ def calculate_holon_kpis(anylogic_outcomes: dict) -> dict:
     )
     Sustainability_pct = min(100, Sustainability_pct)
 
-    MSLS_capacity_kW = get_key_over_all_results("netOverload_pct")
+    netOverload_pct = get_key_over_all_results("netOverload_pct")
+    if netOverload_pct == 1:
+        netload_mv_pos_pct = (
+            (get_key_over_all_results("MSLSnodePeakPositiveLoadElectricity_kW"))
+            / get_key_over_all_results("cumulativeCapacityLS")
+        ) * 100
 
-    netload_mv_pos_pct = (
-        (get_key_over_all_results("MSLSnodePeakPositiveLoadElectricity_kW")) / MSLS_capacity_kW
-    ) * 100
+        netload_mv_neg_pct = (
+            (get_key_over_all_results("MSLSnodePeakNegativeLoadElectricity_kW"))
+            / get_key_over_all_results("cumulativeCapacityLS")
+        ) * 100
 
-    netload_mv_neg_pct = (
-        (get_key_over_all_results("MSLSnodePeakNegativeLoadElectricity_kW")) / MSLS_capacity_kW
-    ) * 100
-
-    netOverload_pct = max(abs(netload_mv_pos_pct), abs(netload_mv_neg_pct))
+        netOverload_pct = max(abs(netload_mv_pos_pct), abs(netload_mv_neg_pct))
 
     KPIs = {
         "sustainability": round(Sustainability_pct, 1),
