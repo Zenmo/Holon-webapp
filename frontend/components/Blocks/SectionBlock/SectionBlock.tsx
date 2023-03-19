@@ -1,8 +1,8 @@
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { StaticImage } from "@/components/ImageSelector/types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
-import { ScenarioContext } from "@/containers/StorylinePage/StorylinePage";
 import { Graphcolor } from "@/containers/types";
+import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
@@ -133,7 +133,6 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
             : element.currentValue,
         };
       });
-    if (!interactiveElements || interactiveElements.length === 0) return;
 
     getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {
