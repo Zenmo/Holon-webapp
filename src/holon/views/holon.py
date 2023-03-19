@@ -28,9 +28,8 @@ class HolonV2Service(generics.CreateAPIView):
                     data["scenario"].id, data["interactive_elements"]
                 )
 
-                # TODO hand over the original_scenario for configs and the edited scenario for datamodel
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
-                cc = CloudClient(original_scenario)
+                cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
                 cc.run()
 
                 cost_benefit_results = CostBenedict(
@@ -58,6 +57,13 @@ class HolonV2Service(generics.CreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
+        finally:
+            # always delete the scenario!
+            try:
+                scenario.delete()
+            except NameError: # catch name error if the view crashed before instantiating the scenario
+                pass
+
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):

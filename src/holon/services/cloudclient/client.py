@@ -1,9 +1,11 @@
+import json
+
 from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
 from anylogiccloudclient.client.cloud_client import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
-from holon.models.scenario import Scenario
+
 from holon.models.config import AnylogicCloudInput
-import json
+from holon.models.scenario import Scenario
 
 
 class CloudClient:
@@ -12,11 +14,12 @@ class CloudClient:
     def __init__(
         self,
         scenario: Scenario,
+        original_scenario: Scenario,
     ):
         from holon.models.config import AnylogicCloudConfig
 
         # db lookup
-        config: AnylogicCloudConfig = scenario.anylogic_config.get()
+        config: AnylogicCloudConfig = original_scenario.anylogic_config.get()
         self.config = config
 
         # value attributes
