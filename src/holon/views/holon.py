@@ -45,7 +45,6 @@ class HolonV2Service(generics.CreateAPIView):
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
                 )
-
                 # Delete duplicated scenario
                 scenario.delete()
                 return Response(
@@ -61,9 +60,10 @@ class HolonV2Service(generics.CreateAPIView):
             # always delete the scenario!
             try:
                 scenario.delete()
-            except NameError: # catch name error if the view crashed before instantiating the scenario
+            except (
+                NameError
+            ):  # catch name error if the view crashed before instantiating the scenario
                 pass
-
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
