@@ -3,3 +3,6 @@
 
 # Add production extra requirements here
 django-storages[azure]
+opencensus-ext-azure==1.1.9
+opencensus-ext-django==0.8.0
+opencensus-ext-ocagent==0.7.1
