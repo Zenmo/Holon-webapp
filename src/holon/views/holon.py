@@ -2,16 +2,15 @@ from django.apps import apps
 from rest_framework import generics, status
 from rest_framework.response import Response
 
+import etm_service
+
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses
 from holon.serializers import HolonRequestSerializer
-from holon.services import CostBenedict, QConfig
+from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
-
-DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
-DUMMY_COST = 42
 
 
 class HolonV2Service(generics.CreateAPIView):
@@ -33,11 +32,17 @@ class HolonV2Service(generics.CreateAPIView):
 
                 cc.run()
 
-                # obtains a list of dicts as described
-                query_configs = [
-                    QConfig(c, anylogic_outcomes=cc.outputs, copied_scenario=scenario)
-                    for c in original_scenario.query_and_convert_config.all()
-                ]
+                # TODO: is this the way to distinguish the national and inter results?
+                etm_outcomes = {}
+                for name, outcome in ETMConnect.connect_from_scenario(
+                    original_scenario, scenario, cc.outputs
+                ):
+                    if name == "costs":
+                        etm_outcomes["cost_outcome"] = outcome
+                    elif name == "National upscaling":
+                        etm_outcomes["nat_upscaling_outcomes"] = outcome
+                    elif name == "Regional upscaling":
+                        etm_outcomes["inter_upscaling_outcomes"] = outcome
 
                 # ignore me! (TODO: should only be triggered on bedrijventerrein)
                 cost_benefit_results = CostBenedict(
@@ -47,11 +52,9 @@ class HolonV2Service(generics.CreateAPIView):
                 results = Results(
                     scenario=scenario,
                     anylogic_outcomes=cc.outputs,
-                    inter_upscaling_outcomes=DUMMY_UPSCALE,  # @Nora: insert upscaling here (see Results for expected data format)
-                    nat_upscaling_outcomes=DUMMY_UPSCALE,  # @Nora: insert upscaling here (see Results for expected data format)
-                    cost_outcome=DUMMY_COST,  # @Nora: insert costs here (see Results for expected data format)
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
+                    **etm_outcomes,
                 )
 
                 return Response(
