@@ -30,6 +30,7 @@ class HolonV2Service(generics.CreateAPIView):
 
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
+
                 cc.run()
 
                 cost_benefit_results = CostBenedict(
@@ -45,6 +46,7 @@ class HolonV2Service(generics.CreateAPIView):
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
                 )
+                
                 return Response(
                     results.to_dict(),
                     status=status.HTTP_200_OK,

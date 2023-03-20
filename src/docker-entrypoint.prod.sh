@@ -33,4 +33,4 @@ wait_for_db
 setup_django
 
 echo Starting using gunicorn
-exec gunicorn pipit.wsgi:application --bind 0.0.0.0:8000 --workers 3
+exec gunicorn pipit.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --graceful-timeout 60 
