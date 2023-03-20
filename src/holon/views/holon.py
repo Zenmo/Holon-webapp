@@ -6,7 +6,7 @@ from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses
 from holon.serializers import HolonRequestSerializer
-from holon.services import CostBenedict
+from holon.services import CostBenedict, QConfig
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 
@@ -33,6 +33,13 @@ class HolonV2Service(generics.CreateAPIView):
 
                 cc.run()
 
+                # obtains a list of dicts as described
+                query_configs = [
+                    QConfig(c, anylogic_outcomes=cc.outputs, copied_scenario=scenario)
+                    for c in original_scenario.query_and_convert_config.all()
+                ]
+
+                # ignore me! (TODO: should only be triggered on bedrijventerrein)
                 cost_benefit_results = CostBenedict(
                     actors=cc.outputs["actors"]
                 ).determine_group_costs()
@@ -40,9 +47,9 @@ class HolonV2Service(generics.CreateAPIView):
                 results = Results(
                     scenario=scenario,
                     anylogic_outcomes=cc.outputs,
-                    inter_upscaling_outcomes=DUMMY_UPSCALE,
-                    nat_upscaling_outcomes=DUMMY_UPSCALE,
-                    cost_outcome=DUMMY_COST,
+                    inter_upscaling_outcomes=DUMMY_UPSCALE,  # @Nora: insert upscaling here (see Results for expected data format)
+                    nat_upscaling_outcomes=DUMMY_UPSCALE,  # @Nora: insert upscaling here (see Results for expected data format)
+                    cost_outcome=DUMMY_COST,  # @Nora: insert costs here (see Results for expected data format)
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
                 )
