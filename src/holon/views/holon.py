@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
-from holon.models.util import all_subclasses
+from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer
 from holon.services import CostBenedict
 from holon.services.cloudclient import CloudClient
@@ -91,15 +91,6 @@ class HolonCMSLogic(generics.RetrieveAPIView):
         return Response(response)
 
     def get_attributes_and_relations(self, model_type_class):
-        def is_exclude_field(field):
-            if field.name.endswith("_ptr"):
-                # Exclude iternal polymorphic attributes for CMS
-                return True
-            if field.is_relation and hasattr(field, "field") and field.field.name.endswith("_ptr"):
-                # Exclude iternal polymorphic attributes of relations for CMS
-                return True
-            else:
-                return False
 
         attributes = []
 
