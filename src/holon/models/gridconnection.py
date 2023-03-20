@@ -38,7 +38,7 @@ class ElectrolyserMode(models.TextChoices):
 class GridConnection(PolymorphicModel, ClusterableModel):
     category = "GENERIC"
 
-    owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
+    owner_actor = models.ForeignKey(Actor, on_delete=models.CASCADE, null=True, blank=True)
     capacity_kw = models.FloatField()
     parent_electric = models.ForeignKey(
         ElectricGridNode, on_delete=models.SET_NULL, null=True, blank=True
@@ -62,13 +62,18 @@ class GridConnection(PolymorphicModel, ClusterableModel):
         null=True,
         blank=True,
     )
-    payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    payload = models.ForeignKey(Scenario, on_delete=models.CASCADE, null=True, blank=True)
     wildcard_JSON = models.JSONField(
         blank=True,
         null=True,
         help_text=_(
             "Use this field to define parameters that are not currently available in the datamodel."
         ),
+    )
+
+    is_rule_action_template = models.BooleanField(
+        default=False,
+        help_text=_("Set this to True when this model can be used as a template for rule actions"),
     )
 
     def __str__(self):
@@ -78,6 +83,12 @@ class GridConnection(PolymorphicModel, ClusterableModel):
         return ValidationError(
             "Should not be implemented at top level! Use a specific class for this case."
         )
+
+    def clean_foreign_keys(self):
+        if not self.is_rule_action_template and (self.payload is None or self.owner_actor is None):
+            raise ValidationError(
+                "GridConnection should be connected. Payload and Owner actor are required"
+            )
 
 
 class InsulationLabel(models.IntegerChoices):
@@ -119,10 +130,18 @@ class BuiltEnvironmentGridConnection(GridConnection):
     pricelevelLowDifFromAvg_eurpkWh = models.FloatField(blank=True, null=True)
     pricelevelHighDifFromAvg_eurpkWh = models.FloatField(blank=True, null=True)
 
+    def clean(self):
+        super().clean()
+        self.clean_foreign_keys()
+
 
 class UtilityGridConnection(GridConnection):
     category = "UTILITY"
     heating_type = models.CharField(max_length=100, choices=HeatingType.choices)
+
+    def clean(self):
+        super().clean()
+        self.clean_foreign_keys()
 
 
 class HousingType(models.TextChoices):
@@ -159,6 +178,10 @@ class ProductionCategory(models.TextChoices):
 
 class ProductionGridConnection(GridConnection):
     category = models.CharField(max_length=25, choices=ProductionCategory.choices)
+
+    def clean(self):
+        super().clean()
+        self.clean_foreign_keys()
 
 
 class IndustryType(models.TextChoices):

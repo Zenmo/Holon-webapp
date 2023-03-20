@@ -25,11 +25,27 @@ class GenericRuleActionAdd(RuleAction):
     """Class containing functionality for adding models to the filtered objects or setting the amount of specific type of model"""
 
     # one of these should be selected
-    asset_to_add = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True, blank=True)
-    gridconnection_to_add = models.ForeignKey(
-        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+    asset_to_add = models.ForeignKey(
+        EnergyAsset,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
     )
-    contract_to_add = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True, blank=True)
+    gridconnection_to_add = models.ForeignKey(
+        GridConnection,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
+    )
+    contract_to_add = models.ForeignKey(
+        Contract,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
+    )
 
     content_panels = [
         FieldPanel("asset_to_add"),

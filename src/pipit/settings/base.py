@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.settings",
     "wagtail.contrib.table_block",
     "wagtailmodelchooser",
+    "wagtail_trash",
     "modelcluster",
     "taggit",
     "wagtail_meta_preview",
