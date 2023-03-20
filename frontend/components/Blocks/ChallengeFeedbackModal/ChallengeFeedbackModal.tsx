@@ -41,8 +41,9 @@ export default function ChallengeFeedbackModal({
           if (modal.value.conditions.length > 0 && content.length) {
             //loop through all conditions within modal...
             for (const conditionItem of modal.value.conditions) {
-              //split parameter into [local/national] and [kpi]
-              const splittedParameter = conditionItem.value.parameter.split("|");
+              //split parameter into [local/national] and [kpi] if it is a string
+              const splittedParameter =
+                isNaN(conditionItem.value.parameter) && conditionItem.value.parameter.split("|");
 
               //kpivalue is the vaule of the assessed validator
               const kpivalue =
