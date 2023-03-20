@@ -23,13 +23,19 @@ class EnergyCarrier(models.TextChoices):
 
 class Contract(PolymorphicModel):
     contractType = models.CharField(
-        max_length=255, choices=ContractType.choices, default=ContractType.DELIVERY
+        max_length=255,
+        choices=ContractType.choices,
+        default=ContractType.DELIVERY,
+        null=True,
+        blank=True,
     )
     contractScope = models.ForeignKey(Actor, on_delete=models.CASCADE)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
     )
-    actor = models.ForeignKey(Actor, on_delete=models.CASCADE, related_name="contracts")
+    actor = models.ForeignKey(
+        Actor, on_delete=models.CASCADE, related_name="contracts", null=True, blank=True
+    )
     annualFee_eur = models.FloatField(default=0.0)
     wildcard_JSON = models.JSONField(
         blank=True,
@@ -39,6 +45,11 @@ class Contract(PolymorphicModel):
         ),
     )
 
+    is_rule_action_template = models.BooleanField(
+        default=False,
+        help_text=_("Set this to True when this model can be used as a template for rule actions"),
+    )
+
     def __str__(self):
         return f"c{self.id} - {self.contractType.lower()}"
 
@@ -46,6 +57,12 @@ class Contract(PolymorphicModel):
         return ValidationError(
             "Should not be implemented at top level! Use a specific class for this case."
         )
+
+    def clean_foreign_keys(self):
+        if not self.is_rule_action_template and (self.actor is None or self.contractScope is None):
+            raise ValidationError(
+                "Contract should be connected. actor and contractScope are required"
+            )
 
 
 class DeliveryContractType(models.TextChoices):
@@ -61,6 +78,8 @@ class DeliveryContract(Contract):
     def clean(self) -> None:
         if self.contractType != ContractType.DELIVERY:
             raise ValidationError(f"ContractType should be 'Delivery' for DeliveryContract")
+
+        self.self.clean_foreign_keys()
 
         return super().clean()
 
@@ -82,6 +101,8 @@ class ConnectionContract(Contract):
         if self.contractType != ContractType.CONNECTION:
             raise ValidationError(f"ContractType should be 'Connection' for ConnectionContract")
 
+        self.clean_foreign_keys()
+
         return super().clean()
 
 
@@ -100,6 +121,8 @@ class TaxContract(Contract):
         if self.contractType != ContractType.TAX:
             raise ValidationError(f"ContractType should be 'Tax' for TaxContract")
 
+        self.clean_foreign_keys()
+
         return super().clean()
 
 
@@ -117,5 +140,7 @@ class TransportContract(Contract):
     def clean(self) -> None:
         if self.contractType != ContractType.TRANSPORT:
             raise ValidationError(f"ContractType should be 'Transport' for TransportContract")
+
+        self.clean_foreign_keys()
 
         return super().clean()
