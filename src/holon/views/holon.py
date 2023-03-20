@@ -45,8 +45,6 @@ class HolonV2Service(generics.CreateAPIView):
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
                 )
-                # Delete duplicated scenario
-                scenario.delete()
                 return Response(
                     results.to_dict(),
                     status=status.HTTP_200_OK,
