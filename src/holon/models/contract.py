@@ -1,7 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
-from django.core.exceptions import ValidationError
 
 from holon.models.actor import Actor
 
@@ -25,7 +25,7 @@ class Contract(PolymorphicModel):
     contractType = models.CharField(
         max_length=255, choices=ContractType.choices, default=ContractType.DELIVERY
     )
-    contractScope = models.ForeignKey(Actor, on_delete=models.PROTECT)
+    contractScope = models.ForeignKey(Actor, on_delete=models.CASCADE)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
     )
