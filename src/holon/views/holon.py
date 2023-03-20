@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
-from holon.models.util import all_subclasses
+from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer
 from holon.services import CostBenedict
 from holon.services.cloudclient import CloudClient
@@ -91,8 +91,12 @@ class HolonCMSLogic(generics.RetrieveAPIView):
         return Response(response)
 
     def get_attributes_and_relations(self, model_type_class):
+
         attributes = []
+
         for field in model_type_class()._meta.get_fields():
+            if is_exclude_field(field):
+                continue
             attribute = {"name": field.name}
             if field.is_relation and issubclass(field.related_model, tuple(self.valid_relations)):
                 attribute["relation"] = field.related_model.__name__

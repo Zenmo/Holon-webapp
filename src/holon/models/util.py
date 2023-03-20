@@ -77,3 +77,14 @@ class RemoveModelBasesOptions(ModelOptionOperation):
     @property
     def migration_name_fragment(self):
         return "remove_%s_bases" % self.name_lower
+
+
+def is_exclude_field(field):
+    if field.name.endswith("_ptr"):
+        # Exclude iternal polymorphic attributes for CMS
+        return True
+    if field.is_relation and hasattr(field, "field") and field.field.name.endswith("_ptr"):
+        # Exclude iternal polymorphic attributes of relations for CMS
+        return True
+    else:
+        return False
