@@ -129,22 +129,16 @@ class GenericRuleActionAdd(RuleAction):
 
         # only take first n objects
         for filtererd_object in filtered_queryset:
-            if not self.model_to_add.__class__.objects.filter(
-                **{parent_fk_field_name: filtererd_object}
-            ).exists():
-                if objects_added < n:
-                    # add model_to_add to filtered object
-                    util.duplicate_model(
-                        self.model_to_add, {parent_fk_field_name: filtererd_object}
-                    )
-                    objects_added += 1
+            if reset_models_before_add:
+                self.model_to_add.__class__.objects.filter(**{parent_fk_field_name: filtererd_object}).delete()
 
-            # `set_count` mode, delete the objects of the model class under the filtered objects
-            elif reset_models_before_add:
-                self.model_to_add.__class__.objects.filter(
-                    **{parent_fk_field_name: filtererd_object}
-                ).delete()
-
+            if objects_added < n and not self.model_to_add.__class__.objects.filter(**{parent_fk_field_name: filtererd_object}).exists():
+                # add model_to_add to filtered object
+                util.duplicate_model(
+                    self.model_to_add, {parent_fk_field_name: filtererd_object}
+                )
+                objects_added += 1
+                
 
 class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
     """Add a set of n models to the filtered items"""
