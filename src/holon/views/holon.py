@@ -91,7 +91,6 @@ class HolonCMSLogic(generics.RetrieveAPIView):
         return Response(response)
 
     def get_attributes_and_relations(self, model_type_class):
-
         attributes = []
 
         for field in model_type_class()._meta.get_fields():

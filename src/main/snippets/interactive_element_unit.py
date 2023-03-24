@@ -10,10 +10,8 @@ from .snippet_base import SnippetBase
 
 @register_snippet
 class InteractiveElementUnit(SnippetBase):
-    name = models.CharField(
-        max_length=50
-    )
-    symbol = models.CharField( max_length=10)
+    name = models.CharField(max_length=50)
+    symbol = models.CharField(max_length=10)
 
     panels = [
         FieldPanel("name"),

@@ -15,7 +15,6 @@ import wagtail_headless_preview.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("customimage", "0003_alter_customimage_file_hash"),
         ("main", "0036_merge_20230130_1024"),

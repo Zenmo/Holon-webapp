@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0040_alter_challengemodepage_feedbackmodals"),
         ("main", "0043_alter_challengemodepage_storyline_and_more"),

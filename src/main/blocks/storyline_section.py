@@ -100,8 +100,8 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_max": option.slider_value_max,
                         "slider_unit": "",
                     }
-                    if option.slider_unit is not None: 
-                        option_dict['slider_unit'] = option.slider_unit.symbol
+                    if option.slider_unit is not None:
+                        option_dict["slider_unit"] = option.slider_unit.symbol
                     options_arr.append(option_dict)
 
             interactive_input_info = {

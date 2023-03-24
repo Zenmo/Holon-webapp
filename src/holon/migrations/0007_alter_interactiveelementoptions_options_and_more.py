@@ -6,7 +6,6 @@ import modelcluster.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0006_remove_storageasset_stateofcharge_r_and_more"),
     ]

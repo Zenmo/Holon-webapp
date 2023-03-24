@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0018_alter_storylinepage_storyline"),
         ("main", "0018_wikipage_introduction_delete_statictermpage"),

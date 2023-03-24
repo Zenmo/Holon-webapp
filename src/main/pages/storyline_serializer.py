@@ -16,6 +16,7 @@ class StorylinePageRoleTypeSerializer(serializers.ModelSerializer):
         model = StorylinePageRoleType
         fields = ["name", "slug"]
 
+
 class StorylinePageUniSerializer(serializers.ModelSerializer):
     """Serializer for the StorylinePageCategory"""
 

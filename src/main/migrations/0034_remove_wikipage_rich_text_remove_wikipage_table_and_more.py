@@ -34,7 +34,6 @@ def convert_to_richtext(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0034_alter_wikipage_table"),
     ]

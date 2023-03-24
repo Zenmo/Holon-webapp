@@ -185,7 +185,7 @@ class InteractiveElementContinuousValues(ClusterableModel):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+', 
+        related_name="+",
     )
 
     panels = [
@@ -193,5 +193,5 @@ class InteractiveElementContinuousValues(ClusterableModel):
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
         InlinePanel("rules", heading="Rules", label="Rules"),
-        FieldPanel('slider_unit')
+        FieldPanel("slider_unit"),
     ]

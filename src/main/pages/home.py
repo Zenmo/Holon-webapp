@@ -8,7 +8,6 @@ from ..blocks import TitleBlock, HeroBlock, CardsBlock, TextAndMediaBlock, Butto
 
 
 class HomePage(HeadlessPreviewMixin, BasePage):
-
     content = StreamField(
         [
             ("title_block", TitleBlock()),

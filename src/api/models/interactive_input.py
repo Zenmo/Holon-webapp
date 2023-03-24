@@ -51,9 +51,10 @@ LEVEL_CHOICES = (
     (LEVEL_INTERMEDIATE, "Intermediate"),
     (LEVEL_LOCAL, "Local"),
 )
+
+
 # Create your models here.
 class InteractiveInput(ClusterableModel):
-
     etm_key = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=100)
     type = models.CharField(
@@ -209,5 +210,5 @@ class InteractiveInputContinuousValues(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+', 
+        related_name="+",
     )
