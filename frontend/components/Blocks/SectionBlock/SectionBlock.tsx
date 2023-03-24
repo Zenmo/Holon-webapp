@@ -11,7 +11,7 @@ import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFee
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
-import HolarchyTab from "./HolarchyTab";
+import HolarchyTab from "./HolarchyTab/HolarchyTab";
 import { Content, Feedbackmodals, InteractiveContent } from "./types";
 
 type Props = {
@@ -158,17 +158,25 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
         />
       )}
 
-      <div className="holonContentContainer">
-        <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
+      <div className="holonContentContainer ">
+        <div className="sticky top-[87px] md:top-[110px] bg-white z-10 px-10 lg:px-16 pl-4 ">
           <div>
             <button
               onClick={closeHolarchyModal}
-              className={`px-6 py-2 ${data.value.background.color} rounded-t-lg border-x-2 border-t-2 border-solid`}>
+              className={`px-6 pb-2 ${
+                holarchyModal
+                  ? "bg-holon-gray-200 text-holon-slated-blue-600"
+                  : "bg-holon-blue-900 text-white"
+              } border-x-2 border-t-2 border-solid h-12`}>
               Interactiemodus {pagetype}
             </button>
             <button
               onClick={openHolarchyModal}
-              className={`px-6 py-2 bg-holon-blue-100 rounded-t-lg`}>
+              className={`px-6 pb-2 ${
+                holarchyModal
+                  ? "bg-holon-blue-900 text-white"
+                  : "bg-holon-gray-200 text-holon-slated-blue-600"
+              } border-x-2 border-t-2 border-solid h-12`}>
               Holarchie
             </button>
           </div>

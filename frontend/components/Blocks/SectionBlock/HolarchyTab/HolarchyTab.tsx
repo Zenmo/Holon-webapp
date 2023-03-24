@@ -1,10 +1,12 @@
-import HolarchyFeedbackImage from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
-import ContentColumn from "./ContentColumn";
-import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
-import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
 import { Content } from "@/components/Blocks/SectionBlock/types";
 import { StaticImage } from "@/components/ImageSelector/types";
+import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
 import { KPIData } from "@/components/KPIDashboard/types";
+import HolarchyFeedbackImage, {
+  HolarchyFeedbackImageProps,
+} from "../../HolarchyFeedbackImage/HolarchyFeedbackImage";
+import ContentColumn from "../ContentColumn";
+import LegendModal from "./LegendModal";
 
 type HolarchyTab = {
   holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
@@ -69,7 +71,9 @@ export default function HolarchyTab({
 
         <div className="row-span-1 row-start-4 col-start-1 col-span-1 md:col-start-2  md:col-span-1  md:row-span-3 md:row-start-1 grid grid-rows grid-rows-3 overflow-hidden">
           {/*image - highest block*/}
-          <div className="row-start-1 bg-holon-holarchy-national row-span-1 col-start-1 col-span-1 "></div>
+          <div className="row-start-1 bg-holon-holarchy-national row-span-1 col-start-1 col-span-1 ">
+            <LegendModal />
+          </div>
 
           {/*image - middle block showing image*/}
           <div className="relative bg-holon-holarchy-intermediate row-start-2 row-span-1 col-start-1 col-span-1 ">
