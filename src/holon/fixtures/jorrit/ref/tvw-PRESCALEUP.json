@@ -2399,7 +2399,7 @@
         "pk": 12,
         "fields": {
             "conversionasset_ptr": 12,
-            "deliveryTemp_degc": 0.0
+            "deliveryTemp_degC": 0.0
         }
     },
     {
@@ -2407,7 +2407,7 @@
         "pk": 14,
         "fields": {
             "conversionasset_ptr": 14,
-            "deliveryTemp_degc": 60.0
+            "deliveryTemp_degC": 60.0
         }
     },
     {
@@ -2415,7 +2415,7 @@
         "pk": 15,
         "fields": {
             "conversionasset_ptr": 15,
-            "deliveryTemp_degc": 100.0
+            "deliveryTemp_degC": 100.0
         }
     },
     {
@@ -2423,7 +2423,7 @@
         "pk": 23,
         "fields": {
             "conversionasset_ptr": 23,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2431,7 +2431,7 @@
         "pk": 27,
         "fields": {
             "conversionasset_ptr": 27,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2439,7 +2439,7 @@
         "pk": 32,
         "fields": {
             "conversionasset_ptr": 32,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2447,7 +2447,7 @@
         "pk": 38,
         "fields": {
             "conversionasset_ptr": 38,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2455,7 +2455,7 @@
         "pk": 44,
         "fields": {
             "conversionasset_ptr": 44,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2463,7 +2463,7 @@
         "pk": 50,
         "fields": {
             "conversionasset_ptr": 50,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2471,7 +2471,7 @@
         "pk": 56,
         "fields": {
             "conversionasset_ptr": 56,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2479,7 +2479,7 @@
         "pk": 57,
         "fields": {
             "conversionasset_ptr": 57,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
@@ -2487,7 +2487,7 @@
         "pk": 63,
         "fields": {
             "conversionasset_ptr": 63,
-            "deliveryTemp_degc": 90.0
+            "deliveryTemp_degC": 90.0
         }
     },
     {
