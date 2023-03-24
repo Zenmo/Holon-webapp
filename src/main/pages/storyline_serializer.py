@@ -6,6 +6,7 @@ from main.pages.base_storyline_challengemode import (
     StorylinePageInformationType,
 )
 from main.snippets.graphcolors import GraphColors
+from main.snippets.interactive_element_unit import InteractiveElementUnit
 
 
 class StorylinePageRoleTypeSerializer(serializers.ModelSerializer):
@@ -14,6 +15,13 @@ class StorylinePageRoleTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = StorylinePageRoleType
         fields = ["name", "slug"]
+
+class StorylinePageUniSerializer(serializers.ModelSerializer):
+    """Serializer for the StorylinePageCategory"""
+
+    class Meta:
+        model = InteractiveElementUnit
+        fields = ["name", "unit"]
 
 
 class StorylinePageGraphColorSerializer(serializers.ModelSerializer):

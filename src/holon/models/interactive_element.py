@@ -7,6 +7,8 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.snippets.models import register_snippet
 from wagtailmodelchooser import register_model_chooser, Chooser, register_filter
 from django.core.validators import MinValueValidator
+from main.snippets.interactive_element_unit import InteractiveElementUnit
+from django.db import models
 
 from wagtail.admin.panels import PageChooserPanel
 from holon.models.scenario import Scenario
@@ -178,10 +180,18 @@ class InteractiveElementContinuousValues(ClusterableModel):
         default=100,
         help_text=_("Maximum amount of the continuous input"),
     )
+    slider_unit = models.ForeignKey(
+        InteractiveElementUnit,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+', 
+    )
 
     panels = [
         FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
         InlinePanel("rules", heading="Rules", label="Rules"),
+        FieldPanel('slider_unit')
     ]

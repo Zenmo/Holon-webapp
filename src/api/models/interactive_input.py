@@ -7,6 +7,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.models import Orderable
 from wagtail.models import Page
 from wagtail.admin.panels import PageChooserPanel
+from main.snippets.interactive_element_unit import InteractiveElementUnit
 
 # from django.core.validators import MinValueValidator
 
@@ -202,4 +203,11 @@ class InteractiveInputContinuousValues(models.Model):
         null=True,
         default=100,
         help_text=_("Maximum amount of the continuous input"),
+    )
+    slider_unit = models.ForeignKey(
+        InteractiveElementUnit,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+', 
     )
