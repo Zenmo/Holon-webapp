@@ -1,3 +1,4 @@
+from datetime import datetime
 from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ScenarioRule
 from holon.serializers import InteractiveElementInput
@@ -8,6 +9,8 @@ def get_scenario_and_apply_rules(
     scenario_id: int, interactive_element_inputs: list[InteractiveElementInput]
 ) -> Scenario:
     """Load a scenario, apply rules from interactive elements and return with mapped fields"""
+
+    print(f"timestamp {datetime.now()}")
 
     # clone scenario
     scenario = Scenario.objects.get(id=scenario_id).clone()
@@ -33,4 +36,5 @@ def get_scenario_and_apply_rules(
                 filtered_queryset = rule.get_filtered_queryset(scenario)
                 rule.apply_rule_actions(filtered_queryset, value)
 
+    print(f"timestamp {datetime.now()}")
     return scenario

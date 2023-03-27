@@ -1,3 +1,5 @@
+from datetime import datetime
+from pprint import pprint
 from django.apps import apps
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -24,19 +26,23 @@ class HolonV2Service(generics.CreateAPIView):
 
         try:
             if serializer.is_valid():
-                return Response(
-                    {
-                        "dashboard_results": dashboard_result_json,
-                        "cost_benefit_results": costbenefit_result_json,
-                    },
-                    status=status.HTTP_200_OK,
-                )
+                # return Response(
+                #     {
+                #         "dashboard_results": dashboard_result_json,
+                #         "cost_benefit_results": costbenefit_result_json,
+                #     },
+                #     status=status.HTTP_200_OK,
+                # )
                 data = serializer.validated_data
 
                 scenario = rule_mapping.get_scenario_and_apply_rules(
                     data["scenario"].id, data["interactive_elements"]
                 )
 
+                # return Response(
+                #     "hoi",
+                #     status=status.HTTP_200_OK,
+                # )
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
 
@@ -64,6 +70,9 @@ class HolonV2Service(generics.CreateAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            import traceback
+
+            # print(traceback.format_exc())
             return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
         finally:
             # always delete the scenario!

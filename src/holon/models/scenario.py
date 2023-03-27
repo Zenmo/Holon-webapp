@@ -66,12 +66,19 @@ class Scenario(ClusterableModel):
 
         return assets
 
+    # import line_profiler
+    # import atexit
+
+    # profile = line_profiler.LineProfiler()
+    # atexit.register(profile.print_stats)
+
+    # @profile
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
 
         from holon.models import Actor, EnergyAsset, GridConnection, GridNode, Policy, Contract
 
-        old_scenario_id = self.id
+        # old_scenario_id = self.id
 
         scenario_old = (
             Scenario.objects.prefetch_related("actor_set")
@@ -85,103 +92,90 @@ class Scenario(ClusterableModel):
         )
 
         with transaction.atomic():
-            # DUPLICATE SCENARIO
-            scenario_new = duplicate_model(self)
+            new_scenario = duplicate_model(self)
 
-            # DUPLICATE ACTORS
+            # actors = Actor.objects.filter(payload_id=old_scenario_id)
             actors = scenario_old.actor_set.all()
-            actor_old_ids = [actor.id for actor in actors]
-            actors = bulk_duplicate(actors, {"payload": scenario_new})
-
+            print(f"duplicating {len(actors)} actors")
             actor_id_to_new_model_mapping = {}
-            for actor_new, actor_old_id in zip(actors, actor_old_ids):
-                actor_id_to_new_model_mapping[actor_old_id] = actor_new
 
-            # DUPLICATE CONTRACTS
-            contracts = Contract.objects.none()
-            attributes = []
+            for actor in actors:
+                actor_id = actor.id
+                new_actor = duplicate_model(actor, {"payload": new_scenario})
 
-            for actor_new in actors:
-                contracts |= actor_new.contracts.all()
-                attributes += [
+                actor_id_to_new_model_mapping[actor_id] = new_actor
+
+            contracts = Contract.objects.filter(actor__payload_id=scenario_old.id)
+            print(f"duplicating {len(contracts)} contracts")
+            for contr in contracts:
+                duplicate_model(
+                    contr,
                     {
-                        "actor": actor_id_to_new_model_mapping[contract.actor.id],
-                        "contractScope": actor_id_to_new_model_mapping[contract.contractScope.id],
-                    }
-                    for contract in contracts
-                ]
+                        "actor": actor_id_to_new_model_mapping[contr.actor.id],
+                        "contractScope": actor_id_to_new_model_mapping[contr.contractScope.id],
+                    },
+                )
 
-            bulk_duplicate(contracts, attributes)
-
-            # DUPLICATE GRIDNODES
+            # gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
             gridnodes = scenario_old.gridnode_set.all()
-            gridnode_old_ids = [gridnode.id for gridnode in gridnodes]
-
-            attributes = [
-                {
-                    "payload": scenario_new,
-                    "owner_actor": actor_id_to_new_model_mapping[gridnode.owner_actor_id],
-                }
-                for gridnode in gridnodes
-            ]
-
-            gridnodes = bulk_duplicate(gridnodes, attributes)
-
+            print(f"duplicating {len(gridnodes)} gridnodes")
             gridnode_id_to_new_model_mapping = {}
-            for gridnode_old_id, gridnode_new in zip(gridnode_old_ids, gridnodes):
-                gridnode_id_to_new_model_mapping[gridnode_old_id] = gridnode_new
+            for gridnode in gridnodes:
+                gridnode_id = gridnode.id
+                new_gridnode = duplicate_model(
+                    gridnode,
+                    {
+                        "payload": new_scenario,
+                        "owner_actor": actor_id_to_new_model_mapping[gridnode.owner_actor_id],
+                    },
+                )
 
-            # Update gridnode parent # TODO stroom line
-            # gridnodes = scenario_new.gridnode_set.all()
-            # gridnodes = GridNode.objects.filter(payload_id=scenario_new.id)
-            for gridnode, gridnode_old_id in zip(gridnodes, gridnode_old_ids):
+                gridnode_id_to_new_model_mapping[gridnode_id] = new_gridnode
+
+            # Update gridnode parent
+            new_gridnodes = GridNode.objects.filter(payload_id=new_scenario.id)
+            for gridnode in new_gridnodes:
                 if gridnode.parent:
                     gridnode.parent = gridnode_id_to_new_model_mapping[gridnode.parent.id]
-                    gridnode_new = gridnode.save()
-                    gridnode_id_to_new_model_mapping[gridnode_old_id] = gridnode_new
+                    gridnode.save()
 
-            # DUPLICATE GRIDCONNECTIONS
+            # gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
             gridconnections = scenario_old.gridconnection_set.all()
+            print(f"duplicating {len(gridconnections)} gridconnections")
 
-            # get gridconnection ids and assets (for later)
-            gridconnection_asset_lists = [
-                gridconnection.energyasset_set.all() for gridconnection in gridconnections
-            ]
-
-            # set up attributes for new gridconnections
-            attributes = [
-                {
-                    "payload": scenario_new,
+            asset_count = 0
+            for gridconnection in gridconnections:
+                attributes_to_update = {
+                    "payload": new_scenario,
                     "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
-                    "parent_heat": gridnode_id_to_new_model_mapping.get(
-                        gridconnection.parent_heat_id, None
-                    ),
-                    "parent_electric": gridnode_id_to_new_model_mapping.get(
-                        gridconnection.parent_electric_id, None
-                    ),
                 }
-                for gridconnection in gridconnections
-            ]
+                if gridconnection.parent_heat:
+                    attributes_to_update["parent_heat"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_heat.id
+                    ]
+                if gridconnection.parent_electric:
+                    attributes_to_update["parent_electric"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_electric.id
+                    ]
 
-            gridconnections = bulk_duplicate(gridconnections, attributes)
+                gridconnection_id = gridconnection.pk
+                new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
 
-            # DUPLICATE ASSETS
-            assets = EnergyAsset.objects.none()
-            attributes = []
+                assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
+                asset_count += len(assets)
+                bulk_duplicate(assets, {"gridconnection": new_gridconnection})
+                # for asset in assets:
+                #     duplicate_model(asset, {"gridconnection": new_gridconnection})
 
-            for gridconnection_new, gridconnections_assets in zip(
-                gridconnections, gridconnection_asset_lists
-            ):
-                assets |= gridconnections_assets
-                attributes += [{"gridconnection": gridconnection_new}]
+            print(f"duplicating {asset_count} assets")
 
-            bulk_duplicate(assets, attributes)
-
-            # DUPLICATE POLICIES
+            # policies = Policy.objects.filter(payload_id=old_scenario_id)
             policies = scenario_old.policy_set.all()
-            bulk_duplicate(policies, {"payload": scenario_new})
+            print(f"duplicating {len(policies)} policies")
+            for policy in policies:
+                duplicate_model(policy, {"payload": new_scenario})
 
-            return scenario_new
+            return new_scenario
 
     def clone_old(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""

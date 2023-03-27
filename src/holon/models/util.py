@@ -52,6 +52,28 @@ def duplicate_model(obj, attrs={}):
     return obj
 
 
+def bulk_duplicate(queryset: PolymorphicQuerySet, attributes: dict = {}):
+    """Duplicate multiple models at once. This invalidates the objects in the original queryset"""
+
+    if not queryset:
+        return
+
+    instances = queryset.get_real_instances()
+    instances_new = []
+
+    base_class = polymorphic_utils.get_base_polymorphic_model(instances[0].__class__)
+    for instance in instances:
+        instance.pk = None
+        instance.id = None
+
+        for key, value in attributes.items():
+            setattr(instance, key, value)
+
+        instances_new.append(instance)
+
+    base_class.objects.bulk_create(instances_new)
+
+
 # import line_profiler
 # import atexit
 
@@ -60,24 +82,24 @@ def duplicate_model(obj, attrs={}):
 
 
 # @profile
-def bulk_duplicate(queryset: PolymorphicQuerySet, attributes: Union[dict, list[dict]] = {}):
+def bulk_duplicate_old(queryset: PolymorphicQuerySet, attributes: Union[dict, list[dict]] = {}):
     """Duplicate multiple models at once. This invalidates the objects in the original queryset"""
 
-    instances = queryset.get_real_instances()
+    # instances = queryset.get_real_instances()
 
-    if not instances:
+    if not queryset:
         return
 
-    base_class = polymorphic_utils.get_base_polymorphic_model(instances[0].__class__)
-
     if isinstance(attributes, dict):
-        attributes = [attributes] * len(instances)
+        attributes = [attributes] * len(queryset)
+
+    assert len(queryset) == len(attributes)
 
     instances_new = []
 
     with transaction.atomic():
 
-        for instance, attrs in zip(instances, attributes):
+        for instance, attrs in zip(queryset, attributes):
             instance.pk = None
             instance.id = None
 
@@ -87,6 +109,7 @@ def bulk_duplicate(queryset: PolymorphicQuerySet, attributes: Union[dict, list[d
             instance.save()
             instances_new.append(instance)
 
+    # base_class = polymorphic_utils.get_base_polymorphic_model(instances[0].__class__)
     # for instance, attrs in zip(instances, attributes):
     #     instance.pk = None
     #     instance.id = None
