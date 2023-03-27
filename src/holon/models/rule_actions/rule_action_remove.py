@@ -7,12 +7,14 @@ from django.db.models.query import QuerySet
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel
 
+
 class RemoveMode(models.TextChoices):
     """Types of remove modes"""
 
-    REMOVE_ALL = "remove_all"   # remove all items
-    REMOVE_N = "remove_n"       # remove n items
-    KEEP_N = "keep_n"           # remove everything but n items
+    REMOVE_ALL = "remove_all"  # remove all items
+    REMOVE_N = "remove_n"  # remove n items
+    KEEP_N = "keep_n"  # remove everything but n items
+
 
 class RuleActionRemove(RuleAction):
     """Remove the filtered items"""
@@ -45,12 +47,12 @@ class RuleActionRemove(RuleAction):
 
             if self.remove_mode == RemoveMode.KEEP_N.value:
                 remove_n = len(filtered_queryset) - val_int
-            
+
             # remove remove_n items
             for filtered_object in filtered_queryset:
                 if remove_n <= 0:
                     return
-                
+
                 filtered_object.delete()
 
                 remove_n -= 1

@@ -127,7 +127,9 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.ENERGYASSET,
             model_subtype="ElectricHeatConversionAsset",
         )
-        rule_action_remove = RuleActionRemove.objects.create(rule=rule, remove_mode=RemoveMode.REMOVE_ALL)
+        rule_action_remove = RuleActionRemove.objects.create(
+            rule=rule, remove_mode=RemoveMode.REMOVE_ALL
+        )
 
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
@@ -155,7 +157,9 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.ENERGYASSET,
             model_subtype="ElectricHeatConversionAsset",
         )
-        rule_action_remove = RuleActionRemove.objects.create(rule=rule, remove_mode=RemoveMode.REMOVE_N)
+        rule_action_remove = RuleActionRemove.objects.create(
+            rule=rule, remove_mode=RemoveMode.REMOVE_N
+        )
 
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
@@ -183,7 +187,9 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.ENERGYASSET,
             model_subtype="ElectricHeatConversionAsset",
         )
-        rule_action_remove = RuleActionRemove.objects.create(rule=rule, remove_mode=RemoveMode.REMOVE_N)
+        rule_action_remove = RuleActionRemove.objects.create(
+            rule=rule, remove_mode=RemoveMode.REMOVE_N
+        )
 
         interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
@@ -211,7 +217,9 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.ENERGYASSET,
             model_subtype="ElectricHeatConversionAsset",
         )
-        rule_action_remove = RuleActionRemove.objects.create(rule=rule, remove_mode=RemoveMode.KEEP_N)
+        rule_action_remove = RuleActionRemove.objects.create(
+            rule=rule, remove_mode=RemoveMode.KEEP_N
+        )
 
         interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
@@ -239,7 +247,9 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.ENERGYASSET,
             model_subtype="ElectricHeatConversionAsset",
         )
-        rule_action_remove = RuleActionRemove.objects.create(rule=rule, remove_mode=RemoveMode.KEEP_N)
+        rule_action_remove = RuleActionRemove.objects.create(
+            rule=rule, remove_mode=RemoveMode.KEEP_N
+        )
 
         interactive_elements = [{"value": "3", "interactive_element": self.interactive_element}]
 
