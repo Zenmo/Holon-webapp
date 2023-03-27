@@ -35,24 +35,24 @@ class RuleActionRemove(RuleAction):
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Remove the filtered items"""
 
+        # remove subselection
         if self.remove_mode == RemoveMode.REMOVE_ALL.value:
-            # remove all
-            filtered_queryset.delete()
+            remove_n = len(filtered_queryset)
+
+        elif self.remove_mode == RemoveMode.REMOVE_N.value:
+            remove_n = int(value)
+
+        elif self.remove_mode == RemoveMode.KEEP_N.value:
+            remove_n = len(filtered_queryset) - int(value)
+
         else:
-            # remove subselection
-            val_int = int(value)
+            raise NotImplementedError(f"No functionality implemented for remove mode {self.remove_mode}")
 
-            if self.remove_mode == RemoveMode.REMOVE_N.value:
-                remove_n = val_int
+        # remove remove_n items
+        for filtered_object in filtered_queryset:
+            if remove_n <= 0:
+                return
 
-            if self.remove_mode == RemoveMode.KEEP_N.value:
-                remove_n = len(filtered_queryset) - val_int
+            filtered_object.delete()
 
-            # remove remove_n items
-            for filtered_object in filtered_queryset:
-                if remove_n <= 0:
-                    return
-
-                filtered_object.delete()
-
-                remove_n -= 1
+            remove_n -= 1

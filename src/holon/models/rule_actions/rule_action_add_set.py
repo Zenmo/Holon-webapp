@@ -130,9 +130,10 @@ class GenericRuleActionAdd(RuleAction):
         # only take first n objects
         for filtererd_object in filtered_queryset:
             if reset_models_before_add:
-                self.model_to_add.__class__.objects.filter(
+                for obj_to_delete in self.model_to_add.__class__.objects.filter(
                     **{parent_fk_field_name: filtererd_object}
-                ).delete()
+                ):
+                    obj_to_delete.delete()
 
             if (
                 objects_added < n
