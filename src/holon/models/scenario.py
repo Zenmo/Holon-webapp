@@ -149,25 +149,18 @@ class Scenario(ClusterableModel):
             ]
 
             # set up attributes for new gridconnections
-            parent_heat_ids = [
-                gridnode_id_to_new_model_mapping.get(gridconnection.parent_heat_id, None)
-                for gridconnection in gridconnections
-            ]
-            parent_electric_ids = [
-                gridnode_id_to_new_model_mapping.get(gridconnection.parent_electric_id, None)
-                for gridconnection in gridconnections
-            ]
-
             attributes = [
                 {
                     "payload": scenario_new,
                     "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
-                    "parent_heat": parent_heat_id,
-                    "parent_electric": parent_electric_id,
+                    "parent_heat": gridnode_id_to_new_model_mapping.get(
+                        gridconnection.parent_heat_id, None
+                    ),
+                    "parent_electric": gridnode_id_to_new_model_mapping.get(
+                        gridconnection.parent_electric_id, None
+                    ),
                 }
-                for parent_heat_id, parent_electric_id, gridconnection in zip(
-                    parent_heat_ids, parent_electric_ids, gridconnections
-                )
+                for gridconnection in gridconnections
             ]
 
             gridconnections = bulk_duplicate(gridconnections, attributes)
