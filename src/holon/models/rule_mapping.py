@@ -9,8 +9,10 @@ def get_scenario_and_apply_rules(
 ) -> Scenario:
     """Load a scenario, apply rules from interactive elements and return with mapped fields"""
 
+    # clone scenario
     scenario = Scenario.objects.get(id=scenario_id).clone()
 
+    # apply rules belonging to interactive elements
     for interactive_element_input in interactive_element_inputs:
         interactive_element = interactive_element_input["interactive_element"]
 

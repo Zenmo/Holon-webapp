@@ -67,7 +67,7 @@ class Scenario(ClusterableModel):
 
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
-        from holon.models import Actor, EnergyAsset, GridConnection, GridNode, Policy
+        from holon.models import Actor, EnergyAsset, GridConnection, GridNode, Policy, Contract
 
         old_scenario_id = self.id
 
@@ -83,24 +83,58 @@ class Scenario(ClusterableModel):
 
                 actor_id_to_new_model_mapping[actor_id] = new_actor
 
-            gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
-            for gridconnection in gridconnections:
-                gridconnection_id = gridconnection.pk
-                new_gridconnection = duplicate_model(
-                    gridconnection,
+            contracts = Contract.objects.filter(actor__payload_id=old_scenario_id)
+            for contr in contracts:
+                duplicate_model(
+                    contr,
                     {
-                        "payload": new_scenario,
-                        "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
+                        "actor": actor_id_to_new_model_mapping[contr.actor.id],
+                        "contractScope": actor_id_to_new_model_mapping[contr.contractScope.id],
                     },
                 )
+
+            gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
+            gridnode_id_to_new_model_mapping = {}
+            for gridnode in gridnodes:
+                gridnode_id = gridnode.id
+                new_gridnode = duplicate_model(
+                    gridnode,
+                    {
+                        "payload": new_scenario,
+                        "owner_actor": actor_id_to_new_model_mapping[gridnode.owner_actor_id],
+                    },
+                )
+
+                gridnode_id_to_new_model_mapping[gridnode_id] = new_gridnode
+
+            # Update gridnode parent
+            new_gridnodes = GridNode.objects.filter(payload_id=new_scenario.id)
+            for gridnode in new_gridnodes:
+                if gridnode.parent:
+                    gridnode.parent = gridnode_id_to_new_model_mapping[gridnode.parent.id]
+                    gridnode.save()
+
+            gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
+            for gridconnection in gridconnections:
+                attributes_to_update = {
+                    "payload": new_scenario,
+                    "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
+                }
+                if gridconnection.parent_heat:
+                    attributes_to_update["parent_heat"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_heat.id
+                    ]
+                if gridconnection.parent_electric:
+                    attributes_to_update["parent_electric"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_electric.id
+                    ]
+
+                gridconnection_id = gridconnection.pk
+                new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
 
                 assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
                 for asset in assets:
                     duplicate_model(asset, {"gridconnection": new_gridconnection})
-
-            gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
-            for gridnode in gridnodes:
-                duplicate_model(gridnode, {"payload": new_scenario})
 
             policies = Policy.objects.filter(payload_id=old_scenario_id)
             for policy in policies:
@@ -118,9 +152,12 @@ class Scenario(ClusterableModel):
         with transaction.atomic():
             # Delete polymorphic models individually
             # django-polymorphic can't handle deletion of mixed object types
+            from holon.models import Contract
+
             delete_individualy(self.assets)
             delete_individualy(self.gridconnection_set.all())
             delete_individualy(self.gridnode_set.all())
+            delete_individualy(Contract.objects.filter(actor__payload_id=self.id))
             delete_individualy(self.actor_set.all())
 
             return super().delete()
