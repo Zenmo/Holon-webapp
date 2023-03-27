@@ -107,6 +107,13 @@ class Scenario(ClusterableModel):
 
                 gridnode_id_to_new_model_mapping[gridnode_id] = new_gridnode
 
+            # Update gridnode parent
+            new_gridnodes = GridNode.objects.filter(payload_id=new_scenario.id)
+            for gridnode in new_gridnodes:
+                if gridnode.parent:
+                    gridnode.parent = gridnode_id_to_new_model_mapping[gridnode.parent.id]
+                    gridnode.save()
+
             gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
             for gridconnection in gridconnections:
                 attributes_to_update = {
