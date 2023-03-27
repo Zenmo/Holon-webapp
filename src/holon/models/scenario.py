@@ -93,30 +93,41 @@ class Scenario(ClusterableModel):
                     },
                 )
 
-            gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
-            for gridconnection in gridconnections:
-                gridconnection_id = gridconnection.pk
-                new_gridconnection = duplicate_model(
-                    gridconnection,
-                    {
-                        "payload": new_scenario,
-                        "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
-                    },
-                )
-
-                assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
-                for asset in assets:
-                    duplicate_model(asset, {"gridconnection": new_gridconnection})
-
             gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
+            gridnode_id_to_new_model_mapping = {}
             for gridnode in gridnodes:
-                duplicate_model(
+                gridnode_id = gridnode.id
+                new_gridnode = duplicate_model(
                     gridnode,
                     {
                         "payload": new_scenario,
                         "owner_actor": actor_id_to_new_model_mapping[gridnode.owner_actor_id],
                     },
                 )
+
+                gridnode_id_to_new_model_mapping[gridnode_id] = new_gridnode
+
+            gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
+            for gridconnection in gridconnections:
+                attributes_to_update = {
+                    "payload": new_scenario,
+                    "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
+                }
+                if gridconnection.parent_heat:
+                    attributes_to_update["parent_heat"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_heat.id
+                    ]
+                if gridconnection.parent_electric:
+                    attributes_to_update["parent_electric"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_electric.id
+                    ]
+
+                gridconnection_id = gridconnection.pk
+                new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
+
+                assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
+                for asset in assets:
+                    duplicate_model(asset, {"gridconnection": new_gridconnection})
 
             policies = Policy.objects.filter(payload_id=old_scenario_id)
             for policy in policies:
