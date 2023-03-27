@@ -46,7 +46,9 @@ class RuleActionRemove(RuleAction):
             remove_n = len(filtered_queryset) - int(value)
 
         else:
-            raise NotImplementedError(f"No functionality implemented for remove mode {self.remove_mode}")
+            raise NotImplementedError(
+                f"No functionality implemented for remove mode {self.remove_mode}"
+            )
 
         # remove remove_n items
         for filtered_object in filtered_queryset:
