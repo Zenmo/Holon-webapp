@@ -128,9 +128,12 @@ class Scenario(ClusterableModel):
         with transaction.atomic():
             # Delete polymorphic models individually
             # django-polymorphic can't handle deletion of mixed object types
+            from holon.models import Contract
+
             delete_individualy(self.assets)
             delete_individualy(self.gridconnection_set.all())
             delete_individualy(self.gridnode_set.all())
+            delete_individualy(Contract.objects.filter(actor__payload_id=self.id))
             delete_individualy(self.actor_set.all())
 
             return super().delete()
