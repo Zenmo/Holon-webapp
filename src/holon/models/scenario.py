@@ -110,7 +110,13 @@ class Scenario(ClusterableModel):
 
             gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
             for gridnode in gridnodes:
-                duplicate_model(gridnode, {"payload": new_scenario})
+                duplicate_model(
+                    gridnode,
+                    {
+                        "payload": new_scenario,
+                        "owner_actor": actor_id_to_new_model_mapping[gridnode.owner_actor_id],
+                    },
+                )
 
             policies = Policy.objects.filter(payload_id=old_scenario_id)
             for policy in policies:
