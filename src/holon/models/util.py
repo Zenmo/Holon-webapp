@@ -1,7 +1,14 @@
 import json
 from pathlib import Path
+from typing import Union
+from django.db import models, transaction
 from django.db.models import Model
 from django.db import models
+from django.db.models.query import QuerySet
+from django.db.migrations.operations.models import ModelOptionOperation
+from polymorphic.managers import PolymorphicQuerySet
+from polymorphic import utils as polymorphic_utils
+import copy
 
 base_path = Path(__file__).parent.parent / "services" / "jsons"
 base_path.mkdir(exist_ok=True, parents=True)
@@ -45,7 +52,51 @@ def duplicate_model(obj, attrs={}):
     return obj
 
 
-from django.db.migrations.operations.models import ModelOptionOperation
+# import line_profiler
+# import atexit
+
+# profile = line_profiler.LineProfiler()
+# atexit.register(profile.print_stats)
+
+
+# @profile
+def bulk_duplicate(queryset: PolymorphicQuerySet, attributes: Union[dict, list[dict]] = {}):
+    """Duplicate multiple models at once. This invalidates the objects in the original queryset"""
+
+    instances = queryset.get_real_instances()
+
+    if not instances:
+        return
+
+    base_class = polymorphic_utils.get_base_polymorphic_model(instances[0].__class__)
+
+    if isinstance(attributes, dict):
+        attributes = [attributes] * len(instances)
+
+    instances_new = []
+
+    with transaction.atomic():
+
+        for instance, attrs in zip(instances, attributes):
+            instance.pk = None
+            instance.id = None
+
+            for key, value in attrs.items():
+                setattr(instance, key, value)
+
+            instance.save()
+            instances_new.append(instance)
+
+    # for instance, attrs in zip(instances, attributes):
+    #     instance.pk = None
+    #     instance.id = None
+
+    #     for key, value in attrs.items():
+    #         setattr(instance, key, value)
+
+    # instances_new = base_class.objects.bulk_create(instances)
+
+    return instances_new
 
 
 class RemoveModelBasesOptions(ModelOptionOperation):
