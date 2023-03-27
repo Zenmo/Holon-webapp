@@ -147,6 +147,9 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
         InlinePanel("rules", heading="Rules", label="Rules"),
     ]
 
+    class Meta:
+        ordering = ["sort_order"]
+
     def __str__(self):
         if self.label:
             return self.label
