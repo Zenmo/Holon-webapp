@@ -68,7 +68,7 @@ class HolonV2Service(generics.CreateAPIView):
         finally:
             # always delete the scenario!
             try:
-                scenario.delete()
+                scenario.delete_async()
             except (
                 NameError
             ):  # catch name error if the view crashed before instantiating the scenario

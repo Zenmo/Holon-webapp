@@ -4,6 +4,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
 from holon.models.util import duplicate_model
+from threading import Thread
 
 
 class Scenario(ClusterableModel):
@@ -161,3 +162,9 @@ class Scenario(ClusterableModel):
             delete_individualy(self.actor_set.all())
 
             return super().delete()
+
+    def delete_async(self) -> None:
+        """Delete the scenario asynchronously using python threading"""
+
+        t = Thread(target=self.delete)
+        t.start()
