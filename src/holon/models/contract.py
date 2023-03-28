@@ -79,7 +79,7 @@ class DeliveryContract(Contract):
         if self.contractType != ContractType.DELIVERY:
             raise ValidationError(f"ContractType should be 'Delivery' for DeliveryContract")
 
-        self.self.clean_foreign_keys()
+        self.clean_foreign_keys()
 
         return super().clean()
 
