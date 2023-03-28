@@ -9,7 +9,7 @@ from holon.models.contract import Contract
 
 
 class MyTest(TestCase):
-    fixtures = ["fixtures/merged-datamodel-ehub-config-fixture.json"]
+    fixtures = ["holon/tests/fixtures/merged-datamodel-ehub-config-fixture.json"]
 
     def __get_scenario_models(self, scenario: Scenario) -> tuple:
         """Get all underlying models of a scenario and return as a tuple"""
