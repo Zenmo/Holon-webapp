@@ -17,6 +17,7 @@ DUMMY_COST = 42
 
 from .dummies import costbenefit_result_json, dashboard_result_json
 
+
 class HolonV2Service(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
