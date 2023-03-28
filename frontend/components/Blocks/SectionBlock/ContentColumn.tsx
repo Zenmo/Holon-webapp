@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { Content, InteractiveContent } from "./types";
 import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import RawHtml from "@/components/RawHtml/RawHtml";
+import React, { useEffect } from "react";
+import { Content, InteractiveContent } from "./types";
 
 type ContentColumn = {
   dataContent: Content[];
@@ -21,7 +21,7 @@ export default function ContentColumn({
 }: ContentColumn) {
   useEffect(() => {
     const contentArr: Content[] = [];
-    dataContent.map((content: Content) => {
+    dataContent?.map((content: Content) => {
       switch (content.type) {
         case "interactive_input":
           content.currentValue = content.currentValue
@@ -50,7 +50,7 @@ export default function ContentColumn({
         if (defaultValue) {
           return content.value.options.find(
             option => option.option === defaultValue || option.label === defaultValue
-          )?.option;
+          )?.id;
         } else {
           const option = content.value.options.find(option => option.default);
           return option ? option.id : content.value.options[0].id;
@@ -95,7 +95,9 @@ export default function ContentColumn({
 
     switch (currentElement.value.type) {
       case "single_select":
-        const selectedOption = currentElement.value.options.find(option => option.id === optionId);
+        const selectedOption = currentElement.value.options.find(
+          option => parseInt(option.id) === parseInt(optionId)
+        );
         if (!selectedOption) break;
         currentElement.currentValue = selectedOption.id;
         break;
