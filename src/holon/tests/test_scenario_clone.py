@@ -64,6 +64,15 @@ class MyTest(TestCase):
 
             self.assertCountEqual(types_a, types_b)
 
+    def test_scenario_clone_reference(self):
+        """Test if the scenario attributes are cloned correctly"""
+        scenario = Scenario.objects.get(pk=1)
+        cloned_scenario = scenario.clone()
+        scenario = Scenario.objects.get(pk=1)
+
+        self.assertEqual(scenario.cloned_from, None)
+        self.assertEqual(cloned_scenario.cloned_from, scenario)
+
     def test_scenario_clone_original_unaffected(self):
         """Test if the original scenario is unaffected by a clone"""
         # get scenario models
