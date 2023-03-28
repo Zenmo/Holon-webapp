@@ -13,6 +13,8 @@ from holon.services.data import Results
 DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
 DUMMY_COST = 42
 
+from .dummies import costbenefit_result_json, dashboard_result_json
+
 
 class HolonV2Service(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
@@ -22,6 +24,13 @@ class HolonV2Service(generics.CreateAPIView):
 
         try:
             if serializer.is_valid():
+                return Response(
+                    {
+                        "dashboard_results": dashboard_result_json,
+                        "cost_benefit_results": costbenefit_result_json,
+                    },
+                    status=status.HTTP_200_OK,
+                )
                 data = serializer.validated_data
 
                 scenario = rule_mapping.get_scenario_and_apply_rules(
