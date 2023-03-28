@@ -23,6 +23,7 @@ class ModelType(models.TextChoices):
     """Types of models"""
 
     ACTOR = "Actor"
+    CONTRACT = "Contract"
     ENERGYASSET = "EnergyAsset"
     GRIDNODE = "GridNode"
     GRIDCONNECTION = "GridConnection"
