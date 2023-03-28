@@ -6,12 +6,16 @@ import etm_service
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
-from holon.models.util import all_subclasses
+from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer
 from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 
+DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
+DUMMY_COST = 42
+
+from .dummies import costbenefit_result_json, dashboard_result_json
 
 class HolonV2Service(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
@@ -21,6 +25,13 @@ class HolonV2Service(generics.CreateAPIView):
 
         try:
             if serializer.is_valid():
+                return Response(
+                    {
+                        "dashboard_results": dashboard_result_json,
+                        "cost_benefit_results": costbenefit_result_json,
+                    },
+                    status=status.HTTP_200_OK,
+                )
                 data = serializer.validated_data
 
                 scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -102,7 +113,10 @@ class HolonCMSLogic(generics.RetrieveAPIView):
 
     def get_attributes_and_relations(self, model_type_class):
         attributes = []
+
         for field in model_type_class()._meta.get_fields():
+            if is_exclude_field(field):
+                continue
             attribute = {"name": field.name}
             if field.is_relation and issubclass(field.related_model, tuple(self.valid_relations)):
                 attribute["relation"] = field.related_model.__name__

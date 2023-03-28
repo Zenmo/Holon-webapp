@@ -263,13 +263,25 @@ class BalanceGroupModelOrder(Orderable):
     balance_group = ParentalKey(RuleActionBalanceGroup, related_name="balance_group_model_order")
 
     asset_to_balance = models.ForeignKey(
-        EnergyAsset, on_delete=models.SET_NULL, null=True, blank=True
+        EnergyAsset,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
     )
     gridconnection_to_balance = models.ForeignKey(
-        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+        GridConnection,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
     )
     contract_to_balance = models.ForeignKey(
-        Contract, on_delete=models.SET_NULL, null=True, blank=True
+        Contract,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
     )
 
     content_panels = [

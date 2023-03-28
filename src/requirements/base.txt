@@ -7,6 +7,7 @@ python-dotenv==0.21
 wagtail>=4.1,<4.2
 wagtail-meta-preview
 wagtail-modelchooser
+wagtail-trash==0.3.0
 wagtail_headless_preview==0.4
 django-cors-headers==3.13
 django-autoslug==1.9.8
