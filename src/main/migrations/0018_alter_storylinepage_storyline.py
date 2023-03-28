@@ -11,7 +11,6 @@ import wagtail.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0017_merge_20221118_1300"),
     ]

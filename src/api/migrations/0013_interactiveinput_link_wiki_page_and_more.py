@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0037_bestpracticeoverviewpage_bestpracticepage_and_more"),
         ("api", "0012_alter_interactiveinputoptions_color"),

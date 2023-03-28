@@ -6,7 +6,6 @@ import wagtail.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0033_alter_staticpage_content_alter_wikipage_table"),
     ]

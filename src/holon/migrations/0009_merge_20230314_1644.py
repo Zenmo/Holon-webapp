@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0006_remove_storageasset_stateofcharge_r_and_more"),
         ("holon", "0008_alter_ruleactionbalancegroup_selected_model_type_name"),

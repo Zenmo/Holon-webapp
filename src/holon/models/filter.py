@@ -118,7 +118,6 @@ class RelationAttributeFilter(Filter):
             return
 
     def relation_model_attribute_options(self) -> list[str]:
-
         model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
         relation_model_type = (
             self.relation_field_subtype
@@ -146,7 +145,6 @@ class RelationAttributeFilter(Filter):
         ]
 
     def relation_field_subtype_options(self) -> list[str]:
-
         model = apps.get_model("holon", self.rule.model_type)
         related_model = model()._meta.get_field(self.relation_field).related_model
 
