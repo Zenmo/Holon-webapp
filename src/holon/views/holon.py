@@ -39,10 +39,6 @@ class HolonV2Service(generics.CreateAPIView):
                     data["scenario"].id, data["interactive_elements"]
                 )
 
-                # return Response(
-                #     "hoi",
-                #     status=status.HTTP_200_OK,
-                # )
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
 
@@ -72,7 +68,7 @@ class HolonV2Service(generics.CreateAPIView):
         except Exception as e:
             import traceback
 
-            # print(traceback.format_exc())
+            print(traceback.format_exc())
             return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
         finally:
             # always delete the scenario!
