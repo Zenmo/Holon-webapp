@@ -47,11 +47,16 @@ class HolonV2Service(generics.CreateAPIView):
                 cc.run()
 
                 # TODO: is this the way to distinguish the national and inter results?
-                etm_outcomes = {}
+                # Init with none values so Result always has the keys
+                etm_outcomes = {
+                    "cost_outcome": None,
+                    "nat_upscaling_outcomes": None,
+                    "inter_upscaling_outcomes": None,
+                }
                 for name, outcome in ETMConnect.connect_from_scenario(
                     original_scenario, scenario, cc.outputs
                 ):
-                    if name == "costs":
+                    if name == "cost":
                         etm_outcomes["cost_outcome"] = outcome
                     elif name == "National upscaling":
                         etm_outcomes["nat_upscaling_outcomes"] = outcome
