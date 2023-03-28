@@ -11,29 +11,45 @@
     {
         "model": "holon.actorgroup",
         "pk": 2,
-        "fields": { "name": "Commercieel bedrijf 1" }
+        "fields": {
+            "name": "Commercieel bedrijf 1"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 3,
-        "fields": { "name": "Commercieel bedrijf 2" }
+        "fields": {
+            "name": "Commercieel bedrijf 2"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 4,
-        "fields": { "name": "Commercieel bedrijf 3" }
+        "fields": {
+            "name": "Commercieel bedrijf 3"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 5,
-        "fields": { "name": "Commercieel bedrijf 4" }
+        "fields": {
+            "name": "Commercieel bedrijf 4"
+        }
     },
     {
         "model": "holon.actorgroup",
         "pk": 6,
-        "fields": { "name": "Bedrijventerrein HOLON" }
+        "fields": {
+            "name": "Bedrijventerrein HOLON"
+        }
     },
-    { "model": "holon.actorsubgroup", "pk": 1, "fields": { "name": "poor" } },
+    {
+        "model": "holon.actorsubgroup",
+        "pk": 1,
+        "fields": {
+            "name": "poor"
+        }
+    },
     {
         "model": "holon.actor",
         "pk": 1,
@@ -55,7 +71,11 @@
             "payload": 1,
             "group": 6,
             "subgroup": null,
-            "wildcard_JSON": [{ "p_gridNodeUnderResponsibility": "E2" }]
+            "wildcard_JSON": [
+                {
+                    "p_gridNodeUnderResponsibility": "E2"
+                }
+            ]
         }
     },
     {
@@ -169,12 +189,18 @@
     {
         "model": "holon.electricgridnode",
         "pk": 1,
-        "fields": { "gridnode_ptr": 1, "type": "HSMS" }
+        "fields": {
+            "gridnode_ptr": 1,
+            "type": "HSMS"
+        }
     },
     {
         "model": "holon.electricgridnode",
         "pk": 2,
-        "fields": { "gridnode_ptr": 2, "type": "MSLS" }
+        "fields": {
+            "gridnode_ptr": 2,
+            "type": "MSLS"
+        }
     },
     {
         "model": "holon.gridconnection",
@@ -189,8 +215,7 @@
             "battery_mode": null,
             "electrolyser_mode": null,
             "payload": 1,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -206,8 +231,7 @@
             "battery_mode": null,
             "electrolyser_mode": null,
             "payload": 1,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -223,8 +247,7 @@
             "battery_mode": null,
             "electrolyser_mode": null,
             "payload": 1,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -240,8 +263,7 @@
             "battery_mode": null,
             "electrolyser_mode": null,
             "payload": 1,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -257,8 +279,7 @@
             "battery_mode": "BALANCE",
             "electrolyser_mode": null,
             "payload": 1,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -294,7 +315,10 @@
     {
         "model": "holon.utilitygridconnection",
         "pk": 3,
-        "fields": { "gridconnection_ptr": 3, "heating_type": "GASBURNER" }
+        "fields": {
+            "gridconnection_ptr": 3,
+            "heating_type": "GASBURNER"
+        }
     },
     {
         "model": "holon.buildinggridconnection",
@@ -315,17 +339,26 @@
     {
         "model": "holon.productiongridconnection",
         "pk": 4,
-        "fields": { "gridconnection_ptr": 4, "category": "WINDFARM" }
+        "fields": {
+            "gridconnection_ptr": 4,
+            "category": "WINDFARM"
+        }
     },
     {
         "model": "holon.productiongridconnection",
         "pk": 5,
-        "fields": { "gridconnection_ptr": 5, "category": "GRIDBATTERY" }
+        "fields": {
+            "gridconnection_ptr": 5,
+            "category": "GRIDBATTERY"
+        }
     },
     {
         "model": "holon.industrygridconnection",
         "pk": 3,
-        "fields": { "utilitygridconnection_ptr": 3, "type": "INDUSTRY_OTHER" }
+        "fields": {
+            "utilitygridconnection_ptr": 3,
+            "type": "INDUSTRY_OTHER"
+        }
     },
     {
         "model": "holon.energyasset",
@@ -335,8 +368,7 @@
             "gridconnection": 3,
             "gridnode": null,
             "name": "INDUSTRY_OTHER_HEAT_DEMAND",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -347,8 +379,7 @@
             "gridconnection": 3,
             "gridnode": null,
             "name": "Office_other_electricity",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -359,8 +390,7 @@
             "gridconnection": 3,
             "gridnode": null,
             "name": "Building_gas_burner",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -371,8 +401,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -383,8 +412,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -395,8 +423,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -407,8 +434,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -419,8 +445,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -431,8 +456,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -443,8 +467,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -455,8 +478,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -467,8 +489,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -479,8 +500,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -491,8 +511,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -503,8 +522,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -515,8 +533,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -527,8 +544,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -539,8 +555,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -551,8 +566,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -563,8 +577,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -575,8 +588,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -587,8 +599,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -599,8 +610,7 @@
             "gridconnection": 1,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -611,8 +621,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -623,8 +632,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -635,8 +643,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -647,8 +654,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -659,8 +665,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -671,8 +676,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -683,8 +687,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -695,8 +698,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -707,8 +709,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -719,8 +720,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -731,8 +731,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -743,8 +742,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -755,8 +753,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -767,8 +764,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -779,8 +775,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -791,8 +786,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -803,8 +797,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -815,8 +808,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -827,8 +819,7 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -839,291 +830,344 @@
             "gridconnection": 2,
             "gridnode": null,
             "name": "Diesel_Truck",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
-        }
-    },
-    {
-        "model": "holon.energyasset",
-        "pk": 1020,
-        "fields": {
-            "polymorphic_ctype": ["holon", "vehicleelectricstorageasset"],
-            "gridconnection": null,
-            "gridnode": null,
-            "name": "EHGV",
-            "wildcard_JSON": null,
-            "is_rule_action_template": true
-        }
-    },
-    {
-        "model": "holon.energyasset",
-        "pk": 1021,
-        "fields": {
-            "polymorphic_ctype": ["holon", "electricstorageasset"],
-            "gridconnection": null,
-            "gridnode": null,
-            "name": "Grid_battery",
-            "wildcard_JSON": null,
-            "is_rule_action_template": true
-        }
-    },
-    {
-        "model": "holon.energyasset",
-        "pk": 1022,
-        "fields": {
-            "polymorphic_ctype": ["holon", "electricstorageasset"],
-            "gridconnection": null,
-            "gridnode": null,
-            "name": "Grid_battery",
-            "wildcard_JSON": null,
-            "is_rule_action_template": true
-        }
-    },
-    {
-        "model": "holon.energyasset",
-        "pk": 1023,
-        "fields": {
-            "polymorphic_ctype": ["holon", "electriccoversionasset"],
-            "gridconnection": null,
-            "gridnode": null,
-            "name": "Electrolyser",
-            "wildcard_JSON": null,
-            "is_rule_action_template": true
-        }
-    },
-    {
-        "model": "holon.energyasset",
-        "pk": 1024,
-        "fields": {
-            "polymorphic_ctype": ["holon", "electriccoversionasset"],
-            "gridconnection": null,
-            "gridnode": null,
-            "name": "Curtailer",
-            "wildcard_JSON": null,
-            "is_rule_action_template": true
-        }
-    },
-    {
-        "model": "holon.energyasset",
-        "pk": 1025,
-        "fields": {
-            "polymorphic_ctype": ["holon", "electricproductionasset"],
-            "gridconnection": 1,
-            "gridnode": null,
-            "name": "Solarpanels_building",
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 4,
-        "fields": { "energyasset_ptr": 4, "type": "HEAT_DEMAND" }
+        "fields": {
+            "energyasset_ptr": 4,
+            "type": "HEAT_DEMAND"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 5,
-        "fields": { "energyasset_ptr": 5, "type": "ELECTRICITY_DEMAND" }
+        "fields": {
+            "energyasset_ptr": 5,
+            "type": "ELECTRICITY_DEMAND"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 900,
-        "fields": { "energyasset_ptr": 900, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 900,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 901,
-        "fields": { "energyasset_ptr": 901, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 901,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 902,
-        "fields": { "energyasset_ptr": 902, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 902,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 903,
-        "fields": { "energyasset_ptr": 903, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 903,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 904,
-        "fields": { "energyasset_ptr": 904, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 904,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 905,
-        "fields": { "energyasset_ptr": 905, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 905,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 906,
-        "fields": { "energyasset_ptr": 906, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 906,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 907,
-        "fields": { "energyasset_ptr": 907, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 907,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 908,
-        "fields": { "energyasset_ptr": 908, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 908,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 909,
-        "fields": { "energyasset_ptr": 909, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 909,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 910,
-        "fields": { "energyasset_ptr": 910, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 910,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 911,
-        "fields": { "energyasset_ptr": 911, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 911,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 912,
-        "fields": { "energyasset_ptr": 912, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 912,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 913,
-        "fields": { "energyasset_ptr": 913, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 913,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 914,
-        "fields": { "energyasset_ptr": 914, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 914,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 915,
-        "fields": { "energyasset_ptr": 915, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 915,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 916,
-        "fields": { "energyasset_ptr": 916, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 916,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 917,
-        "fields": { "energyasset_ptr": 917, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 917,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 918,
-        "fields": { "energyasset_ptr": 918, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 918,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 919,
-        "fields": { "energyasset_ptr": 919, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 919,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1000,
-        "fields": { "energyasset_ptr": 1000, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1000,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1001,
-        "fields": { "energyasset_ptr": 1001, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1001,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1002,
-        "fields": { "energyasset_ptr": 1002, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1002,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1003,
-        "fields": { "energyasset_ptr": 1003, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1003,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1004,
-        "fields": { "energyasset_ptr": 1004, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1004,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1005,
-        "fields": { "energyasset_ptr": 1005, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1005,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1006,
-        "fields": { "energyasset_ptr": 1006, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1006,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1007,
-        "fields": { "energyasset_ptr": 1007, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1007,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1008,
-        "fields": { "energyasset_ptr": 1008, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1008,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1009,
-        "fields": { "energyasset_ptr": 1009, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1009,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1010,
-        "fields": { "energyasset_ptr": 1010, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1010,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1011,
-        "fields": { "energyasset_ptr": 1011, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1011,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1012,
-        "fields": { "energyasset_ptr": 1012, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1012,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1013,
-        "fields": { "energyasset_ptr": 1013, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1013,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1014,
-        "fields": { "energyasset_ptr": 1014, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1014,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1015,
-        "fields": { "energyasset_ptr": 1015, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1015,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1016,
-        "fields": { "energyasset_ptr": 1016, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1016,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1017,
-        "fields": { "energyasset_ptr": 1017, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1017,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1018,
-        "fields": { "energyasset_ptr": 1018, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1018,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.consumptionasset",
         "pk": 1019,
-        "fields": { "energyasset_ptr": 1019, "type": "DIESEL_VEHICLE" }
+        "fields": {
+            "energyasset_ptr": 1019,
+            "type": "DIESEL_VEHICLE"
+        }
     },
     {
         "model": "holon.dieselvehicleasset",
@@ -1504,110 +1548,26 @@
     {
         "model": "holon.conversionasset",
         "pk": 6,
-        "fields": { "energyasset_ptr": 6, "type": "GAS_BURNER", "eta_r": 0.95 }
-    },
-    {
-        "model": "holon.conversionasset",
-        "pk": 1023,
         "fields": {
-            "energyasset_ptr": 1023,
-            "type": "ELECTROLYSER",
-            "eta_r": 0.6
-        }
-    },
-    {
-        "model": "holon.conversionasset",
-        "pk": 1024,
-        "fields": { "energyasset_ptr": 1024, "type": "CURTAILER", "eta_r": 0.0 }
-    },
-    {
-        "model": "holon.electriccoversionasset",
-        "pk": 1023,
-        "fields": {
-            "conversionasset_ptr": 1023,
-            "capacityElectricity_kW": 3500.0
-        }
-    },
-    {
-        "model": "holon.electriccoversionasset",
-        "pk": 1024,
-        "fields": {
-            "conversionasset_ptr": 1024,
-            "capacityElectricity_kW": 10000.0
+            "energyasset_ptr": 6,
+            "type": "GAS_BURNER",
+            "eta_r": 0.95
         }
     },
     {
         "model": "holon.heatconversionasset",
         "pk": 6,
-        "fields": { "conversionasset_ptr": 6, "deliveryTemp_degC": 100.0 }
+        "fields": {
+            "conversionasset_ptr": 6,
+            "deliveryTemp_degC": 100.0
+        }
     },
     {
         "model": "holon.chemicalheatconversionasset",
         "pk": 6,
-        "fields": { "heatconversionasset_ptr": 6, "capacityHeat_kW": 1000.0 }
-    },
-    {
-        "model": "holon.productionasset",
-        "pk": 1025,
-        "fields": { "energyasset_ptr": 1025, "type": "PHOTOVOLTAIC" }
-    },
-    {
-        "model": "holon.electricproductionasset",
-        "pk": 1025,
-        "fields": { "productionasset_ptr": 1025, "capacityElectricity_kW": 0.0 }
-    },
-    {
-        "model": "holon.storageasset",
-        "pk": 1020,
-        "fields": { "energyasset_ptr": 1020, "type": "ELECTRIC_VEHICLE" }
-    },
-    {
-        "model": "holon.storageasset",
-        "pk": 1021,
-        "fields": { "energyasset_ptr": 1021, "type": "STORAGE_ELECTRIC" }
-    },
-    {
-        "model": "holon.storageasset",
-        "pk": 1022,
-        "fields": { "energyasset_ptr": 1022, "type": "STORAGE_ELECTRIC" }
-    },
-    {
-        "model": "holon.electricstorageasset",
-        "pk": 1020,
         "fields": {
-            "storageasset_ptr": 1020,
-            "capacityElectricity_kW": 100.0,
-            "storageCapacity_kWh": 500.0,
-            "stateOfCharge_r": 1.0
-        }
-    },
-    {
-        "model": "holon.electricstorageasset",
-        "pk": 1021,
-        "fields": {
-            "storageasset_ptr": 1021,
-            "capacityElectricity_kW": 10000.0,
-            "storageCapacity_kWh": 17000.0,
-            "stateOfCharge_r": 0.2
-        }
-    },
-    {
-        "model": "holon.electricstorageasset",
-        "pk": 1022,
-        "fields": {
-            "storageasset_ptr": 1022,
-            "capacityElectricity_kW": 10000.0,
-            "storageCapacity_kWh": 32000.0,
-            "stateOfCharge_r": 0.2
-        }
-    },
-    {
-        "model": "holon.vehicleelectricstorageasset",
-        "pk": 1020,
-        "fields": {
-            "electricstorageasset_ptr": 1020,
-            "energyConsumption_kWhpkm": 1.1,
-            "vehicleScaling": 5
+            "heatconversionasset_ptr": 6,
+            "capacityHeat_kW": 1000.0
         }
     },
     {
@@ -1620,8 +1580,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 4,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1634,8 +1593,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 5,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1648,8 +1606,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 6,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1662,8 +1619,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 4,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1676,8 +1632,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 5,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1690,8 +1645,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 6,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1704,8 +1658,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 7,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1718,8 +1671,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 8,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1732,8 +1684,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 7,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1746,8 +1697,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 8,
             "annualFee_eur": 100.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1760,8 +1710,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 4,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1774,8 +1723,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 5,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1788,8 +1736,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 6,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1802,8 +1749,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 7,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1816,8 +1762,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 8,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1830,8 +1775,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 4,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1844,8 +1788,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 5,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1858,8 +1801,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 6,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1872,8 +1814,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 7,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1886,8 +1827,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 8,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1900,8 +1840,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 2,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1914,8 +1853,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 2,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -1928,50 +1866,7 @@
             "energyCarrier": "ELECTRICITY",
             "actor": 2,
             "annualFee_eur": 0.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
-        }
-    },
-    {
-        "model": "holon.contract",
-        "pk": 24,
-        "fields": {
-            "polymorphic_ctype": ["holon", "connectioncontract"],
-            "contractType": "CONNECTION",
-            "contractScope": 1,
-            "energyCarrier": "METHANE",
-            "actor": 6,
-            "annualFee_eur": 2112.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
-        }
-    },
-    {
-        "model": "holon.contract",
-        "pk": 25,
-        "fields": {
-            "polymorphic_ctype": ["holon", "connectioncontract"],
-            "contractType": "CONNECTION",
-            "contractScope": 1,
-            "energyCarrier": "HYDROGEN",
-            "actor": 7,
-            "annualFee_eur": 5198.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
-        }
-    },
-    {
-        "model": "holon.contract",
-        "pk": 26,
-        "fields": {
-            "polymorphic_ctype": ["holon", "taxcontract"],
-            "contractType": "TAX",
-            "contractScope": 9,
-            "energyCarrier": "METHANE",
-            "actor": 6,
-            "annualFee_eur": 496.0,
-            "wildcard_JSON": null,
-            "is_rule_action_template": false
+            "wildcard_JSON": null
         }
     },
     {
@@ -2090,28 +1985,6 @@
         }
     },
     {
-        "model": "holon.connectioncontract",
-        "pk": 24,
-        "fields": {
-            "contract_ptr": 24,
-            "connectionContractType": "DEFAULT",
-            "nfATO_capacity_kW": 0.0,
-            "nfATO_starttime_h": 0.0,
-            "nfATO_endtime_h": 0.0
-        }
-    },
-    {
-        "model": "holon.connectioncontract",
-        "pk": 25,
-        "fields": {
-            "contract_ptr": 25,
-            "connectionContractType": "DEFAULT",
-            "nfATO_capacity_kW": 0.0,
-            "nfATO_starttime_h": 0.0,
-            "nfATO_endtime_h": 0.0
-        }
-    },
-    {
         "model": "holon.taxcontract",
         "pk": 11,
         "fields": {
@@ -2178,17 +2051,6 @@
         }
     },
     {
-        "model": "holon.taxcontract",
-        "pk": 26,
-        "fields": {
-            "contract_ptr": 26,
-            "taxContractType": "NIETSALDEREN",
-            "taxDelivery_eurpkWh": 0.01,
-            "taxFeedin_eurpkWh": 0.0,
-            "proportionalTax_pct": 0.21
-        }
-    },
-    {
         "model": "holon.transportcontract",
         "pk": 16,
         "fields": {
@@ -2246,46 +2108,6 @@
             "transportContractType": "DEFAULT",
             "bandwidthTreshold_kW": 0.0,
             "bandwidthTariff_eurpkWh": 0.0
-        }
-    },
-    {
-        "model": "holon.ruleaction",
-        "pk": 1,
-        "fields": { "polymorphic_ctype": ["holon", "ruleactionfactor"] }
-    },
-    {
-        "model": "holon.relationattributefilter",
-        "pk": 1,
-        "fields": {
-            "polymorphic_ctype": ["holon", "relationattributefilter"],
-            "model_attribute": "id",
-            "comparator": "EQUAL",
-            "value": 1,
-            "rule": 1,
-            "relation_field": "gridconnection",
-            "relation_field_subtype": "BuildingGridConnection"
-        }
-    },
-    {
-        "model": "holon.interactiveelement",
-        "pk": 1,
-        "fields": {
-            "scenario": 1,
-            "name": "IntEl test1",
-            "type": "continuous",
-            "level": "local",
-            "more_information": "",
-            "link_wiki_page": null
-        }
-    },
-    {
-        "model": "holon.interactiveelementcontinuousvalues",
-        "pk": 1,
-        "fields": {
-            "input": 1,
-            "slider_value_default": 50,
-            "slider_value_min": 0,
-            "slider_value_max": 100
         }
     },
     {
@@ -2423,9 +2245,9 @@
         "model": "holon.anylogiccloudconfig",
         "pk": 1,
         "fields": {
-            "api_key": "9f281fab-a0bf-4bf5-9baa-b74d9d2fcc89",
+            "api_key": "7a3563c1-ea1c-41d6-8009-b7abfd93f7ba",
             "url": "https://engine.holontool.nl",
-            "model_name": "Base_23mar",
+            "model_name": "15mrt_branch_ehobs",
             "model_version_number": 2,
             "scenario": 1,
             "owner_email": "gillis@zenmo.com"
@@ -2470,12 +2292,16 @@
     {
         "model": "holon.keyvaluepaircollection",
         "pk": 1,
-        "fields": { "related_config": 1 }
+        "fields": {
+            "related_config": 1
+        }
     },
     {
         "model": "holon.keyvaluepaircollection",
         "pk": 2,
-        "fields": { "related_config": 3 }
+        "fields": {
+            "related_config": 3
+        }
     },
     {
         "model": "holon.floatkeyvaluepair",
@@ -2515,35 +2341,6 @@
             "local_variable": 4,
             "conversion": "multiply",
             "shadow_key": "energy_hub_scaling_factor_holon_in_regional_shadow"
-        }
-    },
-    {
-        "model": "holon.rule",
-        "pk": 1,
-        "fields": {
-            "polymorphic_ctype": ["holon", "scenariorule"],
-            "model_type": "EnergyAsset",
-            "model_subtype": "ElectricProductionAsset"
-        }
-    },
-    {
-        "model": "holon.scenariorule",
-        "pk": 1,
-        "fields": {
-            "rule_ptr": 1,
-            "interactive_element_option": null,
-            "interactive_element_continuous_values": 1
-        }
-    },
-    {
-        "model": "holon.ruleactionfactor",
-        "pk": 1,
-        "fields": {
-            "ruleaction_ptr": 1,
-            "model_attribute": "capacityElectricity_kW",
-            "rule": 1,
-            "min_value": 0,
-            "max_value": 500
         }
     },
     {
