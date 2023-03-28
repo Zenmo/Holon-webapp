@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { Content, InteractiveContent } from "./types";
 import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputs from "@/components/InteractiveInputs/InteractiveInputs";
 import RawHtml from "@/components/RawHtml/RawHtml";
+import React, { useEffect } from "react";
+import { Content, InteractiveContent } from "./types";
 
 type ContentColumn = {
   dataContent: Content[];
@@ -53,7 +53,7 @@ export default function ContentColumn({
           )?.option;
         } else {
           const option = content.value.options.find(option => option.default);
-          return option ? option.id : content.value.options[0].id;
+          return option ? option.option : content.value.options[0].option;
         }
       case "continuous":
         if (defaultValue !== undefined && defaultValue !== "") {
@@ -74,7 +74,7 @@ export default function ContentColumn({
             defaultValueArray?.includes(option.option) ||
             defaultValueArray?.includes(option.label)
         );
-        return defaultOptions.length ? defaultOptions.map(option => option.id) : [];
+        return defaultOptions.length ? defaultOptions.map(option => option.option) : [];
     }
   }
 
