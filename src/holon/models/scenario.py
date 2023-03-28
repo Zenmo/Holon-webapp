@@ -66,13 +66,6 @@ class Scenario(ClusterableModel):
 
         return assets
 
-    # import line_profiler
-    # import atexit
-
-    # profile = line_profiler.LineProfiler()
-    # atexit.register(profile.print_stats)
-
-    # @profile
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
 
