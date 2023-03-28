@@ -7,7 +7,6 @@ import modelcluster.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("api", "0003_scenario_remove_slider_slider_locked_and_more"),
     ]

@@ -23,6 +23,7 @@ class ModelType(models.TextChoices):
     """Types of models"""
 
     ACTOR = "Actor"
+    CONTRACT = "Contract"
     ENERGYASSET = "EnergyAsset"
     GRIDNODE = "GridNode"
     GRIDCONNECTION = "GridConnection"
@@ -214,6 +215,7 @@ class ScenarioRule(Rule):
             + list(self.discrete_factors_remove.all())
             + list(self.discrete_factors_set_count.all())
             + list(self.discrete_factors_balancegroup.all())
+            + list(self.discrete_factors_add_multiple_under_each_parent.all())
         )
 
     def apply_rule_actions(self, filtered_queryset: QuerySet, value: str):

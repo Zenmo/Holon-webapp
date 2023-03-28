@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0007_alter_interactiveelementoptions_options_and_more"),
         ("holon", "0010_alter_ruleactionbalancegroup_selected_model_type_name"),

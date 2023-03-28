@@ -9,7 +9,6 @@ import wagtail.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0008_staticpage_storylineoverviewpage_and_more"),
     ]

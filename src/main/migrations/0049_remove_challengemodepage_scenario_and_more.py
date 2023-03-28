@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0048_casuspage_scenario_alter_challengemodepage_storyline_and_more"),
     ]

@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("customdocument", "0003_auto_20190209_1710"),
         ("api", "0003_scenario_remove_slider_slider_locked_and_more"),
