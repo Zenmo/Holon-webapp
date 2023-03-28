@@ -3,10 +3,10 @@ import json
 # fp = "../peter-dupliceter-datamodel-fixture.json"
 # fp_out = "../peter-dupliceter-datamodel-fixture_clean_keys.json"
 
-fp = "../datamodel-tvw-fixture.json"
-fp_out = "../datamodel-tvw-fixture_clean_keys.json"
+fp = "../buurtelektrificatie_peter.json"
+fp_out = "../buurtelektrificatie_peter_clean_keys.json"
 
-BASE_INT = 456000  # change me!
+BASE_INT = 9960000  # change me!
 
 relations = set(
     [
