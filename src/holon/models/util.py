@@ -52,74 +52,50 @@ def duplicate_model(obj, attrs={}):
     return obj
 
 
+def reset_obj(obj, attributes: dict = {}):
+    """Reset an object"""
+    obj.pk = None
+    obj.id = None
+
+    # for copying polymorphic models with multiple levels of inheritance
+    # https://stackoverflow.com/a/74999379/19602496
+    for field in obj._meta.get_fields(include_parents=True):
+        if not isinstance(field, models.OneToOneField):
+            continue
+
+        # Test this is a pointer to something in our own inheritance tree
+        if not isinstance(obj, field.related_model):
+            continue
+
+        setattr(obj, field.attname, None)
+
+    # modify attributes
+    for key, value in attributes.items():
+        setattr(obj, key, value)
+
+    return obj
+
+
 def bulk_duplicate(queryset: PolymorphicQuerySet, attributes: dict = {}):
     """Duplicate multiple models at once. This invalidates the objects in the original queryset"""
 
     if not queryset:
         return
 
-    instances = queryset.get_real_instances()
-    instances_new = []
+    class_types = set([model.__class__ for model in queryset])
+    print(class_types)
 
-    base_class = polymorphic_utils.get_base_polymorphic_model(instances[0].__class__)
-    for instance in instances:
-        instance.pk = None
-        instance.id = None
+    class_dict = dict.fromkeys(class_types, [])
 
-        for key, value in attributes.items():
-            setattr(instance, key, value)
+    for obj in queryset:
+        class_dict[obj.__class__].append(obj)
 
-        instances_new.append(instance)
+    print(class_dict)
 
-    base_class.objects.bulk_create(instances_new)
+    for class_type, objs in class_dict.items():
+        objs = [reset_obj(obj, attributes) for obj in objs]
 
-
-# import line_profiler
-# import atexit
-
-# profile = line_profiler.LineProfiler()
-# atexit.register(profile.print_stats)
-
-
-# @profile
-def bulk_duplicate_old(queryset: PolymorphicQuerySet, attributes: Union[dict, list[dict]] = {}):
-    """Duplicate multiple models at once. This invalidates the objects in the original queryset"""
-
-    # instances = queryset.get_real_instances()
-
-    if not queryset:
-        return
-
-    if isinstance(attributes, dict):
-        attributes = [attributes] * len(queryset)
-
-    assert len(queryset) == len(attributes)
-
-    instances_new = []
-
-    with transaction.atomic():
-
-        for instance, attrs in zip(queryset, attributes):
-            instance.pk = None
-            instance.id = None
-
-            for key, value in attrs.items():
-                setattr(instance, key, value)
-
-            instance.save()
-            instances_new.append(instance)
-
-    # base_class = polymorphic_utils.get_base_polymorphic_model(instances[0].__class__)
-    # for instance, attrs in zip(instances, attributes):
-    #     instance.pk = None
-    #     instance.id = None
-
-    #     for key, value in attrs.items():
-    #         setattr(instance, key, value)
-
-    # instances_new = base_class.objects.bulk_create(instances)
-
-    return instances_new
+        class_type.objects.bulk_create(objs)
 
 
 class RemoveModelBasesOptions(ModelOptionOperation):
