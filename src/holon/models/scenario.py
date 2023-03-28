@@ -3,7 +3,7 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
-from holon.models.util import bulk_duplicate, duplicate_model
+from holon.models.util import duplicate_model
 from threading import Thread
 
 
@@ -11,6 +11,8 @@ class Scenario(ClusterableModel):
     name = models.CharField(max_length=255)
     version = models.IntegerField(default=1)
     comment = models.TextField(blank=True)
+
+    cloned_from = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
 
     panels = [
         FieldPanel("name"),
@@ -69,9 +71,7 @@ class Scenario(ClusterableModel):
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
 
-        from holon.models import Actor, EnergyAsset, GridConnection, GridNode, Policy, Contract
-
-        # old_scenario_id = self.id
+        from holon.models import EnergyAsset, GridNode, Contract
 
         scenario_old = (
             Scenario.objects.prefetch_related("actor_set")
@@ -85,7 +85,7 @@ class Scenario(ClusterableModel):
         )
 
         with transaction.atomic():
-            new_scenario = duplicate_model(self)
+            new_scenario = duplicate_model(self, {"cloned_from": scenario_old})
 
             actors = scenario_old.actor_set.all()
             actor_id_to_new_model_mapping = {}
@@ -106,7 +106,6 @@ class Scenario(ClusterableModel):
                     },
                 )
 
-            # gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
             gridnodes = scenario_old.gridnode_set.all()
 
             gridnode_id_to_new_model_mapping = {}
