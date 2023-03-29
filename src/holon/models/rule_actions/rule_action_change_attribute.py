@@ -23,8 +23,9 @@ class RuleActionChangeAttribute(RuleAction):
 
     model_attribute = models.CharField(max_length=255, null=False)
     operator = models.CharField(max_length=255, choices=ChangeAttributeOperator.choices)
+    static_value = models.CharField(max_length=255, null=False)
 
-    panels = [FieldPanel("model_attribute"), FieldPanel("operator")]
+    panels = [FieldPanel("model_attribute"), FieldPanel("operator"), FieldPanel("static_value")]
     rule: ScenarioRule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_change_attribute"
     )
@@ -66,6 +67,9 @@ class RuleActionChangeAttribute(RuleAction):
         """
         Apply an operator with a value to the model attribute
         """
+
+        if self.static_value:
+            value = self.static_value
 
         # apply operators to objects
         for filtered_object in filtered_queryset:
