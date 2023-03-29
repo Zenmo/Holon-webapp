@@ -198,6 +198,11 @@ class ScenarioRule(Rule):
                     heading="Discrete rule actions - balance child models",
                     label="Discrete rule action - balance child models",
                 ),
+                InlinePanel(
+                    "discrete_factors_add_multiple_under_each_parent",
+                    heading="Discrete rule actions - add duplicate objects",
+                    label="Discrete rule action - add duplicate objects",
+                ),
             ],
         ),
     ]
