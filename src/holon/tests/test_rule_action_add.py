@@ -117,3 +117,39 @@ class RuleMappingTestClass(TestCase):
             ]
         )
         assert n_ehc_assets == 5  # was 3
+
+    def test_rule_action_add_asset_empty_filter(self):
+        """Test the add rule action when a filter is empty"""
+
+        # Arrange
+        default_ehc = ElectricHeatConversionAsset.objects.create(
+            name="template_heat_pump",
+            type=ConversionAssetType.HEAT_PUMP_AIR,
+            eta_r=0.0,
+            deliveryTemp_degC=0.0,
+            capacityElectricity_kW=0.0,
+        )
+
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="ProductionGridConnection",
+        )
+        rule_action_add = RuleActionAdd.objects.create(asset_to_add=default_ehc, rule=rule)
+
+        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        n_ehc_assets = len(
+            [
+                asset
+                for asset in updated_scenario.assets
+                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
+            ]
+        )
+        assert n_ehc_assets == 3  # was 3
