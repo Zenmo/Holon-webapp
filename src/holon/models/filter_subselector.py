@@ -78,5 +78,5 @@ class Take(FilterSubSelector):
 
         elif self.mode == TakeMode.RANDOM.value:
             ids = list(queryset.values_list("id", flat=True))
-            random_ids = random.choices(ids, k=n)
+            random_ids = random.sample(ids, k=n)
             return queryset.filter(pk__in=random_ids)

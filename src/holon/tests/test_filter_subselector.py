@@ -130,7 +130,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_queryset = rule.get_queryset(self.scenario)
-        queryset = rule.apply_filter_subselections(full_queryset, "3")
+        queryset = rule.apply_filter_subselections(full_queryset, "")
 
         # Assert
         self.assertEqual(len(queryset), 3)
