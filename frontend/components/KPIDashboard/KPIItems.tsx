@@ -1,7 +1,7 @@
 import React from "react";
 import KPIItem from "./KPIItem";
-import { KPIData } from "./types";
 import styles from "./KPIItem.module.css";
+import { KPIData } from "./types";
 
 type KPIItems = {
   view: string;
@@ -14,13 +14,16 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
   function valueCheck(value: number): number | string {
     if (value == undefined || loading) {
       return "-";
+    } else if (typeof value == "number") {
+      value = Math.round(value * 10) / 10;
+      return value;
     } else {
       return value;
     }
   }
 
   function valueCosts(level: string) {
-    let value = valueCheck(data[level].costs);
+    let value = data[level].costs;
     if (level == "local") {
       // divides by 1e3 because "k euro"
       typeof value == "number" ? (value = value / 1e3) : (value = value);
@@ -28,7 +31,7 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
       // divides by 1e9 because "mld euro"
       typeof value == "number" ? (value = value / 1e9) : (value = value);
     }
-    return value;
+    return valueCheck(value);
   }
 
   return (
