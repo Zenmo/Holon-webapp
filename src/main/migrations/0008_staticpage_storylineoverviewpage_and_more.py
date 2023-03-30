@@ -13,7 +13,6 @@ import wagtail_headless_preview.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("customimage", "0003_alter_customimage_file_hash"),
         ("main", "0007_homepage_content_alter_storylinepage_storyline"),

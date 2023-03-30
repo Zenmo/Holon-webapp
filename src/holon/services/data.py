@@ -40,7 +40,7 @@ class Results:
     def to_dict(self):
         return {
             "dashboard_results": {
-                "local": {**self.anylogic_outcomes, "cost": self.cost_outcome},
+                "local": {**self.anylogic_outcomes, "costs": self.cost_outcome},
                 "intermediate": self.inter_upscaling_outcomes,
                 "national": self.nat_upscaling_outcomes,
             },

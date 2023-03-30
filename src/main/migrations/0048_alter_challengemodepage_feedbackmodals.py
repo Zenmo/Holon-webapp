@@ -8,7 +8,6 @@ import wagtail.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0047_alter_challengemodepage_feedbackmodals_and_more"),
     ]

@@ -6,7 +6,6 @@ import modelcluster.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
         ("holon", "0013_remove_datamodelconversion_filter_and_more"),
@@ -126,9 +125,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "self_conversion",
-                    models.CharField(
-                        choices=[("SUM", "Sum"), ("COUNT", "Count")], max_length=255
-                    ),
+                    models.CharField(choices=[("SUM", "Sum"), ("COUNT", "Count")], max_length=255),
                 ),
                 (
                     "attribute_to_sum",

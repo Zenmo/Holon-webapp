@@ -1,3 +1,5 @@
+import etm_service
+
 from holon.models.config import (
     QueryAndConvertConfig,
     KeyValuePairCollection,
@@ -14,6 +16,61 @@ from typing import List
 
 def pprint(msg: str):
     print(f"[QConfig]: {msg}")
+
+
+# I'm very sorry for this... or was it somewhere I could not find it?
+CONFIG_KPIS = {
+    "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+    "config": {
+        "sustainability": {
+            "value": {"type": "query", "data": "value", "etm_key": "dashboard_renewability"}
+        },
+        "self_sufficiency": {
+            "value": {
+                "type": "query",
+                "data": "value",
+                "etm_key": "kpi_self_sufficiency_local_production_of_primary_demand",
+            }
+        },
+        "netload": {
+            "value": {
+                "type": "query",
+                "data": "value",
+                "etm_key": "kpi_required_additional_hv_network_percentage",
+            }
+        },
+        "costs": {"value": {"type": "query", "data": "value", "etm_key": "total_costs"}},
+    },
+}
+
+
+class ETMConnect:
+    @staticmethod
+    def connect_from_scenario(original_scenario, scenario, anylogic_outcomes) -> tuple[str, dict]:
+        """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
+        for config in ETMConnect.query_configs(original_scenario, scenario, anylogic_outcomes):
+            if config.module == "cost":
+                yield ("cost", ETMConnect.costs(config))
+            if config.module == "upscaling":
+                yield ETMConnect.upscaling(config)
+
+    @staticmethod
+    def query_configs(original_scenario, scenario, anylogic_outcomes):
+        return (
+            QConfig(c, anylogic_outcomes=anylogic_outcomes, copied_scenario=scenario)
+            for c in original_scenario.query_and_convert_config.all()
+        )
+
+    @staticmethod
+    def costs(config):
+        return sum(etm_service.retrieve_results(config.etm_scenario_id, config.queries).values())
+
+    @staticmethod
+    def upscaling(config):
+        new_scenario_id = etm_service.scale_copy_and_send(
+            config.etm_scenario_id, config.anylogic_outcomes, config.queries
+        )
+        return (config.name, etm_service.retrieve_results(new_scenario_id, CONFIG_KPIS))
 
 
 class QConfig:

@@ -1,7 +1,14 @@
 import json
 from pathlib import Path
+from typing import Union
+from django.db import models, transaction
 from django.db.models import Model
 from django.db import models
+from django.db.models.query import QuerySet
+from django.db.migrations.operations.models import ModelOptionOperation
+from polymorphic.managers import PolymorphicQuerySet
+from polymorphic import utils as polymorphic_utils
+import copy
 
 base_path = Path(__file__).parent.parent / "services" / "jsons"
 base_path.mkdir(exist_ok=True, parents=True)
@@ -45,7 +52,50 @@ def duplicate_model(obj, attrs={}):
     return obj
 
 
-from django.db.migrations.operations.models import ModelOptionOperation
+def reset_obj(obj, attributes: dict = {}):
+    """Reset an object"""
+    obj.pk = None
+    obj.id = None
+
+    # for copying polymorphic models with multiple levels of inheritance
+    # https://stackoverflow.com/a/74999379/19602496
+    for field in obj._meta.get_fields(include_parents=True):
+        if not isinstance(field, models.OneToOneField):
+            continue
+
+        # Test this is a pointer to something in our own inheritance tree
+        if not isinstance(obj, field.related_model):
+            continue
+
+        setattr(obj, field.attname, None)
+
+    # modify attributes
+    for key, value in attributes.items():
+        setattr(obj, key, value)
+
+    return obj
+
+
+def bulk_duplicate(queryset: PolymorphicQuerySet, attributes: dict = {}):
+    """Duplicate multiple models at once. This invalidates the objects in the original queryset"""
+
+    if not queryset:
+        return
+
+    class_types = set([model.__class__ for model in queryset])
+    print(class_types)
+
+    class_dict = dict.fromkeys(class_types, [])
+
+    for obj in queryset:
+        class_dict[obj.__class__].append(obj)
+
+    print(class_dict)
+
+    for class_type, objs in class_dict.items():
+        objs = [reset_obj(obj, attributes) for obj in objs]
+
+        class_type.objects.bulk_create(objs)
 
 
 class RemoveModelBasesOptions(ModelOptionOperation):

@@ -10,7 +10,6 @@ import wagtail.images.blocks
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("api", "0003_scenario_remove_slider_slider_locked_and_more"),
         ("main", "0004_storylinepage_remove_articlepage_basepage_ptr_and_more"),
