@@ -11,9 +11,14 @@ class FilterSubSelector(PolymorphicModel):
     """Base class for a class that allows selecting a subset of the elements in a queryset"""
 
     use_interactive_element_value = models.BooleanField(default=True)
-    number_of_items = models.IntegerField(null=True, blank=True)
+    number_of_items = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="number of items (leave empty if using interactive element value)",
+    )
 
     panels = [
+        FieldPanel("use_interactive_element_value"),
         FieldPanel("number_of_items"),
     ]
 

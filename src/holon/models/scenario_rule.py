@@ -171,12 +171,12 @@ class ScenarioRule(Rule):
                 InlinePanel(
                     "subselector_skips",
                     heading="Skip a number of filtered items",
-                    label="Skip a number of filtered items",
+                    label="Filter item skip",
                 ),
                 InlinePanel(
                     "subselector_takes",
                     heading="Take a number of filtered items",
-                    label="Skip a number of filtered items",
+                    label="Filter item take",
                 ),
             ],
         ),
