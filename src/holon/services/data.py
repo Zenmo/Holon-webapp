@@ -54,7 +54,7 @@ class Results:
             },
         }
         if self.__include_scenario():
-            result["scenario"] = (ScenarioSerializer(self.scenario).data,)
+            result["scenario"] = ScenarioSerializer(self.scenario).data
 
         return result
 
