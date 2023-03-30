@@ -52,7 +52,13 @@ class Take(FilterSubSelector):
     """Class that takes a certain amount of items in a queryset"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_takes")
-    mode = models.CharField(max_length=32, choices=TakeMode.choices)
+    mode = models.CharField(max_length=32, choices=TakeMode.choices, null=False, blank=False)
+
+    def clean(self):
+        super().clean()
+
+        if not self.mode in [c[1] for c in TakeMode.choices]:
+            raise ValidationError(f"mode {self.mode} is not in list of possible Take modes")
 
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Take a number of items from the queryset, either the first n or random n"""
@@ -63,12 +69,9 @@ class Take(FilterSubSelector):
             n = self.number_of_items
 
         if self.mode == TakeMode.FIRST.value:
-            return queryset[: n - 1]
+            return queryset[:n]
 
         elif self.mode == TakeMode.RANDOM.value:
             ids = list(queryset.values_list("id", flat=True))
             random_ids = random.choices(ids, k=n)
             return queryset.filter(pk__in=random_ids)
-
-        else:
-            raise NotImplementedError(f"Take mode {self.mode} not supported")

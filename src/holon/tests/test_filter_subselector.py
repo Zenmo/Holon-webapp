@@ -59,7 +59,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
         queryset = rule.apply_filter_subselections(full_queryset, "")
 
         # Assert
-        self.assertEqual(queryset, full_queryset[1:])
+        self.assertEqual(list(queryset), list(full_queryset[1:]))
 
     def test_subselector_skip_ie_value(self) -> None:
         # Arange
@@ -76,7 +76,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
         queryset = rule.apply_filter_subselections(full_queryset, "2")
 
         # Assert
-        self.assertEqual(queryset, full_queryset[2:])
+        self.assertEqual(list(queryset), list(full_queryset[2:]))
 
     def test_subselector_take_set_value(self) -> None:
         # Arange
@@ -86,14 +86,16 @@ class RuleFilterSubSelectorTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
 
-        Skip.objects.create(rule=rule, use_interactive_element_value=False, number_of_items=1)
+        Take.objects.create(
+            rule=rule, use_interactive_element_value=False, number_of_items=1, mode=TakeMode.FIRST
+        )
 
         # Act
         full_queryset = rule.get_queryset(self.scenario)
         queryset = rule.apply_filter_subselections(full_queryset, "")
 
         # Assert
-        self.assertEqual(queryset, full_queryset[:0])
+        self.assertEqual(list(queryset), list(full_queryset[:1]))
 
     def test_subselector_take_ie_value(self) -> None:
         # Arange
@@ -103,14 +105,16 @@ class RuleFilterSubSelectorTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
 
-        Skip.objects.create(rule=rule, use_interactive_element_value=True, number_of_items=0)
+        Take.objects.create(
+            rule=rule, use_interactive_element_value=True, number_of_items=0, mode=TakeMode.FIRST
+        )
 
         # Act
         full_queryset = rule.get_queryset(self.scenario)
         queryset = rule.apply_filter_subselections(full_queryset, "3")
 
         # Assert
-        self.assertEqual(queryset, full_queryset[:2])
+        self.assertEqual(list(queryset), list(full_queryset[:3]))
 
     def test_subselector_take_random(self) -> None:
         # Arange
@@ -120,7 +124,9 @@ class RuleFilterSubSelectorTestClass(TestCase):
             model_subtype="BuildingGridConnection",
         )
 
-        Skip.objects.create(rule=rule, use_interactive_element_value=False, number_of_items=3)
+        Take.objects.create(
+            rule=rule, use_interactive_element_value=False, number_of_items=3, mode=TakeMode.RANDOM
+        )
 
         # Act
         full_queryset = rule.get_queryset(self.scenario)

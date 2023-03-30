@@ -236,6 +236,8 @@ class ScenarioRule(Rule):
         for subselector in self.get_filter_subselectors():
             filtered_queryset = subselector.subselect_queryset(filtered_queryset, value)
 
+        return filtered_queryset
+
     def get_actions(self) -> list["RuleAction"]:
         """Return a list of RuleActions belonging to this rule"""
 
