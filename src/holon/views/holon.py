@@ -1,12 +1,16 @@
+from datetime import datetime
+from pprint import pprint
 from django.apps import apps
 from rest_framework import generics, status
 from rest_framework.response import Response
+
+import etm_service
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer
-from holon.services import CostBenedict
+from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 
@@ -24,13 +28,13 @@ class HolonV2Service(generics.CreateAPIView):
 
         try:
             if serializer.is_valid():
-                return Response(
-                    {
-                        "dashboard_results": dashboard_result_json,
-                        "cost_benefit_results": costbenefit_result_json,
-                    },
-                    status=status.HTTP_200_OK,
-                )
+                # return Response(
+                #     {
+                #         "dashboard_results": dashboard_result_json,
+                #         "cost_benefit_results": costbenefit_result_json,
+                #     },
+                #     status=status.HTTP_200_OK,
+                # )
                 data = serializer.validated_data
 
                 scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -42,6 +46,24 @@ class HolonV2Service(generics.CreateAPIView):
 
                 cc.run()
 
+                # TODO: is this the way to distinguish the national and inter results?
+                # Init with none values so Result always has the keys
+                etm_outcomes = {
+                    "cost_outcome": None,
+                    "nat_upscaling_outcomes": None,
+                    "inter_upscaling_outcomes": None,
+                }
+                for name, outcome in ETMConnect.connect_from_scenario(
+                    original_scenario, scenario, cc.outputs
+                ):
+                    if name == "cost":
+                        etm_outcomes["cost_outcome"] = outcome
+                    elif name == "National upscaling":
+                        etm_outcomes["nat_upscaling_outcomes"] = outcome
+                    elif name == "Regional upscaling":
+                        etm_outcomes["inter_upscaling_outcomes"] = outcome
+
+                # ignore me! (TODO: should only be triggered on bedrijventerrein)
                 cost_benefit_results = CostBenedict(
                     actors=cc.outputs["actors"]
                 ).determine_group_costs()
@@ -49,11 +71,9 @@ class HolonV2Service(generics.CreateAPIView):
                 results = Results(
                     scenario=scenario,
                     anylogic_outcomes=cc.outputs,
-                    inter_upscaling_outcomes=DUMMY_UPSCALE,
-                    nat_upscaling_outcomes=DUMMY_UPSCALE,
-                    cost_outcome=DUMMY_COST,
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
+                    **etm_outcomes,
                 )
 
                 return Response(
@@ -64,11 +84,14 @@ class HolonV2Service(generics.CreateAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            import traceback
+
+            print(traceback.format_exc())
             return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
         finally:
             # always delete the scenario!
             try:
-                scenario.delete()
+                scenario.delete_async()
             except (
                 NameError
             ):  # catch name error if the view crashed before instantiating the scenario

@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0002_balancegroupmodelorder_and_more"),
         ("holon", "0004_alter_interactiveelement_level_and_more"),

@@ -83,11 +83,18 @@ $(document).ready(function () {
             $("select[id$='-model_type']").each(function () {
                 setModelSubtypeSelectors($(this), data);
             });
-            $("#id_continuous_values-ADD, id_options-ADD").click(function () {
+            $("#id_continuous_values-ADD, #id_options-ADD").click(function () {
                 $("button[id$='-rules-ADD']").click(function (e) {
-                    $("select[id$='-model_type']").each(function () {
-                        setModelSubtypeSelectors($(this), data);
-                    });
+                    setTimeout(function () {
+                        $("select[id$='-model_type']").each(function () {
+                            setModelSubtypeSelectors($(this), data);
+                        });
+                    }, 500);
+                });
+            });
+            $("button[id$='-rules-ADD']").click(function (e) {
+                $("select[id$='-model_type']").each(function () {
+                    setModelSubtypeSelectors($(this), data);
                 });
             });
         },

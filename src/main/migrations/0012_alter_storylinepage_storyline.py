@@ -10,7 +10,6 @@ import wagtail.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0011_alter_homepage_content_alter_staticpage_content_and_more"),
     ]

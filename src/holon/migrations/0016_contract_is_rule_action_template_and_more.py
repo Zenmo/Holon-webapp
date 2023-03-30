@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0015_alter_datamodelconversion_conversion_and_more"),
     ]

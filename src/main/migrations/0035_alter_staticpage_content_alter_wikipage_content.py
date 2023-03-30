@@ -11,7 +11,6 @@ import wagtail.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0034_remove_wikipage_rich_text_remove_wikipage_table_and_more"),
     ]

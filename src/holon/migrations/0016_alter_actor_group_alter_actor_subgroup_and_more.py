@@ -33,8 +33,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="contract",
             name="contractScope",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="holon.actor"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="holon.actor"),
         ),
     ]

@@ -29,6 +29,7 @@ export type InteractiveInputOptions = {
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
+  sliderUnit?: string;
   level?: string;
 };
 
@@ -61,13 +62,13 @@ function InteractiveInputs({
       setValue={setValue}
       min={options[0]?.sliderValueMin ? options[0].sliderValueMin : 0}
       max={options[0]?.sliderValueMax ? options[0].sliderValueMax : 100}
+      unit={options[0]?.sliderUnit ? options[0].sliderUnit : "%"}
       step={1}
       label={name}
       type="range"
       moreInformation={moreInformation}
       titleWikiPage={titleWikiPage}
       linkWikiPage={linkWikiPage}
-      unit="%"
       tooltip={true}
       selectedLevel={selectedLevel}
       locked={false}></ImageSlider>

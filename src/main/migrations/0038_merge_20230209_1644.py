@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0036_alter_challengemodepage_feedbackmodals"),
         ("main", "0037_bestpracticeoverviewpage_bestpracticepage_and_more"),

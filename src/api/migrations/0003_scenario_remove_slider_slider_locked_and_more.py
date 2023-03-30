@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("api", "0002_slider_slider_locked_slider_slider_value_default_and_more"),
     ]
