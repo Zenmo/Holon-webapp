@@ -12,7 +12,7 @@ export type Props = {
 function InteractiveDropdown({ defaultValue, onChange, options, ...props }: Props) {
   return (
     <select
-      className="bg-white border-2 border-holon-blue-900 text-sm rounded-lg focus:ring-holon-blue-100 focus:border-holon-blue-100 block p-2.5"
+      className="bg-white border-[1px] w-full border-holon-slated-blue-900 text-sm focus:ring-holon-slated-blue-300 focus:border-holon-slated-blue-300 block p-2.5"
       defaultValue={defaultValue}
       onChange={e =>
         onChange(
@@ -31,6 +31,7 @@ function InteractiveDropdown({ defaultValue, onChange, options, ...props }: Prop
               "input"
             }
             key={inputItem.id + index}
+            className="p-4 m-4"
             value={inputItem.id}>
             {inputItem.option}
           </option>

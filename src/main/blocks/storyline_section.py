@@ -50,7 +50,7 @@ class InteractiveInputBlock(blocks.StructBlock):
     ]
 
     interactive_input = ModelChooserBlock(InteractiveElement)
-    display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES)
+    display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES, required=False)
     visible = blocks.BooleanBlock(required=False, default=True)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(
