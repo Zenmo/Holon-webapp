@@ -32,9 +32,9 @@ module.exports = {
         "holon-light-green": "#DEF3DE",
         "holon-red": "#c51700",
         "holon-light-red": "#FFCCCC",
-        "holon-holarchy-national": "#DAE5F5",
-        "holon-holarchy-intermediate": "#B9CAE2",
-        "holon-holarchy-local": "#9DB2CF",
+        "holon-holarchy-national": "#EBF1F9",
+        "holon-holarchy-intermediate": "#D8E2EF",
+        "holon-holarchy-local": "#C9D5E5",
       },
       backgroundImage: {
         "split-white-blue": "linear-gradient(-18deg, #051E3F 40% , white 30%)",

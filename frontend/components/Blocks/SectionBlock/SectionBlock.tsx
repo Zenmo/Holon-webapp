@@ -2,6 +2,7 @@ import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/C
 import { StaticImage } from "@/components/ImageSelector/types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -158,9 +159,9 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
         />
       )}
 
-      <div className="holonContentContainer ">
-        <div className="sticky top-[87px] md:top-[110px] bg-white z-10 px-10 lg:px-16 pl-4 ">
-          <div>
+      <div className="holonContentContainer">
+        <div className="sticky top-[87px] flex flex-row md:top-[110px] bg-white z-10 px-10 lg:px-16 pl-4 shadow-md ">
+          <div className="flex-1">
             <button
               onClick={closeHolarchyModal}
               className={`px-6 pb-2 ${
@@ -180,6 +181,17 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               Holarchie
             </button>
           </div>
+          {holarchyModal && (
+            <button
+              onClick={openHolarchyModal}
+              className={`px-6 pb-2 flex-row justify-center items-center text-center bg-white active:bg-holon-gray-200 h-12`}>
+              <div className="inline-block mr-2 w-5">
+                <InformationCircleIcon />
+              </div>
+              Legenda
+            </button>
+          )}
+          <div className="flex-1"></div>
         </div>
 
         <div className={`flex flex-col lg:flex-row ${backgroundFullcolor}`}>
