@@ -63,7 +63,7 @@ class Take(FilterSubSelector):
             n = self.number_of_items
 
         if self.mode == TakeMode.FIRST.value:
-            return queryset[:n]
+            return queryset[: n - 1]
 
         elif self.mode == TakeMode.RANDOM.value:
             ids = list(queryset.values_list("id", flat=True))
