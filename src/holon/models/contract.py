@@ -29,7 +29,7 @@ class Contract(PolymorphicModel):
         null=True,
         blank=True,
     )
-    name = models.CharField(max_length=255, blank=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
     contractScope = models.ForeignKey(Actor, on_delete=models.CASCADE, null=True)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
