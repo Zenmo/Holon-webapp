@@ -56,7 +56,7 @@ class RuleMappingTestClass(TestCase):
         # Arange
         interactive_elements = [
             {
-                "value": str(self.interactive_element_option_1.id),
+                "value": str(self.interactive_element_option_1.option),
                 "interactive_element": self.interactive_element,
             }
         ]
@@ -78,7 +78,7 @@ class RuleMappingTestClass(TestCase):
         # Arange
         interactive_elements = [
             {
-                "value": str(self.interactive_element_option_3.id),
+                "value": str(self.interactive_element_option_3.option),
                 "interactive_element": self.interactive_element,
             }
         ]
@@ -99,7 +99,7 @@ class RuleMappingTestClass(TestCase):
         # Arange
         interactive_elements = [
             {
-                "value": f"{self.interactive_element_option_1.id},{self.interactive_element_option_3.id}",
+                "value": f"{self.interactive_element_option_1.option},{self.interactive_element_option_3.option}",
                 "interactive_element": self.interactive_element,
             }
         ]

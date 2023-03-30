@@ -28,13 +28,6 @@ class HolonV2Service(generics.CreateAPIView):
 
         try:
             if serializer.is_valid():
-                # return Response(
-                #     {
-                #         "dashboard_results": dashboard_result_json,
-                #         "cost_benefit_results": costbenefit_result_json,
-                #     },
-                #     status=status.HTTP_200_OK,
-                # )
                 data = serializer.validated_data
 
                 scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -70,6 +63,7 @@ class HolonV2Service(generics.CreateAPIView):
 
                 results = Results(
                     scenario=scenario,
+                    request=request,
                     anylogic_outcomes=cc.outputs,
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!

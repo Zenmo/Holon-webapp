@@ -105,6 +105,9 @@ class GenericRuleActionAdd(RuleAction):
     ):
         """Add an asset to the first n items in the the filtered objects"""
 
+        if len(filtered_queryset) <= 0:
+            return
+
         # parse value
         n = int(value)
         if n < 0:

@@ -29,6 +29,7 @@ class Contract(PolymorphicModel):
         null=True,
         blank=True,
     )
+    name = models.CharField(max_length=255, blank=True, null=True)
     contractScope = models.ForeignKey(Actor, on_delete=models.CASCADE, null=True)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
@@ -51,7 +52,7 @@ class Contract(PolymorphicModel):
     )
 
     def __str__(self):
-        return f"c{self.id} - {self.contractType.lower()}"
+        return f"c{self.id} - {self.contractType.lower()}{' - ' + self.name if self.name else ''}"
 
     def clean(self):
         return ValidationError(

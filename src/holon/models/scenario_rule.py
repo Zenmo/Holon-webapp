@@ -166,6 +166,21 @@ class ScenarioRule(Rule):
 
     panels = Rule.panels + [
         MultiFieldPanel(
+            heading="Filter subselection",
+            children=[
+                InlinePanel(
+                    "subselector_skips",
+                    heading="Skip a number of filtered items",
+                    label="Filter item skip",
+                ),
+                InlinePanel(
+                    "subselector_takes",
+                    heading="Take a number of filtered items",
+                    label="Filter item take",
+                ),
+            ],
+        ),
+        MultiFieldPanel(
             heading="Rule actions",
             children=[
                 InlinePanel(
@@ -198,12 +213,30 @@ class ScenarioRule(Rule):
                     heading="Discrete rule actions - balance child models",
                     label="Discrete rule action - balance child models",
                 ),
+                InlinePanel(
+                    "discrete_factors_add_multiple_under_each_parent",
+                    heading="Discrete rule actions - add duplicate objects",
+                    label="Discrete rule action - add duplicate objects",
+                ),
             ],
         ),
     ]
 
     class Meta:
         verbose_name = "ScenarioRule"
+
+    def get_filter_subselectors(self) -> list["FilterSubSelector"]:
+        """Get a list of the filter subselection items"""
+
+        return list(self.subselector_skips.all()) + list(self.subselector_takes.all())
+
+    def apply_filter_subselections(self, filtered_queryset: QuerySet, value: str):
+        """Apply the rule's query subselection to the filtered queryset"""
+
+        for subselector in self.get_filter_subselectors():
+            filtered_queryset = subselector.subselect_queryset(filtered_queryset, value)
+
+        return filtered_queryset
 
     def get_actions(self) -> list["RuleAction"]:
         """Return a list of RuleActions belonging to this rule"""
