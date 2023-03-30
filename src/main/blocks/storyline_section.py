@@ -43,14 +43,14 @@ class InteractiveElementChooser(Chooser):
 
 class InteractiveInputBlock(blocks.StructBlock):
     DISPLAY_CHECKBOXRADIO = "checkbox_radio"
-    DISPLAY_BUTTON = "button"
-    DISPLAY_CHOICES = (
+    DISPLAY_DROPDOWN = "dropdown"
+    DISPLAY_CHOICES = [
         (DISPLAY_CHECKBOXRADIO, "Show as checkboxe(s) or radiobutton(s)"),
-        (DISPLAY_BUTTON, "Show as button(s)"),
-    )
+        (DISPLAY_DROPDOWN, "Show as dropdown"),
+    ]
 
     interactive_input = ModelChooserBlock(InteractiveElement)
-    display = DISPLAY_CHECKBOXRADIO
+    display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES, required=False)
     visible = blocks.BooleanBlock(required=False, default=True)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(
@@ -115,6 +115,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "options": options_arr,
                 "visible": value["visible"],
                 "locked": value["locked"],
+                "display": value["display"],
                 "default_value_override": value["default_value"],
             }
 

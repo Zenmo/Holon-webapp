@@ -143,6 +143,10 @@ $(document).ready(function () {
                         .find(
                             "input[id$='-value-default_value'],select[id$='-value-default_value']"
                         );
+                    const display = $(element)
+                        .closest(".w-panel__content")
+                        .find('[data-contentpath="display"]');
+
                     const label = $(
                         "label[for='" + $(defaultValueInput).attr("id") + "']"
                     );
@@ -155,6 +159,10 @@ $(document).ready(function () {
                     [name, type, options] =
                         interactiveElementName.innerText.split("|");
                     interactiveElementName.innerText = name;
+                    if (type !== "single_select") {
+                        display.hide();
+                    }
+
                     if (type === "continuous") {
                         if (defaultValueInput.prop("tagName") !== "INPUT")
                             convertSelectToInput(defaultValueInput);
@@ -169,7 +177,6 @@ $(document).ready(function () {
                         );
                         label.text("Default value (choose one of the options)");
                     }
-
                     interactiveElementInputs[element.attr("id")] =
                         element.val();
                 }
