@@ -21,7 +21,7 @@ function InteractiveDropdown({ defaultValue, onChange, options, ...props }: Prop
           e.target.childNodes[e.target.selectedIndex].value
         )
       }>
-      {options.map((inputItem: any, index: number) => {
+      {options.map((inputItem, index: number) => {
         return (
           <option
             id={
