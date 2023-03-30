@@ -119,6 +119,12 @@ $(document).ready(function () {
     var checkEverySeconds = 1;
     const interactiveElementInputs = {};
 
+    function setIdToDisplay() {
+        const contentPath = "display";
+        const targetElement = $("[data-contentpath='" + contentPath + "']");
+        targetElement.attr("id", "panel-display-section");
+    }
+
     if ($("#panel-child-content-storyline-heading")) {
         setInterval(function () {
             $("input[id$=-value-interactive_input]").each(function () {
@@ -136,6 +142,11 @@ $(document).ready(function () {
                         .find(
                             "input[id$='-value-default_value'],select[id$='-value-default_value']"
                         );
+                    const display = $(element).attr(
+                        "data-contentpath",
+                        "display"
+                    );
+
                     const label = $(
                         "label[for='" + $(defaultValueInput).attr("id") + "']"
                     );
@@ -155,6 +166,9 @@ $(document).ready(function () {
                         defaultValueInput.attr("min", "0");
                         defaultValueInput.attr("max", "100");
                         label.text("Default value (between 0 and 100)");
+                        display.hide();
+                    } else if (type !== "single_select") {
+                        $(display).hide();
                     } else {
                         convertInputToSelect(
                             defaultValueInput,
@@ -162,7 +176,6 @@ $(document).ready(function () {
                         );
                         label.text("Default value (choose one of the options)");
                     }
-
                     interactiveElementInputs[element.attr("id")] =
                         element.val();
                 }
