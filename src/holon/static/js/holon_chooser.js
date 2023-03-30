@@ -126,12 +126,6 @@ $(document).ready(function () {
     var checkEverySeconds = 1;
     const interactiveElementInputs = {};
 
-    function setIdToDisplay() {
-        const contentPath = "display";
-        const targetElement = $("[data-contentpath='" + contentPath + "']");
-        targetElement.attr("id", "panel-display-section");
-    }
-
     if ($("#panel-child-content-storyline-heading")) {
         setInterval(function () {
             $("input[id$=-value-interactive_input]").each(function () {
