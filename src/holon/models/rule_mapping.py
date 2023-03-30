@@ -31,6 +31,7 @@ def get_scenario_and_apply_rules(
             rule: ScenarioRule
             for rule in option.rules.all():
                 filtered_queryset = rule.get_filtered_queryset(scenario)
+                filtered_queryset = rule.apply_filter_subselections(filtered_queryset, value)
                 rule.apply_rule_actions(filtered_queryset, value)
 
     return scenario
