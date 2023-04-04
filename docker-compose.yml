@@ -30,6 +30,10 @@ services:
       - ./frontend:/usr/src/app
       - /usr/src/frontend/node_modules
       - /usr/src/frontend/.next
+    environment:
+      - WAGTAIL_API_URL=http://python:8000/wt/api/nextjs
+      - NEXT_PUBLIC_WAGTAIL_API_URL=http://localhost:8000/wt/api/nextjs
+      - NEXT_PUBLIC_BASE_URL=http://localhost:8000/wt
     depends_on:
       - web
 
