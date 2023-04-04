@@ -22,7 +22,7 @@ jobs:
       AL_API_KEY: test-api-key
     services:
       postgres_main:
-        image: postgres:12
+        image: postgres:13.9
         env:
           POSTGRES_USER: ${{ env.DB_USER }}
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
@@ -30,9 +30,9 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s 
-          --health-timeout 5s 
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
           --health-retries 5
     strategy:
       max-parallel: 4
