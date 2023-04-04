@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.11-slim
 LABEL version="v0.0.0"
 
 ENV PYTHONUNBUFFERED=1 \
