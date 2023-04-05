@@ -166,6 +166,26 @@ class ScenarioRule(Rule):
 
     panels = Rule.panels + [
         MultiFieldPanel(
+            heading="Interactive value transform",
+            children=[
+                InlinePanel(
+                    "value_translates",
+                    heading="Add or subtract to the value",
+                    label="Value translate",
+                ),
+                InlinePanel(
+                    "value_scales",
+                    heading="Scale the value",
+                    label="Value scale",
+                ),
+                InlinePanel(
+                    "value_map_ranges",
+                    heading="Map the value to a different range",
+                    label="Value map range",
+                ),
+            ],
+        ),
+        MultiFieldPanel(
             heading="Filter subselection",
             children=[
                 InlinePanel(
@@ -224,6 +244,24 @@ class ScenarioRule(Rule):
 
     class Meta:
         verbose_name = "ScenarioRule"
+
+    def get_value_transforms(self) -> list["ValueTransform"]:
+        """Get a list of the value transform items"""
+
+        return (
+            list(self.value_translates.all())
+            + list(self.value_scales.all())
+            + list(self.value_map_ranges.all())
+            + list(self.value_rounds.all())
+        )
+
+    def apply_value_transforms(self, value: str) -> Union[str, int, float]:
+        """Apply the rule's value transforms to the interactive element value"""
+
+        for value_transform in self.get_value_transforms():
+            value = value_transform.transform_value(value)
+
+        return value
 
     def get_filter_subselectors(self) -> list["FilterSubSelector"]:
         """Get a list of the filter subselection items"""
