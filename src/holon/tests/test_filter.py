@@ -113,8 +113,39 @@ class RuleFiltersTestClass(TestCase):
 
         # Assert
         self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_1.id)
 
-    def test_relation_discrete_filter_greater_than(self) -> None:
+    def test_inverted_relation_filter_greater_than(self) -> None:
+        # Arange
+        asset_1: EnergyAsset = EnergyAsset.objects.create(
+            gridconnection=self.gridconnection_1, name="asset 1"
+        )
+        asset_2: EnergyAsset = EnergyAsset.objects.create(
+            gridconnection=self.gridconnection_2, name="asset 2"
+        )
+        rule_asset = Rule.objects.create(
+            model_type=ModelType.ENERGYASSET,
+            model_subtype="",
+        )
+
+        RelationAttributeFilter.objects.create(
+            rule=rule_asset,
+            model_attribute="capacity_kw",
+            comparator=AttributeFilterComparator.GREATER_THAN,
+            value=700.0,
+            relation_field="gridconnection",
+            relation_field_subtype="BuildingGridConnection",
+            invert_filter=True,
+        )
+
+        # Act
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_2.id)
+
+    def test_discrete_filter_greater_than(self) -> None:
         # Arange
         # Add gridconnection with insulationtype none, which should be ignored
         BuildingGridConnection.objects.create(
@@ -147,3 +178,57 @@ class RuleFiltersTestClass(TestCase):
             self.assertTrue(
                 gridconnection.insulation_label in [InsulationLabel.A, InsulationLabel.B]
             )
+
+    def test_inverted_relation_exists_filter(self) -> None:
+        # Arange
+        asset_related_to_gridconnection = EnergyAsset.objects.create(
+            gridconnection=self.gridconnection_1, name="asset 1"
+        )
+        gridnode = GridNode.objects.create(
+            owner_actor=self.actor, capacity_kw=0, payload=self.scenario
+        )
+        asset_related_to_gridnode = EnergyAsset.objects.create(gridnode=gridnode, name="asset 2")
+        rule_asset = Rule.objects.create(
+            model_type=ModelType.ENERGYASSET,
+            model_subtype="",
+        )
+
+        RelationExistsFilter.objects.create(
+            rule=rule_asset,
+            invert_filter=True,
+            relation_field="gridconnection",
+        )
+
+        # Act
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_related_to_gridnode.id)
+
+    def test_inverted_relation_exists_filter_with_subtype(self) -> None:
+        # Arange
+        asset_related_to_building = EnergyAsset.objects.create(
+            gridconnection=self.gridconnection_1, name="asset 1"
+        )
+        asset_related_to_district_heat = EnergyAsset.objects.create(
+            gridconnection=self.gridconnection_4, name="asset 2"
+        )
+        rule_asset = Rule.objects.create(
+            model_type=ModelType.ENERGYASSET,
+            model_subtype="",
+        )
+
+        RelationExistsFilter.objects.create(
+            rule=rule_asset,
+            invert_filter=True,
+            relation_field="gridconnection",
+            relation_field_subtype="BuildingGridConnection",
+        )
+
+        # Act
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_related_to_district_heat.id)
