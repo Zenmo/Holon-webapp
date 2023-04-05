@@ -164,83 +164,94 @@ class ScenarioRule(Rule):
         null=True,
     )
 
-    panels = Rule.panels + [
-        MultiFieldPanel(
-            heading="Interactive value transform",
-            children=[
-                InlinePanel(
-                    "value_translates",
-                    heading="Add or subtract to the value",
-                    label="Value translate",
-                ),
-                InlinePanel(
-                    "value_scales",
-                    heading="Scale the value",
-                    label="Value scale",
-                ),
-                InlinePanel(
-                    "value_map_ranges",
-                    heading="Map the value to a different range",
-                    label="Value map range",
-                ),
-            ],
-        ),
-        MultiFieldPanel(
-            heading="Filter subselection",
-            children=[
-                InlinePanel(
-                    "subselector_skips",
-                    heading="Skip a number of filtered items",
-                    label="Filter item skip",
-                ),
-                InlinePanel(
-                    "subselector_takes",
-                    heading="Take a number of filtered items",
-                    label="Filter item take",
-                ),
-            ],
-        ),
-        MultiFieldPanel(
-            heading="Rule actions",
-            children=[
-                InlinePanel(
-                    "continuous_factors",
-                    heading="Continuous rule actions - factors",
-                    label="Continuous rule action - factor",
-                ),
-                InlinePanel(
-                    "discrete_factors_change_attribute",
-                    heading="Discrete rule actions - change attribute",
-                    label="Discrete rule action - change attribute",
-                ),
-                InlinePanel(
-                    "discrete_factors_remove",
-                    heading="Discrete rule actions - remove filtered objects",
-                    label="Discrete rule action - remove filtered objects",
-                ),
-                InlinePanel(
-                    "discrete_factors_add",
-                    heading="Discrete rule actions - add child models",
-                    label="Discrete rule action - add child models (Select only one of the three options per model to add)",
-                ),
-                InlinePanel(
-                    "discrete_factors_set_count",
-                    heading="Discrete rule actions - set model count",
-                    label="Discrete rule action - set model count",
-                ),
-                InlinePanel(
-                    "discrete_factors_balancegroup",
-                    heading="Discrete rule actions - balance child models",
-                    label="Discrete rule action - balance child models",
-                ),
-                InlinePanel(
-                    "discrete_factors_add_multiple_under_each_parent",
-                    heading="Discrete rule actions - add duplicate objects",
-                    label="Discrete rule action - add duplicate objects",
-                ),
-            ],
-        ),
-    ]
+    panels = (
+        [Rule.panels[0]]
+        + [
+            MultiFieldPanel(
+                heading="Interactive element value transform",
+                children=[
+                    InlinePanel(
+                        "value_translates",
+                        heading="Add or subtract",
+                        label="Value translate",
+                    ),
+                    InlinePanel(
+                        "value_scales",
+                        heading="Scale",
+                        label="Value scale",
+                    ),
+                    InlinePanel(
+                        "value_map_ranges",
+                        heading="Map to a different range",
+                        label="Value map range",
+                    ),
+                    InlinePanel(
+                        "value_rounds",
+                        heading="Round",
+                        label="Value round",
+                    ),
+                ],
+            ),
+        ]
+        + Rule.panels[1:]
+        + [
+            MultiFieldPanel(
+                heading="Filter subselection",
+                children=[
+                    InlinePanel(
+                        "subselector_skips",
+                        heading="Skip a number of filtered items",
+                        label="Filter item skip",
+                    ),
+                    InlinePanel(
+                        "subselector_takes",
+                        heading="Take a number of filtered items",
+                        label="Filter item take",
+                    ),
+                ],
+            ),
+            MultiFieldPanel(
+                heading="Rule actions",
+                children=[
+                    InlinePanel(
+                        "continuous_factors",
+                        heading="Continuous rule actions - factors",
+                        label="Continuous rule action - factor",
+                    ),
+                    InlinePanel(
+                        "discrete_factors_change_attribute",
+                        heading="Discrete rule actions - change attribute",
+                        label="Discrete rule action - change attribute",
+                    ),
+                    InlinePanel(
+                        "discrete_factors_remove",
+                        heading="Discrete rule actions - remove filtered objects",
+                        label="Discrete rule action - remove filtered objects",
+                    ),
+                    InlinePanel(
+                        "discrete_factors_add",
+                        heading="Discrete rule actions - add child models",
+                        label="Discrete rule action - add child models (Select only one of the three options per model to add)",
+                    ),
+                    InlinePanel(
+                        "discrete_factors_set_count",
+                        heading="Discrete rule actions - set model count",
+                        label="Discrete rule action - set model count",
+                    ),
+                    InlinePanel(
+                        "discrete_factors_balancegroup",
+                        heading="Discrete rule actions - balance child models",
+                        label="Discrete rule action - balance child models",
+                    ),
+                    InlinePanel(
+                        "discrete_factors_add_multiple_under_each_parent",
+                        heading="Discrete rule actions - add duplicate objects",
+                        label="Discrete rule action - add duplicate objects",
+                    ),
+                ],
+            ),
+        ]
+    )
 
     class Meta:
         verbose_name = "ScenarioRule"
