@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
-        ("holon", "0030_alter_contract_name"),
+        ("holon", "0031_policy_name"),
     ]
 
     operations = [
