@@ -283,7 +283,7 @@ class RelationExistsFilter(Filter):
                 return Q(**{f"{self.relation_field}__isnull": False})
 
 
-class SecondOrderRelationAttributeFilter(RelationAttributeFilter):
+class SecondOrderRelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
 
     rule = ParentalKey(
@@ -291,10 +291,13 @@ class SecondOrderRelationAttributeFilter(RelationAttributeFilter):
         on_delete=models.CASCADE,
         related_name="second_order_relation_attribute_filters",
     )
-    second_order_relation_field = models.CharField(max_length=255)  # bijv gridconnection
-    second_order_relation_field_subtype = models.CharField(
-        max_length=255, blank=True
-    )  # bijv household
+    relation_field = models.CharField(max_length=255)  # bijv gridconnection
+    relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
+    invert_filter = models.BooleanField(
+        default=False, help_text="Filter models that don't have the specified relation"
+    )
+    second_order_relation_field = models.CharField(max_length=255)
+    second_order_relation_field_subtype = models.CharField(max_length=255, blank=True)
     invert_filter = models.BooleanField(
         default=False, help_text="Filter models that don't satisfy the model attribute comparison"
     )
@@ -340,6 +343,45 @@ class SecondOrderRelationAttributeFilter(RelationAttributeFilter):
         except ObjectDoesNotExist:
             return
 
+    def get_relation_model(self) -> models.Model:
+        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+        model = apps.get_model("holon", model_type)
+
+        relation_model_type = (
+            self.relation_field_subtype
+            if self.relation_field_subtype
+            else model._meta.get_field(self.relation_field).name
+        )
+
+        return apps.get_model("holon", relation_model_type)
+
+    def relation_model_attribute_options(self) -> list[str]:
+        relation_model = self.get_relation_model()
+
+        return [
+            field.name
+            for field in relation_model._meta.get_fields()
+            if not field.is_relation and not is_exclude_field(field)
+        ]
+
+    def relation_field_options(self) -> list[str]:
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if field.is_relation and not is_exclude_field(field)
+        ]
+
+    def relation_field_subtype_options(self) -> list[str]:
+        model = apps.get_model("holon", self.rule.model_type)
+        related_model = model()._meta.get_field(self.relation_field).related_model
+
+        return [subclass.__name__ for subclass in all_subclasses(related_model)]
+
     def get_second_order_relation_model(self) -> models.Model:
         if self.second_order_relation_field_subtype:
             return apps.get_model("holon", self.second_order_relation_field_subtype)
@@ -377,21 +419,34 @@ class SecondOrderRelationAttributeFilter(RelationAttributeFilter):
         return [subclass.__name__ for subclass in all_subclasses(second_related_model)]
 
     def get_q(self) -> Q:
-        relation_field_q = Q()
+        second_order_relation_field_q = Q()
         relation_field_subtype = Q()
+        second_order_relation_field_subtype = Q()
 
         if self.comparator == AttributeFilterComparator.EQUAL.value:
-            relation_field_q = Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
+            second_order_relation_field_q = Q(
+                **{
+                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}": self.value
+                }
+            )
         elif self.comparator == AttributeFilterComparator.LESS_THAN.value:
-            relation_field_q = Q(
-                **{f"{self.relation_field}__{self.model_attribute}__lt": self.value}
+            second_order_relation_field_q = Q(
+                **{
+                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}__lt": self.value
+                }
             )
         elif self.comparator == AttributeFilterComparator.GREATER_THAN.value:
-            relation_field_q = Q(
-                **{f"{self.relation_field}__{self.model_attribute}__gt": self.value}
+            second_order_relation_field_q = Q(
+                **{
+                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}__gt": self.value
+                }
             )
         elif self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
-            relation_field_q = ~Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
+            second_order_relation_field_q = ~Q(
+                **{
+                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}": self.value
+                }
+            )
 
         if self.relation_field_subtype:
             relation_subtype = apps.get_model("holon", self.relation_field_subtype)
@@ -403,9 +458,27 @@ class SecondOrderRelationAttributeFilter(RelationAttributeFilter):
                 }
             )
 
+        if self.second_order_relation_field_subtype:
+            relation_subtype = apps.get_model("holon", self.second_order_relation_field_subtype)
+            second_order_relation_field_subtype = Q(
+                **{
+                    f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
+                        relation_subtype
+                    )
+                }
+            )
+
         if self.invert_filter:
-            return ~(relation_field_subtype & relation_field_q)
-        return relation_field_subtype & relation_field_q
+            return ~(
+                relation_field_subtype
+                & second_order_relation_field_q
+                & second_order_relation_field_subtype
+            )
+        return (
+            relation_field_subtype
+            & second_order_relation_field_q
+            & second_order_relation_field_subtype
+        )
 
 
 class DiscreteAttributeFilter(Filter):
