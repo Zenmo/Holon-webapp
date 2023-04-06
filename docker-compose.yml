@@ -17,13 +17,15 @@ services:
     environment:
       - PYTHON_HOST=http://python
       - NEXT_HOST=http://next
-      - MEDIA_REMOTE_DOMAIN=holontool.nl
+      - SERVER_NAME=pizzaoven.holontool.nl
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   next:
     image: holon_nextjs
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.prod 
     ports:
       - "3000:3000"
     volumes:
@@ -35,7 +37,9 @@ services:
 
   python:
     image: holon_wagtail_python
-    build: ./src
+    build: 
+      context: ./src
+      dockerfile: Dockerfile.prod
     volumes:
       - "./src:/app"
     depends_on:

@@ -7,7 +7,7 @@ server {
     send_timeout                120s; # timeout for sending a response to the requesting client - note this isn't proxy_send_timeout, but the time between two successive write operations to the requesting client (ie. browser)
     reset_timedout_connection on;
 
-    server_name holontool.nl _;
+    server_name pizzaoven.holontool.nl _;
 
     client_max_body_size 128M;
 
