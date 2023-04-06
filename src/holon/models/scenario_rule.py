@@ -70,6 +70,11 @@ class Rule(PolymorphicModel, ClusterableModel):
                     label="Relation attribute filters",
                 ),
                 InlinePanel(
+                    "second_order_relation_attribute_filters",
+                    heading="Second order relation attribute filters",
+                    label="Second order relation attribute filters",
+                ),
+                InlinePanel(
                     "relation_exists_filters",
                     heading="Relation exists filters",
                     label="Relation exists filters",
@@ -110,6 +115,7 @@ class Rule(PolymorphicModel, ClusterableModel):
         return (
             list(self.attribute_filters.all())
             + list(self.relation_attribute_filters.all())
+            + list(self.second_order_relation_attribute_filters.all())
             + list(self.relation_exists_filters.all())
             + list(self.discrete_attribute_filters.all())
         )
