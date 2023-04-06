@@ -65,6 +65,8 @@ class Scenario(ClusterableModel):
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
+        for gridnode in self.gridnode_set.all():
+            assets = assets | gridnode.energyasset_set.all()
 
         return assets
 

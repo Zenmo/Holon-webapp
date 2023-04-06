@@ -69,6 +69,11 @@ class Rule(PolymorphicModel, ClusterableModel):
                     heading="Relation attribute filters",
                     label="Relation attribute filters",
                 ),
+                InlinePanel(
+                    "relation_exists_filters",
+                    heading="Relation exists filters",
+                    label="Relation exists filters",
+                ),
             ],
         ),
     ]
@@ -105,6 +110,7 @@ class Rule(PolymorphicModel, ClusterableModel):
         return (
             list(self.attribute_filters.all())
             + list(self.relation_attribute_filters.all())
+            + list(self.relation_exists_filters.all())
             + list(self.discrete_attribute_filters.all())
         )
 
@@ -140,7 +146,9 @@ class Rule(PolymorphicModel, ClusterableModel):
             submodel = apps.get_model("holon", self.model_subtype)
             queryset = queryset.instance_of(submodel)
 
-        return queryset.filter(queryset_filter)
+        # Use distinct because of relation filters
+        #   e.q. a filter on gridconnections where energyasset have certain properties will produce duplicate gridconnection in the queryset
+        return queryset.filter(queryset_filter).distinct()
 
     def get_filtered_queryset(self, scenario: Scenario) -> QuerySet:
         """Return a queryset based on the Rule's model (sub)type and filters"""
