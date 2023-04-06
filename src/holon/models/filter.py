@@ -462,7 +462,7 @@ class SecondOrderRelationAttributeFilter(Filter):
             relation_subtype = apps.get_model("holon", self.second_order_relation_field_subtype)
             second_order_relation_field_subtype = Q(
                 **{
-                    f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
+                    f"{self.relation_field}__{self.second_order_relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
                         relation_subtype
                     )
                 }
