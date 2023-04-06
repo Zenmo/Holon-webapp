@@ -1,8 +1,31 @@
-# Holon-wagtail
+# Holon webapp
+This repo contains the webapp part of the HOLON project. This includes the NextJS frontend and the Django/Wagtail backend. Other repos are:
+1. [AnyLogic](https://github.com/ZEnMo/HOLON)
+2. [ETM service](https://github.com/ZEnMo/HOLON-ETM)
+3. [cloudclient](https://github.com/ZEnMo/HOLON-cloudclient) (legacy)
 
-# Holon web application prototype
+## Content
+- [Holon webapp](#holon-webapp)
+  - [Content](#content)
+  - [Environments](#environments)
+  - [First setup / Start the application](#first-setup--start-the-application)
+  - [Start Dev Container](#start-dev-container)
+  - [Configure stuff inside the container](#configure-stuff-inside-the-container)
+  - [Admin](#admin)
+  - [Integration testing environment (pizza)](#integration-testing-environment-pizza)
+    - [Initial deploy](#initial-deploy)
+    - [Refresh](#refresh)
+    - [Update the snapshot](#update-the-snapshot)
+  - [Deployment](#deployment)
+  - [Datamodel](#datamodel)
+    - [Development on datamodel](#development-on-datamodel)
+- [Resetting database and building project](#resetting-database-and-building-project)
 
-Prototype of the Holon web application
+## Environments
+We work using LTAP. Local runs on dev containers (see below). All TAP environments are automatically built containers that are hosted on Azure webapp instances. In addition, we have a bleeding edge Integration Testing (IT) environment.
+
+
+
 
 ## First setup / Start the application
 
@@ -73,6 +96,62 @@ python manage.py createsuperuser
 
 After finishing all the steps, you can login on localhost:8000/admin
 
+## Integration testing environment (pizza)
+Runs on Hetzner cloud instance. Uses the acceptance static&media CDN.
+
+### Initial deploy 
+1. Set DNS and certify domain
+```bash
+# ~/HOLON-webapp
+sudo certbot certonly
+# copy both privkey.pem and fullchain.pem
+cp <cert-location> ./docker/files/certs
+```
+2. Copy environment variable files and set correct value
+
+```bash
+# ~/HOLON-webapp
+
+# Frontend
+cp ./frontend/.env.pizza ./frontend/.env
+
+# Backend
+cp ./docker/config/python.pizza.env ./docker/config/python.env
+```
+Make sure the following env vars are set:
+```bash
+# To be set manually
+SECRET_KEY
+AZURE_STORAGE_KEY
+
+# With default value (check if applicable)
+ALLOWED_HOSTS=*
+DOMAIN_HOST="https://pizzaoven.holontool.nl"
+AZURE_ACCOUNT_NAME=holonstorage
+CUSTOM_STATIC_LOCATION="static-acceptatie"
+CUSTOM_MEDIA_LOCATION="media-acceptatie"
+```
+3. Make an export of the production database (or the one that you want to sync) and place that file as `prod.sql` in the `db` folder. 
+1. Use docker compose up to start the service
+```bash
+docker compose up
+```
+
+### Refresh
+Checkout to the branch that you want to use. Stop the service and restart the service using `docker compose up`
+```bash
+docker compose up
+```
+### Update the snapshot
+1. Remove the database container (will remove all data!)
+```bash
+docker compose rm db
+```
+2. Place the new `dump.sql` as `prod.sql` in the `db` folder.
+2. Restart using `docker compose up`
+```bash
+docker compose up
+```
 ## Deployment
 
 Deployment is automatically done with GitHub actions to the Azure portal, the following mapping between code and azure is done:

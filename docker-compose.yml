@@ -20,11 +20,9 @@ services:
       - "host.docker.internal:host-gateway"
 
   next:
-    image: holon_next
-    build: ./frontend
     build: 
       context: ./frontend
-      dockerfile: Dockerfile.prod 
+      dockerfile: Dockerfile.prod
     ports:
       - "3000:3000"
     volumes:
@@ -33,9 +31,11 @@ services:
       - /usr/src/app/.next
     depends_on:
       - web
+    environment:
+      - NEXT_PUBLIC_WAGTAIL_API_URL=https://pizzaoven.holontool.nl/wt/api/nextjs
+      - NEXT_PUBLIC_BASE_URL=https://pizzaoven.holontool.nl/wt
 
   python:
-    image: holon_python
     build: 
       context: ./src
       dockerfile: Dockerfile.prod
