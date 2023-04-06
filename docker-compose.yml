@@ -4,23 +4,24 @@ services:
     image: nginx:alpine
     working_dir: /app
     ports:
-      - "8000:80"
-      - "8082:443"
+      - "80:80"
+      - "443:443"
     depends_on:
       - python
     volumes:
-      - "./docker/files/static/502.html:/app/502.html:cached"
-      - "./docker/files/config/nginx.conf.template:/etc/nginx/templates/default.conf.template:cached"
+      - "./docker/files/static/502.html:/app/502.html"
+      - "./docker/files/config/nginx.pizza.conf:/etc/nginx/templates/default.conf.template"
       - "./docker/files/certs:/etc/nginx/certs"
     environment:
       - PYTHON_HOST=http://python
       - NEXT_HOST=http://next
-      - SERVER_NAME="pizzaoven.holontool.nl"
+      - SERVER_NAME=pizzaoven.holontool.nl
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   next:
     image: holon_next
+    build: ./frontend
     build: 
       context: ./frontend
       dockerfile: Dockerfile.prod 
@@ -28,8 +29,8 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/usr/src/app
-      - /usr/src/frontend/node_modules
-      - /usr/src/frontend/.next
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
     depends_on:
       - web
 
@@ -45,12 +46,11 @@ services:
     env_file: ./docker/config/python.env
 
   db:
-    image: postgis/postgis:12-2.5-alpine
+    image: prod_db
+    build:
+      context: ./db
     ports:
       - "8083:5432"
-    volumes:
-      - "./docker/files/db-dumps/:/docker-entrypoint-initdb.d/"
-      - "./docker/files/shared:/shared:rw"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
