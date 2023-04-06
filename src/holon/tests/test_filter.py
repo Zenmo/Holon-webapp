@@ -206,6 +206,33 @@ class RuleFiltersTestClass(TestCase):
         self.assertEqual(len(filtered_queryset), 1)
         self.assertEqual(filtered_queryset[0].id, asset_related_to_gridnode.id)
 
+    def test_relation_exists_filter(self) -> None:
+        # Arange
+        asset_related_to_gridconnection = EnergyAsset.objects.create(
+            gridconnection=self.gridconnection_1, name="asset 1"
+        )
+        gridnode = GridNode.objects.create(
+            owner_actor=self.actor, capacity_kw=0, payload=self.scenario
+        )
+        asset_related_to_gridnode = EnergyAsset.objects.create(gridnode=gridnode, name="asset 2")
+        rule_asset = Rule.objects.create(
+            model_type=ModelType.ENERGYASSET,
+            model_subtype="",
+        )
+
+        RelationExistsFilter.objects.create(
+            rule=rule_asset,
+            invert_filter=False,
+            relation_field="gridconnection",
+        )
+
+        # Act
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_related_to_gridconnection.id)
+
     def test_inverted_relation_exists_filter_with_subtype(self) -> None:
         # Arange
         asset_related_to_building = EnergyAsset.objects.create(
