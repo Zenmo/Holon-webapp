@@ -21,7 +21,7 @@ class ValueTransformTestClass(TestCase):
 
         self.assertEqual(new_value, 7)
 
-    def test_value_sca(self):
+    def test_value_translate_negative(self):
         """Test ValueTranslate with a negate number"""
 
         # Arrange
