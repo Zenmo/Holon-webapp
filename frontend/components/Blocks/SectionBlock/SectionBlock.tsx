@@ -64,6 +64,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [loading, setLoading] = useState<boolean>(false);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
+  const [legend, setLegend] = useState<boolean>(false);
   const scenario = useContext<number>(ScenarioContext);
 
   const sectionContainerRef = useRef(null);
@@ -160,7 +161,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       )}
 
       <div className="holonContentContainer">
-        <div className="sticky top-[87px] flex flex-row md:top-[110px] bg-white z-10 px-10 lg:px-16 pl-4 shadow-md ">
+        <div className="sticky z-10 top-[87px] flex flex-row md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
           <div className="flex-1">
             <button
               onClick={closeHolarchyModal}
@@ -183,11 +184,11 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
           </div>
           {holarchyModal && (
             <button
-              onClick={openHolarchyModal}
-              className={`px-6 pb-2 flex-row justify-center items-center text-center bg-white active:bg-holon-gray-200 h-12`}>
-              <div className="inline-block mr-2 w-5">
-                <InformationCircleIcon />
-              </div>
+              onClick={() => setLegend(!legend)}
+              className={`px-6 pb-2  bg-white ${
+                legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
+              }`}>
+              <InformationCircleIcon className="mr-2 w-5 inline-block" />
               Legenda
             </button>
           )}
@@ -241,7 +242,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               textLabelIntermediate={data.value.textLabelIntermediate}
               textLabelLocal={data.value.textLabelLocal}
               loading={loading}
-              kpis={kpis}></HolarchyTab>
+              kpis={kpis}
+              legend={legend}></HolarchyTab>
           )}
         </div>
       </div>

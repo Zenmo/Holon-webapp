@@ -1,36 +1,54 @@
-import { Popover } from "@headlessui/react";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useRef } from "react";
+type LegendModal = {
+  data: {
+    colors: [
+      {
+        label: string;
+        png: string;
+      }
+    ];
+    lines: [
+      {
+        label: string;
+        png: string;
+      }
+    ];
+  };
+};
 
-type LegendModal = {};
-
-export default function LegendModal() {
-  const buttonRef = useRef();
-
+export default function LegendModal({ data }: LegendModal) {
   return (
-    <Popover className="relative" data-testid="legend-popover">
-      <div className="flex flex-row justify-center">
-        <Popover.Button
-          className="absolute z-50 flex flex-row top-[-2rem] justify-center items-center text-center px-4 py-2 bg-white active:bg-holon-gray-200 mt-1"
-          ref={buttonRef}>
-          <div className="inline-block mr-2 w-5">
-            <InformationCircleIcon />
-          </div>
-          Legenda
-        </Popover.Button>
-      </div>
-
-      <Popover.Panel className="bg-white border-2 border-solid rounded-md border-holon-gray-300">
-        <div className="m-4">
+    <div className="flex flex-row justify-center animate-fallDown">
+      <div
+        role="figure"
+        aria-label="Legend for colors and lines within image"
+        className="px-4 py-2 w-[250px] h-[150px] bg-white flex flex-row justify-between">
+        <div>
+          <p>Type kleur</p>
           <ul>
-            <li>test 1</li>
-            <li>test 2</li>
-            <li>test 3</li>
-            <li>test 4</li>
-            <li>test 5</li>
+            {data?.colors.map(color => {
+              return (
+                <li key={color.label} className="flex flex-row items-center">
+                  <img className="object-contain h-4 w-4 mr-2" src={color.png}></img>
+                  <p className="text-ellipsis overflow-hidden">{color.label}</p>
+                </li>
+              );
+            })}
           </ul>
         </div>
-      </Popover.Panel>
-    </Popover>
+        <div>
+          <p>Type lijn</p>
+          <ul>
+            {data?.lines.map(line => {
+              return (
+                <li key={line.label} className="flex flex-row items-center">
+                  <img className="object-contain h-4 w-4 mr-2" src={line.png}></img>
+                  <p className="text-ellipsis overflow-hidden">{line.label}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }

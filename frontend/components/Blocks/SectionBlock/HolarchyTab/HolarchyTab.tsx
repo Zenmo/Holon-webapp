@@ -6,6 +6,7 @@ import HolarchyFeedbackImage, {
   HolarchyFeedbackImageProps,
 } from "../../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import ContentColumn from "../ContentColumn";
+import { exampleData } from "./exampleData";
 import LegendModal from "./LegendModal";
 
 type HolarchyTab = {
@@ -19,6 +20,7 @@ type HolarchyTab = {
   textLabelLocal: string;
   loading: boolean;
   kpis: KPIData;
+  legend: boolean;
 };
 
 export default function HolarchyTab({
@@ -32,6 +34,7 @@ export default function HolarchyTab({
   textLabelLocal,
   loading,
   kpis,
+  legend,
 }: HolarchyTab) {
   const levels = ["national", "intermediate", "local"];
 
@@ -72,7 +75,7 @@ export default function HolarchyTab({
         <div className="row-span-1 row-start-4 col-start-1 col-span-1 md:col-start-2  md:col-span-1  md:row-span-3 md:row-start-1 grid grid-rows grid-rows-3 overflow-hidden">
           {/*image - highest block*/}
           <div className="row-start-1 bg-holon-holarchy-national row-span-1 col-start-1 col-span-1 ">
-            <LegendModal />
+            {legend && <LegendModal data={exampleData} />}
           </div>
 
           {/*image - middle block showing image*/}
