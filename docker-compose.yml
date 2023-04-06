@@ -12,17 +12,15 @@ services:
       - "./docker/files/static/502.html:/app/502.html:cached"
       - "./docker/files/config/nginx.conf.template:/etc/nginx/templates/default.conf.template:cached"
       - "./docker/files/certs:/etc/nginx/certs"
-      - "./src/media:/app/media"
-      - "./src/static:/app/static"
     environment:
       - PYTHON_HOST=http://python
       - NEXT_HOST=http://next
-      - SERVER_NAME=pizzaoven.holontool.nl
+      - SERVER_NAME="pizzaoven.holontool.nl"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   next:
-    image: holon_nextjs
+    image: holon_next
     build: 
       context: ./frontend
       dockerfile: Dockerfile.prod 
@@ -36,7 +34,7 @@ services:
       - web
 
   python:
-    image: holon_wagtail_python
+    image: holon_python
     build: 
       context: ./src
       dockerfile: Dockerfile.prod
