@@ -56,6 +56,7 @@ class InteractiveInputBlock(blocks.StructBlock):
     default_value = blocks.CharBlock(
         required=False, help_text="Type the default value exactly as it's shown on the website page"
     )
+    target_value = blocks.CharBlock(required=False, help_text="Type a target value if this value needs to be added to this and all underlying sections.")
 
     def get_api_representation(self, value, context=None):
         if value:
@@ -117,6 +118,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "locked": value["locked"],
                 "display": value["display"],
                 "default_value_override": value["default_value"],
+                "target_value": value["target_value"],
             }
 
             if interactive_input.link_wiki_page is not None:

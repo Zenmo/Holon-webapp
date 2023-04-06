@@ -36,9 +36,29 @@ const ContentBlocks = ({
   pagetype?: string;
   graphcolors?: Graphcolor[];
 }) => {
+  const targetValueMap = new Map();
+
+  function getTargetValues(blocks, currentIndex) {
+    for (let i = 0; i <= currentIndex; i++) {
+      if (blocks[i].type === "section") {
+        blocks[i].value.content.map(element => {
+          if (element.type === "interactive_input" && element.value.targetValue) {
+            targetValueMap.set(element.value.id, element.value.targetValue);
+          }
+        });
+      }
+    }
+  }
+
+  function addTargetValues(values) {
+    values.forEach((value, key) => {
+      console.log(`dit is de key ${key} en dit is de value ${value}`);
+    });
+  }
+
   return (
     <React.Fragment>
-      {content?.map(contentItem => {
+      {content?.map((contentItem, index) => {
         switch (contentItem.type) {
           case "header_full_image_block":
             return <HeaderFullImageBlock key={`headerfull ${contentItem.id}`} data={contentItem} />;
@@ -59,6 +79,9 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
+            getTargetValues(content, index);
+            console.log(targetValueMap);
+            addTargetValues(targetValueMap);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
