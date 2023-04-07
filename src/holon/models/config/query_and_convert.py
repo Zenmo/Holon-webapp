@@ -33,6 +33,11 @@ class QueryAndConvertConfig(ClusterableModel):
             "Use this field to explain the query in the front-end. This field is rendered next to the KPI selection radio (that toggles between local, intermediate and national level)"
         ),
     )
+    generic_etm_query = models.ManyToManyField(
+        "holon.GenericETMQuery",
+        blank=True,
+        help_text=_("Use this field to relate this module configuration to a generic ETM query."),
+    )
 
     panels = [
         FieldPanel("name"),
@@ -40,6 +45,7 @@ class QueryAndConvertConfig(ClusterableModel):
         FieldPanel("module"),
         FieldPanel("etm_scenario_id"),
         FieldPanel("interactive_upscaling_comment"),
+        FieldPanel("generic_etm_query"),
         InlinePanel(
             "etm_query",
             heading="Define your input and query statements here",

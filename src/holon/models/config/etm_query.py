@@ -3,9 +3,9 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.snippets.models import register_snippet
 
 from holon.models.config.query_and_convert import QueryAndConvertConfig
-from main.blocks.rich_text_block import RichtextBlock
 
 
 class EndPoint(models.TextChoices):
@@ -35,7 +35,9 @@ class ETMQuery(ClusterableModel):
         help_text=_("Key as defined in the ETM"),
     )
 
-    related_config = ParentalKey(QueryAndConvertConfig, related_name="etm_query")
+    related_config = ParentalKey(
+        QueryAndConvertConfig, related_name="etm_query", blank=True, null=True
+    )
 
     related_interactive_element = models.ForeignKey(
         "holon.InteractiveElement",
@@ -97,3 +99,11 @@ class ETMQuery(ClusterableModel):
         # TODO validate the use of etm_keys?
 
         return super().clean()
+
+
+@register_snippet
+class GenericETMQuery(ETMQuery):
+    pass
+
+    def __str__(self) -> str:
+        return f"{self.internal_key}"
