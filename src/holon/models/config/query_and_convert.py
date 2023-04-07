@@ -5,6 +5,7 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from holon.models.scenario import Scenario
+from main.blocks.rich_text_block import RichtextBlock
 
 
 class QueryCovertModuleType(models.TextChoices):
@@ -24,11 +25,21 @@ class QueryAndConvertConfig(ClusterableModel):
     )
     etm_scenario_id = models.IntegerField()
 
+    interactive_upscaling_comment = models.TextField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Use this field to explain the query in the front-end. This field is rendered next to the KPI selection radio (that toggles between local, intermediate and national level)"
+        ),
+    )
+
     panels = [
         FieldPanel("name"),
         FieldPanel("api_url"),
         FieldPanel("module"),
         FieldPanel("etm_scenario_id"),
+        FieldPanel("interactive_upscaling_comment"),
         InlinePanel(
             "etm_query",
             heading="Define your input and query statements here",
