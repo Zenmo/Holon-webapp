@@ -28,10 +28,17 @@ def get_scenario_and_apply_rules(
                 if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS
                 else option.option
             )
+
+            # apply filters and rule actions
             rule: ScenarioRule
             for rule in option.rules.all():
+                # transform value if applicable
+                transformed_value = rule.apply_value_transforms(value)
+
                 filtered_queryset = rule.get_filtered_queryset(scenario)
-                filtered_queryset = rule.apply_filter_subselections(filtered_queryset, value)
-                rule.apply_rule_actions(filtered_queryset, value)
+                filtered_queryset = rule.apply_filter_subselections(
+                    filtered_queryset, transformed_value
+                )
+                rule.apply_rule_actions(filtered_queryset, transformed_value)
 
     return scenario
