@@ -135,6 +135,7 @@ class RelationAttributeFilter(Filter):
             return
 
     def get_relation_model(self) -> models.Model:
+        """Helper function to get model class of selected relation"""
         model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
         model = apps.get_model("holon", model_type)
 
@@ -205,84 +206,6 @@ class RelationAttributeFilter(Filter):
         return relation_field_subtype & relation_field_q
 
 
-class RelationExistsFilter(Filter):
-    """Filter on attribute for parent object"""
-
-    rule = ParentalKey(
-        "holon.Rule", on_delete=models.CASCADE, related_name="relation_exists_filters"
-    )
-    relation_field = models.CharField(max_length=255)  # bijv gridconnection
-    relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
-    invert_filter = models.BooleanField(
-        default=False, help_text="Filter models that don't have the specified relation"
-    )
-
-    panels = [
-        FieldPanel("invert_filter"),
-        FieldPanel("relation_field"),
-        FieldPanel("relation_field_subtype"),
-    ]
-
-    class Meta:
-        verbose_name = "RelationAttributeFilter"
-
-    def clean(self):
-        super().clean()
-
-        try:
-            if self.relation_field not in self.relation_field_options():
-                raise ValidationError("Invalid value relation_field")
-            if (
-                self.relation_field_subtype
-                and self.relation_field_subtype not in self.relation_field_subtype_options()
-            ):
-                raise ValidationError("Invalid value relation_field_subtype")
-        except ObjectDoesNotExist:
-            return
-
-    def relation_field_options(self) -> list[str]:
-        model_type = (
-            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
-        )
-        model = apps.get_model("holon", model_type)
-
-        return [
-            field.name
-            for field in model()._meta.get_fields()
-            if field.is_relation and not is_exclude_field(field)
-        ]
-
-    def relation_field_subtype_options(self) -> list[str]:
-        model = apps.get_model("holon", self.rule.model_type)
-        related_model = model()._meta.get_field(self.relation_field).related_model
-
-        return [subclass.__name__ for subclass in all_subclasses(related_model)]
-
-    def get_q(self) -> Q:
-        if self.invert_filter:
-            if self.relation_field_subtype:
-                return ~Q(
-                    **{
-                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
-                            apps.get_model("holon", self.relation_field_subtype)
-                        )
-                    }
-                )
-            else:
-                return Q(**{f"{self.relation_field}__isnull": True})
-        else:
-            if self.relation_field_subtype:
-                return Q(
-                    **{
-                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
-                            apps.get_model("holon", self.relation_field_subtype)
-                        )
-                    }
-                )
-            else:
-                return Q(**{f"{self.relation_field}__isnull": False})
-
-
 class SecondOrderRelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
 
@@ -344,6 +267,7 @@ class SecondOrderRelationAttributeFilter(Filter):
             return
 
     def get_relation_model(self) -> models.Model:
+        """Helper function to get model class of selected relation"""
         model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
         model = apps.get_model("holon", model_type)
 
@@ -355,14 +279,17 @@ class SecondOrderRelationAttributeFilter(Filter):
 
         return apps.get_model("holon", relation_model_type)
 
-    def relation_model_attribute_options(self) -> list[str]:
-        relation_model = self.get_relation_model()
+    def get_second_order_relation_model(self) -> models.Model:
+        """Helper function to get model class of second order selected relation"""
+        if self.second_order_relation_field_subtype:
+            return apps.get_model("holon", self.second_order_relation_field_subtype)
 
-        return [
-            field.name
-            for field in relation_model._meta.get_fields()
-            if not field.is_relation and not is_exclude_field(field)
-        ]
+        relation_model = self.get_relation_model()
+        second_order_relation_model = relation_model._meta.get_field(
+            self.second_order_relation_field
+        ).related_model
+
+        return second_order_relation_model
 
     def relation_field_options(self) -> list[str]:
         model_type = (
@@ -381,17 +308,6 @@ class SecondOrderRelationAttributeFilter(Filter):
         related_model = model()._meta.get_field(self.relation_field).related_model
 
         return [subclass.__name__ for subclass in all_subclasses(related_model)]
-
-    def get_second_order_relation_model(self) -> models.Model:
-        if self.second_order_relation_field_subtype:
-            return apps.get_model("holon", self.second_order_relation_field_subtype)
-
-        relation_model = self.get_relation_model()
-        second_order_relation_model = relation_model._meta.get_field(
-            self.second_order_relation_field
-        ).related_model
-
-        return second_order_relation_model
 
     def second_order_relation_model_attribute_options(self) -> list[str]:
         relation_model = self.get_second_order_relation_model()
@@ -479,6 +395,84 @@ class SecondOrderRelationAttributeFilter(Filter):
             & second_order_relation_field_q
             & second_order_relation_field_subtype
         )
+
+
+class RelationExistsFilter(Filter):
+    """Filter on attribute for parent object"""
+
+    rule = ParentalKey(
+        "holon.Rule", on_delete=models.CASCADE, related_name="relation_exists_filters"
+    )
+    relation_field = models.CharField(max_length=255)  # bijv gridconnection
+    relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
+    invert_filter = models.BooleanField(
+        default=False, help_text="Filter models that don't have the specified relation"
+    )
+
+    panels = [
+        FieldPanel("invert_filter"),
+        FieldPanel("relation_field"),
+        FieldPanel("relation_field_subtype"),
+    ]
+
+    class Meta:
+        verbose_name = "RelationAttributeFilter"
+
+    def clean(self):
+        super().clean()
+
+        try:
+            if self.relation_field not in self.relation_field_options():
+                raise ValidationError("Invalid value relation_field")
+            if (
+                self.relation_field_subtype
+                and self.relation_field_subtype not in self.relation_field_subtype_options()
+            ):
+                raise ValidationError("Invalid value relation_field_subtype")
+        except ObjectDoesNotExist:
+            return
+
+    def relation_field_options(self) -> list[str]:
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if field.is_relation and not is_exclude_field(field)
+        ]
+
+    def relation_field_subtype_options(self) -> list[str]:
+        model = apps.get_model("holon", self.rule.model_type)
+        related_model = model()._meta.get_field(self.relation_field).related_model
+
+        return [subclass.__name__ for subclass in all_subclasses(related_model)]
+
+    def get_q(self) -> Q:
+        if self.invert_filter:
+            if self.relation_field_subtype:
+                return ~Q(
+                    **{
+                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
+                            apps.get_model("holon", self.relation_field_subtype)
+                        )
+                    }
+                )
+            else:
+                return Q(**{f"{self.relation_field}__isnull": True})
+        else:
+            if self.relation_field_subtype:
+                return Q(
+                    **{
+                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
+                            apps.get_model("holon", self.relation_field_subtype)
+                        )
+                    }
+                )
+            else:
+                return Q(**{f"{self.relation_field}__isnull": False})
 
 
 class DiscreteAttributeFilter(Filter):
