@@ -13,6 +13,7 @@ class CostTableTestClass(TestCase):
 
         assert "Bedrijventerrein HOLON" in costs_table.table.keys()
         assert "CONNECTIONOWNER" in costs_table.table.keys()
+        assert "OPERATORGRID" in costs_table.table.keys()
 
     def __al_output(self):
         return [

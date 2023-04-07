@@ -15,6 +15,7 @@ class CostsTable:
         self._table = {}
         for item in cost_items:
             self.__add_to_table(item)
+        self.__fill_out_table()
 
     def __add_to_table(self, item):
         """TODO: also work with subgroups"""
@@ -34,15 +35,19 @@ class CostsTable:
     def __add_from_group(self, item):
         """
         Also needs to add self as None
-        --> are we sure like this we always have all the keys?
-        Probably in the output (as_totals) we need to rebuild the thing for all
-        the different groups to be present
+        TODO: move some functionality from fill_out_table here
         """
-
         self._table[item.from_group()] = {
             item.to_group(): item.price,
             item.from_group(): None,
         }
+
+    def __fill_out_table(self):
+        # we can also keep a global set in memory (self) where we add to in __add_from_group
+        all_groups = set((key for value in self.table.values() for key in value.keys()))
+        basic = {key: 0.0 for key in all_groups}
+        for group in all_groups:
+            self._table[group] = basic | self._table.get(group, {})
 
     def as_totals(self):
         """TODO: returns the main groups view"""
@@ -106,14 +111,19 @@ class CostItem:
         """
         return (
             obj.get("FinancialTransactionVolume_eur", 0.0)
-            + CostItem.delivery_price(obj)
+            + CostItem.delivery_or_feedin_price(obj)
             + obj.get("annualFee_eur", 0.0)
         )
 
     @staticmethod
-    def delivery_price(obj) -> float:
+    def delivery_or_feedin_price(obj) -> float:
         """Check for the delivery price. If no prices sets defaults to 0"""
-        return obj.get("EnergyTransactionVolume_kWh", 0.0) * (
+        volume = obj.get("EnergyTransactionVolume_kWh", 0.0)
+        if volume < 0:
+            return volume * (
+                obj.get("feedinTax_eurpkWh", 0.0) + obj.get("feedinPrice_eurpkWh", 0.0)
+            )
+        return volume * (
             obj.get("deliveryTax_eurpkWh", 0.0) + obj.get("deliveryPrice_eurpkWh", 0.0)
         )
 
