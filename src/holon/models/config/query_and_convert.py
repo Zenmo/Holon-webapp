@@ -1,14 +1,15 @@
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from holon.models.scenario import Scenario
-from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey
 
 
 class QueryCovertModuleType(models.TextChoices):
     UPSCALING = "upscaling"
+    UPSCALING_REGIONAL = "upscaling-regional"
     COST = "cost"
     COSTBENEFIT = "costbenefit"
 
@@ -44,7 +45,9 @@ class QueryAndConvertConfig(ClusterableModel):
 
     def __str__(self):
         if self.module == QueryCovertModuleType.UPSCALING:
-            return f"ETM opschalingsconfiguratie ({self.name})"
+            return f"ETM nationale opschalingsconfiguratie ({self.name})"
+        if self.module == QueryCovertModuleType.UPSCALING_REGIONAL:
+            return f"ETM regionale opschalingsconfiguratie ({self.name})"
         if self.module == QueryCovertModuleType.COST:
             return f"Kostenmodule configuratie ({self.name})"
         if self.module == QueryCovertModuleType.COSTBENEFIT:
