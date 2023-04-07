@@ -9,11 +9,10 @@ class CostTableTestClass(TestCase):
     def test_table_totals(self):
         """Test if the totals table is correctly set up"""
         scenario = Scenario.objects.get(pk=1)
-        costs_table = CostsTable.from_al_output(self.__al_output, scenario)
+        costs_table = CostsTable.from_al_output(self.__al_output(), scenario)
 
-        assert "CONNECTIONOWNER" in costs_table.keys
-        assert False
-        self.assertEqual(False, True)
+        assert "Bedrijventerrein HOLON" in costs_table.table.keys()
+        assert "CONNECTIONOWNER" in costs_table.table.keys()
 
     def __al_output(self):
         return [

@@ -19,13 +19,15 @@ class CostsTable:
     def __add_to_table(self, item):
         """TODO: also work with subgroups"""
         try:
-            self._table[item.from_actor.group][item.to_actor.group] += item.price
+            self._table[item.from_group()][item.to_group()] += item.price
         except KeyError:
+            self.__add_from_group(item)
+        except TypeError:
             self.__add_to_group(item)
 
     def __add_to_group(self, item):
         try:
-            self._table[item.from_actor.group][item.to_actor.group] = item.price
+            self._table[item.from_group()][item.to_group()] = item.price
         except KeyError:
             self.__add_from_group(item)
 
@@ -36,9 +38,10 @@ class CostsTable:
         Probably in the output (as_totals) we need to rebuild the thing for all
         the different groups to be present
         """
-        self._table[item.from_actor.group] = {
-            item.to_actor.group: item.price,
-            item.from_actor.group: None,
+
+        self._table[item.from_group()] = {
+            item.to_group(): item.price,
+            item.from_group(): None,
         }
 
     def as_totals(self):
@@ -63,11 +66,11 @@ class ActorWrapper:
         Strips the AL prefix from the actor name and returns the corresponding Actor
         TODO: Validate: does this actor exists -> what do we do if not
         """
-        return self.actors.get(int(actor_name[3:]))
+        return self.actors.get(id=int(actor_name[3:]))
 
     @classmethod
     def from_scenario(cls, scenario):
-        return cls(scenario.prefetch_related("actors").objects.all())
+        return cls(scenario.actor_set)
 
 
 class CostItem:
@@ -77,6 +80,20 @@ class CostItem:
         self.from_actor = from_actor
         self.to_actor = to_actor
         self.price = price
+
+    def from_group(self):
+        return CostItem.group(self.from_actor)
+
+    def to_group(self):
+        return CostItem.group(self.to_actor)
+
+    @staticmethod
+    def group(actor):
+        """Fallback to category if group is not defined"""
+        try:
+            return actor.group.name
+        except AttributeError:
+            return actor.category
 
     @staticmethod
     def price_for(obj) -> float:
