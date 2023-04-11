@@ -6,7 +6,7 @@ import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -27,6 +27,7 @@ type Props = {
     };
     id: string;
   };
+  targetValue?: {};
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
@@ -52,7 +53,13 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors }: Props) {
+export default function SectionBlock({
+  data,
+  targetValue,
+  pagetype,
+  feedbackmodals,
+  graphcolors,
+}: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
@@ -171,6 +178,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               className={`px-6 py-2 bg-holon-blue-100 rounded-t-lg`}>
               Holarchie
             </button>
+            <p>{targetValue}</p>
           </div>
         </div>
 

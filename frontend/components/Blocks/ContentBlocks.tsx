@@ -36,25 +36,66 @@ const ContentBlocks = ({
   pagetype?: string;
   graphcolors?: Graphcolor[];
 }) => {
-  const targetValueMap = new Map();
-
+  /*loops through all sections above on the page and if there is an interactive element with a target value, it saves it and gives it back. Alternative: globally save it in a variable and only loop through current section and create a new copy of the variable if a new targetvalue is added or one has changed*/
   function getTargetValues(blocks, currentIndex) {
+    const targetValueMap = new Map();
     for (let i = 0; i <= currentIndex; i++) {
       if (blocks[i].type === "section") {
         blocks[i].value.content.map(element => {
           if (element.type === "interactive_input" && element.value.targetValue) {
-            targetValueMap.set(element.value.id, element.value.targetValue);
+            targetValueMap.set(element.value.id, element.value);
           }
         });
       }
     }
+    return targetValueMap;
   }
 
-  function addTargetValues(values) {
+  function addTargetValues(values, content) {
+    const updatedContent = { ...content };
     values.forEach((value, key) => {
-      console.log(`dit is de key ${key} en dit is de value ${value}`);
+      content.value.content.map(element => {
+        if (key === element.value.id) {
+          //console.log("element gevonden!");
+          element.value.targetValue = value;
+        } else {
+          updatedContent.value.content.push({
+            type: "interactive_input",
+            value: {
+              id: key,
+              targetValue: value,
+              visible: false,
+            },
+          });
+        }
+        return updatedContent;
+      });
     });
   }
+
+  /*
+  function addTargetValues(values, content) {
+    const updatedContent = content;
+    values.forEach((value, key) => {
+      content.value.content.map(element => {
+        if (key === element.value.id) {
+          //console.log("element gevonden!");
+          element.value.targetValue = value;
+        } else {
+          updatedContent.value.content.push({
+            type: "interactive_input",
+            value: {
+              id: key,
+              targetValue: value,
+              visible: false,
+            },
+          });
+        }
+        return updatedContent;
+      });
+    });
+  }
+  */
 
   return (
     <React.Fragment>
@@ -79,13 +120,16 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            getTargetValues(content, index);
-            console.log(targetValueMap);
-            addTargetValues(targetValueMap);
+            //console.log(index);
+            const x = getTargetValues(content, index);
+            //console.log(x);
+            const newContent = addTargetValues(x, contentItem);
+            //console.log(newContent);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
                 data={contentItem}
+                //targetValue={targetValueMap}
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
                 graphcolors={graphcolors ?? []}
