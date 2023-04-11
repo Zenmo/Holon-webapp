@@ -7,7 +7,7 @@ import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -60,6 +60,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
     HolarchyFeedbackImageProps[]
   >([]);
+  const [legendItems, setLegendItems] = useState([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
@@ -82,6 +83,9 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
 
   useEffect(() => {
     setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
+    setLegendItems(
+      convertLegendItems(content.filter(content => content.type == "legend_items")[0])
+    );
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
@@ -147,6 +151,19 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       });
   }
 
+  function convertLegendItems(items: any) {
+    const return_arr = [];
+    if (items) {
+      items.value?.legendItems.map(item => {
+        if (return_arr[item.value?.type] === undefined) {
+          return_arr[item.value?.type] = [];
+        }
+        return_arr[item.value?.type].push(item.value);
+      });
+    }
+    return return_arr;
+  }
+
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef}>
       {feedbackmodals && (
@@ -182,16 +199,18 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               Holarchie
             </button>
           </div>
-          {holarchyModal && (
-            <button
-              onClick={() => setLegend(!legend)}
-              className={`px-6 pb-2  bg-white ${
-                legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
-              }`}>
-              <InformationCircleIcon className="mr-2 w-5 inline-block" />
-              Legenda
-            </button>
-          )}
+          {holarchyModal &&
+            ((legendItems["color"] && legendItems["color"].length > 0) ||
+              (legendItems["line"] && legendItems["line"].length > 0)) && (
+              <button
+                onClick={() => setLegend(!legend)}
+                className={`px-6 pb-2  bg-white ${
+                  legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
+                }`}>
+                <InformationCircleIcon className="mr-2 w-5 inline-block" />
+                Legenda
+              </button>
+            )}
           <div className="flex-1"></div>
         </div>
 
@@ -234,6 +253,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
           {holarchyModal && (
             <HolarchyTab
               holarchyFeedbackImages={holarchyFeedbackImages}
+              legendItems={legendItems}
               content={content}
               dataContent={data?.value.content}
               handleContentChange={setContent}

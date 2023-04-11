@@ -15,6 +15,7 @@ from wagtailmodelchooser import register_model_chooser, Chooser
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 from .holarchyfeedbackimages import HolarchyFeedbackImage
+from .legend_item import LegendItemsBlock
 
 
 def get_interactive_inputs():
@@ -146,6 +147,7 @@ class StorylineSectionBlock(blocks.StructBlock):
             ("interactive_input", InteractiveInputBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
             ("holarchy_feedback_image", HolarchyFeedbackImage()),
+            ("legend_items", LegendItemsBlock()),
         ],
         block_counts={"static_image": {"max_num": 1}},
     )
