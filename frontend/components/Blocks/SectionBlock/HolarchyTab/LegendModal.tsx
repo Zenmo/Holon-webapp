@@ -21,7 +21,7 @@ export default function LegendModal({ data }: LegendModal) {
       <div
         role="figure"
         aria-label="Legend for colors and lines within image"
-        className="px-4 py-2 w-[250px] h-[150px] bg-white flex flex-row justify-between">
+        className="px-4 py-2 w-[250px] h-[150px] bg-white flex flex-row justify-between z-50">
         <div>
           <p>Type kleur</p>
           <ul>
