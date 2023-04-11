@@ -36,70 +36,89 @@ const ContentBlocks = ({
   pagetype?: string;
   graphcolors?: Graphcolor[];
 }) => {
-  /*loops through all sections above on the page and if there is an interactive element with a target value, it saves it and gives it back. Alternative: globally save it in a variable and only loop through current section and create a new copy of the variable if a new targetvalue is added or one has changed*/
-  function getTargetValues(blocks, currentIndex) {
-    const targetValueMap = new Map();
-    for (let i = 0; i <= currentIndex; i++) {
-      if (blocks[i].type === "section") {
-        blocks[i].value.content.map(element => {
-          if (element.type === "interactive_input" && element.value.targetValue) {
-            targetValueMap.set(element.value.id, element.value);
-          }
+  let targetValues = new Map();
+
+  /*loops through current section and if there is an interactive element with a target value it creates a clone of the map, either updating an existing interactive input or adding one and then setting that clone to the variable targetValue*/
+  function updateTargetValues(content) {
+    content.map(element => {
+      if (element.type === "interactive_input" && element.value.targetValue) {
+        const newTargetValues = new Map(targetValues);
+        newTargetValues.set(element.value.id, element.value);
+        targetValues = newTargetValues;
+      }
+    });
+  }
+
+  function addTargetValues(values, content) {
+    const updatedContent = [...content];
+
+    values.forEach((value, key) => {
+      const foundElement = updatedContent.find(element => {
+        return element.type === "interactive_input" && element.value.id === key;
+      });
+
+      if (foundElement) {
+        foundElement.value.targetValue = value;
+      } else {
+        updatedContent.push({
+          testValue: value,
         });
       }
-    }
-    return targetValueMap;
-  }
-
-  function addTargetValues(values, content) {
-    const updatedContent = { ...content };
-    values.forEach((value, key) => {
-      content.value.content.map(element => {
-        if (key === element.value.id) {
-          //console.log("element gevonden!");
-          element.value.targetValue = value;
-        } else {
-          updatedContent.value.content.push({
-            type: "interactive_input",
-            value: {
-              id: key,
-              targetValue: value,
-              visible: false,
-            },
-          });
-        }
-        return updatedContent;
-      });
     });
+    return updatedContent;
   }
-
   /*
   function addTargetValues(values, content) {
-    const updatedContent = content;
-    values.forEach((value, key) => {
-      content.value.content.map(element => {
-        if (key === element.value.id) {
-          //console.log("element gevonden!");
-          element.value.targetValue = value;
-        } else {
-          updatedContent.value.content.push({
-            type: "interactive_input",
-            value: {
-              id: key,
-              targetValue: value,
-              visible: false,
-            },
-          });
-        }
-        return updatedContent;
-      });
-    });
-  }
-  */
+    const updatedContent = [...content];
 
+    values.forEach((value, key) => {
+      const foundElement = updatedContent.find(element => {
+        return element.type === "interactive_input" && element.value.id === key;
+      });
+
+      if (foundElement) {
+        foundElement.value.targetValue = value;
+      } else {
+        updatedContent.push({
+          testValue: value,
+        });
+      }
+    });
+    return updatedContent;
+  }
+
+  content.map(element => {
+        if (element.type === "interactive_input") {
+          if (element.value.id === key) {
+            console.log(`deze staat erin`);
+            element.value.targetValue = value;
+            updatedContent.push(element);
+          } else {
+            updatedContent.push(value);
+          }
+        }
+      });
+  const contentArr: Content[] = [];
+  dataContent?.map((content: Content) => {
+    switch (content.type) {
+      case "interactive_input":
+        content.currentValue = content.currentValue
+          ? content.currentValue
+          : getDefaultValue(content);
+        contentArr.push(content);
+        break;
+      case "static_image":
+        handleMedia(content.value);
+        break;
+      default:
+        contentArr.push(content);
+        break;
+    }
+  });
+*/
   return (
     <React.Fragment>
-      {content?.map((contentItem, index) => {
+      {content?.map(contentItem => {
         switch (contentItem.type) {
           case "header_full_image_block":
             return <HeaderFullImageBlock key={`headerfull ${contentItem.id}`} data={contentItem} />;
@@ -120,16 +139,15 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            //console.log(index);
-            const x = getTargetValues(content, index);
-            //console.log(x);
-            const newContent = addTargetValues(x, contentItem);
-            //console.log(newContent);
+            updateTargetValues(contentItem.value.content);
+            //console.log(targetValues);
+            const newContent = addTargetValues(targetValues, contentItem.value.content);
+            console.log(newContent);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
                 data={contentItem}
-                //targetValue={targetValueMap}
+                //targetValue={targetValues}
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
                 graphcolors={graphcolors ?? []}
