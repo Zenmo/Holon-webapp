@@ -15,7 +15,7 @@ class MyTest(TestCase):
         """Get all underlying models of a scenario and return as a tuple"""
 
         actors = list(scenario.actor_set.all())
-        contracts = list(Contract.objects.filter(actor__payload_id=scenario.id))
+        contracts = list(Contract.objects.filter(actor__payload_id=scenario.id).order_by("id"))
         gridnodes = list(scenario.gridnode_set.all())
         gridconnections = list(scenario.gridconnection_set.all())
         assets = list(scenario.assets.all())
