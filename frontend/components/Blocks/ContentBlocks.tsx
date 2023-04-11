@@ -47,9 +47,32 @@ const ContentBlocks = ({
         targetValues = newTargetValues;
       }
     });
+
+    return null;
   }
 
   function addTargetValues(values, content) {
+    const updatedContent = { ...content };
+
+    values.forEach((value, key) => {
+      const foundElement = updatedContent.value.content.find(element => {
+        return element.type === "interactive_input" && element.value.id === key;
+      });
+
+      if (foundElement) {
+        foundElement.value.targetValue = value.targetValue;
+      } else {
+        updatedContent.value.content.push({
+          type: "interactive_input",
+          value: { ...value, visible: false },
+        });
+      }
+    });
+
+    return updatedContent;
+  }
+
+  /*function addTargetValues(values, content) {
     const updatedContent = [...content];
 
     values.forEach((value, key) => {
@@ -58,64 +81,18 @@ const ContentBlocks = ({
       });
 
       if (foundElement) {
-        foundElement.value.targetValue = value;
+        foundElement.value.targetValue = value.targetValue;
       } else {
         updatedContent.push({
-          testValue: value,
+          type: "interactive_input",
+          value: { ...value, visible: false },
         });
       }
     });
+
     return updatedContent;
-  }
-  /*
-  function addTargetValues(values, content) {
-    const updatedContent = [...content];
+  }*/
 
-    values.forEach((value, key) => {
-      const foundElement = updatedContent.find(element => {
-        return element.type === "interactive_input" && element.value.id === key;
-      });
-
-      if (foundElement) {
-        foundElement.value.targetValue = value;
-      } else {
-        updatedContent.push({
-          testValue: value,
-        });
-      }
-    });
-    return updatedContent;
-  }
-
-  content.map(element => {
-        if (element.type === "interactive_input") {
-          if (element.value.id === key) {
-            console.log(`deze staat erin`);
-            element.value.targetValue = value;
-            updatedContent.push(element);
-          } else {
-            updatedContent.push(value);
-          }
-        }
-      });
-  const contentArr: Content[] = [];
-  dataContent?.map((content: Content) => {
-    switch (content.type) {
-      case "interactive_input":
-        content.currentValue = content.currentValue
-          ? content.currentValue
-          : getDefaultValue(content);
-        contentArr.push(content);
-        break;
-      case "static_image":
-        handleMedia(content.value);
-        break;
-      default:
-        contentArr.push(content);
-        break;
-    }
-  });
-*/
   return (
     <React.Fragment>
       {content?.map(contentItem => {
@@ -140,20 +117,17 @@ const ContentBlocks = ({
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
             updateTargetValues(contentItem.value.content);
-            //console.log(targetValues);
-            const newContent = addTargetValues(targetValues, contentItem.value.content);
-            console.log(newContent);
+            const newContent = addTargetValues(targetValues, contentItem);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
-                data={contentItem}
-                //targetValue={targetValues}
+                data={newContent}
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
                 graphcolors={graphcolors ?? []}
               />
             );
-            break;
+
           case "buttons_and_media_block":
             return (
               <ButtonsAndMediaBlock key={`buttonsmedia ${contentItem.id}`} data={contentItem} />
