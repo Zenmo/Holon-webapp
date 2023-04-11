@@ -19,8 +19,8 @@ def get_scenario_and_apply_rules(
         if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS:
             interactive_element_options = interactive_element.continuous_values.all()
         else:  # single and multi select
-            ids = interactive_element_input["value"].split(",")
-            interactive_element_options = interactive_element.options.filter(id__in=ids)
+            options = interactive_element_input["value"].split(",")
+            interactive_element_options = interactive_element.options.filter(option__in=options)
 
         for option in interactive_element_options:
             value = (
@@ -28,9 +28,17 @@ def get_scenario_and_apply_rules(
                 if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS
                 else option.option
             )
+
+            # apply filters and rule actions
             rule: ScenarioRule
             for rule in option.rules.all():
+                # transform value if applicable
+                transformed_value = rule.apply_value_transforms(value)
+
                 filtered_queryset = rule.get_filtered_queryset(scenario)
-                rule.apply_rule_actions(filtered_queryset, value)
+                filtered_queryset = rule.apply_filter_subselections(
+                    filtered_queryset, transformed_value
+                )
+                rule.apply_rule_actions(filtered_queryset, transformed_value)
 
     return scenario

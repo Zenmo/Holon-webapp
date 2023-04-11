@@ -1,15 +1,13 @@
-from datetime import datetime
-from pprint import pprint
 from django.apps import apps
 from rest_framework import generics, status
 from rest_framework.response import Response
-
-import etm_service
+from rest_framework.request import Request
+import traceback
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
-from holon.serializers import HolonRequestSerializer
+from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
@@ -23,29 +21,27 @@ from .dummies import costbenefit_result_json, dashboard_result_json
 class HolonV2Service(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
-    def post(self, request):
+    def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
+
+        scenario = None
+        cc = None
 
         try:
             if serializer.is_valid():
-                # return Response(
-                #     {
-                #         "dashboard_results": dashboard_result_json,
-                #         "cost_benefit_results": costbenefit_result_json,
-                #     },
-                #     status=status.HTTP_200_OK,
-                # )
                 data = serializer.validated_data
 
+                print(f"Cloning scenario {data['scenario'].id}")
                 scenario = rule_mapping.get_scenario_and_apply_rules(
                     data["scenario"].id, data["interactive_elements"]
                 )
 
+                print("Running Anylogic model")
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
-
                 cc.run()
 
+                print("Running ETM module")
                 # TODO: is this the way to distinguish the national and inter results?
                 # Init with none values so Result always has the keys
                 etm_outcomes = {
@@ -63,6 +59,7 @@ class HolonV2Service(generics.CreateAPIView):
                     elif name == "Regional upscaling":
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
+                print("Running CostBenedict module")
                 # ignore me! (TODO: should only be triggered on bedrijventerrein)
                 cost_benefit_results = CostBenedict(
                     actors=cc.outputs["actors"]
@@ -70,12 +67,14 @@ class HolonV2Service(generics.CreateAPIView):
 
                 results = Results(
                     scenario=scenario,
+                    request=request,
                     anylogic_outcomes=cc.outputs,
                     cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
                     cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
                     **etm_outcomes,
                 )
 
+                print("200 OK")
                 return Response(
                     results.to_dict(),
                     status=status.HTTP_200_OK,
@@ -84,18 +83,27 @@ class HolonV2Service(generics.CreateAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            import traceback
-
             print(traceback.format_exc())
-            return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
+
+            response_body = {"error_msg": f"something went wrong: {e}"}
+            if scenario:
+                response_body["scenario"] = ScenarioSerializer(scenario).data
+            if cc:
+                response_body["anylogic_outcomes"] = cc.outputs
+
+            return Response(
+                response_body,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         finally:
             # always delete the scenario!
             try:
-                scenario.delete_async()
-            except (
-                NameError
-            ):  # catch name error if the view crashed before instantiating the scenario
-                pass
+                if scenario:
+                    scenario_id = scenario.id
+                    scenario.delete_async()
+            except Exception as e:
+                print(f"Something went wrong while trying to delete scenario {scenario_id}")
+                print(traceback.format_exc())
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
