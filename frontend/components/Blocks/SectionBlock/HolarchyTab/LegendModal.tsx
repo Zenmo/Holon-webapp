@@ -18,12 +18,12 @@ type LegendModal = {
 
 export default function LegendModal({ data }: LegendModal) {
   return (
-    <div className="flex flex-row justify-center animate-fallDown">
+    <div className="flex flex-row justify-center ">
       <div
         role="figure"
         aria-label="Legend for colors and lines within image"
-        className="px-4 py-2 min-w-[350px] h-auto bg-white flex flex-row justify-between z-50">
-        <div>
+        className="px-4 animate-fallDown py-2 min-w-[350px] h-auto bg-white flex flex-row justify-between z-50">
+        <div className="w-1/2">
           <p>Type kleur</p>
 
           {data["color"] && (
@@ -35,7 +35,7 @@ export default function LegendModal({ data }: LegendModal) {
                       width="20"
                       height="20"
                       alt=""
-                      className="object-contain"
+                      className="object-cover"
                       src={cl.imageSelector.img.src}
                     />
                     <p className="ml-1 text-ellipsis overflow-hidden">{cl.label}</p>
@@ -45,7 +45,7 @@ export default function LegendModal({ data }: LegendModal) {
             </ul>
           )}
         </div>
-        <div>
+        <div className="w-1/2">
           <p>Type lijn</p>
 
           {data["line"] && (
@@ -57,7 +57,7 @@ export default function LegendModal({ data }: LegendModal) {
                       width="16"
                       height="16"
                       alt=""
-                      className="object-contain"
+                      className="object-cover"
                       src={ln.imageSelector.img.src}
                     />
                     <p className="ml-1 text-ellipsis overflow-hidden">{ln.label}</p>

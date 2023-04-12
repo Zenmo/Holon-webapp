@@ -70,7 +70,7 @@ module.exports = {
       },
       animation: {
         cardFadeIn: "FadeIn 0.3s ease-in forwards",
-        fallDown: "FallDown, 0.3s ease-in forwards",
+        fallDown: "FallDown 0.3s ease-in",
       },
     },
   },

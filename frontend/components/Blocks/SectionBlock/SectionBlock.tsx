@@ -178,13 +178,13 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       )}
 
       <div className="holonContentContainer">
-        <div className="sticky z-10 top-[87px] flex flex-row md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
+        <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
           <div className="flex-1">
             <button
               onClick={closeHolarchyModal}
               className={`px-6 pb-2 ${
                 holarchyModal
-                  ? "bg-holon-gray-200 text-holon-slated-blue-600"
+                  ? "bg-holon-gray-200 text-holon-blue-900"
                   : "bg-holon-blue-900 text-white"
               } border-x-2 border-t-2 border-solid h-12`}>
               Interactiemodus {pagetype}
@@ -194,7 +194,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               className={`px-6 pb-2 ${
                 holarchyModal
                   ? "bg-holon-blue-900 text-white"
-                  : "bg-holon-gray-200 text-holon-slated-blue-600"
+                  : "bg-holon-gray-200 text-holon-blue-900"
               } border-x-2 border-t-2 border-solid h-12`}>
               Holarchie
             </button>
@@ -204,7 +204,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               (legendItems["line"] && legendItems["line"].length > 0)) && (
               <button
                 onClick={() => setLegend(!legend)}
-                className={`px-6 pb-2  bg-white ${
+                className={`px-6 py-[0.65rem] bg-white ${
                   legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
                 }`}>
                 <InformationCircleIcon className="mr-2 w-5 inline-block" />
