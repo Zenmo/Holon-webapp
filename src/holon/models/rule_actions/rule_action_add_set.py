@@ -105,6 +105,9 @@ class GenericRuleActionAdd(RuleAction):
     ):
         """Add an asset to the first n items in the the filtered objects"""
 
+        if len(filtered_queryset) <= 0:
+            return
+
         # parse value
         n = int(value)
         if n < 0:
@@ -179,3 +182,45 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
         self.add_or_set_items(filtered_queryset, value, True)
+
+
+class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableModel):
+    """Add a number of duplicate objects for each of the filtered objects"""
+
+    rule = ParentalKey(
+        ScenarioRule,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="discrete_factors_add_multiple_under_each_parent",
+    )
+
+    class Meta:
+        verbose_name = "RuleActionAddMultipleUnderEachParent"
+
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
+        """Set the number of filtered objects with the model specified in rule_action_add to value"""
+
+        # parse value
+        n = int(value)
+        if n < 0:
+            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
+
+        # get parent type and foreign key field name
+        base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        try:
+            parent_fk_field_name = next(
+                parent_fk_fieldname
+                for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(
+                    self.model_to_add.__class__
+                )
+                if base_parent_type == parent_type
+            )
+        except:
+            raise ValueError(
+                f"Type {base_parent_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)} for model type {self.model_to_add.__class__.__name__}"
+            )
+
+        # only take first n objects
+        for filtererd_object in filtered_queryset:
+            for _ in range(n):
+                util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})

@@ -25,15 +25,9 @@ class AttributeFilterComparator(models.TextChoices):
 class Filter(PolymorphicModel):
     """Information on how to find the objects a scenario rule should be applied to"""
 
-    model_attribute = models.CharField(max_length=255)
+    model_attribute = models.CharField(max_length=255, null=True, blank=True)
     comparator = models.CharField(max_length=255, choices=AttributeFilterComparator.choices)
-    value = models.JSONField()
-
-    panels = [
-        FieldPanel("model_attribute"),
-        FieldPanel("comparator"),
-        FieldPanel("value"),
-    ]
+    value = models.JSONField(null=True, blank=True)
 
     def model_attribute_options(self) -> list[str]:
         model_type = (
@@ -59,6 +53,12 @@ class AttributeFilter(Filter):
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="attribute_filters")
 
+    panels = [
+        FieldPanel("model_attribute"),
+        FieldPanel("comparator"),
+        FieldPanel("value"),
+    ]
+
     class Meta:
         verbose_name = "AttributeFilter"
 
@@ -77,6 +77,11 @@ class AttributeFilter(Filter):
     def clean(self):
         super().clean()
 
+        if not self.model_attribute:
+            raise ValidationError("Model attribute is required")
+        if not self.value:
+            raise ValidationError("Value is required")
+
         try:
             if self.model_attribute not in self.model_attribute_options():
                 raise ValidationError("Invalid value model_attribute")
@@ -92,17 +97,29 @@ class RelationAttributeFilter(Filter):
     )
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
+    invert_filter = models.BooleanField(
+        default=False, help_text="Filter models that don't satisfy the model attribute comparison"
+    )
 
     panels = [
+        FieldPanel("invert_filter"),
         FieldPanel("relation_field"),
         FieldPanel("relation_field_subtype"),
-    ] + Filter.panels
+        FieldPanel("model_attribute"),
+        FieldPanel("comparator"),
+        FieldPanel("value"),
+    ]
 
     class Meta:
         verbose_name = "RelationAttributeFilter"
 
     def clean(self):
         super().clean()
+
+        if not self.model_attribute:
+            raise ValidationError("Model attribute is required")
+        if not self.value:
+            raise ValidationError("Value is required")
 
         try:
             if self.model_attribute not in self.relation_model_attribute_options():
@@ -118,18 +135,19 @@ class RelationAttributeFilter(Filter):
             return
 
     def relation_model_attribute_options(self) -> list[str]:
-
         model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+        model = apps.get_model("holon", model_type)
+
         relation_model_type = (
             self.relation_field_subtype
             if self.relation_field_subtype
-            else model_type._meta.get_field(self.relation_field).name
+            else model._meta.get_field(self.relation_field).name
         )
-        model = apps.get_model("holon", relation_model_type)
+        relation_model = apps.get_model("holon", relation_model_type)
 
         return [
             field.name
-            for field in model()._meta.get_fields()
+            for field in relation_model._meta.get_fields()
             if not field.is_relation and not is_exclude_field(field)
         ]
 
@@ -146,7 +164,6 @@ class RelationAttributeFilter(Filter):
         ]
 
     def relation_field_subtype_options(self) -> list[str]:
-
         model = apps.get_model("holon", self.rule.model_type)
         related_model = model()._meta.get_field(self.relation_field).related_model
 
@@ -179,7 +196,87 @@ class RelationAttributeFilter(Filter):
                 }
             )
 
+        if self.invert_filter:
+            return ~(relation_field_subtype & relation_field_q)
         return relation_field_subtype & relation_field_q
+
+
+class RelationExistsFilter(Filter):
+    """Filter on attribute for parent object"""
+
+    rule = ParentalKey(
+        "holon.Rule", on_delete=models.CASCADE, related_name="relation_exists_filters"
+    )
+    relation_field = models.CharField(max_length=255)  # bijv gridconnection
+    relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
+    invert_filter = models.BooleanField(
+        default=False, help_text="Filter models that don't have the specified relation"
+    )
+
+    panels = [
+        FieldPanel("invert_filter"),
+        FieldPanel("relation_field"),
+        FieldPanel("relation_field_subtype"),
+    ]
+
+    class Meta:
+        verbose_name = "RelationAttributeFilter"
+
+    def clean(self):
+        super().clean()
+
+        try:
+            if self.relation_field not in self.relation_field_options():
+                raise ValidationError("Invalid value relation_field")
+            if (
+                self.relation_field_subtype
+                and self.relation_field_subtype not in self.relation_field_subtype_options()
+            ):
+                raise ValidationError("Invalid value relation_field_subtype")
+        except ObjectDoesNotExist:
+            return
+
+    def relation_field_options(self) -> list[str]:
+        model_type = (
+            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+        )
+        model = apps.get_model("holon", model_type)
+
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if field.is_relation and not is_exclude_field(field)
+        ]
+
+    def relation_field_subtype_options(self) -> list[str]:
+        model = apps.get_model("holon", self.rule.model_type)
+        related_model = model()._meta.get_field(self.relation_field).related_model
+
+        return [subclass.__name__ for subclass in all_subclasses(related_model)]
+
+    def get_q(self) -> Q:
+        if self.invert_filter:
+            if self.relation_field_subtype:
+                return ~Q(
+                    **{
+                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
+                            apps.get_model("holon", self.relation_field_subtype)
+                        )
+                    }
+                )
+            else:
+                return Q(**{f"{self.relation_field}__isnull": True})
+        else:
+            if self.relation_field_subtype:
+                return Q(
+                    **{
+                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
+                            apps.get_model("holon", self.relation_field_subtype)
+                        )
+                    }
+                )
+            else:
+                return Q(**{f"{self.relation_field}__isnull": False})
 
 
 class DiscreteAttributeFilter(Filter):
@@ -189,8 +286,19 @@ class DiscreteAttributeFilter(Filter):
         "holon.Rule", on_delete=models.CASCADE, related_name="discrete_attribute_filters"
     )
 
+    panels = [
+        FieldPanel("model_attribute"),
+        FieldPanel("comparator"),
+        FieldPanel("value"),
+    ]
+
     def clean(self):
         super().clean()
+
+        if not self.model_attribute:
+            raise ValidationError("Model attribute is required")
+        if not self.value:
+            raise ValidationError("Value is required")
 
         try:
             if self.model_attribute not in self.discrete_relation_field_options():

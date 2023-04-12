@@ -2,6 +2,7 @@ import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/C
 import { StaticImage } from "@/components/ImageSelector/types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -11,7 +12,8 @@ import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFee
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
-import HolarchyTab from "./HolarchyTab";
+import HolarchyTab from "./HolarchyTab/HolarchyTab";
+import { LegendItem } from "./HolarchyTab/LegendModal";
 import { Content, Feedbackmodals, InteractiveContent } from "./types";
 
 type Props = {
@@ -59,10 +61,12 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
     HolarchyFeedbackImageProps[]
   >([]);
+  const [legendItems, setLegendItems] = useState([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
+  const [legend, setLegend] = useState<boolean>(false);
   const scenario = useContext<number>(ScenarioContext);
 
   const sectionContainerRef = useRef(null);
@@ -80,6 +84,9 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
 
   useEffect(() => {
     setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
+    setLegendItems(
+      convertLegendItems(content.filter(content => content.type == "legend_items")[0])
+    );
     debouncedCalculateKPIs(content);
   }, [content, debouncedCalculateKPIs]);
 
@@ -145,6 +152,19 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       });
   }
 
+  function convertLegendItems(items: Array<LegendItem>) {
+    const return_arr = [];
+    if (items) {
+      items.value?.legendItems.map(item => {
+        if (return_arr[item.value?.type] === undefined) {
+          return_arr[item.value?.type] = [];
+        }
+        return_arr[item.value?.type].push(item.value);
+      });
+    }
+    return return_arr;
+  }
+
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef}>
       {feedbackmodals && (
@@ -159,19 +179,40 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       )}
 
       <div className="holonContentContainer">
-        <div className="sticky top-[87px] md:top-[110px] bg-white z-10 mt-4 pt-2 pl-4">
-          <div>
+        <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
+          <div className="flex-1">
             <button
               onClick={closeHolarchyModal}
-              className={`px-6 py-2 ${data.value.background.color} rounded-t-lg border-x-2 border-t-2 border-solid`}>
+              className={`px-6 pb-2 ${
+                holarchyModal
+                  ? "bg-holon-gray-200 text-holon-blue-900"
+                  : "bg-holon-blue-900 text-white"
+              } border-x-2 border-t-2 border-solid h-12`}>
               Interactiemodus {pagetype}
             </button>
             <button
               onClick={openHolarchyModal}
-              className={`px-6 py-2 bg-holon-blue-100 rounded-t-lg`}>
+              className={`px-6 pb-2 ${
+                holarchyModal
+                  ? "bg-holon-blue-900 text-white"
+                  : "bg-holon-gray-200 text-holon-blue-900"
+              } border-x-2 border-t-2 border-solid h-12`}>
               Holarchie
             </button>
           </div>
+          {holarchyModal &&
+            ((legendItems["color"] && legendItems["color"].length > 0) ||
+              (legendItems["line"] && legendItems["line"].length > 0)) && (
+              <button
+                onClick={() => setLegend(!legend)}
+                className={`px-6 py-[0.65rem] bg-white flex ${
+                  legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
+                }`}>
+                <InformationCircleIcon className="mr-2 w-5 inline-block" />
+                Legenda
+              </button>
+            )}
+          <div className="flex-1"></div>
         </div>
 
         <div className={`flex flex-col lg:flex-row ${backgroundFullcolor}`}>
@@ -213,6 +254,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
           {holarchyModal && (
             <HolarchyTab
               holarchyFeedbackImages={holarchyFeedbackImages}
+              legendItems={legendItems}
               content={content}
               dataContent={data?.value.content}
               handleContentChange={setContent}
@@ -221,7 +263,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               textLabelIntermediate={data.value.textLabelIntermediate}
               textLabelLocal={data.value.textLabelLocal}
               loading={loading}
-              kpis={kpis}></HolarchyTab>
+              kpis={kpis}
+              legend={legend}></HolarchyTab>
           )}
         </div>
       </div>

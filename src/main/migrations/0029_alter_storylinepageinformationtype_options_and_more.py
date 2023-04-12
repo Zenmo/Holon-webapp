@@ -14,7 +14,6 @@ import wagtail_headless_preview.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("api", "0010_delete_slider"),
         ("customimage", "0003_alter_customimage_file_hash"),

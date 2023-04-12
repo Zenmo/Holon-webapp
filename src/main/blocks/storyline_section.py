@@ -15,6 +15,7 @@ from wagtailmodelchooser import register_model_chooser, Chooser
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 from .holarchyfeedbackimages import HolarchyFeedbackImage
+from .legend_item import LegendItemsBlock
 
 
 def get_interactive_inputs():
@@ -43,14 +44,14 @@ class InteractiveElementChooser(Chooser):
 
 class InteractiveInputBlock(blocks.StructBlock):
     DISPLAY_CHECKBOXRADIO = "checkbox_radio"
-    DISPLAY_BUTTON = "button"
-    DISPLAY_CHOICES = (
+    DISPLAY_DROPDOWN = "dropdown"
+    DISPLAY_CHOICES = [
         (DISPLAY_CHECKBOXRADIO, "Show as checkboxe(s) or radiobutton(s)"),
-        (DISPLAY_BUTTON, "Show as button(s)"),
-    )
+        (DISPLAY_DROPDOWN, "Show as dropdown"),
+    ]
 
     interactive_input = ModelChooserBlock(InteractiveElement)
-    display = DISPLAY_CHECKBOXRADIO
+    display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES, required=False)
     visible = blocks.BooleanBlock(required=False, default=True)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(
@@ -98,6 +99,9 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_default": option.slider_value_default,
                         "slider_value_min": option.slider_value_min,
                         "slider_value_max": option.slider_value_max,
+                        "slider_unit": option.slider_unit.symbol
+                        if option.slider_unit is not None
+                        else "",
                     }
                     options_arr.append(option_dict)
 
@@ -112,6 +116,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "options": options_arr,
                 "visible": value["visible"],
                 "locked": value["locked"],
+                "display": value["display"],
                 "default_value_override": value["default_value"],
             }
 
@@ -143,6 +148,7 @@ class StorylineSectionBlock(blocks.StructBlock):
             ("interactive_input", InteractiveInputBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
             ("holarchy_feedback_image", HolarchyFeedbackImage()),
+            ("legend_items", LegendItemsBlock()),
         ],
         block_counts={"static_image": {"max_num": 1}},
     )

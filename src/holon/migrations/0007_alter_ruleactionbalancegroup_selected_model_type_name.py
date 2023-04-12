@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0006_remove_ruleaction_asset_attribute_and_more"),
     ]

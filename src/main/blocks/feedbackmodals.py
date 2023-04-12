@@ -1,12 +1,11 @@
-from django.utils.translation import gettext_lazy as _
 from django.db import models
-
-from wagtail.fields import StreamBlock
+from django.utils.translation import gettext_lazy as _
 from wagtail.core import blocks
+from wagtail.fields import StreamBlock
+from wagtailmodelchooser.blocks import ModelChooserBlock
 
 from holon.models.interactive_element import InteractiveElement
 
-from wagtailmodelchooser.blocks import ModelChooserBlock
 from .holon_image_chooser import HolonImageChooserBlock
 
 
@@ -69,7 +68,9 @@ class FeedbackModalInteractiveInputCondition(blocks.StructBlock):
     value = blocks.CharBlock(
         max_length=255,
         required=True,
-        help_text=_("Set the value of this condition to compare to"),
+        help_text=_(
+            "Set the value of this condition to compare to, this is the value of the slider or the value of the radio/checkbox (field 'Option' within Interactive Element )"
+        ),
     )
 
 

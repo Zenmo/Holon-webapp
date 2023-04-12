@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0034_alter_wikipage_table"),
         ("api", "0010_delete_slider"),

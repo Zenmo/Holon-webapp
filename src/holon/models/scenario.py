@@ -4,12 +4,15 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
 from holon.models.util import duplicate_model
+from threading import Thread
 
 
 class Scenario(ClusterableModel):
     name = models.CharField(max_length=255)
     version = models.IntegerField(default=1)
     comment = models.TextField(blank=True)
+
+    cloned_from = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
 
     panels = [
         FieldPanel("name"),
@@ -62,19 +65,31 @@ class Scenario(ClusterableModel):
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
+        for gridnode in self.gridnode_set.all():
+            assets = assets | gridnode.energyasset_set.all()
 
         return assets
 
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
-        from holon.models import Actor, EnergyAsset, GridConnection, GridNode, Policy, Contract
 
-        old_scenario_id = self.id
+        from holon.models import EnergyAsset, GridNode, Contract
+
+        scenario_old = (
+            Scenario.objects.prefetch_related("actor_set")
+            .prefetch_related("actor_set__contracts")
+            .prefetch_related("gridconnection_set")
+            .prefetch_related("gridconnection_set__energyasset_set")
+            .prefetch_related("gridnode_set")
+            .prefetch_related("gridnode_set__energyasset_set")
+            .prefetch_related("policy_set")
+            .get(id=self.id)
+        )
 
         with transaction.atomic():
-            new_scenario = duplicate_model(self)
+            new_scenario = duplicate_model(self, {"cloned_from": scenario_old})
 
-            actors = Actor.objects.filter(payload_id=old_scenario_id)
+            actors = scenario_old.actor_set.all()
             actor_id_to_new_model_mapping = {}
 
             for actor in actors:
@@ -83,7 +98,7 @@ class Scenario(ClusterableModel):
 
                 actor_id_to_new_model_mapping[actor_id] = new_actor
 
-            contracts = Contract.objects.filter(actor__payload_id=old_scenario_id)
+            contracts = Contract.objects.filter(actor__payload_id=scenario_old.id)
             for contr in contracts:
                 duplicate_model(
                     contr,
@@ -93,7 +108,8 @@ class Scenario(ClusterableModel):
                     },
                 )
 
-            gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
+            gridnodes = scenario_old.gridnode_set.all()
+
             gridnode_id_to_new_model_mapping = {}
             for gridnode in gridnodes:
                 gridnode_id = gridnode.id
@@ -114,7 +130,9 @@ class Scenario(ClusterableModel):
                     gridnode.parent = gridnode_id_to_new_model_mapping[gridnode.parent.id]
                     gridnode.save()
 
-            gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
+            gridconnections = scenario_old.gridconnection_set.all()
+
+            asset_count = 0
             for gridconnection in gridconnections:
                 attributes_to_update = {
                     "payload": new_scenario,
@@ -133,10 +151,11 @@ class Scenario(ClusterableModel):
                 new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
 
                 assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
+                asset_count += len(assets)
                 for asset in assets:
                     duplicate_model(asset, {"gridconnection": new_gridconnection})
 
-            policies = Policy.objects.filter(payload_id=old_scenario_id)
+            policies = scenario_old.policy_set.all()
             for policy in policies:
                 duplicate_model(policy, {"payload": new_scenario})
 
@@ -161,3 +180,8 @@ class Scenario(ClusterableModel):
             delete_individualy(self.actor_set.all())
 
             return super().delete()
+
+    def delete_async(self) -> None:
+        """Delete the scenario asynchrou"""
+        t = Thread(target=self.delete)
+        t.start()

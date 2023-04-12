@@ -41,6 +41,7 @@ class ScenarioAdmin(ModelAdmin):
     add_to_settings_menu = False
     exclude_from_explorer = False
     add_to_admin_menu = True
+    list_filter = ("cloned_from",)
 
 
 # modeladmin_register(FactorAdmin)
