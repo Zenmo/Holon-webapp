@@ -59,6 +59,10 @@ class Take(FilterSubSelector):
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_takes")
     mode = models.CharField(max_length=32, choices=TakeMode.choices, null=False, blank=False)
 
+    panels = FilterSubSelector.panels + [
+        FieldPanel("mode"),
+    ]
+
     def clean(self):
         super().clean()
 
