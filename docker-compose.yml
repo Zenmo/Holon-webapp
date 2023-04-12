@@ -36,6 +36,7 @@ services:
       - NEXT_PUBLIC_BASE_URL=https://pizzaoven.holontool.nl/wt
 
   python:
+    image: python_fakie_09
     build: 
       context: ./src
       dockerfile: Dockerfile.prod
