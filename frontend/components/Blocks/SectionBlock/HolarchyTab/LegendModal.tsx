@@ -16,32 +16,34 @@ type LegendModal = {
   };
 };
 
+function LegendModalItems({ legendItems }: LegendItem) {
+  return legendItems.map(legendItem => (
+    <li key={legendItem.label} className="flex flex-row items-center" title={legendItem.label}>
+      <Image
+        width="16"
+        height="16"
+        alt=""
+        className="object-cover"
+        src={legendItem.imageSelector.img.src}
+      />
+      <span className="ml-1 truncate">{legendItem.label}</span>
+    </li>
+  ));
+}
+
 export default function LegendModal({ data }: LegendModal) {
   return (
     <div className="flex flex-row justify-center ">
       <div
         role="figure"
         aria-label="Legend for colors and lines within image"
-        className="px-4 animate-fallDown py-2 min-w-[350px] h-auto bg-white flex flex-row justify-between z-50">
+        className="gap-1 px-4 animate-fallDown py-2 min-w-[350px] h-auto bg-white flex flex-row justify-between z-50">
         <div className="w-1/2">
           <p>Type kleur</p>
 
           {data["color"] && (
             <ul>
-              {data["color"].map(cl => {
-                return (
-                  <li key={cl.label} className="flex flex-row items-center">
-                    <Image
-                      width="20"
-                      height="20"
-                      alt=""
-                      className="object-cover"
-                      src={cl.imageSelector.img.src}
-                    />
-                    <p className="ml-1 text-ellipsis overflow-hidden">{cl.label}</p>
-                  </li>
-                );
-              })}
+              <LegendModalItems legendItems={data["color"]} />
             </ul>
           )}
         </div>
@@ -50,20 +52,7 @@ export default function LegendModal({ data }: LegendModal) {
 
           {data["line"] && (
             <ul>
-              {data["line"].map(ln => {
-                return (
-                  <li key={ln.label} className="flex flex-row items-center">
-                    <Image
-                      width="16"
-                      height="16"
-                      alt=""
-                      className="object-cover"
-                      src={ln.imageSelector.img.src}
-                    />
-                    <p className="ml-1 text-ellipsis overflow-hidden">{ln.label}</p>
-                  </li>
-                );
-              })}
+              <LegendModalItems legendItems={data["line"]} />
             </ul>
           )}
         </div>

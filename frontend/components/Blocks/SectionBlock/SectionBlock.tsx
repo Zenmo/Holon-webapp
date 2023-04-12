@@ -7,7 +7,7 @@ import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
+import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -205,7 +205,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
               (legendItems["line"] && legendItems["line"].length > 0)) && (
               <button
                 onClick={() => setLegend(!legend)}
-                className={`px-6 py-[0.65rem] bg-white ${
+                className={`px-6 py-[0.65rem] bg-white flex ${
                   legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
                 }`}>
                 <InformationCircleIcon className="mr-2 w-5 inline-block" />
