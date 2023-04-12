@@ -27,7 +27,6 @@ type Props = {
     };
     id: string;
   };
-  targetValue?: {};
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
