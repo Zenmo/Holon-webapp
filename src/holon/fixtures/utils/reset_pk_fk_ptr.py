@@ -3,8 +3,8 @@ import json
 # fp = "../peter-dupliceter-datamodel-fixture.json"
 # fp_out = "../peter-dupliceter-datamodel-fixture_clean_keys.json"
 
-fp = "../datamodel-tvw-fixture.json"
-fp_out = "../datamodel-tvw-fixture_clean_keys.json"
+fp = "../jorrit/ref/tvw-POSTSCALEUP.json"
+fp_out = "../jorrit/ref/tvw-POSTCLEANUP.json"
 
 BASE_INT = 456000  # change me!
 
