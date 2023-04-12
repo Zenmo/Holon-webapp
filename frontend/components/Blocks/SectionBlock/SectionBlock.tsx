@@ -13,6 +13,7 @@ import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import HolarchyTab from "./HolarchyTab/HolarchyTab";
+import { LegendItem } from "./HolarchyTab/LegendModal";
 import { Content, Feedbackmodals, InteractiveContent } from "./types";
 
 type Props = {
@@ -151,7 +152,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       });
   }
 
-  function convertLegendItems(items: any) {
+  function convertLegendItems(items: Array<LegendItem>) {
     const return_arr = [];
     if (items) {
       items.value?.legendItems.map(item => {
