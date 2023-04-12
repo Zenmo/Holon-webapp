@@ -54,6 +54,7 @@ class AttributeFilter(Filter):
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="attribute_filters")
 
     panels = [
+        FieldPanel("rule"),
         FieldPanel("model_attribute"),
         FieldPanel("comparator"),
         FieldPanel("value"),
@@ -76,6 +77,13 @@ class AttributeFilter(Filter):
 
     def clean(self):
         super().clean()
+        print("Clean start")
+        print("attribute", self.model_attribute)
+        print("self in dict", self.__dict__)
+        try:
+            print("rule", self.rule)
+        except:
+            pass
 
         if not self.model_attribute:
             raise ValidationError("Model attribute is required")
@@ -83,10 +91,27 @@ class AttributeFilter(Filter):
             raise ValidationError("Value is required")
 
         try:
+            print("Options", self.model_attribute_options())
             if self.model_attribute not in self.model_attribute_options():
+                print("FAIL")
                 raise ValidationError("Invalid value model_attribute")
         except ObjectDoesNotExist:
+            print("Not exists")
             return
+        print("Done")
+
+
+# from django.db.models.signals import pre_save
+# from django.dispatch import receiver
+
+
+# @receiver(pre_save, sender=AttributeFilter)
+# def valid_order(sender, instance, **kwargs):
+#     print("presavew", instance, instance.__dict__, kwargs)
+#     try:
+#         instance.clean()
+#     except:
+#         raise ValidationError("Value is required")
 
 
 class RelationAttributeFilter(Filter):
