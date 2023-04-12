@@ -50,6 +50,7 @@ const ContentBlocks = ({
     return null;
   }
 
+  /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
     const updatedContent = { ...content };
 
@@ -63,11 +64,14 @@ const ContentBlocks = ({
       } else {
         updatedContent.value.content.push({
           type: "interactive_input",
-          value: { ...value, visible: false },
+          value: {
+            ...value,
+            visible: false,
+            defaultValueOverride: "",
+          },
         });
       }
     });
-
     return updatedContent;
   }
 
@@ -105,7 +109,6 @@ const ContentBlocks = ({
                 graphcolors={graphcolors ?? []}
               />
             );
-
           case "buttons_and_media_block":
             return (
               <ButtonsAndMediaBlock key={`buttonsmedia ${contentItem.id}`} data={contentItem} />
