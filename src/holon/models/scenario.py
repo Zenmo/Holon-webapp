@@ -94,12 +94,14 @@ class Scenario(ClusterableModel):
 
             for actor in actors:
                 actor_id = actor.id
+                actor.original_id = actor_id
                 new_actor = duplicate_model(actor, {"payload": new_scenario})
 
                 actor_id_to_new_model_mapping[actor_id] = new_actor
 
             contracts = Contract.objects.filter(actor__payload_id=scenario_old.id)
             for contr in contracts:
+                contr.original_id = contr.id
                 duplicate_model(
                     contr,
                     {
@@ -113,6 +115,7 @@ class Scenario(ClusterableModel):
             gridnode_id_to_new_model_mapping = {}
             for gridnode in gridnodes:
                 gridnode_id = gridnode.id
+                gridnode.original_id = gridnode_id
                 new_gridnode = duplicate_model(
                     gridnode,
                     {
@@ -148,15 +151,18 @@ class Scenario(ClusterableModel):
                     ]
 
                 gridconnection_id = gridconnection.pk
+                gridconnection.original_id = gridconnection_id
                 new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
 
                 assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
                 asset_count += len(assets)
                 for asset in assets:
+                    asset.original_id = asset.id
                     duplicate_model(asset, {"gridconnection": new_gridconnection})
 
             policies = scenario_old.policy_set.all()
             for policy in policies:
+                policy.original_id = policy.id
                 duplicate_model(policy, {"payload": new_scenario})
 
             return new_scenario
