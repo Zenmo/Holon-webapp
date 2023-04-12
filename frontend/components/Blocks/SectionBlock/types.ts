@@ -1,6 +1,6 @@
-import { FeedbackModal } from "../ChallengeFeedbackModal/types";
-import { StaticImage } from "@/components/ImageSelector/types";
 import { HolarchyFeedbackImageProps } from "@/components/Blocks/HolarchyFeedbackImage/HolarchyFeedbackImage";
+import { StaticImage } from "@/components/ImageSelector/types";
+import { FeedbackModal } from "../ChallengeFeedbackModal/types";
 
 export type Content =
   | {
@@ -32,6 +32,7 @@ export type InteractiveInput = {
   name?: string;
   type?: string;
   defaultValueOverride?: string;
+  targetValue?: string;
   animationTag?: string;
   options: InteractiveInputOptions[];
   display: string;

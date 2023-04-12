@@ -47,7 +47,6 @@ const ContentBlocks = ({
         targetValues = newTargetValues;
       }
     });
-
     return null;
   }
 
@@ -71,27 +70,6 @@ const ContentBlocks = ({
 
     return updatedContent;
   }
-
-  /*function addTargetValues(values, content) {
-    const updatedContent = [...content];
-
-    values.forEach((value, key) => {
-      const foundElement = updatedContent.find(element => {
-        return element.type === "interactive_input" && element.value.id === key;
-      });
-
-      if (foundElement) {
-        foundElement.value.targetValue = value.targetValue;
-      } else {
-        updatedContent.push({
-          type: "interactive_input",
-          value: { ...value, visible: false },
-        });
-      }
-    });
-
-    return updatedContent;
-  }*/
 
   return (
     <React.Fragment>

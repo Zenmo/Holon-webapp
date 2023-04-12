@@ -45,11 +45,17 @@ export default function ContentColumn({
 
   function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
     const defaultValue = content.value.defaultValueOverride;
+    const targetValue = content.value.targetValue;
+
     switch (content.value.type) {
       case "single_select":
         if (defaultValue) {
           return content.value.options.find(
             option => option.option === defaultValue || option.label === defaultValue
+          )?.id;
+        } else if (targetValue) {
+          return content.value.options.find(
+            option => option.option === targetValue || option.label === targetValue
           )?.id;
         } else {
           const option = content.value.options.find(option => option.default);
@@ -58,6 +64,8 @@ export default function ContentColumn({
       case "continuous":
         if (defaultValue !== undefined && defaultValue !== "") {
           return Number(defaultValue);
+        } else if (targetValue) {
+          return Number(targetValue);
         } else if (
           content.value.options.length &&
           content.value.options[0].sliderValueDefault !== undefined
@@ -68,11 +76,14 @@ export default function ContentColumn({
         }
       case "multi_select":
         const defaultValueArray = defaultValue && defaultValue.split(",");
+        const targetValueArray = targetValue && targetValue.split(",");
         const defaultOptions = content.value.options.filter(
           option =>
             option.default ||
             defaultValueArray?.includes(option.option) ||
-            defaultValueArray?.includes(option.label)
+            defaultValueArray?.includes(option.label) ||
+            targetValueArray?.includes(option.option) ||
+            targetValueArray?.includes(option.label)
         );
         return defaultOptions.length ? defaultOptions.map(option => option.option) : [];
     }
