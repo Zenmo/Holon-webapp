@@ -45,7 +45,6 @@ function InteractiveInputs({
   options,
   defaultValue,
   currentValue,
-  targetValue,
   selectedLevel,
   level,
   setValue,
