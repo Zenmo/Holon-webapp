@@ -54,13 +54,7 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({
-  data,
-  targetValue,
-  pagetype,
-  feedbackmodals,
-  graphcolors,
-}: Props) {
+export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
@@ -205,7 +199,6 @@ export default function SectionBlock({
               } border-x-2 border-t-2 border-solid h-12`}>
               Holarchie
             </button>
-            <p>{targetValue}</p>
           </div>
           {holarchyModal &&
             ((legendItems["color"] && legendItems["color"].length > 0) ||
