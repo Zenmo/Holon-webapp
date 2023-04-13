@@ -26,8 +26,6 @@ from wagtail.wagtail_hooks import require_wagtail_login
 from wagtail_headless_preview.models import PagePreview
 from wagtail.api.v2.views import BaseAPIViewSet
 
-from main.snippets.graphcolors import GraphColors
-
 api_router = WagtailAPIRouter("nextjs")
 
 

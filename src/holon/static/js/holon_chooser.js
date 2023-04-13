@@ -262,7 +262,7 @@ function updateFilterInputs(
                     "input[id$='-relation_field_subtype'], select[id$='-relation_field_subtype']"
                 );
             relation_subtype.show();
-            if (Object.keys(data).includes(relation_type)) {
+            if (Object.keys(data[relation_type].model_subtype).length) {
                 const options = Object.keys(data[relation_type].model_subtype);
                 let select;
                 if ($(relation_subtype).prop("tagName") !== "SELECT") {
@@ -306,11 +306,18 @@ function updateFilterInputs(
                 });
             } else {
                 relation_subtype.hide();
-                options = Object.keys(data)
-                    .map((key) => data[key])
-                    .find((type) =>
-                        Object.keys(type.model_subtype).includes(relation_type)
-                    ).model_subtype[relation_type];
+                let options;
+                try {
+                    options = Object.keys(data)
+                        .map((key) => data[key])
+                        .find((type) =>
+                            Object.keys(type.model_subtype).includes(
+                                relation_type
+                            )
+                        ).model_subtype[relation_type];
+                } catch (error) {
+                    options = data[relation_type].attributes;
+                }
 
                 const attribute_select = $(this)
                     .closest(".w-panel__content")

@@ -61,7 +61,7 @@ class Results:
     def __include_scenario(self):
         """Only include modified scenario if request is done locally or on acceptatie"""
         uri = self.request.build_absolute_uri()
-        return "localhost" in uri or "acceptatie" in uri
+        return "localhost" in uri or "acceptatie" in uri or "pizzaoven" in uri
 
 
 def calculate_holon_kpis(anylogic_outcomes: dict) -> dict:

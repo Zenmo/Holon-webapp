@@ -45,6 +45,7 @@ class Scenario(ClusterableModel):
     ]
 
     _assets = None
+    _contracts = None
 
     class Meta:
         verbose_name = "Scenario"
@@ -59,14 +60,33 @@ class Scenario(ClusterableModel):
 
         return self._assets
 
+    @property
+    def contracts(self) -> "list[Contract]":
+        if not self._contracts:
+            self._contracts = self.__load_contracts()
+
+        return self._contracts
+
     def __load_assets(self) -> "list[EnergyAsset]":
         from holon.models.asset import EnergyAsset
 
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
+        for gridnode in self.gridnode_set.all():
+            assets = assets | gridnode.energyasset_set.all()
 
         return assets
+
+    def __load_contracts(self) -> "list[Contract]":
+        from holon.models import Contract
+
+        # return Contract.objects.filter(actor__payload_id=self.id)
+        contracts = Contract.objects.none()
+        for actor in self.actor_set.all():
+            contracts = contracts | actor.contracts.all()
+
+        return contracts
 
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
