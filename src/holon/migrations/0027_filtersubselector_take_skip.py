@@ -6,7 +6,6 @@ import modelcluster.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
         ("holon", "0026_alter_ruleactionchangeattribute_static_value"),

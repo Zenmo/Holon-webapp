@@ -62,12 +62,17 @@ const ContentBlocks = ({
       if (foundElement) {
         foundElement.value.targetValue = value.targetValue;
       } else {
+        //if the element does not exist yet it is added (invisible and with no other defaultValues besides the target value(s))
         updatedContent.value.content.push({
           type: "interactive_input",
           value: {
             ...value,
             visible: false,
             defaultValueOverride: "",
+            options: value.options.map(option => ({
+              ...option,
+              default: false,
+            })),
           },
         });
       }

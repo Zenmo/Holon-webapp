@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0026_alter_ruleactionchangeattribute_static_value"),
     ]
