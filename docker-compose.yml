@@ -32,11 +32,11 @@ services:
     depends_on:
       - web
     environment:
+      - WAGTAIL_API_URL=http://python:8000/wt/  
       - NEXT_PUBLIC_WAGTAIL_API_URL=https://pizzaoven.holontool.nl/wt/api/nextjs
       - NEXT_PUBLIC_BASE_URL=https://pizzaoven.holontool.nl/wt
 
   python:
-    image: python_fakie_09
     build: 
       context: ./src
       dockerfile: Dockerfile.prod
@@ -56,3 +56,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+
+volumes:
+  src:
+    name: pythonvol
