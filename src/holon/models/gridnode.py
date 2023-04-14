@@ -23,6 +23,11 @@ class GridNode(PolymorphicModel):
             "Use this field to define parameters that are not currently available in the datamodel."
         ),
     )
+    original_id = models.BigIntegerField(
+        null=True,
+        blank=True,
+        help_text=_("This field is used as a reference for cloned models. Don't set it manually"),
+    )
 
 
 class ElectricGridType(models.TextChoices):

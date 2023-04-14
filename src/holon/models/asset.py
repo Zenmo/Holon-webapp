@@ -28,6 +28,12 @@ class EnergyAsset(PolymorphicModel):
         help_text=_("Set this to True when this model can be used as a template for rule actions"),
     )
 
+    original_id = models.BigIntegerField(
+        null=True,
+        blank=True,
+        help_text=_("This field is used as a reference for cloned models. Don't set it manually"),
+    )
+
     def clean(self):
         not_connected = self.gridconnection is None and self.gridnode is None
         connected_twice = self.gridconnection is not None and self.gridnode is not None
