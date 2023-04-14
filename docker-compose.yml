@@ -20,7 +20,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   next:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile.prod
     ports:
@@ -32,12 +32,12 @@ services:
     depends_on:
       - web
     environment:
-      - WAGTAIL_API_URL=http://python:8000/wt/  
+      - WAGTAIL_API_URL=http://python:8000/wt/
       - NEXT_PUBLIC_WAGTAIL_API_URL=https://pizzaoven.holontool.nl/wt/api/nextjs
       - NEXT_PUBLIC_BASE_URL=https://pizzaoven.holontool.nl/wt
 
   python:
-    build: 
+    build:
       context: ./src
       dockerfile: Dockerfile.prod
     volumes:
@@ -50,6 +50,8 @@ services:
     image: prod_db
     build:
       context: ./db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - "8083:5432"
     environment:
@@ -58,5 +60,4 @@ services:
       - POSTGRES_DB=postgres
 
 volumes:
-  src:
-    name: pythonvol
+  postgres-data:
