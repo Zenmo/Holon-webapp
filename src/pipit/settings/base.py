@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://pizzaoven.holontool.nl"]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -249,6 +249,6 @@ SENTRY_ENVIRONMENT: Optional[str] = None
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
+CSRF_TRUSTED_ORIGINS = ["localhost:3000", "https://pizzaoven.holontool.nl"]
 
 OLD_PASSWORD_FIELD_ENABLED = True
