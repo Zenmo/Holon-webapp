@@ -834,6 +834,17 @@
         }
     },
     {
+        "model": "holon.energyasset",
+        "pk": 1020,
+        "fields": {
+            "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+            "gridconnection": null,
+            "gridnode": 1,
+            "name": "Diesel_Truck",
+            "wildcard_JSON": null
+        }
+    },
+    {
         "model": "holon.consumptionasset",
         "pk": 4,
         "fields": {
@@ -1166,6 +1177,14 @@
         "pk": 1019,
         "fields": {
             "energyasset_ptr": 1019,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 1020,
+        "fields": {
+            "energyasset_ptr": 1020,
             "type": "DIESEL_VEHICLE"
         }
     },

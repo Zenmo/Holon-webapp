@@ -144,6 +144,11 @@ class Scenario(ClusterableModel):
 
                 gridnode_id_to_new_model_mapping[gridnode_id] = new_gridnode
 
+                assets = EnergyAsset.objects.filter(gridnode_id=gridnode_id)
+                for asset in assets:
+                    asset.original_id = asset.id
+                    duplicate_model(asset, {"gridnode": new_gridnode})
+
             # Update gridnode parent
             new_gridnodes = GridNode.objects.filter(payload_id=new_scenario.id)
             for gridnode in new_gridnodes:
@@ -153,7 +158,6 @@ class Scenario(ClusterableModel):
 
             gridconnections = scenario_old.gridconnection_set.all()
 
-            asset_count = 0
             for gridconnection in gridconnections:
                 attributes_to_update = {
                     "payload": new_scenario,
@@ -173,7 +177,6 @@ class Scenario(ClusterableModel):
                 new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
 
                 assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
-                asset_count += len(assets)
                 for asset in assets:
                     asset.original_id = asset.id
                     duplicate_model(asset, {"gridconnection": new_gridconnection})
