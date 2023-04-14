@@ -44,9 +44,6 @@ class Scenario(ClusterableModel):
         ),
     ]
 
-    _assets = None
-    _contracts = None
-
     class Meta:
         verbose_name = "Scenario"
 
@@ -55,19 +52,6 @@ class Scenario(ClusterableModel):
 
     @property
     def assets(self) -> "list[EnergyAsset]":
-        if not self._assets:
-            self._assets = self.__load_assets()
-
-        return self._assets
-
-    @property
-    def contracts(self) -> "list[Contract]":
-        if not self._contracts:
-            self._contracts = self.__load_contracts()
-
-        return self._contracts
-
-    def __load_assets(self) -> "list[EnergyAsset]":
         from holon.models.asset import EnergyAsset
 
         assets = EnergyAsset.objects.none()
@@ -78,15 +62,35 @@ class Scenario(ClusterableModel):
 
         return assets
 
-    def __load_contracts(self) -> "list[Contract]":
+    @property
+    def contracts(self) -> "list[Contract]":
         from holon.models import Contract
 
-        # return Contract.objects.filter(actor__payload_id=self.id)
         contracts = Contract.objects.none()
         for actor in self.actor_set.all():
             contracts = contracts | actor.contracts.all()
 
         return contracts
+
+    # def __load_assets(self) -> "list[EnergyAsset]":
+    #     from holon.models.asset import EnergyAsset
+
+    #     assets = EnergyAsset.objects.none()
+    #     for gridconnection in self.gridconnection_set.all():
+    #         assets = assets | gridconnection.energyasset_set.all()
+    #     for gridnode in self.gridnode_set.all():
+    #         assets = assets | gridnode.energyasset_set.all()
+
+    #     return assets
+
+    # def __load_contracts(self) -> "list[Contract]":
+    #     from holon.models import Contract
+
+    #     contracts = Contract.objects.none()
+    #     for actor in self.actor_set.all():
+    #         contracts = contracts | actor.contracts.all()
+
+    #     return contracts
 
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
@@ -197,11 +201,14 @@ class Scenario(ClusterableModel):
             # django-polymorphic can't handle deletion of mixed object types
             from holon.models import Contract
 
-            delete_individualy(self.assets)
-            delete_individualy(self.gridconnection_set.all())
-            delete_individualy(self.gridnode_set.all())
+            # Fetch fresh copy of scenario
+            scenario = Scenario.objects.get(id=self.id)
+
+            delete_individualy(scenario.assets)
+            delete_individualy(scenario.gridconnection_set.all())
+            delete_individualy(scenario.gridnode_set.all())
             delete_individualy(Contract.objects.filter(actor__payload_id=self.id))
-            delete_individualy(self.actor_set.all())
+            delete_individualy(scenario.actor_set.all())
 
             return super().delete()
 
