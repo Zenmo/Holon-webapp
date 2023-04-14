@@ -192,9 +192,11 @@ function setAssetAttributes(model_type_select, model_subtype_select, data) {
         .closest(".w-panel__content")
         .find("input[id$='-asset_attribute'], input[id$='-model_attribute']");
 
-    const options = model_subtype_select.val()
-        ? data[model_type].model_subtype[model_subtype_select.val()]
-        : data[model_type].attributes;
+    const options = (
+        model_subtype_select.val()
+            ? data[model_type].model_subtype[model_subtype_select.val()]
+            : data[model_type].attributes
+    ).filter((option) => !option.relation); // Exclude foreign keys for model_attribute
 
     attributeInputs.each(function () {
         convertInputToSelect($(this), options);
