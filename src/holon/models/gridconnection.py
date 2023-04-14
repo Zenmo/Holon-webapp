@@ -1,10 +1,9 @@
-from django.db import models
-from polymorphic.models import PolymorphicModel
-from django.utils.translation import gettext_lazy as _
 from django.apps import apps
-from modelcluster.models import ClusterableModel
 from django.core.exceptions import ValidationError
-
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from modelcluster.models import ClusterableModel
+from polymorphic.models import PolymorphicModel
 
 from holon.models.actor import Actor
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
@@ -115,6 +114,9 @@ class HeatingType(models.TextChoices):
     HEATPUMP_BOILERPEAK = "HEATPUMP_BOILERPEAK"
     HYDROGENFIRED = "HYDROGENFIRED"
     GASFIRED_CHPPEAK = "GASFIRED_CHPPEAK"
+    DISTRICT_EBOILER_CHP = "DISTRICT_EBOILER_CHP"
+    HEATPUMP_AIR = "HEATPUMP_AIR"
+    DISTRICTHEATDECENTRAL = "DISTRICTHEATDECENTRAL"
     LT_RESIDUAL_HEATPUMP_GASPEAK = "LT_RESIDUAL_HEATPUMP_GASPEAK"
     NONE = "NONE"
 
