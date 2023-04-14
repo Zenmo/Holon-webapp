@@ -59,7 +59,7 @@ class InteractiveInputBlock(blocks.StructBlock):
     )
 
     def get_api_representation(self, value, context=None):
-        if value:
+        if value and value["interactive_input"] is not None:
             interactive_input = InteractiveElement.objects.get(pk=value["interactive_input"].id)
             options_arr = []
             if (
