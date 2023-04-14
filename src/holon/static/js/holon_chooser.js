@@ -223,7 +223,9 @@ function updateFilterInputs(
 ) {
     const filterInputs = model_subtype_select
         .closest(".w-panel__content")
-        .find(" input[id$='-relation_field'], select[id$='-relation_field']");
+        .find(
+            " input[id$='-relation_field'], select[id$='-relation_field'], input[id$='-relation_fiel'], select[id$='-relation_fiel']"
+        );
 
     filterInputs.each(function () {
         let options = model_subtype_select.val()
@@ -248,7 +250,6 @@ function updateFilterInputs(
             }
         } else {
             select = $(this);
-            updateOptions(select, options, false, true);
             reset && select.val("");
         }
         select.change(function (e) {
@@ -261,7 +262,16 @@ function updateFilterInputs(
                 .find(
                     "input[id$='-relation_field_subtype'], select[id$='-relation_field_subtype']"
                 );
+            const second_order_relation_type = $(this)
+                .closest(".w-panel__content")
+                .find(
+                    "input[id$='-second_order_relation_field'], select[id$='-second_order_relation_field']"
+                );
             relation_subtype.show();
+
+            let attribute_select;
+            let attribute_options;
+
             if (Object.keys(data[relation_type].model_subtype).length) {
                 const options = Object.keys(data[relation_type].model_subtype);
                 let select;
@@ -292,40 +302,88 @@ function updateFilterInputs(
                         .text()
                         .split("|")[0];
 
-                    const options =
+                    attribute_options =
                         relation_subtype !== "----"
                             ? data[relation_type].model_subtype[
                                   relation_subtype
                               ]
                             : data[relation_type].attributes;
 
-                    const attribute_select = $(this)
+                    attribute_select = $(this)
                         .closest(".w-panel__content")
                         .find("select[id$='-model_attribute']");
-                    updateOptions(attribute_select, options);
+
+                    if (second_order_relation_type) {
+                        let select;
+                        const options = getOptionsFromRelationType(
+                            relation_subtype
+                        ).filter((option) => !!option.relation);
+                        if (
+                            $(second_order_relation_type).prop("tagName") !==
+                            "SELECT"
+                        ) {
+                            select = convertInputToSelect(
+                                $(second_order_relation_type),
+                                options,
+                                false,
+                                true
+                            );
+                            if ($(second_order_relation_type).val()) {
+                                const model_type = $(second_order_relation_type)
+                                    .find("option:selected")
+                                    .text()
+                                    .split("|")[0];
+                                convertInputToSelect(
+                                    select
+                                        .closest(".w-panel__content")
+                                        .find(
+                                            " input[id$='-relation_field_subtype']"
+                                        ),
+                                    Object.keys(data[model_type].model_subtype)
+                                );
+                            }
+                        } else {
+                            select = $(this);
+                            reset && select.val("");
+                        }
+                        select.change(function () {
+                            const relation_type = $(this)
+                                .find("option:selected")
+                                .text()
+                                .split("|")[0];
+                            const relation_subtype = $(this)
+                                .closest(".w-panel__content")
+                                .find(
+                                    "input[id$='-second_order_relation_field_subtype'], select[id$='-second_order_relation_field_subtype']"
+                                );
+                        });
+                    }
                 });
             } else {
                 relation_subtype.hide();
-                let options;
-                try {
-                    options = Object.keys(data)
-                        .map((key) => data[key])
-                        .find((type) =>
-                            Object.keys(type.model_subtype).includes(
-                                relation_type
-                            )
-                        ).model_subtype[relation_type];
-                } catch (error) {
-                    options = data[relation_type].attributes;
-                }
+                options = getOptionsFromRelationType(relation_type);
 
-                const attribute_select = $(this)
+                attribute_select = $(this)
                     .closest(".w-panel__content")
                     .find("select[id$='-model_attribute']");
-                updateOptions(attribute_select, options);
             }
+            updateOptions(attribute_select, attribute_options);
         });
     });
+
+    function getOptionsFromRelationType(relation_type) {
+        let options;
+        try {
+            options = Object.keys(data)
+                .map((key) => data[key])
+                .find((type) =>
+                    Object.keys(type.model_subtype).includes(relation_type)
+                ).model_subtype[relation_type];
+        } catch (error) {
+            options = data[relation_type].attributes;
+        }
+        return options;
+    }
 }
 
 function updateOptions(
