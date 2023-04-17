@@ -12,7 +12,7 @@ urlpatterns = [path("holon/", HolonService.as_view())]
 
 urlpatterns_v2 = [
     path("holon/", HolonV2Service.as_view()),
-    path("cleanup/", HolonScenarioCleanup.as_view()),
+    path("cleanup/", HolonScenarioCleanup.as_view(), name="holon-cleanup"),
     path("datamodel/<int:pk>/", DatamodelService.as_view()),
     path("cloudclient/<int:pk>/", CloudclientService.as_view()),
     path("etm/<int:pk>/", ETMService.as_view()),
