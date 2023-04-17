@@ -282,7 +282,9 @@ class SecondOrderRelationAttributeFilter(Filter):
         related_model = get_relation_model(
             self.rule, self.relation_field, self.relation_field_subtype
         )
-        second_related_model = related_model._meta.get_field(self.second_order_relation_field).related_model
+        second_related_model = related_model._meta.get_field(
+            self.second_order_relation_field
+        ).related_model
 
         return [subclass.__name__ for subclass in all_subclasses(second_related_model)]
 
