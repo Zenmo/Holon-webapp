@@ -133,6 +133,8 @@ class Rule(PolymorphicModel, ClusterableModel):
             return scenario.gridconnection_set.all()
         elif self.model_type == ModelType.POLICY.value:
             return scenario.policy_set.all()
+        elif self.model_type == ModelType.CONTRACT.value:
+            return scenario.contracts
         else:
             raise Exception("Not implemented model type")
 
