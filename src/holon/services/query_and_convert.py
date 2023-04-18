@@ -3,10 +3,16 @@ from typing import List
 import etm_service
 
 from holon.models import DatamodelQueryRule, Scenario
-from holon.models.config import (AnyLogicConversion, DatamodelConversion,
-                                 ETMConversion, ETMQuery, FloatKeyValuePair,
-                                 KeyValuePairCollection, QueryAndConvertConfig,
-                                 StaticConversion)
+from holon.models.config import (
+    AnyLogicConversion,
+    DatamodelConversion,
+    ETMConversion,
+    ETMQuery,
+    FloatKeyValuePair,
+    KeyValuePairCollection,
+    QueryAndConvertConfig,
+    StaticConversion,
+)
 
 
 def pprint(msg: str):
