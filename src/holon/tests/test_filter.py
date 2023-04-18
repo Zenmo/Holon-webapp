@@ -278,3 +278,24 @@ class RuleFiltersTestClass(TestCase):
         # Assert
         self.assertTrue("group" in options)
         self.assertTrue("subgroup" in options)
+
+    def test_relation_attribute_options_no_subtype_successful(self):
+        # Arange
+        rule = Rule.objects.create(
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="",
+        )
+
+        filter = RelationAttributeFilter.objects.create(
+            rule=rule,
+            model_attribute="capacity_kw",
+            comparator=AttributeFilterComparator.GREATER_THAN,
+            value=700.0,
+            relation_field="parent_heat",
+        )
+
+        # Act
+        options = filter.relation_model_attribute_options()
+
+        # Assert
+        self.assertTrue(len(options) > 0)
