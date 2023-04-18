@@ -141,7 +141,7 @@ class RelationAttributeFilter(Filter):
         relation_model_type = (
             self.relation_field_subtype
             if self.relation_field_subtype
-            else model._meta.get_field(self.relation_field).name
+            else model._meta.get_field(self.relation_field).related_model.__name__
         )
         relation_model = apps.get_model("holon", relation_model_type)
 
