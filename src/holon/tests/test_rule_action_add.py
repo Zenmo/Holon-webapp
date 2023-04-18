@@ -1,5 +1,4 @@
 from django.test import TestCase
-import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
@@ -8,11 +7,12 @@ from holon.models import rule_mapping
 class RuleMappingTestClass(TestCase):
     def setUp(self) -> None:
         self.scenario: Scenario = Scenario.objects.create(name="test")
-        actor: Actor = Actor.objects.create(
+        self.actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
+
         gridconnection_0: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=750.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.A,
@@ -20,7 +20,7 @@ class RuleMappingTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         gridconnection_1: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=750.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.A,
@@ -28,7 +28,7 @@ class RuleMappingTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         gridconnection_2: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=750.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.A,
@@ -36,7 +36,7 @@ class RuleMappingTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=750.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.A,
@@ -44,7 +44,7 @@ class RuleMappingTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         BuildingGridConnection.objects.create(
-            owner_actor=actor,
+            owner_actor=self.actor,
             capacity_kw=750.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.A,
@@ -117,6 +117,60 @@ class RuleMappingTestClass(TestCase):
             ]
         )
         assert n_ehc_assets == 5  # was 3
+
+    def test_rule_action_add_contract(self):
+        """Test the add rule action"""
+
+        # Arrange
+        holder_actor = Actor.objects.create(
+            category=ActorType.SUPPLIERENERGY, payload=self.scenario
+        )
+
+        contract_scope = Actor.objects.create(
+            category=ActorType.OPERATORGRID, payload=self.scenario
+        )
+
+        default_contract = DeliveryContract.objects.create(
+            name="template_delivery_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=holder_actor,
+            contractScope=contract_scope,
+            deliveryContractType=DeliveryContractType.FIXED,
+            deliveryPrice_eurpkWh=1,
+            feedinPrice_eurpkWh=1,
+        )
+
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.ACTOR,
+            model_subtype="",
+        )
+        RelationExistsFilter.objects.create(
+            rule=rule, invert_filter=True, relation_field="contracts"
+        )
+        RuleActionAdd.objects.create(contract_to_add=default_contract, rule=rule)
+
+        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        # check if a contract was added
+        assert len(updated_scenario.contracts) == 2
+
+        # check if the cloned actor without contract now has a contract
+        cloned_actor = updated_scenario.actor_set.get(original_id=self.actor.id)
+        assert len(cloned_actor.contracts.all()) == 1
+
+        # check if the cloned contract's contractScope is updated to the cloned contractScope
+        cloned_contract_scope = updated_scenario.actor_set.get(original_id=contract_scope.id)
+        added_contract = cloned_actor.contracts.first()
+
+        assert added_contract.contractScope == cloned_contract_scope
+        assert added_contract.contractScope.original_id == contract_scope.id
 
     def test_rule_action_add_asset_empty_filter(self):
         """Test the add rule action when a filter is empty"""
