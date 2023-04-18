@@ -7,7 +7,7 @@ from modelcluster.fields import ParentalKey
 from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel
 
-from holon.models.util import all_subclasses, is_exclude_field
+from holon.models.util import all_subclasses, is_exclude_field, is_allowed_relation
 
 
 # Don't forget to register new filters in get_filters() of ScenarioRule
@@ -38,7 +38,7 @@ class Filter(PolymorphicModel):
         return [
             field.name
             for field in model()._meta.get_fields()
-            if not field.is_relation and not is_exclude_field(field)
+            if is_allowed_relation(field) or (not field.is_relation and not is_exclude_field(field))
         ]
 
     class Meta:
@@ -148,7 +148,7 @@ class RelationAttributeFilter(Filter):
         return [
             field.name
             for field in relation_model._meta.get_fields()
-            if not field.is_relation and not is_exclude_field(field)
+            if is_allowed_relation(field) or (not field.is_relation and not is_exclude_field(field))
         ]
 
     def relation_field_options(self) -> list[str]:
