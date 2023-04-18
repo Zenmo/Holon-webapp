@@ -23,7 +23,7 @@ export type Content =
 export type InteractiveContent = {
   id: string;
   type: "interactive_input";
-  currentValue?: number | string | string[] | number[] | undefined;
+  currentValue?: number | string | string[] | number[] | undefined | null;
   value: InteractiveInput;
 };
 
