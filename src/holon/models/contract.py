@@ -70,6 +70,7 @@ class Contract(PolymorphicModel):
             raise ValidationError(
                 "Contract should be connected. actor and contractScope are required"
             )
+        
 
 
 class DeliveryContractType(models.TextChoices):
