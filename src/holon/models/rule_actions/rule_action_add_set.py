@@ -146,17 +146,18 @@ class GenericRuleActionAdd(RuleAction):
                 ).exists()
             ):
                 # add model_to_add to filtered object
-                new_model = util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
+                new_model = util.duplicate_model(
+                    self.model_to_add, {parent_fk_field_name: filtererd_object}
+                )
 
                 if self.contract_to_add:
                     self.restore_contract_scope_relation(new_model, filtered_queryset)
 
                 objects_added += 1
 
-
     def restore_contract_scope_relation(self, new_contract: Contract, filtered_queryset: QuerySet):
         """
-        If a contract template is cloned it's relation to its contract scope becomes invalid for serialization. 
+        If a contract template is cloned it's relation to its contract scope becomes invalid for serialization.
         This method restores that relation.
         """
 
@@ -165,10 +166,12 @@ class GenericRuleActionAdd(RuleAction):
         if len(filtered_queryset) > 0 and isinstance(filtered_queryset[0], Actor):
             scenario = filtered_queryset[0].payload
 
-            new_contract_scope = Actor.objects.filter(payload=scenario, original_id=old_contract_scope.id).first()
+            new_contract_scope = Actor.objects.filter(
+                payload=scenario, original_id=old_contract_scope.id
+            ).first()
             new_contract.contractScope = new_contract_scope
             new_contract.save()
-        
+
 
 class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
     """Add a set of n models to the filtered items"""
