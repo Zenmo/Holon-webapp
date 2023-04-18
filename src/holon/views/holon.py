@@ -148,6 +148,23 @@ class HolonCMSLogic(generics.RetrieveAPIView):
         return attributes
 
 
+class HolonScenarioCleanup(generics.RetrieveAPIView):
+    def get(self, request):
+        cloned_scenarios = Scenario.objects.filter(cloned_from__isnull=False)
+        try:
+            for scenario in cloned_scenarios:
+                scenario.delete()
+        except Exception as e:
+            print(traceback.format_exc())
+            response_body = {"error_msg": f"something went wrong: {e}"}
+            return Response(
+                response_body,
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        return Response("succes")
+
+
 class HolonService(generics.CreateAPIView):
     def post(self, request):
         return Response(
