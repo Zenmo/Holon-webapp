@@ -44,9 +44,6 @@ class Scenario(ClusterableModel):
         ),
     ]
 
-    _assets = None
-    _contracts = None
-
     class Meta:
         verbose_name = "Scenario"
 
@@ -55,19 +52,6 @@ class Scenario(ClusterableModel):
 
     @property
     def assets(self) -> "list[EnergyAsset]":
-        if not self._assets:
-            self._assets = self.__load_assets()
-
-        return self._assets
-
-    @property
-    def contracts(self) -> "list[Contract]":
-        if not self._contracts:
-            self._contracts = self.__load_contracts()
-
-        return self._contracts
-
-    def __load_assets(self) -> "list[EnergyAsset]":
         from holon.models.asset import EnergyAsset
 
         assets = EnergyAsset.objects.none()
@@ -78,10 +62,10 @@ class Scenario(ClusterableModel):
 
         return assets
 
-    def __load_contracts(self) -> "list[Contract]":
+    @property
+    def contracts(self) -> "list[Contract]":
         from holon.models import Contract
 
-        # return Contract.objects.filter(actor__payload_id=self.id)
         contracts = Contract.objects.none()
         for actor in self.actor_set.all():
             contracts = contracts | actor.contracts.all()
