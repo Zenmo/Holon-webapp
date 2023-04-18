@@ -138,3 +138,8 @@ def is_exclude_field(field):
         return True
     else:
         return False
+
+
+def is_allowed_relation(field):
+    # group and subgroup of Actor have stable id's, so they can be used for filtering
+    return field.name == "group" or field.name == "subgroup"

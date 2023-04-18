@@ -259,3 +259,22 @@ class RuleFiltersTestClass(TestCase):
         # Assert
         self.assertEqual(len(filtered_queryset), 1)
         self.assertEqual(filtered_queryset[0].id, asset_related_to_district_heat.id)
+
+    def test_stable_id_relation_in_model_attribute_options(self):
+        """Test if stable id relations are included for actor"""
+        # Arange
+        rule: Rule = Rule.objects.create(model_type=ModelType.ACTOR)
+
+        filter: AttributeFilter = AttributeFilter.objects.create(
+            rule=rule,
+            model_attribute="group",
+            comparator=AttributeFilterComparator.EQUAL,
+            value=1,
+        )
+
+        # Act
+        options: list[str] = filter.model_attribute_options()
+
+        # Assert
+        self.assertTrue("group" in options)
+        self.assertTrue("subgroup" in options)
