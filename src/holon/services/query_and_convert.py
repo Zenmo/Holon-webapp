@@ -3,16 +3,10 @@ from typing import List
 import etm_service
 
 from holon.models import DatamodelQueryRule, Scenario
-from holon.models.config import (
-    AnyLogicConversion,
-    DatamodelConversion,
-    ETMConversion,
-    ETMQuery,
-    FloatKeyValuePair,
-    KeyValuePairCollection,
-    QueryAndConvertConfig,
-    StaticConversion,
-)
+from holon.models.config import (AnyLogicConversion, DatamodelConversion,
+                                 ETMConversion, ETMQuery, FloatKeyValuePair,
+                                 KeyValuePairCollection, QueryAndConvertConfig,
+                                 StaticConversion)
 
 
 def pprint(msg: str):
@@ -64,6 +58,7 @@ class ETMConnect:
 
     @staticmethod
     def costs(config):
+        intermediate = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
         return sum(etm_service.retrieve_results(config.etm_scenario_id, config.queries).values())
 
     @staticmethod
