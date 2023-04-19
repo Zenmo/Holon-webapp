@@ -50,119 +50,81 @@ export default function ContentColumn({
   function getDefaultValues(
     content: InteractiveContent
   ): string | number | string[] | undefined | null {
-    const defaultValue = content.value.defaultValueOverride;
-    const targetValue = content.value.targetValuePreviousSection;
+    if (content.value) {
+      const defaultValue = content.value.defaultValueOverride;
+      const targetValue = content.value.targetValuePreviousSection;
 
-    switch (content.value.type) {
-      case "single_select":
-        if (defaultValue) {
-          return content.value.options.find(
-            option => option.option === defaultValue || option.label === defaultValue
-          )?.id;
-        } else if (content.value.visible) {
-          const option = content.value.options.find(option => option.default);
-          return option ? option.option : content.value.options[0].option;
-        } else if (!content.value.visible) {
-          if (targetValue) {
+      switch (content.value.type) {
+        case "single_select":
+          if (defaultValue) {
             return content.value.options.find(
-              option => option.option === targetValue || option.label === targetValue
+              option => option.option === defaultValue || option.label === defaultValue
             )?.id;
-          } else {
-            return null;
+          } else if (content.value.visible) {
+            const option = content.value.options.find(option => option.default);
+            return option ? option.option : content.value.options[0].option;
+          } else if (!content.value.visible) {
+            if (targetValue) {
+              return content.value.options.find(
+                option => option.option === targetValue || option.label === targetValue
+              )?.id;
+            } else {
+              return null;
+            }
           }
-        }
-      case "continuous":
-        if (defaultValue !== undefined && defaultValue !== "") {
-          return Number(defaultValue);
-        } else if (content.value.visible) {
-          if (
-            content.value.options.length &&
-            content.value.options[0].sliderValueDefault !== undefined
-          ) {
-            return Number(content.value.options[0].sliderValueDefault);
-          } else {
-            return 0;
+        case "continuous":
+          if (defaultValue !== undefined && defaultValue !== "") {
+            return Number(defaultValue);
+          } else if (content.value.visible) {
+            if (
+              content.value.options.length &&
+              content.value.options[0].sliderValueDefault !== undefined
+            ) {
+              return Number(content.value.options[0].sliderValueDefault);
+            } else {
+              return 0;
+            }
+          } else if (!content.value.visible) {
+            if (targetValue) {
+              return Number(targetValue);
+            } else if (
+              content.value.options.length &&
+              content.value.options[0].sliderValueDefault !== undefined
+            ) {
+              return Number(content.value.options[0].sliderValueDefault);
+            } else {
+              return null;
+            }
           }
-        } else if (!content.value.visible) {
-          if (targetValue) {
-            return Number(targetValue);
-          } else if (
-            content.value.options.length &&
-            content.value.options[0].sliderValueDefault !== undefined
-          ) {
-            return Number(content.value.options[0].sliderValueDefault);
+
+        case "multi_select":
+          const defaultValueArray = defaultValue && defaultValue.split(",");
+          const targetValueArray = targetValue && targetValue.split(",");
+          const visible = content.value.visible;
+          let options;
+
+          if (visible) {
+            options = content.value.options.filter(
+              option =>
+                option.default ||
+                defaultValueArray?.includes(option.option) ||
+                defaultValueArray?.includes(option.label)
+            );
           } else {
-            return null;
+            options = content.value.options.filter(
+              option =>
+                option.default ||
+                defaultValueArray?.includes(option.option) ||
+                defaultValueArray?.includes(option.label) ||
+                targetValueArray?.includes(option.option) ||
+                targetValueArray?.includes(option.label)
+            );
           }
-        }
 
-      case "multi_select":
-        const defaultValueArray = defaultValue && defaultValue.split(",");
-        const targetValueArray = targetValue && targetValue.split(",");
-        const visible = content.value.visible;
-        let options;
-
-        if (visible) {
-          options = content.value.options.filter(
-            option =>
-              option.default ||
-              defaultValueArray?.includes(option.option) ||
-              defaultValueArray?.includes(option.label)
-          );
-        } else {
-          options = content.value.options.filter(
-            option =>
-              option.default ||
-              defaultValueArray?.includes(option.option) ||
-              defaultValueArray?.includes(option.label) ||
-              targetValueArray?.includes(option.option) ||
-              targetValueArray?.includes(option.label)
-          );
-        }
-
-        return options.length ? options.map(option => option.option) : [];
+          return options.length ? options.map(option => option.option) : [];
+      }
     }
   }
-
-  /*
-  function getDefaultValue(
-    content: InteractiveContent
-  ): string | number | string[] | undefined | null {
-    const defaultValue = content.value.defaultValueOverride;
-
-    switch (content.value.type) {
-      case "single_select":
-        if (defaultValue) {
-          return content.value.options.find(
-            option => option.option === defaultValue || option.label === defaultValue
-          )?.id;
-        } else {
-          const option = content.value.options.find(option => option.default);
-          return option ? option.option : content.value.options[0].option;
-        }
-      case "continuous":
-        if (defaultValue !== undefined && defaultValue !== "") {
-          return Number(defaultValue);
-        } else if (
-          content.value.options.length &&
-          content.value.options[0].sliderValueDefault !== undefined
-        ) {
-          return Number(content.value.options[0].sliderValueDefault);
-        } else {
-          return 0;
-        }
-      case "multi_select":
-        const defaultValueArray = defaultValue && defaultValue.split(",");
-        const defaultOptions = content.value.options.filter(
-          option =>
-            option.default ||
-            defaultValueArray?.includes(option.option) ||
-            defaultValueArray?.includes(option.label)
-        );
-        return defaultOptions.length ? defaultOptions.map(option => option.option) : [];
-    }
-  }
-  */
 
   function setInteractiveInputValue(
     id: string,
@@ -214,7 +176,7 @@ export default function ContentColumn({
       data-empty="Er zijn er geen interactieve elementen in te stellen op dit niveau."
       className="before:empty:content-[attr(data-empty)]">
       {content.map((ct, index) => {
-        if (ct.type === "interactive_input" && ct.value.visible) {
+        if (ct.type && ct.value && ct.type === "interactive_input" && ct.value.visible) {
           return (
             <React.Fragment key={index}>
               <InteractiveInputs

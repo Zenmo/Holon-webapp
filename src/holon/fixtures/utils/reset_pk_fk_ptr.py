@@ -3,25 +3,31 @@ import json
 # fp = "../peter-dupliceter-datamodel-fixture.json"
 # fp_out = "../peter-dupliceter-datamodel-fixture_clean_keys.json"
 
-fp = "../datamodel-tvw-fixture.json"
-fp_out = "../datamodel-tvw-fixture_clean_keys.json"
+fp = "../../../fixture.json"
+fp_out = "../../../fixture_clean_keys.json"
 
 BASE_INT = 456000  # change me!
 
 relations = set(
     [
+        "actor",
+        "anylogic_model_configuration",
+        "contractScope",
+        "gridconnection",
+        "gridnode",
         "group",
-        "subgroup",
+        "input",
+        "interactive_element_option",
+        "owner_actor",
+        "parent_electric",
+        "parent_heat",
+        "parent",
         "payload",
         "pk",
-        "gridconnection",
-        "parent_heat",
-        "owner_actor",
-        "actor",
-        "gridnode",
-        "parent",
-        "contractScope",
-        "parent_electric",
+        "related_config",
+        "related_interactive_element",
+        "scenario",
+        "subgroup",
     ]
 )
 
