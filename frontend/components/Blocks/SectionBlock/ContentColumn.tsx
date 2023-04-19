@@ -24,9 +24,13 @@ export default function ContentColumn({
     dataContent?.map((content: Content) => {
       switch (content.type) {
         case "interactive_input":
-          content.currentValue = content.currentValue
-            ? content.currentValue
-            : getDefaultValue(content);
+          if (content.value.visible) {
+            content.currentValue = content.currentValue
+              ? content.currentValue
+              : getDefaultValues(content);
+          } else if (!content.value.visible) {
+            content.currentValue = getDefaultValues(content);
+          }
           contentArr.push(content);
           break;
         case "static_image":
@@ -43,39 +47,81 @@ export default function ContentColumn({
     }
   }, [dataContent]);
 
-  function getDefaultValue(content: InteractiveContent): string | number | string[] | undefined {
+  function getDefaultValues(
+    content: InteractiveContent
+  ): string | number | string[] | undefined | null {
     if (content.value) {
       const defaultValue = content.value.defaultValueOverride;
+      const targetValue = content.value.targetValuePreviousSection;
+
       switch (content.value.type) {
         case "single_select":
           if (defaultValue) {
             return content.value.options.find(
               option => option.option === defaultValue || option.label === defaultValue
             )?.id;
-          } else {
+          } else if (content.value.visible) {
             const option = content.value.options.find(option => option.default);
             return option ? option.option : content.value.options[0].option;
+          } else if (!content.value.visible) {
+            if (targetValue) {
+              return content.value.options.find(
+                option => option.option === targetValue || option.label === targetValue
+              )?.id;
+            } else {
+              return null;
+            }
           }
         case "continuous":
           if (defaultValue !== undefined && defaultValue !== "") {
             return Number(defaultValue);
-          } else if (
-            content.value.options.length &&
-            content.value.options[0].sliderValueDefault !== undefined
-          ) {
-            return Number(content.value.options[0].sliderValueDefault);
-          } else {
-            return 0;
+          } else if (content.value.visible) {
+            if (
+              content.value.options.length &&
+              content.value.options[0].sliderValueDefault !== undefined
+            ) {
+              return Number(content.value.options[0].sliderValueDefault);
+            } else {
+              return 0;
+            }
+          } else if (!content.value.visible) {
+            if (targetValue) {
+              return Number(targetValue);
+            } else if (
+              content.value.options.length &&
+              content.value.options[0].sliderValueDefault !== undefined
+            ) {
+              return Number(content.value.options[0].sliderValueDefault);
+            } else {
+              return null;
+            }
           }
+
         case "multi_select":
           const defaultValueArray = defaultValue && defaultValue.split(",");
-          const defaultOptions = content.value.options.filter(
-            option =>
-              option.default ||
-              defaultValueArray?.includes(option.option) ||
-              defaultValueArray?.includes(option.label)
-          );
-          return defaultOptions.length ? defaultOptions.map(option => option.option) : [];
+          const targetValueArray = targetValue && targetValue.split(",");
+          const visible = content.value.visible;
+          let options;
+
+          if (visible) {
+            options = content.value.options.filter(
+              option =>
+                option.default ||
+                defaultValueArray?.includes(option.option) ||
+                defaultValueArray?.includes(option.label)
+            );
+          } else {
+            options = content.value.options.filter(
+              option =>
+                option.default ||
+                defaultValueArray?.includes(option.option) ||
+                defaultValueArray?.includes(option.label) ||
+                targetValueArray?.includes(option.option) ||
+                targetValueArray?.includes(option.label)
+            );
+          }
+
+          return options.length ? options.map(option => option.option) : [];
       }
     }
   }
@@ -135,7 +181,7 @@ export default function ContentColumn({
             <React.Fragment key={index}>
               <InteractiveInputs
                 setValue={setInteractiveInputValue}
-                defaultValue={getDefaultValue(ct)}
+                defaultValue={getDefaultValues(ct)}
                 currentValue={ct.currentValue}
                 contentId={ct.id}
                 selectedLevel={selectedLevel}

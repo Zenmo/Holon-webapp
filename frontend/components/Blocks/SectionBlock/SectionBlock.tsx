@@ -7,7 +7,7 @@ import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -140,6 +140,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
             : element.currentValue,
         };
       });
+    console.log(interactiveElements);
 
     getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {

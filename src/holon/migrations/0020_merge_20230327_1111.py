@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0019_alter_interactiveelementoptions_options"),
         ("holon", "0019_ruleactionremove_remove_mode"),
