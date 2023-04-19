@@ -1,10 +1,9 @@
-from django.db import models
-from polymorphic.models import PolymorphicModel
-from django.utils.translation import gettext_lazy as _
 from django.apps import apps
-from modelcluster.models import ClusterableModel
 from django.core.exceptions import ValidationError
-
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from modelcluster.models import ClusterableModel
+from polymorphic.models import PolymorphicModel
 
 from holon.models.actor import Actor
 from holon.models.gridnode import ElectricGridNode, HeatGridNode
@@ -75,6 +74,11 @@ class GridConnection(PolymorphicModel, ClusterableModel):
         default=False,
         help_text=_("Set this to True when this model can be used as a template for rule actions"),
     )
+    original_id = models.BigIntegerField(
+        null=True,
+        blank=True,
+        help_text=_("This field is used as a reference for cloned models. Don't set it manually"),
+    )
 
     def __str__(self):
         return f"b{self.id} {self.category}"
@@ -110,6 +114,9 @@ class HeatingType(models.TextChoices):
     HEATPUMP_BOILERPEAK = "HEATPUMP_BOILERPEAK"
     HYDROGENFIRED = "HYDROGENFIRED"
     GASFIRED_CHPPEAK = "GASFIRED_CHPPEAK"
+    DISTRICT_EBOILER_CHP = "DISTRICT_EBOILER_CHP"
+    HEATPUMP_AIR = "HEATPUMP_AIR"
+    DISTRICTHEATDECENTRAL = "DISTRICTHEATDECENTRAL"
     LT_RESIDUAL_HEATPUMP_GASPEAK = "LT_RESIDUAL_HEATPUMP_GASPEAK"
     NONE = "NONE"
 

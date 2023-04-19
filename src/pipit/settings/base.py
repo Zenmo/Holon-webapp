@@ -3,7 +3,6 @@ from typing import Optional
 
 from pipit.settings import get_env, get_env_bool
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -180,6 +179,7 @@ WAGTAIL_SITE_NAME = "Holon-wagtail"
 WAGTAILIMAGES_IMAGE_MODEL = "customimage.CustomImage"
 WAGTAILDOCS_DOCUMENT_MODEL = "customdocument.CustomDocument"
 WAGTAIL_ALLOW_UNICODE_SLUGS = False
+WAGTAILAPI_LIMIT_MAX = 1000
 
 WAGTAILSEARCH_BACKENDS = {
     "default": {

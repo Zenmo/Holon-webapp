@@ -77,7 +77,11 @@ class RuleActionChangeAttribute(RuleAction):
             new_value = self.__apply_operator(old_value, value)
 
             # change the new value type to the same as the old one
-            cast_new_value = type(old_value)(new_value)
+            try:
+                cast_new_value = type(old_value)(new_value)
+            except:
+                # fallback when old_value is None
+                cast_new_value = new_value
 
             setattr(filtered_object, self.model_attribute, cast_new_value)
             filtered_object.save()

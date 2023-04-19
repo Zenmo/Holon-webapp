@@ -8,8 +8,7 @@ import modelcluster.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("contenttypes", "0002_remove_content_type_name"),
-        ("holon", "0032_merge_20230406_1342"),
+        ("holon", "0034_alter_builtenvironmentgridconnection_heating_type_and_more"),
     ]
 
     operations = [

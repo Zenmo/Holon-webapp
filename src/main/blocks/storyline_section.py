@@ -15,6 +15,7 @@ from wagtailmodelchooser import register_model_chooser, Chooser
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 from .holarchyfeedbackimages import HolarchyFeedbackImage
+from .legend_item import LegendItemsBlock
 
 
 def get_interactive_inputs():
@@ -58,7 +59,7 @@ class InteractiveInputBlock(blocks.StructBlock):
     )
 
     def get_api_representation(self, value, context=None):
-        if value:
+        if value and value["interactive_input"] is not None:
             interactive_input = InteractiveElement.objects.get(pk=value["interactive_input"].id)
             options_arr = []
             if (
@@ -147,6 +148,7 @@ class StorylineSectionBlock(blocks.StructBlock):
             ("interactive_input", InteractiveInputBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
             ("holarchy_feedback_image", HolarchyFeedbackImage()),
+            ("legend_items", LegendItemsBlock()),
         ],
         block_counts={"static_image": {"max_num": 1}},
     )

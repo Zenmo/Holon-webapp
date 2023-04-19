@@ -51,6 +51,12 @@ class Actor(PolymorphicModel):
         ),
     )
 
+    original_id = models.BigIntegerField(
+        null=True,
+        blank=True,
+        help_text=_("This field is used as a reference for cloned models. Don't set it manually"),
+    )
+
     def __str__(self):
         try:
             string = f"{self.type.lower()[:3]}{self.id} ({self.category})"
