@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0023_alter_rule_model_type"),
         ("holon", "0023_ruleactionaddmultipleundereachparent"),

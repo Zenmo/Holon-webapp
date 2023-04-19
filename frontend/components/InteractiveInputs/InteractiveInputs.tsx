@@ -12,6 +12,8 @@ export type Props = {
   display?: string;
   defaultValue?: string | number | [];
   currentValue?: string | number;
+  targetValue?: string | number;
+  targetValuePreviousSection?: string | number | [];
   level?: string;
   selectedLevel?: string;
   setValue: (id: string, value: number | string | boolean, optionId?: number) => void;
