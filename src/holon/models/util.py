@@ -147,7 +147,7 @@ def get_relation_model(
     relation_model_type = (
         relation_field_subtype
         if relation_field_subtype
-        else model._meta.get_field(relation_field).name
+        else model._meta.get_field(relation_field).related_model.__name__
     )
 
     return apps.get_model("holon", relation_model_type)

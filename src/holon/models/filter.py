@@ -12,7 +12,7 @@ from holon.models.util import (
     get_relation_model,
     relation_field_options,
     relation_field_subtype_options,
-    is_allowed_relation
+    is_allowed_relation,
 )
 
 
@@ -142,18 +142,8 @@ class RelationAttributeFilter(Filter):
             return
 
     def relation_model_attribute_options(self) -> list[str]:
-<<<<<<< HEAD
         relation_model = get_relation_model(
             self.rule, self.relation_field, self.relation_field_subtype
-=======
-        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
-        model = apps.get_model("holon", model_type)
-
-        relation_model_type = (
-            self.relation_field_subtype
-            if self.relation_field_subtype
-            else model._meta.get_field(self.relation_field).related_model.__name__
->>>>>>> main
         )
 
         return [
@@ -225,7 +215,7 @@ class SecondOrderRelationAttributeFilter(Filter):
     ]
 
     class Meta:
-        verbose_name = "RelationAttributeFilter"
+        verbose_name = "SecondOrderRelationAttributeFilter"
 
     def clean(self):
         if not self.model_attribute:
