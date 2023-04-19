@@ -140,7 +140,6 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
             : element.currentValue,
         };
       });
-    console.log(interactiveElements);
 
     getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
       .then(res => {

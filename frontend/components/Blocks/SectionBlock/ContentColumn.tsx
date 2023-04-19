@@ -51,7 +51,7 @@ export default function ContentColumn({
     content: InteractiveContent
   ): string | number | string[] | undefined | null {
     const defaultValue = content.value.defaultValueOverride;
-    const targetValue = content.value.targetValue;
+    const targetValue = content.value.targetValuePreviousSection;
 
     switch (content.value.type) {
       case "single_select":

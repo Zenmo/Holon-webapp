@@ -32,7 +32,8 @@ export type InteractiveInput = {
   name?: string;
   type?: string;
   defaultValueOverride?: string;
-  targetValue?: string;
+  targetValue?: string | number | [];
+  targetValuePreviousSection: string | number | [];
   animationTag?: string;
   options: InteractiveInputOptions[];
   display: string;

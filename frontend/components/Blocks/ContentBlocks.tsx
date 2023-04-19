@@ -38,18 +38,6 @@ const ContentBlocks = ({
 }) => {
   let targetValues = new Map();
 
-  /*loops through current section and if there is an interactive element with a target value it creates a clone of the map, either updating an existing interactive input or adding one and then setting that clone to the variable targetValue*/
-  function updateTargetValues(content) {
-    content.map(element => {
-      if (element.type === "interactive_input" && element.value.targetValue) {
-        const newTargetValues = new Map(targetValues);
-        newTargetValues.set(element.value.id, element.value);
-        targetValues = newTargetValues;
-      }
-    });
-    return null;
-  }
-
   /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
     const updatedContent = { ...content };
@@ -60,7 +48,7 @@ const ContentBlocks = ({
       });
 
       if (foundElement) {
-        foundElement.value.targetValue = value.targetValue;
+        foundElement.value.targetValuePreviousSection = value.targetValue;
       } else {
         //if the element does not exist yet it is added (invisible and with no other defaultValues besides the target value(s))
         updatedContent.value.content.push({
@@ -69,6 +57,7 @@ const ContentBlocks = ({
             ...value,
             visible: false,
             defaultValueOverride: "",
+            targetValuePreviousSection: value.targetValue,
             options: value.options.map(option => ({
               ...option,
               default: false,
@@ -78,6 +67,18 @@ const ContentBlocks = ({
       }
     });
     return updatedContent;
+  }
+
+  /*loops through current section and if there is an interactive element with a target value it creates a clone of the map, either updating an existing interactive input or adding one and then setting that clone to the variable targetValue*/
+  function updateTargetValues(content) {
+    content.map(element => {
+      if (element.type === "interactive_input" && element.value.targetValue) {
+        const newTargetValues = new Map(targetValues);
+        newTargetValues.set(element.value.id, element.value);
+        targetValues = newTargetValues;
+      }
+    });
+    return null;
   }
 
   return (
@@ -103,8 +104,8 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            updateTargetValues(contentItem.value.content);
             const newContent = addTargetValues(targetValues, contentItem);
+            updateTargetValues(contentItem.value.content);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
