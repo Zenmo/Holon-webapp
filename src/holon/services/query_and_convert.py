@@ -1,17 +1,18 @@
+from typing import List
+
 import etm_service
 
+from holon.models import DatamodelQueryRule, Scenario
 from holon.models.config import (
-    QueryAndConvertConfig,
-    KeyValuePairCollection,
     AnyLogicConversion,
     DatamodelConversion,
-    StaticConversion,
     ETMConversion,
     ETMQuery,
     FloatKeyValuePair,
+    KeyValuePairCollection,
+    QueryAndConvertConfig,
+    StaticConversion,
 )
-from holon.models import DatamodelQueryRule, Scenario
-from typing import List
 
 
 def pprint(msg: str):
@@ -208,10 +209,14 @@ class Query:
                     f"Couldn't find the specified key '{c.anylogic_key}' in any of the AnyLogic results (resort to convert with 1)"
                 )
         except:
-            pprint(
-                f"Found the key '{c.anylogic_key}' but the result does not parse to a float (resort to convert with 1)"
-            )
-            value = 1
+            # try to get the values from the dict, to check if dict
+            try:
+                value = list(value.values())[:8760]
+            except AttributeError:
+                pprint(
+                    f"Found the key '{c.anylogic_key}' but the result does not parse to a float or a array (resort to convert with 1)"
+                )
+                value = 1
 
         return {
             "type": "static",  # all non-query conversions are considered static
