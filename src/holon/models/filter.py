@@ -8,11 +8,11 @@ from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel
 
 from holon.models.util import (
-    all_subclasses,
     is_exclude_field,
     get_relation_model,
     relation_field_options,
     relation_field_subtype_options,
+    is_allowed_relation
 )
 
 
@@ -44,7 +44,7 @@ class Filter(PolymorphicModel):
         return [
             field.name
             for field in model()._meta.get_fields()
-            if not field.is_relation and not is_exclude_field(field)
+            if is_allowed_relation(field) or (not field.is_relation and not is_exclude_field(field))
         ]
 
     class Meta:
@@ -142,14 +142,24 @@ class RelationAttributeFilter(Filter):
             return
 
     def relation_model_attribute_options(self) -> list[str]:
+<<<<<<< HEAD
         relation_model = get_relation_model(
             self.rule, self.relation_field, self.relation_field_subtype
+=======
+        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
+        model = apps.get_model("holon", model_type)
+
+        relation_model_type = (
+            self.relation_field_subtype
+            if self.relation_field_subtype
+            else model._meta.get_field(self.relation_field).related_model.__name__
+>>>>>>> main
         )
 
         return [
             field.name
             for field in relation_model._meta.get_fields()
-            if not field.is_relation and not is_exclude_field(field)
+            if is_allowed_relation(field) or (not field.is_relation and not is_exclude_field(field))
         ]
 
     def get_q(self) -> Q:

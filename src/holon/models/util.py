@@ -169,3 +169,8 @@ def relation_field_subtype_options(rule: "ScenarioRule", relation_field: str) ->
     related_model = model()._meta.get_field(relation_field).related_model
 
     return [subclass.__name__ for subclass in all_subclasses(related_model)]
+
+
+def is_allowed_relation(field):
+    # group and subgroup of Actor have stable id's, so they can be used for filtering
+    return field.name == "group" or field.name == "subgroup"
