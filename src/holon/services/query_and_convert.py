@@ -3,16 +3,10 @@ from typing import List
 import etm_service
 
 from holon.models import DatamodelQueryRule, Scenario
-from holon.models.config import (
-    AnyLogicConversion,
-    DatamodelConversion,
-    ETMConversion,
-    ETMQuery,
-    FloatKeyValuePair,
-    KeyValuePairCollection,
-    QueryAndConvertConfig,
-    StaticConversion,
-)
+from holon.models.config import (AnyLogicConversion, DatamodelConversion,
+                                 ETMConversion, ETMQuery, FloatKeyValuePair,
+                                 KeyValuePairCollection, QueryAndConvertConfig,
+                                 StaticConversion)
 
 
 def pprint(msg: str):
@@ -24,7 +18,17 @@ CONFIG_KPIS = {
     "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
     "config": {
         "sustainability": {
-            "value": {"type": "query", "data": "value", "etm_key": "dashboard_renewability"}
+            "value": {"type": "query", "data": "value", "etm_key": "dashboard_renewability"},
+            "convert_with": [
+                {
+                    "type": "static",
+                    "type_actual": "static",
+                    "conversion": "multiply",
+                    "data": "value",
+                    "value": 100,
+                    "key": "fr_to_pct",
+                }
+            ],
         },
         "self_sufficiency": {
             "value": {

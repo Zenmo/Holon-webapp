@@ -13,11 +13,6 @@ from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 
-DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
-DUMMY_COST = 42
-
-from .dummies import costbenefit_result_json, dashboard_result_json
-
 
 def pprint(msg: str):
     return print(f"[holon-endpoint]: {msg}")
