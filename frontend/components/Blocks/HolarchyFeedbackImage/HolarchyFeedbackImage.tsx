@@ -60,12 +60,12 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
               return false;
             } else if (
               conditionItem.value.operator == "equal" &&
-              inputvalue != conditionItem.value.value
+              inputvalue.toLowerCase() != conditionItem.value.value.toLowerCase()
             ) {
               return false;
             } else if (
               conditionItem.value.operator == "notequal" &&
-              inputvalue == conditionItem.value.value
+              inputvalue.toLowerCase() == conditionItem.value.value.toLowerCase()
             ) {
               return false;
             } else if (conditionItem.value.operator == "lower" && inputvalue >= conditionValue) {
