@@ -149,9 +149,11 @@ class GenericRuleActionAdd(RuleAction):
                 new_model = util.duplicate_model(
                     self.model_to_add, {parent_fk_field_name: filtererd_object}
                 )
+                print(f"CONTRACT {new_model.id} ADDED")
 
                 if self.contract_to_add:
                     self.restore_contract_scope_relation(new_model, filtered_queryset)
+                    print(f"CONTRACTSCOPE {new_model.contractScope.id} ADDED")
 
                 objects_added += 1
 
