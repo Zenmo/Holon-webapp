@@ -139,12 +139,7 @@ class GenericRuleActionAdd(RuleAction):
                 ):
                     obj_to_delete.delete()
 
-            if (
-                objects_added < n
-                and not self.model_to_add.__class__.objects.filter(
-                    **{parent_fk_field_name: filtererd_object}
-                ).exists()
-            ):
+            if objects_added < n:
                 # add model_to_add to filtered object
                 new_model = util.duplicate_model(
                     self.model_to_add, {parent_fk_field_name: filtererd_object}
