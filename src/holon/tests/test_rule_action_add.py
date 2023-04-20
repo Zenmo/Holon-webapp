@@ -281,6 +281,12 @@ class RuleMappingTestClass(TestCase):
         RelationExistsFilter.objects.create(
             rule=rule, invert_filter=True, relation_field="contracts"
         )
+        AttributeFilter.objects.create(
+            rule=rule,
+            model_attribute="category",
+            comparator=AttributeFilterComparator.EQUAL,
+            value="CONNECTIONOWNER",
+        )
         RuleActionAdd.objects.create(contract_to_add=default_contract, rule=rule)
 
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
@@ -369,6 +375,12 @@ class RuleMappingTestClass(TestCase):
         )
         RelationExistsFilter.objects.create(
             rule=add_rule, invert_filter=True, relation_field="contracts"
+        )
+        AttributeFilter.objects.create(
+            rule=add_rule,
+            model_attribute="category",
+            comparator=AttributeFilterComparator.EQUAL,
+            value="CONNECTIONOWNER",
         )
         RuleActionAdd.objects.create(contract_to_add=default_contract, rule=add_rule)
 
