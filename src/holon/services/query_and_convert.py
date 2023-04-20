@@ -1,3 +1,4 @@
+from copy import deepcopy as copy
 from typing import List
 
 import etm_service
@@ -24,7 +25,17 @@ CONFIG_KPIS = {
     "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
     "config": {
         "sustainability": {
-            "value": {"type": "query", "data": "value", "etm_key": "dashboard_renewability"}
+            "value": {"type": "query", "data": "value", "etm_key": "dashboard_renewability"},
+            "convert_with": [
+                {
+                    "type": "static",
+                    "type_actual": "static",
+                    "conversion": "multiply",
+                    "data": "value",
+                    "value": 100,
+                    "key": "fr_to_pct",
+                }
+            ],
         },
         "self_sufficiency": {
             "value": {
@@ -71,7 +82,7 @@ class ETMConnect:
         new_scenario_id = etm_service.scale_copy_and_send(
             config.etm_scenario_id, config.anylogic_outcomes, config.queries
         )
-        return (config.name, etm_service.retrieve_results(new_scenario_id, CONFIG_KPIS))
+        return (config.name, etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS)))
 
 
 class QConfig:

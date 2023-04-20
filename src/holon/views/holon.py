@@ -13,11 +13,6 @@ from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 
-DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
-DUMMY_COST = 42
-
-from .dummies import costbenefit_result_json, dashboard_result_json
-
 
 def pprint(msg: str):
     return print(f"[holon-endpoint]: {msg}")
@@ -153,9 +148,12 @@ class HolonScenarioCleanup(generics.RetrieveAPIView):
         cloned_scenarios = Scenario.objects.filter(cloned_from__isnull=False)
         try:
             for scenario in cloned_scenarios:
+                pprint(f"Deleting scenario {scenario.id}...")
+                cid = scenario.id
                 scenario.delete()
+                pprint(f"... deleted scenario {cid}")
         except Exception as e:
-            print(traceback.format_exc())
+            pprint(traceback.format_exc())
             response_body = {"error_msg": f"something went wrong: {e}"}
             return Response(
                 response_body,
