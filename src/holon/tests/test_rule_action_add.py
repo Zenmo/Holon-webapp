@@ -186,7 +186,7 @@ class RuleMappingTestClass(TestCase):
         assert n_ehc_assets == 1  # was 1
 
     def test_rule_action_add_contract(self):
-        """Test the add rule action"""
+        """Test the add rule action for a contract and check if contractscope is connected correctly"""
 
         actor_without_contract: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
@@ -244,7 +244,7 @@ class RuleMappingTestClass(TestCase):
         assert added_contract.contractScope.original_id == contract_scope.id
 
     def test_rule_action_add_contract_multiple(self):
-        """Test the add rule action"""
+        """Test the add rule action for multiple contracts and check if contractscope is connected correctly"""
 
         actor_without_contract_0: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
@@ -283,8 +283,6 @@ class RuleMappingTestClass(TestCase):
         )
         RuleActionAdd.objects.create(contract_to_add=default_contract, rule=rule)
 
-        print(f"\nDEFAULT CONTRACT {default_contract.id}")
-
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
@@ -299,6 +297,95 @@ class RuleMappingTestClass(TestCase):
         # check if the cloned actor without contract now has a contract
         cloned_actor_0 = updated_scenario.actor_set.get(original_id=actor_without_contract_0.id)
         cloned_actor_1 = updated_scenario.actor_set.get(original_id=actor_without_contract_1.id)
+        assert len(cloned_actor_0.contracts.all()) == 1
+        assert len(cloned_actor_1.contracts.all()) == 1
+
+        # check if the cloned contract's contractScope is updated to the cloned contractScope
+        added_contract_0 = cloned_actor_0.contracts.first()
+        added_contract_1 = cloned_actor_1.contracts.first()
+
+        cloned_contract_scope = updated_scenario.actor_set.get(original_id=contract_scope.id)
+        assert added_contract_0.contractScope == cloned_contract_scope
+        assert added_contract_1.contractScope == cloned_contract_scope
+
+    def test_rule_action_add_contract_multiple_and_remove_beforehand(self):
+        """Test the add rule action of multiple contracts preceded by a remove"""
+
+        # Arrange
+        actor_with_contract_0: Actor = Actor.objects.create(
+            category=ActorType.CONNECTIONOWNER, payload=self.scenario
+        )
+
+        actor_with_contract_1: Actor = Actor.objects.create(
+            category=ActorType.CONNECTIONOWNER, payload=self.scenario
+        )
+
+        Actor.objects.create(category=ActorType.SUPPLIERENERGY, payload=self.scenario)
+
+        contract_scope = Actor.objects.create(
+            category=ActorType.OPERATORGRID, payload=self.scenario
+        )
+
+        DeliveryContract.objects.create(
+            name="template_delivery_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=actor_with_contract_0,
+            contractScope=contract_scope,
+            deliveryContractType=DeliveryContractType.FIXED,
+            deliveryPrice_eurpkWh=1,
+            feedinPrice_eurpkWh=1,
+        )
+        DeliveryContract.objects.create(
+            name="template_delivery_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=actor_with_contract_1,
+            contractScope=contract_scope,
+            deliveryContractType=DeliveryContractType.FIXED,
+            deliveryPrice_eurpkWh=1,
+            feedinPrice_eurpkWh=1,
+        )
+
+        default_contract = DeliveryContract.objects.create(
+            name="template_delivery_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            # actor=holder_actor,
+            contractScope=contract_scope,
+            deliveryContractType=DeliveryContractType.FIXED,
+            deliveryPrice_eurpkWh=1,
+            feedinPrice_eurpkWh=1,
+        )
+
+        remove_rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.CONTRACT,
+            model_subtype="",
+        )
+        RuleActionRemove.objects.create(rule=remove_rule, remove_mode=RemoveMode.REMOVE_ALL)
+
+        add_rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.ACTOR,
+            model_subtype="",
+        )
+        RelationExistsFilter.objects.create(
+            rule=add_rule, invert_filter=True, relation_field="contracts"
+        )
+        RuleActionAdd.objects.create(contract_to_add=default_contract, rule=add_rule)
+
+        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        # check if a contract was added
+        assert len(updated_scenario.contracts) == 2
+
+        # check if the cloned actor without contract now has a contract
+        cloned_actor_0 = updated_scenario.actor_set.get(original_id=actor_with_contract_0.id)
+        cloned_actor_1 = updated_scenario.actor_set.get(original_id=actor_with_contract_1.id)
         assert len(cloned_actor_0.contracts.all()) == 1
         assert len(cloned_actor_1.contracts.all()) == 1
 
