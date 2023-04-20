@@ -1,9 +1,10 @@
-
 from holon.models import Scenario
 import traceback
 
+
 def pprint(msg: str):
     return print(f"[holon-endpoint]: {msg}")
+
 
 cloned_scenarios = Scenario.objects.filter(cloned_from__isnull=False)
 try:
