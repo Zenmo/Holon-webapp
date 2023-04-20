@@ -49,7 +49,7 @@ export default function ChallengeFeedbackModal({
               const kpivalue =
                 conditionItem.type == "interactive_input_condition"
                   ? content?.find(
-                      content => content.value.id == parseFloat(conditionItem.value.parameter)
+                      content => content.value?.id == parseFloat(conditionItem.value.parameter)
                     )?.currentValue
                   : kpis[splittedParameter[0]][splittedParameter[1]];
 
