@@ -63,12 +63,6 @@ class Take(FilterSubSelector):
         FieldPanel("mode"),
     ]
 
-    def clean(self):
-        super().clean()
-
-        if not self.mode in [c[1] for c in TakeMode.choices]:
-            raise ValidationError(f"mode {self.mode} is not in list of possible Take modes")
-
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Take a number of items from the queryset, either the first n or random n"""
 
@@ -84,3 +78,5 @@ class Take(FilterSubSelector):
             ids = list(queryset.values_list("id", flat=True))
             random_ids = random.sample(ids, k=n)
             return queryset.filter(pk__in=random_ids)
+
+        raise NotImplementedError(f"Take mode {self.mode} is not implemented")
