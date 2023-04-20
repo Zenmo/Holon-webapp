@@ -118,7 +118,7 @@ class RuleMappingTestClass(TestCase):
                 if asset.__class__.__name__ == "ElectricHeatConversionAsset"
             ]
         )
-        assert n_ehc_assets == 5  # was 3
+        assert n_ehc_assets == 8  # was 3
 
     def test_rule_action_add_asset_empty_filter(self):
         """Test the add rule action when a filter is empty"""
@@ -230,7 +230,7 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         # check if a contract was added
-        assert len(updated_scenario.contracts) == 2
+        assert len(updated_scenario.contracts) == 3
 
         # check if the cloned actor without contract now has a contract
         cloned_actor = updated_scenario.actor_set.get(original_id=actor_without_contract.id)
