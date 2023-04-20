@@ -260,6 +260,127 @@ class RuleFiltersTestClass(TestCase):
         self.assertEqual(len(filtered_queryset), 1)
         self.assertEqual(filtered_queryset[0].id, asset_related_to_district_heat.id)
 
+    def test_second_order_relation_filter(self) -> None:
+        # Arange
+        electric_gridnode_1 = ElectricGridNode.objects.create(
+            payload=self.scenario, owner_actor=self.actor, capacity_kw=0
+        )
+        electric_gridnode_2 = ElectricGridNode.objects.create(
+            payload=self.scenario, owner_actor=self.actor, capacity_kw=100
+        )
+        gridconnection_1 = GridConnection.objects.create(
+            payload=self.scenario, parent_electric=electric_gridnode_1, capacity_kw=0
+        )
+        gridconnection_2 = GridConnection.objects.create(
+            payload=self.scenario, parent_electric=electric_gridnode_2, capacity_kw=0
+        )
+        asset_1 = EnergyAsset.objects.create(gridconnection=gridconnection_1)
+        asset_2 = EnergyAsset.objects.create(gridconnection=gridconnection_2)
+
+        rule_asset = Rule.objects.create(
+            model_type=ModelType.ENERGYASSET,
+            model_subtype="",
+        )
+
+        SecondOrderRelationAttributeFilter.objects.create(
+            rule=rule_asset,
+            relation_field="gridconnection",
+            second_order_relation_field="parent_electric",
+            model_attribute="capacity_kw",
+            comparator=AttributeFilterComparator.GREATER_THAN,
+            value=50.0,
+        )
+
+        # Act
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_2.id)
+
+    def test_second_order_relation_filter_with_relation_subtype(self) -> None:
+        # Arange
+        electric_gridnode_1 = ElectricGridNode.objects.create(
+            payload=self.scenario, owner_actor=self.actor, capacity_kw=50
+        )
+        electric_gridnode_2 = ElectricGridNode.objects.create(
+            payload=self.scenario, owner_actor=self.actor, capacity_kw=100
+        )
+        gridconnection_1 = BuildingGridConnection.objects.create(
+            payload=self.scenario,
+            parent_electric=electric_gridnode_1,
+            capacity_kw=0,
+            insulation_label=InsulationLabel.D,
+            heating_type=HeatingType.GASBURNER,
+            type=BuildingType.LOGISTICS,
+        )
+        gridconnection_2 = GridConnection.objects.create(
+            payload=self.scenario, parent_electric=electric_gridnode_2, capacity_kw=0
+        )
+        asset_1 = EnergyAsset.objects.create(gridconnection=gridconnection_1)
+        asset_2 = ConsumptionAsset.objects.create(
+            gridconnection=gridconnection_2,
+        )
+
+        rule_asset = Rule.objects.create(
+            model_type=ModelType.ENERGYASSET,
+            model_subtype="",
+        )
+
+        SecondOrderRelationAttributeFilter.objects.create(
+            rule=rule_asset,
+            relation_field="gridconnection",
+            relation_field_subtype="BuildingGridConnection",
+            second_order_relation_field="parent_electric",
+            model_attribute="capacity_kw",
+            comparator=AttributeFilterComparator.GREATER_THAN,
+            value=40.0,
+        )
+
+        # Act
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_1.id)
+
+    def test_second_order_relation_filter_with_second_order_relation_subtype(self) -> None:
+        # Arange
+        actor_1 = Actor.objects.create(category=ActorType.CONNECTIONOWNER, payload=self.scenario)
+        actor_2 = Actor.objects.create(category=ActorType.CONNECTIONOWNER, payload=self.scenario)
+        gridconnection_1 = GridConnection.objects.create(
+            payload=self.scenario, capacity_kw=0, owner_actor=actor_1
+        )
+        gridconnection_2 = GridConnection.objects.create(
+            payload=self.scenario, capacity_kw=0, owner_actor=actor_2
+        )
+        asset_1 = EnergyAsset.objects.create(gridconnection=gridconnection_1)
+        asset_2 = ConsumptionAsset.objects.create(
+            gridconnection=gridconnection_2, type=ConsumptionAssetType.ELECTRICITY_DEMAND
+        )
+
+        rule_actor = Rule.objects.create(
+            model_type=ModelType.ACTOR,
+            model_subtype="",
+        )
+
+        SecondOrderRelationAttributeFilter.objects.create(
+            rule=rule_actor,
+            relation_field="gridconnection",
+            second_order_relation_field="energyasset",
+            second_order_relation_field_subtype="ConsumptionAsset",
+            model_attribute="id",
+            comparator=AttributeFilterComparator.GREATER_THAN,
+            value=-1,
+        )
+
+        # Act
+        filtered_queryset = rule_actor.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, actor_2.id)
+
     def test_stable_id_relation_in_model_attribute_options(self):
         """Test if stable id relations are included for actor"""
         # Arange
