@@ -109,10 +109,11 @@ class GenericRuleActionAdd(RuleAction):
         if len(filtered_queryset) <= 0:
             return
 
-        # parse value
-        n = int(value)
-        if n < 0:
-            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
+        if reset_models_before_add:
+            # parse value
+            n = int(value)
+            if n < 0:
+                raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
         base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
@@ -139,7 +140,8 @@ class GenericRuleActionAdd(RuleAction):
                 ):
                     obj_to_delete.delete()
 
-            if objects_added < n:
+            # Only check < n for set count
+            if not reset_models_before_add or objects_added < n:
                 # add model_to_add to filtered object
                 new_model = util.duplicate_model(
                     self.model_to_add, {parent_fk_field_name: filtererd_object}
