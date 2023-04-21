@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 from copy import deepcopy as copy
+=======
+>>>>>>> 778e187 (add genericETMqueries)
 from typing import List
 
 import etm_service
 
 from holon.models import DatamodelQueryRule, Scenario
+<<<<<<< HEAD
 from holon.models.config import (
     AnyLogicConversion,
     DatamodelConversion,
@@ -14,6 +18,12 @@ from holon.models.config import (
     QueryAndConvertConfig,
     StaticConversion,
 )
+=======
+from holon.models.config import (AnyLogicConversion, DatamodelConversion,
+                                 ETMConversion, ETMQuery, GenericETMQuery,
+                                 KeyValuePairCollection, QueryAndConvertConfig,
+                                 StaticConversion)
+>>>>>>> 778e187 (add genericETMqueries)
 
 
 def pprint(msg: str):
@@ -127,6 +137,10 @@ class QConfig:
             "config": {},
         }
         for q in self.config_db.etm_query.all():
+            self._queries["config"].update(
+                Query(query=q, config=self, copied_scenario=self.copied_scenario).to_dict()
+            )
+        for q in GenericETMQuery.objects.get(id__in=self.config_db.generic_etm_query.prefetch_related('id').all().id):
             self._queries["config"].update(
                 Query(query=q, config=self, copied_scenario=self.copied_scenario).to_dict()
             )
