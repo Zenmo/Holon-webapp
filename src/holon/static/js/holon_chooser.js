@@ -384,7 +384,7 @@ function updateFilterInputs(
                         "select[id$='-model_attribute'], input[id$='-model_attribute']"
                     );
 
-                if (second_order_relation_type) {
+                if (second_order_relation_type.length) {
                     let newSelect;
                     if (
                         $(second_order_relation_type).prop("tagName") !==
