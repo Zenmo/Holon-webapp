@@ -66,12 +66,12 @@ export default function ChallengeFeedbackModal({
                 return false;
               } else if (
                 conditionItem.value.operator == "equal" &&
-                kpivalue.toLowerCase() != conditionItem.value.value.toLowerCase()
+                kpivalue?.toString().toLowerCase() != conditionItem.value.value.toLowerCase()
               ) {
                 return false;
               } else if (
                 conditionItem.value.operator == "notequal" &&
-                kpivalue.toLowerCase() == conditionItem.value.value.toLowerCase()
+                kpivalue?.toString().toLowerCase() == conditionItem.value.value.toLowerCase()
               ) {
                 return false;
               } else if (conditionItem.value.operator == "lower" && kpivalue >= conditionValue) {

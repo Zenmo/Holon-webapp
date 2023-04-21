@@ -55,7 +55,10 @@ class FeedbackModalInteractiveInputCondition(blocks.StructBlock):
     def get_interactive_inputs():
         pass
 
-    parameter = ModelChooserBlock(InteractiveElement)
+    parameter = ModelChooserBlock(
+        InteractiveElement,
+        help_text=_("Choose an Interactive Element of type `Single select` or `Continuous`"),
+    )
 
     operator = blocks.ChoiceBlock(
         max_length=50,
