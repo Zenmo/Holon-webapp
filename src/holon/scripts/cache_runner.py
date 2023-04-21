@@ -2,6 +2,7 @@ from datetime import datetime
 
 from holon.models.scenario import Scenario
 from django.core.cache import cache
+import argparse
 
 
 def log_print(msg: str):  # TODO move to utils
@@ -78,9 +79,17 @@ class CacheRunner:
         log_print(
             f"Computing possible input combinations for scenario {scenario} with id {scenario.id}"
         )
-        pass
 
 
 if __name__ == "__main__":
 
-    CacheRunner.update_cache()
+    # parse arguments
+    parser = argparse.ArgumentParser(prog="cache_runner")
+    parser.add_argument("-s", help="scenario ids")
+    parser.add_argument("-nd", help="delete invalid records")
+    args = parser.parse_args()
+
+    delete_old_records = False if args.nd else True
+
+    # update cache
+    CacheRunner.update_cache(args.s, delete_old_records)
