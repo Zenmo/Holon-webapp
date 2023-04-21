@@ -1,4 +1,9 @@
 from datetime import datetime
+from holon.models.interactive_element import (
+    InteractiveElement,
+    InteractiveElementContinuousValues,
+    InteractiveElementOptions,
+)
 
 from holon.models.scenario import Scenario
 from django.core.cache import cache
@@ -79,6 +84,14 @@ class CacheRunner:
         log_print(
             f"Computing possible input combinations for scenario {scenario} with id {scenario.id}"
         )
+
+        interactive_elements = InteractiveElement.objects.filter(scenario=scenario).all()
+
+        for interactive_element in interactive_elements:
+            options = InteractiveElementOptions.objects.filter(input=interactive_element).all()
+            sliders = InteractiveElementContinuousValues.objects.filter(
+                input=interactive_element
+            ).all()
 
 
 if __name__ == "__main__":
