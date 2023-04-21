@@ -171,6 +171,29 @@ def relation_field_subtype_options(rule: "ScenarioRule", relation_field: str) ->
     return [subclass.__name__ for subclass in all_subclasses(related_model)]
 
 
-def is_allowed_relation(field):
+def is_allowed_relation(field) -> bool:
     # group and subgroup of Actor have stable id's, so they can be used for filtering
     return field.name == "group" or field.name == "subgroup"
+
+
+def serialize_add_models(asset_to_add, gridconnection_to_add, contract_to_add) -> tuple[str]:
+    """Serialize util function for ruleactionadd hashing"""
+    from holon.serializers.datamodel.mapper import (
+        EnergyAssetPolymorphicSerializer,
+        GridConnectionPolymorphicSerializer,
+        ContractPolymorphicSerializer,
+    )
+
+    asset_json = (
+        json.dumps(EnergyAssetPolymorphicSerializer(asset_to_add).data) if asset_to_add else ""
+    )
+    gridconnection_json = (
+        json.dumps(GridConnectionPolymorphicSerializer(gridconnection_to_add).data)
+        if gridconnection_to_add
+        else ""
+    )
+    contract_json = (
+        json.dumps(ContractPolymorphicSerializer(contract_to_add).data) if contract_to_add else ""
+    )
+
+    return asset_json, gridconnection_json, contract_json

@@ -45,6 +45,9 @@ class Skip(FilterSubSelector):
 
         return queryset[n:]
 
+    def hash(self):
+        return f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items}]"
+
 
 class TakeMode(models.TextChoices):
     """Different methods of selecting part of a queryset"""
@@ -62,6 +65,11 @@ class Take(FilterSubSelector):
     panels = FilterSubSelector.panels + [
         FieldPanel("mode"),
     ]
+
+    def hash(self):
+        return (
+            f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items},{self.mode}]"
+        )
 
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Take a number of items from the queryset, either the first n or random n"""

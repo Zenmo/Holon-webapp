@@ -93,6 +93,15 @@ class InteractiveElement(ClusterableModel):
 
         return name
 
+    def hash(self):
+        if self.type == ChoiceType.CHOICE_CONTINUOUS:
+            cv = self.continuous_values.first()
+            option_hashes = cv.hash() if cv else ""
+        else:
+            option_hashes = ",".join([option.hash() for option in self.options.all()])
+
+        return f"[I{self.id},{self.type},{self.level},{option_hashes}]"
+
     class Meta:
         verbose_name = "Interactive Element"
 
@@ -158,6 +167,10 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
         else:
             return self.option
 
+    def hash(self):
+        rule_hashes = ",".join([rule.hash() for rule in self.rules.all()])
+        return f"[O{self.id},{self.option},{self.default},{self.level},{rule_hashes}]"
+
 
 class InteractiveElementContinuousValues(ClusterableModel):
     input = ParentalKey(
@@ -207,3 +220,7 @@ class InteractiveElementContinuousValues(ClusterableModel):
         InlinePanel("rules", heading="Rules", label="Rules"),
         FieldPanel("slider_unit"),
     ]
+
+    def hash(self):
+        rule_hashes = ",".join([rule.hash() for rule in self.rules.all()])
+        return f"[CV{self.id},{self.slider_value_min},{self.slider_value_max},{self.discretization_steps},{rule_hashes}]"
