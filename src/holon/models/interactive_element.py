@@ -190,11 +190,20 @@ class InteractiveElementContinuousValues(ClusterableModel):
         on_delete=models.SET_NULL,
         related_name="+",
     )
+    discretization_steps = models.IntegerField(
+        null=True,
+        blank=True,
+        default=5,
+        help_text=_(
+            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
+        ),
+    )
 
     panels = [
         FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
+        FieldPanel("discretization_steps"),
         InlinePanel("rules", heading="Rules", label="Rules"),
         FieldPanel("slider_unit"),
     ]
