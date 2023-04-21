@@ -1,6 +1,6 @@
 from django.test import TestCase
 from holon.models.scenario import Scenario
-from holon.services.costs_table import CostsTable
+from holon.services.costs_table import CostTables
 
 
 class CostTableTestClass(TestCase):
@@ -9,11 +9,20 @@ class CostTableTestClass(TestCase):
     def test_table_totals(self):
         """Test if the totals table is correctly set up"""
         scenario = Scenario.objects.get(pk=1)
-        costs_table = CostsTable.from_al_output(self.__al_output(), scenario)
+        tables = CostTables.from_al_output(self.__al_output(), scenario)
+        costs_table = tables.main_table()
 
-        assert "Bedrijventerrein HOLON" in costs_table.table.keys()
-        assert "CONNECTIONOWNER" in costs_table.table.keys()
-        assert "OPERATORGRID" in costs_table.table.keys()
+        assert "Bedrijventerrein HOLON" in costs_table.keys()
+        assert "CONNECTIONOWNER" in costs_table.keys()
+        assert "OPERATORGRID" in costs_table.keys()
+
+        detailed_table = tables.detailed_table("Commercieel bedrijf 1")
+        assert "Commercieel bedrijf 1 - poor" in detailed_table.keys()
+        assert "Commercieel bedrijf 1 - rich" in detailed_table.keys()
+
+        detailed_tables = tables.all_detailed_tables()
+        assert "Commercieel bedrijf 1" in detailed_tables.keys()
+        assert "Commercieel bedrijf 2" not in detailed_tables.keys()
 
     def __al_output(self):
         return [

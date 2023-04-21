@@ -9,7 +9,7 @@ from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer, ScenarioSerializer
-from holon.services import CostBenedict, ETMConnect
+from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 
@@ -59,18 +59,16 @@ class HolonV2Service(generics.CreateAPIView):
                     elif name == "Regional upscaling":
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
-                pprint("Running CostBenedict module")
+                pprint("Calculating CostTables")
                 # ignore me! (TODO: should only be triggered on bedrijventerrein)
-                cost_benefit_results = CostBenedict(
-                    actors=cc.outputs["actors"]
-                ).determine_group_costs()
+                cost_benefit_tables = CostTables.from_al_output(cc.outputs["actors"], scenario)
 
                 results = Results(
                     scenario=scenario,
                     request=request,
                     anylogic_outcomes=cc.outputs,
-                    cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
-                    cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
+                    cost_benefit_results=cost_benefit_tables.main_table(),
+                    cost_benefit_overview=cost_benefit_tables.all_detailed_tables(),
                     **etm_outcomes,
                 )
 

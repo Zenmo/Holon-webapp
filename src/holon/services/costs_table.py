@@ -1,9 +1,37 @@
 """Create a Costs&Benefits Table """
 
 
-class CostsTable:
-    def __init__(self, cost_items) -> None:
-        """cost_items is a generator of CostItems"""
+class CostTables:
+    def __init__(self, cost_items: list) -> None:
+        """cost_items is a list of CostItems, we now loop it a lot - can that be improved?"""
+        self.cost_items = cost_items
+
+    def main_table(self) -> dict:
+        return CostTable(self.cost_items).table
+
+    def detailed_table(self, group) -> dict:
+        return CostTable(self.cost_items, use_subgroup=group).table
+
+    def groups_for_detailed(self) -> set:
+        return set((group for item in self.cost_items for group in item.with_subgroups()))
+
+    def all_detailed_tables(self) -> dict:
+        """
+        Returns a dict where the keys are the applicable actor groups
+        and the values are their detailed tables
+        """
+        return {group: self.detailed_table(group) for group in self.groups_for_detailed()}
+
+    @classmethod
+    def from_al_output(cls, al_output, scenario):
+        actors = ActorWrapper.from_scenario(scenario)
+        return cls([CostItem.from_dict(item, actors) for item in al_output])
+
+
+class CostTable:
+    def __init__(self, cost_items, use_subgroup=None) -> None:
+        """cost_items is a list of CostItems"""
+        self._use_subgroup = use_subgroup
         self.table = cost_items
 
     @property
@@ -18,9 +46,9 @@ class CostsTable:
         self.__fill_out_table()
 
     def __add_to_table(self, item):
-        """TODO: also work with subgroups"""
+        """Adds the item to the table"""
         try:
-            self._table[item.from_group()][item.to_group()] += item.price
+            self._table[self.__name_from(item)][self.__name_to(item)] += item.price
         except KeyError:
             self.__add_from_group(item)
         except TypeError:
@@ -28,7 +56,7 @@ class CostsTable:
 
     def __add_to_group(self, item):
         try:
-            self._table[item.from_group()][item.to_group()] = item.price
+            self._table[self.__name_from(item)][self.__name_to(item)] = item.price
         except KeyError:
             self.__add_from_group(item)
 
@@ -37,9 +65,9 @@ class CostsTable:
         Also needs to add self as None
         TODO: move some functionality from fill_out_table here
         """
-        self._table[item.from_group()] = {
-            item.to_group(): item.price,
-            item.from_group(): None,
+        self._table[self.__name_from(item)] = {
+            self.__name_to(item): item.price,
+            self.__name_from(item): None,
         }
 
     def __fill_out_table(self):
@@ -49,16 +77,13 @@ class CostsTable:
         for group in all_groups:
             self._table[group] = basic | self._table.get(group, {})
 
-    def as_totals(self):
-        """TODO: returns the main groups view"""
+    def __name_from(self, item):
+        return (
+            item.from_subgroup() if self._use_subgroup == item.from_group() else item.from_group()
+        )
 
-    def as_detailed_view(self, group):
-        """TODO: returns detailed view for the group"""
-
-    @classmethod
-    def from_al_output(cls, al_output, scenario):
-        actors = ActorWrapper.from_scenario(scenario)
-        return cls((CostItem.from_dict(item, actors) for item in al_output))
+    def __name_to(self, item):
+        return item.to_subgroup() if self._use_subgroup == item.to_group() else item.to_group()
 
 
 class ActorWrapper:
@@ -69,7 +94,6 @@ class ActorWrapper:
     def find(self, actor_name):
         """
         Strips the AL prefix from the actor name and returns the corresponding Actor
-        TODO: Validate: does this actor exists -> what do we do if not
         """
         return self.actors.get(id=int(actor_name[3:]))
 
@@ -92,6 +116,19 @@ class CostItem:
     def to_group(self):
         return CostItem.group(self.to_actor)
 
+    def from_subgroup(self):
+        return CostItem.subgroup(self.from_actor)
+
+    def to_subgroup(self):
+        return CostItem.subgroup(self.to_actor)
+
+    def with_subgroups(self):
+        """Returns groups that are connected to a subgroup"""
+        if self.from_actor.subgroup:
+            yield self.from_group()
+        if self.to_actor.subgroup:
+            yield self.to_group()
+
     @staticmethod
     def group(actor):
         """Fallback to category if group is not defined"""
@@ -99,6 +136,14 @@ class CostItem:
             return actor.group.name
         except AttributeError:
             return actor.category
+
+    @staticmethod
+    def subgroup(actor):
+        """Fallback to group if subgroup is not defined"""
+        try:
+            return f"{CostItem.group(actor)} - {actor.subgroup.name}"
+        except AttributeError:
+            return CostItem.group(actor)
 
     @staticmethod
     def price_for(obj) -> float:
