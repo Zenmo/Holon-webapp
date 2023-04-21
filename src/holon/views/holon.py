@@ -60,8 +60,7 @@ class HolonV2Service(generics.CreateAPIView):
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
                 pprint("Calculating CostTables")
-                # ignore me! (TODO: should only be triggered on bedrijventerrein)
-                cost_benefit_tables = CostTables.from_al_output(cc.outputs["actors"], scenario)
+                cost_benefit_tables = CostTables.from_al_output(cc.outputs["contracts"], scenario)
 
                 results = Results(
                     scenario=scenario,
