@@ -21,6 +21,9 @@ class ValueTranslate(ValueTransform):
 
     panels = [FieldPanel("amount")]
 
+    def hash(self):
+        return f"[T{self.id},{self.amount}]"
+
     def transform_value(self, value: float) -> float:
         """Translate the value"""
 
@@ -35,6 +38,9 @@ class ValueScale(ValueTransform):
     factor = models.FloatField(null=False, verbose_name="Scaling factor")
 
     panels = [FieldPanel("factor")]
+
+    def hash(self):
+        return f"[T{self.id},{self.factor}]"
 
     def transform_value(self, value: float) -> float:
         """Scale the value"""
@@ -58,6 +64,9 @@ class ValueMapRange(ValueTransform):
         FieldPanel("new_range_min"),
         FieldPanel("new_range_max"),
     ]
+
+    def hash(self):
+        return f"[T{self.id},{self.value_min},{self.value_max},{self.new_range_min},{self.new_range_max}]"
 
     def transform_value(self, value: float) -> float:
         """Map the value from one range to another"""
@@ -83,6 +92,9 @@ class ValueRound(ValueTransform):
     panels = [
         FieldPanel("mode"),
     ]
+
+    def hash(self):
+        return f"[T{self.id},{self.mode}]"
 
     def transform_value(self, value: float) -> int:
         """Round the value"""

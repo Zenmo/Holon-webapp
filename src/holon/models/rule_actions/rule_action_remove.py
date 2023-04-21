@@ -32,6 +32,9 @@ class RuleActionRemove(RuleAction):
     class Meta:
         verbose_name = "RuleActionRemove"
 
+    def hash(self):
+        return f"[A{self.id},{self.remove_mode}]"
+
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Remove the filtered items"""
 

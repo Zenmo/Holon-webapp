@@ -39,6 +39,9 @@ class RuleActionFactor(RuleAction):
         except ObjectDoesNotExist:
             return
 
+    def hash(self):
+        return f"[A{self.id},{self.model_attribute},{self.min_value},{self.max_value}]"
+
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
         Apply rescaling of an atribute of filtered_object according to value.

@@ -31,6 +31,12 @@ class HolonV2Service(generics.CreateAPIView):
             if serializer.is_valid():
                 data = serializer.validated_data
 
+                # TODO temp location?
+                from holon.cache import generate_key
+
+                key = generate_key(data["scenario"], data["interactive_elements"])
+                print("HOLON cache key:", key)
+
                 pprint(f"Cloning scenario {data['scenario'].id}")
                 scenario = rule_mapping.get_scenario_and_apply_rules(
                     data["scenario"].id, data["interactive_elements"]
