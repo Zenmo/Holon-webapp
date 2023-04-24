@@ -14,17 +14,12 @@ from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
-import holon.cache as holon_cache
-
-
-def log_print(msg: str):
-    """Print with endpoint name and timestamp prepended"""
-
-    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[holon-endpoint] [{time}]: {msg}")
+from holon.cache import holon_endpoint_cache
+from holon.utils.logging import HolonLogger
 
 
 class HolonV2Service(generics.CreateAPIView):
+    logger = HolonLogger("holon-endpoint")
     serializer_class = HolonRequestSerializer
 
     def post(self, request: Request):
@@ -39,8 +34,10 @@ class HolonV2Service(generics.CreateAPIView):
                 data = serializer.validated_data
 
                 if use_caching:
-                    key = holon_cache.generate_key(data["scenario"], data["interactive_elements"])
-                    value = holon_cache.get(key)
+                    key = holon_endpoint_cache.generate_key(
+                        data["scenario"], data["interactive_elements"]
+                    )
+                    value = holon_endpoint_cache.get(key)
                     if value:
                         print("HOLON cache hit on: ", key)
                         return Response(
@@ -48,17 +45,17 @@ class HolonV2Service(generics.CreateAPIView):
                             status=status.HTTP_200_OK,
                         )
 
-                log_print(f"Cloning scenario {data['scenario'].id}")
+                HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
                 scenario = rule_mapping.get_scenario_and_apply_rules(
                     data["scenario"].id, data["interactive_elements"]
                 )
 
-                log_print("Running Anylogic model")
+                HolonV2Service.logger.log_print("Running Anylogic model")
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
                 cc.run()
 
-                log_print("Running ETM module")
+                HolonV2Service.logger.log_print("Running ETM module")
                 # TODO: is this the way to distinguish the national and inter results?
                 # Init with none values so Result always has the keys
                 etm_outcomes = {
@@ -76,7 +73,7 @@ class HolonV2Service(generics.CreateAPIView):
                     elif name == "Regional upscaling":
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
-                log_print("Running CostBenedict module")
+                HolonV2Service.logger.log_print("Running CostBenedict module")
                 # ignore me! (TODO: should only be triggered on bedrijventerrein)
                 cost_benefit_results = CostBenedict(
                     actors=cc.outputs["actors"]
@@ -91,12 +88,12 @@ class HolonV2Service(generics.CreateAPIView):
                     **etm_outcomes,
                 )
 
-                log_print("200 OK")
+                HolonV2Service.logger.log_print("200 OK")
 
                 result = results.to_dict()
 
                 if use_caching:
-                    holon_cache.set(key, result)
+                    holon_endpoint_cache.set(key, result)
 
                 return Response(
                     result,
@@ -106,7 +103,7 @@ class HolonV2Service(generics.CreateAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            log_print(traceback.format_exc())
+            HolonV2Service.logger.log_print(traceback.format_exc())
 
             response_body = {"error_msg": f"something went wrong: {e}"}
             if scenario:
@@ -125,7 +122,9 @@ class HolonV2Service(generics.CreateAPIView):
                     scenario_id = scenario.id
                     scenario.delete_async()
             except Exception as e:
-                log_print(f"Something went wrong while trying to delete scenario {scenario_id}")
+                HolonV2Service.logger.log_print(
+                    f"Something went wrong while trying to delete scenario {scenario_id}"
+                )
                 print(traceback.format_exc())
 
 
@@ -167,16 +166,19 @@ class HolonCMSLogic(generics.RetrieveAPIView):
 
 
 class HolonScenarioCleanup(generics.RetrieveAPIView):
+
+    logger = HolonLogger("holon-scenario-cleanup")
+
     def get(self, request):
         cloned_scenarios = Scenario.objects.filter(cloned_from__isnull=False)
         try:
             for scenario in cloned_scenarios:
-                log_print(f"Deleting scenario {scenario.id}...")
+                HolonScenarioCleanup.logger.log_print(f"Deleting scenario {scenario.id}...")
                 cid = scenario.id
                 scenario.delete()
-                log_print(f"... deleted scenario {cid}")
+                HolonScenarioCleanup.logger.log_print(f"... deleted scenario {cid}")
         except Exception as e:
-            log_print(traceback.format_exc())
+            HolonScenarioCleanup.logger.log_print(traceback.format_exc())
             response_body = {"error_msg": f"something went wrong: {e}"}
             return Response(
                 response_body,

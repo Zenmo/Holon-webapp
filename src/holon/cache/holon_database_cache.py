@@ -5,7 +5,7 @@ import base64
 from django.utils.encoding import force_bytes
 
 
-class DatabaseCacheExtended(DatabaseCache):
+class HolonDatabaseCache(DatabaseCache):
     def get_where(self, query, default=None, version="%") -> dict:
         db = router.db_for_read(self.cache_model_class)
         table = connections[db].ops.quote_name(self._table)
@@ -25,6 +25,8 @@ class DatabaseCacheExtended(DatabaseCache):
         return return_d
 
     def get_all(self, default=None, version=None) -> dict:
+        """Get a dictionary of all cache records in the Holon database cache"""
+
         db = router.db_for_read(self.cache_model_class)
         table = connections[db].ops.quote_name(self._table)
 
@@ -41,6 +43,7 @@ class DatabaseCacheExtended(DatabaseCache):
         return return_d
 
     def clear_scenario(self, scenario_id, default=None, version="%") -> None:
+        """Clear all cached records beloning to a specific scenario"""
         db = router.db_for_read(self.cache_model_class)
         table = connections[db].ops.quote_name(self._table)
 
@@ -48,5 +51,7 @@ class DatabaseCacheExtended(DatabaseCache):
             cursor.execute(f"delete FROM {table} WHERE cache_key LIKE ':{version}:{scenario_id}_%'")
 
     def __get_key_without_version(self, key):
+        """Remove the version prependix from standard django database caching"""
+
         second_colon = key.find(":", key.find(":") + 1)
         return key[second_colon + 1 :]
