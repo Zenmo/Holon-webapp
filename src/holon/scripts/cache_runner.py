@@ -9,6 +9,10 @@ from holon.models.interactive_element import (
     InteractiveElementOptions,
 )
 
+from holon.views import HolonV2Service
+from django.http import HttpRequest
+
+
 from holon.models.scenario import Scenario
 from django.core.cache import cache
 import argparse
@@ -55,7 +59,7 @@ class CacheRunner:
         holon_input_configurations = CacheRunner.get_holon_input_generator(scenario)
 
         for holon_input_configuration in holon_input_configurations:
-            CacheRunner.call_holon_endpoint(holon_input_configuration)
+            CacheRunner.call_holon_endpoint(scenario.id, holon_input_configuration)
 
     @staticmethod
     def get_scenarios(scenario_ids: list[int]):
@@ -103,17 +107,33 @@ class CacheRunner:
         return itertools.product(*interactive_element_input_lists)
 
     @staticmethod
-    def call_holon_endpoint(holon_input_configuration: tuple[InteractiveElementInput]):
+    def call_holon_endpoint(
+        scenario_id: int, holon_input_configuration: tuple[InteractiveElementInput]
+    ):
 
-        request_body = str(
-            [
-                f"{interactive_element_input.interactive_element}: {interactive_element_input.value}"
+        request_body = {
+            "scenario": scenario_id,
+            "interactive_elements": [
+                {
+                    "interactive_element": interactive_element_input.interactive_element.id,
+                    "value": interactive_element_input.value,
+                }
                 for interactive_element_input in holon_input_configuration
-            ]
-        )
+            ],
+        }
         log_print(f"Calling HolonV2Service endpoint with configuration {request_body}")
 
-        # TODO call endpoint
+        # Create request to holon endpoint
+        request = HttpRequest()
+        request.data = request_body
+        request.query_params = {}
+        result = HolonV2Service().post(request)
+
+        if result.status_code == 200:
+            log_print("success")
+        else:
+            print(result, result.__dict__)
+            log_print(f"Calling HolonV2Service endpoint failed with response {request.data}")
 
 
 if __name__ == "__main__":

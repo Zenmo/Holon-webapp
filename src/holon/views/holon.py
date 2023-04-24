@@ -35,9 +35,10 @@ class HolonV2Service(generics.CreateAPIView):
 
                 if use_caching:
                     key = holon_endpoint_cache.generate_key(
-                        data["scenario"], data["interactive_elements"]
+                        data["scenario"], dict(data["interactive_elements"])
                     )
                     value = holon_endpoint_cache.get(key)
+
                     if value:
                         print("HOLON cache hit on: ", key)
                         return Response(
