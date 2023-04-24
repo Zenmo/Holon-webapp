@@ -252,3 +252,17 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ["localhost:3000", "https://pizzaoven.holontool.nl"]
 
 OLD_PASSWORD_FIELD_ENABLED = True
+
+
+# Caching
+HOLON_CACHING_TIMEOUT = None  # Set to 0 to disable caching
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table",
+    },
+    "holon_cache": {
+        "BACKEND": "holon.cache.cache.DatabaseCacheExtended",
+        "LOCATION": "holon_cache",
+    },
+}

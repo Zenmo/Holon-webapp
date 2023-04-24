@@ -13,6 +13,7 @@ from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostBenedict, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
+import holon.cache as holon_cache
 
 
 def log_print(msg: str):
@@ -35,11 +36,14 @@ class HolonV2Service(generics.CreateAPIView):
             if serializer.is_valid():
                 data = serializer.validated_data
 
-                # TODO temp location?
-                from holon.cache import generate_key
-
-                key = generate_key(data["scenario"], data["interactive_elements"])
-                print("HOLON cache key:", key)
+                key = holon_cache.generate_key(data["scenario"], data["interactive_elements"])
+                value = holon_cache.get(key)
+                if value:
+                    print("HOLON cache hit on: ", key)
+                    return Response(
+                        value,
+                        status=status.HTTP_200_OK,
+                    )
 
                 log_print(f"Cloning scenario {data['scenario'].id}")
                 scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -85,8 +89,12 @@ class HolonV2Service(generics.CreateAPIView):
                 )
 
                 log_print("200 OK")
+
+                result = results.to_dict()
+                holon_cache.set(key, result)
+
                 return Response(
-                    results.to_dict(),
+                    result,
                     status=status.HTTP_200_OK,
                 )
 
