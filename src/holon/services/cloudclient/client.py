@@ -1,7 +1,6 @@
 import json
 
-from anylogiccloudclient.client.cloud_client import \
-    CloudClient as ALCloudClient
+from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
 from anylogiccloudclient.client.cloud_client import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 
@@ -95,4 +94,6 @@ class CloudClient:
             for co in self.config.anylogic_cloud_output.all()
         }
         # store raw results
-        self._outputs_raw = {name: anylogic_outputs.value(name) for name in anylogic_outputs.names()}
+        self._outputs_raw = {
+            name: anylogic_outputs.value(name) for name in anylogic_outputs.names()
+        }

@@ -5,7 +5,6 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from holon.models.scenario import Scenario
-from main.blocks.rich_text_block import RichtextBlock
 
 
 class QueryCovertModuleType(models.TextChoices):
@@ -50,7 +49,6 @@ class QueryAndConvertConfig(ClusterableModel):
             "etm_query",
             heading="Define your input and query statements here",
             label="ETM query/input statement",
-            min_num=1,
         ),
         InlinePanel(
             "key_value_pair_collection",
