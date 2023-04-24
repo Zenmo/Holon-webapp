@@ -250,9 +250,12 @@ function updateFilterInputs(
                     Object.keys(data[model_type].model_subtype)
                 );
 
-                let attribute_options = model_subtype_select
-                    ? data[model_type].model_subtype[model_subtype_select.val()]
-                    : data[model_type].attributes;
+                let attribute_options =
+                    model_subtype_select && model_subtype_select.val()
+                        ? data[model_type].model_subtype[
+                              model_subtype_select.val()
+                          ]
+                        : data[model_type].attributes;
 
                 const second_order_relation_type = convertInputToSelect(
                     select
@@ -293,7 +296,8 @@ function updateFilterInputs(
             }
         } else {
             select = $(this);
-            reset && select.val("");
+
+            reset && updateOptions(select, options, false, true);
         }
         select.change(function (e) {
             const relation_type = $(this)
@@ -380,7 +384,7 @@ function updateFilterInputs(
                         "select[id$='-model_attribute'], input[id$='-model_attribute']"
                     );
 
-                if (second_order_relation_type) {
+                if (second_order_relation_type.length) {
                     let newSelect;
                     if (
                         $(second_order_relation_type).prop("tagName") !==

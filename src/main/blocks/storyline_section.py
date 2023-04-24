@@ -49,16 +49,15 @@ class InteractiveInputBlock(blocks.StructBlock):
         (DISPLAY_DROPDOWN, "Show as dropdown"),
     ]
 
-    interactive_input = ModelChooserBlock(InteractiveElement)
+    interactive_input = ModelChooserBlock(
+        InteractiveElement,
+        help_text=_("Choose an Interactive Element of type `Single select` or `Continuous`"),
+    )
     display = blocks.ChoiceBlock(choices=DISPLAY_CHOICES, required=False)
     visible = blocks.BooleanBlock(required=False, default=True)
     locked = blocks.BooleanBlock(required=False)
     default_value = blocks.CharBlock(
         required=False, help_text="Type the default value exactly as it's shown on the website page"
-    )
-    target_value = blocks.CharBlock(
-        required=False,
-        help_text="Type a target value if this value needs to be added to the current and all underlying sections. Type the value exactly as it's shown on the website page. Seperate multiple values by a comma (no whitespaces)",
     )
 
     def get_api_representation(self, value, context=None):
@@ -75,9 +74,6 @@ class InteractiveInputBlock(blocks.StructBlock):
                     option_default = False
                     if bool(value["default_value"]):
                         if value["default_value"].lower() == option.option.lower():
-                            option_default = True
-                    elif bool(value["target_value"]):
-                        if value["target_value"].lower() == option.option.lower():
                             option_default = True
                     else:
                         option_default = option.default
@@ -125,7 +121,6 @@ class InteractiveInputBlock(blocks.StructBlock):
                 "locked": value["locked"],
                 "display": value["display"],
                 "default_value_override": value["default_value"],
-                "target_value": value["target_value"],
             }
 
             if interactive_input.link_wiki_page is not None:

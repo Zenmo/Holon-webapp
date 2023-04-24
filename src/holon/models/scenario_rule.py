@@ -322,6 +322,18 @@ class ScenarioRule(Rule):
         for rule_action in self.get_actions():
             rule_action.apply_action_to_queryset(filtered_queryset, value)
 
+    def hash(self):
+        action_hashes = ",".join([rule_action.hash() for rule_action in self.get_actions()])
+        filter_hashes = ",".join([rule_filter.hash() for rule_filter in self.get_filters()])
+        subselector_hashes = ",".join(
+            [rule_subselector.hash() for rule_subselector in self.get_filter_subselectors()]
+        )
+        transform_hashes = ",".join(
+            [rule_transform.hash() for rule_transform in self.get_value_transforms()]
+        )
+
+        return f"[R{self.id},{self.model_type},{self.model_subtype},{action_hashes},{filter_hashes},{subselector_hashes},{transform_hashes}]"
+
 
 class SelfConversionType(models.TextChoices):
     """Applied to the resulting set of objects attribute values before conversion"""

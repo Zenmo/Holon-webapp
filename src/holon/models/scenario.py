@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from holon.models.util import duplicate_model
 from threading import Thread
+from hashlib import sha512
 
 
 class Scenario(ClusterableModel):
@@ -196,3 +197,15 @@ class Scenario(ClusterableModel):
         """Delete the scenario asynchrou"""
         t = Thread(target=self.delete)
         t.start()
+
+    def hash(self):
+        interactive_element_hashes = ",".join(
+            [
+                interactive_element.hash()
+                for interactive_element in self.interactiveelement_set.all()
+            ]
+        )
+        print("Interactive elements configuration hash:", interactive_element_hashes)
+        cms_configuration_hash = sha512(interactive_element_hashes.encode("utf-8")).hexdigest()
+
+        return f"{self.id}_{cms_configuration_hash}"
