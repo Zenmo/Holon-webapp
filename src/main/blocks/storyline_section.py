@@ -1,20 +1,18 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
-
 from wagtail.core import blocks
+from wagtailmodelchooser import Chooser, register_model_chooser
+from wagtailmodelchooser.blocks import ModelChooserBlock
+
 from holon.models import InteractiveElement
 from holon.models.interactive_element import (
-    ChoiceType,
-    InteractiveElementContinuousValues,
-    InteractiveElementOptions,
-)
+    ChoiceType, InteractiveElementContinuousValues, InteractiveElementOptions)
 from main.blocks.rich_text_block import RichtextBlock
-from .holon_image_chooser import HolonImageChooserBlock
-from wagtailmodelchooser.blocks import ModelChooserBlock
-from wagtailmodelchooser import register_model_chooser, Chooser
-from .grid_chooser import GridChooserBlock
+
 from .background_chooser import BackgroundChooserBlock
+from .grid_chooser import GridChooserBlock
 from .holarchyfeedbackimages import HolarchyFeedbackImage
+from .holon_image_chooser import HolonImageChooserBlock
 from .legend_item import LegendItemsBlock
 
 
@@ -27,8 +25,9 @@ class InteractiveElementChooser(Chooser):
     model = InteractiveElement
 
     def get_queryset(self, request):
-        from main.pages.casus import CasusPage
         from wagtail.models import Page
+
+        from main.pages.casus import CasusPage
 
         qs = super().get_queryset(request)
         casus_id = request.META.get("HTTP_REFERER").split("/")[-2]
@@ -106,6 +105,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_default": option.slider_value_default,
                         "slider_value_min": option.slider_value_min,
                         "slider_value_max": option.slider_value_max,
+                        "discretization_steps": option.discretization_steps,
                         "slider_unit": option.slider_unit.symbol
                         if option.slider_unit is not None
                         else "",
