@@ -33,6 +33,12 @@ class InteractiveElementChooser(Chooser):
         from main.pages.casus import CasusPage
 
         qs = super().get_queryset(request)
+        
+        # Send all interactive elements as queryset if the interactive element is linked outside of the pages
+        if request.META.get("HTTP_REFERER").find("pages") == -1:
+            return qs
+
+
         casus_id = request.META.get("HTTP_REFERER").split("/")[-2]
 
         if casus_id == "edit":
