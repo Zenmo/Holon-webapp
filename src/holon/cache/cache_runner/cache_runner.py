@@ -39,4 +39,4 @@ def run_input_combinations(scenario: Scenario):
     holon_input_configurations = get_holon_input_combinations(scenario)
 
     for holon_input_configuration in holon_input_configurations:
-        call_holon_endpoint(holon_input_configuration)
+        call_holon_endpoint(scenario.id, holon_input_configuration)
