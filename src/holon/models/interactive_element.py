@@ -13,6 +13,8 @@ from django.db import models
 from wagtail.admin.panels import PageChooserPanel
 from holon.models.scenario import Scenario
 
+import itertools
+
 
 class ChoiceType(models.TextChoices):
     CHOICE_SINGLESELECT = "single_select"
@@ -101,6 +103,36 @@ class InteractiveElement(ClusterableModel):
             option_hashes = ",".join([option.hash() for option in self.options.all()])
 
         return f"[I{self.id},{self.type},{self.level},{option_hashes}]"
+
+    def get_possible_values(self) -> list[str]:
+        """Return all possible input values for the interactive element"""
+
+        # slider
+        if self.type == ChoiceType.CHOICE_CONTINUOUS:
+            slider: InteractiveElementContinuousValues = self.continuous_values.first()
+
+            return [str(value) for value in slider.get_possible_values()]
+
+        # single/multiselect
+        else:
+            interactive_element_options: list[InteractiveElementOptions] = self.options.all()
+            possible_values = [
+                str(interactive_element_option.option)
+                for interactive_element_option in interactive_element_options
+            ]
+
+            # single select
+            if self.type == ChoiceType.CHOICE_SINGLESELECT:
+                return possible_values
+
+            # multiselect
+            elif self.type == ChoiceType.CHOICE_MULTISELECT:
+                combinations = [""]
+                for i in range(1, len(possible_values) + 1):
+                    for c in itertools.combinations(possible_values, i):
+                        combinations.append(",".join(c))
+
+                return combinations
 
     class Meta:
         verbose_name = "Interactive Element"
@@ -221,6 +253,18 @@ class InteractiveElementContinuousValues(ClusterableModel):
         FieldPanel("slider_unit"),
     ]
 
-    def hash(self):
+    def hash(self) -> str:
+        """Return a string generated for this unique instance used for caching"""
+
         rule_hashes = ",".join([rule.hash() for rule in self.rules.all()])
         return f"[CV{self.id},{self.slider_value_min},{self.slider_value_max},{self.discretization_steps},{rule_hashes}]"
+
+    def get_possible_values(self) -> list[int]:
+        """Get a list of the possible discretized values this slider can return"""
+
+        # MAKE SURE THESE ARE THE SAME VALUES AS THE FRONTEND SLIDER
+        step_size = (self.slider_value_max - self.slider_value_min) / (
+            self.discretization_steps - 1
+        )
+
+        return [self.slider_value_min + i * step_size for i in range(self.discretization_steps)]

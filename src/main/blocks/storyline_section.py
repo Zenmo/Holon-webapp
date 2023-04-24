@@ -6,10 +6,7 @@ from wagtailmodelchooser.blocks import ModelChooserBlock
 
 from holon.models import InteractiveElement
 from holon.models.interactive_element import (
-    ChoiceType,
-    InteractiveElementContinuousValues,
-    InteractiveElementOptions,
-)
+    ChoiceType, InteractiveElementContinuousValues, InteractiveElementOptions)
 from main.blocks.rich_text_block import RichtextBlock
 
 from .background_chooser import BackgroundChooserBlock
@@ -104,6 +101,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_default": option.slider_value_default,
                         "slider_value_min": option.slider_value_min,
                         "slider_value_max": option.slider_value_max,
+                        "discretization_steps": option.discretization_steps,
                         "slider_unit": option.slider_unit.symbol
                         if option.slider_unit is not None
                         else "",

@@ -31,6 +31,7 @@ export type InteractiveInputOptions = {
   sliderValueDefault?: number;
   sliderValueMax?: number;
   sliderValueMin?: number;
+  discretizationSteps?: number;
   sliderUnit?: string;
   level?: string;
 };
@@ -55,17 +56,18 @@ function InteractiveInputs({
     : options;
 
   //if there is a selectedlevel, it should match, the slider
+
   return type === "continuous" &&
     (!selectedLevel || selectedLevel.toLowerCase() == level?.toLowerCase()) ? (
     <ImageSlider
       inputId={contentId}
       datatestid={name}
-      defaultValue={currentValue ? currentValue : Number(defaultValue)}
+      defaultValue={currentValue ? currentValue : defaultValue}
       setValue={setValue}
       min={options[0]?.sliderValueMin ? options[0].sliderValueMin : 0}
       max={options[0]?.sliderValueMax ? options[0].sliderValueMax : 100}
       unit={options[0]?.sliderUnit ? options[0].sliderUnit : "%"}
-      step={1}
+      step={options[0]?.discretizationSteps}
       label={name}
       type="range"
       moreInformation={moreInformation}

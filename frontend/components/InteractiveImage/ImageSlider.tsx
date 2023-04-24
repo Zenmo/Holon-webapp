@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InteractiveInputPopover from "../InteractiveInputs/InteractiveInputPopover";
 import styles from "./ImageSlider.module.css";
 
@@ -40,6 +40,43 @@ export default function ImageSlider({
   selectedLevel,
 }: Props) {
   const [sliderValue, setSliderValue] = useState(defaultValue);
+  const [realValue, setRealValue] = useState(defaultValue);
+  const [sliderTooltipPosition, setSliderTooltipPosition] = useState(defaultValue);
+
+  const slidermin = step ? 0 : min;
+  const slidermax = step ? step - 1 : max;
+  const sliderstep = 1;
+
+  useEffect(() => {
+    //set slider tooltip position based upon defaulvalue, maxvalue, minvalue
+    //if minvalue == 10, maxvalue ==100, default == 55, then the sliderposition should be:
+    // (55-10) / (100 / 10) == (50 percent)
+
+    // because of the the Discretization steps, there are two values:
+    // 1: slidervalue: this is value that is being used to position the slider. This is nessecary because a input type range can't handle fractions such as 1/3
+    // 2: realvalue: this is the actual value, that is being used in the calculattions
+
+    // if steps == 6 , the slider is a slider from 0 - 6.
+    // the value of the slider is being transformed to an actual value, based upon the formula
+
+    // (slidervalue - min) / (max-min) * slidermax
+    // if the slider is value 3, the calculation is
+    // (3-0) / (6-0) * 6 == 3
+
+    setSliderTooltipPosition((defaultValue - min) / (max - min));
+    setSliderValue(((defaultValue - min) / (max - min)) * slidermax);
+  }, []);
+
+  function updateSliderValue(inputId, slidervalue) {
+    const actualValue = Math.floor((slidervalue / slidermax) * (max - min) + min);
+
+    setSliderValue(slidervalue);
+    setRealValue(actualValue);
+    setSliderTooltipPosition(slidervalue / slidermax);
+
+    setValue(inputId, actualValue);
+  }
+
   return (
     <div className="my-4 flex flex-col">
       <div className="flex flex-row mb-2 gap-3 items-center">
@@ -67,15 +104,14 @@ export default function ImageSlider({
             disabled={locked}
             value={sliderValue}
             onChange={e => {
-              setSliderValue(Number(e.target.value));
-              setValue(inputId, Number(e.target.value));
+              updateSliderValue(inputId, Number(e.target.value));
             }}
             className={`h-1 w-3/5 ${locked ? "cursor-not-allowed" : ""} ${
               styles.slider
             } interactImg appearance-none disabled:bg-holon-grey-300`}
-            step={step}
-            min={min}
-            max={max}
+            step={sliderstep}
+            min={slidermin}
+            max={slidermax}
             type={type}
             id={inputId + (selectedLevel ? "holarchy" : "storyline")}
           />
@@ -84,8 +120,8 @@ export default function ImageSlider({
               <div className="relative">
                 <output
                   className="text-white border-white rounded"
-                  style={{ left: "calc((" + sliderValue + " /" + max + ") * 100%)" }}>
-                  {sliderValue}
+                  style={{ left: "calc((" + sliderTooltipPosition + ") * 100%)" }}>
+                  {realValue}
                 </output>
               </div>
             </div>
