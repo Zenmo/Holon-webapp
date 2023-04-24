@@ -168,6 +168,7 @@ class HolonScenarioCleanup(generics.RetrieveAPIView):
                 pprint(f"... deleted scenario {cid}")
         except Exception as e:
             pprint(traceback.format_exc())
+
             response_body = {"error_msg": f"something went wrong: {e}"}
             return Response(
                 response_body,

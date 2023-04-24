@@ -1,7 +1,7 @@
 """
 Write local settings here, or override base settings
 """
-from pipit.settings import initialize_sentry
+from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
 
 WAGTAILADMIN_BASE_URL = "http://localhost:8000"
