@@ -20,7 +20,7 @@ def pprint(msg: str):
     print(f"[QConfig]: {msg}")
 
 
-# I'm very sorry for this... or was it somewhere I could not find it?
+# Hardcoded because not bound to change at any point during this project
 CONFIG_KPIS = {
     "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
     "config": {

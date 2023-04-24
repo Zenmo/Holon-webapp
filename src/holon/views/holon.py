@@ -1,3 +1,4 @@
+import json
 import traceback
 
 from django.apps import apps
@@ -60,14 +61,30 @@ class HolonV2Service(generics.CreateAPIView):
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
                 pprint("Calculating CostTables")
-                cost_benefit_tables = CostTables.from_al_output(cc.outputs["contracts"], scenario)
+                try:
+                    cost_benefit_tables = CostTables.from_al_output(
+                        cc.outputs["contracts"], scenario
+                    )
+                except KeyError:
+                    pprint("contract data is not mapped, trying to find the correct output...")
+                    found = False
+                    for key, alternative_output in cc._outputs_raw.items():
+                        if "contract" in key:
+                            found = True
+                            pprint("...success!")
+                            cost_benefit_tables = CostTables.from_al_output(
+                                json.loads(alternative_output), scenario
+                            )
+                            break
+                    if not found:
+                        raise KeyError
 
                 results = Results(
                     scenario=scenario,
                     request=request,
                     anylogic_outcomes=cc.outputs,
-                    cost_benefit_results=cost_benefit_tables.main_table(),
-                    cost_benefit_overview=cost_benefit_tables.all_detailed_tables(),
+                    cost_benefit_overview=cost_benefit_tables.main_table(),
+                    cost_benefit_detail=cost_benefit_tables.all_detailed_tables(),
                     **etm_outcomes,
                 )
 
