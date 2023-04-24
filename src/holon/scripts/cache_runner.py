@@ -105,7 +105,12 @@ class CacheRunner:
     @staticmethod
     def call_holon_endpoint(holon_input_configuration: tuple[InteractiveElementInput]):
 
-        request_body = ""
+        request_body = str(
+            [
+                f"{interactive_element_input.interactive_element}: {interactive_element_input.value}"
+                for interactive_element_input in holon_input_configuration
+            ]
+        )
         log_print(f"Calling HolonV2Service endpoint with configuration {request_body}")
 
         # TODO call endpoint
