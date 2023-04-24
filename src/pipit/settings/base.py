@@ -255,7 +255,7 @@ OLD_PASSWORD_FIELD_ENABLED = True
 
 
 # Caching
-HOLON_CACHING_TIMEOUT = None  # Set to 0 to disable caching
+HOLON_CACHING_TIMEOUT = None
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",

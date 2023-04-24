@@ -5,6 +5,7 @@ from django.apps import apps
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
+import django_filters.rest_framework
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
@@ -28,6 +29,7 @@ class HolonV2Service(generics.CreateAPIView):
 
     def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
+        use_caching = request.query_params.get("caching", "true").lower() == "true"
 
         scenario = None
         cc = None
@@ -36,14 +38,15 @@ class HolonV2Service(generics.CreateAPIView):
             if serializer.is_valid():
                 data = serializer.validated_data
 
-                key = holon_cache.generate_key(data["scenario"], data["interactive_elements"])
-                value = holon_cache.get(key)
-                if value:
-                    print("HOLON cache hit on: ", key)
-                    return Response(
-                        value,
-                        status=status.HTTP_200_OK,
-                    )
+                if use_caching:
+                    key = holon_cache.generate_key(data["scenario"], data["interactive_elements"])
+                    value = holon_cache.get(key)
+                    if value:
+                        print("HOLON cache hit on: ", key)
+                        return Response(
+                            value,
+                            status=status.HTTP_200_OK,
+                        )
 
                 log_print(f"Cloning scenario {data['scenario'].id}")
                 scenario = rule_mapping.get_scenario_and_apply_rules(
@@ -91,7 +94,9 @@ class HolonV2Service(generics.CreateAPIView):
                 log_print("200 OK")
 
                 result = results.to_dict()
-                holon_cache.set(key, result)
+
+                if use_caching:
+                    holon_cache.set(key, result)
 
                 return Response(
                     result,
