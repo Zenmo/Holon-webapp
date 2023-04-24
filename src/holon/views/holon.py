@@ -39,7 +39,9 @@ class HolonV2Service(generics.CreateAPIView):
                 data = serializer.validated_data
 
                 if use_caching:
-                    key = holon_cache.generate_key(data["scenario"], data["interactive_elements"])
+                    key = holon_cache.generate_key(
+                        data["scenario"], dict(data["interactive_elements"])
+                    )
                     value = holon_cache.get(key)
                     if value:
                         print("HOLON cache hit on: ", key)
