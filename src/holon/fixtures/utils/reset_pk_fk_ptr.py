@@ -3,10 +3,10 @@ import json
 # fp = "../peter-dupliceter-datamodel-fixture.json"
 # fp_out = "../peter-dupliceter-datamodel-fixture_clean_keys.json"
 
-fp = "../jorrit/ref/tvw-POSTSCALEUP.json"
-fp_out = "../jorrit/ref/tvw-POSTCLEANUP.json"
+fp = "../jorrit/ref/tvw-PRESCALEUP.json"
+fp_out = "../jorrit/ref/tvw-CLEANSMALL.json"
 
-BASE_INT = 456000  # change me!
+BASE_INT = 444000  # change me!
 
 relations = set(
     [
@@ -26,6 +26,7 @@ relations = set(
         "pk",
         "related_config",
         "related_interactive_element",
+        "rule",
         "scenario",
         "subgroup",
     ]
