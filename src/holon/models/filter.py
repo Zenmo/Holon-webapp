@@ -13,6 +13,7 @@ from holon.models.util import (
     relation_field_options,
     relation_field_subtype_options,
     is_allowed_relation,
+    all_subclasses,
 )
 
 

@@ -79,9 +79,7 @@ class ETMConnect:
 
     @staticmethod
     def upscaling(config):
-        new_scenario_id = etm_service.scale_copy_and_send(
-            config.etm_scenario_id, config.anylogic_outcomes, config.queries
-        )
+        new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
         return (config.name, etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS)))
 
 
