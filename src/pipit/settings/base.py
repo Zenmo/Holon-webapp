@@ -262,7 +262,7 @@ CACHES = {
         "LOCATION": "cache_table",
     },
     "holon_cache": {
-        "BACKEND": "holon.cache.cache.HolonDatabaseCache",
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
         "LOCATION": "holon_cache",
     },
 }
