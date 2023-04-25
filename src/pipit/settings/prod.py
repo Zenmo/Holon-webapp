@@ -1,10 +1,7 @@
 """
 Write prod settings here, or override base settings
 """
-import sentry_sdk
-from sentry_sdk import configure_scope
-from sentry_sdk.integrations.django import DjangoIntegration
-
+from pipit.settings import initialize_sentry
 from pipit.settings.base import *  # NOQA
 
 
@@ -73,6 +70,11 @@ SESSION_COOKIE_SECURE = True
 
 # Use a secure cookie for the CSRF cookie
 CSRF_COOKIE_SECURE = True
+
+# Sentry
+SENTRY_DSN = get_env("SENTRY_DSN", "")
+SENTRY_ENVIRONMENT = get_env("SENTRY_ENVIRONMENT", "production")
+initialize_sentry(SENTRY_DSN, SENTRY_ENVIRONMENT)
 
 # Log to console to get logging output from docker
 LOGGING = {
