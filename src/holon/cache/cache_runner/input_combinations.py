@@ -15,21 +15,33 @@ from main.pages.challengemode import ChallengeModePage
 from main.blocks.storyline_section import InteractiveInputBlock, StorylineSectionBlock
 from main.pages.base_storyline_challengemode import BaseStorylineChallengeMode
 
+from typing import Type
 
-def get_holon_input_combinations(scenario: Scenario):
+
+def get_holon_input_combinations(
+    scenario: Scenario,
+) -> tuple[Iterator[tuple[InteractiveElementInput]], int]:
     """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for each interactive element for a challange in a scenario"""
     try:
         casus_page = CasusPage.objects.filter(scenario=scenario).first()
 
-        casus_combinations_iterators = get_holon_input_combinations_per_page(
-            casus_page, StorylinePage
-        )
-        challenge_combinations_iterators = get_holon_input_combinations_per_page(
-            casus_page, ChallengeModePage
+        Config.logger.log_print(
+            f"Computing input combinations for scenario {scenario} ({scenario.id})"
         )
 
-        return itertools.chain.from_iterable(
-            challenge_combinations_iterators + casus_combinations_iterators
+        casus_combinations_iterators, n_casus_combinations = get_holon_input_combinations_per_page(
+            casus_page, StorylinePage
+        )
+        (
+            challenge_combinations_iterators,
+            n_challenge_combinations,
+        ) = get_holon_input_combinations_per_page(casus_page, ChallengeModePage)
+
+        return (
+            itertools.chain.from_iterable(
+                challenge_combinations_iterators + casus_combinations_iterators
+            ),
+            n_casus_combinations + n_challenge_combinations,
         )
 
     except CasusPage.DoesNotExist:
@@ -40,19 +52,23 @@ def get_holon_input_combinations(scenario: Scenario):
 
 
 def get_holon_input_combinations_per_page(
-    casus_page: CasusPage, page_type: BaseStorylineChallengeMode
-):
+    casus_page: CasusPage, page_type: Type[BaseStorylineChallengeMode]
+) -> tuple[list[Iterator[tuple[InteractiveElementInput]]], int]:
     """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for a specific type of casuspage"""
+
     interative_input_blocks_per_section = get_interactive_input_blocks_per_section(
         casus_page, page_type
     )
-    iterators = generate_interactive_input_combinations(interative_input_blocks_per_section)
 
-    return iterators
+    iterators, n_combinations = generate_interactive_input_combinations(
+        interative_input_blocks_per_section
+    )
+
+    return iterators, n_combinations
 
 
 def get_interactive_input_blocks_per_section(
-    casus_page: CasusPage, page_type=StorylinePage
+    casus_page: CasusPage, page_type: Type[BaseStorylineChallengeMode] = StorylinePage
 ) -> list[list[InteractiveInputBlock]]:
     """Return a list of sections containing a list of interactive inputs for a on the casuspage"""
 
@@ -72,34 +88,35 @@ def get_interactive_input_blocks_per_section(
             ]
             for section in sections
         ]
-    except StorylinePage.DoesNotExist:
+        return interative_input_blocks_per_section
+
+    except page_type.DoesNotExist:
         Config.logger.log_print(
-            f"No StorylinePage found for for casuspage {casus_page} with id {casus_page.id}"
+            f"No {page_type.__name__} found for for casuspage {casus_page} with id {casus_page.id}"
         )
         return []
-    except ChallengeModePage.DoesNotExist:
-        Config.logger.log_print(
-            f"No ChallengeModePage found for for casuspage {casus_page} with id {casus_page.id}"
-        )
-        return []
+
     except Exception as e:
         Config.logger.log_print(
             f"Something went wrong generating interactive input combinations for scenario  {casus_page} with id {casus_page.id}. {e}"
         )
         return []
 
-    return interative_input_blocks_per_section
-
 
 def generate_interactive_input_combinations(
     sections: list[list[InteractiveInputBlock]],
-) -> list(Iterator[tuple[InteractiveElementInput]]):
-    """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for each interactive element for the given sections"""
+) -> tuple[list[Iterator[tuple[InteractiveElementInput]]], int]:
+    """Return a list of generators which can return all possible combinations of input options for each interactive element for the given sections. Also returns the total number of combinations"""
 
     iterators: list(Iterator[tuple[InteractiveElementInput]]) = []
     target_values: dict[int, InteractiveInputBlock] = {}
 
+    total_combinations = 0
+
     for section in sections:
+
+        section_combinations = 1
+
         interactive_element_input_lists: dict[int, list[InteractiveElementInput]] = {}
 
         # Set target values if from previous sections
@@ -128,15 +145,19 @@ def generate_interactive_input_combinations(
                     for value in interactive_element.get_possible_values()
                 ]
 
+                section_combinations *= len(interactive_element_input_lists[interactive_element.id])
+
             # Update targets
             if interactive_input_block["target_value"]:
                 target_values[interactive_element.id] = interactive_input_block
+
+        total_combinations += section_combinations
 
         # Put all combinations in iterator list
         interactive_element_input_lists = interactive_element_input_lists.values()
         iterators.append(itertools.product(*interactive_element_input_lists))
 
-    return iterators
+    return iterators, total_combinations
 
 
 # def get_holon_input_combinations_old(

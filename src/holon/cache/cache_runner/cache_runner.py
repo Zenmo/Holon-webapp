@@ -36,7 +36,7 @@ def get_scenarios(scenario_ids: list[int]):
 def run_input_combinations(scenario: Scenario):
     """Run all possible combinations of interactive element inputs for a single scenario to force the endpoint to write each possibility to the cache"""
 
-    holon_input_configurations = get_holon_input_combinations(scenario)
+    holon_input_configurations, n_combinations = get_holon_input_combinations(scenario)
 
-    for holon_input_configuration in holon_input_configurations:
-        call_holon_endpoint(scenario.id, holon_input_configuration)
+    for combination_i, holon_input_configuration in enumerate(holon_input_configurations):
+        call_holon_endpoint(scenario.id, holon_input_configuration, combination_i, n_combinations)
