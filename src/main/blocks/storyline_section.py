@@ -6,7 +6,10 @@ from wagtailmodelchooser.blocks import ModelChooserBlock
 
 from holon.models import InteractiveElement
 from holon.models.interactive_element import (
-    ChoiceType, InteractiveElementContinuousValues, InteractiveElementOptions)
+    ChoiceType,
+    InteractiveElementContinuousValues,
+    InteractiveElementOptions,
+)
 from main.blocks.rich_text_block import RichtextBlock
 
 from .background_chooser import BackgroundChooserBlock
