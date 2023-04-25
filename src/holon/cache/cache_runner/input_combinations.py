@@ -9,6 +9,10 @@ from holon.cache.cache_runner.config import Config
 
 from holon.serializers.interactive_element import InteractiveElementInput
 
+from main.pages.casus import CasusPage
+from main.pages.storyline import StorylinePage
+from main.blocks.storyline_section import InteractiveInputBlock, StorylineSectionBlock
+
 
 def get_holon_input_combinations(scenario: Scenario) -> Iterator[tuple[InteractiveElementInput]]:
     """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for each interactive element in a scenario"""
@@ -44,3 +48,24 @@ def get_holon_input_combinations(scenario: Scenario) -> Iterator[tuple[Interacti
     # return a generator for all possible combinations
     # TODO take series into account
     return itertools.product(*interactive_element_input_lists)
+
+
+def get_interactive_input_blocks_per_scenario(
+    scenario: Scenario,
+) -> list[list[InteractiveInputBlock]]:
+    """Return a list of sections containing a list of interactive inputs for a scenario"""
+    casus_page = CasusPage.objects.filter(scenario=scenario).first()
+    storyline_page = StorylinePage.objects.descendant_of(casus_page).first()
+    sections = [
+        block for block in storyline_page.storyline if type(block.block) == StorylineSectionBlock
+    ]
+    interativeInputBlocksPerSection = [
+        [
+            dict(block.value)
+            for block in section.value["content"]
+            if type(block.block) == InteractiveInputBlock
+        ]
+        for section in sections
+    ]
+
+    return interativeInputBlocksPerSection
