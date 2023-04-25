@@ -252,3 +252,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ["localhost:3000", "https://pizzaoven.holontool.nl"]
 
 OLD_PASSWORD_FIELD_ENABLED = True
+
+
+# Disable form length for big interactive element forms
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
