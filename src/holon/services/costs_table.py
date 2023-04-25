@@ -49,9 +49,7 @@ class CostTable:
         """Adds the item to the table"""
         try:
             self._table[self.__name_from(item)][self.__name_to(item)] += item.price
-        except KeyError:
-            self.__add_from_group(item)
-        except TypeError:
+        except:
             self.__add_to_group(item)
 
     def __add_to_group(self, item):
@@ -109,6 +107,7 @@ class CostItem:
         self.from_actor = from_actor
         self.to_actor = to_actor
         self.price = price
+        print(f"CostItem: {self.from_group()} -> {self.to_group()} = {self.price}")
 
     def from_group(self):
         return CostItem.group(self.from_actor)
