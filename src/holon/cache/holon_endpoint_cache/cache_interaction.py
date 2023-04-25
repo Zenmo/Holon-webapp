@@ -10,7 +10,7 @@ def set(key: str, result: dict) -> None:
 
     result = json.dumps(result)
     caches[Config.cache_name].set(key, result, timeout=settings.HOLON_CACHING_TIMEOUT)
-    Config.logger.log_print("Holon cache write: ", key, result)
+    Config.logger.log_print(f"Holon cache write: {key}")
 
 
 def get(key: str) -> dict:
@@ -19,7 +19,7 @@ def get(key: str) -> dict:
     value = caches[Config.cache_name].get(key)
 
     if not value:
-        Config.logger.log_print("HOLON cache miss. key:", key)
+        Config.logger.log_print(f"Holon cache miss. key: {key}")
     else:
         value = json.loads(value)
 
