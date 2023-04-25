@@ -107,7 +107,6 @@ class CostItem:
         self.from_actor = from_actor
         self.to_actor = to_actor
         self.price = price
-        print(f"CostItem: {self.from_group()} -> {self.to_group()} = {self.price}")
 
     def from_group(self):
         return CostItem.group(self.from_actor)
