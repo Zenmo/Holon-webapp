@@ -43,6 +43,7 @@ class CostTable:
         self._table = {}
         for item in cost_items:
             self.__add_to_table(item)
+            self.__add_to_table(CostItem.reversed(item))
         self.__fill_out_table()
 
     def __add_to_table(self, item):
@@ -65,7 +66,7 @@ class CostTable:
         """
         self._table[self.__name_from(item)] = {
             self.__name_to(item): item.price,
-            self.__name_from(item): None,
+            self.__name_from(item): 0.0,
         }
 
     def __fill_out_table(self):
@@ -74,6 +75,9 @@ class CostTable:
         basic = {key: 0.0 for key in all_groups}
         for group in all_groups:
             self._table[group] = basic | self._table.get(group, {})
+            self._table[group]["Netto kosten"] = sum(
+                (value for value in self._table[group].values() if value is not None)
+            )
 
     def __name_from(self, item):
         return (
@@ -176,4 +180,13 @@ class CostItem:
             actors.find(obj["contractScope"]),
             actors.find(obj["contractHolder"]),
             CostItem.price_for(obj),
+        )
+
+    @classmethod
+    def reversed(cls, obj: "CostItem"):
+        """Takes a CostItem returns a new CostItem with the from and to actors switched and the price negated"""
+        return cls(
+            to_actor=obj.from_actor,
+            from_actor=obj.to_actor,
+            price=-obj.price,
         )
