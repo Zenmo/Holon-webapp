@@ -24,32 +24,37 @@ def call_holon_endpoint(
     }
     printable_request_body = request_body
     Config.logger.log_print(
-        f"Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i}/{n_combinations})"
+        f"Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i+1}/{n_combinations})"
     )
 
-    # Create request to holon endpoint
-    # request = HttpRequest()
-    # request.data = request_body
-    # request.query_params = {}
-    # result = HolonV2Service().post(request)
+    try:
+        # Create request to holon endpoint
+        request = HttpRequest()
+        request.data = request_body
+        request.query_params = {}
+        result = HolonV2Service().post(request)
 
-    # if result.status_code != 200:
-    #     print(result, result.__dict__)
-    #     Config.logger.log_print(
-    #         f"Calling HolonV2Service endpoint failed with response {request.data}"
-    #     )
+    except Exception as e:
+        if result.status_code != 200:
+            print(result, result.__dict__)
+            Config.logger.log_print(
+                f"Calling HolonV2Service endpoint failed with response {request.data}:\nError: {e}"
+            )
+    if result.status_code != 200:
+        print(result, result.__dict__)
+        Config.logger.log_print(
+            f"Calling HolonV2Service endpoint failed with response {request.data}"
+        )
 
 
 def get_printable_request_body(request_body: dict[str, Any]) -> str:
     """Make request body smol"""
 
-    try:
-        for i, item in enumerate(request_body["interactive_elements"]):
-            key = item["interactive_element"]
-            value = item["value"]
-            request_body["interactive_elements"][i] = {key: value}
+    smol_request_body = request_body.copy()
 
-    except Exception as e:
-        print(f"request body smollifying went wrong whoopsie {e}")
+    interactive_elements = [
+        {item["interactive_element"]: item["value"]}
+        for item in smol_request_body["interactive_elements"]
+    ]
 
-    return str(request_body)
+    return str({"scenario": request_body["scenario"], "interactive_elements": interactive_elements})
