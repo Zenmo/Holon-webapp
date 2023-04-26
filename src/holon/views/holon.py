@@ -18,6 +18,8 @@ from holon.services.data import Results
 from holon.cache import holon_endpoint_cache
 from holon.utils.logging import HolonLogger
 
+from etm_service.etm_session.session import ETMConnectionError
+
 
 class HolonV2Service(generics.CreateAPIView):
     logger = HolonLogger("holon-endpoint")
@@ -119,7 +121,7 @@ class HolonV2Service(generics.CreateAPIView):
 
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
+        except (Exception, ETMConnectionError) as e:
             HolonV2Service.logger.log_print(traceback.format_exc())
 
             response_body = {"error_msg": f"something went wrong: {e}"}
@@ -132,6 +134,7 @@ class HolonV2Service(generics.CreateAPIView):
                 response_body,
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
         finally:
             # always delete the scenario!
             try:
