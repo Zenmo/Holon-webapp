@@ -13,6 +13,6 @@ def generate_key(scenario: Scenario, interactive_inputs, prefix=""):
     etm_hash = pkg_resources.get_distribution("etm_service").version
     # anylogic_hash = pkg_resources.get_distribution("anylogiccloudclient").version # TODO WERKT NIET MET ANYLOGIC WANT ANYLOGIC (altijd 8.5.0)
 
-    hashed_key = f"{prefix}{cms_configuration_hash}_{input_hash}_{etm_hash}"#_{anylogic_hash}"
+    hashed_key = f"{prefix}{cms_configuration_hash}_{input_hash}_{etm_hash}"  # _{anylogic_hash}"
 
     return hashed_key

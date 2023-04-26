@@ -33,6 +33,7 @@ def clear_scenario(scenario_id: int):
 
     caches[Config.cache_name].clear_scenario(scenario_id)
 
+
 def clear_all():
     """Remove all records in the holon cache"""
 
