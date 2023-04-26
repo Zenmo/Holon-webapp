@@ -113,7 +113,7 @@ class GenericRuleActionAdd(RuleAction):
 
         if reset_models_before_add:
             # parse value
-            n = int(value)
+            n = int(float(value))
             if n < 0:
                 raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
@@ -245,7 +245,7 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
         # parse value
-        n = int(value)
+        n = int(float(value))
         if n < 0:
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 

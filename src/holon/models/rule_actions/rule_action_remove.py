@@ -43,10 +43,10 @@ class RuleActionRemove(RuleAction):
             remove_n = len(filtered_queryset)
 
         elif self.remove_mode == RemoveMode.REMOVE_N.value:
-            remove_n = int(value)
+            remove_n = int(float(value))
 
         elif self.remove_mode == RemoveMode.KEEP_N.value:
-            remove_n = len(filtered_queryset) - int(value)
+            remove_n = len(filtered_queryset) - int(float(value))
 
         else:
             raise NotImplementedError(

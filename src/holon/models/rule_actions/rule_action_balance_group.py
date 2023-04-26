@@ -72,7 +72,7 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         is reached, while the total number of models stays the same.
         """
 
-        target_count = int(value)
+        target_count = int(float(value))
         template_models_in_order = self.get_balance_models_ordered()
         model_types_in_order = [model.__class__ for model in template_models_in_order]
         model_type_names_in_order = [model_type.__name__ for model_type in model_types_in_order]
