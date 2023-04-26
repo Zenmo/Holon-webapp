@@ -38,5 +38,7 @@ def run_input_combinations(scenario: Scenario):
 
     holon_input_configurations, n_combinations = get_holon_input_combinations(scenario)
 
+    Config.logger.log_print(f"Computed {n_combinations} unique input combinations for scenario {scenario.id}")
+
     for combination_i, holon_input_configuration in enumerate(holon_input_configurations):
         call_holon_endpoint(scenario.id, holon_input_configuration, combination_i, n_combinations)

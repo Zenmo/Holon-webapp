@@ -205,7 +205,7 @@ class Scenario(ClusterableModel):
                 for interactive_element in self.interactiveelement_set.all()
             ]
         )
-        print("Interactive elements configuration hash:", interactive_element_hashes)
+        # print("Interactive elements configuration hash:", interactive_element_hashes)
         cms_configuration_hash = sha512(interactive_element_hashes.encode("utf-8")).hexdigest()
 
         return f"{self.id}_{cms_configuration_hash}"

@@ -32,3 +32,10 @@ def clear_scenario(scenario_id: int):
     Config.logger.log_print(f"Deleting cache records for scenario with id {scenario_id}")
 
     caches[Config.cache_name].clear_scenario(scenario_id)
+
+def clear_all():
+    """Remove all records in the holon cache"""
+
+    Config.logger.log_print(f"Deleting all cache records")
+
+    caches[Config.cache_name].clear_all()

@@ -50,6 +50,14 @@ class HolonDatabaseCache(DatabaseCache):
         with connections[db].cursor() as cursor:
             cursor.execute(f"delete FROM {table} WHERE cache_key LIKE ':{version}:{scenario_id}_%'")
 
+    def clear_all(self) -> None:
+        """Clear all cached records beloning to a specific scenario"""
+        db = router.db_for_read(self.cache_model_class)
+        table = connections[db].ops.quote_name(self._table)
+
+        with connections[db].cursor() as cursor:
+            cursor.execute(f"delete FROM {table}")
+
     def __get_key_without_version(self, key):
         """Remove the version prependix from standard django database caching"""
 

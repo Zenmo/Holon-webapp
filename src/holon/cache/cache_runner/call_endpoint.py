@@ -1,3 +1,4 @@
+from typing import Any
 from holon.cache.cache_runner.config import Config
 from holon.serializers.interactive_element import InteractiveElementInput
 from holon.views import HolonV2Service
@@ -21,7 +22,8 @@ def call_holon_endpoint(
             for interactive_element_input in holon_input_configuration
         ],
     }
-    Config.logger.log_print(f"Calling HolonV2Service endpoint with configuration {request_body}")
+    printable_request_body = request_body
+    Config.logger.log_print(f"Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i}/{n_combinations})")
 
     # Create request to holon endpoint
     # request = HttpRequest()
@@ -29,10 +31,22 @@ def call_holon_endpoint(
     # request.query_params = {}
     # result = HolonV2Service().post(request)
 
-    if True or result.status_code == 200:
-        Config.logger.log_print(f"Endpoint finished succesfully ({combination_i}/{n_combinations})")
-    else:
-        print(result, result.__dict__)
-        Config.logger.log_print(
-            f"Calling HolonV2Service endpoint failed with response {request.data}"
-        )
+    # if result.status_code != 200:
+    #     print(result, result.__dict__)
+    #     Config.logger.log_print(
+    #         f"Calling HolonV2Service endpoint failed with response {request.data}"
+    #     )
+
+def get_printable_request_body(request_body: dict[str, Any]) -> str:
+    """Make request body smol"""
+
+    try:
+        for i, item in enumerate(request_body['interactive_elements']):
+            key = item["interactive_element"]
+            value = item["value"]
+            request_body['interactive_elements'][i] = {key: value}
+
+    except Exception as e:
+        print(f"request body smollifying went wrong whoopsie {e}")
+
+    return str(request_body)

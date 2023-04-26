@@ -35,13 +35,13 @@ class HolonV2Service(generics.CreateAPIView):
                 data = serializer.validated_data
 
                 if use_caching:
-                    key = holon_endpoint_cache.generate_key(
-                        data["scenario"], dict(data["interactive_elements"])
+                    cache_key = holon_endpoint_cache.generate_key(
+                        data["scenario"], data["interactive_elements"]
                     )
-                    value = holon_endpoint_cache.get(key)
+                    value = holon_endpoint_cache.get(cache_key)
 
                     if value:
-                        print("HOLON cache hit on: ", key)
+                        HolonV2Service.logger.log_print(f"HOLON cache hit on: {cache_key}")
                         return Response(
                             value,
                             status=status.HTTP_200_OK,
@@ -85,8 +85,8 @@ class HolonV2Service(generics.CreateAPIView):
                         "Contract data is not mapped, trying to find the correct output..."
                     )
                     found = False
-                    for key, alternative_output in cc._outputs_raw.items():
-                        if "contract" in key:
+                    for cc_key, alternative_output in cc._outputs_raw.items():
+                        if "contract" in cc_key:
                             found = True
                             HolonV2Service.logger.log_print("Contract found")
                             cost_benefit_tables = CostTables.from_al_output(
@@ -110,7 +110,7 @@ class HolonV2Service(generics.CreateAPIView):
                 result = results.to_dict()
 
                 if use_caching:
-                    holon_endpoint_cache.set(key, result)
+                    holon_endpoint_cache.set(cache_key, result)
 
                 return Response(
                     result,
