@@ -5,12 +5,10 @@ from holon.views import HolonV2Service
 from django.http import HttpRequest
 
 
-def call_holon_endpoint(
-    scenario_id: int,
-    holon_input_configuration: tuple[InteractiveElementInput],
-    combination_i: int,
-    n_combinations: int,
-):
+def call_holon_endpoint(data: tuple[int, tuple[InteractiveElementInput], int, int]):
+
+    scenario_id, holon_input_configuration, combination_i, n_combinations = data
+    # def call_holon_endpoint(scenario_id, holon_input_configuration, combination_i, n_combinations):
 
     request_body = {
         "scenario": scenario_id,
@@ -22,7 +20,7 @@ def call_holon_endpoint(
             for interactive_element_input in holon_input_configuration
         ],
     }
-    printable_request_body = request_body
+
     Config.logger.log_print(
         f"Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i+1}/{n_combinations})"
     )

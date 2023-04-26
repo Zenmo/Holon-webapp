@@ -1,8 +1,12 @@
+from typing import Iterator
 from holon.cache.cache_runner import get_holon_input_combinations, call_holon_endpoint
 from holon.cache.cache_runner.config import Config
 from holon.cache import holon_endpoint_cache
 
 from holon.models.scenario import Scenario
+from concurrent.futures import ThreadPoolExecutor
+
+from holon.serializers.interactive_element import InteractiveElementInput
 
 
 def update_cache(scenario_ids: list[int] = [], delete_old_records: bool = True):
@@ -42,5 +46,32 @@ def run_input_combinations(scenario: Scenario):
         f"Computed {n_combinations} unique input combinations for scenario {scenario.id}"
     )
 
-    for combination_i, holon_input_configuration in enumerate(holon_input_configurations):
-        call_holon_endpoint(scenario.id, holon_input_configuration, combination_i, n_combinations)
+
+    Config.logger.log_print(f"Starting ThreadPoolExecutor with {14} cores")
+    with ThreadPoolExecutor(max_workers=14) as executor:
+        executor.map(
+            call_holon_endpoint,
+            get_endpoint_call_input_generator(
+                scenario.id, holon_input_configurations, n_combinations
+            ),
+        )
+
+    # for combination_i, holon_input_configuration in enumerate(holon_input_configurations):
+    #     try:
+    #         if combination_i > 0:
+    #             return
+    #         call_holon_endpoint(
+    #             scenario.id, holon_input_configuration, combination_i, n_combinations
+    #         )
+    #     except:
+    #         print("error")
+
+
+def get_endpoint_call_input_generator(
+    scenario_id: int, holon_input_configurations, n_combinations
+) -> Iterator[tuple[int, tuple[InteractiveElementInput], int, int]]:
+
+    i = -1
+    for holon_input_configuration in holon_input_configurations:
+        i += 1
+        yield (scenario_id, holon_input_configuration, i, n_combinations)
