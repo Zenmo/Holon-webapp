@@ -62,3 +62,4 @@ htmlcov
 .mypy_cache
 .devcontainer/.env
 docker-compose.prod.local.yml
+frontend/.env

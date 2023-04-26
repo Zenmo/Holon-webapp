@@ -8,7 +8,6 @@ from holon.models.gridnode import GridNode
 
 
 class EnergyAsset(PolymorphicModel):
-
     category = "GENERIC"
 
     gridconnection = models.ForeignKey(
@@ -27,6 +26,12 @@ class EnergyAsset(PolymorphicModel):
     is_rule_action_template = models.BooleanField(
         default=False,
         help_text=_("Set this to True when this model can be used as a template for rule actions"),
+    )
+
+    original_id = models.BigIntegerField(
+        null=True,
+        blank=True,
+        help_text=_("This field is used as a reference for cloned models. Don't set it manually"),
     )
 
     def clean(self):

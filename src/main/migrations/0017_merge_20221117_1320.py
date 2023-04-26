@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0014_statictermpage"),
         ("main", "0016_remove_storylineoverviewpage_body_and_more"),

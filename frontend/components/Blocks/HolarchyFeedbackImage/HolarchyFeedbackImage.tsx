@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { StaticImage } from "@/components/ImageSelector/types";
 import { Content } from "@/components/Blocks/SectionBlock/types";
+import { StaticImage } from "@/components/ImageSelector/types";
+import React, { useEffect, useState } from "react";
 
 export type HolarchyFeedbackImageProps = {
   id: string;
@@ -44,7 +44,7 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
           for (const conditionItem of feedbackimage.value.conditions) {
             //inputvalue is the vaule of the assessed validator
             const inputvalue = content?.find(
-              content => content.value.id == parseFloat(conditionItem.value.parameter)
+              content => content.value?.id == parseFloat(conditionItem.value.parameter)
             )?.currentValue;
 
             const conditionValue = parseFloat(conditionItem.value.value);
@@ -60,12 +60,12 @@ export default function HolarchyFeedbackImage({ content, holarchyfeedbackimages 
               return false;
             } else if (
               conditionItem.value.operator == "equal" &&
-              inputvalue != conditionItem.value.value
+              inputvalue?.toString().toLowerCase() != conditionItem.value.value.toLowerCase()
             ) {
               return false;
             } else if (
               conditionItem.value.operator == "notequal" &&
-              inputvalue == conditionItem.value.value
+              inputvalue?.toString().toLowerCase() == conditionItem.value.value.toLowerCase()
             ) {
               return false;
             } else if (conditionItem.value.operator == "lower" && inputvalue >= conditionValue) {

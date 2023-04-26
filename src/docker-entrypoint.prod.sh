@@ -14,10 +14,10 @@ wait_for_db () {
 setup_django () {
     echo Running migrations
     python manage.py migrate --noinput
-    
+
     echo Create dummy user if none exists
     python manage.py create_superuser_if_none_exists --user=admin --password=admin
-    
+
     echo Collecting static-files
     python manage.py collectstatic --noinput
 
@@ -33,4 +33,5 @@ wait_for_db
 setup_django
 
 echo Starting using gunicorn
-exec gunicorn pipit.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --graceful-timeout 60 
+## Long timeout because response from AnyLogic may take some time
+exec gunicorn pipit.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 600 --graceful-timeout 60

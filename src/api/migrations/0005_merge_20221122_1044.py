@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("api", "0004_interactiveinput_interactiveinputoptions_and_more"),
         ("api", "0004_scenario_config_file_scenario_etm_scenario_id_and_more"),

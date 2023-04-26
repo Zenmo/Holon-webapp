@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
 import InteractiveImage from "./InteractiveImage";
@@ -23,7 +23,7 @@ describe("Interactive Image", () => {
   });
 
   it("windforce is set to 3", () => {
-    expect(screen.getByTestId<HTMLInputElement>("windforceSlider").value).toBe("3");
+    expect(screen.getByTestId<HTMLInputElement>("windforceSlider").value).toBe("1");
   });
 });
 
@@ -62,7 +62,7 @@ describe("slider changes image", () => {
 
   it("windmills will speed up when slider is moved right", async () => {
     await act(async () => {
-      fireEvent.change(screen.getByTestId("windforceSlider"), { target: { value: 12 } });
+      fireEvent.change(screen.getByTestId("windforceSlider"), { target: { value: 4 } });
     });
     expect(document.getElementById("dataDiv")).toHaveAttribute("data-windforce", "12");
   });
@@ -71,6 +71,6 @@ describe("slider changes image", () => {
     await act(async () => {
       fireEvent.change(screen.getByTestId("windforceSlider"), { target: { value: 3 } });
     });
-    expect(document.getElementById("dataDiv")).toHaveAttribute("data-windforce", "3");
+    expect(document.getElementById("dataDiv")).toHaveAttribute("data-windforce", "9");
   });
 });

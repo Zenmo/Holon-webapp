@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import ImageSlider from "./ImageSlider";
 import ImgFlatSolar from "./ImageElements/ImgFlatSolar";
+import ImageSlider from "./ImageSlider";
 
 export default function InteractiveImage() {
   const [solarpanels, setSolarpanels] = useState(0);
@@ -23,7 +23,6 @@ export default function InteractiveImage() {
             setValue={(id, value) => setSolarpanels(value)}
             min={0}
             max={6}
-            step={1}
             label="Aantal zonnepanelen"
             type="range"></ImageSlider>
           <p className="mt-8 text-base">
@@ -36,7 +35,6 @@ export default function InteractiveImage() {
             setValue={(id, value) => setWindmills(value)}
             min={0}
             max={3}
-            step={1}
             label="Aantal windmolens"
             type="range"></ImageSlider>
           <p className="mt-8 text-base">Bepaal hier hoe hard de wind waait. </p>
@@ -47,7 +45,7 @@ export default function InteractiveImage() {
             setValue={(id, value) => setWindForce(value)}
             min={0}
             max={12}
-            step={3}
+            step={5} // 0 3 6 9 12
             label="Windkracht"
             type="range"></ImageSlider>
         </div>

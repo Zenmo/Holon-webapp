@@ -4,38 +4,38 @@ services:
     image: nginx:alpine
     working_dir: /app
     ports:
-      - "8000:80"
-      - "8082:443"
+      - "80:80"
+      - "443:443"
     depends_on:
       - python
     volumes:
-      - "./docker/files/static/502.html:/app/502.html:cached"
-      - "./docker/files/config/nginx.conf.template:/etc/nginx/templates/default.conf.template:cached"
+      - "./docker/files/static/502.html:/app/502.html"
+      - "./docker/files/config/nginx.pizza.conf:/etc/nginx/templates/default.conf.template"
       - "./docker/files/certs:/etc/nginx/certs"
-      - "./src/media:/app/media"
-      - "./src/static:/app/static"
     environment:
       - PYTHON_HOST=http://python
       - NEXT_HOST=http://next
-      - MEDIA_REMOTE_DOMAIN=holontool.nl
+      - SERVER_NAME=pizzaoven.holontool.nl
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   next:
-    image: holon_nextjs
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/usr/src/app
-      - /usr/src/frontend/node_modules
-      - /usr/src/frontend/.next
     depends_on:
       - web
+    environment:
+      - WAGTAIL_API_URL=http://python:8000/wt/
+      - NEXT_PUBLIC_WAGTAIL_API_URL=https://pizzaoven.holontool.nl/wt/api/nextjs
+      - NEXT_PUBLIC_BASE_URL=https://pizzaoven.holontool.nl/wt
 
   python:
-    image: holon_wagtail_python
-    build: ./src
+    build:
+      context: ./src
+      dockerfile: Dockerfile.prod
     volumes:
       - "./src:/app"
     depends_on:
@@ -43,13 +43,17 @@ services:
     env_file: ./docker/config/python.env
 
   db:
-    image: postgis/postgis:12-2.5-alpine
+    image: prod_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    build:
+      context: ./db
     ports:
       - "8083:5432"
-    volumes:
-      - "./docker/files/db-dumps/:/docker-entrypoint-initdb.d/"
-      - "./docker/files/shared:/shared:rw"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+
+volumes:
+  postgres-data:

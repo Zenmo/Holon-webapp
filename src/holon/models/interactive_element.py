@@ -7,6 +7,8 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.snippets.models import register_snippet
 from wagtailmodelchooser import register_model_chooser, Chooser, register_filter
 from django.core.validators import MinValueValidator
+from main.snippets.interactive_element_unit import InteractiveElementUnit
+from django.db import models
 
 from wagtail.admin.panels import PageChooserPanel
 from holon.models.scenario import Scenario
@@ -147,6 +149,9 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
         InlinePanel("rules", heading="Rules", label="Rules"),
     ]
 
+    class Meta:
+        ordering = ["sort_order"]
+
     def __str__(self):
         if self.label:
             return self.label
@@ -178,10 +183,27 @@ class InteractiveElementContinuousValues(ClusterableModel):
         default=100,
         help_text=_("Maximum amount of the continuous input"),
     )
+    discretization_steps = models.IntegerField(
+        null=True,
+        blank=True,
+        default=5,
+        help_text=_(
+            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
+        ),
+    )
+    slider_unit = models.ForeignKey(
+        InteractiveElementUnit,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
 
     panels = [
         FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
+        FieldPanel("discretization_steps"),
         InlinePanel("rules", heading="Rules", label="Rules"),
+        FieldPanel("slider_unit"),
     ]

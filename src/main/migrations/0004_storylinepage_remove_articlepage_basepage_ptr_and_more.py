@@ -11,7 +11,6 @@ import wagtail_headless_preview.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0003_wikipage"),
     ]
