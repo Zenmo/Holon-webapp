@@ -5,6 +5,7 @@ from django.apps import apps
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
+from sentry_sdk import capture_exception
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
@@ -98,6 +99,7 @@ class HolonV2Service(generics.CreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             pprint(traceback.format_exc())
+            capture_exception(e)
 
             response_body = {"error_msg": f"something went wrong: {e}"}
             if scenario:
@@ -168,6 +170,7 @@ class HolonScenarioCleanup(generics.RetrieveAPIView):
                 pprint(f"... deleted scenario {cid}")
         except Exception as e:
             pprint(traceback.format_exc())
+            capture_exception(e)
 
             response_body = {"error_msg": f"something went wrong: {e}"}
             return Response(

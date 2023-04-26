@@ -1,5 +1,6 @@
 import json
 
+import sentry_sdk
 from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
 from anylogiccloudclient.client.cloud_client import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
@@ -63,6 +64,7 @@ class CloudClient:
 
         return ScenarioSerializer(scenario).data
 
+    @sentry_sdk.trace
     def run(self) -> None:
         """run the scenario, outputs are set to the .outputs attribute"""
 
