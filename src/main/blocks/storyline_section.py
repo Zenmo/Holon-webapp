@@ -64,7 +64,7 @@ class InteractiveInputBlock(blocks.StructBlock):
     )
     target_value = blocks.CharBlock(
         required=False,
-        help_text="Type a target value if this value needs to be added to the current and all underlying sections. Type the value exactly as it's shown on the website page. Seperate multiple values by a comma (no whitespaces)",
+        help_text="Type a target value if this value needs to be added to all underlying sections. Type the value exactly as it's shown on the website page. Seperate multiple values by a comma (no whitespaces)",
     )
 
     def get_api_representation(self, value, context=None):
