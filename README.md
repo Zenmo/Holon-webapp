@@ -1,6 +1,6 @@
 # Holon webapp
 
-This repo contains the webapp part of the HOLON project. This includes the NextJS frontend and the Django/Wagtail backend. Other repos are:
+This repo contains the webapp part of the HOLON project. This includes the NextJS frontend and the Django/Wagtail backend. This repo and other repos are licensed under the [MIT license](LICENSE.md). Other repos are:
 
 1. [AnyLogic](https://github.com/ZEnMo/HOLON)
 2. [ETM service](https://github.com/ZEnMo/HOLON-ETM)
