@@ -3,7 +3,7 @@ Write stage settings here, or override base settings
 """
 from sentry_sdk import configure_scope
 
-from pipit.settings import initialize_sentry
+from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
 
 

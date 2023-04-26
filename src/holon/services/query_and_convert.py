@@ -2,6 +2,7 @@ from copy import deepcopy as copy
 from typing import List
 
 import etm_service
+import sentry_sdk
 
 from holon.models import DatamodelQueryRule, Scenario
 from holon.models.config import (
@@ -58,6 +59,7 @@ CONFIG_KPIS = {
 
 class ETMConnect:
     @staticmethod
+    @sentry_sdk.trace
     def connect_from_scenario(original_scenario, scenario, anylogic_outcomes) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
         for config in ETMConnect.query_configs(original_scenario, scenario, anylogic_outcomes):
@@ -74,13 +76,37 @@ class ETMConnect:
         )
 
     @staticmethod
+    @sentry_sdk.trace
     def costs(config):
-        return sum(etm_service.retrieve_results(config.etm_scenario_id, config.queries).values())
+        cost_components = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
+
+        span = sentry_sdk.Hub.current.scope.span
+        if span is not None:
+            for key, value in config.queries.items():
+                span.set_data("etm_query_" + key, value)
+
+            for key, value in cost_components.items():
+                span.set_data("etm_output_cost_" + key, value)
+
+        return sum(cost_components.values())
 
     @staticmethod
+    @sentry_sdk.trace
     def upscaling(config):
         new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
-        return (config.name, etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS)))
+
+        kpis = etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS))
+
+        span = sentry_sdk.Hub.current.scope.span
+        if span is not None:
+            span.set_data("etm_new_scenario_id", new_scenario_id)
+            for key, value in config.queries.items():
+                span.set_data("etm_query_" + key, value)
+
+            for key, value in kpis.items():
+                span.set_data("etm_output_kpi_" + key, value)
+
+        return config.name, kpis
 
 
 class QConfig:

@@ -31,6 +31,7 @@ services:
       - WAGTAIL_API_URL=http://python:8000/wt/
       - NEXT_PUBLIC_WAGTAIL_API_URL=https://pizzaoven.holontool.nl/wt/api/nextjs
       - NEXT_PUBLIC_BASE_URL=https://pizzaoven.holontool.nl/wt
+      - RETURN_SCENARIO=True
 
   python:
     build:

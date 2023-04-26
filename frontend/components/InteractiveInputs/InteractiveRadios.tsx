@@ -58,7 +58,7 @@ function InteractiveRadios({
               }
               className="flex flex-row mb-2 gap-4 items-center">
               <input
-                defaultChecked={defaultCheckedValue.includes(inputItem.id)}
+                defaultChecked={defaultCheckedValue.includes(inputItem.option)}
                 type={inputType}
                 name={name + contentId}
                 id={contentId + inputItem.id + (selectedLevel ? "holarchy" : "storyline") + "input"}
