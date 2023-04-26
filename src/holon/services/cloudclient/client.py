@@ -100,7 +100,6 @@ class CloudClient:
         }
 
 
-
 class PatchedAnyLogicCloudClient(ALCloudClient):
     """Patched version of the AnyLogic Cloud Client.
 
