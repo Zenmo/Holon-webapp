@@ -94,7 +94,7 @@ class HolonV2Service(generics.CreateAPIView):
                             )
                             break
                     if not found:
-                        raise KeyError
+                        raise KeyError("No contract found in cc keys")
 
                 results = Results(
                     scenario=scenario,
