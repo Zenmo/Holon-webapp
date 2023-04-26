@@ -9,7 +9,7 @@ from holon.models.config import (
     DatamodelConversion,
     ETMConversion,
     ETMQuery,
-    FloatKeyValuePair,
+    GenericETMQuery,
     KeyValuePairCollection,
     QueryAndConvertConfig,
     StaticConversion,
@@ -20,7 +20,7 @@ def pprint(msg: str):
     print(f"[QConfig]: {msg}")
 
 
-# I'm very sorry for this... or was it somewhere I could not find it?
+# Hardcoded because not bound to change at any point during this project
 CONFIG_KPIS = {
     "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
     "config": {
@@ -127,6 +127,10 @@ class QConfig:
             "config": {},
         }
         for q in self.config_db.etm_query.all():
+            self._queries["config"].update(
+                Query(query=q, config=self, copied_scenario=self.copied_scenario).to_dict()
+            )
+        for q in self.config_db.generic_etm_query.all():
             self._queries["config"].update(
                 Query(query=q, config=self, copied_scenario=self.copied_scenario).to_dict()
             )

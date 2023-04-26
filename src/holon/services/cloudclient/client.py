@@ -94,6 +94,10 @@ class CloudClient:
             co.internal_key: json.loads(anylogic_outputs.value(co.anylogic_key))
             for co in self.config.anylogic_cloud_output.all()
         }
+        # store raw results
+        self._outputs_raw = {
+            name: anylogic_outputs.value(name) for name in anylogic_outputs.names()
+        }
 
 
 class PatchedAnyLogicCloudClient(ALCloudClient):
