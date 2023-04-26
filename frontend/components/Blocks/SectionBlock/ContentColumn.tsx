@@ -59,7 +59,7 @@ export default function ContentColumn({
           if (defaultValue) {
             return content.value.options.find(
               option => option.option === defaultValue || option.label === defaultValue
-            )?.id;
+            )?.option;
           } else if (content.value.visible) {
             const option = content.value.options.find(option => option.default);
             return option ? option.option : content.value.options[0].option;
@@ -67,7 +67,7 @@ export default function ContentColumn({
             if (targetValue) {
               return content.value.options.find(
                 option => option.option === targetValue || option.label === targetValue
-              )?.id;
+              )?.option;
             } else {
               return null;
             }
