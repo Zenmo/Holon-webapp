@@ -5,6 +5,7 @@ import numpy as np
 
 from holon.models import Scenario
 from holon.serializers import ScenarioSerializer
+from pipit.settings import get_env_bool
 
 
 class Results:
@@ -59,12 +60,8 @@ class Results:
         return result
 
     def __include_scenario(self):
-        """Only include modified scenario if request is done locally or on acceptatie"""
-        try:
-            uri = self.request.build_absolute_uri()
-            return "localhost" in uri or "acceptatie" in uri or "pizzaoven" in uri
-        except:
-            return True
+        """Only include modified scenario if env variable is set"""
+        return get_env_bool("RETURN_SCENARIO", False)
 
 
 def calculate_holon_kpis(anylogic_outcomes: dict) -> dict:
