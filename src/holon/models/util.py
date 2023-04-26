@@ -1,14 +1,11 @@
 import json
 from pathlib import Path
-from typing import Union
-from django.db import models, transaction
+from django.db import models
 from django.db.models import Model
 from django.db import models
-from django.db.models.query import QuerySet
 from django.db.migrations.operations.models import ModelOptionOperation
 from polymorphic.managers import PolymorphicQuerySet
-from polymorphic import utils as polymorphic_utils
-import copy
+from django.apps import apps
 
 base_path = Path(__file__).parent.parent / "services" / "jsons"
 base_path.mkdir(exist_ok=True, parents=True)
@@ -138,3 +135,42 @@ def is_exclude_field(field):
         return True
     else:
         return False
+
+
+def get_relation_model(
+    rule: "ScenarioRule", relation_field: str, relation_field_subtype: str
+) -> models.Model:
+    """Helper function to get model class of selected relation"""
+    model_type = rule.model_subtype if rule.model_subtype else rule.model_type
+    model = apps.get_model("holon", model_type)
+
+    relation_model_type = (
+        relation_field_subtype
+        if relation_field_subtype
+        else model._meta.get_field(relation_field).related_model.__name__
+    )
+
+    return apps.get_model("holon", relation_model_type)
+
+
+def relation_field_options(rule: "ScenarioRule") -> list[str]:
+    model_type = rule.model_type if rule.model_subtype is None else rule.model_subtype
+    model = apps.get_model("holon", model_type)
+
+    return [
+        field.name
+        for field in model()._meta.get_fields()
+        if field.is_relation and not is_exclude_field(field)
+    ]
+
+
+def relation_field_subtype_options(rule: "ScenarioRule", relation_field: str) -> list[str]:
+    model = apps.get_model("holon", rule.model_type)
+    related_model = model()._meta.get_field(relation_field).related_model
+
+    return [subclass.__name__ for subclass in all_subclasses(related_model)]
+
+
+def is_allowed_relation(field):
+    # group and subgroup of Actor have stable id's, so they can be used for filtering
+    return field.name == "group" or field.name == "subgroup"

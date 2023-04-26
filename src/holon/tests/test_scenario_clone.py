@@ -15,7 +15,7 @@ class MyTest(TestCase):
         """Get all underlying models of a scenario and return as a tuple"""
 
         actors = list(scenario.actor_set.all())
-        contracts = list(Contract.objects.filter(actor__payload_id=scenario.id))
+        contracts = list(Contract.objects.filter(actor__payload_id=scenario.id).order_by("id"))
         gridnodes = list(scenario.gridnode_set.all())
         gridconnections = list(scenario.gridconnection_set.all())
         assets = list(scenario.assets.all())
@@ -116,3 +116,18 @@ class MyTest(TestCase):
         self.__assert_not_equal_model_tuples(cloned_scenario_models, all_models)
 
         self.__assert_equal_model_tuples_and_different_pks(scenario_models, cloned_scenario_models)
+
+    def test_scenario_clone_orginal_ids(self):
+        """Test if original ids of cloned models are set correctly"""
+        scenario = Scenario.objects.get(pk=1)
+        cloned_scenario = scenario.clone()
+        scenario = Scenario.objects.get(pk=1)
+
+        scenario_models = self.__get_scenario_models(scenario)
+        cloned_scenario_models = self.__get_scenario_models(cloned_scenario)
+
+        for i in range(6):
+            ids = sorted([model.id for model in scenario_models[i]])
+            cloned_origin_ids = sorted([model.original_id for model in cloned_scenario_models[i]])
+
+            self.assertEqual(ids, cloned_origin_ids)

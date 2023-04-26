@@ -51,6 +51,13 @@
         }
     },
     {
+        "model": "holon.actorsubgroup",
+        "pk": 2,
+        "fields": {
+            "name": "rich"
+        }
+    },
+    {
         "model": "holon.actor",
         "pk": 1,
         "fields": {
@@ -134,13 +141,25 @@
             "category": "CONNECTIONOWNER",
             "payload": 1,
             "group": 2,
-            "subgroup": null,
+            "subgroup": 1,
             "wildcard_JSON": null
         }
     },
     {
         "model": "holon.actor",
         "pk": 8,
+        "fields": {
+            "polymorphic_ctype": ["holon", "actor"],
+            "category": "CONNECTIONOWNER",
+            "payload": 1,
+            "group": 2,
+            "subgroup": 2,
+            "wildcard_JSON": null
+        }
+    },
+    {
+        "model": "holon.actor",
+        "pk": 9,
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "CONNECTIONOWNER",
@@ -152,7 +171,7 @@
     },
     {
         "model": "holon.actor",
-        "pk": 9,
+        "pk": 10,
         "fields": {
             "polymorphic_ctype": ["holon", "actor"],
             "category": "GOVHOLON",
@@ -834,6 +853,17 @@
         }
     },
     {
+        "model": "holon.energyasset",
+        "pk": 1020,
+        "fields": {
+            "polymorphic_ctype": ["holon", "dieselvehicleasset"],
+            "gridconnection": null,
+            "gridnode": 1,
+            "name": "Diesel_Truck",
+            "wildcard_JSON": null
+        }
+    },
+    {
         "model": "holon.consumptionasset",
         "pk": 4,
         "fields": {
@@ -1166,6 +1196,14 @@
         "pk": 1019,
         "fields": {
             "energyasset_ptr": 1019,
+            "type": "DIESEL_VEHICLE"
+        }
+    },
+    {
+        "model": "holon.consumptionasset",
+        "pk": 1020,
+        "fields": {
+            "energyasset_ptr": 1020,
             "type": "DIESEL_VEHICLE"
         }
     },
@@ -2163,8 +2201,7 @@
             "data_type": "value",
             "etm_key": "capacity_of_energy_power_wind_turbine_inland",
             "related_config": 1,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
+            "related_interactive_element": null
         }
     },
     {
@@ -2176,8 +2213,7 @@
             "data_type": "value",
             "etm_key": "price_of_natural_gas_per_mwh",
             "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
+            "related_interactive_element": null
         }
     },
     {
@@ -2189,8 +2225,7 @@
             "data_type": "value",
             "etm_key": "capacity_of_energy_power_wind_turbine_inland",
             "related_config": 3,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
+            "related_interactive_element": null
         }
     },
     {
@@ -2202,8 +2237,7 @@
             "data_type": "value",
             "etm_key": "tester_etm_key",
             "related_config": 4,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
+            "related_interactive_element": null
         }
     },
     {
@@ -2215,8 +2249,7 @@
             "data_type": "curve",
             "etm_key": "hourly_price_of_electricity_per_mwh",
             "related_config": 2,
-            "related_interactive_element": null,
-            "interactive_upscaling_comment": null
+            "related_interactive_element": null
         }
     },
     {

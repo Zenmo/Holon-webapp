@@ -30,12 +30,12 @@ class Contract(PolymorphicModel):
         blank=True,
     )
     name = models.CharField(max_length=255, blank=True, null=True)
-    contractScope = models.ForeignKey(Actor, on_delete=models.CASCADE, null=True)
+    contractScope = models.ForeignKey(Actor, on_delete=models.SET_NULL, null=True)
     energyCarrier = models.CharField(
         max_length=255, choices=EnergyCarrier.choices, default=EnergyCarrier.ELECTRICITY
     )
     actor = models.ForeignKey(
-        Actor, on_delete=models.CASCADE, related_name="contracts", null=True, blank=True
+        Actor, on_delete=models.SET_NULL, related_name="contracts", null=True, blank=True
     )
     annualFee_eur = models.FloatField(default=0.0)
     wildcard_JSON = models.JSONField(
@@ -49,6 +49,12 @@ class Contract(PolymorphicModel):
     is_rule_action_template = models.BooleanField(
         default=False,
         help_text=_("Set this to True when this model can be used as a template for rule actions"),
+    )
+
+    original_id = models.BigIntegerField(
+        null=True,
+        blank=True,
+        help_text=_("This field is used as a reference for cloned models. Don't set it manually"),
     )
 
     def __str__(self):

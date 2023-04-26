@@ -1,44 +1,48 @@
-from datetime import datetime
-from pprint import pprint
+import json
+import traceback
+
 from django.apps import apps
 from rest_framework import generics, status
+from rest_framework.request import Request
 from rest_framework.response import Response
-
-import etm_service
 
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
-from holon.serializers import HolonRequestSerializer
-from holon.services import CostBenedict, ETMConnect
+from holon.serializers import HolonRequestSerializer, ScenarioSerializer
+from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 
-DUMMY_UPSCALE = {"sustainability": 42, "self_sufficiency": 42, "netload": 42, "costs": 42}
-DUMMY_COST = 42
 
-from .dummies import costbenefit_result_json, dashboard_result_json
+def pprint(msg: str):
+    return print(f"[holon-endpoint]: {msg}")
 
 
 class HolonV2Service(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
-    def post(self, request):
+    def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
+
+        scenario = None
+        cc = None
 
         try:
             if serializer.is_valid():
                 data = serializer.validated_data
 
+                pprint(f"Cloning scenario {data['scenario'].id}")
                 scenario = rule_mapping.get_scenario_and_apply_rules(
                     data["scenario"].id, data["interactive_elements"]
                 )
 
+                pprint("Running Anylogic model")
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
-
                 cc.run()
 
+                pprint("Running ETM module")
                 # TODO: is this the way to distinguish the national and inter results?
                 # Init with none values so Result always has the keys
                 etm_outcomes = {
@@ -56,20 +60,35 @@ class HolonV2Service(generics.CreateAPIView):
                     elif name == "Regional upscaling":
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
-                # ignore me! (TODO: should only be triggered on bedrijventerrein)
-                cost_benefit_results = CostBenedict(
-                    actors=cc.outputs["actors"]
-                ).determine_group_costs()
+                pprint("Calculating CostTables")
+                try:
+                    cost_benefit_tables = CostTables.from_al_output(
+                        cc.outputs["contracts"], scenario
+                    )
+                except KeyError:
+                    pprint("contract data is not mapped, trying to find the correct output...")
+                    found = False
+                    for key, alternative_output in cc._outputs_raw.items():
+                        if "contract" in key:
+                            found = True
+                            pprint("...success!")
+                            cost_benefit_tables = CostTables.from_al_output(
+                                json.loads(alternative_output), scenario
+                            )
+                            break
+                    if not found:
+                        raise KeyError
 
                 results = Results(
                     scenario=scenario,
                     request=request,
                     anylogic_outcomes=cc.outputs,
-                    cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
-                    cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
+                    cost_benefit_overview=cost_benefit_tables.main_table(),
+                    cost_benefit_detail=cost_benefit_tables.all_detailed_tables(),
                     **etm_outcomes,
                 )
 
+                pprint("200 OK")
                 return Response(
                     results.to_dict(),
                     status=status.HTTP_200_OK,
@@ -78,18 +97,27 @@ class HolonV2Service(generics.CreateAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            import traceback
+            pprint(traceback.format_exc())
 
-            print(traceback.format_exc())
-            return Response(f"Something went wrong: {e}", status=status.HTTP_400_BAD_REQUEST)
+            response_body = {"error_msg": f"something went wrong: {e}"}
+            if scenario:
+                response_body["scenario"] = ScenarioSerializer(scenario).data
+            if cc:
+                response_body["anylogic_outcomes"] = cc.outputs
+
+            return Response(
+                response_body,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         finally:
             # always delete the scenario!
             try:
-                scenario.delete_async()
-            except (
-                NameError
-            ):  # catch name error if the view crashed before instantiating the scenario
-                pass
+                if scenario:
+                    scenario_id = scenario.id
+                    scenario.delete_async()
+            except Exception as e:
+                pprint(f"Something went wrong while trying to delete scenario {scenario_id}")
+                pprint(traceback.format_exc())
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
@@ -127,6 +155,26 @@ class HolonCMSLogic(generics.RetrieveAPIView):
                 attribute["relation"] = field.related_model.__name__
             attributes.append(attribute)
         return attributes
+
+
+class HolonScenarioCleanup(generics.RetrieveAPIView):
+    def get(self, request):
+        cloned_scenarios = Scenario.objects.filter(cloned_from__isnull=False)
+        try:
+            for scenario in cloned_scenarios:
+                pprint(f"Deleting scenario {scenario.id}...")
+                cid = scenario.id
+                scenario.delete()
+                pprint(f"... deleted scenario {cid}")
+        except Exception as e:
+            pprint(traceback.format_exc())
+            response_body = {"error_msg": f"something went wrong: {e}"}
+            return Response(
+                response_body,
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        return Response("succes")
 
 
 class HolonService(generics.CreateAPIView):

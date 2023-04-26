@@ -6,7 +6,6 @@ import modelcluster.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0022_merge_20230328_1312"),
     ]

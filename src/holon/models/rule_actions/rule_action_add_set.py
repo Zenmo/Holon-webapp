@@ -1,6 +1,7 @@
 from typing import Union
 
 from django.forms import ValidationError
+from holon.models.actor import Actor
 from holon.models.rule_actions import RuleAction
 
 from django.db import models
@@ -108,10 +109,11 @@ class GenericRuleActionAdd(RuleAction):
         if len(filtered_queryset) <= 0:
             return
 
-        # parse value
-        n = int(value)
-        if n < 0:
-            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
+        if reset_models_before_add:
+            # parse value
+            n = int(value)
+            if n < 0:
+                raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
         base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
@@ -130,6 +132,15 @@ class GenericRuleActionAdd(RuleAction):
 
         objects_added = 0
 
+        # get cloned contractscope
+        if self.contract_to_add:
+            scenario = filtered_queryset[0].payload
+            old_contract_scope = self.contract_to_add.contractScope
+
+            cloned_contract_scope = Actor.objects.filter(
+                payload=scenario, original_id=old_contract_scope.id
+            ).first()
+
         # only take first n objects
         for filtererd_object in filtered_queryset:
             if reset_models_before_add:
@@ -138,14 +149,24 @@ class GenericRuleActionAdd(RuleAction):
                 ):
                     obj_to_delete.delete()
 
-            if (
-                objects_added < n
-                and not self.model_to_add.__class__.objects.filter(
-                    **{parent_fk_field_name: filtererd_object}
-                ).exists()
-            ):
+            # Only check < n for set count
+            if not reset_models_before_add or objects_added < n:
                 # add model_to_add to filtered object
-                util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
+
+                if self.contract_to_add:
+                    util.duplicate_model(
+                        self.model_to_add,
+                        {
+                            parent_fk_field_name: filtererd_object,
+                            "contractScope": cloned_contract_scope,
+                        },
+                    )
+
+                else:
+                    util.duplicate_model(
+                        self.model_to_add, {parent_fk_field_name: filtererd_object}
+                    )
+
                 objects_added += 1
 
 

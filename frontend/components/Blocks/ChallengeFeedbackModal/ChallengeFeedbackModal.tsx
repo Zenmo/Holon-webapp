@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect, useState } from "react";
-import Confetti from "react-confetti";
-import { Dialog, Transition } from "@headlessui/react";
 import Button from "@/components/Button/Button";
-import { FeedbackModal } from "./types";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useEffect, useState } from "react";
+import Confetti from "react-confetti";
 import { KPIData } from "../../KPIDashboard/types";
 import { Content } from "../SectionBlock/types";
+import { FeedbackModal } from "./types";
 
 type ChallengeFeedbackModalProps = {
   kpis: KPIData;
@@ -49,7 +49,7 @@ export default function ChallengeFeedbackModal({
               const kpivalue =
                 conditionItem.type == "interactive_input_condition"
                   ? content?.find(
-                      content => content.value.id == parseFloat(conditionItem.value.parameter)
+                      content => content.value?.id == parseFloat(conditionItem.value.parameter)
                     )?.currentValue
                   : kpis[splittedParameter[0]][splittedParameter[1]];
 
@@ -66,12 +66,12 @@ export default function ChallengeFeedbackModal({
                 return false;
               } else if (
                 conditionItem.value.operator == "equal" &&
-                kpivalue != conditionItem.value.value
+                kpivalue?.toString().toLowerCase() != conditionItem.value.value.toLowerCase()
               ) {
                 return false;
               } else if (
                 conditionItem.value.operator == "notequal" &&
-                kpivalue == conditionItem.value.value
+                kpivalue?.toString().toLowerCase() == conditionItem.value.value.toLowerCase()
               ) {
                 return false;
               } else if (conditionItem.value.operator == "lower" && kpivalue >= conditionValue) {

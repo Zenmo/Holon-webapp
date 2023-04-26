@@ -44,8 +44,6 @@ class Scenario(ClusterableModel):
         ),
     ]
 
-    _assets = None
-
     class Meta:
         verbose_name = "Scenario"
 
@@ -54,19 +52,25 @@ class Scenario(ClusterableModel):
 
     @property
     def assets(self) -> "list[EnergyAsset]":
-        if not self._assets:
-            self._assets = self.__load_assets()
-
-        return self._assets
-
-    def __load_assets(self) -> "list[EnergyAsset]":
         from holon.models.asset import EnergyAsset
 
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
+        for gridnode in self.gridnode_set.all():
+            assets = assets | gridnode.energyasset_set.all()
 
         return assets
+
+    @property
+    def contracts(self) -> "list[Contract]":
+        from holon.models import Contract
+
+        contracts = Contract.objects.none()
+        for actor in self.actor_set.all():
+            contracts = contracts | actor.contracts.all()
+
+        return contracts
 
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
@@ -92,12 +96,14 @@ class Scenario(ClusterableModel):
 
             for actor in actors:
                 actor_id = actor.id
+                actor.original_id = actor_id
                 new_actor = duplicate_model(actor, {"payload": new_scenario})
 
                 actor_id_to_new_model_mapping[actor_id] = new_actor
 
             contracts = Contract.objects.filter(actor__payload_id=scenario_old.id)
             for contr in contracts:
+                contr.original_id = contr.id
                 duplicate_model(
                     contr,
                     {
@@ -111,6 +117,7 @@ class Scenario(ClusterableModel):
             gridnode_id_to_new_model_mapping = {}
             for gridnode in gridnodes:
                 gridnode_id = gridnode.id
+                gridnode.original_id = gridnode_id
                 new_gridnode = duplicate_model(
                     gridnode,
                     {
@@ -121,6 +128,11 @@ class Scenario(ClusterableModel):
 
                 gridnode_id_to_new_model_mapping[gridnode_id] = new_gridnode
 
+                assets = EnergyAsset.objects.filter(gridnode_id=gridnode_id)
+                for asset in assets:
+                    asset.original_id = asset.id
+                    duplicate_model(asset, {"gridnode": new_gridnode})
+
             # Update gridnode parent
             new_gridnodes = GridNode.objects.filter(payload_id=new_scenario.id)
             for gridnode in new_gridnodes:
@@ -130,7 +142,6 @@ class Scenario(ClusterableModel):
 
             gridconnections = scenario_old.gridconnection_set.all()
 
-            asset_count = 0
             for gridconnection in gridconnections:
                 attributes_to_update = {
                     "payload": new_scenario,
@@ -146,15 +157,17 @@ class Scenario(ClusterableModel):
                     ]
 
                 gridconnection_id = gridconnection.pk
+                gridconnection.original_id = gridconnection_id
                 new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
 
                 assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
-                asset_count += len(assets)
                 for asset in assets:
+                    asset.original_id = asset.id
                     duplicate_model(asset, {"gridconnection": new_gridconnection})
 
             policies = scenario_old.policy_set.all()
             for policy in policies:
+                policy.original_id = policy.id
                 duplicate_model(policy, {"payload": new_scenario})
 
             return new_scenario

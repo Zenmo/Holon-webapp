@@ -183,6 +183,14 @@ class InteractiveElementContinuousValues(ClusterableModel):
         default=100,
         help_text=_("Maximum amount of the continuous input"),
     )
+    discretization_steps = models.IntegerField(
+        null=True,
+        blank=True,
+        default=5,
+        help_text=_(
+            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
+        ),
+    )
     slider_unit = models.ForeignKey(
         InteractiveElementUnit,
         null=True,
@@ -195,6 +203,7 @@ class InteractiveElementContinuousValues(ClusterableModel):
         FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
+        FieldPanel("discretization_steps"),
         InlinePanel("rules", heading="Rules", label="Rules"),
         FieldPanel("slider_unit"),
     ]

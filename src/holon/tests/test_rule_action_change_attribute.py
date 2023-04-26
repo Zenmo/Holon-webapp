@@ -167,3 +167,28 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         assert updated_scenario.gridconnection_set.first().capacity_kw == 250.0  # was 750.0
+
+    def test_change_multiple_attributes(self):
+        # Arrange
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="BuildingGridConnection",
+        )
+        rule_action_change_attribute_set = RuleActionChangeAttribute.objects.create(
+            model_attribute="capacity_kw", operator=ChangeAttributeOperator.SET, rule=rule
+        )
+        rule_action_change_attribute_set = RuleActionChangeAttribute.objects.create(
+            model_attribute="insulation_label", operator=ChangeAttributeOperator.SET, rule=rule
+        )
+
+        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        assert updated_scenario.gridconnection_set.first().capacity_kw == 1  # was 750.0
+        assert updated_scenario.gridconnection_set.first().insulation_label == 1  # was 750.0

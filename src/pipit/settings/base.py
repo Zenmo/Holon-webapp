@@ -3,7 +3,6 @@ from typing import Optional
 
 from pipit.settings import get_env, get_env_bool
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -80,7 +79,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://pizzaoven.holontool.nl"]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -180,6 +179,7 @@ WAGTAIL_SITE_NAME = "Holon-wagtail"
 WAGTAILIMAGES_IMAGE_MODEL = "customimage.CustomImage"
 WAGTAILDOCS_DOCUMENT_MODEL = "customdocument.CustomDocument"
 WAGTAIL_ALLOW_UNICODE_SLUGS = False
+WAGTAILAPI_LIMIT_MAX = 1000
 
 WAGTAILSEARCH_BACKENDS = {
     "default": {
@@ -249,6 +249,10 @@ SENTRY_ENVIRONMENT: Optional[str] = None
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
+CSRF_TRUSTED_ORIGINS = ["localhost:3000", "https://pizzaoven.holontool.nl"]
 
 OLD_PASSWORD_FIELD_ENABLED = True
+
+
+# Disable form length for big interactive element forms
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
