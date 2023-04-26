@@ -75,6 +75,12 @@ def get_interactive_input_blocks_per_section(
     try:
         page_with_interactive_inputs = page_type.objects.descendant_of(casus_page).first()
 
+        if page_with_interactive_inputs is None:
+            Config.logger.log_print(
+                f"No {page_type.__name__} found for for casuspage {casus_page} with id {casus_page.id}"
+            )
+            return []
+
         sections = [
             block
             for block in page_with_interactive_inputs.storyline
@@ -89,12 +95,6 @@ def get_interactive_input_blocks_per_section(
             for section in sections
         ]
         return interative_input_blocks_per_section
-
-    except page_type.DoesNotExist:
-        Config.logger.log_print(
-            f"No {page_type.__name__} found for for casuspage {casus_page} with id {casus_page.id}"
-        )
-        return []
 
     except Exception as e:
         Config.logger.log_print(
