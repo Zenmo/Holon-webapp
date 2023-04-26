@@ -266,3 +266,7 @@ CACHES = {
         "LOCATION": "holon_cache",
     },
 }
+
+
+# Disable form length for big interactive element forms
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None

@@ -285,7 +285,6 @@ class SecondOrderRelationAttributeFilter(Filter):
         ]
 
     def second_order_relation_field_subtype_options(self) -> list[str]:
-
         related_model = get_relation_model(
             self.rule, self.relation_field, self.relation_field_subtype
         )

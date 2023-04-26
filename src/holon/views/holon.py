@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 import traceback
 
 from django.apps import apps
@@ -11,7 +12,7 @@ from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer, ScenarioSerializer
-from holon.services import CostBenedict, ETMConnect
+from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 from holon.cache import holon_endpoint_cache
@@ -74,18 +75,33 @@ class HolonV2Service(generics.CreateAPIView):
                     elif name == "Regional upscaling":
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
-                HolonV2Service.logger.log_print("Running CostBenedict module")
-                # ignore me! (TODO: should only be triggered on bedrijventerrein)
-                cost_benefit_results = CostBenedict(
-                    actors=cc.outputs["actors"]
-                ).determine_group_costs()
+                HolonV2Service.logger.log_print("Calculating CostTables")
+                try:
+                    cost_benefit_tables = CostTables.from_al_output(
+                        cc.outputs["contracts"], scenario
+                    )
+                except KeyError:
+                    HolonV2Service.logger.log_print(
+                        "Contract data is not mapped, trying to find the correct output..."
+                    )
+                    found = False
+                    for key, alternative_output in cc._outputs_raw.items():
+                        if "contract" in key:
+                            found = True
+                            HolonV2Service.logger.log_print("Contract found")
+                            cost_benefit_tables = CostTables.from_al_output(
+                                json.loads(alternative_output), scenario
+                            )
+                            break
+                    if not found:
+                        raise KeyError
 
                 results = Results(
                     scenario=scenario,
                     request=request,
                     anylogic_outcomes=cc.outputs,
-                    cost_benefit_detail=cost_benefit_results,  # TODO: twice the same!
-                    cost_benefit_overview=cost_benefit_results,  # TODO: twice the same!
+                    cost_benefit_overview=cost_benefit_tables.main_table(),
+                    cost_benefit_detail=cost_benefit_tables.all_detailed_tables(),
                     **etm_outcomes,
                 )
 

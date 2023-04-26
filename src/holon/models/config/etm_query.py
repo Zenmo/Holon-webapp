@@ -1,9 +1,9 @@
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
-
-from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.snippets.models import register_snippet
 
 from holon.models.config.query_and_convert import QueryAndConvertConfig
 
@@ -35,7 +35,9 @@ class ETMQuery(ClusterableModel):
         help_text=_("Key as defined in the ETM"),
     )
 
-    related_config = ParentalKey(QueryAndConvertConfig, related_name="etm_query")
+    related_config = ParentalKey(
+        QueryAndConvertConfig, related_name="etm_query", blank=True, null=True
+    )
 
     related_interactive_element = models.ForeignKey(
         "holon.InteractiveElement",
@@ -46,7 +48,15 @@ class ETMQuery(ClusterableModel):
             "Use this field to relate this query and conversion set to an interactive element (used for rendering in the front-end)"
         ),
     )
-    interactive_upscaling_comment = models.CharField(
+    interactive_upscaling_title = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_(
+            "Title of the explaination of upscaling. For instance, the category of the upscaling component ('Zon op dak')."
+        ),
+    )
+    interactive_upscaling_comment = models.TextField(
         max_length=255,
         blank=True,
         null=True,
@@ -60,6 +70,9 @@ class ETMQuery(ClusterableModel):
         FieldPanel("data_type"),
         FieldPanel("etm_key"),
         FieldPanel("internal_key"),
+        FieldPanel("related_interactive_element"),
+        FieldPanel("interactive_upscaling_title"),
+        FieldPanel("interactive_upscaling_comment"),
         InlinePanel(
             "static_conversion_step",
             heading="Convert inputs/queries with static values",
@@ -80,11 +93,17 @@ class ETMQuery(ClusterableModel):
             heading="Convert inputs/queries based on AnyLogic outcomes",
             label="AnyLogic result conversion (convert with AnyLogic outcomes)",
         ),
-        FieldPanel("related_interactive_element"),
-        FieldPanel("interactive_upscaling_comment"),
     ]
 
     def clean(self) -> None:
         # TODO validate the use of etm_keys?
 
         return super().clean()
+
+
+@register_snippet
+class GenericETMQuery(ETMQuery):
+    pass
+
+    def __str__(self) -> str:
+        return f"{self.internal_key}"
