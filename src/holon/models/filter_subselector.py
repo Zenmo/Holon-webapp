@@ -39,7 +39,7 @@ class Skip(FilterSubSelector):
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Skip a number of items in the queryset"""
         if self.use_interactive_element_value:
-            n = int(value)
+            n = int(float(value))
         else:
             n = self.number_of_items
 
@@ -75,7 +75,7 @@ class Take(FilterSubSelector):
         """Take a number of items from the queryset, either the first n or random n"""
 
         if self.use_interactive_element_value:
-            n = int(value)
+            n = int(float(value))
         else:
             n = self.number_of_items
 
