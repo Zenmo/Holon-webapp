@@ -23,7 +23,9 @@ def call_holon_endpoint(
         ],
     }
     printable_request_body = request_body
-    Config.logger.log_print(f"Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i}/{n_combinations})")
+    Config.logger.log_print(
+        f"Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i}/{n_combinations})"
+    )
 
     # Create request to holon endpoint
     # request = HttpRequest()
@@ -37,14 +39,15 @@ def call_holon_endpoint(
     #         f"Calling HolonV2Service endpoint failed with response {request.data}"
     #     )
 
+
 def get_printable_request_body(request_body: dict[str, Any]) -> str:
     """Make request body smol"""
 
     try:
-        for i, item in enumerate(request_body['interactive_elements']):
+        for i, item in enumerate(request_body["interactive_elements"]):
             key = item["interactive_element"]
             value = item["value"]
-            request_body['interactive_elements'][i] = {key: value}
+            request_body["interactive_elements"][i] = {key: value}
 
     except Exception as e:
         print(f"request body smollifying went wrong whoopsie {e}")
