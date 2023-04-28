@@ -56,6 +56,10 @@ def get_holon_input_combinations_per_page(
 ) -> tuple[list[Iterator[tuple[InteractiveElementInput]]], int]:
     """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for a specific type of casuspage"""
 
+    Config.logger.log_print(
+        f"Computing input combinations for casus page {casus_page.id} and page type {page_type.__name__}"
+    )
+
     interative_input_blocks_per_section = get_interactive_input_blocks_per_section(
         casus_page, page_type
     )
@@ -115,6 +119,8 @@ def generate_interactive_input_combinations(
 
     for section in sections:
 
+        print(f" - Section with {len(section)} interactive elements")
+
         section_combinations = 1
 
         interactive_element_input_lists: dict[int, list[InteractiveElementInput]] = {}
@@ -138,6 +144,9 @@ def generate_interactive_input_combinations(
                         interactive_input_block["default_value"],
                     )
                 ]
+                print(
+                    f"   - Invisible interactive element \"{interactive_element}\", default value {interactive_input_block['default_value']}"
+                )
 
             else:
                 interactive_element_input_lists[interactive_element.id] = [
@@ -145,12 +154,16 @@ def generate_interactive_input_combinations(
                     for value in interactive_element.get_possible_values()
                 ]
 
+                print(
+                    f'   - Interactive element "{interactive_element}" with {len(interactive_element_input_lists[interactive_element.id])} possible input values'
+                )
                 section_combinations *= len(interactive_element_input_lists[interactive_element.id])
 
             # Update targets
             if interactive_input_block["target_value"]:
                 target_values[interactive_element.id] = interactive_input_block
 
+        print(f"  - Section adds {section_combinations} possible combinations")
         total_combinations += section_combinations
 
         # Put all combinations in iterator list
