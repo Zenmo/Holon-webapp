@@ -264,6 +264,8 @@ CACHES = {
     "holon_cache": {
         "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
         "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 10000},
     },
 }
 
