@@ -122,7 +122,7 @@ class HolonV2Service(generics.CreateAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except (Exception, ETMConnectionError) as e:
-            HolonV2Service.logger.log_print(traceback.format_exc())
+            HolonV2Service.logger.log_print(e)
 
             response_body = {"error_msg": f"something went wrong: {e}"}
             if scenario:

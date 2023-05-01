@@ -275,4 +275,6 @@ class InteractiveElementContinuousValues(ClusterableModel):
             self.discretization_steps - 1
         )
 
-        return [self.slider_value_min + i * step_size for i in range(self.discretization_steps)]
+        return [
+            int(self.slider_value_min + i * step_size) for i in range(self.discretization_steps)
+        ]

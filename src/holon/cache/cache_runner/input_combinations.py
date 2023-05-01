@@ -135,7 +135,7 @@ def generate_interactive_input_combinations(
             ]
 
         for interactive_input_block in section:
-            interactive_element = interactive_input_block["interactive_input"]
+            interactive_element: InteractiveElement = interactive_input_block["interactive_input"]
 
             if not interactive_input_block["visible"]:
                 interactive_element_input_lists[interactive_element.id] = [
@@ -171,41 +171,3 @@ def generate_interactive_input_combinations(
         iterators.append(itertools.product(*interactive_element_input_lists))
 
     return iterators, total_combinations
-
-
-# def get_holon_input_combinations_old(
-#     scenario: Scenario,
-# ) -> Iterator[tuple[InteractiveElementInput]]:
-#     """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for each interactive element for a challange in a scenario"""
-
-#     Config.logger.log_print(
-#         f"Computing possible input combinations for scenario {scenario} with id {scenario.id}"
-#     )
-
-#     # retrieve all individual interactive element input possibilities
-#     interactive_elements = InteractiveElement.objects.filter(scenario=scenario).all()
-#     interactive_element_input_lists = [
-#         [
-#             InteractiveElementInput(interactive_element, value)
-#             for value in interactive_element.get_possible_values()
-#         ]
-#         for interactive_element in interactive_elements
-#     ]
-
-#     # log our findings
-#     Config.logger.log_print(f"Found {len(interactive_elements)} interactive elements: ")
-#     n_combinations = 1
-#     for interactive_element_input_list in interactive_element_input_lists:
-#         print(
-#             f" - {interactive_element_input_list[0].interactive_element}, with {len(interactive_element_input_list)} possible values:"
-#         )
-#         print(
-#             f"   - {[interactive_element_input.value for interactive_element_input in interactive_element_input_list]}"
-#         )
-#         n_combinations *= len(interactive_element_input_list)
-
-#     print(f"For a total of {n_combinations} possible input combinations")
-
-#     # return a generator for all possible combinations
-#     # TODO take series into account
-#     return itertools.product(*interactive_element_input_lists)
