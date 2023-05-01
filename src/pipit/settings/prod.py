@@ -26,6 +26,13 @@ CACHES = {
             "MAX_ENTRIES": 1000,
         },
     },
+    "holon_cache": {
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
+        "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 100000},
+    },
+
 }
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
