@@ -4,8 +4,11 @@ from holon.serializers.interactive_element import InteractiveElementInput
 from holon.views import HolonV2Service
 from django.http import HttpRequest
 
+from holon.views.holon import HolonCacheCheck
+
 
 def call_holon_endpoint(data: tuple[int, tuple[InteractiveElementInput], int, int]):
+    """Call the holon endpoint using a scenario id and a set of interactive elements with values (inputs)"""
 
     scenario_id, holon_input_configuration, combination_i, n_combinations = data
     # def call_holon_endpoint(scenario_id, holon_input_configuration, combination_i, n_combinations):
@@ -39,9 +42,44 @@ def call_holon_endpoint(data: tuple[int, tuple[InteractiveElementInput], int, in
                 f"Calling HolonV2Service endpoint failed with response {request.data}:\nError: {e}"
             )
     if result.status_code != 200:
-        print(result, result.__dict__)
         Config.logger.log_print(
-            f"Calling HolonV2Service endpoint failed with response {request.data}"
+            f"Calling HolonV2Service endpoint failed with response {request.data}. Error msg: {result['data']['error_msg']}"
+        )
+
+
+def call_cache_check_endpoint(
+    scenario_id: int, holon_input_configuration: tuple[InteractiveElementInput]
+) -> bool:
+    """Call the holon cache check endpoint to check if a cache record exists"""
+
+    request_body = {
+        "scenario": scenario_id,
+        "interactive_elements": [
+            {
+                "interactive_element": interactive_element_input.interactive_element.id,
+                "value": interactive_element_input.value,
+            }
+            for interactive_element_input in holon_input_configuration
+        ],
+    }
+
+    try:
+        # Create request to holon endpoint
+        request = HttpRequest()
+        request.data = request_body
+        request.query_params = {}
+        result = HolonCacheCheck().post(request)
+
+        if result.status_code != 200:
+            Config.logger.log_print(
+                f"Calling HolonV2Service endpoint failed with response {request.data}. \nResponse: \n{result.__dict__}"
+            )
+
+        return result.data
+
+    except Exception as e:
+        Config.logger.log_print(
+            f"Calling HolonV2Service endpoint failed with response {request.data}:\nError: {e}"
         )
 
 

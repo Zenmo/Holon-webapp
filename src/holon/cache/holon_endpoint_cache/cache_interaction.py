@@ -33,6 +33,15 @@ def get(key: str) -> dict:
         Config.logger.log_print(f"Cache read failed for key {key}:\n{e}")
 
 
+def exists(key: str) -> bool:
+    """Check if a record in the holon_cache database exists"""
+
+    if caches[Config.cache_name].get(key):
+        return True
+
+    return False
+
+
 def clear_scenario(scenario_id: int):
     """Remove all records of a specific scenario in the holon cache"""
 

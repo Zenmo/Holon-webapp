@@ -3,9 +3,10 @@ from hashlib import sha256
 import pkg_resources
 
 from holon.models.scenario import Scenario
+from holon.serializers.interactive_element import InteractiveElementInput
 
 
-def generate_key(scenario: Scenario, interactive_inputs, prefix=""):
+def generate_key(scenario: Scenario, interactive_inputs: tuple[InteractiveElementInput], prefix=""):
     """Generate a unique cache key for the scenario data and interactive inputs configuration"""
 
     input_hash = sha256(str(interactive_inputs).encode("utf-8")).hexdigest()

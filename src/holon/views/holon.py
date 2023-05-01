@@ -11,7 +11,7 @@ import django_filters.rest_framework
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
-from holon.serializers import HolonRequestSerializer, ScenarioSerializer
+from holon.serializers import HolonRequestSerializer
 from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
@@ -146,6 +146,36 @@ class HolonV2Service(generics.CreateAPIView):
                     f"Something went wrong while trying to delete scenario {scenario_id}"
                 )
                 print(traceback.format_exc())
+
+
+class HolonCacheCheck(generics.CreateAPIView):
+    logger = HolonLogger("holon-cache-check")
+    serializer_class = HolonRequestSerializer
+
+    def post(self, request: Request):
+
+        serializer = HolonRequestSerializer(data=request.data)
+
+        try:
+            if serializer.is_valid():
+                data = serializer.validated_data
+                cache_key = holon_endpoint_cache.generate_key(
+                    data["scenario"], data["interactive_elements"]
+                )
+                key_exists = holon_endpoint_cache.exists(cache_key)
+
+                return Response(
+                    key_exists,
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response(
+                key_exists,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
