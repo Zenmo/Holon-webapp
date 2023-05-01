@@ -2,6 +2,7 @@ from copy import deepcopy as copy
 from typing import List
 
 import etm_service
+import sentry_sdk
 
 from holon.models import DatamodelQueryRule, Scenario
 from holon.models.config import (
