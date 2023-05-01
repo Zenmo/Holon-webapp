@@ -1,4 +1,5 @@
 import logging
+import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
 
@@ -40,6 +41,9 @@ def consolidate_db_spans_nothrow(event: dict[str, any], hint: dict[str, any]) ->
         return event
 
 
+is_old_python = sys.version_info.major <= 3 and sys.version_info.minor < 11
+
+
 # Some actions produce many database queries. This exceeds the span limit of Sentry (1000).
 # This function merges those spans so there is enough room left to send more relevant data.
 def consolidate_db_spans(event: dict[str, any], hint: dict[str, any]) -> dict[str, any]:
@@ -61,18 +65,26 @@ def consolidate_db_spans(event: dict[str, any], hint: dict[str, any]) -> dict[st
             new_spans.append(spans[0])
             continue
 
-        start_timestamp = spans[0]["start_timestamp"]
-        timestamp = spans[0]["timestamp"]
+        earliest_start_timestamp = spans[0]["start_timestamp"]
+        latest_timestamp = spans[0]["timestamp"]
         duration_s = 0.0
 
         for span in spans:
-            start_timestamp = min(start_timestamp, span["start_timestamp"])
-            timestamp = max(timestamp, span["timestamp"])
+            earliest_start_timestamp = min(earliest_start_timestamp, span["start_timestamp"])
+            latest_timestamp = max(latest_timestamp, span["timestamp"])
 
-            t1 = datetime.fromisoformat(span["start_timestamp"])
-            t2 = datetime.fromisoformat(span["timestamp"])
+            if is_old_python:
+                # Python <3.11 does not support "Z" suffix for UTC timestamp
+                # even though this is part of the RFC 3339 and ISO 8601 standards.
+                t1 = datetime.fromisoformat(span["start_timestamp"].replace("Z", "+00:00"))
+                t2 = datetime.fromisoformat(span["timestamp"].replace("Z", "+00:00"))
 
-            duration_s += (t2 - t1).total_seconds()
+                duration_s += (t2 - t1).total_seconds()
+            else:
+                t1 = datetime.fromisoformat(span["start_timestamp"])
+                t2 = datetime.fromisoformat(span["timestamp"])
+
+                duration_s += (t2 - t1).total_seconds()
 
         consolidated_span = {
             "trace_id": spans[0]["trace_id"],
@@ -85,8 +97,8 @@ def consolidate_db_spans(event: dict[str, any], hint: dict[str, any]) -> dict[st
                 "Number of queries": len(spans),
                 "Consolidated Duration": f"{round(duration_s * 1000, 2)}ms",
             },
-            "start_timestamp": start_timestamp,
-            "timestamp": timestamp,
+            "start_timestamp": earliest_start_timestamp,
+            "timestamp": latest_timestamp,
         }
 
         new_spans.append(consolidated_span)
