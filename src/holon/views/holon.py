@@ -1,24 +1,21 @@
-from datetime import datetime
 import json
 import traceback
 
 from django.apps import apps
+from etm_service.etm_session.session import ETMConnectionError
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
-import django_filters.rest_framework
 
+from holon.cache import holon_endpoint_cache
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
-from holon.serializers import HolonRequestSerializer
+from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
-from holon.cache import holon_endpoint_cache
 from holon.utils.logging import HolonLogger
-
-from etm_service.etm_session.session import ETMConnectionError
 
 
 class HolonV2Service(generics.CreateAPIView):
@@ -153,7 +150,6 @@ class HolonCacheCheck(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
     def post(self, request: Request):
-
         serializer = HolonRequestSerializer(data=request.data)
 
         try:
@@ -216,7 +212,6 @@ class HolonCMSLogic(generics.RetrieveAPIView):
 
 
 class HolonScenarioCleanup(generics.RetrieveAPIView):
-
     logger = HolonLogger("holon-scenario-cleanup")
 
     def get(self, request):
