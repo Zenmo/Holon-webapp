@@ -32,17 +32,23 @@ def get_holon_input_combinations(
         casus_combinations_iterators, n_casus_combinations = get_holon_input_combinations_per_page(
             casus_page, StorylinePage
         )
+
         (
             challenge_combinations_iterators,
             n_challenge_combinations,
         ) = get_holon_input_combinations_per_page(casus_page, ChallengeModePage)
 
         return (
-            itertools.chain.from_iterable(
-                challenge_combinations_iterators + casus_combinations_iterators
-            ),
-            n_casus_combinations + n_challenge_combinations,
+            itertools.chain.from_iterable(casus_combinations_iterators),
+            n_casus_combinations,
         )
+
+        # return (
+        #     itertools.chain.from_iterable(
+        #         challenge_combinations_iterators + casus_combinations_iterators # TODO RESTORE - TAVM
+        #     ),
+        #     n_casus_combinations + n_challenge_combinations,
+        # )
 
     except CasusPage.DoesNotExist:
         Config.logger.log_print(f"No CasusPage found for scenario {scenario} with id {scenario.id}")
