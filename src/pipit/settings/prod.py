@@ -1,9 +1,8 @@
 """
 Write prod settings here, or override base settings
 """
-from pipit.settings import initialize_sentry
+from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
-
 
 DEBUG = False
 
