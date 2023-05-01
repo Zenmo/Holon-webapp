@@ -10,11 +10,11 @@ from holon.models.config import (
     DatamodelConversion,
     ETMConversion,
     ETMQuery,
-    GenericETMQuery,
     KeyValuePairCollection,
     QueryAndConvertConfig,
     StaticConversion,
 )
+from pipit.sentry import sentry_sdk_trace
 
 
 def pprint(msg: str):
@@ -59,6 +59,7 @@ CONFIG_KPIS = {
 
 class ETMConnect:
     @staticmethod
+    @sentry_sdk_trace
     def connect_from_scenario(original_scenario, scenario, anylogic_outcomes) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
         for config in ETMConnect.query_configs(original_scenario, scenario, anylogic_outcomes):
@@ -75,6 +76,7 @@ class ETMConnect:
         )
 
     @staticmethod
+    @sentry_sdk_trace
     def costs(config):
         cost_components = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
 
@@ -89,6 +91,7 @@ class ETMConnect:
         return sum(cost_components.values())
 
     @staticmethod
+    @sentry_sdk_trace
     def upscaling(config):
         new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
 
