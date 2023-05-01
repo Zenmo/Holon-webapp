@@ -25,7 +25,7 @@ def call_holon_endpoint(data: tuple[int, tuple[InteractiveElementInput], int, in
     }
 
     Config.logger.log_print(
-        f"Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i+1}/{n_combinations})"
+        f"({combination_i+1}/{n_combinations}) Calling HolonV2Service endpoint with configuration {get_printable_request_body(request_body)} ({combination_i+1}/{n_combinations})"
     )
 
     try:
