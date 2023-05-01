@@ -32,7 +32,6 @@ CACHES = {
         "TIMEOUT": None,
         "OPTIONS": {"MAX_ENTRIES": 100000},
     },
-
 }
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
