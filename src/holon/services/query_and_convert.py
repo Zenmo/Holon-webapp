@@ -14,12 +14,10 @@ from holon.models.config import (
     QueryAndConvertConfig,
     StaticConversion,
 )
+from holon.utils.logging import HolonLogger
 from pipit.sentry import sentry_sdk_trace
 
-
-def pprint(msg: str):
-    print(f"[QConfig]: {msg}")
-
+qc_logger = HolonLogger("QConfig")
 
 # Hardcoded because not bound to change at any point during this project
 CONFIG_KPIS = {
@@ -244,7 +242,7 @@ class Query:
         try:
             value = float(value)
             if value == 1:
-                pprint(
+                qc_logger.log_print(
                     f"Couldn't find the specified key '{c.anylogic_key}' in any of the AnyLogic results (resort to convert with 1)"
                 )
         except:
@@ -252,7 +250,7 @@ class Query:
             try:
                 value = list(value.values())[:8760]
             except AttributeError:
-                pprint(
+                qc_logger.log_print(
                     f"Found the key '{c.anylogic_key}' but the result does not parse to a float or a array (resort to convert with 1)"
                 )
                 value = 1
