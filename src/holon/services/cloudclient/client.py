@@ -1,7 +1,6 @@
 import json
 
-from anylogiccloudclient.client.cloud_client import \
-    CloudClient as ALCloudClient
+from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
 from anylogiccloudclient.client.cloud_client import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from anylogiccloudclient.data.model import Model
