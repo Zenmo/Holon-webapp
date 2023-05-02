@@ -6,7 +6,6 @@ from sentry_sdk import configure_scope
 from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
 
-
 DEBUG = False
 
 DATABASES["default"]["CONN_MAX_AGE"] = get_env("DATABASE_CONN_MAX_AGE", default=60)

@@ -4,7 +4,6 @@ Write prod settings here, or override base settings
 from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
 
-
 DEBUG = False
 
 DATABASES["default"]["CONN_MAX_AGE"] = get_env("DATABASE_CONN_MAX_AGE", default=60)
@@ -25,6 +24,12 @@ CACHES = {
         "OPTIONS": {
             "MAX_ENTRIES": 1000,
         },
+    },
+    "holon_cache": {
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
+        "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 100000},
     },
 }
 

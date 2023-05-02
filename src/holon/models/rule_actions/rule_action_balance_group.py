@@ -51,6 +51,12 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     class Meta:
         verbose_name = "RuleActionBalanceGroup"
 
+    def hash(self):
+        balance_model_hashes = ",".join(
+            [model.hash() for model in self.balance_group_model_order.all()]
+        )
+        return f"[A{self.id},{self.selected_model_type_name},{balance_model_hashes}]"
+
     def get_balance_models_ordered(self) -> list:
         """Get the linked RuleActionModel objects in order from the linking table"""
         return [
@@ -66,7 +72,7 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
         is reached, while the total number of models stays the same.
         """
 
-        target_count = int(value)
+        target_count = int(float(value))
         template_models_in_order = self.get_balance_models_ordered()
         model_types_in_order = [model.__class__ for model in template_models_in_order]
         model_type_names_in_order = [model_type.__name__ for model_type in model_types_in_order]
@@ -300,6 +306,13 @@ class BalanceGroupModelOrder(Orderable):
 
         self.__validate_model_selection()
         self.__set_model()
+
+    def hash(self):
+        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
+            self.asset_to_balance, self.gridconnection_to_balance, self.contract_to_balance
+        )
+
+        return f"[B{self.id},{asset_json},{gridconnection_json},{contract_json}]"
 
     def __validate_model_selection(self):
         """Validate only a single model type is selected"""

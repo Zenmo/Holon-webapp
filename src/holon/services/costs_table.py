@@ -150,23 +150,27 @@ class CostItem:
     @staticmethod
     def price_for(obj) -> float:
         """
-        Either FinancialTransactionVolume_eur is 0, or delivery_price is 0
-        Add annual costs to this.
-        Returns the contracts total price
+        FinancialTransactionVolume_eur includes all contract cost:
+            1. Energycarrier_volume x Energycarrier_price
+            2. Annual_fee
+            3. Taxes
+               -> All parameters are determined in AnyLogic
 
         Defaults to 0.0
         """
-        return (
-            obj.get("FinancialTransactionVolume_eur", 0.0)
-            + CostItem.delivery_or_feedin_price(obj)
-            + obj.get("annualFee_eur", 0.0)
+        return round(
+            (
+                -obj.get("FinancialTransactionVolume_eur", 0.0)
+            ),  # should be negative because costs are negative in frontend
+            #  but positive output from Anylogic
+            2,
         )
 
     @staticmethod
     def delivery_or_feedin_price(obj) -> float:
-        """Check for the delivery price. If no prices sets defaults to 0"""
+        """Redundant function: Check for the delivery price. If no prices sets defaults to 0"""
         volume = obj.get("EnergyTransactionVolume_kWh", 0.0)
-        if volume < 0:
+        if volume > 0:
             return volume * (
                 obj.get("feedinTax_eurpkWh", 0.0) + obj.get("feedinPrice_eurpkWh", 0.0)
             )
@@ -177,9 +181,9 @@ class CostItem:
     @classmethod
     def from_dict(cls, obj: dict, actors: ActorWrapper):
         return cls(
-            actors.find(obj["contractScope"]),
-            actors.find(obj["contractHolder"]),
-            CostItem.price_for(obj),
+            from_actor=actors.find(obj["contractHolder"]),
+            to_actor=actors.find(obj["contractScope"]),
+            price=CostItem.price_for(obj),
         )
 
     @classmethod

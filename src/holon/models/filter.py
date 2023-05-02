@@ -95,6 +95,9 @@ class AttributeFilter(Filter):
         except ObjectDoesNotExist:
             return
 
+    def hash(self):
+        return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value}]"
+
 
 class RelationAttributeFilter(Filter):
     """Filter on attribute for parent object"""
@@ -141,6 +144,9 @@ class RelationAttributeFilter(Filter):
                 raise ValidationError("Invalid value relation_field_subtype")
         except ObjectDoesNotExist:
             return
+
+    def hash(self):
+        return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value},{self.relation_field},{self.relation_field_subtype},{self.invert_filter}]"
 
     def relation_model_attribute_options(self) -> list[str]:
         relation_model = get_relation_model(
@@ -195,9 +201,6 @@ class SecondOrderRelationAttributeFilter(Filter):
     )
     relation_field = models.CharField(max_length=255)  # bijv gridconnection
     relation_field_subtype = models.CharField(max_length=255, blank=True)  # bijv household
-    invert_filter = models.BooleanField(
-        default=False, help_text="Filter models that don't have the specified relation"
-    )
     second_order_relation_field = models.CharField(max_length=255)
     second_order_relation_field_subtype = models.CharField(max_length=255, blank=True)
     invert_filter = models.BooleanField(
@@ -245,6 +248,9 @@ class SecondOrderRelationAttributeFilter(Filter):
                 raise ValidationError("Invalid value relation second order relation field subtype")
         except ObjectDoesNotExist:
             return
+
+    def hash(self):
+        return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value},{self.relation_field},{self.relation_field_subtype},{self.invert_filter},{self.second_order_relation_field},{self.second_order_relation_field}]"
 
     def get_second_order_relation_model(self) -> models.Model:
         """Helper function to get model class of second order selected relation"""
@@ -387,6 +393,9 @@ class RelationExistsFilter(Filter):
         except ObjectDoesNotExist:
             return
 
+    def hash(self):
+        return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value},{self.relation_field},{self.relation_field_subtype},{self.invert_filter}]"
+
     def get_q(self) -> Q:
         if self.invert_filter:
             if self.relation_field_subtype:
@@ -441,6 +450,9 @@ class DiscreteAttributeFilter(Filter):
                 raise ValidationError("Invalid value, not a choice for model attribute")
         except ObjectDoesNotExist:
             return
+
+    def hash(self):
+        return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value}]"
 
     def discrete_relation_field_options(self) -> list[str]:
         model_type = (

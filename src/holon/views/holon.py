@@ -2,11 +2,12 @@ import json
 import traceback
 
 from django.apps import apps
+from etm_service.etm_session.session import ETMConnectionError
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
-from sentry_sdk import capture_exception
 
+from holon.cache import holon_endpoint_cache
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
@@ -14,17 +15,16 @@ from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
-
-
-def pprint(msg: str):
-    return print(f"[holon-endpoint]: {msg}")
+from holon.utils.logging import HolonLogger
 
 
 class HolonV2Service(generics.CreateAPIView):
+    logger = HolonLogger("holon-endpoint")
     serializer_class = HolonRequestSerializer
 
     def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
+        use_caching = request.query_params.get("caching", "true").lower() == "true"
 
         scenario = None
         cc = None
@@ -33,17 +33,30 @@ class HolonV2Service(generics.CreateAPIView):
             if serializer.is_valid():
                 data = serializer.validated_data
 
-                pprint(f"Cloning scenario {data['scenario'].id}")
+                if use_caching:
+                    cache_key = holon_endpoint_cache.generate_key(
+                        data["scenario"], data["interactive_elements"]
+                    )
+                    value = holon_endpoint_cache.get(cache_key)
+
+                    if value:
+                        HolonV2Service.logger.log_print(f"HOLON cache hit on: {cache_key}")
+                        return Response(
+                            value,
+                            status=status.HTTP_200_OK,
+                        )
+
+                HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
                 scenario = rule_mapping.get_scenario_and_apply_rules(
                     data["scenario"].id, data["interactive_elements"]
                 )
 
-                pprint("Running Anylogic model")
+                HolonV2Service.logger.log_print("Running Anylogic model")
                 original_scenario = Scenario.objects.get(id=data["scenario"].id)
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
                 cc.run()
 
-                pprint("Running ETM module")
+                HolonV2Service.logger.log_print("Running ETM module")
                 # TODO: is this the way to distinguish the national and inter results?
                 # Init with none values so Result always has the keys
                 etm_outcomes = {
@@ -61,24 +74,26 @@ class HolonV2Service(generics.CreateAPIView):
                     elif name == "Regional upscaling":
                         etm_outcomes["inter_upscaling_outcomes"] = outcome
 
-                pprint("Calculating CostTables")
+                HolonV2Service.logger.log_print("Calculating CostTables")
                 try:
                     cost_benefit_tables = CostTables.from_al_output(
                         cc.outputs["contracts"], scenario
                     )
                 except KeyError:
-                    pprint("contract data is not mapped, trying to find the correct output...")
+                    HolonV2Service.logger.log_print(
+                        "Contract data is not mapped, trying to find the correct output..."
+                    )
                     found = False
-                    for key, alternative_output in cc._outputs_raw.items():
-                        if "contract" in key:
+                    for cc_key, alternative_output in cc._outputs_raw.items():
+                        if "contract" in cc_key:
                             found = True
-                            pprint("...success!")
+                            HolonV2Service.logger.log_print("Contract found")
                             cost_benefit_tables = CostTables.from_al_output(
                                 json.loads(alternative_output), scenario
                             )
                             break
                     if not found:
-                        raise KeyError
+                        raise KeyError("No contract found in cc keys")
 
                 results = Results(
                     scenario=scenario,
@@ -89,17 +104,22 @@ class HolonV2Service(generics.CreateAPIView):
                     **etm_outcomes,
                 )
 
-                pprint("200 OK")
+                HolonV2Service.logger.log_print("200 OK")
+
+                result = results.to_dict()
+
+                if use_caching:
+                    holon_endpoint_cache.set(cache_key, result)
+
                 return Response(
-                    results.to_dict(),
+                    result,
                     status=status.HTTP_200_OK,
                 )
 
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            pprint(traceback.format_exc())
-            capture_exception(e)
+        except (Exception, ETMConnectionError) as e:
+            HolonV2Service.logger.log_print(e)
 
             response_body = {"error_msg": f"something went wrong: {e}"}
             if scenario:
@@ -111,6 +131,7 @@ class HolonV2Service(generics.CreateAPIView):
                 response_body,
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
         finally:
             # always delete the scenario!
             try:
@@ -118,8 +139,39 @@ class HolonV2Service(generics.CreateAPIView):
                     scenario_id = scenario.id
                     scenario.delete_async()
             except Exception as e:
-                pprint(f"Something went wrong while trying to delete scenario {scenario_id}")
-                pprint(traceback.format_exc())
+                HolonV2Service.logger.log_print(
+                    f"Something went wrong while trying to delete scenario {scenario_id}"
+                )
+                print(traceback.format_exc())
+
+
+class HolonCacheCheck(generics.CreateAPIView):
+    logger = HolonLogger("holon-cache-check")
+    serializer_class = HolonRequestSerializer
+
+    def post(self, request: Request):
+        serializer = HolonRequestSerializer(data=request.data)
+
+        try:
+            if serializer.is_valid():
+                data = serializer.validated_data
+                cache_key = holon_endpoint_cache.generate_key(
+                    data["scenario"], data["interactive_elements"]
+                )
+                key_exists = holon_endpoint_cache.exists(cache_key)
+
+                return Response(
+                    key_exists,
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response(
+                key_exists,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
@@ -160,18 +212,18 @@ class HolonCMSLogic(generics.RetrieveAPIView):
 
 
 class HolonScenarioCleanup(generics.RetrieveAPIView):
+    logger = HolonLogger("holon-scenario-cleanup")
+
     def get(self, request):
         cloned_scenarios = Scenario.objects.filter(cloned_from__isnull=False)
         try:
             for scenario in cloned_scenarios:
-                pprint(f"Deleting scenario {scenario.id}...")
+                HolonScenarioCleanup.logger.log_print(f"Deleting scenario {scenario.id}...")
                 cid = scenario.id
                 scenario.delete()
-                pprint(f"... deleted scenario {cid}")
+                HolonScenarioCleanup.logger.log_print(f"... deleted scenario {cid}")
         except Exception as e:
-            pprint(traceback.format_exc())
-            capture_exception(e)
-
+            HolonScenarioCleanup.logger.log_print(traceback.format_exc())
             response_body = {"error_msg": f"something went wrong: {e}"}
             return Response(
                 response_body,

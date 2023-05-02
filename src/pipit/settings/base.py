@@ -254,5 +254,21 @@ CSRF_TRUSTED_ORIGINS = ["localhost:3000", "https://pizzaoven.holontool.nl"]
 OLD_PASSWORD_FIELD_ENABLED = True
 
 
+# Caching
+HOLON_CACHING_TIMEOUT = None
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table",
+    },
+    "holon_cache": {
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
+        "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 100000},
+    },
+}
+
+
 # Disable form length for big interactive element forms
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
