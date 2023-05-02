@@ -45,6 +45,7 @@ class CostTable:
             self.__add_to_table(item)
             self.__add_to_table(CostItem.reversed(item))
         self.__fill_out_table()
+        self.__round_table()
 
     def __add_to_table(self, item):
         """Adds the item to the table"""
@@ -78,6 +79,17 @@ class CostTable:
             self._table[group]["Netto kosten"] = sum(
                 (value for value in self._table[group].values() if value is not None)
             )
+
+    def __round_table(self):
+        """loops through the final table and rounds all values"""
+
+        for holder, transactions in self._table.items():
+            try:
+                for scope, transaction in transactions.items():
+                    self._table[holder][scope] = int(transaction)
+            except TypeError:  # unsure if we ever get deeper, but just to be sure
+                for deeper_scope, deeper_transaction in transaction.items():
+                    self._table[holder][scope][deeper_scope] = int(deeper_transaction)
 
     def __name_from(self, item):
         return (
@@ -158,13 +170,9 @@ class CostItem:
 
         Defaults to 0.0
         """
-        return round(
-            (
-                -obj.get("FinancialTransactionVolume_eur", 0.0)
-            ),  # should be negative because costs are negative in frontend
-            #  but positive output from Anylogic
-            2,
-        )
+        return -obj.get("FinancialTransactionVolume_eur", 0.0)
+        # should be negative because costs are negative in frontend
+        # but positive output from Anylogic
 
     @staticmethod
     def delivery_or_feedin_price(obj) -> float:
