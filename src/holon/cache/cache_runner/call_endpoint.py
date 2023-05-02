@@ -75,12 +75,13 @@ def call_cache_check_endpoint(
                 f"Calling HolonV2Service endpoint failed with response {request.data}. \nResponse: \n{result.__dict__}"
             )
 
-        return result.data
+        return bool(result.data is True)
 
     except Exception as e:
         Config.logger.log_print(
             f"Calling HolonV2Service endpoint failed with response {request.data}:\nError: {e}"
         )
+        return False
 
 
 def get_printable_request_body(request_body: dict[str, Any]) -> str:

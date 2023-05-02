@@ -86,7 +86,7 @@ def check_input_combinations(
 
     total_cache_hits = sum(cache_hits)
 
-    Config.logger.log_print(f"Total cache hits: {total_cache_hits}")
+    Config.logger.log_print(f"Total cache hits: {total_cache_hits}/{n_combinations}")
 
     return total_cache_hits
 
