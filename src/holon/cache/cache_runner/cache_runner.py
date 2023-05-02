@@ -12,7 +12,12 @@ from holon.serializers.interactive_element import InteractiveElementInput
 N_THREADS = 14
 
 
-def update_cache(scenario_ids: list[int] = [], delete_old_records: bool = True):
+def update_cache(
+    scenario_ids: list[int] = [],
+    delete_old_records: bool = True,
+    include_storyline: bool = True,
+    include_challenge: bool = True,
+):
     """Update the Holon cache by calling the endpoint for each combination in each scenario"""
 
     Config.logger.log_print("Starting holon cache runner")
@@ -29,10 +34,12 @@ def update_cache(scenario_ids: list[int] = [], delete_old_records: bool = True):
         if delete_old_records:
             holon_endpoint_cache.clear_scenario(scenario.id)
 
-        run_input_combinations(scenario)
+        run_input_combinations(scenario, include_storyline, include_challenge)
 
 
-def check_cache(scenario_ids: list[int] = []):
+def check_cache(
+    scenario_ids: list[int] = [], include_storyline: bool = True, include_challenge: bool = True
+):
     """Update the Holon cache by calling the endpoint for each combination in each scenario"""
 
     Config.logger.log_print("Starting holon cache checker")
@@ -45,7 +52,7 @@ def check_cache(scenario_ids: list[int] = []):
 
     # check items for cache
     for scenario in scenarios:
-        check_input_combinations(scenario)
+        check_input_combinations(scenario, include_storyline, include_challenge)
 
 
 def get_scenarios(scenario_ids: list[int]):
@@ -57,10 +64,14 @@ def get_scenarios(scenario_ids: list[int]):
     return Scenario.objects.filter(cloned_from__isnull=True).all()
 
 
-def check_input_combinations(scenario: Scenario) -> int:
+def check_input_combinations(
+    scenario: Scenario, include_storyline: bool = True, include_challenge: bool = True
+) -> int:
     """Check all possible combinations of interactive element inputs for a scenario for existing cache records"""
 
-    holon_input_configurations, n_combinations = get_holon_input_combinations(scenario)
+    holon_input_configurations, n_combinations = get_holon_input_combinations(
+        scenario, include_storyline, include_challenge
+    )
 
     Config.logger.log_print(
         f"Computed {n_combinations} unique input combinations for scenario {scenario.id}"
@@ -80,11 +91,15 @@ def check_input_combinations(scenario: Scenario) -> int:
     return total_cache_hits
 
 
-def run_input_combinations(scenario: Scenario):
+def run_input_combinations(
+    scenario: Scenario, include_storyline: bool = True, include_challenge: bool = True
+):
     """Run all possible combinations of interactive element inputs for a single scenario to force the endpoint to write each possibility to the cache"""
 
     os.environ["CACHE_RUNNER_RUNNING"] = "True"
-    holon_input_configurations, n_combinations = get_holon_input_combinations(scenario)
+    holon_input_configurations, n_combinations = get_holon_input_combinations(
+        scenario, include_storyline, include_challenge
+    )
 
     Config.logger.log_print(
         f"Computed {n_combinations} unique input combinations for scenario {scenario.id}"

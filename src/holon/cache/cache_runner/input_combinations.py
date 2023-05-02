@@ -20,7 +20,7 @@ from typing import Type
 
 
 def get_holon_input_combinations(
-    scenario: Scenario,
+    scenario: Scenario, include_storyline: bool = True, include_challenge: bool = True
 ) -> tuple[Iterator[tuple[InteractiveElementInput]], int]:
     """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for each interactive element for a challange in a scenario"""
     try:
@@ -30,17 +30,26 @@ def get_holon_input_combinations(
             f"Computing input combinations for scenario {scenario} ({scenario.id})"
         )
 
-        casus_combinations_iterators, n_casus_combinations = get_holon_input_combinations_per_page(
-            casus_page, StorylinePage
-        )
-        (
-            challenge_combinations_iterators,
-            n_challenge_combinations,
-        ) = get_holon_input_combinations_per_page(casus_page, ChallengeModePage)
+        casus_combinations_iterators = []
+        challenge_combinations_iterators = []
+        n_casus_combinations = 0
+        n_challenge_combinations = 0
+
+        if include_storyline:
+            (
+                casus_combinations_iterators,
+                n_casus_combinations,
+            ) = get_holon_input_combinations_per_page(casus_page, StorylinePage)
+
+        if include_challenge:
+            (
+                challenge_combinations_iterators,
+                n_challenge_combinations,
+            ) = get_holon_input_combinations_per_page(casus_page, ChallengeModePage)
 
         return (
             itertools.chain.from_iterable(
-                challenge_combinations_iterators + casus_combinations_iterators
+                casus_combinations_iterators + challenge_combinations_iterators
             ),
             n_casus_combinations + n_challenge_combinations,
         )
