@@ -1,4 +1,5 @@
 from typing import Union
+import json
 
 from django.forms import ValidationError
 from holon.models.actor import Actor
@@ -8,6 +9,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 
 from holon.models import util
+
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -111,7 +113,7 @@ class GenericRuleActionAdd(RuleAction):
 
         if reset_models_before_add:
             # parse value
-            n = int(value)
+            n = int(float(value))
             if n < 0:
                 raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
@@ -180,6 +182,13 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
     class Meta:
         verbose_name = "RuleActionAdd"
 
+    def hash(self):
+        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
+            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
+        )
+
+        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
@@ -199,6 +208,13 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
     class Meta:
         verbose_name = "RuleActionSetCount"
 
+    def hash(self):
+        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
+            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
+        )
+
+        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
@@ -215,6 +231,13 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
         related_name="discrete_factors_add_multiple_under_each_parent",
     )
 
+    def hash(self):
+        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
+            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
+        )
+
+        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+
     class Meta:
         verbose_name = "RuleActionAddMultipleUnderEachParent"
 
@@ -222,7 +245,7 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
         # parse value
-        n = int(value)
+        n = int(float(value))
         if n < 0:
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 

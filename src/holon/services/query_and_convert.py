@@ -10,16 +10,14 @@ from holon.models.config import (
     DatamodelConversion,
     ETMConversion,
     ETMQuery,
-    GenericETMQuery,
     KeyValuePairCollection,
     QueryAndConvertConfig,
     StaticConversion,
 )
+from holon.utils.logging import HolonLogger
+from pipit.sentry import sentry_sdk_trace
 
-
-def pprint(msg: str):
-    print(f"[QConfig]: {msg}")
-
+qc_logger = HolonLogger("QConfig")
 
 # Hardcoded because not bound to change at any point during this project
 CONFIG_KPIS = {
@@ -59,7 +57,7 @@ CONFIG_KPIS = {
 
 class ETMConnect:
     @staticmethod
-    @sentry_sdk.trace
+    @sentry_sdk_trace
     def connect_from_scenario(original_scenario, scenario, anylogic_outcomes) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
         for config in ETMConnect.query_configs(original_scenario, scenario, anylogic_outcomes):
@@ -76,7 +74,7 @@ class ETMConnect:
         )
 
     @staticmethod
-    @sentry_sdk.trace
+    @sentry_sdk_trace
     def costs(config):
         cost_components = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
 
@@ -91,7 +89,7 @@ class ETMConnect:
         return sum(cost_components.values())
 
     @staticmethod
-    @sentry_sdk.trace
+    @sentry_sdk_trace
     def upscaling(config):
         new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
 
@@ -244,7 +242,7 @@ class Query:
         try:
             value = float(value)
             if value == 1:
-                pprint(
+                qc_logger.log_print(
                     f"Couldn't find the specified key '{c.anylogic_key}' in any of the AnyLogic results (resort to convert with 1)"
                 )
         except:
@@ -252,7 +250,7 @@ class Query:
             try:
                 value = list(value.values())[:8760]
             except AttributeError:
-                pprint(
+                qc_logger.log_print(
                     f"Found the key '{c.anylogic_key}' but the result does not parse to a float or a array (resort to convert with 1)"
                 )
                 value = 1

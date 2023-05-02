@@ -32,6 +32,9 @@ class RuleActionRemove(RuleAction):
     class Meta:
         verbose_name = "RuleActionRemove"
 
+    def hash(self):
+        return f"[A{self.id},{self.remove_mode}]"
+
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Remove the filtered items"""
 
@@ -40,10 +43,10 @@ class RuleActionRemove(RuleAction):
             remove_n = len(filtered_queryset)
 
         elif self.remove_mode == RemoveMode.REMOVE_N.value:
-            remove_n = int(value)
+            remove_n = int(float(value))
 
         elif self.remove_mode == RemoveMode.KEEP_N.value:
-            remove_n = len(filtered_queryset) - int(value)
+            remove_n = len(filtered_queryset) - int(float(value))
 
         else:
             raise NotImplementedError(

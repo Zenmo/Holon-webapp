@@ -8,7 +8,7 @@ from holon.models.scenario import Scenario
 class InteractiveElementInput:
     def __init__(self, interactive_element: InteractiveElement, value: str):
         self.interactive_element = interactive_element
-        self.value = value
+        self.value = str(value)
 
 
 class InteractiveElementInputSerializer(serializers.Serializer):
