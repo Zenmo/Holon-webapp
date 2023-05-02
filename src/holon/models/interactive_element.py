@@ -1,17 +1,16 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
-from wagtail.core.models import Orderable
+from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from wagtail.snippets.models import register_snippet
-from wagtailmodelchooser import register_model_chooser, Chooser, register_filter
-from django.core.validators import MinValueValidator
-from main.snippets.interactive_element_unit import InteractiveElementUnit
-from django.db import models
-
 from wagtail.admin.panels import PageChooserPanel
+from wagtail.core.models import Orderable
+from wagtail.snippets.models import register_snippet
+from wagtailmodelchooser import Chooser, register_filter, register_model_chooser
+
 from holon.models.scenario import Scenario
+from main.snippets.interactive_element_unit import InteractiveElementUnit
 
 
 class ChoiceType(models.TextChoices):
@@ -87,7 +86,7 @@ class InteractiveElement(ClusterableModel):
     ]
 
     def __str__(self):
-        name = f"{self.name}|{self.type}"
+        name = f"{self.scenario.name}|{self.name}|{self.type}"
         if self.type != ChoiceType.CHOICE_CONTINUOUS and self.options.count() > 0:
             name = f"{name}|{','.join(d.option for d in self.options.all())}"
 
