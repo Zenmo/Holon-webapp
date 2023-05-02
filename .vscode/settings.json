@@ -3,7 +3,6 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true,
         "source.organizeImports": true
-
     },
     "editor.quickSuggestions": {
         "strings": true
