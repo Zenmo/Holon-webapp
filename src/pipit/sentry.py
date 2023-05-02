@@ -117,7 +117,7 @@ def sentry_sdk_trace(func: Callable) -> Callable:
 
     @wraps(func)
     def inner(*args, **kwargs):
-        if get_env_bool("CACHE_RUNNER_RUNNING"):
+        if get_env_bool("CACHE_RUNNER_RUNNING", False):
             return func(*args, **kwargs)
         else:
             return sentry_sdk.trace(func)(*args, **kwargs)
