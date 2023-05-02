@@ -1,12 +1,12 @@
+import os
+from concurrent.futures import ThreadPoolExecutor
 from typing import Iterator
-from holon.cache.cache_runner import get_holon_input_combinations, call_holon_endpoint
+
+from holon.cache import holon_endpoint_cache
+from holon.cache.cache_runner import call_holon_endpoint, get_holon_input_combinations
 from holon.cache.cache_runner.call_endpoint import call_cache_check_endpoint
 from holon.cache.cache_runner.config import Config
-from holon.cache import holon_endpoint_cache
-
 from holon.models.scenario import Scenario
-from concurrent.futures import ThreadPoolExecutor
-
 from holon.serializers.interactive_element import InteractiveElementInput
 
 N_THREADS = 14
@@ -16,6 +16,7 @@ def update_cache(scenario_ids: list[int] = [], delete_old_records: bool = True):
     """Update the Holon cache by calling the endpoint for each combination in each scenario"""
 
     Config.logger.log_print("Starting holon cache runner")
+    os.environ["CACHE_RUNNER_RUNNING"] = "True"
 
     # get scenarios
     scenarios = get_scenarios(scenario_ids)
@@ -82,6 +83,7 @@ def check_input_combinations(scenario: Scenario) -> int:
 def run_input_combinations(scenario: Scenario):
     """Run all possible combinations of interactive element inputs for a single scenario to force the endpoint to write each possibility to the cache"""
 
+    os.environ["CACHE_RUNNER_RUNNING"] = "True"
     holon_input_configurations, n_combinations = get_holon_input_combinations(scenario)
 
     Config.logger.log_print(

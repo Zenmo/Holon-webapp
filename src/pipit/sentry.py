@@ -1,10 +1,14 @@
 import logging
 import sys
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
+from functools import wraps
+from typing import Callable
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+
+from pipit.settings import get_env_bool
 
 
 def initialize_sentry(ingest_dsn: str, environment: str) -> None:
@@ -106,3 +110,16 @@ def consolidate_db_spans(event: dict[str, any], hint: dict[str, any]) -> dict[st
     event["spans"] = new_spans
 
     return event
+
+
+def sentry_sdk_trace(func: Callable) -> Callable:
+    """Decorator that conditionally adds Sentry tracing to a function based on an environment variable."""
+
+    @wraps(func)
+    def inner(*args, **kwargs):
+        if get_env_bool("CACHE_RUNNER_RUNNING"):
+            return func(*args, **kwargs)
+        else:
+            return sentry_sdk.trace(func)(*args, **kwargs)
+
+    return inner
