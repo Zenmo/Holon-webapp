@@ -2,8 +2,10 @@ from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ScenarioRule
 from holon.serializers import InteractiveElementInput
 from holon.models import ChoiceType
+from pipit.sentry import sentry_sdk_trace
 
 
+@sentry_sdk_trace
 def get_scenario_and_apply_rules(
     scenario_id: int, interactive_element_inputs: list[InteractiveElementInput]
 ) -> Scenario:
