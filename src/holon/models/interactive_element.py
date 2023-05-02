@@ -7,8 +7,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.admin.panels import PageChooserPanel
 from wagtail.core.models import Orderable
 from wagtail.snippets.models import register_snippet
-from wagtailmodelchooser import (Chooser, register_filter,
-                                 register_model_chooser)
+from wagtailmodelchooser import Chooser, register_filter, register_model_chooser
 
 from holon.models.scenario import Scenario
 from main.snippets.interactive_element_unit import InteractiveElementUnit
