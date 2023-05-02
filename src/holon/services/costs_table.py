@@ -156,10 +156,13 @@ class CostItem:
 
         Defaults to 0.0
         """
-        return (
-            +CostItem.delivery_or_feedin_price(obj)
-            + CostItem.determine_financial_flows(obj)
-            + obj.get("annualFee_eur", 0.0)
+        return round(
+            (
+                obj.get("FinancialTransactionVolume_eur", 0.0)
+                + CostItem.delivery_or_feedin_price(obj)
+                + obj.get("annualFee_eur", 0.0)
+            ),
+            2,
         )
 
     @staticmethod
@@ -173,16 +176,6 @@ class CostItem:
         return volume * (
             obj.get("deliveryTax_eurpkWh", 0.0) + obj.get("deliveryPrice_eurpkWh", 0.0)
         )
-
-    @staticmethod
-    def determine_financial_flows(obj) -> float:
-        if (obj.get("proportionalTax_pct", 0.0) != 0.0) and obj.get("contractType") == "TAX":
-            return CostItem.proportional_tax(obj)
-        return obj.get("FinancialTransactionVolume_eur", 0.0)
-
-    @staticmethod
-    def proportional_tax(obj) -> float:
-        pass
 
     @classmethod
     def from_dict(cls, obj: dict, actors: ActorWrapper):
