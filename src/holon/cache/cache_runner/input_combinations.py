@@ -1,4 +1,5 @@
 import itertools
+import traceback
 from typing import Iterator
 from holon.models.interactive_element import (
     InteractiveElement,
@@ -46,9 +47,11 @@ def get_holon_input_combinations(
 
     except CasusPage.DoesNotExist:
         Config.logger.log_print(f"No CasusPage found for scenario {scenario} with id {scenario.id}")
-        return []
-    except:
-        return []
+        return ([], 0)
+    except Exception as e:
+        Config.logger.log_print(f"Error while computing combinations: {e}")
+        print(traceback.format_exc())
+        return ([], 0)
 
 
 def get_holon_input_combinations_per_page(
@@ -77,7 +80,9 @@ def get_interactive_input_blocks_per_section(
     """Return a list of sections containing a list of interactive inputs for a on the casuspage"""
 
     try:
-        page_with_interactive_inputs = page_type.objects.descendant_of(casus_page).first()
+        page_with_interactive_inputs: page_type = page_type.objects.descendant_of(
+            casus_page
+        ).first()
 
         if page_with_interactive_inputs is None:
             Config.logger.log_print(
@@ -85,7 +90,7 @@ def get_interactive_input_blocks_per_section(
             )
             return []
 
-        sections = [
+        sections: list[StorylineSectionBlock] = [
             block
             for block in page_with_interactive_inputs.storyline
             if type(block.block) == StorylineSectionBlock
@@ -113,7 +118,7 @@ def generate_interactive_input_combinations(
     """Return a list of generators which can return all possible combinations of input options for each interactive element for the given sections. Also returns the total number of combinations"""
 
     iterators: list(Iterator[tuple[InteractiveElementInput]]) = []
-    target_values: dict[int, InteractiveInputBlock] = {}
+    target_value_blocks: dict[int, InteractiveInputBlock] = {}
 
     total_combinations = 0
 
@@ -126,11 +131,11 @@ def generate_interactive_input_combinations(
         interactive_element_input_lists: dict[int, list[InteractiveElementInput]] = {}
 
         # Set target values if from previous sections
-        for key, value in target_values.items():
-            interactive_element_input_lists[key] = [
+        for interactive_element_id, interactive_input_block in target_value_blocks.items():
+            interactive_element_input_lists[interactive_element_id] = [
                 InteractiveElementInput(
-                    value["interactive_input"],
-                    value["default_value"],
+                    interactive_input_block["interactive_input"],
+                    interactive_input_block["target_value"],
                 )
             ]
 
@@ -161,7 +166,7 @@ def generate_interactive_input_combinations(
 
             # Update targets
             if interactive_input_block["target_value"]:
-                target_values[interactive_element.id] = interactive_input_block
+                target_value_blocks[interactive_element.id] = interactive_input_block
 
         print(f"  - Section adds {section_combinations} possible combinations")
         total_combinations += section_combinations
