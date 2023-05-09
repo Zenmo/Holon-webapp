@@ -257,7 +257,10 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
 
             util.duplicate_model(
                 template_models_in_order[current_template_model_i],
-                {parent_fk_field_name: filtererd_object},
+                {
+                    parent_fk_field_name: filtererd_object,
+                    "is_rule_action_template": False,
+                },
             )
 
             model_add_count += 1
