@@ -41,6 +41,7 @@ const ContentBlocks = ({
   /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
     const updatedContent = { ...content };
+    const uniqueTargetValues = []
 
     values.forEach((value, key) => {
       const foundElement = updatedContent.value.content.find(element => {
@@ -50,8 +51,8 @@ const ContentBlocks = ({
       if (foundElement) {
         foundElement.value.targetValuePreviousSection = value.targetValue;
       } else {
-        //if the element does not exist yet it is added (invisible and with no other defaultValues besides the target value(s))
-        updatedContent.value.content.push({
+        //if the element does not exist yet it is added to an array (the element is invisible and with no other defaultValues besides the target value(s))
+        uniqueTargetValues.unshift({
           type: "interactive_input",
           value: {
             ...value,
@@ -66,6 +67,11 @@ const ContentBlocks = ({
         });
       }
     });
+    //the array target values is placed in front of the list with interactive input elements, keeping the order in which they were placed on the page
+    uniqueTargetValues.map((item) => {
+      updatedContent.value.content.unshift(item);
+    })
+     
     return updatedContent;
   }
 
