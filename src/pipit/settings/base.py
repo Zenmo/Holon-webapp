@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "corsheaders",
     # Project specific apps
     "pipit",
@@ -125,7 +126,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "pipit.wsgi.application"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",)
+    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "holon-auth"
@@ -272,3 +274,11 @@ CACHES = {
 
 # Disable form length for big interactive element forms
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+# Openapi documentation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "HOLON",
+    "DESCRIPTION": "",
+    "VERSION": "2.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}

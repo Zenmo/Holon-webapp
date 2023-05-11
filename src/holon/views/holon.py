@@ -2,6 +2,7 @@ import json
 import traceback
 
 from django.apps import apps
+from django.shortcuts import render
 from etm_service.etm_session.session import ETMConnectionError
 from rest_framework import generics, status
 from rest_framework.request import Request
@@ -209,6 +210,11 @@ class HolonCMSLogic(generics.RetrieveAPIView):
                 attribute["relation"] = field.related_model.__name__
             attributes.append(attribute)
         return attributes
+
+
+def holonCMSLogicFormatter(request):
+    configs = HolonCMSLogic().get(request)
+    return render(request, "modelconfig.html", {"configs": configs.data})
 
 
 class HolonScenarioCleanup(generics.RetrieveAPIView):

@@ -161,12 +161,17 @@ class GenericRuleActionAdd(RuleAction):
                         {
                             parent_fk_field_name: filtererd_object,
                             "contractScope": cloned_contract_scope,
+                            "is_rule_action_template": False,
                         },
                     )
 
                 else:
                     util.duplicate_model(
-                        self.model_to_add, {parent_fk_field_name: filtererd_object}
+                        self.model_to_add,
+                        {
+                            parent_fk_field_name: filtererd_object,
+                            "is_rule_action_template": False,
+                        },
                     )
 
                 objects_added += 1
@@ -267,4 +272,10 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
         # only take first n objects
         for filtererd_object in filtered_queryset:
             for _ in range(n):
-                util.duplicate_model(self.model_to_add, {parent_fk_field_name: filtererd_object})
+                util.duplicate_model(
+                    self.model_to_add,
+                    {
+                        parent_fk_field_name: filtererd_object,
+                        "is_rule_action_template": False,
+                    },
+                )
