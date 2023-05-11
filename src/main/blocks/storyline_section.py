@@ -82,9 +82,6 @@ class InteractiveInputBlock(blocks.StructBlock):
                     if bool(value["default_value"]):
                         if value["default_value"].lower() == option.option.lower():
                             option_default = True
-                    elif bool(value["target_value"]):
-                        if value["target_value"].lower() == option.option.lower():
-                            option_default = True
                     else:
                         option_default = option.default
                     option_dict = {

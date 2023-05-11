@@ -36,7 +36,7 @@ const ContentBlocks = ({
   pagetype?: string;
   graphcolors?: Graphcolor[];
 }) => {
-  let targetValues = new Map();
+  let targetValuesPreviousSections = new Map();
 
   /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
@@ -79,9 +79,9 @@ const ContentBlocks = ({
   function updateTargetValues(content) {
     content.map(element => {
       if (element.type === "interactive_input" && element.value.targetValue) {
-        const newTargetValues = new Map(targetValues);
+        const newTargetValues = new Map(targetValuesPreviousSections);
         newTargetValues.set(element.value.id, element.value);
-        targetValues = newTargetValues;
+        targetValuesPreviousSections = newTargetValues;
       }
     });
     return null;
@@ -110,7 +110,7 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            const newContent = addTargetValues(targetValues, contentItem);
+            const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
             updateTargetValues(contentItem.value.content);
             return (
               <SectionBlock

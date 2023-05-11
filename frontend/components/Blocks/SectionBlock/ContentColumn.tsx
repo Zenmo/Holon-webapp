@@ -120,7 +120,6 @@ export default function ContentColumn({
                 targetValueArray?.includes(option.label)
             );
           }
-
           return options.length ? options.map(option => option.option) : [];
       }
     }
