@@ -45,7 +45,8 @@ class Filter(PolymorphicModel):
         return [
             field.name
             for field in model()._meta.get_fields()
-            if is_allowed_relation(field) or (not field.is_relation and not is_exclude_field(field))
+            if is_allowed_relation(field.name)
+            or (not field.is_relation and not is_exclude_field(field))
         ]
 
     class Meta:
@@ -156,7 +157,8 @@ class RelationAttributeFilter(Filter):
         return [
             field.name
             for field in relation_model._meta.get_fields()
-            if is_allowed_relation(field) or (not field.is_relation and not is_exclude_field(field))
+            if is_allowed_relation(field.name)
+            or (not field.is_relation and not is_exclude_field(field))
         ]
 
     def get_q(self) -> Q:

@@ -8,6 +8,9 @@ from wagtail.admin.edit_handlers import FieldPanel
 from django.db.models.query import QuerySet
 
 
+from holon.models.util import is_allowed_relation
+
+
 class ChangeAttributeOperator(models.TextChoices):
     """Types of supported mathematical operators"""
 
@@ -37,7 +40,10 @@ class RuleActionChangeAttribute(RuleAction):
         super().clean()
 
         try:
-            if not self.model_attribute in self.rule.get_model_attributes_options():
+            if (
+                not self.model_attribute in self.rule.get_model_attributes_options()
+                or not is_allowed_relation(self.model_attribute)
+            ):
                 raise ValidationError(f"Invalid value {self.model_attribute} for model_attribute")
         except ObjectDoesNotExist:
             return
