@@ -181,7 +181,6 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
     panels = [
         FieldPanel("option"),
         FieldPanel("label"),
-        FieldPanel("default"),
         FieldPanel("legal_limitation"),
         FieldPanel("level"),
         FieldPanel("color"),
@@ -252,7 +251,6 @@ class InteractiveElementContinuousValues(ClusterableModel):
     )
 
     panels = [
-        FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
         FieldPanel("discretization_steps"),
