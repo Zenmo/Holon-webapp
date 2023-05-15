@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.9-alpine AS base
 
 # Create app directory
 RUN mkdir -p /home/app
@@ -31,13 +31,18 @@ RUN apk add --no-cache imagemagick && \
 RUN pip install pip --upgrade
 ADD requirements $APP_HOME/requirements
 RUN pip install -r ./requirements/prod.txt
+
+# Copy project
+COPY . $APP_HOME
+
+FROM base AS clean-scenarios
+ENTRYPOINT ["python", "manage.py", "loop_clean_scenarios"]
+
+FROM base AS wagtail
 RUN pip install gunicorn
 
 # Copy production entrypoint
 COPY docker-entrypoint.prod.sh $APP_HOME
-
-# Copy project
-COPY . $APP_HOME
 
 # Copy ssh files
 COPY sshd_config /etc/ssh/
