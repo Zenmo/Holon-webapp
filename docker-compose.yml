@@ -22,7 +22,7 @@ services:
   next:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
     ports:
       - "3000:3000"
     depends_on:
@@ -36,7 +36,7 @@ services:
   python:
     build:
       context: ./src
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
     volumes:
       - "./src:/app"
     depends_on:
