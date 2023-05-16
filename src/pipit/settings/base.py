@@ -1,3 +1,8 @@
+"""
+Base settings, to be included and optionally overridden by environment-specific settings.
+Which settings are used is controlled by the environment variable DJANGO_SETTINGS_MODULE.
+For example for src/pipit/settings/stage.py, set "DJANGO_SETTINGS_MODULE=pipit.settings.stage".
+"""
 import os
 from typing import Optional
 
@@ -213,7 +218,7 @@ if get_env("AWS_ACCESS_KEY_ID", ""):
 
 # Uploaded media
 MEDIA_URL = "/wt/media/"
-MEDIA_ROOT = "/app/media"
+MEDIA_ROOT = "./media/"
 
 
 # Static files, if in production use static root, else use static dirs
@@ -223,7 +228,7 @@ STATIC_URL = "/wt/static/"
 
 # The absolute path to the directory where collectstatic will collect static
 # files for deployment. Example: "/var/www/example.com/static/"I
-STATIC_ROOT = "/app/static"
+STATIC_ROOT = "./static"
 
 # This setting defines the additional locations the staticfiles will traverse
 STATICFILES_DIRS = (
