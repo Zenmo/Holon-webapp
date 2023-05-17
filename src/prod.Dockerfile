@@ -41,9 +41,6 @@ ENTRYPOINT ["python", "manage.py", "loop_clean_scenarios"]
 FROM base AS wagtail
 RUN pip install gunicorn
 
-# Copy production entrypoint
-COPY docker-entrypoint.prod.sh $APP_HOME
-
 # Copy ssh files
 COPY sshd_config /etc/ssh/
 
