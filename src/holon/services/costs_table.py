@@ -1,4 +1,5 @@
 """Create a Costs&Benefits Table """
+from holon.models import Actor
 
 
 class CostTables:
@@ -101,19 +102,27 @@ class CostTable:
 
 
 class ActorWrapper:
-    def __init__(self, actors) -> None:
+    def __init__(self, id_to_actor: dict[int, Actor]) -> None:
         """Where actors is the Django equivalent of AR relation of Actors of the scenario"""
-        self.actors = actors
+        self.id_to_actor = id_to_actor
 
     def find(self, actor_name):
         """
         Strips the AL prefix from the actor name and returns the corresponding Actor
         """
-        return self.actors.get(id=int(actor_name[3:]))
+        return self.id_to_actor[int(actor_name[3:])]
 
     @classmethod
     def from_scenario(cls, scenario):
-        return cls(scenario.actor_set)
+        # In scenario "Transitie Visie Warmte"
+        # doing this eagerly prevents many thousands of queries
+        # even though there are only 44 actors.
+        actors = list(
+            scenario.actor_set.all().prefetch_related("group").prefetch_related("subgroup")
+        )
+        id_to_actor: dict[int, Actor] = {actor.id: actor for actor in actors}
+
+        return cls(id_to_actor)
 
 
 class CostItem:
