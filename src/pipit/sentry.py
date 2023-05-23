@@ -31,7 +31,7 @@ def initialize_sentry(ingest_dsn: str, environment: str) -> None:
         release="0.1.0",
         # We do too many queries on some pages.
         # Is there a better way to reduce the number of spans?
-        _experiments={"max_spans": 20_000},  # default 1000
+        _experiments={"max_spans": 100_000},  # default 1000
         before_send_transaction=consolidate_db_spans_nothrow,
         traces_sampler=traces_sampler,
     )
