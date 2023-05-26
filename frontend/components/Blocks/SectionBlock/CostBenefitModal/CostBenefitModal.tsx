@@ -51,7 +51,7 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
           <div className="flex flex-1 flex-col h-full">
             <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
               <div className="flex flex-row justify-between">
-                <Tab.List>
+                <Tab.List className="lg:w-[25%]">
                   {tabItems.map((tabItem, index) => (
                     <Tab
                       key={tabItem.tabName + index}
@@ -66,11 +66,22 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
                       {tabItem.tabName}
                     </Tab>
                   ))}
+                  {selectedIndex === 2 && (
+                    <select className="bg-white border-[1px] border-holon-slated-blue-900 text-sm focus:ring-holon-slated-blue-300 focus:border-holon-slated-blue-300 h-full ml-2">
+                      <option>Huishoudens</option>
+                      <option>X</option>
+                    </select>
+                  )}
                 </Tab.List>
                 <h2>{tabItems[selectedIndex].tabTitle}</h2>
-                <button type="button" className="text-holon-blue-900 w-8" onClick={handleClick}>
-                  <XMarkIcon />
-                </button>
+                <div className="lg:w-[25%] flex">
+                  <button
+                    type="button"
+                    className="text-holon-blue-900 w-8 ml-auto"
+                    onClick={handleClick}>
+                    <XMarkIcon />
+                  </button>
+                </div>
               </div>
 
               <Tab.Panels className="flex flex-1 flex-col min-h-0">
