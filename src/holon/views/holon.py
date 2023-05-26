@@ -28,16 +28,19 @@ class HolonV2Service(generics.CreateAPIView):
         serializer = HolonRequestSerializer(data=request.data)
         use_caching = request.query_params.get("caching", "true").lower() == "true"
 
-        scenario = None
+        scenario: Scenario = None
+        scenario_to_delete: Scenario = None
         cc = None
 
         try:
             if serializer.is_valid():
                 data = serializer.validated_data
+                original_scenario = data["scenario"]
+                scenario = original_scenario
 
                 if use_caching:
                     cache_key = holon_endpoint_cache.generate_key(
-                        data["scenario"], data["interactive_elements"]
+                        scenario, data["interactive_elements"]
                     )
                     value = holon_endpoint_cache.get(cache_key)
 
@@ -49,12 +52,16 @@ class HolonV2Service(generics.CreateAPIView):
                         )
 
                 HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
-                scenario = rule_mapping.get_scenario_and_apply_rules(
-                    data["scenario"].id, data["interactive_elements"]
+                scenario = rule_mapping.apply_rules(
+                    scenario, data["interactive_elements"]
                 )
 
+                # prefetch again after rules are applied, for more efficient serialization
+                scenario = Scenario.queryset_with_relations().get(id=scenario.id)
+                scenario_to_delete = scenario
+
                 HolonV2Service.logger.log_print("Running Anylogic model")
-                original_scenario = Scenario.objects.get(id=data["scenario"].id)
+
                 cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
                 cc.run()
 
@@ -122,6 +129,7 @@ class HolonV2Service(generics.CreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except (Exception, ETMConnectionError) as e:
             HolonV2Service.logger.log_print(e)
+            traceback.print_exception(e)
             capture_exception(e)
 
             response_body = {"error_msg": f"something went wrong: {e}"}
@@ -138,9 +146,9 @@ class HolonV2Service(generics.CreateAPIView):
         finally:
             # always delete the scenario!
             try:
-                if scenario:
-                    scenario_id = scenario.id
-                    scenario.delete_async()
+                if scenario_to_delete:
+                    scenario_id = scenario_to_delete.id
+                    scenario_to_delete.delete_async()
             except Exception as e:
                 HolonV2Service.logger.log_print(
                     f"Something went wrong while trying to delete scenario {scenario_id}"

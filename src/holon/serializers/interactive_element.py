@@ -28,7 +28,7 @@ class InteractiveElementInputSerializer(serializers.Serializer):
 class HolonRequestSerializer(serializers.Serializer):
     interactive_elements = InteractiveElementInputSerializer(many=True)
 
-    scenario = serializers.PrimaryKeyRelatedField(queryset=Scenario.objects.all())
+    scenario = serializers.PrimaryKeyRelatedField(queryset=Scenario.queryset_with_relations())
 
     class Meta:
         fields = ["interactive_elements"]
