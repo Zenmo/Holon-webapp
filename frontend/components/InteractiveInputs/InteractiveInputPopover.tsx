@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Popover } from "@headlessui/react";
 import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -8,19 +8,26 @@ type Props = {
   moreInformation?: string;
   legal_limitation?: string;
   color?: string;
+  textColor?: string;
   titleWikiPage?: string;
   linkWikiPage?: string;
 };
+
+enum PopoverHorizontalPosition {
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+}
 
 export default function InteractiveInputPopover({
   name,
   moreInformation,
   legal_limitation,
   color,
+  textColor,
   titleWikiPage,
   linkWikiPage,
 }: Props) {
-  const buttonRef = useRef();
+  const buttonRef = useRef<HTMLButtonElement>();
 
   const selectBackgroundColor = (color: string) => {
     let bgColor = "";
@@ -41,14 +48,34 @@ export default function InteractiveInputPopover({
     return bgColor;
   };
 
+  const [popoverHorizontalPosition, setPopoverHorizontalPosition] = useState(PopoverHorizontalPosition.RIGHT)
+  useLayoutEffect(() => {
+    const { left } = buttonRef.current.getBoundingClientRect();
+    if (left / window.innerWidth < 0.5) {
+      // This element is on left half of the screen.
+      // Let the popover flow to the right.
+      setPopoverHorizontalPosition(PopoverHorizontalPosition.RIGHT)
+    } else {
+      setPopoverHorizontalPosition(PopoverHorizontalPosition.LEFT)
+    }
+  }, []);
+
+  const selectPopoverLocationStyle = () => {
+    if (popoverHorizontalPosition == PopoverHorizontalPosition.LEFT) {
+      return {right: 0};
+    } else {
+      return ({}); // equivalent to left: 0
+    }
+  }
+
   return (
     <Popover className="relative" data-testid="input-popover">
       <Popover.Button className="w-6 h-6 mt-1" ref={buttonRef}>
         <InformationCircleIcon />
       </Popover.Button>
 
-      <Popover.Panel className="absolute z-10 bg-white w-[350px] sm:w-[400px] xl:w-[475px] border-2 border-solid rounded-md border-holon-gray-300 ">
-        <div>
+      <Popover.Panel className="absolute z-10 bg-white w-[350px] sm:w-[400px] xl:w-[475px] border-2 border-solid rounded-md border-holon-gray-300 " style={selectPopoverLocationStyle()}>
+        <div className={textColor}>
           <div className=" mt-4 mx-4 mb-2">
             <h4 className="text-ellipsis overflow-hidden border-b-2 border-holon-gray-300">
               {name}

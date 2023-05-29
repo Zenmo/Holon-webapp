@@ -42,6 +42,9 @@ class RuleActionChangeAttribute(RuleAction):
         except ObjectDoesNotExist:
             return
 
+    def hash(self):
+        return f"[A{self.id},{self.model_attribute},{self.operator},{self.static_value}]"
+
     def __apply_operator(self, value_old, input_value):
         """Cast the input value to the same type of the old value and apply the chosen operator"""
 

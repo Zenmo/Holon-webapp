@@ -39,11 +39,14 @@ class Skip(FilterSubSelector):
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Skip a number of items in the queryset"""
         if self.use_interactive_element_value:
-            n = int(value)
+            n = int(float(value))
         else:
             n = self.number_of_items
 
         return queryset[n:]
+
+    def hash(self):
+        return f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items}]"
 
 
 class TakeMode(models.TextChoices):
@@ -63,11 +66,16 @@ class Take(FilterSubSelector):
         FieldPanel("mode"),
     ]
 
+    def hash(self):
+        return (
+            f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items},{self.mode}]"
+        )
+
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Take a number of items from the queryset, either the first n or random n"""
 
         if self.use_interactive_element_value:
-            n = int(value)
+            n = int(float(value))
         else:
             n = self.number_of_items
 

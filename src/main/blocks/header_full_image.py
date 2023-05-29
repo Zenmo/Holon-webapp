@@ -1,9 +1,6 @@
 """ Streamfields """
 from wagtail.core import blocks
-
-from main.blocks.rich_text_block import RichtextBlock
-from .holon_image_chooser import HolonImageChooserBlock
-from .background_chooser import BackgroundChooserBlock
+from .holon_header_image_chooser import HolonHeaderImageChooserBlock
 
 
 class HeaderFullImageBlock(blocks.StructBlock):
@@ -21,7 +18,7 @@ class HeaderFullImageBlock(blocks.StructBlock):
         default="h2",
     )
 
-    image_selector = HolonImageChooserBlock(required=True)
+    image_selector = HolonHeaderImageChooserBlock(required=True)
 
     alt_text = blocks.CharBlock(
         help_text=(

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "corsheaders",
     # Project specific apps
     "pipit",
@@ -125,7 +126,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "pipit.wsgi.application"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",)
+    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "holon-auth"
@@ -254,5 +256,29 @@ CSRF_TRUSTED_ORIGINS = ["localhost:3000", "https://pizzaoven.holontool.nl"]
 OLD_PASSWORD_FIELD_ENABLED = True
 
 
+# Caching
+HOLON_CACHING_TIMEOUT = None
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table",
+    },
+    "holon_cache": {
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
+        "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 100000},
+    },
+}
+
+
 # Disable form length for big interactive element forms
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+# Openapi documentation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "HOLON",
+    "DESCRIPTION": "",
+    "VERSION": "2.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}

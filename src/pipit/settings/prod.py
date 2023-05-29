@@ -1,9 +1,8 @@
 """
 Write prod settings here, or override base settings
 """
-from pipit.settings import initialize_sentry
+from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
-
 
 DEBUG = False
 
@@ -25,6 +24,12 @@ CACHES = {
         "OPTIONS": {
             "MAX_ENTRIES": 1000,
         },
+    },
+    "holon_cache": {
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
+        "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 100000},
     },
 }
 

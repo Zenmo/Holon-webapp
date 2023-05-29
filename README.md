@@ -22,6 +22,7 @@ This repo contains the webapp part of the HOLON project. This includes the NextJ
   - [Deployment](#deployment)
   - [Datamodel](#datamodel)
     - [Development on datamodel](#development-on-datamodel)
+    - [Datamodel scenario feedback in any environment](#datamodel-scenario-feedback-in-any-environment)
 - [Resetting database and building project](#resetting-database-and-building-project)
 
 ## Environments
@@ -194,6 +195,14 @@ Refer to the datamodel readme: [datamodel.readme.md](src/holon/datamodel.readme.
 ### Development on datamodel
 
 Use convenience `migrate_and_create_fixture.sh` before every commit to make sure that the fixtures or present datamodels survive the changes you are making to the datamodel.
+
+### Datamodel scenario feedback in any environment
+
+A feature to help debug AnyLogic model results. This setting is used in the `/wt/api/nextjs/v2/holon/` endpoint to determine whether to send back the used scenario (through the serializer) or not. This should ideally not be set to true in production since it will impact performance.
+
+```conf
+RETURN_SCENARIO=True
+```
 
 # Resetting database and building project
 
