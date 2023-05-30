@@ -6,6 +6,7 @@ from holon.models.gridnode import GridNode
 from holon.models.policy import Policy
 from holon.models.scenario import Scenario
 from holon.models.contract import Contract
+from holon.services.clone_scenario import clone_scenario
 
 
 class MyTest(TestCase):
@@ -67,7 +68,7 @@ class MyTest(TestCase):
     def test_scenario_clone_reference(self):
         """Test if the scenario attributes are cloned correctly"""
         scenario = Scenario.objects.get(pk=1)
-        cloned_scenario = scenario.clone()
+        cloned_scenario = clone_scenario(scenario)
         scenario = Scenario.objects.get(pk=1)
 
         self.assertEqual(scenario.cloned_from, None)
@@ -80,7 +81,7 @@ class MyTest(TestCase):
         scenario_models_before = self.__get_scenario_models(scenario)
 
         # clone
-        scenario.clone()
+        clone_scenario(scenario)
 
         # get scenario models again
         scenario = Scenario.objects.get(pk=1)
@@ -92,7 +93,7 @@ class MyTest(TestCase):
     def test_scenario_clone_attributes(self):
         """Test if the scenario attributes are cloned correctly"""
         scenario = Scenario.objects.get(pk=1)
-        cloned_scenario = scenario.clone()
+        cloned_scenario = clone_scenario(scenario)
         scenario = Scenario.objects.get(pk=1)
 
         self.assertNotEqual(scenario.pk, cloned_scenario.pk)
@@ -103,7 +104,7 @@ class MyTest(TestCase):
     def test_scenario_clone_models(self):
         """Test if underlying models are cloned correctly"""
         scenario = Scenario.objects.get(pk=1)
-        cloned_scenario = scenario.clone()
+        cloned_scenario = clone_scenario(scenario)
         scenario = Scenario.objects.get(pk=1)
 
         # check underlying model counts
@@ -120,7 +121,7 @@ class MyTest(TestCase):
     def test_scenario_clone_orginal_ids(self):
         """Test if original ids of cloned models are set correctly"""
         scenario = Scenario.objects.get(pk=1)
-        cloned_scenario = scenario.clone()
+        cloned_scenario = clone_scenario(scenario)
         scenario = Scenario.objects.get(pk=1)
 
         scenario_models = self.__get_scenario_models(scenario)

@@ -2,6 +2,7 @@ from holon.models.scenario import Scenario
 from holon.models.scenario_rule import ScenarioRule
 from holon.serializers import InteractiveElementInput
 from holon.models import ChoiceType
+from holon.services.clone_scenario import clone_scenario
 from pipit.sentry import sentry_sdk_trace
 
 
@@ -23,7 +24,7 @@ def apply_rules(
     """Load a scenario, apply rules from interactive elements and return with mapped fields"""
 
     # clone scenario
-    scenario = scenario.clone()
+    scenario = clone_scenario(scenario)
 
     # apply rules belonging to interactive elements
     for interactive_element_input in interactive_element_inputs:
