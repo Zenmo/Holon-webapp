@@ -4,11 +4,8 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
-from holon.models.util import duplicate_model_nomutate
 from threading import Thread
 from hashlib import sha512
-
-from pipit.sentry import sentry_sdk_trace
 
 
 class Scenario(ClusterableModel):
@@ -89,105 +86,6 @@ class Scenario(ClusterableModel):
             .prefetch_related("gridnode_set__energyasset_set")
             .prefetch_related("policy_set")
         )
-
-    @sentry_sdk_trace
-    def clone(self) -> "Scenario":
-        """Clone scenario and all its relations in a new scenario"""
-
-        from holon.models import EnergyAsset, GridNode, Contract, Actor, Policy
-
-        with transaction.atomic():
-            new_scenario = duplicate_model_nomutate(self)
-            new_scenario.cloned_from = self
-            new_scenario.save()
-
-            actor_id_to_new_model_mapping = {}
-
-            for actor in self.actor_set.all():
-                new_actor = duplicate_model_nomutate(actor)
-                new_actor.payload = new_scenario
-                new_actor.original_id = actor.id
-
-                actor_id_to_new_model_mapping[actor.id] = new_actor
-
-            Actor.objects.bulk_create(actor_id_to_new_model_mapping.values())
-
-            for contract in Contract.objects.filter(actor__payload_id=self.id):
-                new_contract = duplicate_model_nomutate(contract)
-                new_contract.original_id = contract.id
-                new_contract.actor = actor_id_to_new_model_mapping[contract.actor_id]
-                new_contract.contractScope = actor_id_to_new_model_mapping[
-                    contract.contractScope_id
-                ]
-                # Can't bulk create because it's not implemented in django-polymorphic
-                new_contract.save()
-
-            gridnode_id_to_new_model_mapping = {}
-            for gridnode in self.gridnode_set.all():
-                new_gridnode = duplicate_model_nomutate(gridnode)
-                new_gridnode.original_id = gridnode.id
-                new_gridnode.payload = new_scenario
-                new_gridnode.owner_actor = actor_id_to_new_model_mapping[gridnode.owner_actor_id]
-                # Can't bulk create because it's not implemented in django-polymorphic
-                new_gridnode.save()
-
-                gridnode_id_to_new_model_mapping[gridnode.id] = new_gridnode
-
-            for gridnode in self.gridnode_set.all():
-                for asset in gridnode.energyasset_set.all():
-                    new_asset = duplicate_model_nomutate(asset)
-                    new_asset.original_id = asset.id
-                    new_asset.gridnode = gridnode_id_to_new_model_mapping[asset.gridnode_id]
-                    # Can't bulk create because it's not implemented in django-polymorphic
-                    new_asset.save()
-
-            # Update gridnode parent
-            for gridnode in gridnode_id_to_new_model_mapping.values():
-                if gridnode.parent:
-                    gridnode.parent = gridnode_id_to_new_model_mapping[gridnode.parent.id]
-                    gridnode.save()
-
-            gridconnections = self.gridconnection_set.all()
-
-            for gridconnection in gridconnections:
-                new_gridconnection = duplicate_model_nomutate(gridconnection)
-                new_gridconnection.original_id = gridconnection.pk
-                new_gridconnection.payload = new_scenario
-                new_gridconnection.owner_actor = actor_id_to_new_model_mapping[
-                    gridconnection.owner_actor_id
-                ]
-
-                if gridconnection.parent_heat_id:
-                    new_gridconnection.parent_heat = gridnode_id_to_new_model_mapping[
-                        gridconnection.parent_heat_id
-                    ]
-                if gridconnection.parent_electric_id:
-                    new_gridconnection.parent_electric = gridnode_id_to_new_model_mapping[
-                        gridconnection.parent_electric_id
-                    ]
-
-                # Can't bulk create because it's not implemented in django-polymorphic
-                new_gridconnection.save()
-
-                for asset in gridconnection.energyasset_set.all():
-                    new_asset = duplicate_model_nomutate(asset)
-                    new_asset.original_id = asset.id
-                    new_asset.gridconnection = new_gridconnection
-                    # Can't bulk create because it's not implemented in django-polymorphic
-                    new_asset.save()
-
-            new_policies = []
-            for policy in self.policy_set.all():
-                new_policy = duplicate_model_nomutate(policy)
-                new_policy.original_id = policy.id
-                new_policy.payload = new_scenario
-
-                new_policies.append(new_policy)
-
-            Policy.objects.bulk_create(new_policies)
-
-            # fetch again to make sure nothing stale is left in the object
-            return Scenario.objects.get(id=new_scenario.id)
 
     def delete(self) -> None:
         """Delete scenario and all its relations"""

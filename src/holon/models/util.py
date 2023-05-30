@@ -1,6 +1,8 @@
 import copy
 import json
 from pathlib import Path
+from typing import TypeVar
+
 from django.db import models
 from django.db.models import Model
 from django.db import models
@@ -40,7 +42,10 @@ def duplicate_model(obj, attrs={}):
     return obj
 
 
-def duplicate_model_nomutate(source: Model) -> Model:
+TModel = TypeVar("TModel", bound=Model)
+
+
+def duplicate_model_nomutate(source: TModel) -> TModel:
     # shallow copy
     destination = copy.copy(source)
     destination.pk = None

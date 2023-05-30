@@ -52,9 +52,7 @@ class HolonV2Service(generics.CreateAPIView):
                         )
 
                 HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
-                scenario = rule_mapping.apply_rules(
-                    scenario, data["interactive_elements"]
-                )
+                scenario = rule_mapping.apply_rules(scenario, data["interactive_elements"])
 
                 # prefetch again after rules are applied, for more efficient serialization
                 scenario = Scenario.queryset_with_relations().get(id=scenario.id)
