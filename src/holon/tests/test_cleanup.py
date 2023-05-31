@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.test import Client
 from rest_framework.response import Response
 
+from holon.services.clone_scenario import clone_scenario
+
 
 class MyTest(TestCase):
     fixtures = ["holon/tests/fixtures/merged-datamodel-ehub-config-fixture.json"]
@@ -11,7 +13,7 @@ class MyTest(TestCase):
     def test_cleanup_scenarios(self):
         # Arange
         scenario = Scenario.objects.get(pk=1)
-        scenario.clone()
+        clone_scenario(scenario)
 
         # Act
         url: str = reverse("holon-cleanup")

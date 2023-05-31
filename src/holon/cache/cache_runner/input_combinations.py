@@ -132,7 +132,6 @@ def generate_interactive_input_combinations(
     total_combinations = 0
 
     for section in sections:
-
         print(f" - Section with {len(section)} interactive elements")
 
         section_combinations = 1

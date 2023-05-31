@@ -1,5 +1,8 @@
+import copy
 import json
 from pathlib import Path
+from typing import TypeVar
+
 from django.db import models
 from django.db.models import Model
 from django.db import models
@@ -29,8 +32,36 @@ def duplicate_model(obj, attrs={}):
     obj.pk = None
     obj.id = None
 
-    # for copying polymorphic models with multiple levels of inheritance
-    # https://stackoverflow.com/a/74999379/19602496
+    clear_base_pointer(obj)
+
+    # modify attributes
+    for key, value in attrs.items():
+        setattr(obj, key, value)
+
+    obj.save()
+    return obj
+
+
+TModel = TypeVar("TModel", bound=Model)
+
+
+def duplicate_model_nomutate(source: TModel) -> TModel:
+    # shallow copy
+    destination = copy.copy(source)
+    destination.pk = None
+    destination.id = None
+
+    clear_base_pointer(destination)
+
+    return destination
+
+
+# What I suspect this does:
+# Django polymorphic has an internal one-to-one relation to the base table.
+# This function clears that relation so that we can save a copied object
+# as an independent object and retain the source object.
+# see https://stackoverflow.com/a/74999379/19602496
+def clear_base_pointer(obj: Model):
     for field in obj._meta.get_fields(include_parents=True):
         if not isinstance(field, models.OneToOneField):
             continue
@@ -40,13 +71,6 @@ def duplicate_model(obj, attrs={}):
             continue
 
         setattr(obj, field.attname, None)
-
-    # modify attributes
-    for key, value in attrs.items():
-        setattr(obj, key, value)
-
-    obj.save()
-    return obj
 
 
 def reset_obj(obj, attributes: dict = {}):
