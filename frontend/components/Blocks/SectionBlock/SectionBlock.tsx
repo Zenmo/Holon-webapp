@@ -5,16 +5,16 @@ import { Graphcolor } from "@/containers/types";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { SetStateAction, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import HolarchyTab from "./HolarchyTab/HolarchyTab";
 import { LegendItem } from "./HolarchyTab/LegendModal";
-import { Content, Feedbackmodals, InteractiveContent } from "./types";
+import { Content, Feedbackmodals, InteractiveContent, SavedElements } from "./types";
 
 type Props = {
   data: {
@@ -32,6 +32,8 @@ type Props = {
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
+  savePageValues: SetStateAction<SavedElements[]>; 
+  saveScenario: () => void; 
 };
 
 const initialData = {
@@ -54,7 +56,7 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors }: Props) {
+export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors, savePageValues, saveScenario }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
@@ -88,6 +90,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
     debouncedCalculateKPIs(content);
+    savePageValues(saveCurrentValues(content)); 
   }, [content, debouncedCalculateKPIs]);
 
   useEffect(() => {
@@ -164,6 +167,23 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
     }
     return return_arr;
   }
+
+  const saveCurrentValues = (content: Content[]) => {
+    //get currentValues of visible interactive elements
+    let savedElements: SavedElements = {}; 
+
+    content?.map((sectionItem: Content) => {
+      if(sectionItem.type === "interactive_input" && sectionItem.value.visible) {
+        let key = `${data.id}.${sectionItem.value.id}`; 
+        let value = sectionItem.currentValue; 
+
+        savedElements = {...savedElements, [key]: value}; 
+      }
+    })
+    return savedElements; 
+  
+  }
+  
 
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef}>
@@ -245,7 +265,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
                 data={kpis}
                 loading={loading}
                 dashboardId={data.id}
-                handleClickCostBen={openCostBenefitModal}></KPIDashboard>
+                handleClickCostBen={openCostBenefitModal}
+                handleClickScenario={saveScenario}></KPIDashboard>
             </div>
           </div>
         </div>

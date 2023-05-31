@@ -1,10 +1,5 @@
-import ButtonsAndMediaBlock from "./ButtonsAndMediaBlock/ButtonsAndMediaBlock";
-import CardBlock from "./CardsBlock/CardBlock";
-import HeroBlock from "./HeroBlock/HeroBlock";
-import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock";
-import TitleBlock from "./TitleBlock/TitleBlock";
-
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import {
   CardBlockVariant,
   Graphcolor,
@@ -13,11 +8,17 @@ import {
   TextAndMediaVariant,
   TitleBlockVariant,
 } from "../../containers/types";
+import ButtonsAndMediaBlock from "./ButtonsAndMediaBlock/ButtonsAndMediaBlock";
+import CardBlock from "./CardsBlock/CardBlock";
 import { FeedbackModal } from "./ChallengeFeedbackModal/types";
 import HeaderFullImageBlock from "./HeaderFullImageBlock/HeaderFullImageBlock";
+import HeroBlock from "./HeroBlock/HeroBlock";
 import ParagraphBlock from "./ParagraphBlock";
 import SectionBlock from "./SectionBlock/SectionBlock";
+import { SavedElements } from "./SectionBlock/types";
 import TableBlock from "./TableBlock/TableBlock";
+import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock";
+import TitleBlock from "./TitleBlock/TitleBlock";
 
 export type Feedbackmodals = [FeedbackModal];
 
@@ -37,7 +38,19 @@ const ContentBlocks = ({
   graphcolors?: Graphcolor[];
 }) => {
   let targetValuesPreviousSections = new Map();
+  const [ currentPageValues, setCurrentPageValues] = useState({}); 
+  const { asPath } = useRouter(); 
+  const [ savedValues, setSavedValues ] = useState([]); 
 
+  useEffect(()=> {
+    checkIfSavedScenario(); 
+  }, [])
+
+  useEffect(() => {
+    console.log(savedValues);
+  }, [savedValues]);
+
+  
   /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
     const updatedContent = { ...content };
@@ -87,6 +100,61 @@ const ContentBlocks = ({
     return null;
   }
 
+  function saveSectionValues(sectionValue: SavedElements) {
+    const newCurrentPageValues = Object.assign(currentPageValues, sectionValue); 
+    setCurrentPageValues(newCurrentPageValues); 
+  }
+
+  function saveScenario() {
+    //get baseUrl
+    const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
+    const baseURL = `${origin}${asPath}`;
+    //get params
+    const params = Object.entries(currentPageValues).map(([key, val]) => `${key}=${val}`).join('&'); 
+    //create link
+    const savedScenarioUrl = `${baseURL}?${params}`; 
+    console.log(savedScenarioUrl); 
+    return savedScenarioUrl; 
+  }
+
+  function checkIfSavedScenario() {
+    const urlParams = typeof window !== 'undefined' && window.location.origin ? new URLSearchParams(window.location.search) : null;
+    if(urlParams) {
+      const entries = urlParams.entries(); //returns an iterator of decoded [key,value] tuples
+      const params = Object.fromEntries(entries);
+      console.log(params); 
+      
+      if(Object.keys(params).length !== 0) {
+        for (const [key, value] of Object.entries(params)) {
+          const x = key.toString();
+          const y = x.split('.');
+          y.push(value);  
+         setSavedValues(prevSavedValues => [...prevSavedValues, y]); 
+        } 
+      } else {
+     return; 
+    }
+    } else {
+      return; 
+    }   
+  }
+
+  function addSavedValues(savedValues, content) {
+    const updatedContent = { ...content }; 
+    const uniqueSavedValues = []; 
+
+    savedValues.forEach((array) => {
+      if(array[0] === content.id) {
+        const foundElement = updatedContent.value.content.find(element => {
+          return element.type === "interactive_input" && element.value.id === array[1];
+        });
+        if(foundElement) {
+          foundElement.value.savedValue = array[2]; 
+        }
+      }
+    })
+  }
+
   return (
     <React.Fragment>
       {content?.map(contentItem => {
@@ -111,7 +179,7 @@ const ContentBlocks = ({
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
-            updateTargetValues(contentItem.value.content);
+            updateTargetValues(contentItem.value.content); 
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
@@ -119,6 +187,9 @@ const ContentBlocks = ({
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
                 graphcolors={graphcolors ?? []}
+                savePageValues={saveSectionValues}
+                saveScenario={saveScenario}
+                savedSectionValues={savedSectionValues}
               />
             );
           case "buttons_and_media_block":
