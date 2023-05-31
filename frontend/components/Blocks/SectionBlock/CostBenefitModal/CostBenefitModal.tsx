@@ -5,7 +5,8 @@ import { Graphcolor } from "@/containers/types";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+const CostBenefitDetailStaticData = require("./staticdata.json");
 
 type Props = {
   handleClose: () => void;
@@ -19,6 +20,11 @@ type Props = {
 export default function CostBenefitModal({ handleClose, costBenefitData, graphcolors }: Props) {
   const ignoredLabels = ["name", "Netto kosten"];
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [subgroup, setSubgroup] = useState("");
+
+  useEffect(() => {
+    setSubgroup(Object.keys(CostBenefitDetailStaticData)[0]);
+  }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -51,7 +57,7 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
           <div className="flex flex-1 flex-col h-full">
             <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
               <div className="flex flex-row justify-between">
-                <Tab.List className="lg:w-[25%]">
+                <Tab.List className="xl:w-[28%] flex flex-nowrap flex-row">
                   {tabItems.map((tabItem, index) => (
                     <Tab
                       key={tabItem.tabName + index}
@@ -67,14 +73,21 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
                     </Tab>
                   ))}
                   {selectedIndex === 2 && (
-                    <select className="bg-white border-[1px] border-holon-slated-blue-900 text-sm focus:ring-holon-slated-blue-300 focus:border-holon-slated-blue-300 h-full ml-2">
-                      <option>Huishoudens</option>
-                      <option>X</option>
-                    </select>
+                    <div className=" h-full ml-2">
+                      <select
+                        onChange={e => setSubgroup(e.target.value)}
+                        className="bg-white border-[1px] border-holon-slated-blue-900 text-sm focus:ring-holon-slated-blue-300 focus:border-holon-slated-blue-300 h-full w-full">
+                        {Object.keys(CostBenefitDetailStaticData).map(item => (
+                          <option value={item} key={item}>
+                            {item}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   )}
                 </Tab.List>
                 <h2>{tabItems[selectedIndex].tabTitle}</h2>
-                <div className="lg:w-[25%] flex">
+                <div className="xl:w-[28%] flex">
                   <button
                     type="button"
                     className="text-holon-blue-900 w-8 ml-auto"
@@ -97,12 +110,17 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
                 </Tab.Panel>
 
                 <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0 pt-2">
-                  <CostBenefitDetail
-                    chartdata={convertGraphData(costBenefitData.detail)}
-                    detailData={costBenefitData.detail}
-                    dataColors={graphcolors ?? []}
-                    ignoredLabels={ignoredLabels}
-                  />
+                  {subgroup ? (
+                    <CostBenefitDetail
+                      chartdata={convertGraphData(CostBenefitDetailStaticData[subgroup])}
+                      //detailData={costBenefitData.detail}
+                      detailData={CostBenefitDetailStaticData[subgroup]}
+                      dataColors={graphcolors ?? []}
+                      ignoredLabels={ignoredLabels}
+                    />
+                  ) : (
+                    <p>Er is geen data om te tonen</p>
+                  )}
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
