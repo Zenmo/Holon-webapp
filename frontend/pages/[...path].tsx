@@ -1,5 +1,5 @@
 import querystring from "querystring";
-import { getPage, getRedirect, getAllPages, WagtailApiResponseError } from "../api/wagtail";
+import { WagtailApiResponseError, getAllPages, getPage, getRedirect } from "../api/wagtail";
 import LazyContainers from "../containers/LazyContainers";
 
 const isProd = process.env.NODE_ENV === "production";
@@ -85,7 +85,7 @@ export async function getServerSideProps({ req, params, res }) {
     }
 
     if (componentName === "WikiPage") {
-      const { json: wikiMenu } = await getAllPages({ type: "main.WikiPage" });
+      const { json: wikiMenu } = await getAllPages({ type: "main.WikiPage", limit: 99999999 });
       componentProps.wikiMenu = wikiMenu;
     }
 
