@@ -192,3 +192,28 @@ class RuleMappingTestClass(TestCase):
         # Assert
         assert updated_scenario.gridconnection_set.first().capacity_kw == 1  # was 750.0
         assert updated_scenario.gridconnection_set.first().insulation_label == 1  # was 750.0
+
+    def test_change_attribute_allowed_relation_set(self):
+        """Test the change attribute set operator"""
+
+        # Arrange
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.ACTOR,
+        )
+        RuleActionChangeAttribute.objects.create(
+            model_attribute="group", operator=ChangeAttributeOperator.SET, rule=rule
+        )
+
+        actor_group = ActorGroup.objects.create(name="group")
+        interactive_elements = [
+            {"value": str(actor_group.id), "interactive_element": self.interactive_element}
+        ]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        assert updated_scenario.actor_set.first().group_id == actor_group.id

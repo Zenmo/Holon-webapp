@@ -206,12 +206,8 @@ class HolonCMSLogic(generics.RetrieveAPIView):
             if is_exclude_field(field):
                 continue
             attribute = {"name": field.name}
-            if field.is_relation:
-                if issubclass(field.related_model, tuple(self.valid_relations)):
-                    attribute["relation"] = field.related_model.__name__
-                elif is_allowed_relation(field.name):
-                    extra_id_attribute = {"name": f"{field.name}_id"}
-                    attributes.append(extra_id_attribute)
+            if field.is_relation and issubclass(field.related_model, tuple(self.valid_relations)):
+                attribute["relation"] = field.related_model.__name__
             attributes.append(attribute)
         return attributes
 

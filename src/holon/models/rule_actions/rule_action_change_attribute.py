@@ -80,9 +80,13 @@ class RuleActionChangeAttribute(RuleAction):
         if self.static_value:
             value = self.static_value
 
+        model_attribute = self.model_attribute
+        if is_allowed_relation(model_attribute):
+            model_attribute += "_id"
+
         # apply operators to objects
         for filtered_object in filtered_queryset:
-            old_value = getattr(filtered_object, self.model_attribute)
+            old_value = getattr(filtered_object, model_attribute)
             new_value = self.__apply_operator(old_value, value)
 
             # change the new value type to the same as the old one
@@ -92,5 +96,5 @@ class RuleActionChangeAttribute(RuleAction):
                 # fallback when old_value is None
                 cast_new_value = new_value
 
-            setattr(filtered_object, self.model_attribute, cast_new_value)
+            setattr(filtered_object, model_attribute, cast_new_value)
             filtered_object.save()
