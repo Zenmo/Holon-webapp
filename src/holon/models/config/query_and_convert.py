@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
@@ -32,7 +32,7 @@ class QueryAndConvertConfig(ClusterableModel):
             "Use this field to explain the query in the front-end. This field is rendered next to the KPI selection radio (that toggles between local, intermediate and national level)"
         ),
     )
-    generic_etm_query = models.ManyToManyField(
+    generic_etm_query = ParentalManyToManyField(
         "holon.GenericETMQuery",
         blank=True,
         help_text=_("Use this field to relate this module configuration to a generic ETM query."),
