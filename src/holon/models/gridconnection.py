@@ -194,6 +194,7 @@ class ProductionGridConnection(GridConnection):
 class IndustryType(models.TextChoices):
     STEEL = "STEEL"
     INDUSTRY_OTHER = "INDUSTRY_OTHER"
+    AGRO_ENERGYHUB = "AGRO_ENERGYHUB"
 
 
 class IndustryGridConnection(UtilityGridConnection):
