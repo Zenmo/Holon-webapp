@@ -82,6 +82,7 @@ class RuleActionChangeAttribute(RuleAction):
 
         model_attribute = self.model_attribute
         if is_allowed_relation(model_attribute):
+            # Add id to attribute so it can be updated with an id compared to a model instance
             model_attribute += "_id"
 
         # apply operators to objects
