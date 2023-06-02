@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from holon.cache import holon_endpoint_cache
 from holon.models import Scenario, rule_mapping
 from holon.models.scenario_rule import ModelType
-from holon.models.util import all_subclasses, is_exclude_field, is_allowed_relation
+from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
