@@ -3,6 +3,7 @@ from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 from holon.models.actor import Actor
 from holon.models.gridnode import GridNode
+from holon.models.scenario import Scenario
 from django.apps import apps
 
 from polymorphic import utils
@@ -23,7 +24,7 @@ class RuleActionUtils:
             return [(GridConnection, "gridconnection"), (GridNode, "gridnode")]
 
         if base_class == GridConnection:
-            return [(Actor, "owner_actor")]
+            return [(Actor, "owner_actor"), (Scenario, "payload")]
 
         if base_class == Contract:
             return [(Actor, "actor")]

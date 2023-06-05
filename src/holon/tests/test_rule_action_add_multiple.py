@@ -89,3 +89,69 @@ class RuleMappingTestClass(TestCase):
             ]
         )
         assert n_ehc_assets == 13  # was 1, add 3 x 4 assets
+
+    def test_rule_action_add_multiple_gridconnection_with_children(self):
+        """Test the add rule action for an actor with contracts"""
+
+        # Arrange
+        existing_contract_scope = Actor.objects.create(
+            category=ActorType.OPERATORGRID, payload=self.scenario
+        )
+        new_actor: Actor = Actor.objects.create(
+            category=ActorType.CONNECTIONOWNER,
+        )
+        DeliveryContract.objects.create(
+            name="template_delivery_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=new_actor,
+            contractScope=existing_contract_scope,
+            deliveryContractType=DeliveryContractType.FIXED,
+            deliveryPrice_eurpkWh=1,
+            feedinPrice_eurpkWh=1,
+        )
+
+        gridconnection_0: BuildingGridConnection = BuildingGridConnection.objects.create(
+            owner_actor=new_actor,
+            capacity_kw=750.0,
+            # payload=self.scenario,
+            is_rule_action_template=True,
+            insulation_label=InsulationLabel.A,
+            heating_type=HeatingType.GASBURNER,
+            type=BuildingType.LOGISTICS,
+        )
+        ElectricHeatConversionAsset.objects.create(
+            gridconnection=gridconnection_0,
+            name="building_heat_pump",
+            type=ConversionAssetType.HEAT_PUMP_AIR,
+            eta_r=0.95,
+            deliveryTemp_degC=70.0,
+            capacityElectricity_kW=30.0,
+        )
+
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.SCENARIO,
+        )
+        RuleActionAddMultipleUnderEachParent.objects.create(
+            gridconnection_to_add=gridconnection_0, rule=rule
+        )
+        interactive_elements = [{"value": "5", "interactive_element": self.interactive_element}]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        assert len(updated_scenario.gridconnection_set.all()) == 8  # was 3
+        assert len(updated_scenario.assets) == 6  # was 1
+        assert len(updated_scenario.actor_set.all()) == 7  # was 2
+        assert len(updated_scenario.contracts) == 5  # was 0
+        assert (
+            updated_scenario.actor_set.all()[6].contracts.first().contractScope.id
+            != existing_contract_scope.id
+        )
+        assert (
+            updated_scenario.actor_set.all()[6].contracts.first().contractScope.original_id
+            == existing_contract_scope.id
+        )
