@@ -154,6 +154,9 @@ def is_exclude_field(field):
     if field.name.endswith("_ptr"):
         # Exclude iternal polymorphic attributes for CMS
         return True
+    if field.name == "polymorphic_ctype":
+        # Exclude iternal polymorphic attributes for CMS
+        return True
     if field.is_relation and hasattr(field, "field") and field.field.name.endswith("_ptr"):
         # Exclude iternal polymorphic attributes of relations for CMS
         return True
@@ -195,9 +198,9 @@ def relation_field_subtype_options(rule: "ScenarioRule", relation_field: str) ->
     return [subclass.__name__ for subclass in all_subclasses(related_model)]
 
 
-def is_allowed_relation(field) -> bool:
+def is_allowed_relation(field_name: str) -> bool:
     # group and subgroup of Actor have stable id's, so they can be used for filtering
-    return field.name == "group" or field.name == "subgroup"
+    return field_name == "group" or field_name == "subgroup"
 
 
 def serialize_add_models(asset_to_add, gridconnection_to_add, contract_to_add) -> tuple[str]:
