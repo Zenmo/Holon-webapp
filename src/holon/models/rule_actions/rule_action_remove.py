@@ -7,6 +7,8 @@ from django.db.models.query import QuerySet
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel
 
+from holon.models import Actor
+
 
 class RemoveMode(models.TextChoices):
     """Types of remove modes"""
@@ -58,6 +60,12 @@ class RuleActionRemove(RuleAction):
             if remove_n <= 0:
                 return
 
+            # Remove connected gridconnections of actor implicitly
+            # Not doing this results in foreign key violation of assets connection to a gridconnection
+            # Django's cascading delete is managed by Django not the database
+            if isinstance(filtered_object, Actor):
+                for gridconnection in filtered_object.gridconnection_set.all():
+                    gridconnection.delete()
             filtered_object.delete()
 
             remove_n -= 1
