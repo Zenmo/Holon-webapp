@@ -22,13 +22,13 @@ const SandboxPage = ({
   graphcolors: Graphcolor[];
 }) => {
   return (
-    <div className={styles["ChallengeModePage"]}>
+    <div className={styles["SandboxPage"]}>
       <ScenarioContext.Provider value={scenario}>
         <ContentBlocks
           content={storyline}
           graphcolors={graphcolors ?? []}
           feedbackmodals={feedbackmodals}
-          pagetype="Challenge"
+          pagetype="Sandbox"
         />
       </ScenarioContext.Provider>
     </div>

@@ -7,7 +7,7 @@ import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -179,41 +179,43 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       )}
 
       <div className="holonContentContainer">
-        <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
-          <div className="flex-1">
-            <button
-              onClick={closeHolarchyModal}
-              className={`px-6 pb-2 ${
-                holarchyModal
-                  ? "bg-holon-gray-200 text-holon-blue-900"
-                  : "bg-holon-blue-900 text-white"
-              } border-x-2 border-t-2 border-solid h-12`}>
-              Interactiemodus {pagetype}
-            </button>
-            <button
-              onClick={openHolarchyModal}
-              className={`px-6 pb-2 ${
-                holarchyModal
-                  ? "bg-holon-blue-900 text-white"
-                  : "bg-holon-gray-200 text-holon-blue-900"
-              } border-x-2 border-t-2 border-solid h-12`}>
-              Holarchie
-            </button>
-          </div>
-          {holarchyModal &&
-            ((legendItems["color"] && legendItems["color"].length > 0) ||
-              (legendItems["line"] && legendItems["line"].length > 0)) && (
+        {pagetype !== "Sandbox" && (
+          <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
+            <div className="flex-1">
               <button
-                onClick={() => setLegend(!legend)}
-                className={`px-6 py-[0.65rem] bg-white flex ${
-                  legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
-                }`}>
-                <InformationCircleIcon className="mr-2 w-5 inline-block" />
-                Legenda
+                onClick={closeHolarchyModal}
+                className={`px-6 pb-2 ${
+                  holarchyModal
+                    ? "bg-holon-gray-200 text-holon-blue-900"
+                    : "bg-holon-blue-900 text-white"
+                } border-x-2 border-t-2 border-solid h-12`}>
+                Interactiemodus {pagetype}
               </button>
-            )}
-          <div className="flex-1"></div>
-        </div>
+              <button
+                onClick={openHolarchyModal}
+                className={`px-6 pb-2 ${
+                  holarchyModal
+                    ? "bg-holon-blue-900 text-white"
+                    : "bg-holon-gray-200 text-holon-blue-900"
+                } border-x-2 border-t-2 border-solid h-12`}>
+                Holarchie
+              </button>
+            </div>
+            {holarchyModal &&
+              ((legendItems["color"] && legendItems["color"].length > 0) ||
+                (legendItems["line"] && legendItems["line"].length > 0)) && (
+                <button
+                  onClick={() => setLegend(!legend)}
+                  className={`px-6 py-[0.65rem] bg-white flex ${
+                    legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
+                  }`}>
+                  <InformationCircleIcon className="mr-2 w-5 inline-block" />
+                  Legenda
+                </button>
+              )}
+            <div className="flex-1"></div>
+          </div>
+        )}
 
         <div className={`flex flex-col lg:flex-row ${backgroundFullcolor}`}>
           <div
