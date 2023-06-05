@@ -40,10 +40,7 @@ class RuleActionChangeAttribute(RuleAction):
         super().clean()
 
         try:
-            if (
-                not self.model_attribute in self.rule.get_model_attributes_options()
-                or not is_allowed_relation(self.model_attribute)
-            ):
+            if not self.model_attribute in self.rule.get_model_attributes_options():
                 raise ValidationError(f"Invalid value {self.model_attribute} for model_attribute")
         except ObjectDoesNotExist:
             return
