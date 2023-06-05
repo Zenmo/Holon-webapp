@@ -34,21 +34,49 @@ jobs:
   build-and-deploy-images:
     runs-on: ubuntu-latest
     steps:
-      # checkout the repo
-      - name: "Checkout GitHub Action"
+      - name: Check out repository
         uses: actions/checkout@main
-      - name: "Build and push image"
+      - name: Authenticate with Azure Container Registry
         uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - run: |
-          docker build ./src --file ./src/prod.Dockerfile --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }} --target wagtail
-          docker build ./src --file ./src/prod.Dockerfile --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/clean-scenarios:${{ github.ref_name }} --target clean-scenarios
-          docker build ./frontend --build-arg NEXT_PUBLIC_WAGTAIL_API_URL=$NEXT_PUBLIC_WAGTAIL_API_URL -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }} -f ./frontend/prod.Dockerfile
-          docker build ./docker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/clean-scenarios:${{ github.ref_name }}
+      # Create environment variables ACTIONS_RUNTIME_TOKEN and ACTIONS_CACHE_URL
+      # to let docker access the cache.
+      - name: Expose variables
+        uses: crazy-max/ghaction-github-runtime@v2
+      # Need to use driver --driver=docker-container to use GitHub cache integration.
+      # The GitHub cache is per-branch.
+      - name: Docker build and push
+        run: docker buildx create --use --driver=docker-container
+      - run: >
+          docker buildx build ./src
+          --file ./src/prod.Dockerfile
+          --target wagtail
+          --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-wagtail
+          --cache-from type=gha,scope=${{ github.ref_name }}-wagtail
+          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
+          --push
+      - run: >
+          docker buildx build ./src
+          --file ./src/prod.Dockerfile
+          --target clean-scenarios
+          --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-clean-scenarios
+          --cache-from type=gha,scope=${{ github.ref_name }}-clean-scenarios
+          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/clean-scenarios:${{ github.ref_name }}
+          --push
+      - run: >
+          docker buildx build ./frontend
+          --file ./frontend/prod.Dockerfile
+          --build-arg NEXT_PUBLIC_WAGTAIL_API_URL=$NEXT_PUBLIC_WAGTAIL_API_URL
+          --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-nextjs
+          --cache-from type=gha,scope=${{ github.ref_name }}-nextjs
+          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ github.ref_name }}
+          --push
+      - run: >
+          docker buildx build ./docker
+          --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-nginx
+          --cache-from type=gha,scope=${{ github.ref_name }}-nginx
+          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/nginx:${{ github.ref_name }}
+          --push
