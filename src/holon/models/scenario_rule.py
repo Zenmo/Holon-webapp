@@ -7,6 +7,7 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from polymorphic.models import PolymorphicModel
 from holon.models.filter import Filter
+from holon.models.util import is_allowed_relation
 
 from holon.models.interactive_element import (
     InteractiveElementOptions,
@@ -102,7 +103,11 @@ class Rule(PolymorphicModel, ClusterableModel):
         model_type = self.model_type if self.model_subtype is None else self.model_subtype
         model = apps.get_model("holon", model_type)
 
-        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if not field.is_relation or is_allowed_relation(field.name)
+        ]
 
     def model_subtype_options(self) -> list[str]:
         """Get a list of subclass names of the Rule's model type"""
