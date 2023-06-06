@@ -23,8 +23,9 @@ class RuleActionChangeAttribute(RuleAction):
 
     model_attribute = models.CharField(max_length=255, null=False)
     operator = models.CharField(max_length=255, choices=ChangeAttributeOperator.choices)
+    static_value = models.CharField(max_length=255, null=True, blank=True)
 
-    panels = [FieldPanel("model_attribute"), FieldPanel("operator")]
+    panels = [FieldPanel("model_attribute"), FieldPanel("operator"), FieldPanel("static_value")]
     rule: ScenarioRule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_change_attribute"
     )
@@ -40,6 +41,9 @@ class RuleActionChangeAttribute(RuleAction):
                 raise ValidationError(f"Invalid value {self.model_attribute} for model_attribute")
         except ObjectDoesNotExist:
             return
+
+    def hash(self):
+        return f"[A{self.id},{self.model_attribute},{self.operator},{self.static_value}]"
 
     def __apply_operator(self, value_old, input_value):
         """Cast the input value to the same type of the old value and apply the chosen operator"""
@@ -67,13 +71,20 @@ class RuleActionChangeAttribute(RuleAction):
         Apply an operator with a value to the model attribute
         """
 
+        if self.static_value:
+            value = self.static_value
+
         # apply operators to objects
         for filtered_object in filtered_queryset:
             old_value = getattr(filtered_object, self.model_attribute)
             new_value = self.__apply_operator(old_value, value)
 
             # change the new value type to the same as the old one
-            cast_new_value = type(old_value)(new_value)
+            try:
+                cast_new_value = type(old_value)(new_value)
+            except:
+                # fallback when old_value is None
+                cast_new_value = new_value
 
             setattr(filtered_object, self.model_attribute, cast_new_value)
             filtered_object.save()

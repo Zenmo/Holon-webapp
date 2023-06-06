@@ -1,11 +1,7 @@
-import {
-  BoltIcon,
-  CurrencyEuroIcon,
-  GlobeEuropeAfricaIcon,
-  MapPinIcon,
-} from "@heroicons/react/24/solid";
+import {BoltIcon, CurrencyEuroIcon, GlobeEuropeAfricaIcon, MapPinIcon,} from "@heroicons/react/24/solid";
 
 import styles from "./KPIItem.module.css";
+import InteractiveInputPopover from "../InteractiveInputs/InteractiveInputPopover";
 
 type Props = {
   title: string;
@@ -26,7 +22,16 @@ export default function KPIItem({ title, label, value, unit, view }: Props) {
   return (
     <div className={styles[view]}>
       <div>
-        <span data-class="kpiTitle">{title}</span>
+        <span data-class="kpiTitle">
+          {title}
+          <InteractiveInputPopover
+              data-class="kpiInfo"
+              textColor="text-holon-blue-900"
+              name={title}
+              // Perhaps it would be better to display the text in the popover but that is a bit more work.
+              // This link is brittle since it is a reference to content in the CMS.
+              linkWikiPage={"wiki/gebruikershandleiding/3-key-perfomance-indicatoren/kpi-" + title.toLowerCase()} />
+        </span>
         <span data-class="kpiIcon">{iconMap[label]}</span>
         <div>
           <output>{value} </output>

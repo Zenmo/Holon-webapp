@@ -1,6 +1,7 @@
 """
 Write local settings here, or override base settings
 """
+from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
 
 MIDDLEWARE += [
@@ -34,6 +35,11 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 AUTH_PASSWORD_VALIDATORS = []
 
 INTERNAL_IPS = get_env("INTERNAL_IPS", default="").split(",")
+
+# Sentry
+SENTRY_DSN = get_env("SENTRY_DSN", "")
+SENTRY_ENVIRONMENT = get_env("SENTRY_ENVIRONMENT", "local")
+initialize_sentry(SENTRY_DSN, SENTRY_ENVIRONMENT)
 
 # Add django debug toolbar when using local version
 if get_env_bool("DEBUG_TOOLBAR", default=True):

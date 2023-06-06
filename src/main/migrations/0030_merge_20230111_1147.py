@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0029_alter_staticpage_content"),
         ("main", "0029_alter_storylinepageinformationtype_options_and_more"),

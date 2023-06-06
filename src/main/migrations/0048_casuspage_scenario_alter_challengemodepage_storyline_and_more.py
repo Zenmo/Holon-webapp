@@ -13,7 +13,6 @@ import wagtailmodelchooser.blocks
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0003_actor_anylogiccloudconfig_contract_energyasset_and_more"),
         ("main", "0047_alter_challengemodepage_feedbackmodals_and_more"),

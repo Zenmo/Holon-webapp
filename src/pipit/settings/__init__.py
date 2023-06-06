@@ -13,9 +13,24 @@ def get_env(name, default=None):
     if default is not None:
         return default
 
-    error_msg = "Set the {} env variable".format(name)
+    raise ImproperlyConfigured(f"Set the {name} env variable")
+
+
+def get_env_bool(name: str, default: bool = None) -> bool:
+    if name in os.environ:
+        string_value = os.environ[name].upper()
+
+        if string_value == "TRUE":
+            return True
+
+        if string_value == "FALSE":
+            return False
+
+        error_msg = f"Expected True or False for env variable {name} but got {string_value}"
+        raise ImproperlyConfigured(error_msg)
+
+    if default is not None:
+        return default
+
+    error_msg = f"Set the {name} env variable"
     raise ImproperlyConfigured(error_msg)
-
-
-def get_env_bool(name, default=None):
-    return get_env(name, default=default) == "True"

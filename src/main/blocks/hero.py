@@ -5,8 +5,7 @@ from wagtail.embeds.blocks import EmbedBlock
 
 from main.blocks.rich_text_block import RichtextBlock
 from .button import ButtonBlock
-from .holon_image_chooser import HolonImageChooserBlock
-from .background_chooser import BackgroundChooserBlock
+from .holon_header_image_chooser import HolonHeaderImageChooserBlock
 
 
 class HeroBlock(StructBlock):
@@ -27,7 +26,7 @@ class HeroBlock(StructBlock):
     text = RichtextBlock(required=True)
     media = StreamBlock(
         [
-            ("image", HolonImageChooserBlock(required=False)),
+            ("image", HolonHeaderImageChooserBlock(required=False)),
             ("video", EmbedBlock(required=False)),
         ],
         help_text="Choose an image or paste an embed url",

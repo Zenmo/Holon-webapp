@@ -1,12 +1,15 @@
 from typing import Union
+import json
 
 from django.forms import ValidationError
+from holon.models.actor import Actor
 from holon.models.rule_actions import RuleAction
 
 from django.db import models
 from django.db.models.query import QuerySet
 
 from holon.models import util
+
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -25,11 +28,27 @@ class GenericRuleActionAdd(RuleAction):
     """Class containing functionality for adding models to the filtered objects or setting the amount of specific type of model"""
 
     # one of these should be selected
-    asset_to_add = models.ForeignKey(EnergyAsset, on_delete=models.SET_NULL, null=True, blank=True)
-    gridconnection_to_add = models.ForeignKey(
-        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+    asset_to_add = models.ForeignKey(
+        EnergyAsset,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
     )
-    contract_to_add = models.ForeignKey(Contract, on_delete=models.SET_NULL, null=True, blank=True)
+    gridconnection_to_add = models.ForeignKey(
+        GridConnection,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
+    )
+    contract_to_add = models.ForeignKey(
+        Contract,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_rule_action_template": True},
+    )
 
     content_panels = [
         FieldPanel("asset_to_add"),
@@ -89,10 +108,14 @@ class GenericRuleActionAdd(RuleAction):
     ):
         """Add an asset to the first n items in the the filtered objects"""
 
-        # parse value
-        n = int(value)
-        if n < 0:
-            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
+        if len(filtered_queryset) <= 0:
+            return
+
+        if reset_models_before_add:
+            # parse value
+            n = int(float(value))
+            if n < 0:
+                raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
         base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
@@ -111,23 +134,47 @@ class GenericRuleActionAdd(RuleAction):
 
         objects_added = 0
 
+        # get cloned contractscope
+        if self.contract_to_add:
+            scenario = filtered_queryset[0].payload
+            old_contract_scope = self.contract_to_add.contractScope
+
+            cloned_contract_scope = Actor.objects.filter(
+                payload=scenario, original_id=old_contract_scope.id
+            ).first()
+
         # only take first n objects
         for filtererd_object in filtered_queryset:
-            if not self.model_to_add.__class__.objects.filter(
-                **{parent_fk_field_name: filtererd_object}
-            ).exists():
-                if objects_added < n:
-                    # add model_to_add to filtered object
-                    util.duplicate_model(
-                        self.model_to_add, {parent_fk_field_name: filtererd_object}
-                    )
-                    objects_added += 1
-
-            # `set_count` mode, delete the objects of the model class under the filtered objects
-            elif reset_models_before_add:
-                self.model_to_add.__class__.objects.filter(
+            if reset_models_before_add:
+                for obj_to_delete in self.model_to_add.__class__.objects.filter(
                     **{parent_fk_field_name: filtererd_object}
-                ).delete()
+                ):
+                    obj_to_delete.delete()
+
+            # Only check < n for set count
+            if not reset_models_before_add or objects_added < n:
+                # add model_to_add to filtered object
+
+                if self.contract_to_add:
+                    util.duplicate_model(
+                        self.model_to_add,
+                        {
+                            parent_fk_field_name: filtererd_object,
+                            "contractScope": cloned_contract_scope,
+                            "is_rule_action_template": False,
+                        },
+                    )
+
+                else:
+                    util.duplicate_model(
+                        self.model_to_add,
+                        {
+                            parent_fk_field_name: filtererd_object,
+                            "is_rule_action_template": False,
+                        },
+                    )
+
+                objects_added += 1
 
 
 class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
@@ -139,6 +186,13 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
 
     class Meta:
         verbose_name = "RuleActionAdd"
+
+    def hash(self):
+        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
+            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
+        )
+
+        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
 
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
@@ -159,7 +213,69 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
     class Meta:
         verbose_name = "RuleActionSetCount"
 
+    def hash(self):
+        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
+            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
+        )
+
+        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 
         self.add_or_set_items(filtered_queryset, value, True)
+
+
+class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableModel):
+    """Add a number of duplicate objects for each of the filtered objects"""
+
+    rule = ParentalKey(
+        ScenarioRule,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="discrete_factors_add_multiple_under_each_parent",
+    )
+
+    def hash(self):
+        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
+            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
+        )
+
+        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+
+    class Meta:
+        verbose_name = "RuleActionAddMultipleUnderEachParent"
+
+    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
+        """Set the number of filtered objects with the model specified in rule_action_add to value"""
+
+        # parse value
+        n = int(float(value))
+        if n < 0:
+            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
+
+        # get parent type and foreign key field name
+        base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        try:
+            parent_fk_field_name = next(
+                parent_fk_fieldname
+                for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(
+                    self.model_to_add.__class__
+                )
+                if base_parent_type == parent_type
+            )
+        except:
+            raise ValueError(
+                f"Type {base_parent_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)} for model type {self.model_to_add.__class__.__name__}"
+            )
+
+        # only take first n objects
+        for filtererd_object in filtered_queryset:
+            for _ in range(n):
+                util.duplicate_model(
+                    self.model_to_add,
+                    {
+                        parent_fk_field_name: filtererd_object,
+                        "is_rule_action_template": False,
+                    },
+                )

@@ -3,7 +3,6 @@ from typing import Optional
 
 from pipit.settings import get_env, get_env_bool
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -53,6 +52,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.settings",
     "wagtail.contrib.table_block",
     "wagtailmodelchooser",
+    "wagtail_trash",
     "modelcluster",
     "taggit",
     "wagtail_meta_preview",
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "corsheaders",
     # Project specific apps
     "pipit",
@@ -79,7 +80,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://pizzaoven.holontool.nl"]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -125,7 +126,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "pipit.wsgi.application"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",)
+    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "holon-auth"
@@ -179,6 +181,7 @@ WAGTAIL_SITE_NAME = "Holon-wagtail"
 WAGTAILIMAGES_IMAGE_MODEL = "customimage.CustomImage"
 WAGTAILDOCS_DOCUMENT_MODEL = "customdocument.CustomDocument"
 WAGTAIL_ALLOW_UNICODE_SLUGS = False
+WAGTAILAPI_LIMIT_MAX = 1000
 
 WAGTAILSEARCH_BACKENDS = {
     "default": {
@@ -248,6 +251,34 @@ SENTRY_ENVIRONMENT: Optional[str] = None
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
+CSRF_TRUSTED_ORIGINS = ["localhost:3000", "https://pizzaoven.holontool.nl"]
 
 OLD_PASSWORD_FIELD_ENABLED = True
+
+
+# Caching
+HOLON_CACHING_TIMEOUT = None
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table",
+    },
+    "holon_cache": {
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
+        "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 100000},
+    },
+}
+
+
+# Disable form length for big interactive element forms
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+# Openapi documentation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "HOLON",
+    "DESCRIPTION": "",
+    "VERSION": "2.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}

@@ -41,14 +41,20 @@ class SubGroup(models.TextChoices):
 class Actor(PolymorphicModel):
     category = models.CharField(max_length=255, choices=ActorType.choices)
     payload = models.ForeignKey(Scenario, on_delete=models.CASCADE)
-    group = models.ForeignKey(ActorGroup, on_delete=models.PROTECT, blank=True, null=True)
-    subgroup = models.ForeignKey(ActorSubGroup, on_delete=models.PROTECT, blank=True, null=True)
+    group = models.ForeignKey(ActorGroup, on_delete=models.SET_NULL, blank=True, null=True)
+    subgroup = models.ForeignKey(ActorSubGroup, on_delete=models.SET_NULL, blank=True, null=True)
     wildcard_JSON = models.JSONField(
         blank=True,
         null=True,
         help_text=_(
             "Use this field to define parameters that are not currently available in the datamodel."
         ),
+    )
+
+    original_id = models.BigIntegerField(
+        null=True,
+        blank=True,
+        help_text=_("This field is used as a reference for cloned models. Don't set it manually"),
     )
 
     def __str__(self):

@@ -1,12 +1,10 @@
 """
 Write stage settings here, or override base settings
 """
-import sentry_sdk
 from sentry_sdk import configure_scope
-from sentry_sdk.integrations.django import DjangoIntegration
 
+from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
-
 
 DEBUG = False
 
@@ -59,16 +57,9 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Sentry
-SENTRY_DSN = get_env("SENTRY_DSN")
-SENTRY_ENVIRONMENT = "stage"
-
-sentry_sdk.init(
-    dsn=SENTRY_DSN,
-    release=APP_VERSION,
-    environment=SENTRY_ENVIRONMENT,
-    debug=True,
-    integrations=[DjangoIntegration()],
-)
+SENTRY_DSN = get_env("SENTRY_DSN", "")
+SENTRY_ENVIRONMENT = get_env("SENTRY_ENVIRONMENT", "stage")
+initialize_sentry(SENTRY_DSN, SENTRY_ENVIRONMENT)
 
 # Add sentry to logging
 with configure_scope() as scope:

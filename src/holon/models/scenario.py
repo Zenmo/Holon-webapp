@@ -4,12 +4,16 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
 from holon.models.util import duplicate_model
+from threading import Thread
+from hashlib import sha512
 
 
 class Scenario(ClusterableModel):
     name = models.CharField(max_length=255)
     version = models.IntegerField(default=1)
     comment = models.TextField(blank=True)
+
+    cloned_from = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
 
     panels = [
         FieldPanel("name"),
@@ -41,8 +45,6 @@ class Scenario(ClusterableModel):
         ),
     ]
 
-    _assets = None
-
     class Meta:
         verbose_name = "Scenario"
 
@@ -51,59 +53,122 @@ class Scenario(ClusterableModel):
 
     @property
     def assets(self) -> "list[EnergyAsset]":
-        if not self._assets:
-            self._assets = self.__load_assets()
-
-        return self._assets
-
-    def __load_assets(self) -> "list[EnergyAsset]":
         from holon.models.asset import EnergyAsset
 
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
             assets = assets | gridconnection.energyasset_set.all()
+        for gridnode in self.gridnode_set.all():
+            assets = assets | gridnode.energyasset_set.all()
 
         return assets
 
+    @property
+    def contracts(self) -> "list[Contract]":
+        from holon.models import Contract
+
+        contracts = Contract.objects.none()
+        for actor in self.actor_set.all():
+            contracts = contracts | actor.contracts.all()
+
+        return contracts
+
     def clone(self) -> "Scenario":
         """Clone scenario and all its relations in a new scenario"""
-        from holon.models import Actor, EnergyAsset, GridConnection, GridNode, Policy
 
-        old_scenario_id = self.id
+        from holon.models import EnergyAsset, GridNode, Contract
+
+        scenario_old = (
+            Scenario.objects.prefetch_related("actor_set")
+            .prefetch_related("actor_set__contracts")
+            .prefetch_related("gridconnection_set")
+            .prefetch_related("gridconnection_set__energyasset_set")
+            .prefetch_related("gridnode_set")
+            .prefetch_related("gridnode_set__energyasset_set")
+            .prefetch_related("policy_set")
+            .get(id=self.id)
+        )
 
         with transaction.atomic():
-            new_scenario = duplicate_model(self)
+            new_scenario = duplicate_model(self, {"cloned_from": scenario_old})
 
-            actors = Actor.objects.filter(payload_id=old_scenario_id)
+            actors = scenario_old.actor_set.all()
             actor_id_to_new_model_mapping = {}
 
             for actor in actors:
                 actor_id = actor.id
+                actor.original_id = actor_id
                 new_actor = duplicate_model(actor, {"payload": new_scenario})
 
                 actor_id_to_new_model_mapping[actor_id] = new_actor
 
-            gridconnections = GridConnection.objects.filter(payload_id=old_scenario_id)
-            for gridconnection in gridconnections:
-                gridconnection_id = gridconnection.pk
-                new_gridconnection = duplicate_model(
-                    gridconnection,
+            contracts = Contract.objects.filter(actor__payload_id=scenario_old.id)
+            for contr in contracts:
+                contr.original_id = contr.id
+                duplicate_model(
+                    contr,
                     {
-                        "payload": new_scenario,
-                        "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
+                        "actor": actor_id_to_new_model_mapping[contr.actor.id],
+                        "contractScope": actor_id_to_new_model_mapping[contr.contractScope.id],
                     },
                 )
 
+            gridnodes = scenario_old.gridnode_set.all()
+
+            gridnode_id_to_new_model_mapping = {}
+            for gridnode in gridnodes:
+                gridnode_id = gridnode.id
+                gridnode.original_id = gridnode_id
+                new_gridnode = duplicate_model(
+                    gridnode,
+                    {
+                        "payload": new_scenario,
+                        "owner_actor": actor_id_to_new_model_mapping[gridnode.owner_actor_id],
+                    },
+                )
+
+                gridnode_id_to_new_model_mapping[gridnode_id] = new_gridnode
+
+                assets = EnergyAsset.objects.filter(gridnode_id=gridnode_id)
+                for asset in assets:
+                    asset.original_id = asset.id
+                    duplicate_model(asset, {"gridnode": new_gridnode})
+
+            # Update gridnode parent
+            new_gridnodes = GridNode.objects.filter(payload_id=new_scenario.id)
+            for gridnode in new_gridnodes:
+                if gridnode.parent:
+                    gridnode.parent = gridnode_id_to_new_model_mapping[gridnode.parent.id]
+                    gridnode.save()
+
+            gridconnections = scenario_old.gridconnection_set.all()
+
+            for gridconnection in gridconnections:
+                attributes_to_update = {
+                    "payload": new_scenario,
+                    "owner_actor": actor_id_to_new_model_mapping[gridconnection.owner_actor_id],
+                }
+                if gridconnection.parent_heat:
+                    attributes_to_update["parent_heat"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_heat.id
+                    ]
+                if gridconnection.parent_electric:
+                    attributes_to_update["parent_electric"] = gridnode_id_to_new_model_mapping[
+                        gridconnection.parent_electric.id
+                    ]
+
+                gridconnection_id = gridconnection.pk
+                gridconnection.original_id = gridconnection_id
+                new_gridconnection = duplicate_model(gridconnection, attributes_to_update)
+
                 assets = EnergyAsset.objects.filter(gridconnection_id=gridconnection_id)
                 for asset in assets:
+                    asset.original_id = asset.id
                     duplicate_model(asset, {"gridconnection": new_gridconnection})
 
-            gridnodes = GridNode.objects.filter(payload_id=old_scenario_id)
-            for gridnode in gridnodes:
-                duplicate_model(gridnode, {"payload": new_scenario})
-
-            policies = Policy.objects.filter(payload_id=old_scenario_id)
+            policies = scenario_old.policy_set.all()
             for policy in policies:
+                policy.original_id = policy.id
                 duplicate_model(policy, {"payload": new_scenario})
 
             return new_scenario
@@ -118,9 +183,29 @@ class Scenario(ClusterableModel):
         with transaction.atomic():
             # Delete polymorphic models individually
             # django-polymorphic can't handle deletion of mixed object types
+            from holon.models import Contract
+
             delete_individualy(self.assets)
             delete_individualy(self.gridconnection_set.all())
             delete_individualy(self.gridnode_set.all())
+            delete_individualy(Contract.objects.filter(actor__payload_id=self.id))
             delete_individualy(self.actor_set.all())
 
             return super().delete()
+
+    def delete_async(self) -> None:
+        """Delete the scenario asynchrou"""
+        t = Thread(target=self.delete)
+        t.start()
+
+    def hash(self):
+        interactive_element_hashes = ",".join(
+            [
+                interactive_element.hash()
+                for interactive_element in self.interactiveelement_set.all()
+            ]
+        )
+        # print("Interactive elements configuration hash:", interactive_element_hashes)
+        cms_configuration_hash = sha512(interactive_element_hashes.encode("utf-8")).hexdigest()
+
+        return f"{self.id}_{cms_configuration_hash}"

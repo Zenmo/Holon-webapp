@@ -36,6 +36,57 @@ const ContentBlocks = ({
   pagetype?: string;
   graphcolors?: Graphcolor[];
 }) => {
+  let targetValuesPreviousSections = new Map();
+
+  /*Adds target values of previous sections to interactive elements in the section */
+  function addTargetValues(values, content) {
+    const updatedContent = { ...content };
+    const uniqueTargetValues = []
+
+    values.forEach((value, key) => {
+      const foundElement = updatedContent.value.content.find(element => {
+        return element.type === "interactive_input" && element.value.id === key;
+      });
+
+      if (foundElement) {
+        foundElement.value.targetValuePreviousSection = value.targetValue;
+      } else {
+        //if the element does not exist yet it is added to an array (the element is invisible and with no other defaultValues besides the target value(s))
+        uniqueTargetValues.unshift({
+          type: "interactive_input",
+          value: {
+            ...value,
+            visible: false,
+            defaultValueOverride: "",
+            targetValuePreviousSection: value.targetValue,
+            options: value.options.map(option => ({
+              ...option,
+              default: false,
+            })),
+          },
+        });
+      }
+    });
+    //the array target values is placed in front of the list with interactive input elements, keeping the order in which they were placed on the page
+    uniqueTargetValues.map((item) => {
+      updatedContent.value.content.unshift(item);
+    })
+     
+    return updatedContent;
+  }
+
+  /*loops through current section and if there is an interactive element with a target value it creates a clone of the map, either updating an existing interactive input or adding one and then setting that clone to the variable targetValue*/
+  function updateTargetValues(content) {
+    content.map(element => {
+      if (element.type === "interactive_input" && element.value.targetValue) {
+        const newTargetValues = new Map(targetValuesPreviousSections);
+        newTargetValues.set(element.value.id, element.value);
+        targetValuesPreviousSections = newTargetValues;
+      }
+    });
+    return null;
+  }
+
   return (
     <React.Fragment>
       {content?.map(contentItem => {
@@ -59,16 +110,17 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
+            const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
+            updateTargetValues(contentItem.value.content);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
-                data={contentItem}
+                data={newContent}
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
                 graphcolors={graphcolors ?? []}
               />
             );
-            break;
           case "buttons_and_media_block":
             return (
               <ButtonsAndMediaBlock key={`buttonsmedia ${contentItem.id}`} data={contentItem} />

@@ -1,15 +1,18 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
-from wagtail.core.models import Orderable
+from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from wagtail.snippets.models import register_snippet
-from wagtailmodelchooser import register_model_chooser, Chooser, register_filter
-from django.core.validators import MinValueValidator
-
 from wagtail.admin.panels import PageChooserPanel
+from wagtail.core.models import Orderable
+from wagtail.snippets.models import register_snippet
+from wagtailmodelchooser import Chooser, register_filter, register_model_chooser
+
 from holon.models.scenario import Scenario
+from main.snippets.interactive_element_unit import InteractiveElementUnit
+
+import itertools
 
 
 class ChoiceType(models.TextChoices):
@@ -85,11 +88,50 @@ class InteractiveElement(ClusterableModel):
     ]
 
     def __str__(self):
-        name = f"{self.name}|{self.type}"
+        name = f"{self.scenario.name}|{self.name}|{self.type}"
         if self.type != ChoiceType.CHOICE_CONTINUOUS and self.options.count() > 0:
             name = f"{name}|{','.join(d.option for d in self.options.all())}"
 
         return name
+
+    def hash(self):
+        if self.type == ChoiceType.CHOICE_CONTINUOUS:
+            cv = self.continuous_values.first()
+            option_hashes = cv.hash() if cv else ""
+        else:
+            option_hashes = ",".join([option.hash() for option in self.options.all()])
+
+        return f"[I{self.id},{self.type},{self.level},{option_hashes}]"
+
+    def get_possible_values(self) -> list[str]:
+        """Return all possible input values for the interactive element"""
+
+        # slider
+        if self.type == ChoiceType.CHOICE_CONTINUOUS:
+            slider: InteractiveElementContinuousValues = self.continuous_values.first()
+
+            return [str(value) for value in slider.get_possible_values()]
+
+        # single/multiselect
+        else:
+            interactive_element_options: list[InteractiveElementOptions] = self.options.all()
+            possible_values = [
+                str(interactive_element_option.option)
+                for interactive_element_option in interactive_element_options
+            ]
+
+            # single select
+            if self.type == ChoiceType.CHOICE_SINGLESELECT:
+                return possible_values
+
+            # multiselect
+            elif self.type == ChoiceType.CHOICE_MULTISELECT:
+                combinations = [""]
+                for i in range(1, len(possible_values) + 1):
+                    for c in itertools.combinations(possible_values, i):
+                        combinations.append(",".join(c))
+
+                return combinations
 
     class Meta:
         verbose_name = "Interactive Element"
@@ -139,7 +181,6 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
     panels = [
         FieldPanel("option"),
         FieldPanel("label"),
-        FieldPanel("default"),
         FieldPanel("legal_limitation"),
         FieldPanel("level"),
         FieldPanel("color"),
@@ -147,11 +188,18 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
         InlinePanel("rules", heading="Rules", label="Rules"),
     ]
 
+    class Meta:
+        ordering = ["sort_order"]
+
     def __str__(self):
         if self.label:
             return self.label
         else:
             return self.option
+
+    def hash(self):
+        rule_hashes = ",".join([rule.hash() for rule in self.rules.all()])
+        return f"[O{self.id},{self.option},{self.default},{self.level},{rule_hashes}]"
 
 
 class InteractiveElementContinuousValues(ClusterableModel):
@@ -178,10 +226,52 @@ class InteractiveElementContinuousValues(ClusterableModel):
         default=100,
         help_text=_("Maximum amount of the continuous input"),
     )
+    discretization_steps = models.IntegerField(
+        null=True,
+        blank=True,
+        default=5,
+        help_text=_(
+            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
+        ),
+    )
+    slider_unit = models.ForeignKey(
+        InteractiveElementUnit,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
+    discretization_steps = models.IntegerField(
+        null=True,
+        blank=True,
+        default=5,
+        help_text=_(
+            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
+        ),
+    )
 
     panels = [
-        FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
+        FieldPanel("discretization_steps"),
         InlinePanel("rules", heading="Rules", label="Rules"),
+        FieldPanel("slider_unit"),
     ]
+
+    def hash(self) -> str:
+        """Return a string generated for this unique instance used for caching"""
+
+        rule_hashes = ",".join([rule.hash() for rule in self.rules.all()])
+        return f"[CV{self.id},{self.slider_value_min},{self.slider_value_max},{self.discretization_steps},{rule_hashes}]"
+
+    def get_possible_values(self) -> list[int]:
+        """Get a list of the possible discretized values this slider can return"""
+
+        # MAKE SURE THESE ARE THE SAME VALUES AS THE FRONTEND SLIDER
+        step_size = (self.slider_value_max - self.slider_value_min) / (
+            self.discretization_steps - 1
+        )
+
+        return [
+            int(self.slider_value_min + i * step_size) for i in range(self.discretization_steps)
+        ]

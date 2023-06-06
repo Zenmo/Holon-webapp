@@ -10,7 +10,6 @@ from .feedbackmodals import FeedbackModalInteractiveInputCondition
 
 
 class HolarchyFeedbackImage(blocks.StructBlock):
-
     image_selector = HolonImageChooserBlock()
 
     conditions = StreamBlock(

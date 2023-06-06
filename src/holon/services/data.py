@@ -4,6 +4,8 @@ from pathlib import Path
 import numpy as np
 
 from holon.models import Scenario
+from holon.serializers import ScenarioSerializer
+from pipit.settings import get_env_bool
 
 
 class Results:
@@ -15,6 +17,7 @@ class Results:
     def __init__(
         self,
         scenario: Scenario,
+        request,
         anylogic_outcomes: dict,
         inter_upscaling_outcomes: dict,
         nat_upscaling_outcomes: dict,
@@ -28,6 +31,8 @@ class Results:
         self.cost_outcome = cost_outcome
         self.cost_benefit_overview = cost_benefit_overview
         self.cost_benefit_detail = cost_benefit_detail
+        self.scenario = scenario
+        self.request = request
 
     @property
     def anylogic_outcomes(self):
@@ -38,9 +43,9 @@ class Results:
         self._anylogic_outcomes = calculate_holon_kpis(anylogic_outcomes)
 
     def to_dict(self):
-        return {
+        result = {
             "dashboard_results": {
-                "local": {**self.anylogic_outcomes, "cost": self.cost_outcome},
+                "local": {**self.anylogic_outcomes, "costs": self.cost_outcome},
                 "intermediate": self.inter_upscaling_outcomes,
                 "national": self.nat_upscaling_outcomes,
             },
@@ -49,6 +54,14 @@ class Results:
                 "detail": self.cost_benefit_detail,
             },
         }
+        if self.__include_scenario():
+            result["scenario"] = ScenarioSerializer(self.scenario).data
+
+        return result
+
+    def __include_scenario(self):
+        """Only include modified scenario if env variable is set"""
+        return get_env_bool("RETURN_SCENARIO", False)
 
 
 def calculate_holon_kpis(anylogic_outcomes: dict) -> dict:

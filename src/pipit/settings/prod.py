@@ -1,12 +1,8 @@
 """
 Write prod settings here, or override base settings
 """
-import sentry_sdk
-from sentry_sdk import configure_scope
-from sentry_sdk.integrations.django import DjangoIntegration
-
+from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
-
 
 DEBUG = False
 
@@ -28,6 +24,12 @@ CACHES = {
         "OPTIONS": {
             "MAX_ENTRIES": 1000,
         },
+    },
+    "holon_cache": {
+        "BACKEND": "holon.cache.holon_database_cache.HolonDatabaseCache",
+        "LOCATION": "holon_cache",
+        "TIMEOUT": None,
+        "OPTIONS": {"MAX_ENTRIES": 100000},
     },
 }
 
@@ -73,6 +75,11 @@ SESSION_COOKIE_SECURE = True
 
 # Use a secure cookie for the CSRF cookie
 CSRF_COOKIE_SECURE = True
+
+# Sentry
+SENTRY_DSN = get_env("SENTRY_DSN", "")
+SENTRY_ENVIRONMENT = get_env("SENTRY_ENVIRONMENT", "production")
+initialize_sentry(SENTRY_DSN, SENTRY_ENVIRONMENT)
 
 # Log to console to get logging output from docker
 LOGGING = {

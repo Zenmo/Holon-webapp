@@ -13,6 +13,9 @@
 .kpiStoryline [data-class="kpiTitle"] {
   font-size: 0.75rem;
   line-height: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .kpiStoryline [data-class="kpiIcon"] {

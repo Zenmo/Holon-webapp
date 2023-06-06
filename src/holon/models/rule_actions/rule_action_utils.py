@@ -26,7 +26,7 @@ class RuleActionUtils:
             return [(Actor, "owner_actor")]
 
         if base_class == Contract:
-            return [(Actor, "owner_actor")]
+            return [(Actor, "actor")]
 
     def get_balanceable_subtypes() -> list[str]:
         """Get all possible subclass types for the balanceable models"""
