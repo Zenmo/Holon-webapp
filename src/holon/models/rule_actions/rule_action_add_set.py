@@ -13,7 +13,6 @@ from holon.models import util
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from polymorphic import utils
 
 from wagtail.admin.edit_handlers import FieldPanel
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils
@@ -189,7 +188,9 @@ class GenericRuleActionAdd(RuleAction):
                 raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-        base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
+            filtered_queryset[0].__class__
+        )
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
@@ -310,7 +311,9 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-        base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
+            filtered_queryset[0].__class__
+        )
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname

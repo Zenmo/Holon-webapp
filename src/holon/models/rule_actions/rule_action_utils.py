@@ -7,6 +7,8 @@ from holon.models.scenario import Scenario
 from django.apps import apps
 
 from polymorphic import utils
+from polymorphic.base import PolymorphicModelBase
+from polymorphic.models import PolymorphicModel
 from holon.models.util import all_subclasses
 
 
@@ -42,3 +44,14 @@ class RuleActionUtils:
             ]
 
         return choices
+
+    def get_base_polymorphic_model(ChildModel, allow_abstract=False):
+        """
+        First the first concrete model in the inheritance chain that inherited from the PolymorphicModel.
+        """
+        model = utils.get_base_polymorphic_model(ChildModel)
+
+        if model is None:
+            # Return normal class if not polymorphic
+            return ChildModel
+        return model
