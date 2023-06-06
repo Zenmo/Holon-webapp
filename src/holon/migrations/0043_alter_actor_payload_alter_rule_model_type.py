@@ -6,7 +6,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("holon", "0041_biogasmethaneconverter_dieselconsumptionasset_and_more"),
+        ("holon", "0042_alter_buildinggridconnection_type"),
     ]
 
     operations = [
