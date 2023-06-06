@@ -1,12 +1,13 @@
 from holon.models import GridConnection
+from .repository import RepositoryBaseClass
 
 
-class GridConnectionRepository:
+class GridConnectionRepository(RepositoryBaseClass):
     """Repository containing all gridconnections in memory"""
 
     def __init__(self, scenario_aggregate):
         self.scenario_aggregate = scenario_aggregate
 
-        self.objects: list[GridConnection] = GridConnection.objects.filter(
-            payload=scenario_aggregate.scenario
-        ).get_real_instances()
+        self.set_objects(
+            GridConnection.objects.filter(payload=scenario_aggregate.scenario).get_real_instances()
+        )
