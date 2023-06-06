@@ -60,7 +60,7 @@ class RuleActionRemove(RuleAction):
             if remove_n <= 0:
                 return
 
-            # Remove connected gridconnections of actor implicitly
+            # Remove connected gridconnections of actor explicitly
             # Not doing this results in foreign key violation of assets connection to a gridconnection
             # Django's cascading delete is managed by Django not the database
             if isinstance(filtered_object, Actor):
