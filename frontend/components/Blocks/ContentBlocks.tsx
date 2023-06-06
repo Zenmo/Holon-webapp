@@ -46,9 +46,16 @@ const ContentBlocks = ({
     checkIfSavedScenario();
   }, []);
 
-  useEffect(() => {
-    console.log(savedValues);
-  }, [savedValues]);
+  /*
+  function updateSectionContent(values, content) {
+    const updatedContent = { ...content };
+
+    addTargetValues(values, content);
+    addSavedValues(values, content);
+
+    return updatedContent;
+  }
+  */
 
   /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
@@ -127,6 +134,7 @@ const ContentBlocks = ({
     }
     //create link
     const savedScenarioUrl = `${baseURL}?${params.toString()}`;
+    console.log(savedScenarioUrl);
     return savedScenarioUrl;
   }
 
@@ -154,10 +162,26 @@ const ContentBlocks = ({
   }
 
   function addSavedValues(values, content) {
-    values.keys(item => {
-      if (item === content.id) {
+    const updatedContent = { ...content };
+
+    for (const key in values) {
+      if (key === content.id) {
+        const value = values[key];
+
+        for (const subKey in value) {
+          const foundElement = updatedContent.value.content.find(element => {
+            return element.type === "interactive_input" && element.value.id === Number(subKey);
+          });
+          if (foundElement) {
+            const subValue = value[subKey];
+            foundElement.value.savedValue = subValue;
+          } else {
+            return;
+          }
+        }
       }
-    });
+    }
+    return updatedContent;
   }
 
   return (
@@ -184,13 +208,13 @@ const ContentBlocks = ({
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
-            //const savedValuesContent = addSavedValues(savedValues, contentItem);
-            //console.log(savedValuesContent);
+            const savedValuesContent = addSavedValues(savedValues, newContent);
+
             updateTargetValues(contentItem.value.content);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
-                data={newContent}
+                data={savedValuesContent}
                 pagetype={pagetype}
                 feedbackmodals={feedbackmodals}
                 graphcolors={graphcolors ?? []}
