@@ -53,5 +53,7 @@ export type InteractiveInputOptions = {
 export type Feedbackmodals = Array<FeedbackModal>;
 
 export type SavedElements = {
-  [key: string]: number | string | string[] | number[] | undefined | null;
-}
+  [key: string]: {
+    [key: number]: number | string | string[] | number[] | undefined | null;
+  };
+};

@@ -32,8 +32,8 @@ type Props = {
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
-  savePageValues: SetStateAction<SavedElements[]>; 
-  saveScenario: () => void; 
+  savePageValues: SetStateAction<SavedElements>;
+  saveScenario: () => void;
 };
 
 const initialData = {
@@ -56,7 +56,14 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors, savePageValues, saveScenario }: Props) {
+export default function SectionBlock({
+  data,
+  pagetype,
+  feedbackmodals,
+  graphcolors,
+  savePageValues,
+  saveScenario,
+}: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
@@ -90,7 +97,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
     debouncedCalculateKPIs(content);
-    savePageValues(saveCurrentValues(content)); 
+    savePageValues(saveCurrentValues(content));
   }, [content, debouncedCalculateKPIs]);
 
   useEffect(() => {
@@ -170,20 +177,20 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
 
   const saveCurrentValues = (content: Content[]) => {
     //get currentValues of visible interactive elements
-    let savedElements: SavedElements = {}; 
+    let savedElements: SavedElements = {
+      [data.id]: {},
+    };
 
     content?.map((sectionItem: Content) => {
-      if(sectionItem.type === "interactive_input" && sectionItem.value.visible) {
-        let key = `${data.id}.${sectionItem.value.id}`; 
-        let value = sectionItem.currentValue; 
+      if (sectionItem.type === "interactive_input" && sectionItem.value.visible) {
+        let key = `${sectionItem.value.id}`;
+        let value = sectionItem.currentValue;
 
-        savedElements = {...savedElements, [key]: value}; 
+        savedElements[data.id] = { ...savedElements[data.id], [key]: value };
       }
-    })
-    return savedElements; 
-  
-  }
-  
+    });
+    return savedElements;
+  };
 
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef}>

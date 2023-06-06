@@ -38,23 +38,22 @@ const ContentBlocks = ({
   graphcolors?: Graphcolor[];
 }) => {
   let targetValuesPreviousSections = new Map();
-  const [ currentPageValues, setCurrentPageValues] = useState({}); 
-  const { asPath } = useRouter(); 
-  const [ savedValues, setSavedValues ] = useState([]); 
+  const [currentPageValues, setCurrentPageValues] = useState({});
+  const { asPath } = useRouter();
+  const [savedValues, setSavedValues] = useState({});
 
-  useEffect(()=> {
-    checkIfSavedScenario(); 
-  }, [])
+  useEffect(() => {
+    checkIfSavedScenario();
+  }, []);
 
   useEffect(() => {
     console.log(savedValues);
   }, [savedValues]);
 
-  
   /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
     const updatedContent = { ...content };
-    const uniqueTargetValues = []
+    const uniqueTargetValues = [];
 
     values.forEach((value, key) => {
       const foundElement = updatedContent.value.content.find(element => {
@@ -81,10 +80,10 @@ const ContentBlocks = ({
       }
     });
     //the array target values is placed in front of the list with interactive input elements, keeping the order in which they were placed on the page
-    uniqueTargetValues.map((item) => {
+    uniqueTargetValues.map(item => {
       updatedContent.value.content.unshift(item);
-    })
-     
+    });
+
     return updatedContent;
   }
 
@@ -100,59 +99,65 @@ const ContentBlocks = ({
     return null;
   }
 
+  /*Saves all current values of visible interactive elements in a section */
   function saveSectionValues(sectionValue: SavedElements) {
-    const newCurrentPageValues = Object.assign(currentPageValues, sectionValue); 
-    setCurrentPageValues(newCurrentPageValues); 
+    const newCurrentPageValues = Object.assign(currentPageValues, sectionValue);
+    setCurrentPageValues(newCurrentPageValues);
   }
 
+  /*Save scenario functionality. Creates a link of the page with the current values of visible interactive elements of the different sections in the params*/
   function saveScenario() {
+    console.log(currentPageValues);
     //get baseUrl
-    const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
+    const origin =
+      typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
     const baseURL = `${origin}${asPath}`;
     //get params
-    const params = Object.entries(currentPageValues).map(([key, val]) => `${key}=${val}`).join('&'); 
+    const params = new URLSearchParams();
+    const data = currentPageValues;
+    //so far so good, data klopt
+    for (const section in data) {
+      for (const key in data[section]) {
+        for (const key in data[section]) {
+          const encodedKey = encodeURIComponent(`${section}.${key}`); // modify key format
+          const encodedValue = encodeURIComponent(data[section][key]);
+          params.append(encodedKey, encodedValue);
+        }
+      }
+    }
     //create link
-    const savedScenarioUrl = `${baseURL}?${params}`; 
-    console.log(savedScenarioUrl); 
-    return savedScenarioUrl; 
+    const savedScenarioUrl = `${baseURL}?${params.toString()}`;
+    return savedScenarioUrl;
   }
 
   function checkIfSavedScenario() {
-    const urlParams = typeof window !== 'undefined' && window.location.origin ? new URLSearchParams(window.location.search) : null;
-    if(urlParams) {
-      const entries = urlParams.entries(); //returns an iterator of decoded [key,value] tuples
-      const params = Object.fromEntries(entries);
-      console.log(params); 
-      
-      if(Object.keys(params).length !== 0) {
-        for (const [key, value] of Object.entries(params)) {
-          const x = key.toString();
-          const y = x.split('.');
-          y.push(value);  
-         setSavedValues(prevSavedValues => [...prevSavedValues, y]); 
-        } 
-      } else {
-     return; 
+    const urlParams =
+      typeof window !== "undefined" && window.location.origin
+        ? new URLSearchParams(window.location.search)
+        : null;
+
+    const data = {};
+
+    if (urlParams) {
+      for (const [encodedKey, encodedValue] of urlParams) {
+        const decodedKey = decodeURIComponent(encodedKey);
+        const decodedValue = decodeURIComponent(encodedValue);
+
+        const [section, key] = decodedKey.split(".");
+        if (!(section in data)) {
+          data[section] = {};
+        }
+        data[section][key] = decodedValue;
+      }
     }
-    } else {
-      return; 
-    }   
+    setSavedValues(data);
   }
 
-  function addSavedValues(savedValues, content) {
-    const updatedContent = { ...content }; 
-    const uniqueSavedValues = []; 
-
-    savedValues.forEach((array) => {
-      if(array[0] === content.id) {
-        const foundElement = updatedContent.value.content.find(element => {
-          return element.type === "interactive_input" && element.value.id === array[1];
-        });
-        if(foundElement) {
-          foundElement.value.savedValue = array[2]; 
-        }
+  function addSavedValues(values, content) {
+    values.keys(item => {
+      if (item === content.id) {
       }
-    })
+    });
   }
 
   return (
@@ -179,7 +184,9 @@ const ContentBlocks = ({
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
-            updateTargetValues(contentItem.value.content); 
+            //const savedValuesContent = addSavedValues(savedValues, contentItem);
+            //console.log(savedValuesContent);
+            updateTargetValues(contentItem.value.content);
             return (
               <SectionBlock
                 key={`section ${contentItem.id}`}
@@ -189,7 +196,6 @@ const ContentBlocks = ({
                 graphcolors={graphcolors ?? []}
                 savePageValues={saveSectionValues}
                 saveScenario={saveScenario}
-                savedSectionValues={savedSectionValues}
               />
             );
           case "buttons_and_media_block":
