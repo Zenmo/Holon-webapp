@@ -41,7 +41,7 @@ const ContentBlocks = ({
   /*Adds target values of previous sections to interactive elements in the section */
   function addTargetValues(values, content) {
     const updatedContent = { ...content };
-    const uniqueTargetValues = []
+    const uniqueTargetValues = [];
 
     values.forEach((value, key) => {
       const foundElement = updatedContent.value.content.find(element => {
@@ -68,10 +68,10 @@ const ContentBlocks = ({
       }
     });
     //the array target values is placed in front of the list with interactive input elements, keeping the order in which they were placed on the page
-    uniqueTargetValues.map((item) => {
+    uniqueTargetValues.map(item => {
       updatedContent.value.content.unshift(item);
-    })
-     
+    });
+
     return updatedContent;
   }
 

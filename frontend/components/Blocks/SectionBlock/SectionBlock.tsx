@@ -64,6 +64,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [legendItems, setLegendItems] = useState([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [dirtyState, setDirtyState] = useState<boolean>(true);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
   const [legend, setLegend] = useState<boolean>(false);
@@ -87,8 +88,20 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
     setLegendItems(
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
-    debouncedCalculateKPIs(content);
+
+    if (pagetype !== "Sandbox") {
+      debouncedCalculateKPIs(content);
+    } else {
+      console.log("KPIs handmatig aftrappen");
+    }
   }, [content, debouncedCalculateKPIs]);
+
+  useEffect(() => {
+    if (pagetype === "Sandbox") {
+      // debouncedCalculateKPIs(content);
+      setDirtyState(true);
+    }
+  }, [content]);
 
   useEffect(() => {
     if (costBenefitModal || holarchyModal) {
@@ -235,7 +248,36 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
             )}
           </div>
 
-          <div className={`flex flex-col ${gridValue.right}`}>
+          <div className={`relative flex flex-col ${gridValue.right}`}>
+            {dirtyState && (
+              <div className="absolute top-0 left-0 w-full h-full bg-black/[.8] z-50">
+                <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded">
+                  {!loading && (
+                    <div>
+                      <h2>Reken instellingen door</h2>
+                      <p>
+                        Heb je alle instellingen goed ingesteld, reken dan in een keer alles door.
+                        Na het rekenen zijn de resultaten in het dashboard zichtbaar. Niet het
+                        gewenste resultaat? Maak wijzigingen en reken nogmaals alle instellingen
+                        door.
+                      </p>
+
+                      <div>
+                        <span>Reset instellingen</span>&nbsp;
+                        <span
+                          onClick={() => {
+                            debouncedCalculateKPIs(content);
+                            setDirtyState(false);
+                          }}>
+                          Reken door
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             <div className="lg:sticky top-0">
               <div className="py-12 px-10 lg:px-16 lg:pt-24">
                 {Object.keys(media).length > 0 && (
