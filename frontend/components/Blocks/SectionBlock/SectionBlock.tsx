@@ -1,4 +1,5 @@
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
+import Button from "@/components/Button/Button";
 import { StaticImage } from "@/components/ImageSelector/types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
@@ -64,11 +65,12 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [legendItems, setLegendItems] = useState([]);
   const [media, setMedia] = useState<StaticImage>({});
   const [loading, setLoading] = useState<boolean>(false);
-  const [dirtyState, setDirtyState] = useState<boolean>(true);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
   const [legend, setLegend] = useState<boolean>(false);
   const scenario = useContext<number>(ScenarioContext);
+  const [dirtyState, setDirtyState] = useState<boolean>(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const sectionContainerRef = useRef(null);
 
@@ -89,19 +91,17 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
 
-    if (pagetype !== "Sandbox") {
+    if (isInitialLoad) {
       debouncedCalculateKPIs(content);
-    } else {
-      console.log("KPIs handmatig aftrappen");
+    }
+
+    if (!isInitialLoad) {
+      // Added a timeout for better ux
+      setTimeout(() => {
+        setDirtyState(true);
+      }, 500);
     }
   }, [content, debouncedCalculateKPIs]);
-
-  useEffect(() => {
-    if (pagetype === "Sandbox") {
-      // debouncedCalculateKPIs(content);
-      setDirtyState(true);
-    }
-  }, [content]);
 
   useEffect(() => {
     if (costBenefitModal || holarchyModal) {
@@ -136,6 +136,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   }
 
   function calculateKPIs(content) {
+    setIsInitialLoad(false);
     setLoading(true);
     const interactiveElements = content
       .filter(
@@ -159,9 +160,11 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
         setCostBenefitData(res.costBenefitResults);
         setKPIs(res.dashboardResults);
         setLoading(false);
+        setDirtyState(false);
       })
       .catch(() => {
         setLoading(false);
+        setDirtyState(false);
       });
   }
 
@@ -250,30 +253,27 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
 
           <div className={`relative flex flex-col ${gridValue.right}`}>
             {dirtyState && (
-              <div className="absolute top-0 left-0 w-full h-full bg-black/[.8] z-50">
+              <div className="absolute flex justify-center items-center p-12 top-0 left-0 w-full h-full bg-black/[.8] z-50">
                 <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded">
-                  {!loading && (
-                    <div>
-                      <h2>Reken instellingen door</h2>
-                      <p>
-                        Heb je alle instellingen goed ingesteld, reken dan in een keer alles door.
-                        Na het rekenen zijn de resultaten in het dashboard zichtbaar. Niet het
-                        gewenste resultaat? Maak wijzigingen en reken nogmaals alle instellingen
-                        door.
-                      </p>
+                  <div>
+                    <h2>Reken instellingen door</h2>
+                    <p>
+                      Heb je alle instellingen goed ingesteld, reken dan in een keer alles door. Na
+                      het rekenen zijn de resultaten in het dashboard zichtbaar. Niet het gewenste
+                      resultaat? Maak wijzigingen en reken nogmaals alle instellingen door.
+                    </p>
 
-                      <div>
-                        <span>Reset instellingen</span>&nbsp;
-                        <span
-                          onClick={() => {
-                            debouncedCalculateKPIs(content);
-                            setDirtyState(false);
-                          }}>
-                          Reken door
-                        </span>
-                      </div>
+                    <div className="flex justify-center mt-6 items-center">
+                      <div className="font-bold mr-3">Reset instellingen</div>
+                      <Button
+                        onClick={() => {
+                          debouncedCalculateKPIs(content);
+                          setDirtyState(false);
+                        }}>
+                        Reken door
+                      </Button>
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             )}
