@@ -1,9 +1,11 @@
 from holon.models import Contract
-from .repository import RepositoryBaseClass
+from .base_repository import RepositoryBaseClass
 
 
 class ContractRepository(RepositoryBaseClass):
     """Repository containing all contracts in memory"""
+
+    objects: list[Contract] = []
 
     def __init__(self, scenario_aggregate):
         self.scenario_aggregate = scenario_aggregate

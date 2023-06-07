@@ -5,6 +5,8 @@ from .repository import RepositoryBaseClass
 class PolicyRepository(RepositoryBaseClass):
     """Repository containing all policies in memory"""
 
+    objects: list[Policy] = []
+
     def __init__(self, scenario_aggregate):
         self.scenario_aggregate = scenario_aggregate
 

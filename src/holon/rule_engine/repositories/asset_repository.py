@@ -1,10 +1,12 @@
 from holon.models import EnergyAsset
 from django.db.models import Q
-from .repository import RepositoryBaseClass
+from .base_repository import RepositoryBaseClass
 
 
 class EnergyAssetRepository(RepositoryBaseClass):
     """Repository containing all energyassets in memory"""
+
+    objects: list[EnergyAsset] = []
 
     def __init__(self, scenario_aggregate):
         self.scenario_aggregate = scenario_aggregate
