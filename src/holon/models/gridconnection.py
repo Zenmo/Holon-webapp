@@ -169,6 +169,8 @@ class BuildingType(models.TextChoices):
     STORE = "STORE"
     OFFICE = "OFFICE"
     LOGISTICS = "LOGISTICS"
+    FARM = "FARM"
+    VILLAGE = "VILLAGE"
 
 
 class BuildingGridConnection(BuiltEnvironmentGridConnection):
