@@ -40,7 +40,9 @@ class SubGroup(models.TextChoices):
 
 class Actor(PolymorphicModel):
     category = models.CharField(max_length=255, choices=ActorType.choices)
-    payload = models.ForeignKey(Scenario, on_delete=models.CASCADE, null=True, blank=True)
+    payload = models.ForeignKey(
+        Scenario, on_delete=models.CASCADE, null=True, blank=True
+    )  # can be null for template gridconnections
     group = models.ForeignKey(ActorGroup, on_delete=models.SET_NULL, blank=True, null=True)
     subgroup = models.ForeignKey(ActorSubGroup, on_delete=models.SET_NULL, blank=True, null=True)
     wildcard_JSON = models.JSONField(
