@@ -51,12 +51,17 @@ export default function ContentColumn({
     content: InteractiveContent
   ): string | number | string[] | undefined | null {
     if (content.value) {
+      const savedValue = content.value.savedValue;
       const defaultValue = content.value.defaultValueOverride;
       const targetValue = content.value.targetValuePreviousSection;
 
       switch (content.value.type) {
         case "single_select":
-          if (defaultValue) {
+          if (savedValue) {
+            return content.value.options.find(
+              option => option.option === savedValue || option.label === savedValue
+            )?.option;
+          } else if (defaultValue) {
             return content.value.options.find(
               option => option.option === defaultValue || option.label === defaultValue
             )?.option;
@@ -73,7 +78,9 @@ export default function ContentColumn({
             }
           }
         case "continuous":
-          if (defaultValue !== undefined && defaultValue !== "") {
+          if (savedValue !== undefined && savedValue !== "") {
+            return Number(savedValue);
+          } else if (defaultValue !== undefined && defaultValue !== "") {
             return Number(defaultValue);
           } else if (content.value.visible) {
             if (

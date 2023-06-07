@@ -15,7 +15,7 @@ import HeaderFullImageBlock from "./HeaderFullImageBlock/HeaderFullImageBlock";
 import HeroBlock from "./HeroBlock/HeroBlock";
 import ParagraphBlock from "./ParagraphBlock";
 import SectionBlock from "./SectionBlock/SectionBlock";
-import { SavedElements } from "./SectionBlock/types";
+import { Content, SavedElements } from "./SectionBlock/types";
 import TableBlock from "./TableBlock/TableBlock";
 import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock";
 import TitleBlock from "./TitleBlock/TitleBlock";
@@ -39,26 +39,16 @@ const ContentBlocks = ({
 }) => {
   let targetValuesPreviousSections = new Map();
   const [currentPageValues, setCurrentPageValues] = useState({});
-  const { asPath } = useRouter();
   const [savedValues, setSavedValues] = useState({});
+  const [checkedSavedValues, setCheckedSavedValues] = useState(false);
+  const { asPath } = useRouter();
 
   useEffect(() => {
     checkIfSavedScenario();
   }, []);
 
-  /*
-  function updateSectionContent(values, content) {
-    const updatedContent = { ...content };
-
-    addTargetValues(values, content);
-    addSavedValues(values, content);
-
-    return updatedContent;
-  }
-  */
-
   /*Adds target values of previous sections to interactive elements in the section */
-  function addTargetValues(values, content) {
+  function addTargetValues(values, content: Content[]) {
     const updatedContent = { ...content };
     const uniqueTargetValues = [];
 
@@ -95,7 +85,7 @@ const ContentBlocks = ({
   }
 
   /*loops through current section and if there is an interactive element with a target value it creates a clone of the map, either updating an existing interactive input or adding one and then setting that clone to the variable targetValue*/
-  function updateTargetValues(content) {
+  function updateTargetValues(content: Content[]) {
     content.map(element => {
       if (element.type === "interactive_input" && element.value.targetValue) {
         const newTargetValues = new Map(targetValuesPreviousSections);
@@ -113,8 +103,7 @@ const ContentBlocks = ({
   }
 
   /*Save scenario functionality. Creates a link of the page with the current values of visible interactive elements of the different sections in the params*/
-  function saveScenario() {
-    console.log(currentPageValues);
+  function saveScenario(title: string, description: string) {
     //get baseUrl
     const origin =
       typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
@@ -132,6 +121,11 @@ const ContentBlocks = ({
         }
       }
     }
+    params.append("title", title);
+    if (description) {
+      params.append("description", description);
+    }
+
     //create link
     const savedScenarioUrl = `${baseURL}?${params.toString()}`;
     console.log(savedScenarioUrl);
@@ -159,9 +153,10 @@ const ContentBlocks = ({
       }
     }
     setSavedValues(data);
+    setCheckedSavedValues(true);
   }
 
-  function addSavedValues(values, content) {
+  function addSavedValues(values: SavedElements, content: Content) {
     const updatedContent = { ...content };
 
     for (const key in values) {
@@ -209,18 +204,19 @@ const ContentBlocks = ({
           case "section":
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
             const savedValuesContent = addSavedValues(savedValues, newContent);
-
             updateTargetValues(contentItem.value.content);
             return (
-              <SectionBlock
-                key={`section ${contentItem.id}`}
-                data={savedValuesContent}
-                pagetype={pagetype}
-                feedbackmodals={feedbackmodals}
-                graphcolors={graphcolors ?? []}
-                savePageValues={saveSectionValues}
-                saveScenario={saveScenario}
-              />
+              checkedSavedValues && (
+                <SectionBlock
+                  key={`section ${contentItem.id}`}
+                  data={savedValuesContent}
+                  pagetype={pagetype}
+                  feedbackmodals={feedbackmodals}
+                  graphcolors={graphcolors ?? []}
+                  savePageValues={saveSectionValues}
+                  saveScenario={saveScenario}
+                />
+              )
             );
           case "buttons_and_media_block":
             return (

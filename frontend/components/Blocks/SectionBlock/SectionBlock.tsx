@@ -14,6 +14,7 @@ import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import HolarchyTab from "./HolarchyTab/HolarchyTab";
 import { LegendItem } from "./HolarchyTab/LegendModal";
+import ScenarioModal from "./ScenarioModals/ScenarioModal";
 import { Content, Feedbackmodals, InteractiveContent, SavedElements } from "./types";
 
 type Props = {
@@ -33,7 +34,7 @@ type Props = {
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
   savePageValues: SetStateAction<SavedElements>;
-  saveScenario: () => void;
+  saveScenario: (title: string, description: string) => void;
 };
 
 const initialData = {
@@ -76,12 +77,18 @@ export default function SectionBlock({
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
   const [legend, setLegend] = useState<boolean>(false);
+  const [showSaveScenarioModal, setShowSaveScenarioModal] = useState(false);
+  const [showSavedScenarioModal, setShowSavedScenarioModal] = useState(false);
+  const [showOpenScenarioModal, setShowOpenScenarioModal] = useState(false);
+  const [scenarioDetails, setScenarioDetails] = useState({});
+
   const scenario = useContext<number>(ScenarioContext);
+  let scenarioUrl: string = "";
 
   const sectionContainerRef = useRef(null);
 
   const backgroundFullcolor =
-    data.value.background.size == "bg__full" ? data.value.background.color : "";
+    data.value?.background.size == "bg__full" ? data.value.background.color : "";
 
   // Have to create a seperate variable for this since the bg-color is semi-transparent
   // Otherwise they will overlap and will the left be darker since 2 layers
@@ -192,6 +199,13 @@ export default function SectionBlock({
     return savedElements;
   };
 
+  const handleSaveScenario = (title: string, description: string) => {
+    scenarioUrl = saveScenario(title, description);
+    console.log(scenarioUrl);
+    setShowSaveScenarioModal(false);
+    setShowSavedScenarioModal(true);
+  };
+
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef}>
       {feedbackmodals && (
@@ -204,7 +218,15 @@ export default function SectionBlock({
           costBenefitData={costBenefitData}
         />
       )}
-
+      {showSaveScenarioModal && (
+        <ScenarioModal
+          isOpen={showSaveScenarioModal}
+          onClose={() => setShowSaveScenarioModal(false)}
+          handleChange={setScenarioDetails}
+          handleSaveScenario={handleSaveScenario}
+          type="saveScenario"
+        />
+      )}
       <div className="holonContentContainer">
         <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
           <div className="flex-1">
@@ -273,7 +295,9 @@ export default function SectionBlock({
                 loading={loading}
                 dashboardId={data.id}
                 handleClickCostBen={openCostBenefitModal}
-                handleClickScenario={saveScenario}></KPIDashboard>
+                handleClickScenario={() => {
+                  setShowSaveScenarioModal(true);
+                }}></KPIDashboard>
             </div>
           </div>
         </div>
