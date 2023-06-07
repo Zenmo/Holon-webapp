@@ -6,6 +6,8 @@ from wagtail.admin.edit_handlers import FieldPanel
 import random
 from modelcluster.fields import ParentalKey
 
+from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 
 class FilterSubSelector(PolymorphicModel):
     """Base class for a class that allows selecting a subset of the elements in a queryset"""
@@ -30,12 +32,19 @@ class FilterSubSelector(PolymorphicModel):
         """Select a subset of items from the queryset"""
         pass
 
+    def subselect_repository(
+        self, repository: RepositoryBaseClass, value: str
+    ) -> RepositoryBaseClass:
+        """Return a subset of items from the object list"""
+        pass
+
 
 class Skip(FilterSubSelector):
     """Class that allows for skipping a certain amount of items in a queryset"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_skips")
 
+    # TODO remove after rule engine update
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Skip a number of items in the queryset"""
         if self.use_interactive_element_value:
@@ -44,6 +53,21 @@ class Skip(FilterSubSelector):
             n = self.number_of_items
 
         return queryset[n:]
+
+    def subselect_repository(
+        self, repository: RepositoryBaseClass, value: str
+    ) -> RepositoryBaseClass:
+        """Skip a number of items in the object list"""
+
+        # determine number of items to skip
+        if self.use_interactive_element_value:
+            n = int(float(value))
+        else:
+            n = self.number_of_items
+
+        # return repository with subset of objects
+        repository.objects = repository.objects[n:]
+        return repository
 
     def hash(self):
         return f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items}]"
@@ -71,6 +95,7 @@ class Take(FilterSubSelector):
             f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items},{self.mode}]"
         )
 
+    # TODO remove after rule engine update
     def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
         """Take a number of items from the queryset, either the first n or random n"""
 
@@ -88,3 +113,29 @@ class Take(FilterSubSelector):
             return queryset.filter(pk__in=random_ids)
 
         raise NotImplementedError(f"Take mode {self.mode} is not implemented")
+
+    def subselect_repository(
+        self, repository: RepositoryBaseClass, value: str
+    ) -> RepositoryBaseClass:
+        """Take a number of items from the object list, either the first n or random n"""
+
+        objects = repository.objects
+
+        # determine number of items to take
+        if self.use_interactive_element_value:
+            n = int(float(value))
+        else:
+            n = self.number_of_items
+
+        # take items depending on mode
+        if self.mode == TakeMode.FIRST.value:
+            objects = objects[:n]
+
+        elif self.mode == TakeMode.RANDOM.value:
+            ids = [obj.id for obj in objects]
+            random_ids = random.sample(ids, k=n)
+            objects = [obj for obj in objects if obj.id in random_ids]
+
+        # return repository with updated objects
+        repository.objects = objects
+        return repository

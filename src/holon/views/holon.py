@@ -61,16 +61,19 @@ class HolonV2Service(generics.CreateAPIView):
                     interactive_elements = data["interactive_elements"]
 
                     scenario_aggregate = ScenarioAggregate(scenario)
-                    scenario_aggregate.apply_rules(interactive_elements)
+                    scenario_aggregate = rule_mapping.apply_rules(
+                        scenario_aggregate, interactive_elements
+                    )
 
                     cc_payload = scenario_aggregate.serialize_to_json()
                     cc = CloudClient(payload=cc_payload, original_scenario=scenario)
+
                 else:  # TODO remove after rule engine update
 
                     original_scenario = scenario
 
                     HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
-                    scenario = rule_mapping.apply_rules(scenario, data["interactive_elements"])
+                    scenario = rule_mapping.apply_rules_old(scenario, data["interactive_elements"])
 
                     # prefetch again after rules are applied, for more efficient serialization
                     scenario = Scenario.queryset_with_relations().get(id=scenario.id)
