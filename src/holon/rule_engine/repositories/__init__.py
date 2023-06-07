@@ -1,6 +1,7 @@
-from .actor import *  # NOQA
-from .asset import *  # NOQA
-from .contract import *  # NOQA
-from .gridconnection import *  # NOQA
-from .gridnode import *  # NOQA
-from .policy import *  # NOQA
+from .repository_base import *  # NOQA
+from .actor_repository import *  # NOQA
+from .asset_repository import *  # NOQA
+from .contract_repository import *  # NOQA
+from .gridconnection_repository import *  # NOQA
+from .gridnode_repository import *  # NOQA
+from .policy_repository import *  # NOQA

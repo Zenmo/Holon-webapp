@@ -18,6 +18,9 @@ from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 from holon.utils.logging import HolonLogger
+from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
+
+USE_NEW_SCENARIO_SERIALIZER = False
 
 
 class HolonV2Service(generics.CreateAPIView):
@@ -35,8 +38,7 @@ class HolonV2Service(generics.CreateAPIView):
         try:
             if serializer.is_valid():
                 data = serializer.validated_data
-                original_scenario = data["scenario"]
-                scenario = original_scenario
+                scenario = data["scenario"]
 
                 if use_caching:
                     cache_key = holon_endpoint_cache.generate_key(
@@ -51,16 +53,33 @@ class HolonV2Service(generics.CreateAPIView):
                             status=status.HTTP_200_OK,
                         )
 
-                HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
-                scenario = rule_mapping.apply_rules(scenario, data["interactive_elements"])
+                # APPLY INTERACTIVE ELEMENTs
+                HolonV2Service.logger.log_print("Applying interactive elements to scenario")
 
-                # prefetch again after rules are applied, for more efficient serialization
-                scenario = Scenario.queryset_with_relations().get(id=scenario.id)
-                scenario_to_delete = scenario
+                if not USE_NEW_SCENARIO_SERIALIZER:
+                    scenario = data["scenario"]
+                    interactive_elements = data["interactive_elements"]
 
+                    scenario_aggregate = ScenarioAggregate(scenario)
+                    scenario_aggregate.apply_rules(interactive_elements)
+
+                    cc_payload = scenario_aggregate.serialize_to_json()
+                    cc = CloudClient(payload=cc_payload, original_scenario=scenario)
+                else:  # TODO remove after rule engine update
+
+                    original_scenario = scenario
+
+                    HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
+                    scenario = rule_mapping.apply_rules(scenario, data["interactive_elements"])
+
+                    # prefetch again after rules are applied, for more efficient serialization
+                    scenario = Scenario.queryset_with_relations().get(id=scenario.id)
+                    scenario_to_delete = scenario
+                    cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
+
+                # RUN ANYLOGIC
                 HolonV2Service.logger.log_print("Running Anylogic model")
 
-                cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
                 cc.run()
 
                 HolonV2Service.logger.log_print("Running ETM module")

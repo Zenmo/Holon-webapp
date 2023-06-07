@@ -14,9 +14,7 @@ class CloudClient:
     """a more convient way of working with the AnyLogic cloud client"""
 
     def __init__(
-        self,
-        scenario: Scenario,
-        original_scenario: Scenario,
+        self, original_scenario: Scenario, scenario: Scenario = None, payload: dict = None
     ):
         from holon.models.config import AnylogicCloudConfig
 
@@ -33,7 +31,12 @@ class CloudClient:
         self.model_version = self._get_model_version(
             model_name=config.model_name, model_version=config.model_version_number
         )
-        self.payload = self.get_scenario_json(scenario)
+
+        # TODO remove after rule engine update
+        if payload:
+            self.payload = payload
+        else:
+            self.payload = self.get_scenario_json(scenario)
 
         # initials
         self._outputs = None
