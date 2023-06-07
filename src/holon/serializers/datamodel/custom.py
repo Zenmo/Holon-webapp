@@ -80,6 +80,11 @@ class ContractSerializer(AnyLogicModelSerializer):
             return obj.contractScope
 
 
+class ContractV2Serializer(ContractSerializer):
+    def get_contractScope(self, obj):
+        return ActorSerializer().get_id(obj.contractScope)
+
+
 class ActorSerializer(AnyLogicModelSerializer):
     # contracts = ContractSerializer(many=True, read_only=True)
 
@@ -99,7 +104,7 @@ class ActorSerializer(AnyLogicModelSerializer):
     def get_contracts(self, obj: Actor):
         from .mapper import ContractPolymorphicSerializer
 
-        return ContractPolymorphicSerializer(obj.contracts.all(), many=True, read_only=True).data
+        return ContractPolymorphicSerializer(obj.contracts, many=True, read_only=True).data
 
     def get_group(self, obj: Actor):
         if obj.group is not None:
@@ -112,6 +117,13 @@ class ActorSerializer(AnyLogicModelSerializer):
             return ActorSubGroup.objects.get(id=obj.subgroup.id).name
         else:
             return None
+
+
+class ActorV2Serializer(ActorSerializer):
+    def get_contracts(self, obj: Actor):
+        from .mapper_v2 import ContractV2PolymorphicSerializer
+
+        return ContractV2PolymorphicSerializer(obj.contract_list, many=True, read_only=True).data
 
 
 class EnergyAssetSerializer(AnyLogicModelSerializer):
@@ -168,7 +180,7 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     def get_owner_actor(self, obj):
         # get related actor
         if obj.owner_actor is not None:
-            obj = Actor.objects.get(id=obj.owner_actor.id)
+            obj = obj.owner_actor
             return ActorSerializer().get_id(obj)
         else:
             return obj.owner_actor
@@ -182,6 +194,30 @@ class GridNodeSerializer(AnyLogicModelSerializer):
 
     def get_category(self, obj: GridNode):
         return obj.category
+
+
+class GridNodeV2Serializer(GridNodeSerializer):
+    def get_parent(self, obj):
+        # get related gridnode
+        if obj.parent is not None:
+            return self.get_id(obj.parent)
+        else:
+            return obj.parent
+
+    def get_owner_actor(self, obj):
+        # get related actor
+        if obj.owner_actor is not None:
+            obj = Actor.objects.get(id=obj.owner_actor.id)
+            return ActorSerializer().get_id(obj)
+        else:
+            return obj.owner_actor
+
+    def get_assets(self, obj: GridConnection):
+        from .mapper import EnergyAssetPolymorphicSerializer
+
+        return EnergyAssetPolymorphicSerializer(
+            obj.energyasset_list, many=True, read_only=True
+        ).data
 
 
 class GridConnectionSerializer(AnyLogicModelSerializer):
@@ -236,3 +272,47 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
 
     def get_category(self, obj: GridConnection):
         return obj.category
+
+
+class GridConnectionV2Serializer(GridConnectionSerializer):
+    parent_node = ...
+    parent_heat = ...
+    parent_electric = ...
+
+    def get_parent(self, obj):
+        # get related gridnode
+        if obj.parent is not None:
+            return self.get_id(obj.parent)
+        else:
+            return obj.parent
+
+    def get_parent_node(self, id):
+        obj = GridNode.objects.get(id=id)
+        return GridNodeSerializer().get_id(obj)
+
+    def get_parent_heat(self, obj):
+        if obj.parent_heat is not None:
+            return GridNodeSerializer().get_id(self.parent_heat)
+        else:
+            return obj.parent_heat
+
+    def get_parent_electric(self, obj):
+        if obj.parent_electric is not None:
+            return GridNodeSerializer().get_id(self.parent_electric)
+        else:
+            return obj.parent_electric
+
+    def get_owner_actor(self, obj):
+        # get related actor
+        if obj.owner_actor is not None:
+            obj = Actor.objects.get(id=obj.owner_actor.id)
+            return ActorSerializer().get_id(obj)
+        else:
+            return obj.owner_actor
+
+    def get_assets(self, obj: GridConnection):
+        from .mapper import EnergyAssetPolymorphicSerializer
+
+        return EnergyAssetPolymorphicSerializer(
+            obj.energyasset_list, many=True, read_only=True
+        ).data

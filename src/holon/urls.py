@@ -2,7 +2,7 @@ import imp
 
 from django.urls import path
 
-from holon.views.datamodel import DatamodelService
+from holon.views.datamodel import DatamodelService, DatamodelTempService
 from holon.views.holon import HolonCacheCheck, HolonService, HolonV2Service, HolonScenarioCleanup
 from holon.views.cloudclient import CloudclientService
 from holon.views.etm import ETMService
@@ -15,6 +15,7 @@ urlpatterns_v2 = [
     path("cache_check/", HolonCacheCheck.as_view()),
     path("cleanup/", HolonScenarioCleanup.as_view(), name="holon-cleanup"),
     path("datamodel/<int:pk>/", DatamodelService.as_view()),
+    path("datamodeltemp/<int:pk>/", DatamodelTempService.as_view()),
     path("cloudclient/<int:pk>/", CloudclientService.as_view()),
     path("etm/<int:pk>/", ETMService.as_view()),
 ]
