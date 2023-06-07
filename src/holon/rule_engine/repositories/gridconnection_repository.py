@@ -1,4 +1,5 @@
 from holon.models import GridConnection
+from src.holon.models.scenario import Scenario
 from .repository import RepositoryBaseClass
 
 
@@ -7,9 +8,5 @@ class GridConnectionRepository(RepositoryBaseClass):
 
     objects: list[GridConnection] = []
 
-    def __init__(self, scenario_aggregate):
-        self.scenario_aggregate = scenario_aggregate
-
-        self.set_objects(
-            GridConnection.objects.filter(payload=scenario_aggregate.scenario).get_real_instances()
-        )
+    def __init__(self, scenario: Scenario):
+        self.objects = GridConnection.objects.filter(payload=scenario).get_real_instances()

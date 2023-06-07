@@ -12,9 +12,6 @@ class RepositoryBaseClass(ABC):
     def set_objects(self, objects):
         self.objects = objects
 
-    def list(self):
-        return self.objects
-
     def dict(self):
         return {obj.id: obj for obj in self.objects}
 
@@ -36,7 +33,7 @@ class RepositoryBaseClass(ABC):
 
     def all(self) -> list[object]:
         """Return all objects in the repository"""
-        raise NotImplementedError()
+        return self.objects
 
     def add(self, object):
         """Add an object to the repository"""

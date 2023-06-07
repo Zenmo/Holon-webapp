@@ -1,5 +1,6 @@
 from holon.models import EnergyAsset
 from django.db.models import Q
+from src.holon.models.scenario import Scenario
 from .base_repository import RepositoryBaseClass
 
 
@@ -8,12 +9,8 @@ class EnergyAssetRepository(RepositoryBaseClass):
 
     objects: list[EnergyAsset] = []
 
-    def __init__(self, scenario_aggregate):
-        self.scenario_aggregate = scenario_aggregate
+    def __init__(self, scenario: Scenario):
 
-        self.set_objects(
-            EnergyAsset.objects.filter(
-                Q(gridconnection__payload=scenario_aggregate.scenario)
-                | Q(gridnode__payload=scenario_aggregate.scenario)
-            ).get_real_instances()
-        )
+        self.objects = EnergyAsset.objects.filter(
+            Q(gridconnection__payload=scenario) | Q(gridnode__payload=scenario)
+        ).get_real_instances()

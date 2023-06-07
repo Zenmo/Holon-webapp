@@ -1,4 +1,5 @@
 from holon.models import Policy
+from src.holon.models.scenario import Scenario
 from .repository import RepositoryBaseClass
 
 
@@ -7,9 +8,5 @@ class PolicyRepository(RepositoryBaseClass):
 
     objects: list[Policy] = []
 
-    def __init__(self, scenario_aggregate):
-        self.scenario_aggregate = scenario_aggregate
-
-        self.set_objects(
-            Policy.objects.filter(payload=scenario_aggregate.scenario).get_real_instances()
-        )
+    def __init__(self, scenario: Scenario):
+        self.objects = Policy.objects.filter(payload=scenario).get_real_instances()

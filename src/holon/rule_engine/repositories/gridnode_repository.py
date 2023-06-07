@@ -1,4 +1,5 @@
 from holon.models import GridNode
+from src.holon.models.scenario import Scenario
 from .base_repository import RepositoryBaseClass
 
 
@@ -7,9 +8,5 @@ class GridNodeRepository(RepositoryBaseClass):
 
     objects: list[GridNode] = []
 
-    def __init__(self, scenario_aggregate):
-        self.scenario_aggregate = scenario_aggregate
-
-        self.set_objects(
-            GridNode.objects.filter(payload=scenario_aggregate.scenario).get_real_instances()
-        )
+    def __init__(self, scenario: Scenario):
+        self.objects = GridNode.objects.filter(payload=scenario).get_real_instances()
