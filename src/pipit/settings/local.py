@@ -4,10 +4,6 @@ Write local settings here, or override base settings
 from pipit.sentry import initialize_sentry
 from pipit.settings.base import *  # NOQA
 
-MIDDLEWARE += [
-    "opencensus.ext.django.middleware.OpencensusMiddleware",
-]
-
 WAGTAILADMIN_BASE_URL = "http://localhost:8000"
 
 MEDIA_ROOT = "/media/"
