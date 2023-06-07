@@ -34,8 +34,8 @@ class FilterSubSelector(PolymorphicModel):
 
     panels = [
         FieldPanel("use_interactive_element_value"),
-        FieldPanel("number_of_items"),
         FieldPanel("amount_type"),
+        FieldPanel("number_of_items"),
     ]
 
     def clean(self):

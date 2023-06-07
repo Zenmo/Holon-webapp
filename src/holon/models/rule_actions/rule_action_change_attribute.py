@@ -6,7 +6,6 @@ from modelcluster.fields import ParentalKey
 from holon.models.scenario_rule import ScenarioRule
 from wagtail.admin.edit_handlers import FieldPanel
 from django.db.models.query import QuerySet
-from polymorphic.models import PolymorphicModel
 
 
 from holon.models.util import is_allowed_relation
@@ -28,7 +27,6 @@ class RuleActionChangeAttribute(RuleAction):
     model_attribute = models.CharField(max_length=255, null=False)
     operator = models.CharField(max_length=255, choices=ChangeAttributeOperator.choices)
     static_value = models.CharField(max_length=255, null=True, blank=True)
-    noise = models
 
     panels = [FieldPanel("model_attribute"), FieldPanel("operator"), FieldPanel("static_value")]
     rule: ScenarioRule = ParentalKey(
