@@ -33,6 +33,19 @@ CACHES = {
     },
 }
 
+MIDDLEWARE += [
+    "opencensus.ext.django.middleware.OpencensusMiddleware",
+]
+APPLICATION_INSIGHTS_CONNECTION_STRING = get_env("APPLICATION_INSIGHTS_CONNECTION_STRING")
+OPENCENSUS = {
+    "TRACE": {
+        "SAMPLER": "opencensus.trace.samplers.ProbabilitySampler(rate=1)",
+        "EXPORTER": f"""opencensus.ext.azure.trace_exporter.AzureExporter(
+                  connection_string='${APPLICATION_INSIGHTS_CONNECTION_STRING}',
+        )""",
+    }
+}
+
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_STORAGE = "pipit.storages.AzureStaticStorage"
