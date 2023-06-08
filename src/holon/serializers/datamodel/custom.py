@@ -159,13 +159,13 @@ class ActorV2Serializer(AnyLogicModelSerializer):
 
     def get_group(self, obj: Actor):
         if obj.group is not None:
-            return ActorGroup.objects.get(id=obj.group.id).name
+            return ActorGroup.objects.get(id=obj.group_id).name
         else:
             return None
 
     def get_subgroup(self, obj: Actor):
         if obj.subgroup is not None:
-            return ActorSubGroup.objects.get(id=obj.subgroup.id).name
+            return ActorSubGroup.objects.get(id=obj.subgroup_id).name
         else:
             return None
 
