@@ -27,6 +27,24 @@ class ScenarioAggregate:
         self.gridnode_repository = GridNodeRepository(self.scenario)
         self.policy_repository = PolicyRepository(self.scenario)
 
+    def get_repository_for_model_type(self, model_type_name: str) -> RepositoryBaseClass:
+        """Get the correct repository based on the model type name"""
+
+        if model_type_name == ModelType.ACTOR.value:
+            return self.actor_repository.clone()
+        elif model_type_name == ModelType.ENERGYASSET.value:
+            return self.energyasset_repository.clone()
+        elif model_type_name == ModelType.GRIDNODE.value:
+            return self.gridnode_repository.clone()
+        elif model_type_name == ModelType.GRIDCONNECTION.value:
+            return self.gridconnection_repository.clone()
+        elif model_type_name == ModelType.POLICY.value:
+            return self.policy_repository.clone()
+        elif model_type_name == ModelType.CONTRACT.value:
+            return self.contract_repository.clone()
+        else:
+            raise Exception(f"ScenarioAggregate: Not implemented model type name {model_type_name}")
+
     def serialize_to_json(self) -> dict:
         """"""
         # TODO SEM HIERZO!!!

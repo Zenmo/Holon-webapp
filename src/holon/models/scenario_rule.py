@@ -148,30 +148,11 @@ class Rule(PolymorphicModel, ClusterableModel):
         else:
             raise Exception("Not implemented model type")
 
-    def get_repository_for_model_type(
-        self, scenario_aggregate: ScenarioAggregate
-    ) -> RepositoryBaseClass:
-        """Get the correct repository based on the scenario rule model type"""
+    def get_filtered_repository(self, scenario_aggregate: ScenarioAggregate) -> RepositoryBaseClass:
+        """Return a repository based on the Rule's model (sub)type and filters"""
 
-        if self.model_type == ModelType.ACTOR.value:
-            return scenario_aggregate.actor_repository.clone()
-        elif self.model_type == ModelType.ENERGYASSET.value:
-            return scenario_aggregate.energyasset_repository.clone()
-        elif self.model_type == ModelType.GRIDNODE.value:
-            return scenario_aggregate.gridnode_repository.clone()
-        elif self.model_type == ModelType.GRIDCONNECTION.value:
-            return scenario_aggregate.gridconnection_repository.clone()
-        elif self.model_type == ModelType.POLICY.value:
-            return scenario_aggregate.policy_repository.clone()
-        elif self.model_type == ModelType.CONTRACT.value:
-            return scenario_aggregate.contract_repository.clone()
-        else:
-            raise Exception(f"Rule: Not implemented model type {self.model_type}")
-
-    def apply_filters_to_repository(
-        self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
-    ) -> RepositoryBaseClass:
-        """Apply filters to a repository and return the filtered repository"""
+        # get the repository corresponding to the model type
+        repository = scenario_aggregate.get_repository_for_model_type(self.model_type)
 
         # filter the repository for model subtype
         if self.model_subtype:
@@ -185,14 +166,6 @@ class Rule(PolymorphicModel, ClusterableModel):
 
         # MAKE SURE RESULTS ARE DISTINCT
         return repository
-
-    def get_filtered_repository(self, scenario_aggregate: ScenarioAggregate) -> RepositoryBaseClass:
-        """Return a repository based on the Rule's model (sub)type and filters"""
-
-        repository = self.get_repository_for_model_type(scenario_aggregate)
-        filtered_repository = self.apply_filters_to_repository(scenario_aggregate, repository)
-
-        return filtered_repository
 
     # TODO remove after rule engine update
     def apply_filters_to_queryset(self, queryset: QuerySet) -> QuerySet:
