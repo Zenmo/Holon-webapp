@@ -6,7 +6,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 import random
 from modelcluster.fields import ParentalKey
 
-from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
 
 class FilterSubSelector(PolymorphicModel):

@@ -10,9 +10,9 @@ from holon.models.util import (
     relation_field_options,
     relation_field_subtype_options,
 )
-from src.holon.models.filter.filter import Filter
-from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.filter.filter import Filter
+from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RelationExistsFilter(Filter):

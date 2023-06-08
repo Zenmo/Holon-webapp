@@ -7,9 +7,9 @@ from holon.models.util import (
     is_exclude_field,
     is_allowed_relation,
 )
-from src.holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
-from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
+from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class Filter(PolymorphicModel):

@@ -1,8 +1,8 @@
 from django.db.models.query import QuerySet
 from polymorphic.models import PolymorphicModel
-from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
-from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 # Don't forget to register new actions in get_actions() of ScenarioRule
 

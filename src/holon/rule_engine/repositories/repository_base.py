@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Type
 
-from src.holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
+from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 
 
 class RepositoryBaseClass:

@@ -7,10 +7,10 @@ from holon.rule_engine.repositories import (
     GridNodeRepository,
     PolicyRepository,
 )
-from src.holon.models.interactive_element import ChoiceType
-from src.holon.models.scenario_rule import ModelType, ScenarioRule
-from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from src.holon.serializers.interactive_element import InteractiveElementInput
+from holon.models.interactive_element import ChoiceType
+from holon.models.scenario_rule import ModelType, ScenarioRule
+from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from holon.serializers.interactive_element import InteractiveElementInput
 from django.apps import apps
 from holon.serializers import ScenarioV2Serializer
 
@@ -49,6 +49,7 @@ class ScenarioAggregate:
     def serialize_to_json(self) -> dict:
         """"""
         scenario_tree = self.__to_tree()
+        # TODO rename after rule engine update
         json_data = ScenarioV2Serializer(scenario_tree).data
 
         return json_data

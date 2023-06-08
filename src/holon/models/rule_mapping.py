@@ -4,7 +4,7 @@ from holon.serializers import InteractiveElementInput
 from holon.models import ChoiceType
 from holon.services.clone_scenario import clone_scenario
 from pipit.sentry import sentry_sdk_trace
-from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 def get_scenario_and_apply_rules(

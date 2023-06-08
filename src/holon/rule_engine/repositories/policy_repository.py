@@ -1,6 +1,6 @@
 from holon.models import Policy
-from src.holon.models.scenario import Scenario
-from .repository import RepositoryBaseClass
+from holon.models.scenario import Scenario
+from .repository_base import RepositoryBaseClass
 
 
 class PolicyRepository(RepositoryBaseClass):

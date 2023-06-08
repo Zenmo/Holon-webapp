@@ -18,7 +18,7 @@ from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
 from holon.services.data import Results
 from holon.utils.logging import HolonLogger
-from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 USE_NEW_SCENARIO_SERIALIZER = False
 
@@ -69,7 +69,6 @@ class HolonV2Service(generics.CreateAPIView):
                     cc = CloudClient(payload=cc_payload, original_scenario=scenario)
 
                 else:  # TODO remove after rule engine update
-
                     original_scenario = scenario
 
                     HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")

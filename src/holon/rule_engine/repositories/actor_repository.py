@@ -1,6 +1,6 @@
 from holon.models import Actor
-from src.holon.models.scenario import Scenario
-from .base_repository import RepositoryBaseClass
+from holon.models.scenario import Scenario
+from .repository_base import RepositoryBaseClass
 
 
 class ActorRepository(RepositoryBaseClass):
@@ -10,4 +10,3 @@ class ActorRepository(RepositoryBaseClass):
 
     def __init__(self, scenario: Scenario):
         objects = Actor.objects.filter(payload=scenario).get_real_instances()
-
