@@ -15,7 +15,6 @@ urlpatterns_v2 = [
     path("cache_check/", HolonCacheCheck.as_view()),
     path("cleanup/", HolonScenarioCleanup.as_view(), name="holon-cleanup"),
     path("datamodel/<int:pk>/", DatamodelService.as_view()),
-    path("datamodeltemp/<int:pk>/", DatamodelTempService.as_view()),
     path("cloudclient/<int:pk>/", CloudclientService.as_view()),
     path("etm/<int:pk>/", ETMService.as_view()),
 ]
