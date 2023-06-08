@@ -1,12 +1,10 @@
 from __future__ import annotations
-from abc import ABC
-from typing import List, Type, Union
-import numpy as np
-from holon.models.filter import AttributeFilterComparator, Filter
-from src.holon.models.filter_subselector import FilterSubSelector
+from typing import Type
+
+from src.holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 
 
-class RepositoryBaseClass(ABC):
+class RepositoryBaseClass:
     """Repository containing all actors in memory"""
 
     objects: list[object] = []
@@ -25,33 +23,53 @@ class RepositoryBaseClass(ABC):
         """Keep only items in the repository that match with a certain filter"""
         raise NotImplementedError()
 
-    def filter(self, filter) -> RepositoryBaseClass:
-        """Keep only items in the repository that match with a certain filter"""
-        raise NotImplementedError()
-
     # TODO ERIK
     def filter_attribute_value(
         self, attribute_name: str, value: str, comparator: AttributeFilterComparator
     ) -> RepositoryBaseClass:
         """"""
-        attributes = [getattr(obj, attribute_name) for obj in self.objects]
+        # attributes = [getattr(obj, attribute_name) for obj in self.objects]
 
+        # if self.comparator == AttributeFilterComparator.EQUAL.value:
+        #     return repository.filter_attribute_value(self.model_attribute, self.value)
 
-        if self.comparator == AttributeFilterComparator.EQUAL.value:
-            return repository.filter_attribute_value(self.model_attribute, self.value)
+        #     return repository.filter(**{f"{model_type}___{self.model_attribute}": self.value})
+        # if self.comparator == AttributeFilterComparator.LESS_THAN.value:
+        #     return repository.filter(**{f"{model_type}___{self.model_attribute}__lt": self.value})
+        # if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
+        #     return repository.filter(**{f"{model_type}___{self.model_attribute}__gt": self.value})
+        # if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
+        #     return repository.filter(
+        #         invert=True, **{f"{model_type}___{self.model_attribute}": self.value}
 
-            return repository.filter(**{f"{model_type}___{self.model_attribute}": self.value})
-        if self.comparator == AttributeFilterComparator.LESS_THAN.value:
-            return repository.filter(**{f"{model_type}___{self.model_attribute}__lt": self.value})
-        if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
-            return repository.filter(**{f"{model_type}___{self.model_attribute}__gt": self.value})
-        if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
-            return repository.filter(
-                invert=True, **{f"{model_type}___{self.model_attribute}": self.value}
-
-        if 
-
+        # if
         return self
+
+    # TODO ERIK
+    def filter_enum_attribute_value(
+        self, attribute_name: str, value: str, comparator: AttributeFilterComparator
+    ) -> RepositoryBaseClass:
+        """Filter a discrete series (Enum) attribute"""
+
+        # Zelfde als standaard attribute filter, maar greater/lesser than moet met Enum/Textchoice volgorde werken.
+        # -1/None waardes moeten uitgesloten worden.
+        # kijk voor meer info naar `get_q()` van `DiscreteAttributeFilter`
+
+        raise NotImplementedError()
+
+    # TODO ERIK
+    def filter_has_relation(
+        self,
+        relation_field: str,
+        relation_repository: RepositoryBaseClass,
+        invert: bool = False,
+    ) -> RepositoryBaseClass:
+        """Filter the repository on items that have a relation that exists in the relation_repository. Possibility to invert the filter."""
+
+        # TODO
+        # - filter deze repository op welke items' relation field een item refereren die in de gefilterde relation_repository zit
+
+        raise NotImplementedError()
 
     # TODO ERIK
     def get(self, id: int) -> object:

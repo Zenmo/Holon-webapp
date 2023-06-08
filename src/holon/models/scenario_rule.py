@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from polymorphic.models import PolymorphicModel
-from holon.models.filter import Filter
+from holon.models.filter.filter import Filter
 from holon.models.util import is_allowed_relation
 
 from holon.models.interactive_element import (
@@ -130,24 +130,6 @@ class Rule(PolymorphicModel, ClusterableModel):
             + list(self.discrete_attribute_filters.all())
         )
 
-    def get_queryset(self, scenario: Scenario) -> QuerySet:
-        """Create the queryset for a rule based on its model type and model subtype"""
-
-        if self.model_type == ModelType.ACTOR.value:
-            return scenario.actor_set.all()
-        elif self.model_type == ModelType.ENERGYASSET.value:
-            return scenario.assets
-        elif self.model_type == ModelType.GRIDNODE.value:
-            return scenario.gridnode_set.all()
-        elif self.model_type == ModelType.GRIDCONNECTION.value:
-            return scenario.gridconnection_set.all()
-        elif self.model_type == ModelType.POLICY.value:
-            return scenario.policy_set.all()
-        elif self.model_type == ModelType.CONTRACT.value:
-            return scenario.contracts
-        else:
-            raise Exception("Not implemented model type")
-
     def get_filtered_repository(self, scenario_aggregate: ScenarioAggregate) -> RepositoryBaseClass:
         """Return a repository based on the Rule's model (sub)type and filters"""
 
@@ -166,6 +148,25 @@ class Rule(PolymorphicModel, ClusterableModel):
 
         # MAKE SURE RESULTS ARE DISTINCT
         return repository
+
+    # TODO remove after rule engine update
+    def get_queryset(self, scenario: Scenario) -> QuerySet:
+        """Create the queryset for a rule based on its model type and model subtype"""
+
+        if self.model_type == ModelType.ACTOR.value:
+            return scenario.actor_set.all()
+        elif self.model_type == ModelType.ENERGYASSET.value:
+            return scenario.assets
+        elif self.model_type == ModelType.GRIDNODE.value:
+            return scenario.gridnode_set.all()
+        elif self.model_type == ModelType.GRIDCONNECTION.value:
+            return scenario.gridconnection_set.all()
+        elif self.model_type == ModelType.POLICY.value:
+            return scenario.policy_set.all()
+        elif self.model_type == ModelType.CONTRACT.value:
+            return scenario.contracts
+        else:
+            raise Exception("Not implemented model type")
 
     # TODO remove after rule engine update
     def apply_filters_to_queryset(self, queryset: QuerySet) -> QuerySet:
