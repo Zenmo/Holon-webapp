@@ -7,6 +7,8 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 from src.holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from src.holon.models.filter.filter import Filter
+from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class DiscreteAttributeFilter(Filter):
@@ -88,3 +90,12 @@ class DiscreteAttributeFilter(Filter):
             )
         if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
             return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
+
+    def filter_repository(
+        self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
+    ) -> RepositoryBaseClass:
+        """Apply the attribute filter with an Enum attribute to a repository"""
+
+        return repository.filter_enum_attribute_value(
+            self.model_attribute, self.value, self.comparator
+        )

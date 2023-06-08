@@ -11,6 +11,8 @@ from holon.models.util import (
     relation_field_subtype_options,
 )
 from src.holon.models.filter.filter import Filter
+from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RelationExistsFilter(Filter):
@@ -75,3 +77,26 @@ class RelationExistsFilter(Filter):
                 )
             else:
                 return Q(**{f"{self.relation_field}__isnull": False})
+
+    def filter_repository(
+        self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
+    ) -> RepositoryBaseClass:
+        """Apply the relation attribute filter to a repository"""
+
+        # get relation repository
+        model = apps.get_model("holon", self.rule.model_type)
+        relation_model_type = (
+            model()._meta.get_field(self.relation_field).related_model.__class__.__name__
+        )
+        relation_repository = scenario_aggregate.get_repository_for_model_type(relation_model_type)
+
+        # filter by subtype
+        if self.relation_field_subtype:
+            relation_repository = relation_repository.filter_model_subtype(
+                self.relation_field_subtype
+            )
+
+        # filter repository on which items refer to an item in the filtered relation_repository
+        return repository.filter_has_relation(
+            self.relation_field, relation_repository, self.invert_filter
+        )

@@ -46,6 +46,18 @@ class RepositoryBaseClass:
         return self
 
     # TODO ERIK
+    def filter_enum_attribute_value(
+        self, attribute_name: str, value: str, comparator: AttributeFilterComparator
+    ) -> RepositoryBaseClass:
+        """Filter a discrete series (Enum) attribute"""
+
+        # Zelfde als standaard attribute filter, maar greater/lesser than moet met Enum/Textchoice volgorde werken.
+        # -1/None waardes moeten uitgesloten worden.
+        # kijk voor meer info naar `get_q()` van `DiscreteAttributeFilter`
+
+        raise NotImplementedError()
+
+    # TODO ERIK
     def filter_has_relation(
         self,
         relation_field: str,
