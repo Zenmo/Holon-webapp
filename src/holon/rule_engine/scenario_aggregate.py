@@ -1,7 +1,7 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
+# from __future__ import annotations
+# from typing import TYPE_CHECKING
 
-from holon.models import Scenario
+from holon.models.scenario import Scenario
 from holon.rule_engine.repositories import (
     ActorRepository,
     EnergyAssetRepository,
@@ -13,8 +13,7 @@ from holon.rule_engine.repositories import (
 
 from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
-if TYPE_CHECKING:
-    from holon.models import ModelType
+from holon.models.scenario_rule import ModelType
 
 
 class ScenarioAggregate:

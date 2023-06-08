@@ -1,3 +1,10 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -13,8 +20,7 @@ from holon.models.util import (
     relation_field_subtype_options,
     is_allowed_relation,
 )
-from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.filter.filter import Filter
 

@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import QuerySet
@@ -5,8 +11,6 @@ from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel
 import random
 from modelcluster.fields import ParentalKey
-
-from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
 
 class FilterSubSelector(PolymorphicModel):

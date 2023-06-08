@@ -1,3 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.models.filter.filter import Filter
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from typing import Union
 from django.apps import apps
 from django.core.exceptions import ValidationError
@@ -6,7 +14,6 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from polymorphic.models import PolymorphicModel
-from holon.models.filter.filter import Filter
 from holon.models.util import is_allowed_relation
 
 from holon.models.interactive_element import (
@@ -21,8 +28,6 @@ from holon.models.config.datamodel_conversion import DatamodelConversion
 from holon.models.filter_subselector import FilterSubSelector
 from holon.models.rule_actions.rule_action import RuleAction
 from holon.models.value_tranform import ValueTransform
-from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class ModelType(models.TextChoices):
