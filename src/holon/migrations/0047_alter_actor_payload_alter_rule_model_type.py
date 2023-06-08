@@ -6,7 +6,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("holon", "0042_alter_buildinggridconnection_type"),
+        ("holon", "0046_alter_ruleactionattributenoise_max_value_and_more"),
     ]
 
     operations = [
