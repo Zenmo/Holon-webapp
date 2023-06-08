@@ -7,6 +7,13 @@ import random
 from modelcluster.fields import ParentalKey
 
 
+class AmountType(models.TextChoices):
+    """Select absolute number of items or relative number"""
+
+    ABSOLUTE = "ABSOLUTE"
+    RELATIVE = "RELATIVE"
+
+
 class FilterSubSelector(PolymorphicModel):
     """Base class for a class that allows selecting a subset of the elements in a queryset"""
 
@@ -14,11 +21,20 @@ class FilterSubSelector(PolymorphicModel):
     number_of_items = models.IntegerField(
         null=True,
         blank=True,
-        verbose_name="number of items (leave empty if using interactive element value)",
+        verbose_name="number or percentage of items (leave empty if using interactive element value)",
+    )
+    amount_type = models.CharField(
+        max_length=32,
+        choices=AmountType.choices,
+        default=AmountType.ABSOLUTE.value,
+        null=False,
+        blank=False,
+        verbose_name="Absolute number of items or percentage of total selection (number between 0 and 100)",
     )
 
     panels = [
         FieldPanel("use_interactive_element_value"),
+        FieldPanel("amount_type"),
         FieldPanel("number_of_items"),
     ]
 
@@ -42,6 +58,9 @@ class Skip(FilterSubSelector):
             n = int(float(value))
         else:
             n = self.number_of_items
+
+        if self.amount_type == AmountType.RELATIVE.value:
+            n = int(float(n / 100) * len(queryset))
 
         return queryset[n:]
 
@@ -78,6 +97,9 @@ class Take(FilterSubSelector):
             n = int(float(value))
         else:
             n = self.number_of_items
+
+        if self.amount_type == AmountType.RELATIVE.value:
+            n = int(float(n / 100) * len(queryset))
 
         if self.mode == TakeMode.FIRST.value:
             return queryset[:n]
