@@ -66,6 +66,8 @@ class RuleActionRemove(RuleAction):
             if isinstance(filtered_object, Actor):
                 for gridconnection in filtered_object.gridconnection_set.all():
                     gridconnection.delete()
+                for contract in filtered_object.contracts.all():
+                    contract.delete()
             filtered_object.delete()
 
             remove_n -= 1

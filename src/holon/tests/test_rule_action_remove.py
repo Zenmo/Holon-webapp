@@ -11,6 +11,25 @@ class RuleMappingTestClass(TestCase):
         actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
+        DeliveryContract.objects.create(
+            name="delivery_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=actor,
+            contractScope=actor,
+            deliveryContractType=DeliveryContractType.FIXED,
+            deliveryPrice_eurpkWh=1,
+            feedinPrice_eurpkWh=1,
+        )
+        ConnectionContract.objects.create(
+            name="connection_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=actor,
+            contractScope=actor,
+            connectionContractType=ConnectionContractType.DEFAULT,
+            nfATO_capacity_kW=1,
+            nfATO_starttime_h=1,
+            nfATO_endtime_h=1,
+        )
         gridconnection_0: BuildingGridConnection = BuildingGridConnection.objects.create(
             owner_actor=actor,
             capacity_kw=750.0,
