@@ -10,6 +10,7 @@ type ContentColumn = {
   handleContentChange: React.Dispatch<React.SetStateAction<Content[]>>;
   handleMedia: React.Dispatch<React.SetStateAction<StaticImage>>;
   selectedLevel?: string;
+  pagetype?: string;
 };
 
 export default function ContentColumn({
@@ -18,6 +19,7 @@ export default function ContentColumn({
   handleContentChange,
   handleMedia,
   selectedLevel,
+  pagetype,
 }: ContentColumn) {
   useEffect(() => {
     const contentArr: Content[] = [];
@@ -184,6 +186,7 @@ export default function ContentColumn({
                 currentValue={ct.currentValue}
                 contentId={ct.id}
                 selectedLevel={selectedLevel}
+                pagetype={pagetype}
                 {...ct.value}
               />
             </React.Fragment>

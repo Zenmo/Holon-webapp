@@ -278,6 +278,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
                 content={content}
                 handleContentChange={setContent}
                 handleMedia={setMedia}
+                pagetype={pagetype}
               />
             )}
           </div>
