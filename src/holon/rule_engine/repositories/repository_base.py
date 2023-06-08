@@ -23,10 +23,6 @@ class RepositoryBaseClass:
         """Keep only items in the repository that match with a certain filter"""
         raise NotImplementedError()
 
-    def filter(self, filter) -> RepositoryBaseClass:
-        """Keep only items in the repository that match with a certain filter"""
-        raise NotImplementedError()
-
     # TODO ERIK
     def filter_attribute_value(
         self, attribute_name: str, value: str, comparator: AttributeFilterComparator
@@ -49,6 +45,7 @@ class RepositoryBaseClass:
         # if
         return self
 
+    # TODO ERIK
     def filter_has_relation(
         self,
         relation_field: str,
