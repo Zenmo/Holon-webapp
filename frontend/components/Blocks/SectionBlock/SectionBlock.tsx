@@ -131,7 +131,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
 
   function createCopyofContent(input: Content[]) {
     const returnArr: Content[] = [];
-    input.map((inputObj: any) => {
+    input.map(inputObj => {
       returnArr.push({ ...inputObj });
     });
 
