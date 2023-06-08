@@ -20,13 +20,29 @@ from holon.services.data import Results
 from holon.utils.logging import HolonLogger
 
 
+def use_result_cache(request: Request) -> bool:
+    """
+    Caching simulation results is enabled by default unless cookie or query param is set.
+    Set cookie in javascript console:
+    document.cookie = "caching=false; Path=/wt/api/nextjs/v2/holon; SameSite=Lax;"
+    """
+    if request.query_params.get("caching", "true").lower() == "false":
+        return False
+
+    if request.COOKIES.get("caching", "true").lower() == "false":
+        return False
+
+    return True
+
+
 class HolonV2Service(generics.CreateAPIView):
     logger = HolonLogger("holon-endpoint")
     serializer_class = HolonRequestSerializer
 
     def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
-        use_caching = request.query_params.get("caching", "true").lower() == "true"
+
+        use_caching = use_result_cache(request)
 
         scenario: Scenario = None
         scenario_to_delete: Scenario = None
