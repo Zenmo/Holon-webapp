@@ -245,6 +245,11 @@ class ScenarioRule(Rule):
                         label="Discrete rule action - change attribute",
                     ),
                     InlinePanel(
+                        "discrete_factors_attribute_noise",
+                        heading="Discrete rule actions - attribute noise",
+                        label="Discrete rule action - attribute noise",
+                    ),
+                    InlinePanel(
                         "discrete_factors_remove",
                         heading="Discrete rule actions - remove filtered objects",
                         label="Discrete rule action - remove filtered objects",
@@ -314,6 +319,7 @@ class ScenarioRule(Rule):
         return (
             list(self.continuous_factors.all())
             + list(self.discrete_factors_change_attribute.all())
+            + list(self.discrete_factors_attribute_noise.all())
             + list(self.discrete_factors_add.all())
             + list(self.discrete_factors_remove.all())
             + list(self.discrete_factors_set_count.all())
