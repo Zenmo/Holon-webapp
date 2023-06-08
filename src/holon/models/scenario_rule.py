@@ -29,6 +29,7 @@ class ModelType(models.TextChoices):
     GRIDNODE = "GridNode"
     GRIDCONNECTION = "GridConnection"
     POLICY = "Policy"
+    SCENARIO = "Scenario"
 
 
 class Rule(PolymorphicModel, ClusterableModel):
@@ -140,6 +141,8 @@ class Rule(PolymorphicModel, ClusterableModel):
             return scenario.policy_set.all()
         elif self.model_type == ModelType.CONTRACT.value:
             return scenario.contracts
+        elif self.model_type == ModelType.SCENARIO.value:
+            return Scenario.objects.filter(id=scenario.id)
         else:
             raise Exception("Not implemented model type")
 

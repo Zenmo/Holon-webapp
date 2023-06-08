@@ -13,7 +13,6 @@ from holon.models import util
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from polymorphic import utils
 
 from wagtail.admin.edit_handlers import FieldPanel
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils
@@ -95,9 +94,80 @@ class GenericRuleActionAdd(RuleAction):
             assert not (self.asset_to_add or self.contract_to_add)
             self.model_to_add = self.gridconnection_to_add
 
+            (
+                self.asset_children_to_add,
+                self.actor_to_add,
+                self.actor_contracts_to_add,
+            ) = self.__get_gridconnection_children(self.model_to_add)
+
         elif self.contract_to_add:
             assert not (self.asset_to_add or self.gridconnection_to_add)
             self.model_to_add = self.contract_to_add
+
+    def __get_gridconnection_children(self, gridconnection):
+        """Retrieve all related children of the given gridconnection"""
+        assets = gridconnection.energyasset_set.get_real_instances()
+        actor = gridconnection.owner_actor
+        actor_contracts = actor.contracts.get_real_instances() if actor else []
+
+        return assets, actor, actor_contracts
+
+    def set_contract_scope(self, filtered_queryset):
+        """Set contract scope of new contracts to the cloned actor in the cloned scenario"""
+        if self.contract_to_add:
+            scenario = filtered_queryset[0].payload
+            old_contract_scope = self.contract_to_add.contractScope
+
+            cloned_contract_scope = Actor.objects.filter(
+                payload=scenario, original_id=old_contract_scope.id
+            ).first()
+            self.model_to_add.contractScope = cloned_contract_scope
+
+        elif self.gridconnection_to_add and self.actor_to_add:
+            scenario = filtered_queryset[0]
+
+            for contract in self.actor_contracts_to_add:
+                old_contract_scope = contract.contractScope
+
+                cloned_contract_scope = Actor.objects.filter(
+                    payload=scenario, original_id=old_contract_scope.id
+                ).first()
+
+                contract.contractScope = cloned_contract_scope
+
+    def duplicate_gridconnection_with_children(self, object):
+        """Duplicate template gridconection including all related models"""
+        added_actor = util.duplicate_model(
+            self.actor_to_add,
+            {
+                "payload": object,
+                "is_rule_action_template": False,
+            },
+        )
+        added_gridconnection = util.duplicate_model(
+            self.model_to_add,
+            {
+                "payload": object,
+                "owner_actor": added_actor,
+                "is_rule_action_template": False,
+            },
+        )
+        for asset in self.asset_children_to_add:
+            util.duplicate_model(
+                asset,
+                {
+                    "gridconnection": added_gridconnection,
+                    "is_rule_action_template": False,
+                },
+            )
+        for contract in self.actor_contracts_to_add:
+            util.duplicate_model(
+                contract,
+                {
+                    "actor": added_actor,
+                    "is_rule_action_template": False,
+                },
+            )
 
     class Meta:
         verbose_name = "GenericRuleActionAdd"
@@ -118,7 +188,9 @@ class GenericRuleActionAdd(RuleAction):
                 raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-        base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
+            filtered_queryset[0].__class__
+        )
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
@@ -134,14 +206,7 @@ class GenericRuleActionAdd(RuleAction):
 
         objects_added = 0
 
-        # get cloned contractscope
-        if self.contract_to_add:
-            scenario = filtered_queryset[0].payload
-            old_contract_scope = self.contract_to_add.contractScope
-
-            cloned_contract_scope = Actor.objects.filter(
-                payload=scenario, original_id=old_contract_scope.id
-            ).first()
+        self.set_contract_scope(filtered_queryset)
 
         # only take first n objects
         for filtererd_object in filtered_queryset:
@@ -153,17 +218,8 @@ class GenericRuleActionAdd(RuleAction):
 
             # Only check < n for set count
             if not reset_models_before_add or objects_added < n:
-                # add model_to_add to filtered object
-
-                if self.contract_to_add:
-                    util.duplicate_model(
-                        self.model_to_add,
-                        {
-                            parent_fk_field_name: filtererd_object,
-                            "contractScope": cloned_contract_scope,
-                            "is_rule_action_template": False,
-                        },
-                    )
+                if self.gridconnection_to_add and self.actor_to_add:
+                    self.duplicate_gridconnection_with_children(filtererd_object)
 
                 else:
                     util.duplicate_model(
@@ -255,7 +311,9 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-        base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
+            filtered_queryset[0].__class__
+        )
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
@@ -269,13 +327,18 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
                 f"Type {base_parent_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)} for model type {self.model_to_add.__class__.__name__}"
             )
 
+        self.set_contract_scope(filtered_queryset)
+
         # only take first n objects
         for filtererd_object in filtered_queryset:
             for _ in range(n):
-                util.duplicate_model(
-                    self.model_to_add,
-                    {
-                        parent_fk_field_name: filtererd_object,
-                        "is_rule_action_template": False,
-                    },
-                )
+                if self.gridconnection_to_add and self.actor_to_add:
+                    self.duplicate_gridconnection_with_children(filtererd_object)
+                else:
+                    util.duplicate_model(
+                        self.model_to_add,
+                        {
+                            parent_fk_field_name: filtererd_object,
+                            "is_rule_action_template": False,
+                        },
+                    )
