@@ -59,6 +59,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
+  const [initialContent, setInitialContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
     HolarchyFeedbackImageProps[]
   >([]);
@@ -70,7 +71,8 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [legend, setLegend] = useState<boolean>(false);
   const scenario = useContext<number>(ScenarioContext);
   const [dirtyState, setDirtyState] = useState<boolean>(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [resetState, setResetState] = useState<boolean>(false);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
   const sectionContainerRef = useRef(null);
 
@@ -91,15 +93,20 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
 
-    if (isInitialLoad) {
+    if (pagetype !== "Sandbox") {
       debouncedCalculateKPIs(content);
-    }
+    } else {
+      if (isInitialLoad) {
+        setInitialContent(createCopyofContent([...content]));
+        debouncedCalculateKPIs(content);
+      }
 
-    if (!isInitialLoad) {
-      // Added a timeout for better ux
-      setTimeout(() => {
-        setDirtyState(true);
-      }, 500);
+      if (!isInitialLoad && !resetState) {
+        // Added a timeout for better ux
+        setTimeout(() => {
+          setDirtyState(true);
+        }, 500);
+      }
     }
   }, [content, debouncedCalculateKPIs]);
 
@@ -120,6 +127,30 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
 
   function closeCostBenefitModal() {
     setCostBenefitModal(false);
+  }
+
+  function createCopyofContent(input: Content[]) {
+    const returnArr: Content[] = [];
+    input.map((inputObj: any) => {
+      returnArr.push({ ...inputObj });
+    });
+
+    return returnArr;
+  }
+
+  function resetContent() {
+    // First set an empty array and after that fill the content with the initial content
+    // TODO: Find a better way to reset the content. For now it works like this.
+    setResetState(true);
+    setContent([]);
+    setTimeout(() => {
+      setContent(createCopyofContent([...initialContent]));
+      debouncedCalculateKPIs([...initialContent]);
+    });
+    setTimeout(() => {
+      setResetState(false);
+    }, 750);
+    setDirtyState(false);
   }
 
   function openHolarchyModal() {
@@ -264,7 +295,9 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
                     </p>
 
                     <div className="flex justify-center mt-6 items-center">
-                      <div className="font-bold mr-3">Reset instellingen</div>
+                      <div className="font-bold mr-3" onClick={() => resetContent()}>
+                        Reset instellingen
+                      </div>
                       <Button
                         onClick={() => {
                           debouncedCalculateKPIs(content);
