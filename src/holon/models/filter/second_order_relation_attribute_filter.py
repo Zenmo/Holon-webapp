@@ -15,6 +15,8 @@ from holon.models.util import (
 )
 from src.holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from src.holon.models.filter.filter import Filter
+from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class SecondOrderRelationAttributeFilter(Filter):
@@ -180,4 +182,58 @@ class SecondOrderRelationAttributeFilter(Filter):
             relation_field_subtype
             & second_order_relation_field_q
             & second_order_relation_field_subtype
+        )
+
+    def filter_repository(
+        self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
+    ) -> RepositoryBaseClass:
+        """Apply the relation attribute filter to a repository"""
+
+        # get relation repository
+        model = apps.get_model("holon", self.rule.model_type)
+        relation_model_type_name = (
+            model()._meta.get_field(self.relation_field).related_model.__class__.__name__
+        )
+        first_order_relation_repository = scenario_aggregate.get_repository_for_model_type(
+            relation_model_type_name
+        )
+
+        # filter relation repository by subtype
+        if self.relation_field_subtype:
+            first_order_relation_repository = first_order_relation_repository.filter_model_subtype(
+                self.relation_field_subtype
+            )
+
+        #  get second-order relation repository
+        relation_model = apps.get_model("holon", relation_model_type_name)
+        second_order_relation_model_type_name = (
+            relation_model()
+            ._meta.get_field(self.second_order_relation_field)
+            .related_model.__class__.__name__
+        )
+        second_order_relation_repository = scenario_aggregate.get_repository_for_model_type(
+            second_order_relation_model_type_name
+        )
+
+        # filter second-order relation repository by subtype
+        if self.second_order_relation_field_subtype:
+            second_order_relation_repository = (
+                second_order_relation_repository.filter_model_subtype(
+                    self.second_order_relation_field_subtype
+                )
+            )
+
+        # filter second_order_relation_repository on attribute
+        second_order_relation_repository = second_order_relation_repository.filter_attribute_value(
+            self.model_attribute, self.value, self.comparator
+        )
+
+        # filter first-order relation repository on which items refer to an item in the filtered relation_repository
+        first_order_relation_repository = first_order_relation_repository.filter_has_relation(
+            self.second_order_relation_field, second_order_relation_repository, invert=False
+        )
+
+        # filter repository on which items refer to an item in the filtered relation_repository
+        return repository.filter_has_relation(
+            self.relation_field, first_order_relation_repository, self.invert_filter
         )
