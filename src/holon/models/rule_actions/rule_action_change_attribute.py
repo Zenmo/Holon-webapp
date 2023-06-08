@@ -110,7 +110,7 @@ class RuleActionChangeAttribute(RuleAction):
         if self.static_value:
             value = self.static_value
 
-        # TODO fix this for new rule engine
+        # TODO check if this is correct
         model_attribute = self.model_attribute
         if is_allowed_relation(model_attribute):
             # Add id to attribute so it can be updated with an id compared to a model instance

@@ -23,30 +23,22 @@ class ScenarioAggregate:
     def __init__(self, scenario: Scenario):
         self.scenario = scenario
 
-        self.actor_repository = ActorRepository(self.scenario)
-        self.energyasset_repository = EnergyAssetRepository(self.scenario)
-        self.contract_repository = ContractRepository(self.scenario)
-        self.gridconnection_repository = GridConnectionRepository(self.scenario)
-        self.gridnode_repository = GridNodeRepository(self.scenario)
-        self.policy_repository = PolicyRepository(self.scenario)
+        self.repositories: dict[str, RepositoryBaseClass] = {
+            ModelType.ACTOR.value: ActorRepository(self.scenario),
+            ModelType.ENERGYASSET.value: EnergyAssetRepository(self.scenario),
+            ModelType.CONTRACT.value: ContractRepository(self.scenario),
+            ModelType.POLICY.value: PolicyRepository(self.scenario),
+            ModelType.GRIDCONNECTION.value: GridConnectionRepository(self.scenario),
+            ModelType.GRIDNODE.value: GridNodeRepository(self.scenario),
+        }
 
     def get_repository_for_model_type(self, model_type_name: str) -> RepositoryBaseClass:
         """Get the correct repository based on the model type name"""
 
-        if model_type_name == ModelType.ACTOR.value:
-            return self.actor_repository.clone()
-        elif model_type_name == ModelType.ENERGYASSET.value:
-            return self.energyasset_repository.clone()
-        elif model_type_name == ModelType.GRIDNODE.value:
-            return self.gridnode_repository.clone()
-        elif model_type_name == ModelType.GRIDCONNECTION.value:
-            return self.gridconnection_repository.clone()
-        elif model_type_name == ModelType.POLICY.value:
-            return self.policy_repository.clone()
-        elif model_type_name == ModelType.CONTRACT.value:
-            return self.contract_repository.clone()
-        else:
+        if not model_type_name in self.repositories:
             raise Exception(f"ScenarioAggregate: Not implemented model type name {model_type_name}")
+
+        return self.repositories[model_type_name].clone()
 
     def serialize_to_json(self) -> dict:
         """Serialize scenario to json with embedded relations"""
@@ -62,20 +54,20 @@ class ScenarioAggregate:
         """Convert scenario to a tree structure"""
         tree = self.scenario
 
-        actor_lookup = self.actor_repository.dict()
-        gridnode_lookup = self.gridnode_repository.dict()
+        actor_lookup = self.repositories[ModelType.ACTOR.value].dict()
+        gridnode_lookup = self.repositories[ModelType.GRIDNODE.value].dict()
 
-        contracts = self.contract_repository.list()
+        contracts = self.repositories[ModelType.CONTRACT.value].all()
         for contract in contracts:
             contract.contractScope = actor_lookup[contract.contractScope_id]
 
-        tree.actors = self.actor_repository.list()
+        tree.actors = self.repositories[ModelType.ACTOR.value].all()
         for actor in tree.actors:
             actor.contract_list = [
                 contract for contract in contracts if contract.actor_id == actor.id
             ]
 
-        tree.gridnodes = self.gridnode_repository.list()
+        tree.gridnodes = self.repositories[ModelType.GRIDNODE.value].all()
         for gridnode in tree.gridnodes:
             if gridnode.owner_actor_id:
                 gridnode.owner_actor = actor_lookup[gridnode.owner_actor_id]
@@ -84,11 +76,11 @@ class ScenarioAggregate:
 
             gridnode.energyasset_list = [
                 asset
-                for asset in self.energyasset_repository.list()
+                for asset in self.repositories[ModelType.ENERGYASSET.value].all()
                 if asset.gridnode_id == gridnode.id
             ]
 
-        tree.gridconnections = self.gridconnection_repository.list()
+        tree.gridconnections = self.repositories[ModelType.GRIDCONNECTION.value].all()
         for gridconnection in tree.gridconnections:
             if gridconnection.owner_actor_id:
                 gridconnection.owner_actor = actor_lookup[gridconnection.owner_actor_id]
@@ -99,10 +91,10 @@ class ScenarioAggregate:
 
             gridconnection.energyasset_list = [
                 asset
-                for asset in self.energyasset_repository.list()
+                for asset in self.repositories[ModelType.ENERGYASSET.value].all()
                 if asset.gridconnection_id == gridconnection.id
             ]
 
-        tree.policies = self.policy_repository.list()
+        tree.policies = self.repositories[ModelType.POLICY.value].all()
 
         return tree
