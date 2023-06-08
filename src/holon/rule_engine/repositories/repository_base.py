@@ -76,6 +76,11 @@ class RepositoryBaseClass:
         """Get an item in the objects list by id"""
         raise NotImplementedError()
 
+    def update_attribute(self, id: int, attribute_name: str, value):
+        """Select an object by id in the repository and set it's attribute attribute_name to value"""
+
+        raise NotImplementedError()
+
     def all(self) -> list[object]:
         """Return all objects in the repository"""
         return self.objects

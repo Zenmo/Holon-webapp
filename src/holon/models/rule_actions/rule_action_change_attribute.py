@@ -9,6 +9,8 @@ from django.db.models.query import QuerySet
 
 
 from holon.models.util import is_allowed_relation
+from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class ChangeAttributeOperator(models.TextChoices):
@@ -96,3 +98,39 @@ class RuleActionChangeAttribute(RuleAction):
 
             setattr(filtered_object, model_attribute, cast_new_value)
             filtered_object.save()
+
+    def apply_to_scenario_aggregate(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        filtered_repository: RepositoryBaseClass,
+        value: str,
+    ) -> ScenarioAggregate:
+        """Apply a rule action to an object in the queryset"""
+
+        if self.static_value:
+            value = self.static_value
+
+        # TODO fix this for new rule engine
+        model_attribute = self.model_attribute
+        if is_allowed_relation(model_attribute):
+            # Add id to attribute so it can be updated with an id compared to a model instance
+            model_attribute += "_id"
+
+        # apply operators to objects
+        for filtered_object in filtered_repository:
+            old_value = getattr(filtered_object, model_attribute)
+            new_value = self.__apply_operator(old_value, value)
+
+            # change the new value type to the same as the old one
+            try:
+                cast_new_value = type(old_value)(new_value)
+            except:
+                # fallback when old_value is None
+                cast_new_value = new_value
+
+            # update scenario aggregate
+            scenario_aggregate.repositories[filtered_object.__class__.__name__].update_attribute(
+                filtered_object, model_attribute, cast_new_value
+            )
+
+        return scenario_aggregate
