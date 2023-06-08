@@ -18,11 +18,11 @@ from holon.models.util import all_subclasses
 from django.db.models.query import QuerySet
 from django.db.models import Q
 from holon.models.config.datamodel_conversion import DatamodelConversion
-from src.holon.models.filter_subselector import FilterSubSelector
-from src.holon.models.rule_actions.rule_action import RuleAction
-from src.holon.models.value_tranform import ValueTransform
-from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.filter_subselector import FilterSubSelector
+from holon.models.rule_actions.rule_action import RuleAction
+from holon.models.value_tranform import ValueTransform
+from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class ModelType(models.TextChoices):

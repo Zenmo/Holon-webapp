@@ -138,7 +138,7 @@ class ActorSerializer(AnyLogicModelSerializer):
 
 
 # TODO rename after rule engine update
-class ActorSerializer(AnyLogicModelSerializer):
+class ActorV2Serializer(AnyLogicModelSerializer):
     class Meta:
         model = Actor
         fields = "__all__"

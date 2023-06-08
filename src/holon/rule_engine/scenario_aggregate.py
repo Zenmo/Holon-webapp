@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from holon.models import Scenario
 from holon.rule_engine.repositories import (
     ActorRepository,
@@ -7,12 +10,11 @@ from holon.rule_engine.repositories import (
     GridNodeRepository,
     PolicyRepository,
 )
-from holon.models.interactive_element import ChoiceType
-from holon.models.scenario_rule import ModelType, ScenarioRule
+
 from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from holon.serializers.interactive_element import InteractiveElementInput
-from django.apps import apps
-from holon.serializers import ScenarioV2Serializer
+
+if TYPE_CHECKING:
+    from holon.models import ModelType
 
 
 class ScenarioAggregate:
@@ -47,7 +49,9 @@ class ScenarioAggregate:
             raise Exception(f"ScenarioAggregate: Not implemented model type name {model_type_name}")
 
     def serialize_to_json(self) -> dict:
-        """"""
+        """Serialize scenario to json with embedded relations"""
+        from holon.serializers import ScenarioV2Serializer
+
         scenario_tree = self.__to_tree()
         # TODO rename after rule engine update
         json_data = ScenarioV2Serializer(scenario_tree).data

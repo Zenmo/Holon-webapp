@@ -1,8 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from django.db.models.query import QuerySet
 from polymorphic.models import PolymorphicModel
-from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
-from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+
+if TYPE_CHECKING:
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 # Don't forget to register new actions in get_actions() of ScenarioRule
 

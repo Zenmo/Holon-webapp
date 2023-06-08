@@ -1,4 +1,4 @@
-from holon.models import EnergyAsset
+from holon.models import EnergyAsset, Scenario
 from django.db.models import Q
 from .repository_base import RepositoryBaseClass
 
