@@ -15,6 +15,8 @@ from holon.models.util import (
     is_allowed_relation,
     all_subclasses,
 )
+from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 # Don't forget to register new filters in get_filters() of ScenarioRule
@@ -53,6 +55,12 @@ class Filter(PolymorphicModel):
         abstract = True
 
     def get_q(self) -> Q:
+        pass
+
+    def filter_repository(
+        self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
+    ) -> RepositoryBaseClass:
+        """Apply the current filter to a repository"""
         pass
 
 

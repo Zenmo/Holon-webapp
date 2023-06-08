@@ -1,6 +1,7 @@
 ###################################################
 ## Note! This script is automatically generated! ##
 ###################################################
+# TODO remove after rule engine update: whole file
 
 from rest_polymorphic.serializers import PolymorphicSerializer
 

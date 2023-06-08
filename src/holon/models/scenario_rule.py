@@ -18,6 +18,11 @@ from holon.models.util import all_subclasses
 from django.db.models.query import QuerySet
 from django.db.models import Q
 from holon.models.config.datamodel_conversion import DatamodelConversion
+from src.holon.models.filter_subselector import FilterSubSelector
+from src.holon.models.rule_actions.rule_action import RuleAction
+from src.holon.models.value_tranform import ValueTransform
+from src.holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from src.holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class ModelType(models.TextChoices):
@@ -143,6 +148,26 @@ class Rule(PolymorphicModel, ClusterableModel):
         else:
             raise Exception("Not implemented model type")
 
+    def get_filtered_repository(self, scenario_aggregate: ScenarioAggregate) -> RepositoryBaseClass:
+        """Return a repository based on the Rule's model (sub)type and filters"""
+
+        # get the repository corresponding to the model type
+        repository = scenario_aggregate.get_repository_for_model_type(self.model_type)
+
+        # filter the repository for model subtype
+        if self.model_subtype:
+            model_subtype = apps.get_model("holon", self.model_subtype)
+            repository = repository.filter_model_subtype(model_subtype)
+
+        # apply rule filters to repository
+        filters = self.get_filters()
+        for filter in filters:
+            repository = filter.filter_repository(scenario_aggregate, repository)
+
+        # MAKE SURE RESULTS ARE DISTINCT
+        return repository
+
+    # TODO remove after rule engine update
     def apply_filters_to_queryset(self, queryset: QuerySet) -> QuerySet:
         """Fetch and apply the rule filters to a queryset"""
 
@@ -163,6 +188,7 @@ class Rule(PolymorphicModel, ClusterableModel):
         #   e.q. a filter on gridconnections where energyasset have certain properties will produce duplicate gridconnection in the queryset
         return queryset.filter(queryset_filter).distinct()
 
+    # TODO remove after rule engine update
     def get_filtered_queryset(self, scenario: Scenario) -> QuerySet:
         """Return a queryset based on the Rule's model (sub)type and filters"""
 
@@ -277,7 +303,7 @@ class ScenarioRule(Rule):
     class Meta:
         verbose_name = "ScenarioRule"
 
-    def get_value_transforms(self) -> list["ValueTransform"]:
+    def get_value_transforms(self) -> list[ValueTransform]:
         """Get a list of the value transform items"""
 
         return (
@@ -295,11 +321,21 @@ class ScenarioRule(Rule):
 
         return value
 
-    def get_filter_subselectors(self) -> list["FilterSubSelector"]:
+    def subselect_repository(self, filtered_repository: RepositoryBaseClass, value: str):
+        """Apply the rule's query subselection to the filtered queryset"""
+
+        subselectors = self.get_filter_subselectors()
+        for subselector in subselectors:
+            filtered_repository = subselector.subselect_repository(filtered_repository, value)
+
+        return filtered_repository
+
+    def get_filter_subselectors(self) -> list[FilterSubSelector]:
         """Get a list of the filter subselection items"""
 
         return list(self.subselector_skips.all()) + list(self.subselector_takes.all())
 
+    # TODO remove after rule engine update
     def apply_filter_subselections(self, filtered_queryset: QuerySet, value: str):
         """Apply the rule's query subselection to the filtered queryset"""
 
@@ -308,7 +344,23 @@ class ScenarioRule(Rule):
 
         return filtered_queryset
 
-    def get_actions(self) -> list["RuleAction"]:
+    def apply_rule_actions(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        filtered_repository: RepositoryBaseClass,
+        value: str,
+    ):
+        """Apply rule actions to filtered objects"""
+
+        rule_actions = self.get_actions()
+        for rule_action in rule_actions:
+            scenario_aggregate = rule_action.apply_to_scenario_aggregate(
+                scenario_aggregate, filtered_repository, value
+            )
+
+        return scenario_aggregate
+
+    def get_actions(self) -> list[RuleAction]:
         """Return a list of RuleActions belonging to this rule"""
 
         return (
@@ -321,7 +373,8 @@ class ScenarioRule(Rule):
             + list(self.discrete_factors_add_multiple_under_each_parent.all())
         )
 
-    def apply_rule_actions(self, filtered_queryset: QuerySet, value: str):
+    # TODO remove after rule engine update
+    def apply_rule_actions_old(self, filtered_queryset: QuerySet, value: str):
         """Apply rule actions to filtered objects"""
 
         for rule_action in self.get_actions():

@@ -53,6 +53,7 @@ class AnyLogicModelSerializer(serializers.ModelSerializer):
         return representation
 
 
+# TODO remove after rule engine update
 class ContractSerializer(AnyLogicModelSerializer):
     class Meta:
         model = Contract
@@ -80,14 +81,31 @@ class ContractSerializer(AnyLogicModelSerializer):
             return obj.contractScope
 
 
-class ContractV2Serializer(ContractSerializer):
+# TODO rename after rule engine update
+class ContractV2Serializer(AnyLogicModelSerializer):
+    class Meta:
+        model = Contract
+        fields = "__all__"
+
+    id = serializers.SerializerMethodField()
+    contractScope = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        return f"c{obj.id}"
+
+    def get_fields(self):
+        return super().get_fields(
+            exclude_fields=[
+                "actor",
+            ]
+        )
+
     def get_contractScope(self, obj):
         return ActorSerializer().get_id(obj.contractScope)
 
 
+# TODO remove after rule engine update
 class ActorSerializer(AnyLogicModelSerializer):
-    # contracts = ContractSerializer(many=True, read_only=True)
-
     class Meta:
         model = Actor
         fields = "__all__"
@@ -119,11 +137,37 @@ class ActorSerializer(AnyLogicModelSerializer):
             return None
 
 
-class ActorV2Serializer(ActorSerializer):
+# TODO rename after rule engine update
+class ActorSerializer(AnyLogicModelSerializer):
+    class Meta:
+        model = Actor
+        fields = "__all__"
+
+    id = serializers.SerializerMethodField()
+    group = serializers.SerializerMethodField()
+    subgroup = serializers.SerializerMethodField()
+    contracts = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        return f"{obj.category.lower()[:3]}{obj.id}"
+
     def get_contracts(self, obj: Actor):
+        # TODO rename after rule engine update
         from .mapper_v2 import ContractV2PolymorphicSerializer
 
         return ContractV2PolymorphicSerializer(obj.contract_list, many=True, read_only=True).data
+
+    def get_group(self, obj: Actor):
+        if obj.group is not None:
+            return ActorGroup.objects.get(id=obj.group.id).name
+        else:
+            return None
+
+    def get_subgroup(self, obj: Actor):
+        if obj.subgroup is not None:
+            return ActorSubGroup.objects.get(id=obj.subgroup.id).name
+        else:
+            return None
 
 
 class EnergyAssetSerializer(AnyLogicModelSerializer):
@@ -151,6 +195,7 @@ class PolicySerializer(AnyLogicModelSerializer):
         return f"pol{obj.id}"
 
 
+# TODO remove after rule engine update
 class GridNodeSerializer(AnyLogicModelSerializer):
     class Meta:
         model = GridNode
@@ -180,7 +225,7 @@ class GridNodeSerializer(AnyLogicModelSerializer):
     def get_owner_actor(self, obj):
         # get related actor
         if obj.owner_actor is not None:
-            obj = obj.owner_actor
+            obj = Actor.objects.get(id=obj.owner_actor.id)
             return ActorSerializer().get_id(obj)
         else:
             return obj.owner_actor
@@ -196,7 +241,25 @@ class GridNodeSerializer(AnyLogicModelSerializer):
         return obj.category
 
 
+# TODO rename after rule engine update
 class GridNodeV2Serializer(GridNodeSerializer):
+    class Meta:
+        model = GridNode
+        fields = "__all__"
+
+    id = serializers.SerializerMethodField()
+    parent = serializers.SerializerMethodField()
+    owner_actor = serializers.SerializerMethodField()
+    assets = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        try:
+            id = f"{obj.category[0]}{obj.id}"
+        except AttributeError:
+            id = f"grn{obj.id}"
+        return id
+
     def get_parent(self, obj):
         # get related gridnode
         if obj.parent is not None:
@@ -207,7 +270,7 @@ class GridNodeV2Serializer(GridNodeSerializer):
     def get_owner_actor(self, obj):
         # get related actor
         if obj.owner_actor is not None:
-            obj = Actor.objects.get(id=obj.owner_actor.id)
+            obj = obj.owner_actor
             return ActorSerializer().get_id(obj)
         else:
             return obj.owner_actor
@@ -219,10 +282,12 @@ class GridNodeV2Serializer(GridNodeSerializer):
             obj.energyasset_list, many=True, read_only=True
         ).data
 
+    def get_category(self, obj: GridNode):
+        return obj.category
 
+
+# TODO remove after rule engine update
 class GridConnectionSerializer(AnyLogicModelSerializer):
-    # energyassets = EnergyAssetSerializer(many=True, read_only=True, source="energyasset_set")
-
     class Meta:
         model = GridConnection
         fields = "__all__"
@@ -274,21 +339,29 @@ class GridConnectionSerializer(AnyLogicModelSerializer):
         return obj.category
 
 
-class GridConnectionV2Serializer(GridConnectionSerializer):
-    parent_node = ...
-    parent_heat = ...
-    parent_electric = ...
+# TODO rename after rule engine update
+class GridConnectionV2Serializer(AnyLogicModelSerializer):
+    class Meta:
+        model = GridConnection
+        fields = "__all__"
 
-    def get_parent(self, obj):
-        # get related gridnode
-        if obj.parent is not None:
-            return self.get_id(obj.parent)
+    owner_actor = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
+    parent_electric = serializers.SerializerMethodField()
+    parent_heat = serializers.SerializerMethodField()
+    assets = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        return f"grc{obj.id}"
+
+    def get_owner_actor(self, obj):
+        # get related actor
+        if obj.owner_actor is not None:
+            obj = obj.owner_actor
+            return ActorSerializer().get_id(obj)
         else:
-            return obj.parent
-
-    def get_parent_node(self, id):
-        obj = GridNode.objects.get(id=id)
-        return GridNodeSerializer().get_id(obj)
+            return obj.owner_actor
 
     def get_parent_heat(self, obj):
         if obj.parent_heat is not None:
@@ -302,17 +375,12 @@ class GridConnectionV2Serializer(GridConnectionSerializer):
         else:
             return obj.parent_electric
 
-    def get_owner_actor(self, obj):
-        # get related actor
-        if obj.owner_actor is not None:
-            obj = Actor.objects.get(id=obj.owner_actor.id)
-            return ActorSerializer().get_id(obj)
-        else:
-            return obj.owner_actor
-
     def get_assets(self, obj: GridConnection):
         from .mapper import EnergyAssetPolymorphicSerializer
 
         return EnergyAssetPolymorphicSerializer(
             obj.energyasset_list, many=True, read_only=True
         ).data
+
+    def get_category(self, obj: GridConnection):
+        return obj.category
