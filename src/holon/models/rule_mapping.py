@@ -89,6 +89,7 @@ def apply_rules(
                 transformed_value = rule.apply_value_transforms(value)
 
                 filtered_repository = rule.get_filtered_repository(scenario_aggregate)
+
                 filtered_repository = rule.subselect_repository(
                     scenario_aggregate, filtered_repository, transformed_value
                 )
