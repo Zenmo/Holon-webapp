@@ -2,7 +2,7 @@ import imp
 
 from django.urls import path
 
-from holon.views.datamodel import DatamodelService, DatamodelTempService
+from holon.views.datamodel import DatamodelService
 from holon.views.holon import HolonCacheCheck, HolonService, HolonV2Service, HolonScenarioCleanup
 from holon.views.cloudclient import CloudclientService
 from holon.views.etm import ETMService
