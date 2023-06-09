@@ -122,7 +122,7 @@ class RuleActionChangeAttribute(RuleAction):
             model_attribute += "_id"
 
         # apply operators to objects
-        for filtered_object in filtered_repository:
+        for filtered_object in filtered_repository.all():
             old_value = getattr(filtered_object, model_attribute)
             new_value = self.__apply_operator(old_value, value)
 
@@ -134,8 +134,8 @@ class RuleActionChangeAttribute(RuleAction):
                 cast_new_value = new_value
 
             # update scenario aggregate
-            scenario_aggregate.repositories[filtered_object.__class__.__name__].update_attribute(
-                filtered_object, model_attribute, cast_new_value
-            )
+            scenario_aggregate.repositories[
+                filtered_repository.base_model_type.__name__
+            ].update_attribute(filtered_object, model_attribute, cast_new_value)
 
         return scenario_aggregate

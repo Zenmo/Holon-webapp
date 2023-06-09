@@ -42,7 +42,7 @@ class ScenarioAggregate:
 
         cloned_repository = self.repositories[model_type_name].clone()
 
-        if model_subtype_name:
+        if model_subtype_name and model_subtype_name != model_type_name:
             cloned_repository = cloned_repository.filter_model_subtype(model_subtype_name)
 
         return cloned_repository
