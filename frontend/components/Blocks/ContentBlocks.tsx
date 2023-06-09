@@ -42,6 +42,7 @@ const ContentBlocks = ({
   const [savedValues, setSavedValues] = useState({});
   const [checkedSavedValues, setCheckedSavedValues] = useState(false);
   const [openingSection, setOpeningSection] = useState<string>("");
+  const [scenarioDiffElements, setScenarioDiffElements] = useState({});
   const { asPath } = useRouter();
 
   useEffect(() => {
@@ -187,7 +188,12 @@ const ContentBlocks = ({
             const subValue = value[subKey];
             foundElement.value.savedValue = subValue;
           } else {
-            return;
+            setScenarioDiffElements({
+              ...scenarioDiffElements,
+              key: {
+                subKey: value,
+              },
+            });
           }
         }
       }
