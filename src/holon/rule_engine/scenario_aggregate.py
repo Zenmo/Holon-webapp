@@ -11,10 +11,14 @@ from holon.rule_engine.repositories import (
     PolicyRepository,
 )
 from django.apps import apps
+from django.db import models
+from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 
 from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
 from holon.models.scenario_rule import ModelType
+from polymorphic import utils
+from polymorphic.models import PolymorphicModel
 
 
 class ScenarioAggregate:
@@ -56,7 +60,58 @@ class ScenarioAggregate:
         relation_model_name = (
             model()._meta.get_field(relation_field_name).related_model.__class__.__name__
         )
+        # TODO check if the baseclass needs to be fetched, f.e. for parent_heat and parent_electric in gridconnection
         return self.get_repository_for_model_type(relation_model_name, model_subtype_name)
+
+    def remove_object(self, object: PolymorphicModel, base_model_type=""):
+        """Remove object from self including related models according to deletion policy"""
+        if not base_model_type:
+            base_model_type = utils.get_base_polymorphic_model(object.__class__).__name__
+
+        relation_fields = [
+            field.__dict__
+            for field in object.__class__._meta.get_fields()
+            if field.is_relation and hasattr(field, "on_delete")
+        ]
+
+        for field in relation_fields:
+            related_model_repository = self.get_repository_for_relation_field(
+                base_model_type, field.name
+            )
+            relation_field_attribute = field.field.name + "_id"
+            related_objects = related_model_repository.filter_attribute_value(
+                relation_field_attribute, AttributeFilterComparator.EQUAL.value, object.id
+            ).all()
+
+            for related_object in related_objects:
+                if field.on_delete == models.CASCADE:
+                    self.remove_object(
+                        self, related_object, related_model_repository.base_model_type.__name__
+                    )
+                elif field.on_delete == models.SET_NULL:
+                    self.repositories[
+                        related_model_repository.base_model_type.__name__
+                    ].update_attribute(related_object, relation_field_attribute, None)
+                elif field.on_delete == models.PROTECT:
+                    raise models.ProtectedError(
+                        f"Cannot remove object, because {relation_field_attribute} is protected",
+                        related_object,
+                    )
+                elif field.on_delete == models.RESTRICT:
+                    raise models.RestrictedError(
+                        f"Cannot remove object, because {relation_field_attribute} is restricted",
+                        related_object,
+                    )
+                elif field.on_delete == models.DO_NOTHING:
+                    pass
+                else:
+                    raise NotImplementedError(
+                        f"No functionality implemented for on_delete {field.on_delete}"
+                    )
+
+        self.repositories[base_model_type].remove(object)
+
+        return self
 
     def serialize_to_json(self) -> dict:
         """Serialize scenario to json with embedded relations"""
