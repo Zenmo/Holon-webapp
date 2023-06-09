@@ -1,3 +1,10 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from holon.models.rule_actions import RuleAction
 from holon.models.scenario_rule import ScenarioRule
 
@@ -55,3 +62,22 @@ class RuleActionFactor(RuleAction):
         for filtered_object in filtered_queryset:
             setattr(filtered_object, self.model_attribute, mapped_value)
             filtered_object.save()
+
+    def apply_to_scenario_aggregate(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        filtered_repository: RepositoryBaseClass,
+        value: str,
+    ) -> ScenarioAggregate:
+        """Apply a rule action to an object in the queryset"""
+
+        # rescale value according to min/max
+        value_flt = float(value)
+        mapped_value = (self.max_value - self.min_value) * (value_flt / 100.0) + self.min_value
+
+        for filtered_object in filtered_repository.all():
+            scenario_aggregate.repositories[
+                filtered_repository.base_model_type.__name__
+            ].update_attribute(filtered_object, self.model_attribute, mapped_value)
+
+        return scenario_aggregate
