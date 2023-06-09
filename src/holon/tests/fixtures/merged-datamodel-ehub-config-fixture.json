@@ -2341,8 +2341,16 @@
             "etm_query": 3,
             "conversion": "multiply",
             "conversion_value_type": "value",
-            "datamodel_query_rule": 1,
             "shadow_key": "some_asset_for_dep_costs"
+        }
+    },
+    {
+        "model": "holon.rule",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": ["holon", "datamodelqueryrule"],
+            "model_type": "EnergyAsset",
+            "model_subtype": "ElectricStorageAsset"
         }
     },
     {
