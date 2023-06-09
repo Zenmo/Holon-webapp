@@ -15,7 +15,9 @@ class RepositoryFilterSubmodelTestClass(unittest.TestCase):
         house_grid_connection = HouseGridConnection()
         repository = RepositoryBaseClass([house_grid_connection])
 
-        built_environment_repository = repository.filter_model_subtype(BuiltEnvironmentGridConnection)
+        built_environment_repository = repository.filter_model_subtype(
+            BuiltEnvironmentGridConnection
+        )
         assert len(built_environment_repository.all()) == 1
 
         utility_repository = repository.filter_model_subtype(UtilityGridConnection)
