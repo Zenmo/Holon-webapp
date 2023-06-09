@@ -18,6 +18,10 @@
   gap: 0.5rem;
 }
 
+.kpiStoryline [data-class="kpiTitle"] button + div {
+  bottom: 100%;
+}
+
 .kpiStoryline [data-class="kpiIcon"] {
   width: 25px;
   height: 25px;
