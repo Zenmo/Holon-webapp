@@ -365,13 +365,13 @@ class GridConnectionV2Serializer(AnyLogicModelSerializer):
 
     def get_parent_heat(self, obj):
         if obj.parent_heat is not None:
-            return GridNodeSerializer().get_id(self.parent_heat)
+            return GridNodeSerializer().get_id(obj.parent_heat)
         else:
             return obj.parent_heat
 
     def get_parent_electric(self, obj):
         if obj.parent_electric is not None:
-            return GridNodeSerializer().get_id(self.parent_electric)
+            return GridNodeSerializer().get_id(obj.parent_electric)
         else:
             return obj.parent_electric
 
