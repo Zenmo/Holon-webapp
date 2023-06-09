@@ -8,6 +8,7 @@ class RepositoryBaseClass:
     """Repository containing all actors in memory"""
 
     objects: list[object] = []
+    base_model_type = None
 
     def dict(self):
         return {obj.id: obj for obj in self.objects}
@@ -95,7 +96,7 @@ class RepositoryBaseClass:
         else:
             raise ValueError("Neither `start`, `end` nor `indices` are provided")
 
-        return self
+        return self.__class__(objects)
 
     # TODO ERIK
     def get(self, id: int) -> object:
@@ -105,6 +106,10 @@ class RepositoryBaseClass:
     def all(self) -> list[object]:
         """Return all objects in the repository"""
         return self.objects
+
+    def len(self) -> int:
+        """Return the number of objects in the repository"""
+        return len(self.objects)
 
     def update_attribute(self, id: int, attribute_name: str, value):
         """
