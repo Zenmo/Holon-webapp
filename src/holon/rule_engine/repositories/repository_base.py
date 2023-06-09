@@ -7,16 +7,20 @@ from django.db.models.base import Model as DjangoModel
 from polymorphic.models import PolymorphicModel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
+from src.holon.models.scenario import Scenario
 
 
 class RepositoryBaseClass:
     """Repository containing all actors in memory"""
 
-    objects: list[PolymorphicModel] = []
-    base_model_type = None
+    base_model_type = PolymorphicModel
 
     def __init__(self, objects: list[PolymorphicModel]):
         self.objects = objects
+
+    @classmethod
+    def from_scenario(cls, scenario: Scenario):
+        return cls(cls.base_model_type.objects.filter(payload=scenario).get_real_instances())
 
     def dict(self):
         return {obj.id: obj for obj in self.objects}
@@ -107,9 +111,9 @@ class RepositoryBaseClass:
         """Return a repository with a subset of it's objects, depending on an index range"""
 
         if (not start is None) or (not end is None):
-            self.objects = self.objects[start:end]
+            objects = self.objects[start:end]
         elif not indices is None:
-            self.objects = [self.objects[i] for i in indices]
+            objects = [self.objects[i] for i in indices]
         else:
             raise ValueError("Neither `start`, `end` nor `indices` are provided")
 
