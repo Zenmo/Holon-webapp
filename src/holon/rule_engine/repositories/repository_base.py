@@ -7,7 +7,7 @@ from django.db.models.base import Model as DjangoModel
 from polymorphic.models import PolymorphicModel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
-from src.holon.models.scenario import Scenario
+from holon.models.scenario import Scenario
 
 
 class RepositoryBaseClass:
