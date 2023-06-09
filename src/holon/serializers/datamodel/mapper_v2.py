@@ -80,7 +80,7 @@ from .custom import (
 )
 
 
-from .subserializers import (
+from .subserializers_v2 import (
     DeliveryContractSerializer,
     ConnectionContractSerializer,
     TaxContractSerializer,
@@ -88,7 +88,7 @@ from .subserializers import (
 )
 
 
-from .subserializers import (
+from .subserializers_v2 import (
     ConsumptionAssetSerializer,
     DieselVehicleAssetSerializer,
     DieselConsumptionAssetSerializer,
@@ -122,7 +122,7 @@ from .subserializers import (
 from .subserializers import ActorGroupSerializer, ActorSubGroupSerializer
 
 
-from .subserializers import (
+from .subserializers_v2 import (
     BuiltEnvironmentGridConnectionSerializer,
     UtilityGridConnectionSerializer,
     HouseGridConnectionSerializer,
@@ -133,7 +133,7 @@ from .subserializers import (
 )
 
 
-from .subserializers import ElectricGridNodeSerializer, HeatGridNodeSerializer
+from .subserializers_v2 import ElectricGridNodeSerializer, HeatGridNodeSerializer
 
 
 class ContractV2PolymorphicSerializer(PolymorphicSerializer):
