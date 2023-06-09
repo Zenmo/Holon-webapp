@@ -23,9 +23,6 @@ class RepositoryBaseClass:
     def from_scenario(cls, scenario: Scenario):
         return cls(cls.base_model_type.objects.filter(payload=scenario).get_real_instances())
 
-    def dict(self):
-        return {obj.id: obj for obj in self.objects}
-
     def clone(self) -> RepositoryBaseClass:
         """Clone the object"""
         return self.__class__(self.objects[:])
@@ -49,13 +46,10 @@ class RepositoryBaseClass:
         if not issubclass(model_subtype, base_type):
             raise Exception(f"${model_subtype} is not a subtype of ${base_type}")
 
-    # TODO ERIK
     def filter_attribute_value(
         self, attribute_name: str, comparator: AttributeFilterComparator, value
     ) -> RepositoryBaseClass:
-        """
-        Filter on items' attribute given a comparator and a value
-        """
+        """Filter on items' attribute given a comparator and a value"""
 
         objects = [
             object
@@ -111,43 +105,46 @@ class RepositoryBaseClass:
 
         return self.__class__(objects)
 
-    # TODO ERIK
-    def get(self, id: int) -> object:
-        """Get an item in the objects list by id"""
+    def get(self, id: int) -> PolymorphicModel:
+        """Get an item in the objects list by id. Return None if object was not found"""
 
-        raise NotImplementedError()
+        return next((object for object in self.objects if object.id == id), None)
 
-    def all(self) -> list[object]:
+    def all(self) -> list[PolymorphicModel]:
         """Return all objects in the repository"""
+
         return self.objects
 
     def len(self) -> int:
         """Return the number of objects in the repository"""
+
         return len(self.objects)
 
     def update_attribute(self, id: int, attribute_name: str, value):
-        """
-        Select an object by id in the repository and set it's attribute attribute_name to value
-        <CHANGES INTERNAL STATE>
-        """
+        """Select an object by id in the repository and set it's attribute attribute_name to value"""
 
-        raise NotImplementedError()
+        object_index = next((i for i, object in enumerate(self.objects) if object.id == id), -1)
 
-    # TODO ERIK
-    def add(self, object):
-        """
-        Add an object to the repository
-        <CHANGES INTERNAL STATE>
-        """
-        raise NotImplementedError()
+        if object_index < 0:
+            raise IndexError(f"{self.base_model_type.__name__} object with id {id} not found")
 
-    # TODO ERIK
+        setattr(self.objects[object_index], attribute_name, value)
+
+    def add(self, object: PolymorphicModel):
+        """Add an object to the repository"""
+
+        # check if object base type is correct
+        if not self.base_model_type.__name__ == utils.get_base_polymorphic_model(object).__name__:
+            raise ValueError(
+                f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {utils.get_base_polymorphic_model(object).__name__}"
+            )
+
+        self.objects.append(object)
+
     def remove(self, object):
-        """
-        Remove an item from the repository
-        <CHANGES INTERNAL STATE>
-        """
-        raise NotImplementedError()
+        """Remove an item from the repository"""
+
+        self.objects.remove(object)
 
 
 def attribute_matches_value(
