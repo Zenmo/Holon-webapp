@@ -6,7 +6,6 @@ import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-const CostBenefitDetailStaticData = require("./staticdata.json");
 
 type Props = {
   handleClose: () => void;
@@ -23,7 +22,7 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
   const [subgroup, setSubgroup] = useState("");
 
   useEffect(() => {
-    setSubgroup(Object.keys(CostBenefitDetailStaticData)[0]);
+    setSubgroup(Object.keys(costBenefitData.detail)[0]);
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -77,7 +76,7 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
                       <select
                         onChange={e => setSubgroup(e.target.value)}
                         className="bg-white border-[1px] border-holon-slated-blue-900 text-sm focus:ring-holon-slated-blue-300 focus:border-holon-slated-blue-300 h-full w-full">
-                        {Object.keys(CostBenefitDetailStaticData).map(item => (
+                        {Object.keys(costBenefitData.detail).map(item => (
                           <option value={item} key={item}>
                             {item}
                           </option>
@@ -112,9 +111,9 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
                 <Tab.Panel className="flex flex-1 flex-col gap-2 min-h-0 pt-2">
                   {subgroup ? (
                     <CostBenefitDetail
-                      chartdata={convertGraphData(CostBenefitDetailStaticData[subgroup])}
+                      chartdata={convertGraphData(costBenefitData.detail[subgroup])}
                       //detailData={costBenefitData.detail}
-                      detailData={CostBenefitDetailStaticData[subgroup]}
+                      detailData={costBenefitData.detail[subgroup]}
                       dataColors={graphcolors ?? []}
                       ignoredLabels={ignoredLabels}
                     />
