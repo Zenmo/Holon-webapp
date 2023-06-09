@@ -63,8 +63,22 @@ class ScenarioAggregate:
         # TODO check if the baseclass needs to be fetched, f.e. for parent_heat and parent_electric in gridconnection
         return self.get_repository_for_model_type(relation_model_name, model_subtype_name)
 
+    def add_object(
+        self, object: PolymorphicModel, base_model_type="", additional_attributes: dict = {}
+    ):
+        """Add an object to self in the correct repository"""
+
+        if not base_model_type:
+            base_model_type = utils.get_base_polymorphic_model(object.__class__).__name__
+
+        for key, value in additional_attributes.items():
+            setattr(object, key, value)
+
+        self.repositories[base_model_type].add(object)
+
     def remove_object(self, object: PolymorphicModel, base_model_type=""):
         """Remove object from self including related models according to deletion policy"""
+
         if not base_model_type:
             base_model_type = utils.get_base_polymorphic_model(object.__class__).__name__
 
