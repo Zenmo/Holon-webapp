@@ -83,12 +83,19 @@ class RepositoryBaseClass:
 
         raise NotImplementedError()
 
-    def get_subset_range(self, start: int = None, end: int = None):
+    def get_subset_range(
+        self, start: int = None, end: int = None, indices: list[int] = None
+    ) -> RepositoryBaseClass:
         """Return a repository with a subset of it's objects, depending on an index range"""
-        
-        # TODO test broadcasting [x:None] etc
 
-        self.objects = 
+        if (not start is None) or (not end is None):
+            self.objects = self.objects[start:end]
+        elif not indices is None:
+            self.objects = [self.objects[i] for i in indices]
+        else:
+            raise ValueError("Neither `start`, `end` nor `indices` are provided")
+
+        return self
 
     # TODO ERIK
     def get(self, id: int) -> object:

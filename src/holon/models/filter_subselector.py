@@ -70,8 +70,7 @@ class Skip(FilterSubSelector):
             n = self.number_of_items
 
         # return repository with subset of objects
-        repository.objects = repository.objects[n:]
-        return repository
+        return repository.get_subset_range(start=n)
 
     def hash(self):
         return f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items}]"
@@ -123,8 +122,6 @@ class Take(FilterSubSelector):
     ) -> RepositoryBaseClass:
         """Take a number of items from the object list, either the first n or random n"""
 
-        objects = repository.objects
-
         # determine number of items to take
         if self.use_interactive_element_value:
             n = int(float(value))
@@ -133,13 +130,9 @@ class Take(FilterSubSelector):
 
         # take items depending on mode
         if self.mode == TakeMode.FIRST.value:
-            objects = objects[:n]
+            return repository.get_subset_range(end=n)
 
         elif self.mode == TakeMode.RANDOM.value:
-            ids = [obj.id for obj in objects]
+            ids = [obj.id for obj in repository.all()]
             random_ids = random.sample(ids, k=n)
-            objects = [obj for obj in objects if obj.id in random_ids]
-
-        # return repository with updated objects
-        repository.objects = objects
-        return repository
+            return repository.get_subset_range(indices=random_ids)
