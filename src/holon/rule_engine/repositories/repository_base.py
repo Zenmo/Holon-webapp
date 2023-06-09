@@ -156,16 +156,16 @@ def attribute_matches_value(
     # throws if attribute doesn't exist
     attribute = getattr(object, attribute_name)
 
-    if comparator.value == AttributeFilterComparator.EQUAL.value:
+    if comparator == AttributeFilterComparator.EQUAL.value:
         return attribute == value
 
-    if comparator.value == AttributeFilterComparator.LESS_THAN.value:
+    if comparator == AttributeFilterComparator.LESS_THAN.value:
         return attribute < value
 
-    if comparator.value == AttributeFilterComparator.GREATER_THAN.value:
+    if comparator == AttributeFilterComparator.GREATER_THAN.value:
         return attribute > value
 
-    if comparator.value == AttributeFilterComparator.NOT_EQUAL.value:
+    if comparator == AttributeFilterComparator.NOT_EQUAL.value:
         return attribute != value
 
     raise Exception("unreachable")
