@@ -1,3 +1,10 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from django.apps import apps
 from django.db import models
 from django.db.models import Q
@@ -8,8 +15,7 @@ from holon.models.util import (
     is_allowed_relation,
 )
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
-from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
-from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+
 
 
 class Filter(PolymorphicModel):

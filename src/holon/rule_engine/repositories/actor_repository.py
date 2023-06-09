@@ -9,4 +9,4 @@ class ActorRepository(RepositoryBaseClass):
     objects: list[Actor] = []
 
     def __init__(self, scenario: Scenario):
-        objects = Actor.objects.filter(payload=scenario).get_real_instances()
+        self.objects = Actor.objects.filter(payload=scenario).get_real_instances()

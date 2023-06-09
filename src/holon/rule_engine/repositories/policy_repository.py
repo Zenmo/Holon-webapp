@@ -1,10 +1,9 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
+from holon.models import Policy
+from holon.models.scenario import Scenario
 from .repository_base import RepositoryBaseClass
 
-if TYPE_CHECKING:
-    from holon.models import Policy, Scenario
+
+from holon.models import Policy
 
 
 class PolicyRepository(RepositoryBaseClass):
