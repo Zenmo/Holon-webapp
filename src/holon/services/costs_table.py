@@ -164,9 +164,9 @@ class CostItem:
 
     def with_subgroups(self):
         """Returns groups that are connected to a subgroup"""
-        if self.from_actor.subgroup:
+        if not self.from_actor.subgroup == self.from_actor.group:
             yield self.from_group()
-        if self.to_actor.subgroup:
+        if not self.to_actor.subgroup == self.to_actor.group:
             yield self.to_group()
 
     def reversable(self):
@@ -235,8 +235,11 @@ class CostItem:
 
 class CostToSelfItem:
     def __init__(self, group, price) -> None:
-        self.group = group.split("-")[-1].join("-") if len(group.split("-")) > 1 else group
-        self.subgroup = group if len(group.split("-")) > 1 else ""
+        if len(group.split("-")) > 1:
+            self.group = " -".join(group.split(" -")[:-1])
+        else:
+            self.group = group
+        self.subgroup = group
         self.price = price
 
     def from_group(self):
@@ -252,7 +255,7 @@ class CostToSelfItem:
         return COSTS_TO_SELF
 
     def with_subgroups(self):
-        if self.subgroup:
+        if not self.subgroup == self.group:
             yield self.group
 
     def reversable(self):
