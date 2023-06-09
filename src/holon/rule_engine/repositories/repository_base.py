@@ -141,7 +141,7 @@ class RepositoryBaseClass:
 
         self.objects.append(object)
 
-    def remove(self, object):
+    def remove(self, object: PolymorphicModel):
         """Remove an item from the repository"""
 
         self.objects.remove(object)
