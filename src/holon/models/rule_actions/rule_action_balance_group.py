@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Union
 
 from holon.models.rule_actions import RuleAction
@@ -19,8 +20,6 @@ from holon.models.scenario_rule import ScenarioRule
 from holon.models.asset import EnergyAsset
 from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
-
-from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 
 from typing import TYPE_CHECKING
 
