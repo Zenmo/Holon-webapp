@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.forms import ValidationError
 from holon.models.actor import Actor
 from holon.models.rule_actions import RuleAction
