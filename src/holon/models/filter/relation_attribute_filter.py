@@ -131,7 +131,7 @@ class RelationAttributeFilter(Filter):
 
         # filter relation_repository on attribute
         relation_repository = relation_repository.filter_attribute_value(
-            self.model_attribute, self.value, self.comparator
+            self.model_attribute, self.comparator, self.value
         )
 
         # filter repository on which items refer to an item in the filtered relation_repository

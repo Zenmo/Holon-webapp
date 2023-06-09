@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Union
 
 from holon.models.rule_actions import RuleAction
@@ -20,7 +21,11 @@ from holon.models.asset import EnergyAsset
 from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 
-from holon.models.rule_actions.rule_action_utils import RuleActionUtils
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
 
 class ChoiceListIterator(object):
@@ -66,6 +71,19 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
             )
         ]
 
+    def apply_to_scenario_aggregate(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        filtered_repository: RepositoryBaseClass,
+        value: str,
+    ) -> ScenarioAggregate:
+        """Apply a rule action to an object in the queryset"""
+
+        raise NotImplementedError(
+            "BalanceGroup werd voorheen niet gebruikt en is dus niet geupdate naar de nieuwe rule-engine versie"
+        )
+
+    # TODO remove after rule engine update
     def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
         """
         Balance a set of models by removing and adding models such that a target count for the selected model

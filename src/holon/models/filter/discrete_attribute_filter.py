@@ -102,5 +102,5 @@ class DiscreteAttributeFilter(Filter):
         """Apply the attribute filter with an Enum attribute to a repository"""
 
         return repository.filter_enum_attribute_value(
-            self.model_attribute, self.value, self.comparator
+            self.model_attribute, self.comparator, self.value
         )

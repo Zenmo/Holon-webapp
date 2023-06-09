@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import logging
+import sentry_sdk
+
 from polymorphic import utils
-import copy
-from typing import Type, TypeVar
-from django.db.models.base import Model as DjangoModel
+from typing import Type
 from polymorphic.models import PolymorphicModel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
@@ -50,32 +51,23 @@ class RepositoryBaseClass:
 
     # TODO ERIK
     def filter_attribute_value(
-        self, attribute_name: str, value: str, comparator: AttributeFilterComparator
+        self, attribute_name: str, comparator: AttributeFilterComparator, value
     ) -> RepositoryBaseClass:
         """
         Filter on items' attribute given a comparator and a value
-        <RETURNS MODIFIED REPOSITORY>
         """
-        # attributes = [getattr(obj, attribute_name) for obj in self.objects]
 
-        # if self.comparator == AttributeFilterComparator.EQUAL.value:
-        #     return repository.filter_attribute_value(self.model_attribute, self.value)
+        objects = [
+            object
+            for object in self.objects
+            if attribute_matches_value(object, attribute_name, value, comparator)
+        ]
 
-        #     return repository.filter(**{f"{model_type}___{self.model_attribute}": self.value})
-        # if self.comparator == AttributeFilterComparator.LESS_THAN.value:
-        #     return repository.filter(**{f"{model_type}___{self.model_attribute}__lt": self.value})
-        # if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
-        #     return repository.filter(**{f"{model_type}___{self.model_attribute}__gt": self.value})
-        # if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
-        #     return repository.filter(
-        #         invert=True, **{f"{model_type}___{self.model_attribute}": self.value}
-
-        # if
-        return self
+        return self.__class__(objects)
 
     # TODO ERIK
     def filter_enum_attribute_value(
-        self, attribute_name: str, value: str, comparator: AttributeFilterComparator
+        self, attribute_name: str, comparator: AttributeFilterComparator, value: str
     ) -> RepositoryBaseClass:
         """
         Filter a discrete series (Enum) attribute
@@ -122,6 +114,7 @@ class RepositoryBaseClass:
     # TODO ERIK
     def get(self, id: int) -> object:
         """Get an item in the objects list by id"""
+
         raise NotImplementedError()
 
     def all(self) -> list[object]:
@@ -155,3 +148,24 @@ class RepositoryBaseClass:
         <CHANGES INTERNAL STATE>
         """
         raise NotImplementedError()
+
+
+def attribute_matches_value(
+    object: object, attribute_name: str, value, comparator: AttributeFilterComparator
+):
+    # throws if attribute doesn't exist
+    attribute = getattr(object, attribute_name)
+
+    if comparator.value == AttributeFilterComparator.EQUAL.value:
+        return attribute == value
+
+    if comparator.value == AttributeFilterComparator.LESS_THAN.value:
+        return attribute < value
+
+    if comparator.value == AttributeFilterComparator.GREATER_THAN.value:
+        return attribute > value
+
+    if comparator.value == AttributeFilterComparator.NOT_EQUAL.value:
+        return attribute != value
+
+    raise Exception("unreachable")
