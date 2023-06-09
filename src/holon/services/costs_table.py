@@ -38,7 +38,7 @@ class CostTables:
         items[dict]:    key value pairs of actor names and costs
         """
         for group, value in items.items():
-            self.inject_costs_to_self(group, value)
+            self.inject_costs_to_self(group, -1 * value)
 
     @classmethod
     def from_al_output(cls, al_output, scenario):
