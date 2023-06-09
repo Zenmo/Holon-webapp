@@ -34,7 +34,7 @@ type Props = {
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
   savePageValues: SetStateAction<SavedElements>;
-  saveScenario: (title: string, description: string) => void;
+  saveScenario: (title: string, description: string, sectionId: string) => string;
 };
 
 const initialData = {
@@ -77,13 +77,13 @@ export default function SectionBlock({
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
   const [legend, setLegend] = useState<boolean>(false);
-  const [showSaveScenarioModal, setShowSaveScenarioModal] = useState(false);
-  const [showSavedScenarioModal, setShowSavedScenarioModal] = useState(false);
-  const [showOpenScenarioModal, setShowOpenScenarioModal] = useState(false);
-  const [scenarioDetails, setScenarioDetails] = useState({});
+  const [savedScenarioURL, setSavedScenarioURL] = useState<string>("");
+  const [showScenarioModal, setShowScenarioModal] = useState<boolean>(false);
+  const [scenarioModalType, setScenarioModalType] = useState<
+    "saveScenario" | "savedScenario" | "openScenario"
+  >("saveScenario");
 
   const scenario = useContext<number>(ScenarioContext);
-  let scenarioUrl: string = "";
 
   const sectionContainerRef = useRef(null);
 
@@ -97,6 +97,13 @@ export default function SectionBlock({
   const gridValue = getGrid(data.value.gridLayout.grid);
 
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
+
+  useEffect(() => {
+    if (data.value.openingSection) {
+      setScenarioModalType("openScenario");
+      setShowScenarioModal(true);
+    }
+  }, []);
 
   useEffect(() => {
     setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
@@ -200,14 +207,12 @@ export default function SectionBlock({
   };
 
   const handleSaveScenario = (title: string, description: string) => {
-    scenarioUrl = saveScenario(title, description);
-    console.log(scenarioUrl);
-    setShowSaveScenarioModal(false);
-    setShowSavedScenarioModal(true);
+    setSavedScenarioURL(saveScenario(title, description, data.id));
+    setScenarioModalType("savedScenario");
   };
 
   return (
-    <div className={`sectionContainer`} ref={sectionContainerRef}>
+    <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
@@ -218,15 +223,18 @@ export default function SectionBlock({
           costBenefitData={costBenefitData}
         />
       )}
-      {showSaveScenarioModal && (
+      {showScenarioModal && (
         <ScenarioModal
-          isOpen={showSaveScenarioModal}
-          onClose={() => setShowSaveScenarioModal(false)}
-          handleChange={setScenarioDetails}
+          isOpen={showScenarioModal}
+          onClose={() => setShowScenarioModal(false)}
           handleSaveScenario={handleSaveScenario}
-          type="saveScenario"
+          type={scenarioModalType}
+          scenarioUrl={savedScenarioURL}
+          scenarioTitle={data.value.scenarioTitle}
+          scenarioDescription={data.value.scenarioDescription}
         />
       )}
+
       <div className="holonContentContainer">
         <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
           <div className="flex-1">
@@ -296,7 +304,8 @@ export default function SectionBlock({
                 dashboardId={data.id}
                 handleClickCostBen={openCostBenefitModal}
                 handleClickScenario={() => {
-                  setShowSaveScenarioModal(true);
+                  setShowScenarioModal(true);
+                  setScenarioModalType("saveScenario");
                 }}></KPIDashboard>
             </div>
           </div>

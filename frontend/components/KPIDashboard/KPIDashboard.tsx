@@ -1,4 +1,4 @@
-import { ArrowDownCircleIcon, CurrencyEuroIcon } from "@heroicons/react/24/outline";
+import { CurrencyEuroIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import Button from "../Button/Button";
 import KPIItems from "./KPIItems";
@@ -33,7 +33,8 @@ export default function KPIDashboard({
           Kosten en Baten
         </Button>
         <Button onClick={handleClickScenario} variant="light">
-          <ArrowDownCircleIcon className="h-6 w-6 pr-1" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/imgs/save.png" alt="icon save" width={20} height={20} className="mr-2" />
           Scenario opslaan
         </Button>
       </div>

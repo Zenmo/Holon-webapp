@@ -41,10 +41,15 @@ const ContentBlocks = ({
   const [currentPageValues, setCurrentPageValues] = useState({});
   const [savedValues, setSavedValues] = useState({});
   const [checkedSavedValues, setCheckedSavedValues] = useState(false);
+  const [openingSection, setOpeningSection] = useState<string>("");
   const { asPath } = useRouter();
 
   useEffect(() => {
     checkIfSavedScenario();
+    if (Object.keys(savedValues).length !== 0) {
+      const elem = document.getElementById(openingSection);
+      elem?.scrollIntoView({ behavior: "smooth" });
+    }
   }, []);
 
   /*Adds target values of previous sections to interactive elements in the section */
@@ -103,7 +108,7 @@ const ContentBlocks = ({
   }
 
   /*Save scenario functionality. Creates a link of the page with the current values of visible interactive elements of the different sections in the params*/
-  function saveScenario(title: string, description: string) {
+  function saveScenario(title: string, description: string, sectionId: string) {
     //get baseUrl
     const origin =
       typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
@@ -121,14 +126,11 @@ const ContentBlocks = ({
         }
       }
     }
-    params.append("title", title);
-    if (description) {
-      params.append("description", description);
-    }
-
+    params.append("title", encodeURIComponent(title));
+    params.append("currentSection", encodeURIComponent(sectionId));
+    description && params.append("description", encodeURIComponent(description));
     //create link
     const savedScenarioUrl = `${baseURL}?${params.toString()}`;
-    console.log(savedScenarioUrl);
     return savedScenarioUrl;
   }
 
@@ -145,24 +147,38 @@ const ContentBlocks = ({
         const decodedKey = decodeURIComponent(encodedKey);
         const decodedValue = decodeURIComponent(encodedValue);
 
-        const [section, key] = decodedKey.split(".");
-        if (!(section in data)) {
-          data[section] = {};
+        if (decodedKey === "title") {
+          data[decodedKey] = decodedValue;
+        } else if (decodedKey === "description") {
+          data[decodedKey] = decodedValue;
+        } else if (decodedKey === "currentSection") {
+          data[decodedKey] = decodedValue;
+          setOpeningSection(decodedValue);
+        } else {
+          const [section, key] = decodedKey.split(".");
+          if (!(section in data)) {
+            data[section] = {};
+          }
+          data[section][key] = decodedValue;
         }
-        data[section][key] = decodedValue;
       }
     }
+
     setSavedValues(data);
     setCheckedSavedValues(true);
   }
 
   function addSavedValues(values: SavedElements, content: Content) {
     const updatedContent = { ...content };
-
     for (const key in values) {
-      if (key === content.id) {
+      if (key === "title") {
+        updatedContent.value.scenarioTitle = values[key];
+      } else if (key === "description") {
+        updatedContent.value.scenarioDescription = values[key];
+      } else if (key === "currentSection" && values[key] === content.id) {
+        updatedContent.value.openingSection = true;
+      } else if (key === content.id) {
         const value = values[key];
-
         for (const subKey in value) {
           const foundElement = updatedContent.value.content.find(element => {
             return element.type === "interactive_input" && element.value.id === Number(subKey);
@@ -203,7 +219,10 @@ const ContentBlocks = ({
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
-            const savedValuesContent = addSavedValues(savedValues, newContent);
+            const savedValuesContent =
+              Object.keys(savedValues).length !== 0
+                ? addSavedValues(savedValues, newContent)
+                : newContent;
             updateTargetValues(contentItem.value.content);
             return (
               checkedSavedValues && (

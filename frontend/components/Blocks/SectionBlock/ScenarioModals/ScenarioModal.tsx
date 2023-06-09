@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
 
 import Button from "../../../Button/Button";
@@ -7,9 +7,11 @@ import Button from "../../../Button/Button";
 type ScenarioModal = {
   isOpen: boolean;
   onClose: () => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSaveScenario: (title: string, description: string) => void;
-  type: string;
+  type: "saveScenario" | "savedScenario" | "openScenario";
+  scenarioUrl: string;
+  scenarioTitle: string;
+  scenarioDescription: string;
 };
 
 export default function ScenarioModal({
@@ -17,11 +19,18 @@ export default function ScenarioModal({
   onClose,
   handleSaveScenario,
   type,
+  scenarioUrl,
+  scenarioTitle,
+  scenarioDescription,
 }: ScenarioModal) {
   const [scenarioDetails, setScenarioDetails] = useState({
     scenarioTitle: "",
     scenarioDescription: "",
   });
+  const [copied, setCopied] = useState<boolean>(false);
+  const textMessageLink = encodeURIComponent(
+    `Ik heb een scenario aangemaakt op www.holontool.nl. Bekijk het scenario via deze link: ${scenarioUrl}`
+  );
 
   function closeModal() {
     onClose();
@@ -33,7 +42,6 @@ export default function ScenarioModal({
   }
 
   function onSaveScenario() {
-    console.log(scenarioDetails);
     handleSaveScenario(scenarioDetails.scenarioTitle, scenarioDetails.scenarioDescription);
   }
 
@@ -46,7 +54,7 @@ export default function ScenarioModal({
             <div className="text-holon-blue-900 flex flex-col items-start">
               <p className="text-left">
                 Sla hier je scenario op. Let op: wijzigingen kunnen niet aan een bestaand scenario
-                worden toegevoegd. Daarvoor moet een nieuwe link worden gegenereerd .
+                worden toegevoegd. Daarvoor moet een nieuwe link worden gegenereerd.
               </p>
               <form
                 className="text-base flex flex-col items-start font-semibold w-full"
@@ -65,6 +73,7 @@ export default function ScenarioModal({
                   type="text"
                   id="scenarioDescription"
                   name="scenarioDescription"
+                  maxLength={150}
                   className="border border-holon-gray-200 w-full h-10 my-1 px-2"
                   onChange={handleInputChange}></input>
               </form>
@@ -77,13 +86,110 @@ export default function ScenarioModal({
                 onClick={closeModal}>
                 Annuleren
               </Button>
-              <Button
-                variant="dark"
-                type="submit"
-                value="Submit"
-                //onClick={handleSaveScenario}
-                form="saveScenario">
+              <Button variant="dark" type="submit" value="Submit" form="saveScenario">
                 Scenario opslaan
+              </Button>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    savedScenario: {
+      title: "Scenario opgeslagen",
+      content: (
+        <>
+          <div>
+            <div className="text-holon-blue-900 flex flex-col items-start">
+              <p className="text-left">
+                Copy/paste de opgeslagen scenario link om de instellingen met collega's te delen.
+              </p>
+
+              <h3 className="text-left text-base">Gegenereerd scenario-URL</h3>
+              <div className="flex flex-row w-full  mt-2">
+                <p className="text-left truncate text-ellipsis border p-1 h-[3rem] border-holon-gray-200">
+                  {scenarioUrl}
+                </p>
+                <Button
+                  variant="dark"
+                  onClick={() => {
+                    navigator.clipboard.writeText(scenarioUrl);
+                    setCopied(!copied);
+                  }}>
+                  {copied ? "Gekopieerd!" : "Kopieer link"}
+                </Button>
+              </div>
+              <div>
+                <h3 className="text-left text-base">Deel via:</h3>
+                <div className="flex flex-row">
+                  <a
+                    href={`mailto:?body=${textMessageLink}&subject=Holonscenario`}
+                    className="mr-2 buttonLight"
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    <EnvelopeIcon className="w-4 h-4 mr-2"></EnvelopeIcon>
+                    E-mail
+                  </a>
+                  <a
+                    href={`https://linkedin.com/shareArticle?text=${textMessageLink}`}
+                    className="mr-2 buttonLight"
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/imgs/linkedin.png"
+                      alt="logo LinkedIn"
+                      width={20}
+                      height={20}
+                      className="mr-2"
+                    />
+                    LinkedIn
+                  </a>
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${textMessageLink}`}
+                    className="buttonLight"
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/imgs/twitter.png"
+                      alt="logo twitter"
+                      width={20}
+                      height={20}
+                      className="mr-2"
+                    />
+                    Twitter
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="mt-2">
+              <p className="p-4 bg-holon-gray-100 text-holon-blue-900 text-left text-sm">
+                Copy/paste de opgeslagen scenario link om de instellingen met collega's te delen.
+              </p>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    openScenario: {
+      title: `Open scenario ${scenarioTitle}`,
+      content: (
+        <>
+          <div>
+            <div className="text-holon-blue-900 flex flex-col items-start">
+              <p className="text-left">{scenarioDescription}</p>
+            </div>
+            {/*als er verschillen zijn tussen int elm -> hier disclaimer laten zien */}
+            <div className="mt-2">
+              <p className="p-4 bg-holon-gray-100 text-holon-blue-900 text-left text-sm">
+                <QuestionMarkCircleIcon className="w-4 h-4" />
+                De interactieve elementen in dit scenario zijn anders dan de opgeslagen elementen:
+                <ul></ul>
+              </p>
+            </div>
+            <div className="flex flex-row justify-center mt-2">
+              <Button variant="dark" onClick={closeModal}>
+                Open scenario
               </Button>
             </div>
           </div>
