@@ -1,5 +1,10 @@
 from __future__ import annotations
-from typing import Type
+
+from polymorphic import utils
+import copy
+from typing import Type, TypeVar
+from django.db.models.base import Model as DjangoModel
+from polymorphic.models import PolymorphicModel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 
@@ -7,25 +12,37 @@ from holon.models.filter.attribute_filter_comparator import AttributeFilterCompa
 class RepositoryBaseClass:
     """Repository containing all actors in memory"""
 
-    objects: list[object] = []
+    objects: list[PolymorphicModel] = []
     base_model_type = None
+
+    def __init__(self, objects: list[PolymorphicModel]):
+        self.objects = objects
 
     def dict(self):
         return {obj.id: obj for obj in self.objects}
 
-    # TODO ERIK
     def clone(self) -> RepositoryBaseClass:
         """Clone the object"""
+        return self.__class__(self.objects[:])
 
-        raise NotImplementedError()
-
-    # TODO ERIK
     def filter_model_subtype(self, model_subtype: Type) -> RepositoryBaseClass:
-        """
-        Keep only items in the repository that match with a certain filter
-        <RETURNS MODIFIED REPOSITORY>
-        """
-        raise NotImplementedError()
+        """Keep only items in the repository that are of the specified subtype, including further derived types."""
+
+        self.__assert_valid_subtype(model_subtype)
+
+        objects = [o for o in self.objects if isinstance(o, model_subtype)]
+
+        return self.__class__(objects)
+
+    def __assert_valid_subtype(self, model_subtype: Type) -> None:
+        """Sanity check to verify that the model belongs to this repository."""
+        if len(self.objects) == 0:
+            return
+
+        base_type = utils.get_base_polymorphic_model(self.objects[0].__class__)
+
+        if not issubclass(model_subtype, base_type):
+            raise Exception(f"${model_subtype} is not a subtype of ${base_type}")
 
     # TODO ERIK
     def filter_attribute_value(

@@ -24,12 +24,12 @@ class ScenarioAggregate:
         self.scenario = scenario
 
         self.repositories: dict[str, RepositoryBaseClass] = {
-            ModelType.ACTOR.value: ActorRepository(self.scenario),
-            ModelType.ENERGYASSET.value: EnergyAssetRepository(self.scenario),
-            ModelType.CONTRACT.value: ContractRepository(self.scenario),
-            ModelType.POLICY.value: PolicyRepository(self.scenario),
-            ModelType.GRIDCONNECTION.value: GridConnectionRepository(self.scenario),
-            ModelType.GRIDNODE.value: GridNodeRepository(self.scenario),
+            ModelType.ACTOR.value: ActorRepository.from_scenario(self.scenario),
+            ModelType.ENERGYASSET.value: EnergyAssetRepository.from_scenario(self.scenario),
+            ModelType.CONTRACT.value: ContractRepository.from_scenario(self.scenario),
+            ModelType.POLICY.value: PolicyRepository.from_scenario(self.scenario),
+            ModelType.GRIDCONNECTION.value: GridConnectionRepository.from_scenario(self.scenario),
+            ModelType.GRIDNODE.value: GridNodeRepository.from_scenario(self.scenario),
         }
 
     def get_repository_for_model_type(
