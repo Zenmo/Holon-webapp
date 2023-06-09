@@ -3,13 +3,10 @@ from holon.models.scenario import Scenario
 from .repository_base import RepositoryBaseClass
 
 
-from holon.models import Policy
-
-
 class PolicyRepository(RepositoryBaseClass):
     """Repository containing all policies in memory"""
 
-    objects: list[Policy] = []
+    base_model_type = Policy
 
     def __init__(self, scenario: Scenario):
         self.objects = Policy.objects.filter(payload=scenario).get_real_instances()

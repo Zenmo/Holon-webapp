@@ -195,38 +195,18 @@ class SecondOrderRelationAttributeFilter(Filter):
         """Apply the relation attribute filter to a repository"""
 
         # get relation repository
-        model = apps.get_model("holon", self.rule.model_type)
-        relation_model_type_name = (
-            model()._meta.get_field(self.relation_field).related_model.__class__.__name__
-        )
-        first_order_relation_repository = scenario_aggregate.get_repository_for_model_type(
-            relation_model_type_name
+        relation_repository = scenario_aggregate.get_repository_for_relation_field(
+            self.rule.model_type,
+            self.relation_field,
+            model_subtype_name=self.relation_field_subtype,
         )
 
-        # filter relation repository by subtype
-        if self.relation_field_subtype:
-            first_order_relation_repository = first_order_relation_repository.filter_model_subtype(
-                self.relation_field_subtype
-            )
-
-        #  get second-order relation repository
-        relation_model = apps.get_model("holon", relation_model_type_name)
-        second_order_relation_model_type_name = (
-            relation_model()
-            ._meta.get_field(self.second_order_relation_field)
-            .related_model.__class__.__name__
+        # get second-order relation repository
+        second_order_relation_repository = scenario_aggregate.get_repository_for_relation_field(
+            relation_repository.base_model_type.__name__,
+            self.second_order_relation_field,
+            model_subtype_name=self.second_order_relation_field_subtype,
         )
-        second_order_relation_repository = scenario_aggregate.get_repository_for_model_type(
-            second_order_relation_model_type_name
-        )
-
-        # filter second-order relation repository by subtype
-        if self.second_order_relation_field_subtype:
-            second_order_relation_repository = (
-                second_order_relation_repository.filter_model_subtype(
-                    self.second_order_relation_field_subtype
-                )
-            )
 
         # filter second_order_relation_repository on attribute
         second_order_relation_repository = second_order_relation_repository.filter_attribute_value(

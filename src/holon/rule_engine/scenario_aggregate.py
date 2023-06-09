@@ -10,6 +10,7 @@ from holon.rule_engine.repositories import (
     GridNodeRepository,
     PolicyRepository,
 )
+from django.apps import apps
 
 from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
@@ -31,13 +32,31 @@ class ScenarioAggregate:
             ModelType.GRIDNODE.value: GridNodeRepository(self.scenario),
         }
 
-    def get_repository_for_model_type(self, model_type_name: str) -> RepositoryBaseClass:
+    def get_repository_for_model_type(
+        self, model_type_name: str, model_subtype_name: str = ""
+    ) -> RepositoryBaseClass:
         """Get the correct repository based on the model type name"""
 
         if not model_type_name in self.repositories:
             raise Exception(f"ScenarioAggregate: Not implemented model type name {model_type_name}")
 
-        return self.repositories[model_type_name].clone()
+        cloned_repository = self.repositories[model_type_name].clone()
+
+        if model_subtype_name:
+            cloned_repository = cloned_repository.filter_model_subtype(model_subtype_name)
+
+        return cloned_repository
+
+    def get_repository_for_relation_field(
+        self, model_type_name: str, relation_field_name: str, model_subtype_name: str = ""
+    ) -> RepositoryBaseClass:
+        """Get the correct repository based on the relation field of a model type"""
+
+        model = apps.get_model("holon", model_type_name)
+        relation_model_name = (
+            model()._meta.get_field(relation_field_name).related_model.__class__.__name__
+        )
+        return self.get_repository_for_model_type(relation_model_name, model_subtype_name)
 
     def serialize_to_json(self) -> dict:
         """Serialize scenario to json with embedded relations"""

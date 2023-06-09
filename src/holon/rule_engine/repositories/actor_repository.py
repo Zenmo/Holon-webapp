@@ -6,7 +6,7 @@ from .repository_base import RepositoryBaseClass
 class ActorRepository(RepositoryBaseClass):
     """Repository containing all actors in memory"""
 
-    objects: list[Actor] = []
+    base_model_type = Actor
 
     def __init__(self, scenario: Scenario):
         self.objects = Actor.objects.filter(payload=scenario).get_real_instances()

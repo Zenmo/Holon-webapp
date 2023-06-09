@@ -6,7 +6,7 @@ from .repository_base import RepositoryBaseClass
 class EnergyAssetRepository(RepositoryBaseClass):
     """Repository containing all energyassets in memory"""
 
-    objects: list[EnergyAsset] = []
+    base_model_type = EnergyAsset
 
     def __init__(self, scenario: Scenario):
         self.objects = EnergyAsset.objects.filter(

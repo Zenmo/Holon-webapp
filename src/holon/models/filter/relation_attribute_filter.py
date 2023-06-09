@@ -123,17 +123,11 @@ class RelationAttributeFilter(Filter):
         """Apply the relation attribute filter to a repository"""
 
         # get relation repository
-        model = apps.get_model("holon", self.rule.model_type)
-        relation_model_type = (
-            model()._meta.get_field(self.relation_field).related_model.__class__.__name__
+        relation_repository = scenario_aggregate.get_repository_for_relation_field(
+            self.rule.model_type,
+            self.relation_field,
+            model_subtype_name=self.relation_field_subtype,
         )
-        relation_repository = scenario_aggregate.get_repository_for_model_type(relation_model_type)
-
-        # filter by subtype
-        if self.relation_field_subtype:
-            relation_repository = relation_repository.filter_model_subtype(
-                self.relation_field_subtype
-            )
 
         # filter relation_repository on attribute
         relation_repository = relation_repository.filter_attribute_value(
