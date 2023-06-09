@@ -195,7 +195,7 @@ class SecondOrderRelationAttributeFilter(Filter):
         """Apply the relation attribute filter to a repository"""
 
         # get relation repository
-        relation_repository = scenario_aggregate.get_repository_for_relation_field(
+        first_order_relation_repository = scenario_aggregate.get_repository_for_relation_field(
             self.rule.model_type,
             self.relation_field,
             model_subtype_name=self.relation_field_subtype,
@@ -203,7 +203,7 @@ class SecondOrderRelationAttributeFilter(Filter):
 
         # get second-order relation repository
         second_order_relation_repository = scenario_aggregate.get_repository_for_relation_field(
-            relation_repository.base_model_type.__name__,
+            first_order_relation_repository.base_model_type.__name__,
             self.second_order_relation_field,
             model_subtype_name=self.second_order_relation_field_subtype,
         )

@@ -90,16 +90,13 @@ class RelationExistsFilter(Filter):
 
         # get relation repository
         model = apps.get_model("holon", self.rule.model_type)
-        relation_model_type = (
-            model()._meta.get_field(self.relation_field).related_model.__class__.__name__
-        )
+        relation_model_type = model()._meta.get_field(self.relation_field).related_model.__name__
         relation_repository = scenario_aggregate.get_repository_for_model_type(relation_model_type)
 
         # filter by subtype
         if self.relation_field_subtype:
-            relation_repository = relation_repository.filter_model_subtype(
-                self.relation_field_subtype
-            )
+            relation_model_subtype = apps.get_model("holon", self.relation_field_subtype)
+            relation_repository = relation_repository.filter_model_subtype(relation_model_subtype)
 
         # filter repository on which items refer to an item in the filtered relation_repository
         return repository.filter_has_relation(

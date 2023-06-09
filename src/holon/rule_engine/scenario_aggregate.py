@@ -47,7 +47,8 @@ class ScenarioAggregate:
         cloned_repository = self.repositories[model_type_name].clone()
 
         if model_subtype_name and model_subtype_name != model_type_name:
-            cloned_repository = cloned_repository.filter_model_subtype(model_subtype_name)
+            model_subtype = apps.get_model("holon", model_subtype_name)
+            cloned_repository = cloned_repository.filter_model_subtype(model_subtype)
 
         return cloned_repository
 
@@ -57,11 +58,10 @@ class ScenarioAggregate:
         """Get the correct repository based on the relation field of a model type"""
 
         model = apps.get_model("holon", model_type_name)
-        relation_model_name = (
-            model()._meta.get_field(relation_field_name).related_model.__class__.__name__
-        )
-        # TODO check if the baseclass needs to be fetched, f.e. for parent_heat and parent_electric in gridconnection
-        return self.get_repository_for_model_type(relation_model_name, model_subtype_name)
+        relation_model_class = model()._meta.get_field(relation_field_name).related_model
+        relation_model_base_name = utils.get_base_polymorphic_model(relation_model_class).__name__
+
+        return self.get_repository_for_model_type(relation_model_base_name, model_subtype_name)
 
     def remove_object(self, object: PolymorphicModel, base_model_type=""):
         """Remove object from self including related models according to deletion policy"""

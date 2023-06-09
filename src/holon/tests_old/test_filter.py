@@ -2,7 +2,6 @@ from django.test import TestCase
 
 from holon.models import *
 from holon.models import rule_mapping
-from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RuleFiltersTestClass(TestCase):
@@ -66,7 +65,6 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-
         filtered_queryset = rule.get_filtered_queryset(self.scenario)
 
         # Assert
@@ -107,11 +105,10 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
+        self.assertEqual(len(filtered_queryset), 1)
 
     def test_relation_filter_greater_than(self) -> None:
         # Arange
@@ -136,12 +133,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_asset.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filtered_repository.all()[0].id, asset_1.id)
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_1.id)
 
     def test_inverted_relation_filter_greater_than(self) -> None:
         # Arange
@@ -198,12 +194,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_gridconnection.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_gridconnection.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 2)
-        for gridconnection in filtered_repository.all():
+        self.assertEqual(len(filtered_queryset), 2)
+        for gridconnection in filtered_queryset:
             self.assertTrue(
                 gridconnection.insulation_label in [InsulationLabel.A, InsulationLabel.B]
             )
@@ -229,12 +224,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_asset.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filtered_repository.all()[0].id, asset_related_to_gridnode.id)
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_related_to_gridnode.id)
 
     def test_relation_exists_filter(self) -> None:
         # Arange
@@ -257,12 +251,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_asset.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filtered_repository.all()[0].id, asset_related_to_gridconnection.id)
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_related_to_gridconnection.id)
 
     def test_inverted_relation_exists_filter_with_subtype(self) -> None:
         # Arange
@@ -285,12 +278,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_asset.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filtered_repository.all()[0].id, asset_related_to_district_heat.id)
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_related_to_district_heat.id)
 
     def test_second_order_relation_filter(self) -> None:
         # Arange
@@ -324,12 +316,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_asset.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filtered_repository.all()[0].id, asset_2.id)
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_2.id)
 
     def test_second_order_relation_filter_with_relation_subtype(self) -> None:
         # Arange
@@ -371,12 +362,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_asset.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_asset.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filtered_repository.all()[0].id, asset_1.id)
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, asset_1.id)
 
     def test_second_order_relation_filter_with_second_order_relation_subtype(self) -> None:
         # Arange
@@ -409,12 +399,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        scenario_aggregate = ScenarioAggregate(self.scenario)
-        filtered_repository = rule_actor.get_filtered_repository(scenario_aggregate)
+        filtered_queryset = rule_actor.get_filtered_queryset(self.scenario)
 
         # Assert
-        self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filter_subselector.all()[0].id, actor_2.id)
+        self.assertEqual(len(filtered_queryset), 1)
+        self.assertEqual(filtered_queryset[0].id, actor_2.id)
 
     def test_stable_id_relation_in_model_attribute_options(self):
         """Test if stable id relations are included for actor"""
