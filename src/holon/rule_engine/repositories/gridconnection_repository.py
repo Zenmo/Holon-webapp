@@ -8,5 +8,6 @@ class GridConnectionRepository(RepositoryBaseClass):
 
     base_model_type = GridConnection
 
-    def __init__(self, scenario: Scenario):
-        self.objects = GridConnection.objects.filter(payload=scenario).get_real_instances()
+    @classmethod
+    def from_scenario(cls, scenario: Scenario):
+        return cls(GridConnection.objects.filter(payload=scenario).get_real_instances())

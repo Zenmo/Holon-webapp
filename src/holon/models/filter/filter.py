@@ -17,7 +17,6 @@ from holon.models.util import (
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 
 
-
 class Filter(PolymorphicModel):
     """Information on how to find the objects a scenario rule should be applied to"""
 

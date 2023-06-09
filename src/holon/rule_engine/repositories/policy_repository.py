@@ -8,5 +8,6 @@ class PolicyRepository(RepositoryBaseClass):
 
     base_model_type = Policy
 
-    def __init__(self, scenario: Scenario):
-        self.objects = Policy.objects.filter(payload=scenario).get_real_instances()
+    @classmethod
+    def from_scenario(cls, scenario: Scenario):
+        return cls(Policy.objects.filter(payload=scenario).get_real_instances())
