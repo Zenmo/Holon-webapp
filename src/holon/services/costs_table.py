@@ -235,7 +235,7 @@ class CostItem:
 
 class CostToSelfItem:
     def __init__(self, group, price) -> None:
-        self.group = group.split("-")[:-1].join("-") if len(group.split("-")) > 1 else group
+        self.group = group.split("-")[-1].join("-") if len(group.split("-")) > 1 else group
         self.subgroup = group if len(group.split("-")) > 1 else ""
         self.price = price
 
