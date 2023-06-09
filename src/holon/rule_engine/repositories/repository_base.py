@@ -51,21 +51,23 @@ class RepositoryBaseClass:
 
     # TODO ERIK
     def filter_attribute_value(
-        self, attribute_name: str, value, comparator: AttributeFilterComparator
+        self, attribute_name: str, comparator: AttributeFilterComparator, value
     ) -> RepositoryBaseClass:
         """
         Filter on items' attribute given a comparator and a value
         """
 
         objects = [
-            o for o in self.objects if attribute_matches_value(o, attribute_name, value, comparator)
+            object
+            for object in self.objects
+            if attribute_matches_value(object, attribute_name, value, comparator)
         ]
 
         return self.__class__(objects)
 
     # TODO ERIK
     def filter_enum_attribute_value(
-        self, attribute_name: str, value: str, comparator: AttributeFilterComparator
+        self, attribute_name: str, comparator: AttributeFilterComparator, value: str
     ) -> RepositoryBaseClass:
         """
         Filter a discrete series (Enum) attribute
@@ -112,6 +114,7 @@ class RepositoryBaseClass:
     # TODO ERIK
     def get(self, id: int) -> object:
         """Get an item in the objects list by id"""
+
         raise NotImplementedError()
 
     def all(self) -> list[object]:
@@ -166,4 +169,3 @@ def attribute_matches_value(
         return attribute != value
 
     raise Exception("unreachable")
-

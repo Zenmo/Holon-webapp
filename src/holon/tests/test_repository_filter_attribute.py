@@ -19,70 +19,70 @@ class RepositoryFilterAttributeTestClass(unittest.TestCase):
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 2, AttributeFilterComparator.EQUAL
+                "capacity_kw", AttributeFilterComparator.EQUAL, 2
             ).len()
             == 1
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 3, AttributeFilterComparator.EQUAL
+                "capacity_kw", AttributeFilterComparator.EQUAL, 3
             ).len()
             == 0
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 3, AttributeFilterComparator.LESS_THAN
+                "capacity_kw", AttributeFilterComparator.LESS_THAN, 3
             ).len()
             == 1
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 5, AttributeFilterComparator.LESS_THAN
+                "capacity_kw", AttributeFilterComparator.LESS_THAN, 5
             ).len()
             == 2
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 1, AttributeFilterComparator.LESS_THAN
+                "capacity_kw", AttributeFilterComparator.LESS_THAN, 1
             ).len()
             == 0
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 3, AttributeFilterComparator.GREATER_THAN
+                "capacity_kw", AttributeFilterComparator.GREATER_THAN, 3
             ).len()
             == 1
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 1, AttributeFilterComparator.GREATER_THAN
+                "capacity_kw", AttributeFilterComparator.GREATER_THAN, 1
             ).len()
             == 2
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 5, AttributeFilterComparator.GREATER_THAN
+                "capacity_kw", AttributeFilterComparator.GREATER_THAN, 5
             ).len()
             == 0
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 3, AttributeFilterComparator.NOT_EQUAL
+                "capacity_kw", AttributeFilterComparator.NOT_EQUAL, 3
             ).len()
             == 2
         )
 
         assert (
             repository.filter_attribute_value(
-                "capacity_kw", 4, AttributeFilterComparator.NOT_EQUAL
+                "capacity_kw", AttributeFilterComparator.NOT_EQUAL, 4
             ).len()
             == 1
         )
@@ -92,8 +92,8 @@ class RepositoryFilterAttributeTestClass(unittest.TestCase):
             Exception,
             repository.filter_attribute_value,
             "capacity_w",
-            9000,
             AttributeFilterComparator.GREATER_THAN,
+            9000,
         )
 
         # should be int instead of string
@@ -101,6 +101,6 @@ class RepositoryFilterAttributeTestClass(unittest.TestCase):
             Exception,
             repository.filter_attribute_value,
             "capacity_kw",
-            "9000",
             AttributeFilterComparator.GREATER_THAN,
+            "9000",
         )

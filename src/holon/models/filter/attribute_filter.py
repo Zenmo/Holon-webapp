@@ -60,7 +60,7 @@ class AttributeFilter(Filter):
     ) -> RepositoryBaseClass:
         """Apply the attribute filter to a repository"""
 
-        return repository.filter_attribute_value(self.model_attribute, self.value, self.comparator)
+        return repository.filter_attribute_value(self.model_attribute, self.comparator, self.value)
 
     def hash(self):
         return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value}]"
