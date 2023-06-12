@@ -101,14 +101,17 @@ class RepositoryBaseClass:
         elif not indices is None:
             objects = [self.objects[i] for i in indices]
         else:
-            raise ValueError("Neither `start`, `end` nor `indices` are provided")
+            raise ValueError("Provide at least a `start`, `end` or `indices` parameter")
 
         return self.__class__(objects)
 
     def get(self, id: int) -> PolymorphicModel:
-        """Get an item in the objects list by id. Return None if object was not found"""
+        """Get an item in the objects list by id. Raises IndexError if object was not found"""
 
-        return next((object for object in self.objects if object.id == id), None)
+        try:
+            return next(object for object in self.objects if object.id == id)
+        except:
+            self.raise_id_not_found_error(id)
 
     def all(self) -> list[PolymorphicModel]:
         """Return all objects in the repository"""
@@ -145,6 +148,10 @@ class RepositoryBaseClass:
         """Remove an item from the repository"""
 
         self.objects.remove(object)
+
+    def raise_id_not_found_error(self, id: int):
+        """Method that raises an IndexError about an index not being found"""
+        raise IndexError(f"{self.base_model_type.__name__} object with id {id} not found")
 
 
 def attribute_matches_value(
