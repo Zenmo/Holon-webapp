@@ -4,7 +4,7 @@ from holon.models import GridConnection, EnergyAsset
 from holon.rule_engine.repositories import GridConnectionRepository
 
 
-class RepositoryGetTestClass(unittest.TestCase):
+class RepositoryAddTestClass(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
 

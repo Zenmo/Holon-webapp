@@ -112,13 +112,24 @@ class RepositoryBaseClass:
     ) -> RepositoryBaseClass:
         """
         Filter the repository on items that have a relation that exists in the relation_repository. Possibility to invert the filter.
-        <RETURNS MODIFIED REPOSITORY>
         """
 
-        # TODO
-        # - filter deze repository op welke items' relation field een item refereren die in de gefilterde relation_repository zit
+        relation_ids = relation_repository.ids()
 
-        raise NotImplementedError()
+        if invert:
+            objects = [
+                object
+                for object in self.objects
+                if not getattr(object, f"{relation_field}_id") in relation_ids
+            ]
+        else:
+            objects = [
+                object
+                for object in self.objects
+                if getattr(object, f"{relation_field}_id") in relation_ids
+            ]
+
+        return self.__class__(objects)
 
     def get_subset_range(
         self, start: int = None, end: int = None, indices: list[int] = None
@@ -146,6 +157,11 @@ class RepositoryBaseClass:
         """Return all objects in the repository"""
 
         return self.objects
+
+    def ids(self) -> list[int]:
+        """Returns a list of object ids"""
+
+        return [object.id for object in self.objects]
 
     def first(self) -> object:
         """Return first object in the repository"""
