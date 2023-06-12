@@ -92,10 +92,7 @@ class RepositoryBaseClass:
     def filter_enum_attribute_value(
         self, attribute_name: str, comparator: AttributeFilterComparator, value: str
     ) -> RepositoryBaseClass:
-        """
-        Filter a discrete series (Enum) attribute
-        <RETURNS MODIFIED REPOSITORY>
-        """
+        """Filter a discrete series (Enum) attribute"""
 
         objects = [
             object
@@ -244,10 +241,12 @@ def attribute_matches_value(
 def discrete_attribute_passes_none_check(
     object: object, attribute_name: str, comparator: AttributeFilterComparator
 ) -> bool:
-    NONE = -1
+    """If comparator is larger than or smaller than, check if the attribute is not the default enum"""
+
+    NONE_VALUE = -1
     if comparator == AttributeFilterComparator.EQUAL.value:
         return True
     if comparator == AttributeFilterComparator.NOT_EQUAL.value:
         return True
 
-    return getattr(object, attribute_name) != NONE
+    return getattr(object, attribute_name) != NONE_VALUE
