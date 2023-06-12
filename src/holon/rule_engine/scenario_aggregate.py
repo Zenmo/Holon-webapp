@@ -89,9 +89,10 @@ class ScenarioAggregate:
                         self, related_object, related_model_repository.base_model_type.__name__
                     )
                 elif field.on_delete == models.SET_NULL:
-                    self.repositories[
-                        related_model_repository.base_model_type.__name__
-                    ].update_attribute(related_object, relation_field_attribute, None)
+                    setattr(related_object, relation_field_attribute, None)
+                    self.repositories[related_model_repository.base_model_type.__name__].update(
+                        related_object
+                    )
                 elif field.on_delete == models.PROTECT:
                     raise models.ProtectedError(
                         f"Cannot remove object, because {relation_field_attribute} is protected",
@@ -109,7 +110,7 @@ class ScenarioAggregate:
                         f"No functionality implemented for on_delete {field.on_delete}"
                     )
 
-        self.repositories[base_model_type].remove(object)
+        self.repositories[base_model_type].remove(object.id)
 
         return self
 

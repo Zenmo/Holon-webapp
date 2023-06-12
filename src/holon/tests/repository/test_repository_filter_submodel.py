@@ -6,14 +6,14 @@ from holon.models import (
     UtilityGridConnection,
     HeatStorageAsset,
 )
-from holon.rule_engine.repositories import RepositoryBaseClass
+from holon.rule_engine.repositories import GridConnectionRepository
 
 
 class RepositoryFilterSubmodelTestClass(unittest.TestCase):
     def test_filter(self):
         # Pick gridconnection because it also a clusterable model, thus using multiple inheritance
-        house_grid_connection = HouseGridConnection()
-        repository = RepositoryBaseClass([house_grid_connection])
+        house_grid_connection = HouseGridConnection(id=1)
+        repository = GridConnectionRepository([house_grid_connection])
 
         built_environment_repository = repository.filter_model_subtype(
             BuiltEnvironmentGridConnection
