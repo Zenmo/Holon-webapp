@@ -1,3 +1,5 @@
+# TODO remove after rule engine update: whole file
+
 from django.test import TestCase
 import pytest
 

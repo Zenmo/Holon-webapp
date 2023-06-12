@@ -210,7 +210,7 @@ class SecondOrderRelationAttributeFilter(Filter):
 
         # filter second_order_relation_repository on attribute
         second_order_relation_repository = second_order_relation_repository.filter_attribute_value(
-            self.model_attribute, self.value, self.comparator
+            self.model_attribute, self.comparator, self.value
         )
 
         # filter first-order relation repository on which items refer to an item in the filtered relation_repository

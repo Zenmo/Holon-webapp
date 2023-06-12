@@ -68,10 +68,18 @@ class ScenarioAggregate:
         if not base_model_type:
             base_model_type = utils.get_base_polymorphic_model(object.__class__).__name__
 
+        # Relation field list requirements:
+        # - be a relation
+        # - have a delete policy
+        # - not be a reference to polymorphic parents ( parent_link )
+        # - be part of the scenario aggregate ( no fields referencing rules )
         relation_fields = [
-            field.__dict__
+            field
             for field in object.__class__._meta.get_fields()
-            if field.is_relation and hasattr(field, "on_delete")
+            if field.is_relation
+            and hasattr(field, "on_delete")
+            and field.parent_link == False
+            and utils.get_base_polymorphic_model(field.related_model).__name__ in ModelType.values
         ]
 
         for field in relation_fields:

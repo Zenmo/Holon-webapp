@@ -3,6 +3,7 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RuleMappingTestClass(TestCase):
@@ -43,12 +44,16 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
-        # Assert
-        assert updated_scenario.gridconnection_set.first().capacity_kw == 250.0  # was 750.0
+        # Asserts
+
+        assert (
+            updated_scenario.repositories["GridConnection"].first().capacity_kw == 250.0
+        )  # was 750.0
 
     def test_change_attribute_set_static_value(self):
         """Test the change attribute set operator"""
@@ -69,12 +74,15 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert updated_scenario.gridconnection_set.first().capacity_kw == 350.0  # was 750.0
+        assert (
+            updated_scenario.repositories["GridConnection"].first().capacity_kw == 350.0
+        )  # was 750.0
 
     def test_change_attribute_add(self):
         """Test the change attribute add operator"""
@@ -92,12 +100,15 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert updated_scenario.gridconnection_set.first().capacity_kw == 1000.0  # was 750.0
+        assert (
+            updated_scenario.repositories["GridConnection"].first().capacity_kw == 1000.0
+        )  # was 750.0
 
     def test_change_attribute_subtract(self):
         """Test the change attribute subtract operator"""
@@ -115,12 +126,15 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert updated_scenario.gridconnection_set.first().capacity_kw == 500.0  # was 750.0
+        assert (
+            updated_scenario.repositories["GridConnection"].first().capacity_kw == 500.0
+        )  # was 750.0
 
     def test_change_attribute_multiply(self):
         """Test the change attribute multiply operator"""
@@ -138,12 +152,15 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert updated_scenario.gridconnection_set.first().capacity_kw == 1500.0  # was 750.0
+        assert (
+            updated_scenario.repositories["GridConnection"].first().capacity_kw == 1500.0
+        )  # was 750.0
 
     def test_change_attribute_divide(self):
         """Test the change attribute divide operator"""
@@ -161,12 +178,15 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "3", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert updated_scenario.gridconnection_set.first().capacity_kw == 250.0  # was 750.0
+        assert (
+            updated_scenario.repositories["GridConnection"].first().capacity_kw == 250.0
+        )  # was 750.0
 
     def test_change_multiple_attributes(self):
         # Arrange
@@ -185,13 +205,16 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert updated_scenario.gridconnection_set.first().capacity_kw == 1  # was 750.0
-        assert updated_scenario.gridconnection_set.first().insulation_label == 1  # was 750.0
+        assert updated_scenario.repositories["GridConnection"].first().capacity_kw == 1  # was 750.0
+        assert (
+            updated_scenario.repositories["GridConnection"].first().insulation_label == 1
+        )  # was 750.0
 
     def test_change_attribute_allowed_relation_set(self):
         """Test the change attribute set operator"""
@@ -211,9 +234,10 @@ class RuleMappingTestClass(TestCase):
         ]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert updated_scenario.actor_set.first().group_id == actor_group.id
+        assert updated_scenario.repositories["Actor"].first().group_id == actor_group.id

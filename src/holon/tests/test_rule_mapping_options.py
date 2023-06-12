@@ -3,6 +3,7 @@ from django.test import TestCase
 from holon.models import *
 from holon.models import rule_mapping
 from holon.models.rule_actions import RuleActionFactor
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RuleMappingTestClass(TestCase):
@@ -62,12 +63,13 @@ class RuleMappingTestClass(TestCase):
         ]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        updated_gridconnection = updated_scenario.gridconnection_set.all()[0]
+        updated_gridconnection = updated_scenario.repositories["GridConnection"].first()
         self.assertEqual(updated_gridconnection.capacity_kw, self.factor_option_1.min_value)
         self.assertEqual(
             updated_gridconnection.tempSetpointNight_degC,
@@ -84,12 +86,12 @@ class RuleMappingTestClass(TestCase):
         ]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
-
         # Assert
-        updated_gridconnection = updated_scenario.gridconnection_set.all()[0]
+        updated_gridconnection = updated_scenario.repositories["GridConnection"].first()
         self.assertEqual(updated_gridconnection.capacity_kw, self.gridconnection.capacity_kw)
         self.assertEqual(
             updated_gridconnection.tempSetpointNight_degC, self.factor_option_3.max_value
@@ -105,12 +107,13 @@ class RuleMappingTestClass(TestCase):
         ]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        updated_gridconnection = updated_scenario.gridconnection_set.all()[0]
+        updated_gridconnection = updated_scenario.repositories["GridConnection"].first()
         self.assertEqual(updated_gridconnection.capacity_kw, self.factor_option_1.min_value)
         self.assertEqual(
             updated_gridconnection.tempSetpointNight_degC, self.factor_option_3.max_value

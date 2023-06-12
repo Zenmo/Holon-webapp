@@ -3,6 +3,7 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RuleMappingTestClass(TestCase):
@@ -98,19 +99,16 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_hhc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
+        ehc_assets = updated_scenario.repositories["EnergyAsset"].filter_model_subtype(
+            ElectricHeatConversionAsset
         )
-        assert n_hhc_assets == 0  # was 3
+        assert ehc_assets.len() == 0  # was 3
 
     def test_rule_action_remove_none(self):
         """Test the remove rule action"""
@@ -128,19 +126,16 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_hhc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
+        ehc_assets = updated_scenario.repositories["EnergyAsset"].filter_model_subtype(
+            ElectricHeatConversionAsset
         )
-        assert n_hhc_assets == 3  # was 3
+        assert ehc_assets.len() == 3  # was 3
 
     def test_rule_action_remove_n(self):
         """Test the remove rule action"""
@@ -158,19 +153,16 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_hhc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
+        ehc_assets = updated_scenario.repositories["EnergyAsset"].filter_model_subtype(
+            ElectricHeatConversionAsset
         )
-        assert n_hhc_assets == 2  # was 3
+        assert ehc_assets.len() == 2  # was 3
 
     def test_rule_action_keep_n(self):
         """Test the remove rule action"""
@@ -188,19 +180,16 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_hhc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
+        ehc_assets = updated_scenario.repositories["EnergyAsset"].filter_model_subtype(
+            ElectricHeatConversionAsset
         )
-        assert n_hhc_assets == 1  # was 3
+        assert ehc_assets.len() == 1  # was 3
 
     def test_rule_action_keep_all(self):
         """Test the remove rule action"""
@@ -218,16 +207,13 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "3", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_hhc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
+        ehc_assets = updated_scenario.repositories["EnergyAsset"].filter_model_subtype(
+            ElectricHeatConversionAsset
         )
-        assert n_hhc_assets == 3  # was 3
+        assert ehc_assets.len() == 3  # was 3

@@ -364,6 +364,7 @@ class ScenarioRule(Rule):
                 scenario_aggregate, filtered_repository, value
             )
 
+        print("enddd", scenario_aggregate)
         return scenario_aggregate
 
     def get_actions(self) -> list[RuleAction]:
