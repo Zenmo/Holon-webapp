@@ -3,9 +3,12 @@ from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
 from holon.models.actor import Actor
 from holon.models.gridnode import GridNode
+from holon.models.scenario import Scenario
 from django.apps import apps
 
 from polymorphic import utils
+from polymorphic.base import PolymorphicModelBase
+from polymorphic.models import PolymorphicModel
 from holon.models.util import all_subclasses
 
 
@@ -23,7 +26,7 @@ class RuleActionUtils:
             return [(GridConnection, "gridconnection"), (GridNode, "gridnode")]
 
         if base_class == GridConnection:
-            return [(Actor, "owner_actor")]
+            return [(Actor, "owner_actor"), (Scenario, "payload")]
 
         if base_class == Contract:
             return [(Actor, "actor")]
@@ -41,3 +44,14 @@ class RuleActionUtils:
             ]
 
         return choices
+
+    def get_base_polymorphic_model(ChildModel, allow_abstract=False):
+        """
+        First the first concrete model in the inheritance chain that inherited from the PolymorphicModel.
+        """
+        model = utils.get_base_polymorphic_model(ChildModel)
+
+        if model is None:
+            # Return normal class if not polymorphic
+            return ChildModel
+        return model
