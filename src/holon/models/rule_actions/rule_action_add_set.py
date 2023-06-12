@@ -227,23 +227,22 @@ class GenericRuleActionAdd(RuleAction):
 
         # only take first n objects
         for filtererd_object in filtered_repository.all():
-
             if reset_models_before_add:
                 # check which objects of the same type as model_to_add are already
                 # connected to our current filtered_object, and remove these
 
                 model_to_add_repository = scenario_aggregate.get_repository_for_model_type(
                     self.model_to_add_base_class.__name__,
-                    model_subtype_name=self.model_to_add.__class__,
+                    model_subtype_name=self.model_to_add.__class__.__name__,
                 )
 
                 objects_to_delete = model_to_add_repository.filter_attribute_value(
                     f"{parent_fk_field_name}_id",
-                    filtererd_object.id,
                     AttributeFilterComparator.EQUAL,
+                    filtererd_object.id,
                 )
 
-                for object in objects_to_delete:
+                for object in objects_to_delete.all():
                     scenario_aggregate.remove_object(object)
 
             # Only check < n for set count
@@ -255,7 +254,7 @@ class GenericRuleActionAdd(RuleAction):
                 ):  # TODO if cloned_contract_scope is indeed unnecessary, this whole if statement can be removed
                     scenario_aggregate.add_object(
                         self.model_to_add,
-                        self.model_to_add_base_class,
+                        self.model_to_add_base_class.__name__,
                         {
                             parent_fk_field_name: filtererd_object,
                             f"{parent_fk_field_name}_id": filtererd_object.id,
@@ -267,7 +266,7 @@ class GenericRuleActionAdd(RuleAction):
                 else:
                     scenario_aggregate.add_object(
                         self.model_to_add,
-                        self.model_to_add_base_class,
+                        self.model_to_add_base_class.__name__,
                         {
                             parent_fk_field_name: filtererd_object,
                             f"{parent_fk_field_name}_id": filtererd_object.id,
@@ -432,11 +431,11 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
             )
 
         # only take first n objects
-        for filtererd_object in filtered_repository:
+        for filtererd_object in filtered_repository.all():
             for _ in range(n):
                 scenario_aggregate.add_object(
                     self.model_to_add,
-                    self.model_to_add_base_class,
+                    self.model_to_add_base_class.__name__,
                     {
                         parent_fk_field_name: filtererd_object,
                         f"{parent_fk_field_name}_id": filtererd_object.id,
