@@ -250,12 +250,15 @@ class GenericRuleActionAdd(RuleAction):
             if not reset_models_before_add or objects_added < n:
                 # add model_to_add to filtered object
 
-                if self.contract_to_add:
+                if (
+                    self.contract_to_add
+                ):  # TODO if cloned_contract_scope is indeed unnecessary, this whole if statement can be removed
                     scenario_aggregate.add_object(
                         self.model_to_add,
                         self.model_to_add_base_class,
                         {
                             parent_fk_field_name: filtererd_object,
+                            f"{parent_fk_field_name}_id": filtererd_object.id,
                             # "contractScope": cloned_contract_scope,
                             "is_rule_action_template": False,
                         },
@@ -267,6 +270,7 @@ class GenericRuleActionAdd(RuleAction):
                         self.model_to_add_base_class,
                         {
                             parent_fk_field_name: filtererd_object,
+                            f"{parent_fk_field_name}_id": filtererd_object.id,
                             "is_rule_action_template": False,
                         },
                     )
@@ -435,6 +439,7 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
                     self.model_to_add_base_class,
                     {
                         parent_fk_field_name: filtererd_object,
+                        f"{parent_fk_field_name}_id": filtererd_object.id,
                         "is_rule_action_template": False,
                     },
                 )
