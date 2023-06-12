@@ -296,9 +296,9 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
                     </p>
 
                     <div className="flex justify-center mt-6 items-center">
-                      <div className="font-bold mr-3" onClick={() => resetContent()}>
+                      <button className="font-bold mr-3 mb-4" onClick={() => resetContent()}>
                         Reset instellingen
-                      </div>
+                      </button>
                       <Button
                         onClick={() => {
                           debouncedCalculateKPIs(content);
