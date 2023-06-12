@@ -6,16 +6,16 @@ from holon.models import (
     HeatStorageAsset,
     AttributeFilterComparator,
 )
-from holon.rule_engine.repositories import RepositoryBaseClass
+from holon.rule_engine.repositories import GridConnectionRepository
 
 
 class RepositoryFilterAttributeTestClass(unittest.TestCase):
     def test_filter(self):
-        low_grid_connection = GridConnection()
+        low_grid_connection = GridConnection(id=1)
         low_grid_connection.capacity_kw = 2
-        high_grid_connection = GridConnection()
+        high_grid_connection = GridConnection(id=2)
         high_grid_connection.capacity_kw = 4
-        repository = RepositoryBaseClass([low_grid_connection, high_grid_connection])
+        repository = GridConnectionRepository([low_grid_connection, high_grid_connection])
 
         assert (
             repository.filter_attribute_value(

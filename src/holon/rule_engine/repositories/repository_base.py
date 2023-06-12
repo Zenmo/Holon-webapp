@@ -18,9 +18,27 @@ class RepositoryBaseClass:
     base_model_type = PolymorphicModel
 
     def __init__(self, objects: list[PolymorphicModel]):
+
+        self.assert_object_ids(objects)  # TODO make property with setter?
         self.objects = objects
+
         # start an id counter at an arbitrary high number
-        self.id_counter = self.id_counter_generator(start_id=1000000)
+        self.id_counter = self.id_counter_generator(objects)
+
+    def assert_object_ids(self, objects: list[PolymorphicModel]):
+        """Raises a ValueError if any of the objects have invalid or no ids"""
+
+        id_list = [object.id for object in objects]
+        stoute_lijst = [
+            {str(object): object.id}
+            for object in objects
+            if object.id is None or id_list.count(object.id) > 1 or not isinstance(object.id, int)
+        ]
+
+        if any(stoute_lijst):
+            raise ValueError(
+                f"Some of the provided objects have invalid, duplicate or no ids. Offending objects: {stoute_lijst}"
+            )
 
     @classmethod
     def from_scenario(cls, scenario: Scenario):
@@ -168,10 +186,12 @@ class RepositoryBaseClass:
 
         return cloned_new_object
 
-    def id_counter_generator(self, start_id: int) -> list[int]:
+    def id_counter_generator(self, objects: list[PolymorphicModel]) -> list[int]:
         """Generator to keep track of new ids"""
 
-        new_id = start_id
+        max_id = max([object.id for object in objects])
+        new_id = max_id + 1
+
         while True:
             yield new_id
             new_id += 1
