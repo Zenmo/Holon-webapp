@@ -133,6 +133,6 @@ class Take(FilterSubSelector):
             return repository.get_subset_range(end=n)
 
         elif self.mode == TakeMode.RANDOM.value:
-            ids = [obj.id for obj in repository.all()]
-            random_ids = random.sample(ids, k=n)
-            return repository.get_subset_range(indices=random_ids)
+            indices = range(repository.len())
+            random_indices = random.sample(indices, k=n)
+            return repository.get_subset_range(indices=random_indices)

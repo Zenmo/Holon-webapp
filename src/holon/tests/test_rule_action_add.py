@@ -2,6 +2,9 @@ from django.test import TestCase
 
 from holon.models import *
 from holon.models import rule_mapping
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
+from holon.models.scenario_rule import ModelType
 
 
 class RuleMappingTestClass(TestCase):
@@ -106,19 +109,16 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_ehc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
-        )
-        assert n_ehc_assets == 8  # was 3
+        ehc_assets = updated_scenario.repositories[
+            ModelType.ENERGYASSET.value
+        ].filter_model_subtype(ElectricHeatConversionAsset)
+        assert ehc_assets.len() == 8  # was 3
 
     def test_rule_action_add_asset_empty_filter(self):
         """Test the add rule action when a filter is empty"""
@@ -171,19 +171,15 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
-
         # Assert
-        n_ehc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
-        )
-        assert n_ehc_assets == 1  # was 1
+        ehc_assets = updated_scenario.repositories[
+            ModelType.ENERGYASSET.value
+        ].filter_model_subtype(ElectricHeatConversionAsset)
+        assert ehc_assets.len() == 1  # was 1
 
     def test_rule_action_add_contract(self):
         """Test the add rule action for a contract and check if contractscope is connected correctly"""
@@ -224,21 +220,30 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
         # check if a contract was added
-        assert len(updated_scenario.contracts) == 3
+        assert updated_scenario.repositories[ModelType.CONTRACT.value].len() == 3
 
         # check if the cloned actor without contract now has a contract
-        cloned_actor = updated_scenario.actor_set.get(original_id=actor_without_contract.id)
-        assert len(cloned_actor.contracts.all()) == 1
+        cloned_actor = updated_scenario.repositories[ModelType.ACTOR.value].get(
+            actor_without_contract.id
+        )
+        cloned_actor_contracts = updated_scenario.repositories[
+            ModelType.CONTRACT.value
+        ].filter_attribute_value("owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor.id)
+        assert cloned_actor_contracts.len() == 1
 
         # check if the cloned contract's contractScope is updated to the cloned contractScope
-        cloned_contract_scope = updated_scenario.actor_set.get(original_id=contract_scope.id)
-        added_contract = cloned_actor.contracts.first()
+        cloned_contract_scope = updated_scenario.repositories[ModelType.ACTOR.value].get(
+            contract_scope.id
+        )
+
+        added_contract = cloned_actor_contracts.first()
 
         assert added_contract.contractScope == cloned_contract_scope
         assert added_contract.contractScope.original_id == contract_scope.id
@@ -292,25 +297,58 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
         # check if a contract was added
-        assert len(updated_scenario.contracts) == 2
+        assert updated_scenario.repositories[ModelType.CONTRACT.value].len() == 2
 
         # check if the cloned actor without contract now has a contract
-        cloned_actor_0 = updated_scenario.actor_set.get(original_id=actor_without_contract_0.id)
-        cloned_actor_1 = updated_scenario.actor_set.get(original_id=actor_without_contract_1.id)
-        assert len(cloned_actor_0.contracts.all()) == 1
-        assert len(cloned_actor_1.contracts.all()) == 1
+        cloned_actor_0 = updated_scenario.repositories[ModelType.ACTOR.value].get(
+            actor_without_contract_0.id
+        )
+        cloned_actor_1 = updated_scenario.repositories[ModelType.ACTOR.value].get(
+            actor_without_contract_1.id
+        )
+        assert (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
+            )
+            .len()
+            == 1
+        )
+        assert (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
+            )
+            .len()
+            == 1
+        )
 
         # check if the cloned contract's contractScope is updated to the cloned contractScope
-        added_contract_0 = cloned_actor_0.contracts.first()
-        added_contract_1 = cloned_actor_1.contracts.first()
+        added_contract_0 = (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
+            )
+            .first()
+        )
+        added_contract_1 = (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
+            )
+            .first()
+        )
 
-        cloned_contract_scope = updated_scenario.actor_set.get(original_id=contract_scope.id)
+        cloned_contract_scope = updated_scenario.repositories[ModelType.CONTRACT.value].get(
+            contract_scope.id
+        )
         assert added_contract_0.contractScope == cloned_contract_scope
         assert added_contract_1.contractScope == cloned_contract_scope
 
@@ -387,24 +425,53 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
         # check if a contract was added
-        assert len(updated_scenario.contracts) == 2
+        assert updated_scenario.repositories[ModelType.CONTRACT.value].len() == 2
 
         # check if the cloned actor without contract now has a contract
         cloned_actor_0 = updated_scenario.actor_set.get(original_id=actor_with_contract_0.id)
         cloned_actor_1 = updated_scenario.actor_set.get(original_id=actor_with_contract_1.id)
-        assert len(cloned_actor_0.contracts.all()) == 1
-        assert len(cloned_actor_1.contracts.all()) == 1
+        assert (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
+            )
+            .len()
+            == 1
+        )
+        assert (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
+            )
+            .len()
+            == 1
+        )
 
         # check if the cloned contract's contractScope is updated to the cloned contractScope
-        added_contract_0 = cloned_actor_0.contracts.first()
-        added_contract_1 = cloned_actor_1.contracts.first()
+        added_contract_0 = (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
+            )
+            .first()
+        )
+        added_contract_1 = (
+            updated_scenario.repositories[ModelType.CONTRACT.value]
+            .filter_attribute_value(
+                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
+            )
+            .first()
+        )
 
-        cloned_contract_scope = updated_scenario.actor_set.get(original_id=contract_scope.id)
+        cloned_contract_scope = updated_scenario.repositories[ModelType.CONTRACT.value].get(
+            contract_scope.id
+        )
         assert added_contract_0.contractScope == cloned_contract_scope
         assert added_contract_1.contractScope == cloned_contract_scope

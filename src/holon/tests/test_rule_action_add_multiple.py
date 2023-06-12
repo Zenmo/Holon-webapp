@@ -3,6 +3,7 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RuleMappingTestClass(TestCase):
@@ -76,16 +77,13 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_ehc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
+        ehc_assets = updated_scenario.get_repository_for_model_type(
+            "EnergyAsset", "ElectricHeatConversionAsset"
         )
-        assert n_ehc_assets == 13  # was 1, add 3 x 4 assets
+        assert ehc_assets.len() == 13  # was 1, add 3 x 4 assets

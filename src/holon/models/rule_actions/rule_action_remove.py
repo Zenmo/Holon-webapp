@@ -96,7 +96,7 @@ class RuleActionRemove(RuleAction):
         # remove remove_n items
         for filtered_object in filtered_repository.all():
             if remove_n <= 0:
-                return
+                return scenario_aggregate
 
             scenario_aggregate = scenario_aggregate.remove_object(
                 filtered_object, filtered_repository.base_model_type.__name__

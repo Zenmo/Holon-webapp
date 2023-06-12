@@ -19,6 +19,7 @@ from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 from holon.models.scenario_rule import ModelType
 from polymorphic import utils
 from polymorphic.models import PolymorphicModel
+from holon.models.util import is_scenario_object_relation_field
 
 
 class ScenarioAggregate:
@@ -69,9 +70,9 @@ class ScenarioAggregate:
             base_model_type = utils.get_base_polymorphic_model(object.__class__).__name__
 
         relation_fields = [
-            field.__dict__
+            field
             for field in object.__class__._meta.get_fields()
-            if field.is_relation and hasattr(field, "on_delete")
+            if is_scenario_object_relation_field(field)
         ]
 
         for field in relation_fields:

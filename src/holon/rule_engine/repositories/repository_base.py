@@ -147,6 +147,10 @@ class RepositoryBaseClass:
 
         return self.objects
 
+    def first(self) -> object:
+        """Return first object in the repository"""
+        return self.objects[0]
+
     def len(self) -> int:
         """Return the number of objects in the repository"""
 

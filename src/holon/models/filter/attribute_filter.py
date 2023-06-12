@@ -13,6 +13,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.filter.filter import Filter
+from holon.models.util import is_allowed_relation
 
 
 class AttributeFilter(Filter):
@@ -60,7 +61,12 @@ class AttributeFilter(Filter):
     ) -> RepositoryBaseClass:
         """Apply the attribute filter to a repository"""
 
-        return repository.filter_attribute_value(self.model_attribute, self.comparator, self.value)
+        model_attribute = self.model_attribute
+        if is_allowed_relation(model_attribute):
+            # Add id to attribute so it can be updated with an id compared to a model instance
+            model_attribute += "_id"
+
+        return repository.filter_attribute_value(model_attribute, self.comparator, self.value)
 
     def hash(self):
         return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value}]"
