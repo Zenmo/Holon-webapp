@@ -14,6 +14,7 @@ export default {
   CasusPage: dynamic(() => import("./CasusPage")),
   StorylinePage: dynamic(() => import("./StorylinePage")),
   ChallengeModePage: dynamic(() => import("./ChallengeModePage")),
+  SandboxPage: dynamic(() => import("./SandboxPage")),
   InteractiveOverviewPage: dynamic(() => import("./InteractiveOverviewPage")),
   StorylineOverviewPage: dynamic(() => import("./StorylineOverviewPage")),
   LoginPage: dynamic(() => import("./LoginPage")),

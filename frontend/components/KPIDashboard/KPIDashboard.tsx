@@ -19,7 +19,7 @@ export default function KPIDashboard({
 }: KPIDashboardProps) {
   const [level, setLevel] = useState("local");
 
-  const backgroundColor = loading ? "bg-holon-gray-300" : "bg-holon-slated-blue-900";
+  const backgroundColor = loading ? "bg-holon-gray-400" : "bg-holon-slated-blue-900";
 
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
@@ -28,7 +28,13 @@ export default function KPIDashboard({
         <Button onClick={handleClickCostBen}>Kosten en Baten</Button>
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
-        <KPIItems view="kpiStoryline" data={data} level={level} loading={loading} />
+        {!loading ? (
+          <KPIItems view="kpiStoryline" data={data} level={level} loading={loading} />
+        ) : (
+          <div className="flex flex-row justify-around items-center text-white min-h-[170px] w-full">
+            <div className="font-bold text-lg">Instellingen aan het doorrekenen...</div>
+          </div>
+        )}
       </div>
     </div>
   );
