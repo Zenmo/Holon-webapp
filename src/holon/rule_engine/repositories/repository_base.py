@@ -18,7 +18,6 @@ class RepositoryBaseClass:
     base_model_type = PolymorphicModel
 
     def __init__(self, objects: list[PolymorphicModel]):
-
         self.assert_object_ids(objects)  # TODO make property with setter?
         self.objects = objects
 
@@ -98,11 +97,14 @@ class RepositoryBaseClass:
         <RETURNS MODIFIED REPOSITORY>
         """
 
-        # Zelfde als standaard attribute filter, maar greater/lesser than moet met Enum/Textchoice volgorde werken.
-        # -1/None waardes moeten uitgesloten worden.
-        # kijk voor meer info naar `get_q()` van `DiscreteAttributeFilter`
+        objects = [
+            object
+            for object in self.objects
+            if attribute_matches_value(object, attribute_name, value, comparator)
+            and discrete_attribute_passes_none_check(object, attribute_name, comparator)
+        ]
 
-        raise NotImplementedError()
+        return self.__class__(objects)
 
     def filter_has_relation(
         self,
@@ -237,3 +239,15 @@ def attribute_matches_value(
         return attribute != value
 
     raise Exception("unreachable")
+
+
+def discrete_attribute_passes_none_check(
+    object: object, attribute_name: str, comparator: AttributeFilterComparator
+) -> bool:
+    NONE = -1
+    if comparator == AttributeFilterComparator.EQUAL.value:
+        return True
+    if comparator == AttributeFilterComparator.NOT_EQUAL.value:
+        return True
+
+    return getattr(object, attribute_name) != NONE
