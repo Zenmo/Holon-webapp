@@ -8,6 +8,7 @@ from django.db.models import Model
 from django.db import models
 from django.db.migrations.operations.models import ModelOptionOperation
 from polymorphic.managers import PolymorphicQuerySet
+from polymorphic import utils
 from django.apps import apps
 
 base_path = Path(__file__).parent.parent / "services" / "jsons"
@@ -224,3 +225,20 @@ def serialize_add_models(asset_to_add, gridconnection_to_add, contract_to_add) -
     )
 
     return asset_json, gridconnection_json, contract_json
+
+
+def is_scenario_object_relation_field(field: str) -> bool:
+    from holon.models.scenario_rule import ModelType
+
+    # Relation field list requirements:
+    # - be a relation
+    # - have a delete policy
+    # - not be a reference to polymorphic parents ( parent_link )
+    # - be part of the scenario aggregate ( no fields referencing rules )
+
+    return (
+        field.is_relation
+        and hasattr(field, "on_delete")
+        and field.parent_link == False
+        and utils.get_base_polymorphic_model(field.related_model).__name__ in ModelType.values
+    )
