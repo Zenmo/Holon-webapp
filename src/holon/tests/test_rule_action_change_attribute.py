@@ -4,6 +4,7 @@ import pytest
 from holon.models import *
 from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.scenario_rule import ModelType
 
 
 class RuleMappingTestClass(TestCase):
@@ -52,7 +53,8 @@ class RuleMappingTestClass(TestCase):
         # Asserts
 
         assert (
-            updated_scenario.repositories["GridConnection"].first().capacity_kw == 250.0
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().capacity_kw
+            == 250.0
         )  # was 750.0
 
     def test_change_attribute_set_static_value(self):
@@ -81,7 +83,8 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         assert (
-            updated_scenario.repositories["GridConnection"].first().capacity_kw == 350.0
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().capacity_kw
+            == 350.0
         )  # was 750.0
 
     def test_change_attribute_add(self):
@@ -107,7 +110,8 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         assert (
-            updated_scenario.repositories["GridConnection"].first().capacity_kw == 1000.0
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().capacity_kw
+            == 1000.0
         )  # was 750.0
 
     def test_change_attribute_subtract(self):
@@ -133,7 +137,8 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         assert (
-            updated_scenario.repositories["GridConnection"].first().capacity_kw == 500.0
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().capacity_kw
+            == 500.0
         )  # was 750.0
 
     def test_change_attribute_multiply(self):
@@ -159,7 +164,8 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         assert (
-            updated_scenario.repositories["GridConnection"].first().capacity_kw == 1500.0
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().capacity_kw
+            == 1500.0
         )  # was 750.0
 
     def test_change_attribute_divide(self):
@@ -185,7 +191,8 @@ class RuleMappingTestClass(TestCase):
 
         # Assert
         assert (
-            updated_scenario.repositories["GridConnection"].first().capacity_kw == 250.0
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().capacity_kw
+            == 250.0
         )  # was 750.0
 
     def test_change_multiple_attributes(self):
@@ -211,9 +218,12 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert updated_scenario.repositories["GridConnection"].first().capacity_kw == 1  # was 750.0
         assert (
-            updated_scenario.repositories["GridConnection"].first().insulation_label == 1
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().capacity_kw == 1
+        )  # was 750.0
+        assert (
+            updated_scenario.repositories[ModelType.GRIDCONNECTION.value].first().insulation_label
+            == 1
         )  # was 750.0
 
     def test_change_attribute_allowed_relation_set(self):
@@ -240,4 +250,6 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert updated_scenario.repositories["Actor"].first().group_id == actor_group.id
+        assert (
+            updated_scenario.repositories[ModelType.ACTOR.value].first().group_id == actor_group.id
+        )

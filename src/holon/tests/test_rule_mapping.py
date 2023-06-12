@@ -4,6 +4,7 @@ from holon.models import *
 from holon.models import rule_mapping
 from holon.models.rule_actions.rule_action_factor import RuleActionFactor
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.scenario_rule import ModelType
 
 
 class RuleMappingTestClass(TestCase):
@@ -63,7 +64,9 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        updated_gridconnection = updated_scenario.repositories["GridConnection"].first()
+        updated_gridconnection = updated_scenario.repositories[
+            ModelType.GRIDCONNECTION.value
+        ].first()
         self.assertEqual(updated_gridconnection.capacity_kw, factor.min_value)
 
     def test_rule_mapping_assets(self) -> None:
@@ -85,7 +88,7 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        updated_asset = updated_scenario.repositories["EnergyAsset"].first()
+        updated_asset = updated_scenario.repositories[ModelType.ENERGYASSET.value].first()
         self.assertEqual(updated_asset.deliveryTemp_degC, factor.min_value)
 
     def test_rule_mapping_contracts(self) -> None:
@@ -107,5 +110,5 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        updated_contract = updated_scenario.repositories["Contract"].first()
+        updated_contract = updated_scenario.repositories[ModelType.CONTRACT.value].first()
         self.assertEqual(updated_contract.annualFee_eur, factor.min_value)

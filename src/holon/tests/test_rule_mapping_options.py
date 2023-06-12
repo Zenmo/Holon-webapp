@@ -4,6 +4,7 @@ from holon.models import *
 from holon.models import rule_mapping
 from holon.models.rule_actions import RuleActionFactor
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.scenario_rule import ModelType
 
 
 class RuleMappingTestClass(TestCase):
@@ -69,7 +70,9 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        updated_gridconnection = updated_scenario.repositories["GridConnection"].first()
+        updated_gridconnection = updated_scenario.repositories[
+            ModelType.GRIDCONNECTION.value
+        ].first()
         self.assertEqual(updated_gridconnection.capacity_kw, self.factor_option_1.min_value)
         self.assertEqual(
             updated_gridconnection.tempSetpointNight_degC,
@@ -91,7 +94,9 @@ class RuleMappingTestClass(TestCase):
             scenario_aggregate, interactive_elements
         )
         # Assert
-        updated_gridconnection = updated_scenario.repositories["GridConnection"].first()
+        updated_gridconnection = updated_scenario.repositories[
+            ModelType.GRIDCONNECTION.value
+        ].first()
         self.assertEqual(updated_gridconnection.capacity_kw, self.gridconnection.capacity_kw)
         self.assertEqual(
             updated_gridconnection.tempSetpointNight_degC, self.factor_option_3.max_value
@@ -113,7 +118,9 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        updated_gridconnection = updated_scenario.repositories["GridConnection"].first()
+        updated_gridconnection = updated_scenario.repositories[
+            ModelType.GRIDCONNECTION.value
+        ].first()
         self.assertEqual(updated_gridconnection.capacity_kw, self.factor_option_1.min_value)
         self.assertEqual(
             updated_gridconnection.tempSetpointNight_degC, self.factor_option_3.max_value

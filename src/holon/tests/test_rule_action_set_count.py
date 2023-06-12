@@ -4,6 +4,7 @@ import pytest
 from holon.models import *
 from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.scenario_rule import ModelType
 
 
 class RuleMappingTestClass(TestCase):
@@ -113,9 +114,9 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        ehc_assets = updated_scenario.repositories["EnergyAsset"].filter_model_subtype(
-            ElectricHeatConversionAsset
-        )
+        ehc_assets = updated_scenario.repositories[
+            ModelType.ENERGYASSET.value
+        ].filter_model_subtype(ElectricHeatConversionAsset)
         assert ehc_assets.len() == 2  # was 3
 
     def test_rule_action_set_count_higher_than_original(self):
@@ -148,7 +149,7 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        ehc_assets = updated_scenario.repositories["EnergyAsset"].filter_model_subtype(
-            ElectricHeatConversionAsset
-        )
+        ehc_assets = updated_scenario.repositories[
+            ModelType.ENERGYASSET.value
+        ].filter_model_subtype(ElectricHeatConversionAsset)
         assert ehc_assets.len() == 4  # was 3
