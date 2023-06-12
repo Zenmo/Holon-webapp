@@ -1,7 +1,7 @@
 import unittest
 
 from holon.models import GridConnection
-from holon.rule_engine.repositories import RepositoryBaseClass
+from holon.rule_engine.repositories import GridConnectionRepository
 
 
 class RepositoryGetTestClass(unittest.TestCase):
@@ -14,7 +14,7 @@ class RepositoryGetTestClass(unittest.TestCase):
         high_grid_connection = GridConnection()
         high_grid_connection.capacity_kw = 4
         high_grid_connection.id = 52
-        self.repository = RepositoryBaseClass([low_grid_connection, high_grid_connection])
+        self.repository = GridConnectionRepository([low_grid_connection, high_grid_connection])
 
     def test_get(self):
         assert self.repository.get(33).capacity_kw == 2

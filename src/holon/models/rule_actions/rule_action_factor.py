@@ -76,8 +76,9 @@ class RuleActionFactor(RuleAction):
         mapped_value = (self.max_value - self.min_value) * (value_flt / 100.0) + self.min_value
 
         for filtered_object in filtered_repository.all():
-            scenario_aggregate.repositories[
-                filtered_repository.base_model_type.__name__
-            ].update_attribute(filtered_object, self.model_attribute, mapped_value)
+            setattr(filtered_object, self.model_attribute, mapped_value)
+            scenario_aggregate.repositories[filtered_repository.base_model_type.__name__].update(
+                filtered_object
+            )
 
         return scenario_aggregate

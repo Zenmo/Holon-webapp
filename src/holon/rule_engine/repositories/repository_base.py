@@ -99,6 +99,7 @@ class RepositoryBaseClass:
     ) -> RepositoryBaseClass:
         """Return a repository with a subset of it's objects, depending on an index range"""
 
+        # get a subset of the objects in this repository
         if (not start is None) or (not end is None):
             objects = self.objects[start:end]
         elif not indices is None:
@@ -106,6 +107,7 @@ class RepositoryBaseClass:
         else:
             raise ValueError("Provide at least a `start`, `end` or `indices` parameter")
 
+        # return a new repository initialized with the subset of objects
         return self.__class__(objects)
 
     def get(self, id: int) -> PolymorphicModel:
@@ -126,17 +128,27 @@ class RepositoryBaseClass:
 
         return len(self.objects)
 
-    def update_attribute(self, id: int, attribute_name: str, value):
-        """Select an object by id in the repository and set it's attribute attribute_name to value"""
+    def update(self, updated_object: PolymorphicModel):
+        """
+        Select an object by id in the repository and set it's attribute attribute_name to value.
+        Raises an IndexError if the id was not found.
+        """
 
-        object_index = next((i for i, object in enumerate(self.objects) if object.id == id), -1)
+        # check if object base type is correct
+        self.assert_correct_object_type(updated_object)
+
+        # find object in list and overwrite
+        update_id = updated_object.id
+        object_index = next(
+            (i for i, object in enumerate(self.objects) if object.id == update_id), -1
+        )
 
         if object_index < 0:
-            raise IndexError(f"{self.base_model_type.__name__} object with id {id} not found")
+            self.raise_id_not_found_error(update_id)
 
-        setattr(self.objects[object_index], attribute_name, value)
+        self.objects[object_index] = updated_object
 
-    def add(self, object: PolymorphicModel) -> PolymorphicModel:
+    def add(self, new_object: PolymorphicModel) -> PolymorphicModel:
         """
         Add an object to the repository.
         The object is deep copied and gets a new id.
@@ -144,22 +156,16 @@ class RepositoryBaseClass:
         """
 
         # check if object base type is correct
-        if (
-            not self.base_model_type.__name__
-            == utils.get_base_polymorphic_model(object.__class__).__name__
-        ):
-            raise ValueError(
-                f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {utils.get_base_polymorphic_model(object.__class__).__name__}"
-            )
+        self.assert_correct_object_type(new_object)
 
         # copy object and set new id
-        cloned_object = deepcopy(object)
-        cloned_object.id = next(self.id_counter)
+        cloned_new_object = deepcopy(new_object)
+        cloned_new_object.id = next(self.id_counter)
 
         # add new object to list and return new object
-        self.objects.append(cloned_object)
+        self.objects.append(cloned_new_object)
 
-        return cloned_object
+        return cloned_new_object
 
     def id_counter_generator(self, start_id: int) -> list[int]:
         """Generator to keep track of new ids"""
@@ -173,6 +179,17 @@ class RepositoryBaseClass:
         """Remove an item from the repository"""
 
         self.objects.remove(object)
+
+    def assert_correct_object_type(self, object: PolymorphicModel):
+        """Raises a ValueError if the base model type of object is different from this repository's base model type"""
+
+        if (
+            not self.base_model_type.__name__
+            == utils.get_base_polymorphic_model(object.__class__).__name__
+        ):
+            raise ValueError(
+                f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {utils.get_base_polymorphic_model(object.__class__).__name__}"
+            )
 
     def raise_id_not_found_error(self, id: int):
         """Method that raises an IndexError about an index not being found"""

@@ -134,8 +134,9 @@ class RuleActionChangeAttribute(RuleAction):
                 cast_new_value = new_value
 
             # update scenario aggregate
-            scenario_aggregate.repositories[
-                filtered_repository.base_model_type.__name__
-            ].update_attribute(filtered_object, model_attribute, cast_new_value)
+            setattr(filtered_object, model_attribute, cast_new_value)
+            scenario_aggregate.repositories[filtered_repository.base_model_type.__name__].update(
+                filtered_object
+            )
 
         return scenario_aggregate
