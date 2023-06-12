@@ -9,6 +9,7 @@ from polymorphic.models import PolymorphicModel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.scenario import Scenario
+from copy import deepcopy
 
 
 class RepositoryBaseClass:
@@ -18,6 +19,8 @@ class RepositoryBaseClass:
 
     def __init__(self, objects: list[PolymorphicModel]):
         self.objects = objects
+        # start an id counter at an arbitrary high number
+        self.id_counter = self.id_counter_generator(start_id=1000000)
 
     @classmethod
     def from_scenario(cls, scenario: Scenario):
@@ -133,16 +136,38 @@ class RepositoryBaseClass:
 
         setattr(self.objects[object_index], attribute_name, value)
 
-    def add(self, object: PolymorphicModel):
-        """Add an object to the repository"""
+    def add(self, object: PolymorphicModel) -> PolymorphicModel:
+        """
+        Add an object to the repository.
+        The object is deep copied and gets a new id.
+        Added object is returned.
+        """
 
         # check if object base type is correct
-        if not self.base_model_type.__name__ == utils.get_base_polymorphic_model(object).__name__:
+        if (
+            not self.base_model_type.__name__
+            == utils.get_base_polymorphic_model(object.__class__).__name__
+        ):
             raise ValueError(
-                f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {utils.get_base_polymorphic_model(object).__name__}"
+                f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {utils.get_base_polymorphic_model(object.__class__).__name__}"
             )
 
-        self.objects.append(object)
+        # copy object and set new id
+        cloned_object = deepcopy(object)
+        cloned_object.id = next(self.id_counter)
+
+        # add new object to list and return new object
+        self.objects.append(cloned_object)
+
+        return cloned_object
+
+    def id_counter_generator(self, start_id: int) -> list[int]:
+        """Generator to keep track of new ids"""
+
+        new_id = start_id
+        while True:
+            yield new_id
+            new_id += 1
 
     def remove(self, object: PolymorphicModel):
         """Remove an item from the repository"""
