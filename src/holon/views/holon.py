@@ -93,7 +93,7 @@ class HolonV2Service(generics.CreateAPIView):
                     "inter_upscaling_outcomes": None,
                 }
                 for name, outcome in ETMConnect.connect_from_scenario(
-                    original_scenario, scenario, cc.outputs
+                    original_scenario, scenario_aggregate, cc.outputs
                 ):
                     if name == "cost":
                         etm_outcomes["cost_outcome"] = outcome

@@ -15,6 +15,7 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from polymorphic.models import PolymorphicModel
 from holon.models.util import is_allowed_relation
+import sentry_sdk
 
 from holon.models.interactive_element import (
     InteractiveElementOptions,
@@ -445,13 +446,52 @@ class DatamodelQueryRule(Rule):
                     f"{self.model_subtype if self.model_subtype else self.model_type} has no attribute {self.attribute_to_sum}"
                 )
 
-    def get_filters_object_count(self, scenario: Scenario) -> int:
+    def get_filters_object_count(self, scenario_aggregate: ScenarioAggregate) -> int:
+        """Get the number of objects in the combined filter resutls"""
+
+        filtered_repository = self.get_filtered_repository(scenario_aggregate)
+        return filtered_repository.len()
+
+    def get_filters_attribute_sum(self, scenario_aggregate: ScenarioAggregate) -> float:
+        """Return the sum of a specific attribute of all objects in a queryset"""
+
+        filtered_repository = self.get_filtered_repository(scenario_aggregate)
+
+        attr_sum = 0.0
+        for filtered_object in filtered_repository.all():
+            try:
+                value = float(getattr(filtered_object, self.attribute_to_sum))
+                attr_sum += value
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                print(
+                    f"Something went wrong while summing model attributes, let's act as if nothing happend and keep going ({e})"
+                )
+
+        return attr_sum
+
+    def get_filter_aggregation_result(
+        self, scenario_aggregate: ScenarioAggregate
+    ) -> Union[int, float]:
+        """Get the filter aggregation result based on the datamodel query rule's conversion type"""
+
+        if self.self_conversion == SelfConversionType.COUNT.value:
+            return self.get_filters_object_count(scenario_aggregate)
+
+        elif self.self_conversion == SelfConversionType.SUM.value:
+            return self.get_filters_attribute_sum(scenario_aggregate)
+
+        raise ValidationError("No valid conversion type set")
+
+    # TODO remove after rule engine update
+    def get_filters_object_count_old(self, scenario: Scenario) -> int:
         """Get the number of objects in the combined filter resutls"""
 
         filtered_queryset = self.get_filtered_queryset(scenario)
         return filtered_queryset.count()
 
-    def get_filters_attribute_sum(self, scenario: Scenario) -> float:
+    # TODO remove after rule engine update
+    def get_filters_attribute_sum_old(self, scenario: Scenario) -> float:
         """Return the sum of a specific attribute of all objects in a queryset"""
 
         filtered_queryset = self.get_filtered_queryset(scenario)
@@ -468,13 +508,14 @@ class DatamodelQueryRule(Rule):
 
         return attr_sum
 
-    def get_filter_aggregation_result(self, scenario: Scenario) -> Union[int, float]:
+    # TODO remove after rule engine update
+    def get_filter_aggregation_result_old(self, scenario: Scenario) -> Union[int, float]:
         """Get the filter aggregation result based on the datamodel query rule's conversion type"""
 
         if self.self_conversion == SelfConversionType.COUNT.value:
-            return self.get_filters_object_count(scenario)
+            return self.get_filters_object_count_old(scenario)
 
         elif self.self_conversion == SelfConversionType.SUM.value:
-            return self.get_filters_attribute_sum(scenario)
+            return self.get_filters_attribute_sum_old(scenario)
 
         raise ValidationError("No valid conversion type set")

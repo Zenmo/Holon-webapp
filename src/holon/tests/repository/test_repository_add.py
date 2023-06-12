@@ -16,7 +16,6 @@ class RepositoryGetTestClass(unittest.TestCase):
         self.repository = GridConnectionRepository([low_grid_connection, high_grid_connection])
 
     def test_add(self):
-
         assert self.repository.len() == 2
 
         # add new item
@@ -29,7 +28,6 @@ class RepositoryGetTestClass(unittest.TestCase):
         assert self.repository.objects[2].capacity_kw == 3
 
     def test_add_wrong_object_type(self):
-
         energy_asset = EnergyAsset(id=1)
 
         # non-existing index
@@ -40,7 +38,6 @@ class RepositoryGetTestClass(unittest.TestCase):
         )
 
     def test_add_mutable(self):
-
         assert self.repository.len() == 2
 
         # add new item

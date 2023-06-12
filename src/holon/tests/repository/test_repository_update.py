@@ -19,7 +19,6 @@ class RepositoryGetTestClass(unittest.TestCase):
         self.repository = GridConnectionRepository([low_grid_connection, high_grid_connection])
 
     def test_update(self):
-
         object_to_update = deepcopy(self.repository.objects[0])
         object_to_update.capacity_kw = 3
 
@@ -28,7 +27,6 @@ class RepositoryGetTestClass(unittest.TestCase):
         assert self.repository.objects[0].capacity_kw == 3
 
     def test_update_wrong_object_type(self):
-
         wrong_object = EnergyAsset()
         wrong_object.id = 33
 
@@ -40,7 +38,6 @@ class RepositoryGetTestClass(unittest.TestCase):
         )
 
     def test_update_wrong_id(self):
-
         non_existent_object = GridConnection()
         non_existent_object.capacity_kw = 3
         non_existent_object.id = 12

@@ -18,7 +18,6 @@ class RepositoryBaseClass:
     base_model_type = PolymorphicModel
 
     def __init__(self, objects: list[PolymorphicModel]):
-
         self.assert_object_ids(objects)  # TODO make property with setter?
         self.objects = objects
 
