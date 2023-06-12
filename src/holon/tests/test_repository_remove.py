@@ -1,7 +1,9 @@
 import unittest
 
-from holon.models import GridConnection
+from holon.models import GridConnection, EnergyAsset
 from holon.rule_engine.repositories import GridConnectionRepository
+
+from copy import deepcopy
 
 
 class RepositoryGetTestClass(unittest.TestCase):
@@ -16,14 +18,22 @@ class RepositoryGetTestClass(unittest.TestCase):
         high_grid_connection.id = 52
         self.repository = GridConnectionRepository([low_grid_connection, high_grid_connection])
 
-    def test_get(self):
-        assert self.repository.get(33).capacity_kw == 2
-        assert self.repository.get(52).capacity_kw == 4
+    def test_remove(self):
 
-    def test_get_wrong_id(self):
+        id_to_remove_0 = self.repository.objects[0].id
+        id_to_remove_1 = self.repository.objects[1].id
+
+        assert self.repository.len() == 2
+        self.repository.remove(id_to_remove_0)
+        assert self.repository.len() == 1
+        self.repository.remove(id_to_remove_1)
+        assert self.repository.len() == 0
+
+    def test_remove_wrong_id(self):
+
         # non-existing index
         self.assertRaises(
             ValueError,
-            self.repository.get,
-            10,
+            self.repository.remove,
+            12,
         )

@@ -27,7 +27,7 @@ class RepositoryGetTestClass(unittest.TestCase):
         self.repository.update(object_to_update)
         assert self.repository.objects[0].capacity_kw == 3
 
-    def test_update_wrong_object(self):
+    def test_update_wrong_object_type(self):
 
         wrong_object = EnergyAsset()
         wrong_object.id = 33
@@ -47,7 +47,7 @@ class RepositoryGetTestClass(unittest.TestCase):
 
         # non-existing index
         self.assertRaises(
-            IndexError,
+            ValueError,
             self.repository.update,
             non_existent_object,
         )

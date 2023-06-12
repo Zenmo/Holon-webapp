@@ -26,6 +26,16 @@ class RepositoryBaseClass:
     def from_scenario(cls, scenario: Scenario):
         return cls(cls.base_model_type.objects.filter(payload=scenario).get_real_instances())
 
+    def get_list_index_for_object_id(self, object_id: int) -> int:
+        """Get the index in the objects list for a certain id. Raises ValueError if object is not found"""
+
+        try:
+            return next(i for i, object in enumerate(self.objects) if object.id == object_id)
+        except:
+            raise ValueError(
+                f"{self.base_model_type.__name__} object with id {object_id} not found"
+            )
+
     def clone(self) -> RepositoryBaseClass:
         """Clone the object"""
         return self.__class__(self.objects[:])
@@ -62,7 +72,6 @@ class RepositoryBaseClass:
 
         return self.__class__(objects)
 
-    # TODO ERIK
     def filter_enum_attribute_value(
         self, attribute_name: str, comparator: AttributeFilterComparator, value: str
     ) -> RepositoryBaseClass:
@@ -77,7 +86,6 @@ class RepositoryBaseClass:
 
         raise NotImplementedError()
 
-    # TODO ERIK
     def filter_has_relation(
         self,
         relation_field: str,
@@ -110,13 +118,11 @@ class RepositoryBaseClass:
         # return a new repository initialized with the subset of objects
         return self.__class__(objects)
 
-    def get(self, id: int) -> PolymorphicModel:
+    def get(self, object_id: int) -> PolymorphicModel:
         """Get an item in the objects list by id. Raises IndexError if object was not found"""
 
-        try:
-            return next(object for object in self.objects if object.id == id)
-        except:
-            self.raise_id_not_found_error(id)
+        list_index = self.get_list_index_for_object_id(object_id)
+        return self.objects[list_index]
 
     def all(self) -> list[PolymorphicModel]:
         """Return all objects in the repository"""
@@ -139,14 +145,9 @@ class RepositoryBaseClass:
 
         # find object in list and overwrite
         update_id = updated_object.id
-        object_index = next(
-            (i for i, object in enumerate(self.objects) if object.id == update_id), -1
-        )
+        list_index = self.get_list_index_for_object_id(update_id)
 
-        if object_index < 0:
-            self.raise_id_not_found_error(update_id)
-
-        self.objects[object_index] = updated_object
+        self.objects[list_index] = updated_object
 
     def add(self, new_object: PolymorphicModel) -> PolymorphicModel:
         """
@@ -175,10 +176,11 @@ class RepositoryBaseClass:
             yield new_id
             new_id += 1
 
-    def remove(self, object: PolymorphicModel):
+    def remove(self, object_id: int):
         """Remove an item from the repository"""
 
-        self.objects.remove(object)
+        list_index = self.get_list_index_for_object_id(object_id)
+        self.objects.pop(list_index)
 
     def assert_correct_object_type(self, object: PolymorphicModel):
         """Raises a ValueError if the base model type of object is different from this repository's base model type"""
@@ -190,10 +192,6 @@ class RepositoryBaseClass:
             raise ValueError(
                 f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {utils.get_base_polymorphic_model(object.__class__).__name__}"
             )
-
-    def raise_id_not_found_error(self, id: int):
-        """Method that raises an IndexError about an index not being found"""
-        raise IndexError(f"{self.base_model_type.__name__} object with id {id} not found")
 
 
 def attribute_matches_value(

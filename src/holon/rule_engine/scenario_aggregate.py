@@ -110,7 +110,7 @@ class ScenarioAggregate:
                         f"No functionality implemented for on_delete {field.on_delete}"
                     )
 
-        self.repositories[base_model_type].remove(object)
+        self.repositories[base_model_type].remove(object.id)
 
         return self
 

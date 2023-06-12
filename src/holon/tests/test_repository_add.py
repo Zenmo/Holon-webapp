@@ -28,7 +28,7 @@ class RepositoryGetTestClass(unittest.TestCase):
         assert self.repository.len() == 3
         assert self.repository.objects[2].capacity_kw == 3
 
-    def test_add_wrong_type(self):
+    def test_add_wrong_object_type(self):
 
         energy_asset = EnergyAsset()
 
@@ -39,7 +39,7 @@ class RepositoryGetTestClass(unittest.TestCase):
             energy_asset,
         )
 
-    def test_add_deepcopy(self):
+    def test_add_mutable(self):
 
         assert self.repository.len() == 2
 
