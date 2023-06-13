@@ -101,7 +101,7 @@ class ScenarioAggregate:
             for related_object in related_objects:
                 if field.on_delete == models.CASCADE:
                     self.remove_object(
-                        self, related_object, related_model_repository.base_model_type.__name__
+                        related_object, related_model_repository.base_model_type.__name__
                     )
                 elif field.on_delete == models.SET_NULL:
                     setattr(related_object, relation_field_attribute, None)
