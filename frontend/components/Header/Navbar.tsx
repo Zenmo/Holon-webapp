@@ -6,9 +6,6 @@ export default function Navbar({
   items,
 }: {
   items: NavItem[];
-  loggedIn: boolean;
-  nameUser: string;
-  mutateUser: () => void;
 }) {
   const router = useRouter();
 
