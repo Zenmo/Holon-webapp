@@ -1,7 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  LinkedinShareButton
+} from 'next-share';
 import { Fragment, useState } from "react";
-
 import Button from "../../../Button/Button";
 
 type ScenarioModal = {
@@ -12,6 +14,7 @@ type ScenarioModal = {
   scenarioUrl: string;
   scenarioTitle: string;
   scenarioDescription: string;
+  scenarioDiffElements: {}; 
 };
 
 export default function ScenarioModal({
@@ -22,6 +25,7 @@ export default function ScenarioModal({
   scenarioUrl,
   scenarioTitle,
   scenarioDescription,
+  scenarioDiffElements
 }: ScenarioModal) {
   const [scenarioDetails, setScenarioDetails] = useState({
     scenarioTitle: "",
@@ -29,7 +33,7 @@ export default function ScenarioModal({
   });
   const [copied, setCopied] = useState<boolean>(false);
   const textMessageLink = encodeURIComponent(
-    `Ik heb een scenario aangemaakt op www.holontool.nl. Bekijk het scenario via deze link: ${scenarioUrl}`
+    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: https://shorturl.at/aem27`
   );
 
   function closeModal() {
@@ -44,6 +48,24 @@ export default function ScenarioModal({
   function onSaveScenario() {
     handleSaveScenario(scenarioDetails.scenarioTitle, scenarioDetails.scenarioDescription);
   }
+
+  function listDifferentElements(values) {
+   const elements = []; 
+    for (const key in values) {
+      console.log(key); 
+      const value = values[key];
+        for (const subKey in value) {
+          console.log(subKey); 
+          if(value[subKey].difference === "missing") {
+           elements.push(<p>{`In section ${key} is interactief element ${subKey} verwijderd van de pagina.`}</p>)
+          }  else if(value[subKey].difference === "added") {
+            elements.push(<p>{`In section ${key} is interactief element ${subKey} toegevoegd aan de pagina.`}</p>)
+          }
+    }
+  }
+  return elements; 
+}
+
 
   const ScenarioType = {
     saveScenario: {
@@ -129,21 +151,19 @@ export default function ScenarioModal({
                     <EnvelopeIcon className="w-4 h-4 mr-2"></EnvelopeIcon>
                     E-mail
                   </a>
-                  <a
-                    href={`https://linkedin.com/shareArticle?text=${textMessageLink}`}
-                    className="mr-2 buttonLight"
-                    rel="noopener noreferrer"
-                    target="_blank">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/imgs/linkedin.png"
-                      alt="logo LinkedIn"
-                      width={20}
-                      height={20}
-                      className="mr-2"
-                    />
-                    LinkedIn
-                  </a>
+                  {/* Link werkt nu niet, maar wel met bestaande site met parameters*/}
+              
+                  <LinkedinShareButton className="buttonLight mr-2" blankTarget={true} url={`${scenarioUrl}`}>
+                    <span className="buttonLight mr-2">   {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/imgs/linkedin.png"
+                        alt="logo LinkedIn"
+                        width={20}
+                        height={20}
+                        className="mr-2"
+                      />LinkedIn</span>
+                  </LinkedinShareButton>
+
                   <a
                     href={`https://twitter.com/intent/tweet?text=${textMessageLink}`}
                     className="buttonLight"
@@ -172,7 +192,7 @@ export default function ScenarioModal({
       ),
     },
     openScenario: {
-      title: `Open scenario ${scenarioTitle}`,
+      title: `Open scenario: ${scenarioTitle}`,
       content: (
         <>
           <div>
@@ -180,13 +200,20 @@ export default function ScenarioModal({
               <p className="text-left">{scenarioDescription}</p>
             </div>
             {/*als er verschillen zijn tussen int elm -> hier disclaimer laten zien */}
-            <div className="mt-2">
+            {Object.keys(scenarioDiffElements).length !== 0 && (
+              <div className="mt-2">
               <p className="p-4 bg-holon-gray-100 text-holon-blue-900 text-left text-sm">
                 <QuestionMarkCircleIcon className="w-4 h-4" />
                 De interactieve elementen in dit scenario zijn anders dan de opgeslagen elementen:
-                <ul></ul>
+                <ul>
+                  {listDifferentElements(scenarioDiffElements).map((element, index) => (
+                    <li key={index}>{element}</li>
+                  ))} 
+                 </ul>
               </p>
             </div>
+            )}
+            
             <div className="flex flex-row justify-center mt-2">
               <Button variant="dark" onClick={closeModal}>
                 Open scenario
@@ -228,7 +255,7 @@ export default function ScenarioModal({
                   <div className="flex flex-row justify-between">
                     <Dialog.Title
                       as="h2"
-                      className="leading-6 text-2xl text-holon-blue-900 font-bold">
+                      className="leading-6 text-2xl text-holon-blue-900 font-bold text-left">
                       {ScenarioType[type].title}
                     </Dialog.Title>
                     <button type="button" className="text-gray-800" onClick={closeModal}>

@@ -42,8 +42,10 @@ const ContentBlocks = ({
   const [savedValues, setSavedValues] = useState({});
   const [checkedSavedValues, setCheckedSavedValues] = useState(false);
   const [openingSection, setOpeningSection] = useState<string>("");
-  const [scenarioDiffElements, setScenarioDiffElements] = useState({});
+  
   const { asPath } = useRouter();
+  let scenarioDiffElements = {}; 
+  let sectionCount = 0; 
 
   useEffect(() => {
     checkIfSavedScenario();
@@ -113,7 +115,9 @@ const ContentBlocks = ({
     //get baseUrl
     const origin =
       typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
-    const baseURL = `${origin}${asPath}`;
+
+    const pathWithoutParams = asPath.split('?')[0]; 
+    const baseURL = `${origin}${pathWithoutParams}`;
     //get params
     const params = new URLSearchParams();
     const data = currentPageValues;
@@ -170,7 +174,8 @@ const ContentBlocks = ({
   }
 
   function addSavedValues(values: SavedElements, content: Content) {
-    const updatedContent = { ...content };
+    //add saved values to content or scenarioDiffElements
+    const updatedContent = { ...content }; 
     for (const key in values) {
       if (key === "title") {
         updatedContent.value.scenarioTitle = values[key];
@@ -180,24 +185,54 @@ const ContentBlocks = ({
         updatedContent.value.openingSection = true;
       } else if (key === content.id) {
         const value = values[key];
+        
         for (const subKey in value) {
+
           const foundElement = updatedContent.value.content.find(element => {
             return element.type === "interactive_input" && element.value.id === Number(subKey);
           });
-          if (foundElement) {
+         if (foundElement) {
             const subValue = value[subKey];
             foundElement.value.savedValue = subValue;
-          } else {
-            setScenarioDiffElements({
-              ...scenarioDiffElements,
-              key: {
-                subKey: value,
-              },
-            });
+          }
+          else {
+            scenarioDiffElements[content.id] = {
+              ...(scenarioDiffElements[content.id] || {}),
+      
+                [subKey]: {
+                  value: value[subKey],
+                  difference: "missing",
+                }
+              
+            }
           }
         }
       }
     }
+
+     // Check for elements in content that are not in values
+     let valuesIds: string[]; 
+    values[content.id] ? valuesIds = Object.keys(values[content.id]) : valuesIds = [];
+    console.log(valuesIds); 
+  
+    for (const element of updatedContent.value.content) {
+    if (
+      element.type === "interactive_input" &&
+      element.value.visible === true &&
+      !valuesIds.includes(element.value.id.toString())
+    ) {
+      const subKey = element.value.id.toString();
+   
+      scenarioDiffElements[content.id] = {
+        ...(scenarioDiffElements[content.id] || {}),
+        [subKey]: {
+          value: element.value,
+          difference: "added",
+        },
+      };
+    }
+  }
+ 
     return updatedContent;
   }
 
@@ -224,7 +259,9 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
+            sectionCount++; 
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
+            //if there are any savedValues in the parameters, these are added to the section
             const savedValuesContent =
               Object.keys(savedValues).length !== 0
                 ? addSavedValues(savedValues, newContent)
@@ -234,12 +271,14 @@ const ContentBlocks = ({
               checkedSavedValues && (
                 <SectionBlock
                   key={`section ${contentItem.id}`}
+                  pageSectionCount={sectionCount}
                   data={savedValuesContent}
                   pagetype={pagetype}
                   feedbackmodals={feedbackmodals}
                   graphcolors={graphcolors ?? []}
                   savePageValues={saveSectionValues}
                   saveScenario={saveScenario}
+                  scenarioDiffElements={scenarioDiffElements}
                 />
               )
             );

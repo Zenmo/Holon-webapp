@@ -35,6 +35,7 @@ type Props = {
   graphcolors?: Graphcolor[];
   savePageValues: SetStateAction<SavedElements>;
   saveScenario: (title: string, description: string, sectionId: string) => string;
+  scenarioDiffElements: {}; 
 };
 
 const initialData = {
@@ -64,6 +65,7 @@ export default function SectionBlock({
   graphcolors,
   savePageValues,
   saveScenario,
+  scenarioDiffElements
 }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
@@ -199,6 +201,7 @@ export default function SectionBlock({
       if (sectionItem.type === "interactive_input" && sectionItem.value.visible) {
         let key = `${sectionItem.value.id}`;
         let value = sectionItem.currentValue;
+        let name = sectionItem.value.name; 
 
         savedElements[data.id] = { ...savedElements[data.id], [key]: value };
       }
@@ -232,6 +235,7 @@ export default function SectionBlock({
           scenarioUrl={savedScenarioURL}
           scenarioTitle={data.value.scenarioTitle}
           scenarioDescription={data.value.scenarioDescription}
+          scenarioDiffElements={scenarioDiffElements}
         />
       )}
 
