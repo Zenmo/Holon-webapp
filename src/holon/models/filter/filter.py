@@ -40,9 +40,6 @@ class Filter(PolymorphicModel):
     class Meta:
         abstract = True
 
-    def get_q(self) -> Q:
-        pass
-
     def filter_repository(
         self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
     ) -> RepositoryBaseClass:

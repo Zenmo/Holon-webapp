@@ -127,68 +127,6 @@ class SecondOrderRelationAttributeFilter(Filter):
 
         return [subclass.__name__ for subclass in all_subclasses(second_related_model)]
 
-    def get_q(self) -> Q:
-        second_order_relation_field_q = Q()
-        relation_field_subtype = Q()
-        second_order_relation_field_subtype = Q()
-
-        if self.comparator == AttributeFilterComparator.EQUAL.value:
-            second_order_relation_field_q = Q(
-                **{
-                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}": self.value
-                }
-            )
-        elif self.comparator == AttributeFilterComparator.LESS_THAN.value:
-            second_order_relation_field_q = Q(
-                **{
-                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}__lt": self.value
-                }
-            )
-        elif self.comparator == AttributeFilterComparator.GREATER_THAN.value:
-            second_order_relation_field_q = Q(
-                **{
-                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}__gt": self.value
-                }
-            )
-        elif self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
-            second_order_relation_field_q = ~Q(
-                **{
-                    f"{self.relation_field}__{self.second_order_relation_field}__{self.model_attribute}": self.value
-                }
-            )
-
-        if self.relation_field_subtype:
-            relation_subtype = apps.get_model("holon", self.relation_field_subtype)
-            relation_field_subtype = Q(
-                **{
-                    f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
-                        relation_subtype
-                    )
-                }
-            )
-
-        if self.second_order_relation_field_subtype:
-            relation_subtype = apps.get_model("holon", self.second_order_relation_field_subtype)
-            second_order_relation_field_subtype = Q(
-                **{
-                    f"{self.relation_field}__{self.second_order_relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
-                        relation_subtype
-                    )
-                }
-            )
-
-        if self.invert_filter:
-            return ~(
-                relation_field_subtype
-                & second_order_relation_field_q
-                & second_order_relation_field_subtype
-            )
-        return (
-            relation_field_subtype
-            & second_order_relation_field_q
-            & second_order_relation_field_subtype
-        )
-
     def filter_repository(
         self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
     ) -> RepositoryBaseClass:

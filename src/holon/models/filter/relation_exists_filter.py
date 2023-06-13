@@ -59,30 +59,6 @@ class RelationExistsFilter(Filter):
     def hash(self):
         return f"[F{self.id},{self.model_attribute},{self.comparator},{self.value},{self.relation_field},{self.relation_field_subtype},{self.invert_filter}]"
 
-    def get_q(self) -> Q:
-        if self.invert_filter:
-            if self.relation_field_subtype:
-                return ~Q(
-                    **{
-                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
-                            apps.get_model("holon", self.relation_field_subtype)
-                        )
-                    }
-                )
-            else:
-                return Q(**{f"{self.relation_field}__isnull": True})
-        else:
-            if self.relation_field_subtype:
-                return Q(
-                    **{
-                        f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
-                            apps.get_model("holon", self.relation_field_subtype)
-                        )
-                    }
-                )
-            else:
-                return Q(**{f"{self.relation_field}__isnull": False})
-
     def filter_repository(
         self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
     ) -> RepositoryBaseClass:
