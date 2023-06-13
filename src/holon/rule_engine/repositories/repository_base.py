@@ -241,7 +241,7 @@ def attribute_matches_value(
 def discrete_attribute_passes_none_check(
     object: object, attribute_name: str, comparator: AttributeFilterComparator
 ) -> bool:
-    """If comparator is larger than or smaller than, check if the attribute is not the default enum"""
+    """Check if object with discrete attribute should be ignored in the comparison based on NONE value usage"""
 
     NONE_VALUE = -1
     if comparator == AttributeFilterComparator.EQUAL.value:
