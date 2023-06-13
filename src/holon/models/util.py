@@ -1,7 +1,7 @@
 import copy
 import json
 from pathlib import Path
-from typing import TypeVar
+from typing import TypeVar, Union
 
 from django.db import models
 from django.db.models import Model
@@ -227,7 +227,7 @@ def serialize_add_models(asset_to_add, gridconnection_to_add, contract_to_add) -
     return asset_json, gridconnection_json, contract_json
 
 
-def is_scenario_object_relation_field(field: str) -> bool:
+def is_scenario_object_relation_field(field: Union[models.Field, models.ForeignObjectRel]) -> bool:
     from holon.models.scenario_rule import ModelType
 
     # Relation field list requirements:
