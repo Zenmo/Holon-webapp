@@ -228,13 +228,16 @@ def serialize_add_models(asset_to_add, gridconnection_to_add, contract_to_add) -
 
 
 def is_scenario_object_relation_field(field: Union[models.Field, models.ForeignObjectRel]) -> bool:
-    from holon.models.scenario_rule import ModelType
+    """
+    Test if a field is a relation field related to the models that are connected to a Scenario.
 
-    # Relation field list requirements:
-    # - be a relation
-    # - have a delete policy
-    # - not be a reference to polymorphic parents ( parent_link )
-    # - be part of the scenario aggregate ( no fields referencing rules )
+    Relation field list requirements:
+     - be a relation
+     - have a delete policy
+     - not be a reference to polymorphic parents ( parent_link )
+     - be part of the scenario aggregate ( no fields referencing rules )
+    """
+    from holon.models.scenario_rule import ModelType
 
     return (
         field.is_relation
