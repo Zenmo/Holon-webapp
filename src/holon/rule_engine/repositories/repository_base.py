@@ -10,6 +10,7 @@ from polymorphic.models import PolymorphicModel
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.scenario import Scenario
 from copy import deepcopy
+from django.db.models.fields.related import ManyToOneRel
 
 
 class RepositoryBaseClass:
@@ -111,13 +112,36 @@ class RepositoryBaseClass:
     ) -> RepositoryBaseClass:
         """
         Filter the repository on items that have a relation that exists in the relation_repository. Possibility to invert the filter.
-        <RETURNS MODIFIED REPOSITORY>
         """
+        relation_type = self.base_model_type()._meta.get_field(relation_field)
 
-        # TODO
-        # - filter deze repository op welke items' relation field een item refereren die in de gefilterde relation_repository zit
+        if isinstance(relation_type, ManyToOneRel):
+            # if the relation field refers to a child, we need to find the field name of the child's foreign key field
+            reverse_relation_field = relation_type.field.name + "_id"
 
-        raise NotImplementedError()
+            referred_object_ids = [
+                getattr(relation_object, reverse_relation_field)
+                for relation_object in relation_repository.all()
+            ]
+
+            selection_mask = [object.id in referred_object_ids for object in self.objects]
+
+        else:
+            relation_ids = relation_repository.ids()
+            selection_mask = [
+                getattr(object, f"{relation_field}_id") in relation_ids for object in self.objects
+            ]
+
+        # possibly invert the selection mask
+        if invert:
+            selection_mask = [not x for x in selection_mask]
+
+        # select objects based on the mask
+        objects = [
+            object for is_selected, object in zip(selection_mask, self.objects) if is_selected
+        ]
+
+        return self.__class__(objects)
 
     def get_subset_range(
         self, start: int = None, end: int = None, indices: list[int] = None
@@ -145,6 +169,11 @@ class RepositoryBaseClass:
         """Return all objects in the repository"""
 
         return self.objects
+
+    def ids(self) -> list[int]:
+        """Returns a list of object ids"""
+
+        return [object.id for object in self.objects]
 
     def first(self) -> object:
         """Return first object in the repository"""
@@ -192,7 +221,7 @@ class RepositoryBaseClass:
     def id_counter_generator(self, objects: list[PolymorphicModel]) -> list[int]:
         """Generator to keep track of new ids"""
 
-        max_id = max([object.id for object in objects])
+        max_id = max([object.id for object in objects], default=0)
         new_id = max_id + 1
 
         while True:

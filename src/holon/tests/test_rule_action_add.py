@@ -235,7 +235,7 @@ class RuleMappingTestClass(TestCase):
         )
         cloned_actor_contracts = updated_scenario.repositories[
             ModelType.CONTRACT.value
-        ].filter_attribute_value("owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor.id)
+        ].filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor.id)
         assert cloned_actor_contracts.len() == 1
 
         # check if the cloned contract's contractScope is updated to the cloned contractScope
@@ -246,7 +246,7 @@ class RuleMappingTestClass(TestCase):
         added_contract = cloned_actor_contracts.first()
 
         assert added_contract.contractScope == cloned_contract_scope
-        assert added_contract.contractScope.original_id == contract_scope.id
+        assert added_contract.contractScope.id == contract_scope.id
 
     def test_rule_action_add_contract_multiple(self):
         """Test the add rule action for multiple contracts and check if contractscope is connected correctly"""
@@ -315,17 +315,13 @@ class RuleMappingTestClass(TestCase):
         )
         assert (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id)
             .len()
             == 1
         )
         assert (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id)
             .len()
             == 1
         )
@@ -333,20 +329,16 @@ class RuleMappingTestClass(TestCase):
         # check if the cloned contract's contractScope is updated to the cloned contractScope
         added_contract_0 = (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id)
             .first()
         )
         added_contract_1 = (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id)
             .first()
         )
 
-        cloned_contract_scope = updated_scenario.repositories[ModelType.CONTRACT.value].get(
+        cloned_contract_scope = updated_scenario.repositories[ModelType.ACTOR.value].get(
             contract_scope.id
         )
         assert added_contract_0.contractScope == cloned_contract_scope
@@ -435,21 +427,21 @@ class RuleMappingTestClass(TestCase):
         assert updated_scenario.repositories[ModelType.CONTRACT.value].len() == 2
 
         # check if the cloned actor without contract now has a contract
-        cloned_actor_0 = updated_scenario.actor_set.get(original_id=actor_with_contract_0.id)
-        cloned_actor_1 = updated_scenario.actor_set.get(original_id=actor_with_contract_1.id)
+        cloned_actor_0 = updated_scenario.repositories[ModelType.ACTOR.value].get(
+            actor_with_contract_0.id
+        )
+        cloned_actor_1 = updated_scenario.repositories[ModelType.ACTOR.value].get(
+            actor_with_contract_1.id
+        )
         assert (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id)
             .len()
             == 1
         )
         assert (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id)
             .len()
             == 1
         )
@@ -457,20 +449,16 @@ class RuleMappingTestClass(TestCase):
         # check if the cloned contract's contractScope is updated to the cloned contractScope
         added_contract_0 = (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_0.id)
             .first()
         )
         added_contract_1 = (
             updated_scenario.repositories[ModelType.CONTRACT.value]
-            .filter_attribute_value(
-                "owner_actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id
-            )
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, cloned_actor_1.id)
             .first()
         )
 
-        cloned_contract_scope = updated_scenario.repositories[ModelType.CONTRACT.value].get(
+        cloned_contract_scope = updated_scenario.repositories[ModelType.ACTOR.value].get(
             contract_scope.id
         )
         assert added_contract_0.contractScope == cloned_contract_scope

@@ -386,7 +386,7 @@ class RuleFiltersTestClass(TestCase):
         gridconnection_1 = GridConnection.objects.create(
             payload=self.scenario, capacity_kw=0, owner_actor=actor_1
         )
-        gridconnection_2 = GridConnection.objects.create(
+        gridconnection_2: GridConnection = GridConnection.objects.create(
             payload=self.scenario, capacity_kw=0, owner_actor=actor_2
         )
         asset_1 = EnergyAsset.objects.create(gridconnection=gridconnection_1)
@@ -415,7 +415,7 @@ class RuleFiltersTestClass(TestCase):
 
         # Assert
         self.assertEqual(filtered_repository.len(), 1)
-        self.assertEqual(filter_subselector.first().id, actor_2.id)
+        self.assertEqual(filtered_repository.first().id, actor_2.id)
 
     def test_stable_id_relation_in_model_attribute_options(self):
         """Test if stable id relations are included for actor"""

@@ -6,7 +6,7 @@ from holon.rule_engine.repositories import GridConnectionRepository
 from copy import deepcopy
 
 
-class RepositoryGetTestClass(unittest.TestCase):
+class RepositoryUpdateTestClass(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
 

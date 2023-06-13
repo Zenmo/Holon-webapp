@@ -215,7 +215,7 @@ class SecondOrderRelationAttributeFilter(Filter):
 
         # filter first-order relation repository on which items refer to an item in the filtered relation_repository
         first_order_relation_repository = first_order_relation_repository.filter_has_relation(
-            self.second_order_relation_field, second_order_relation_repository, invert=False
+            self.second_order_relation_field, second_order_relation_repository
         )
 
         # filter repository on which items refer to an item in the filtered relation_repository
