@@ -12,10 +12,15 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
         low_gridnode = GridNode()
         low_gridnode.capacity_kw = 2
         low_gridnode.id = 33
+        medium_gridnode = GridNode()
+        medium_gridnode.capacity_kw = 3
+        medium_gridnode.id = 40
         high_gridnode = GridNode()
         high_gridnode.capacity_kw = 4
         high_gridnode.id = 52
-        self.gridnode_repository = GridNodeRepository([low_gridnode, high_gridnode])
+        self.gridnode_repository = GridNodeRepository(
+            [low_gridnode, medium_gridnode, high_gridnode]
+        )
 
         low_energy_asset = EnergyAsset()
         low_energy_asset.id = 10
@@ -34,7 +39,7 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
             [low_energy_asset, high_energy_asset_1, high_energy_asset_2]
         )
 
-    def test_filter_relation_no_invert(self):
+    def test_filter_relation(self):
 
         filtered_repository = self.asset_repository.filter_has_relation(
             "gridnode", self.gridnode_repository, False
@@ -44,7 +49,7 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
         assert filtered_repository.all()[0].id == 10
         assert filtered_repository.all()[1].id == 1
 
-    def test_filter_relation_invert(self):
+    def test_filter_relation_inverted(self):
 
         filtered_repository = self.asset_repository.filter_has_relation(
             "gridnode", self.gridnode_repository, True
@@ -52,3 +57,22 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
 
         assert filtered_repository.len() == 1
         assert filtered_repository.all()[0].id == 2
+
+    def test_filter_relation_parent_to_child(self):
+
+        filtered_repository = self.gridnode_repository.filter_has_relation(
+            "energyasset", self.asset_repository, False
+        )
+
+        assert filtered_repository.len() == 2
+        assert filtered_repository.all()[0].id == 33
+        assert filtered_repository.all()[1].id == 52
+
+    def test_filter_relation_parent_to_child_inverted(self):
+
+        filtered_repository = self.gridnode_repository.filter_has_relation(
+            "energyasset", self.asset_repository, True
+        )
+
+        assert filtered_repository.len() == 1
+        assert filtered_repository.all()[0].id == 40
