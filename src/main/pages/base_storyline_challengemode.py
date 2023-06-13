@@ -83,6 +83,8 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
             "section": {"min_num": 1},
         },
         use_json_field=True,
+        null=True,
+        blank=True,
     )
 
     content_panels = BaseCard.content_panels + [

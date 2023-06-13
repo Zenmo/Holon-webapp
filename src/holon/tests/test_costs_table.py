@@ -22,7 +22,7 @@ class CostTableTestClass(TestCase):
 
         detailed_tables = tables.all_detailed_tables()
         assert "Commercieel bedrijf 1" in detailed_tables.keys()
-        assert "Commercieel bedrijf 2" not in detailed_tables.keys()
+        assert "OPERATORGRID" not in detailed_tables.keys()
 
     def __al_output(self):
         return [

@@ -2218,6 +2218,18 @@
     },
     {
         "model": "holon.etmquery",
+        "pk": 3,
+        "fields": {
+            "internal_key": "depreciation_costs_of_some_asset",
+            "endpoint": "query",
+            "data_type": "value",
+            "etm_key": "depreciation_costs_of_some_asset",
+            "related_config": 2,
+            "related_interactive_element": null
+        }
+    },
+    {
+        "model": "holon.etmquery",
         "pk": 20,
         "fields": {
             "internal_key": "energy_hub_installed_capacity_wind_turbines_on_land",
@@ -2320,6 +2332,35 @@
             "anylogic_key": "O hourly curves data",
             "internal_key": "curves",
             "anylogic_model_configuration": 1
+        }
+    },
+    {
+        "model": "holon.datamodelconversion",
+        "pk": 2,
+        "fields": {
+            "etm_query": 3,
+            "conversion": "multiply",
+            "conversion_value_type": "value",
+            "shadow_key": "some_asset_for_dep_costs"
+        }
+    },
+    {
+        "model": "holon.rule",
+        "pk": 1,
+        "fields": {
+            "polymorphic_ctype": ["holon", "datamodelqueryrule"],
+            "model_type": "EnergyAsset",
+            "model_subtype": "ElectricStorageAsset"
+        }
+    },
+    {
+        "model": "holon.datamodelqueryrule",
+        "pk": 1,
+        "fields": {
+            "rule_ptr": 1,
+            "self_conversion": "SUM",
+            "datamodel_conversion_step": 2,
+            "attribute_to_sum": "capacityElectricity_kW"
         }
     },
     {

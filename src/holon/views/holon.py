@@ -23,17 +23,30 @@ from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 USE_NEW_SCENARIO_SERIALIZER = False
 
 
+def use_result_cache(request: Request) -> bool:
+    """
+    Caching simulation results is enabled by default unless cookie or query param is set.
+    Set cookie in javascript console:
+    document.cookie = "caching=false; Path=/wt/api/nextjs/v2/holon; SameSite=Lax;"
+    """
+    if request.query_params.get("caching", "true").lower() == "false":
+        return False
+
+    if request.COOKIES.get("caching", "true").lower() == "false":
+        return False
+
+    return True
+
+
 class HolonV2Service(generics.CreateAPIView):
     logger = HolonLogger("holon-endpoint")
     serializer_class = HolonRequestSerializer
 
     def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
-        use_caching = request.query_params.get("caching", "true").lower() == "true"
 
-        scenario: Scenario = None
-        scenario_to_delete: Scenario = None
-        cc = None
+        use_caching = use_result_cache(request)
+        scenario = None
 
         try:
             if serializer.is_valid():
@@ -69,7 +82,6 @@ class HolonV2Service(generics.CreateAPIView):
                     cc = CloudClient(payload=cc_payload, original_scenario=scenario)
 
                 else:  # TODO remove after rule engine update
-                    original_scenario = scenario
 
                     HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
                     scenario = rule_mapping.apply_rules_old(scenario, data["interactive_elements"])
@@ -77,7 +89,7 @@ class HolonV2Service(generics.CreateAPIView):
                     # prefetch again after rules are applied, for more efficient serialization
                     scenario = Scenario.queryset_with_relations().get(id=scenario.id)
                     scenario_to_delete = scenario
-                    cc = CloudClient(scenario=scenario, original_scenario=original_scenario)
+                    cc = CloudClient(scenario=scenario, original_scenario=scenario)
 
                 # RUN ANYLOGIC
                 HolonV2Service.logger.log_print("Running Anylogic model")
@@ -85,43 +97,12 @@ class HolonV2Service(generics.CreateAPIView):
                 cc.run()
 
                 HolonV2Service.logger.log_print("Running ETM module")
-                # TODO: is this the way to distinguish the national and inter results?
-                # Init with none values so Result always has the keys
-                etm_outcomes = {
-                    "cost_outcome": None,
-                    "nat_upscaling_outcomes": None,
-                    "inter_upscaling_outcomes": None,
-                }
-                for name, outcome in ETMConnect.connect_from_scenario(
-                    original_scenario, scenario_aggregate, cc.outputs
-                ):
-                    if name == "cost":
-                        etm_outcomes["cost_outcome"] = outcome
-                    elif name == "National upscaling":
-                        etm_outcomes["nat_upscaling_outcomes"] = outcome
-                    elif name == "Regional upscaling":
-                        etm_outcomes["inter_upscaling_outcomes"] = outcome
+                etm_outcomes = self._etm_results(scenario, scenario_aggregate, cc)
 
                 HolonV2Service.logger.log_print("Calculating CostTables")
-                try:
-                    cost_benefit_tables = CostTables.from_al_output(
-                        cc.outputs["contracts"], scenario
-                    )
-                except KeyError:
-                    HolonV2Service.logger.log_print(
-                        "Contract data is not mapped, trying to find the correct output..."
-                    )
-                    found = False
-                    for cc_key, alternative_output in cc._outputs_raw.items():
-                        if "contract" in cc_key:
-                            found = True
-                            HolonV2Service.logger.log_print("Contract found")
-                            cost_benefit_tables = CostTables.from_al_output(
-                                json.loads(alternative_output), scenario
-                            )
-                            break
-                    if not found:
-                        raise KeyError("No contract found in cc keys")
+                cost_benefit_tables = self._cost_benefit_tables(
+                    etm_outcomes.pop("depreciation_costs"), scenario, cc
+                )
 
                 results = Results(
                     scenario=scenario,
@@ -173,6 +154,51 @@ class HolonV2Service(generics.CreateAPIView):
                     f"Something went wrong while trying to delete scenario {scenario_id}"
                 )
                 print(traceback.format_exc())
+
+    def _etm_results(
+        self, original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, cc: CloudClient
+    ):
+        """Returns a dict with results from the ETM"""
+        etm_outcomes = {
+            "cost_outcome": None,
+            "nat_upscaling_outcomes": None,
+            "inter_upscaling_outcomes": None,
+            "depreciation_costs": [],
+        }
+        for name, outcome in ETMConnect.connect_from_scenario(
+            original_scenario, scenario_aggregate, cc.output
+        ):
+            if name == "cost":
+                etm_outcomes["cost_outcome"] = outcome
+            elif name == "National upscaling":
+                etm_outcomes["nat_upscaling_outcomes"] = outcome
+            elif name == "Regional upscaling":
+                etm_outcomes["inter_upscaling_outcomes"] = outcome
+            elif name == "cost_benefit":
+                etm_outcomes["depreciation_costs"] = outcome
+
+        return etm_outcomes
+
+    def _cost_benefit_tables(
+        self, depreciation_costs, scenario: Scenario, cc: CloudClient
+    ) -> CostTables:
+        tables = CostTables.from_al_output(self._find_contracts(cc), scenario)
+        for costs in depreciation_costs:
+            tables.inject_depreciation_costs(costs)
+        return tables
+
+    def _find_contracts(self, cc: CloudClient):
+        """Finds contracts in the AnyLogic outcomes, needed for cost tables"""
+        try:
+            return cc.outputs["contracts"]
+        except KeyError as err:
+            HolonV2Service.logger.log_print(
+                "Contract data is not mapped, trying to find the correct output..."
+            )
+            for cc_key, alternative_output in cc._outputs_raw.items():
+                if "contract" in cc_key:
+                    return json.loads(alternative_output)
+            raise KeyError("No contract found in cc keys") from err
 
 
 class HolonCacheCheck(generics.CreateAPIView):

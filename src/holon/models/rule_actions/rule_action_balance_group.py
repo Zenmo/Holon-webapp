@@ -11,7 +11,6 @@ from holon.models import util
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from polymorphic import utils
 
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.core.models import Orderable
@@ -165,7 +164,9 @@ class RuleActionBalanceGroup(RuleAction, ClusterableModel):
     ) -> str:
         """Get the fieldname of the model that refers to its parent object"""
 
-        base_parent_type = utils.get_base_polymorphic_model(filtered_queryset[0].__class__)
+        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
+            filtered_queryset[0].__class__
+        )
 
         try:
             parent_fk_field_name = next(

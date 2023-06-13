@@ -16,6 +16,7 @@ from holon.models.config import (
 )
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.utils.logging import HolonLogger
+from holon.services.costs_table import CostItem
 from pipit.sentry import sentry_sdk_trace
 
 qc_logger = HolonLogger("QConfig")
@@ -60,20 +61,20 @@ class ETMConnect:
     @staticmethod
     @sentry_sdk_trace
     def connect_from_scenario(
-        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes
+        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
     ) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
         for config in ETMConnect.query_configs(
             original_scenario, scenario_aggregate, anylogic_outcomes
         ):
             if config.module == "cost":
-                yield ("cost", ETMConnect.costs(config))
+                yield from ETMConnect.costs(config)
             if config.module == "upscaling":
                 yield ETMConnect.upscaling(config)
 
     @staticmethod
     def query_configs(
-        original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes
+        original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
     ):
         return (
             QConfig(c, anylogic_outcomes=anylogic_outcomes, scenario_aggregate=scenario_aggregate)
@@ -100,7 +101,16 @@ class ETMConnect:
             for key, value in cost_components.items():
                 span.set_data("etm_output_cost_" + key, value)
 
-        return sum(cost_components.values())
+        yield ("costs", sum(cost_components.values()))
+
+        # Calculate depreciation costs for each actor
+        yield (
+            "cost_benefit",
+            [
+                {actor: val * cost_components[key] for actor, val in actors.items()}
+                for key, actors in config.distribution_keys.items()
+            ],
+        )
 
     @staticmethod
     @sentry_sdk_trace
@@ -121,6 +131,11 @@ class ETMConnect:
         return config.name, kpis
 
 
+class AssetCombiner:
+    def __init__(self, qconfig, etm_results) -> None:
+        pass
+
+
 class QConfig:
     def __init__(
         self,
@@ -135,6 +150,7 @@ class QConfig:
         self.etm_scenario_id = config_db.etm_scenario_id
         self.anylogic_outcomes = anylogic_outcomes
         self.scenario_aggregate = scenario_aggregate
+        self.distribution_keys = {}
 
     @property
     def vars(self) -> dict:
@@ -168,13 +184,21 @@ class QConfig:
             "config": {},
         }
         for q in self.config_db.etm_query.all():
-            self._queries["config"].update(
-                Query(query=q, config=self, scenario_aggregate=self.scenario_aggregate).to_dict()
-            )
+            self.unpack(q)
         for q in self.config_db.generic_etm_query.all():
-            self._queries["config"].update(
-                Query(query=q, config=self, scenario_aggregate=self.scenario_aggregate).to_dict()
-            )
+            self.unpack(q)
+
+    def unpack(self, q):
+        query = Query(query=q, config=self, scenario_aggregate=self.scenario_aggregate)
+        self._queries["config"].update(query.to_dict())
+
+        self.distribution_keys.update(
+            {
+                query.internal_key: query.distribution_key
+                if query.distribution_key
+                else {"Undefined": 1.0}
+            }
+        )
 
 
 class Query:
@@ -189,6 +213,8 @@ class Query:
         self.query_db = query
         self.scenario_aggregate = scenario_aggregate
         self.anylogic_outcomes = config.anylogic_outcomes
+        # WHEN FILLED: self.distribution_keys = {group1: val1, group2: val2, ...}
+        self.distribution_key = {}
 
     @property
     def convert_with(self) -> List[dict]:
@@ -283,10 +309,29 @@ class Query:
             "key": c.shadow_key,
         }
 
+    # TODO change copied_scenario to scenario_aggregate and fix methods
     def set_datamodel(self, c: DatamodelConversion):
         """"""
         qr: DatamodelQueryRule = c.datamodel_query_rule.get()
         value = qr.get_filter_aggregation_result(self.scenario_aggregate)
+
+        unique_actors_subgroup = self.copied_scenario.actor_set.distinct("group", "subgroup")
+        # TODO: aren't we double counting now? some guys already got some in their subgroup?
+        unique_actors_group = self.copied_scenario.actor_set.distinct("group")
+
+        for actor in unique_actors_subgroup:
+            g_value = qr.get_filter_aggregation_result(
+                self.copied_scenario, group_to_filter=actor.group, subgroup_to_filter=actor.subgroup
+            )
+            keyname = CostItem.subgroup(actor)
+            self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
+
+        for actor in unique_actors_group:
+            g_value = qr.get_filter_aggregation_result(
+                self.copied_scenario, group_to_filter=actor.group
+            )
+            keyname = CostItem.group(actor)
+            self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
 
         return {
             "type": "static",  # all non-query conversions are considered static
