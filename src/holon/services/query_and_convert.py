@@ -14,6 +14,7 @@ from holon.models.config import (
     QueryAndConvertConfig,
     StaticConversion,
 )
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.utils.logging import HolonLogger
 from pipit.sentry import sentry_sdk_trace
 
@@ -58,19 +59,32 @@ CONFIG_KPIS = {
 class ETMConnect:
     @staticmethod
     @sentry_sdk_trace
-    def connect_from_scenario(original_scenario, scenario, anylogic_outcomes) -> tuple[str, dict]:
+    def connect_from_scenario(
+        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes
+    ) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
-        for config in ETMConnect.query_configs(original_scenario, scenario, anylogic_outcomes):
+        for config in ETMConnect.query_configs(
+            original_scenario, scenario_aggregate, anylogic_outcomes
+        ):
             if config.module == "cost":
                 yield ("cost", ETMConnect.costs(config))
             if config.module == "upscaling":
                 yield ETMConnect.upscaling(config)
 
     @staticmethod
-    def query_configs(original_scenario, scenario, anylogic_outcomes):
+    def query_configs(
+        original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes
+    ):
         return (
-            QConfig(c, anylogic_outcomes=anylogic_outcomes, copied_scenario=scenario)
-            for c in original_scenario.query_and_convert_config.all()
+            QConfig(c, anylogic_outcomes=anylogic_outcomes, scenario_aggregate=scenario_aggregate)
+            for c in original_scenario.query_and_convert_config.prefetch_related(
+                "key_value_pair_collection__float_key_value_pair"
+            )
+            .prefetch_related("etm_query__static_conversion_step")
+            .prefetch_related("etm_query__etm_conversion_step")
+            .prefetch_related("etm_query__datamodel_conversion_step__datamodel_query_rule")
+            .prefetch_related("etm_query__al_conversion_step")
+            .all()
         )
 
     @staticmethod
@@ -109,7 +123,10 @@ class ETMConnect:
 
 class QConfig:
     def __init__(
-        self, config_db: QueryAndConvertConfig, anylogic_outcomes: dict, copied_scenario: Scenario
+        self,
+        config_db: QueryAndConvertConfig,
+        anylogic_outcomes: dict,
+        scenario_aggregate: ScenarioAggregate,
     ) -> None:
         self.config_db = config_db
         self.module = config_db.module
@@ -117,7 +134,7 @@ class QConfig:
         self.api_url = config_db.api_url
         self.etm_scenario_id = config_db.etm_scenario_id
         self.anylogic_outcomes = anylogic_outcomes
-        self.copied_scenario = copied_scenario
+        self.scenario_aggregate = scenario_aggregate
 
     @property
     def vars(self) -> dict:
@@ -152,23 +169,25 @@ class QConfig:
         }
         for q in self.config_db.etm_query.all():
             self._queries["config"].update(
-                Query(query=q, config=self, copied_scenario=self.copied_scenario).to_dict()
+                Query(query=q, config=self, scenario_aggregate=self.scenario_aggregate).to_dict()
             )
         for q in self.config_db.generic_etm_query.all():
             self._queries["config"].update(
-                Query(query=q, config=self, copied_scenario=self.copied_scenario).to_dict()
+                Query(query=q, config=self, scenario_aggregate=self.scenario_aggregate).to_dict()
             )
 
 
 class Query:
-    def __init__(self, query: ETMQuery, config: QConfig, copied_scenario: Scenario) -> None:
+    def __init__(
+        self, query: ETMQuery, config: QConfig, scenario_aggregate: ScenarioAggregate
+    ) -> None:
         self.internal_key = query.internal_key
         self.data_type = query.data_type
         self.endpoint = query.endpoint
         self.etm_key = query.etm_key
         self.config = config
         self.query_db = query
-        self.copied_scenario = copied_scenario
+        self.scenario_aggregate = scenario_aggregate
         self.anylogic_outcomes = config.anylogic_outcomes
 
     @property
@@ -267,7 +286,7 @@ class Query:
     def set_datamodel(self, c: DatamodelConversion):
         """"""
         qr: DatamodelQueryRule = c.datamodel_query_rule.get()
-        value = qr.get_filter_aggregation_result(self.copied_scenario)
+        value = qr.get_filter_aggregation_result(self.scenario_aggregate)
 
         return {
             "type": "static",  # all non-query conversions are considered static
