@@ -157,57 +157,6 @@ class Rule(PolymorphicModel, ClusterableModel):
         # MAKE SURE RESULTS ARE DISTINCT
         return repository
 
-    # TODO remove after rule engine update
-    def get_queryset(self, scenario: Scenario) -> QuerySet:
-        """Create the queryset for a rule based on its model type and model subtype"""
-
-        if self.model_type == ModelType.ACTOR.value:
-            return scenario.actor_set.all()
-        elif self.model_type == ModelType.ENERGYASSET.value:
-            return scenario.assets
-        elif self.model_type == ModelType.GRIDNODE.value:
-            return scenario.gridnode_set.all()
-        elif self.model_type == ModelType.GRIDCONNECTION.value:
-            return scenario.gridconnection_set.all()
-        elif self.model_type == ModelType.POLICY.value:
-            return scenario.policy_set.all()
-        elif self.model_type == ModelType.CONTRACT.value:
-            return scenario.contracts
-        elif self.model_type == ModelType.SCENARIO.value:
-            return Scenario.objects.filter(id=scenario.id)
-        else:
-            raise Exception("Not implemented model type")
-
-    # TODO remove after rule engine update
-    def apply_filters_to_queryset(self, queryset: QuerySet) -> QuerySet:
-        """Fetch and apply the rule filters to a queryset"""
-
-        # Use Q() for filtering
-        # chaining filter()/exclude() will lead to duplicate records
-        # filter with dict destructering doesn't have not equal operator
-        queryset_filter = Q()
-
-        # filter: Filter
-        for filter in self.get_filters():
-            queryset_filter &= filter.get_q()
-
-        if self.model_subtype:
-            submodel = apps.get_model("holon", self.model_subtype)
-            queryset = queryset.instance_of(submodel)
-
-        # Use distinct because of relation filters
-        #   e.q. a filter on gridconnections where energyasset have certain properties will produce duplicate gridconnection in the queryset
-        return queryset.filter(queryset_filter).distinct()
-
-    # TODO remove after rule engine update
-    def get_filtered_queryset(self, scenario: Scenario) -> QuerySet:
-        """Return a queryset based on the Rule's model (sub)type and filters"""
-
-        queryset = self.get_queryset(scenario)
-        filtered_queryset = self.apply_filters_to_queryset(queryset)
-
-        return filtered_queryset
-
 
 class ScenarioRule(Rule):
     """A rule that finds a selection of objects and updates an attribute according to user input"""
@@ -351,15 +300,6 @@ class ScenarioRule(Rule):
 
         return list(self.subselector_skips.all()) + list(self.subselector_takes.all())
 
-    # TODO remove after rule engine update
-    def apply_filter_subselections(self, filtered_queryset: QuerySet, value: str):
-        """Apply the rule's query subselection to the filtered queryset"""
-
-        for subselector in self.get_filter_subselectors():
-            filtered_queryset = subselector.subselect_queryset(filtered_queryset, value)
-
-        return filtered_queryset
-
     def apply_rule_actions(
         self,
         scenario_aggregate: ScenarioAggregate,
@@ -389,13 +329,6 @@ class ScenarioRule(Rule):
             + list(self.discrete_factors_balancegroup.all())
             + list(self.discrete_factors_add_multiple_under_each_parent.all())
         )
-
-    # TODO remove after rule engine update
-    def apply_rule_actions_old(self, filtered_queryset: QuerySet, value: str):
-        """Apply rule actions to filtered objects"""
-
-        for rule_action in self.get_actions():
-            rule_action.apply_action_to_queryset(filtered_queryset, value)
 
     def hash(self):
         action_hashes = ",".join([rule_action.hash() for rule_action in self.get_actions()])
@@ -501,81 +434,6 @@ class DatamodelQueryRule(Rule):
 
         elif self.self_conversion == SelfConversionType.SUM.value:
             return self.get_filters_attribute_sum(scenario_aggregate)
-
-        raise ValidationError("No valid conversion type set")
-
-    # TODO remove after rule engine update
-    def get_filters_object_count_old(
-        self,
-        scenario: Scenario,
-        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-    ) -> int:
-        """Get the number of objects in the combined filter resutls"""
-
-        filtered_queryset = self.get_filtered_queryset(scenario)
-        if group_to_filter is not None:
-            filtered_queryset = filtered_queryset.filter(
-                self.determine_group_filter(
-                    model_attribute="group", group_to_filter=group_to_filter
-                )
-            )
-        if subgroup_to_filter is not None:
-            filtered_queryset = filtered_queryset.filter(
-                self.determine_group_filter(
-                    model_attribute="subgroup", group_to_filter=subgroup_to_filter
-                )
-            )
-        return filtered_queryset.count()
-
-    # TODO remove after rule engine update
-    def get_filters_attribute_sum_old(
-        self,
-        scenario: Scenario,
-        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-    ) -> float:
-        """Return the sum of a specific attribute of all objects in a queryset"""
-
-        filtered_queryset = self.get_filtered_queryset(scenario)
-        if group_to_filter is not None:
-            filtered_queryset = filtered_queryset.filter(
-                self.determine_group_filter(
-                    model_attribute="group", group_to_filter=group_to_filter
-                )
-            )
-        if subgroup_to_filter is not None:
-            filtered_queryset = filtered_queryset.filter(
-                self.determine_group_filter(
-                    model_attribute="subgroup", group_to_filter=subgroup_to_filter
-                )
-            )
-        attr_sum = 0.0
-        for filtered_object in filtered_queryset:
-            try:
-                value = float(getattr(filtered_object, self.attribute_to_sum))
-                attr_sum += value
-            except Exception as e:
-                print(
-                    f"Something went wrong while summing model attributes, let's act as if nothing happend and keep going ({e})"
-                )
-
-        return attr_sum
-
-    # TODO remove after rule engine update
-    def get_filter_aggregation_result_old(
-        self,
-        scenario: Scenario,
-        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-    ) -> Union[int, float]:
-        """Get the filter aggregation result based on the datamodel query rule's conversion type"""
-        ## TODO make get filters more DRY (WIES4)
-        if self.self_conversion == SelfConversionType.COUNT.value:
-            return self.get_filters_object_count_old(scenario, group_to_filter, subgroup_to_filter)
-
-        elif self.self_conversion == SelfConversionType.SUM.value:
-            return self.get_filters_attribute_sum_old(scenario, group_to_filter, subgroup_to_filter)
 
         raise ValidationError("No valid conversion type set")
 
