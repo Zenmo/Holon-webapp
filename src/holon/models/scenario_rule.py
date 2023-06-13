@@ -349,7 +349,11 @@ class DatamodelQueryRule(Rule):
 
     self_conversion = models.CharField(max_length=255, choices=SelfConversionType.choices)
     datamodel_conversion_step = ParentalKey(
-        DatamodelConversion, related_name="datamodel_query_rule"
+        DatamodelConversion,
+        related_name="datamodel_query_rule",
+        # OneToOneField is not included with modelcluster.
+        # unique=True creates the same database constraint.
+        unique=True,
     )
 
     attribute_to_sum = models.CharField(
