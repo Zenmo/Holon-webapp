@@ -240,5 +240,6 @@ def is_scenario_object_relation_field(field: str) -> bool:
         field.is_relation
         and hasattr(field, "on_delete")
         and field.parent_link == False
-        and utils.get_base_polymorphic_model(field.related_model).__name__ in ModelType.values
+        and getattr(utils.get_base_polymorphic_model(field.related_model), "__name__", None)
+        in ModelType.values
     )
