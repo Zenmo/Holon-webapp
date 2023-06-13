@@ -134,7 +134,6 @@ class ScenarioAggregate:
         from holon.serializers import ScenarioSerializer
 
         scenario_tree = self.__to_tree()
-        # TODO rename after rule engine update
         json_data = ScenarioSerializer(scenario_tree).data
 
         return json_data

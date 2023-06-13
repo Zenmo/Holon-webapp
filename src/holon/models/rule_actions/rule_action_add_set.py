@@ -117,127 +117,9 @@ class GenericRuleActionAdd(RuleAction):
 
         return assets, actor, actor_contracts
 
-    def set_contract_scope(self, filtered_queryset):
-        """Set contract scope of new contracts to the cloned actor in the cloned scenario"""
-        if self.contract_to_add:
-            scenario = filtered_queryset[0].payload
-            old_contract_scope = self.contract_to_add.contractScope
-
-            cloned_contract_scope = Actor.objects.filter(
-                payload=scenario, original_id=old_contract_scope.id
-            ).first()
-            self.model_to_add.contractScope = cloned_contract_scope
-
-        elif self.gridconnection_to_add and self.actor_to_add:
-            scenario = filtered_queryset[0]
-
-            for contract in self.actor_contracts_to_add:
-                old_contract_scope = contract.contractScope
-
-                cloned_contract_scope = Actor.objects.filter(
-                    payload=scenario, original_id=old_contract_scope.id
-                ).first()
-
-                contract.contractScope = cloned_contract_scope
-
-    # TODO omschrijven naar nieuwe rule engine - TAVM
-    def duplicate_gridconnection_with_children(self, object):
-        """Duplicate template gridconection including all related models"""
-        added_actor = util.duplicate_model(
-            self.actor_to_add,
-            {
-                "payload": object,
-                "is_rule_action_template": False,
-            },
-        )
-        added_gridconnection = util.duplicate_model(
-            self.model_to_add,
-            {
-                "payload": object,
-                "owner_actor": added_actor,
-                "is_rule_action_template": False,
-            },
-        )
-        for asset in self.asset_children_to_add:
-            util.duplicate_model(
-                asset,
-                {
-                    "gridconnection": added_gridconnection,
-                    "is_rule_action_template": False,
-                },
-            )
-        for contract in self.actor_contracts_to_add:
-            util.duplicate_model(
-                contract,
-                {
-                    "actor": added_actor,
-                    "is_rule_action_template": False,
-                },
-            )
-
     class Meta:
         verbose_name = "GenericRuleActionAdd"
         abstract = True
-
-    # TODO remove after rule engine update
-    def add_or_set_items_old(
-        self, filtered_queryset: QuerySet, value: str, reset_models_before_add: bool
-    ):
-        """Add an asset to the first n items in the the filtered objects"""
-
-        if len(filtered_queryset) <= 0:
-            return
-
-        if reset_models_before_add:
-            # parse value
-            n = int(float(value))
-            if n < 0:
-                raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
-
-        # get parent type and foreign key field name
-        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
-            filtered_queryset[0].__class__
-        )
-        try:
-            parent_fk_field_name = next(
-                parent_fk_fieldname
-                for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(
-                    self.model_to_add.__class__
-                )
-                if base_parent_type == parent_type
-            )
-        except:
-            raise ValueError(
-                f"Type {base_parent_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)} for model type {self.model_to_add.__class__.__name__}"
-            )
-
-        objects_added = 0
-
-        self.set_contract_scope(filtered_queryset)
-
-        # only take first n objects
-        for filtererd_object in filtered_queryset:
-            if reset_models_before_add:
-                for obj_to_delete in self.model_to_add.__class__.objects.filter(
-                    **{parent_fk_field_name: filtererd_object}
-                ):
-                    obj_to_delete.delete()
-
-            # Only check < n for set count
-            if not reset_models_before_add or objects_added < n:
-                if self.gridconnection_to_add and self.actor_to_add:
-                    self.duplicate_gridconnection_with_children(filtererd_object)
-
-                else:
-                    util.duplicate_model(
-                        self.model_to_add,
-                        {
-                            parent_fk_field_name: filtererd_object,
-                            "is_rule_action_template": False,
-                        },
-                    )
-
-                objects_added += 1
 
     def add_or_set_items(
         self,
@@ -273,16 +155,6 @@ class GenericRuleActionAdd(RuleAction):
             )
 
         objects_added = 0
-
-        # NOT NECESSARY ANYMORE? PLS REVIEW - TAVM
-        # # get cloned contractscope
-        # if self.contract_to_add:
-        #     scenario = filtered_queryset[0].payload
-        #     old_contract_scope = self.contract_to_add.contractScope
-
-        #     cloned_contract_scope = Actor.objects.filter(
-        #         payload=scenario, original_id=old_contract_scope.id
-        #     ).first()
 
         # only take first n objects
         for filtererd_object in filtered_repository.all():
@@ -355,11 +227,6 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
 
         return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Set the number of filtered objects with the model specified in rule_action_add to value"""
-
-        self.add_or_set_items_old(filtered_queryset, value, False)
-
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
@@ -391,11 +258,6 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
 
         return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Set the number of filtered objects with the model specified in rule_action_add to value"""
-
-        self.add_or_set_items_old(filtered_queryset, value, True)
-
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
@@ -426,44 +288,6 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
 
     class Meta:
         verbose_name = "RuleActionAddMultipleUnderEachParent"
-
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Set the number of filtered objects with the model specified in rule_action_add to value"""
-
-        # parse value
-        n = int(float(value))
-        if n < 0:
-            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
-
-        # get parent type and foreign key field name
-        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
-            filtered_queryset[0].__class__
-        )
-        try:
-            parent_fk_field_name = next(
-                parent_fk_fieldname
-                for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(
-                    self.model_to_add.__class__
-                )
-                if base_parent_type == parent_type
-            )
-        except:
-            raise ValueError(
-                f"Type {base_parent_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)} for model type {self.model_to_add.__class__.__name__}"
-            )
-
-        self.set_contract_scope(filtered_queryset)
-
-        # only take first n objects
-        for filtererd_object in filtered_queryset:
-            for _ in range(n):
-                util.duplicate_model(
-                    self.model_to_add,
-                    {
-                        parent_fk_field_name: filtererd_object,
-                        "is_rule_action_template": False,
-                    },
-                )
 
     # TODO childmodel duplicate code SEM herstellen
     def apply_to_scenario_aggregate(

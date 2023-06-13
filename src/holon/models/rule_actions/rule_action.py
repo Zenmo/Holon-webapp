@@ -18,11 +18,6 @@ class RuleAction(PolymorphicModel):
 
     class Meta:
         verbose_name = "RuleAction"
-        # abstract = True
-
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Apply a rule action to an object in the queryset"""
-        pass
 
     def apply_to_scenario_aggregate(
         self,

@@ -68,18 +68,3 @@ class RuleActionAttributeNoise(RuleAction):
         raise NotImplementedError(
             f"RuleActionAttributeNoise: Noise type {self.noise_type} not recognized"
         )
-
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """
-        Apply an operator with a value to the model attribute
-        """
-
-        model_attribute = self.model_attribute
-
-        # apply operators to objects
-        for filtered_object in filtered_queryset:
-            value = float(getattr(filtered_object, model_attribute))
-            new_value = self.__apply_noise(value)
-
-            setattr(filtered_object, model_attribute, new_value)
-            filtered_object.save()
