@@ -34,7 +34,7 @@ function InteractiveDropdown({ defaultValue, onChange, options, ...props }: Prop
             key={inputItem.id + index}
             className="p-4 m-4"
             value={inputItem.option}>
-            {inputItem.option}
+            {inputItem.label ? inputItem.label : inputItem.option}
           </option>
         );
       })}
