@@ -64,19 +64,6 @@ class Skip(FilterSubSelector):
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_skips")
 
-    # TODO remove after rule engine update
-    def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
-        """Skip a number of items in the queryset"""
-        if self.use_interactive_element_value:
-            n = int(float(value))
-        else:
-            n = self.number_of_items
-
-        if self.amount_type == AmountType.RELATIVE.value:
-            n = int(float(n / 100) * len(queryset))
-
-        return queryset[n:]
-
     def subselect_repository(
         self, repository: RepositoryBaseClass, value: str
     ) -> RepositoryBaseClass:
@@ -116,28 +103,6 @@ class Take(FilterSubSelector):
         return (
             f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items},{self.mode}]"
         )
-
-    # TODO remove after rule engine update
-    def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
-        """Take a number of items from the queryset, either the first n or random n"""
-
-        if self.use_interactive_element_value:
-            n = int(float(value))
-        else:
-            n = self.number_of_items
-
-        if self.amount_type == AmountType.RELATIVE.value:
-            n = int(float(n / 100) * len(queryset))
-
-        if self.mode == TakeMode.FIRST.value:
-            return queryset[:n]
-
-        elif self.mode == TakeMode.RANDOM.value:
-            ids = list(queryset.values_list("id", flat=True))
-            random_ids = random.sample(ids, k=n)
-            return queryset.filter(pk__in=random_ids)
-
-        raise NotImplementedError(f"Take mode {self.mode} is not implemented")
 
     def subselect_repository(
         self, repository: RepositoryBaseClass, value: str
