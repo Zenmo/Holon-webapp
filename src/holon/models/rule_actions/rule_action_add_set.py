@@ -128,9 +128,7 @@ class GenericRuleActionAdd(RuleAction):
                 raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-        base_parent_type = (
-            Scenario if filtered_repository is None else filtered_repository.base_model_type
-        )
+        base_parent_type = filtered_repository.base_model_type
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
@@ -334,9 +332,7 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-        base_parent_type = (
-            Scenario if filtered_repository is None else filtered_repository.base_model_type
-        )
+        base_parent_type = filtered_repository.base_model_type
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
