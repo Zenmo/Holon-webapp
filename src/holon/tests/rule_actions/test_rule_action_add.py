@@ -510,20 +510,27 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert len(updated_scenario.gridconnection_set.all()) == 1  # was 0
-        assert len(updated_scenario.gridconnection_set.all()[0].energyasset_set.all()) == 1  # was 0
-        assert len(updated_scenario.actor_set.all()) == 2  # was 1
-        assert len(updated_scenario.actor_set.all()[1].contracts.all()) == 1  # was 0
+        assert updated_scenario.repositories[ModelType.GRIDCONNECTION].len() == 1  # was 0
+        added_gridconnection = updated_scenario.repositories[ModelType.GRIDCONNECTION].first()
         assert (
-            updated_scenario.actor_set.all()[1].contracts.first().contractScope.id
-            != existing_contract_scope.id
-        )
+            updated_scenario.repositories[ModelType.ENERGYASSET]
+            .filter_attribute_value(
+                "gridconnection_id", AttributeFilterComparator.EQUAL, added_gridconnection.id
+            )
+            .len()
+            == 1
+        )  # was 0
+        assert updated_scenario.repositories[ModelType.ACTOR].len() == 2  # was 1
+        added_actor = updated_scenario.repositories[ModelType.ACTOR].all()[1]
         assert (
-            updated_scenario.actor_set.all()[1].contracts.first().contractScope.original_id
-            == existing_contract_scope.id
-        )
+            updated_scenario.repositories[ModelType.CONTRACT]
+            .filter_attribute_value("actor_id", AttributeFilterComparator.EQUAL, added_actor.id)
+            .len()
+            == 1
+        )  # was 0

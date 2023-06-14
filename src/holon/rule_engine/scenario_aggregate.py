@@ -9,6 +9,7 @@ from holon.rule_engine.repositories import (
     GridConnectionRepository,
     GridNodeRepository,
     PolicyRepository,
+    ScenarioRepository,
 )
 from django.apps import apps
 from django.db import models
@@ -35,6 +36,7 @@ class ScenarioAggregate:
             ModelType.POLICY.value: PolicyRepository.from_scenario(self.scenario),
             ModelType.GRIDCONNECTION.value: GridConnectionRepository.from_scenario(self.scenario),
             ModelType.GRIDNODE.value: GridNodeRepository.from_scenario(self.scenario),
+            ModelType.SCENARIO.value: ScenarioRepository.from_scenario(self.scenario),
         }
 
     def get_repository_for_model_type(
@@ -66,7 +68,7 @@ class ScenarioAggregate:
 
     def add_object(
         self, object: PolymorphicModel, base_model_type="", additional_attributes: dict = {}
-    ):
+    ) -> PolymorphicModel:
         """Add an object to self in the correct repository"""
 
         if not base_model_type:
@@ -75,7 +77,7 @@ class ScenarioAggregate:
         for key, value in additional_attributes.items():
             setattr(object, key, value)
 
-        self.repositories[base_model_type].add(object)
+        return self.repositories[base_model_type].add(object)
 
     def remove_object(self, object: PolymorphicModel, base_model_type=""):
         """Remove object from self including related models according to deletion policy"""
