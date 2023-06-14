@@ -175,6 +175,10 @@ class RepositoryBaseClass:
 
         return self.objects
 
+    def dict(self) -> dict[int, PolymorphicModel]:
+        """Return all objects in the repository in an id to model dictionary"""
+        return {object.id: object for object in self.objects}
+
     def ids(self) -> list[int]:
         """Returns a list of object ids"""
 

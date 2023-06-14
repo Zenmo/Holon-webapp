@@ -9,7 +9,6 @@ from holon.models.rule_actions import RuleAction
 from holon.models.scenario_rule import ScenarioRule
 
 from django.db import models
-from django.db.models.query import QuerySet
 from modelcluster.fields import ParentalKey
 
 from wagtail.admin.edit_handlers import FieldPanel
@@ -49,27 +48,13 @@ class RuleActionFactor(RuleAction):
     def hash(self):
         return f"[A{self.id},{self.model_attribute},{self.min_value},{self.max_value}]"
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """
-        Apply rescaling of an atribute of filtered_object according to value.
-        May throw ValueError if value cannot be parsed to float.
-        """
-
-        # rescale value according to min/max
-        value_flt = float(value)
-        mapped_value = (self.max_value - self.min_value) * (value_flt / 100.0) + self.min_value
-
-        for filtered_object in filtered_queryset:
-            setattr(filtered_object, self.model_attribute, mapped_value)
-            filtered_object.save()
-
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
     ) -> ScenarioAggregate:
-        """Apply a rule action to an object in the queryset"""
+        """Apply a rule action to an object in the repository"""
 
         # rescale value according to min/max
         value_flt = float(value)

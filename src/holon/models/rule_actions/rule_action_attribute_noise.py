@@ -1,3 +1,10 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from holon.models.rule_actions import RuleAction
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
@@ -69,17 +76,24 @@ class RuleActionAttributeNoise(RuleAction):
             f"RuleActionAttributeNoise: Noise type {self.noise_type} not recognized"
         )
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """
-        Apply an operator with a value to the model attribute
-        """
+    def apply_to_scenario_aggregate(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        filtered_repository: RepositoryBaseClass,
+        value: str,
+    ) -> ScenarioAggregate:
+        """Apply noise to attributes of objects in the repository"""
 
         model_attribute = self.model_attribute
 
         # apply operators to objects
-        for filtered_object in filtered_queryset:
+        for filtered_object in filtered_repository.all():
             value = float(getattr(filtered_object, model_attribute))
             new_value = self.__apply_noise(value)
 
             setattr(filtered_object, model_attribute, new_value)
-            filtered_object.save()
+            scenario_aggregate.repositories[filtered_repository.base_model_type.__name__].update(
+                filtered_object
+            )
+
+        return scenario_aggregate

@@ -20,8 +20,6 @@ from holon.services.data import Results
 from holon.utils.logging import HolonLogger
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
-USE_NEW_SCENARIO_SERIALIZER = False
-
 
 def use_result_cache(request: Request) -> bool:
     """
@@ -47,6 +45,7 @@ class HolonV2Service(generics.CreateAPIView):
 
         use_caching = use_result_cache(request)
         scenario = None
+        cc_payload = None
 
         try:
             if serializer.is_valid():
@@ -66,36 +65,26 @@ class HolonV2Service(generics.CreateAPIView):
                             status=status.HTTP_200_OK,
                         )
 
-                # APPLY INTERACTIVE ELEMENTs
+                # RULE ENGINE - APPLY INTERACTIVE ELEMENTS
                 HolonV2Service.logger.log_print("Applying interactive elements to scenario")
 
-                if not USE_NEW_SCENARIO_SERIALIZER:
-                    scenario = data["scenario"]
-                    interactive_elements = data["interactive_elements"]
+                scenario = data["scenario"]
+                interactive_elements = data["interactive_elements"]
 
-                    scenario_aggregate = ScenarioAggregate(scenario)
-                    scenario_aggregate = rule_mapping.apply_rules(
-                        scenario_aggregate, interactive_elements
-                    )
+                scenario_aggregate = ScenarioAggregate(scenario)
+                scenario_aggregate = rule_mapping.apply_rules(
+                    scenario_aggregate, interactive_elements
+                )
 
-                    cc_payload = scenario_aggregate.serialize_to_json()
-                    cc = CloudClient(payload=cc_payload, original_scenario=scenario)
-
-                else:  # TODO remove after rule engine update
-
-                    HolonV2Service.logger.log_print(f"Cloning scenario {data['scenario'].id}")
-                    scenario = rule_mapping.apply_rules_old(scenario, data["interactive_elements"])
-
-                    # prefetch again after rules are applied, for more efficient serialization
-                    scenario = Scenario.queryset_with_relations().get(id=scenario.id)
-                    scenario_to_delete = scenario
-                    cc = CloudClient(scenario=scenario, original_scenario=scenario)
+                cc_payload = scenario_aggregate.serialize_to_json()
+                cc = CloudClient(payload=cc_payload, scenario=scenario)
 
                 # RUN ANYLOGIC
                 HolonV2Service.logger.log_print("Running Anylogic model")
 
                 cc.run()
 
+                # ETM MODULE
                 HolonV2Service.logger.log_print("Running ETM module")
                 etm_outcomes = self._etm_results(scenario, scenario_aggregate, cc)
 
@@ -105,7 +94,7 @@ class HolonV2Service(generics.CreateAPIView):
                 )
 
                 results = Results(
-                    scenario=scenario,
+                    cc_payload=cc_payload,
                     request=request,
                     anylogic_outcomes=cc.outputs,
                     cost_benefit_overview=cost_benefit_tables.main_table(),
@@ -143,20 +132,8 @@ class HolonV2Service(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        finally:
-            # always delete the scenario!
-            try:
-                if scenario_to_delete:
-                    scenario_id = scenario_to_delete.id
-                    scenario_to_delete.delete_async()
-            except Exception as e:
-                HolonV2Service.logger.log_print(
-                    f"Something went wrong while trying to delete scenario {scenario_id}"
-                )
-                print(traceback.format_exc())
-
     def _etm_results(
-        self, original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, cc: CloudClient
+        self, scenario: Scenario, scenario_aggregate: ScenarioAggregate, cc: CloudClient
     ):
         """Returns a dict with results from the ETM"""
         etm_outcomes = {
@@ -166,7 +143,7 @@ class HolonV2Service(generics.CreateAPIView):
             "depreciation_costs": [],
         }
         for name, outcome in ETMConnect.connect_from_scenario(
-            original_scenario, scenario_aggregate, cc.output
+            scenario, scenario_aggregate, cc.outputs
         ):
             if name == "cost":
                 etm_outcomes["cost_outcome"] = outcome

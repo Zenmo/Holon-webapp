@@ -133,11 +133,10 @@ class ScenarioAggregate:
 
     def serialize_to_json(self) -> dict:
         """Serialize scenario to json with embedded relations"""
-        from holon.serializers import ScenarioV2Serializer
+        from holon.serializers import ScenarioSerializer
 
         scenario_tree = self.__to_tree()
-        # TODO rename after rule engine update
-        json_data = ScenarioV2Serializer(scenario_tree).data
+        json_data = ScenarioSerializer(scenario_tree).data
 
         return json_data
 

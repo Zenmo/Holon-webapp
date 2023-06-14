@@ -10,7 +10,6 @@ from holon.models.rule_actions import RuleAction
 from holon.models.scenario_rule import ScenarioRule
 
 from django.db import models
-from django.db.models.query import QuerySet
 
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel
@@ -45,48 +44,13 @@ class RuleActionRemove(RuleAction):
     def hash(self):
         return f"[A{self.id},{self.remove_mode}]"
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Remove the filtered items"""
-
-        # remove subselection
-        if self.remove_mode == RemoveMode.REMOVE_ALL.value:
-            remove_n = len(filtered_queryset)
-
-        elif self.remove_mode == RemoveMode.REMOVE_N.value:
-            remove_n = int(float(value))
-
-        elif self.remove_mode == RemoveMode.KEEP_N.value:
-            remove_n = len(filtered_queryset) - int(float(value))
-
-        else:
-            raise NotImplementedError(
-                f"No functionality implemented for remove mode {self.remove_mode}"
-            )
-
-        # remove remove_n items
-        for filtered_object in filtered_queryset:
-            if remove_n <= 0:
-                return
-
-            # Remove connected gridconnections of actor explicitly
-            # Not doing this results in foreign key violation of assets connection to a gridconnection
-            # Django's cascading delete is managed by Django not the database
-            if isinstance(filtered_object, Actor):
-                for gridconnection in filtered_object.gridconnection_set.all():
-                    gridconnection.delete()
-                for contract in filtered_object.contracts.all():
-                    contract.delete()
-            filtered_object.delete()
-
-            remove_n -= 1
-
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
     ) -> ScenarioAggregate:
-        """Apply a rule action to an object in the queryset"""
+        """Apply a rule action to an object in the repository"""
 
         # remove subselection
         if self.remove_mode == RemoveMode.REMOVE_ALL.value:

@@ -86,37 +86,6 @@ class RelationAttributeFilter(Filter):
             or (not field.is_relation and not is_exclude_field(field))
         ]
 
-    def get_q(self) -> Q:
-        relation_field_q = Q()
-        relation_field_subtype = Q()
-
-        if self.comparator == AttributeFilterComparator.EQUAL.value:
-            relation_field_q = Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
-        elif self.comparator == AttributeFilterComparator.LESS_THAN.value:
-            relation_field_q = Q(
-                **{f"{self.relation_field}__{self.model_attribute}__lt": self.value}
-            )
-        elif self.comparator == AttributeFilterComparator.GREATER_THAN.value:
-            relation_field_q = Q(
-                **{f"{self.relation_field}__{self.model_attribute}__gt": self.value}
-            )
-        elif self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
-            relation_field_q = ~Q(**{f"{self.relation_field}__{self.model_attribute}": self.value})
-
-        if self.relation_field_subtype:
-            relation_subtype = apps.get_model("holon", self.relation_field_subtype)
-            relation_field_subtype = Q(
-                **{
-                    f"{self.relation_field}__polymorphic_ctype": ContentType.objects.get_for_model(
-                        relation_subtype
-                    )
-                }
-            )
-
-        if self.invert_filter:
-            return ~(relation_field_subtype & relation_field_q)
-        return relation_field_subtype & relation_field_q
-
     def filter_repository(
         self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
     ) -> RepositoryBaseClass:
