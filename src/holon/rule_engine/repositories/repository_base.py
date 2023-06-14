@@ -143,7 +143,7 @@ class RepositoryBaseClass:
 
         # get a subset of the objects in this repository
         if (not start is None) or (not end is None):
-            objects = self.objects[start:end]
+            objects = self.all()[start:end]
         elif not indices is None:
             objects = [self.all()[i] for i in indices]
         else:
