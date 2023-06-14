@@ -130,7 +130,7 @@ class GenericRuleActionAdd(RuleAction):
         # get parent type and foreign key field name
         base_parent_type = (
             Scenario if filtered_repository is None else filtered_repository.base_model_type
-        )  # TODO make sure repository has this
+        )
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
@@ -320,7 +320,6 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
                     },
                 )
 
-    # TODO childmodel duplicate code SEM herstellen
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
@@ -335,7 +334,6 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-
         base_parent_type = (
             Scenario if filtered_repository is None else filtered_repository.base_model_type
         )
