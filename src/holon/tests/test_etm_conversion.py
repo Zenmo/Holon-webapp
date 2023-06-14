@@ -124,7 +124,7 @@ class RuleFiltersTestClass(TestCase):
                     "value": {
                         "type": "input",
                         "data": "value",
-                        "etm_key": "divide_capacity_by_actors"
+                        "etm_key": "divide_capacity_by_actors",
                     },
                     "convert_with": [
                         {
@@ -136,13 +136,13 @@ class RuleFiltersTestClass(TestCase):
                             "key": "multiply_internal",
                         },
                         {
-                            'type': 'static',
-                            'type_actual': 'datamodel',
-                            'conversion': 'divide',
-                            'data': 'value',
-                            'value': 2,
-                            'key': 'divide_internal'
-                        }
+                            "type": "static",
+                            "type_actual": "datamodel",
+                            "conversion": "divide",
+                            "data": "value",
+                            "value": 2,
+                            "key": "divide_internal",
+                        },
                     ],
                 }
             },
