@@ -70,6 +70,10 @@ class Skip(FilterSubSelector):
         else:
             n = self.number_of_items
 
+        # case mode relative
+        if self.amount_type == AmountType.RELATIVE.value:
+            n = int(float(n / 100) * repository.len())
+
         # return repository with subset of objects
         return repository.get_subset_range(start=n)
 
@@ -109,6 +113,10 @@ class Take(FilterSubSelector):
             n = int(float(value))
         else:
             n = self.number_of_items
+
+        # in case the mode is relative
+        if self.amount_type == AmountType.RELATIVE.value:
+            n = int(float(n / 100) * repository.len())
 
         # take items depending on mode
         if self.mode == TakeMode.FIRST.value:
