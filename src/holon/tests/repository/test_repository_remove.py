@@ -19,8 +19,8 @@ class RepositoryRemoveTestClass(unittest.TestCase):
         self.repository = GridConnectionRepository([low_grid_connection, high_grid_connection])
 
     def test_remove(self):
-        id_to_remove_0 = self.repository.objects[0].id
-        id_to_remove_1 = self.repository.objects[1].id
+        id_to_remove_0 = self.repository.all()[0].id
+        id_to_remove_1 = self.repository.all()[1].id
 
         assert self.repository.len() == 2
         self.repository.remove(id_to_remove_0)
@@ -31,7 +31,7 @@ class RepositoryRemoveTestClass(unittest.TestCase):
     def test_remove_wrong_id(self):
         # non-existing index
         self.assertRaises(
-            ValueError,
+            KeyError,
             self.repository.remove,
             12,
         )

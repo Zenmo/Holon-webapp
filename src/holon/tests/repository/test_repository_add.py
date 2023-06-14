@@ -25,7 +25,7 @@ class RepositoryAddTestClass(unittest.TestCase):
 
         # assert
         assert self.repository.len() == 3
-        assert self.repository.objects[2].capacity_kw == 3
+        assert self.repository.all()[2].capacity_kw == 3
 
     def test_add_wrong_object_type(self):
         energy_asset = EnergyAsset(id=1)
@@ -48,12 +48,12 @@ class RepositoryAddTestClass(unittest.TestCase):
 
         # assert
         assert self.repository.len() == 4
-        assert self.repository.objects[2].capacity_kw == 3
-        assert self.repository.objects[3].capacity_kw == 3
+        assert self.repository.all()[2].capacity_kw == 3
+        assert self.repository.all()[3].capacity_kw == 3
 
-        assert self.repository.objects[2].id != self.repository.objects[3].id
+        assert self.repository.all()[2].id != self.repository.all()[3].id
 
-        self.repository.objects[2].capacity_kw = 8
+        self.repository.all()[2].capacity_kw = 8
 
-        assert self.repository.objects[2].capacity_kw == 8
-        assert self.repository.objects[3].capacity_kw == 3
+        assert self.repository.all()[2].capacity_kw == 8
+        assert self.repository.all()[3].capacity_kw == 3

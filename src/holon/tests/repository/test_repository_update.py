@@ -19,12 +19,12 @@ class RepositoryUpdateTestClass(unittest.TestCase):
         self.repository = GridConnectionRepository([low_grid_connection, high_grid_connection])
 
     def test_update(self):
-        object_to_update = deepcopy(self.repository.objects[0])
+        object_to_update = deepcopy(self.repository.all()[0])
         object_to_update.capacity_kw = 3
 
-        assert self.repository.objects[0].capacity_kw == 2
+        assert self.repository.all()[0].capacity_kw == 2
         self.repository.update(object_to_update)
-        assert self.repository.objects[0].capacity_kw == 3
+        assert self.repository.all()[0].capacity_kw == 3
 
     def test_update_wrong_object_type(self):
         wrong_object = EnergyAsset()
@@ -44,7 +44,7 @@ class RepositoryUpdateTestClass(unittest.TestCase):
 
         # non-existing index
         self.assertRaises(
-            ValueError,
+            KeyError,
             self.repository.update,
             non_existent_object,
         )

@@ -9,7 +9,7 @@ from polymorphic.models import PolymorphicModel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.scenario import Scenario
-from copy import deepcopy
+from copy import copy, deepcopy
 from django.db.models.fields.related import ManyToOneRel
 
 
@@ -19,13 +19,15 @@ class RepositoryBaseClass:
     base_model_type = PolymorphicModel
 
     def __init__(self, objects: list[PolymorphicModel]):
-        self.assert_object_ids(objects)  # TODO make property with setter?
-        self.objects = objects
+        # store objects
+        self.assert_object_ids(objects)
 
         # Set original id of each model
         # This maintains backwards compatibility when id's weren't stable because of cloning in the database
-        for object in self.objects:
+        for object in objects:
             object.original_id = object.id
+
+        self.id_object_dict: dict[int, PolymorphicModel] = {object.id: object for object in objects}
 
         # start an id counter at an arbitrary high number
         self.id_counter = self.id_counter_generator(objects)
@@ -49,38 +51,26 @@ class RepositoryBaseClass:
     def from_scenario(cls, scenario: Scenario):
         return cls(cls.base_model_type.objects.filter(payload=scenario).get_real_instances())
 
-    def get_list_index_for_object_id(self, object_id: int) -> int:
-        """Get the index in the objects list for a certain id. Raises ValueError if object is not found"""
-
-        try:
-            return next(i for i, object in enumerate(self.objects) if object.id == object_id)
-        except:
-            raise ValueError(
-                f"{self.base_model_type.__name__} object with id {object_id} not found"
-            )
-
     def clone(self) -> RepositoryBaseClass:
         """Clone the object"""
-        return self.__class__(self.objects[:])
+        return self.__class__(self.all())
 
     def filter_model_subtype(self, model_subtype: Type) -> RepositoryBaseClass:
         """Keep only items in the repository that are of the specified subtype, including further derived types."""
 
         self.__assert_valid_subtype(model_subtype)
 
-        objects = [o for o in self.objects if isinstance(o, model_subtype)]
+        objects = [o for o in self.all() if isinstance(o, model_subtype)]
 
         return self.__class__(objects)
 
     def __assert_valid_subtype(self, model_subtype: Type) -> None:
         """Sanity check to verify that the model belongs to this repository."""
-        if len(self.objects) == 0:
+        if self.len() == 0:
             return
 
-        base_type = utils.get_base_polymorphic_model(self.objects[0].__class__)
-
-        if not issubclass(model_subtype, base_type):
-            raise Exception(f"${model_subtype} is not a subtype of ${base_type}")
+        if not issubclass(model_subtype, self.base_model_type):
+            raise Exception(f"${model_subtype} is not a subtype of ${self.base_model_type}")
 
     def filter_attribute_value(
         self, attribute_name: str, comparator: AttributeFilterComparator, value
@@ -89,7 +79,7 @@ class RepositoryBaseClass:
 
         objects = [
             object
-            for object in self.objects
+            for object in self.all()
             if attribute_matches_value(object, attribute_name, value, comparator)
         ]
 
@@ -102,7 +92,7 @@ class RepositoryBaseClass:
 
         objects = [
             object
-            for object in self.objects
+            for object in self.all()
             if attribute_matches_value(object, attribute_name, value, comparator)
             and discrete_attribute_passes_none_check(object, attribute_name, comparator)
         ]
@@ -129,12 +119,12 @@ class RepositoryBaseClass:
                 for relation_object in relation_repository.all()
             ]
 
-            selection_mask = [object.id in referred_object_ids for object in self.objects]
+            selection_mask = [object.id in referred_object_ids for object in self.all()]
 
         else:
             relation_ids = relation_repository.ids()
             selection_mask = [
-                getattr(object, f"{relation_field}_id") in relation_ids for object in self.objects
+                getattr(object, f"{relation_field}_id") in relation_ids for object in self.all()
             ]
 
         # possibly invert the selection mask
@@ -142,9 +132,7 @@ class RepositoryBaseClass:
             selection_mask = [not x for x in selection_mask]
 
         # select objects based on the mask
-        objects = [
-            object for is_selected, object in zip(selection_mask, self.objects) if is_selected
-        ]
+        objects = [object for is_selected, object in zip(selection_mask, self.all()) if is_selected]
 
         return self.__class__(objects)
 
@@ -157,7 +145,7 @@ class RepositoryBaseClass:
         if (not start is None) or (not end is None):
             objects = self.objects[start:end]
         elif not indices is None:
-            objects = [self.objects[i] for i in indices]
+            objects = [self.all()[i] for i in indices]
         else:
             raise ValueError("Provide at least a `start`, `end` or `indices` parameter")
 
@@ -167,13 +155,12 @@ class RepositoryBaseClass:
     def get(self, object_id: int) -> PolymorphicModel:
         """Get an item in the objects list by id. Raises IndexError if object was not found"""
 
-        list_index = self.get_list_index_for_object_id(object_id)
-        return self.objects[list_index]
+        return self.id_object_dict[object_id]
 
     def all(self) -> list[PolymorphicModel]:
         """Return all objects in the repository"""
 
-        return self.objects
+        return list(self.id_object_dict.values())
 
     def dict(self) -> dict[int, PolymorphicModel]:
         """Return all objects in the repository in an id to model dictionary"""
@@ -182,16 +169,16 @@ class RepositoryBaseClass:
     def ids(self) -> list[int]:
         """Returns a list of object ids"""
 
-        return [object.id for object in self.objects]
+        return list(self.id_object_dict.keys())
 
     def first(self) -> object:
         """Return first object in the repository"""
-        return self.objects[0]
+        return self.all()[0]
 
     def len(self) -> int:
         """Return the number of objects in the repository"""
 
-        return len(self.objects)
+        return len(self.id_object_dict)
 
     def update(self, updated_object: PolymorphicModel):
         """
@@ -199,14 +186,14 @@ class RepositoryBaseClass:
         Raises an IndexError if the id was not found.
         """
 
+        if updated_object.id not in self.ids():
+            raise KeyError(f"Key {updated_object.id} not found in repository")
+
         # check if object base type is correct
         self.assert_correct_object_type(updated_object)
 
         # find object in list and overwrite
-        update_id = updated_object.id
-        list_index = self.get_list_index_for_object_id(update_id)
-
-        self.objects[list_index] = updated_object
+        self.id_object_dict[updated_object.id] = updated_object
 
     def add(self, new_object: PolymorphicModel) -> PolymorphicModel:
         """
@@ -223,7 +210,7 @@ class RepositoryBaseClass:
         cloned_new_object.id = next(self.id_counter)
 
         # add new object to list and return new object
-        self.objects.append(cloned_new_object)
+        self.id_object_dict[cloned_new_object.id] = cloned_new_object
 
         return cloned_new_object
 
@@ -240,8 +227,7 @@ class RepositoryBaseClass:
     def remove(self, object_id: int):
         """Remove an item from the repository"""
 
-        list_index = self.get_list_index_for_object_id(object_id)
-        self.objects.pop(list_index)
+        self.id_object_dict.pop(object_id)
 
     def assert_correct_object_type(self, object: PolymorphicModel):
         """Raises a ValueError if the base model type of object is different from this repository's base model type"""

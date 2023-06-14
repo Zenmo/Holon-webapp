@@ -23,7 +23,7 @@ class RepositoryGetTestClass(unittest.TestCase):
     def test_get_wrong_id(self):
         # non-existing index
         self.assertRaises(
-            ValueError,
+            KeyError,
             self.repository.get,
             10,
         )
