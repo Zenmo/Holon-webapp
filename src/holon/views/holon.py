@@ -94,8 +94,7 @@ class HolonV2Service(generics.CreateAPIView):
                 )
 
                 results = Results(
-                    scenario=scenario,
-                    # cc_payload=cc_payload,
+                    cc_payload=cc_payload,
                     request=request,
                     anylogic_outcomes=cc.outputs,
                     cost_benefit_overview=cost_benefit_tables.main_table(),
@@ -144,7 +143,7 @@ class HolonV2Service(generics.CreateAPIView):
             "depreciation_costs": [],
         }
         for name, outcome in ETMConnect.connect_from_scenario(
-            scenario, scenario_aggregate, cc.output
+            scenario, scenario_aggregate, cc.outputs
         ):
             if name == "cost":
                 etm_outcomes["cost_outcome"] = outcome
