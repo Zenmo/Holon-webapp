@@ -22,6 +22,11 @@ class RepositoryBaseClass:
         self.assert_object_ids(objects)  # TODO make property with setter?
         self.objects = objects
 
+        # Set original id of each model
+        # This maintains backwards compatibility when id's weren't stable because of cloning in the database
+        for object in self.objects:
+            object.original_id = object.id
+
         # start an id counter at an arbitrary high number
         self.id_counter = self.id_counter_generator(objects)
 
