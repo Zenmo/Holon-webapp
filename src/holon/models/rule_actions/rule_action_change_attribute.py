@@ -12,7 +12,6 @@ from django.db import models
 from modelcluster.fields import ParentalKey
 from holon.models.scenario_rule import ScenarioRule
 from wagtail.admin.edit_handlers import FieldPanel
-from django.db.models.query import QuerySet
 
 
 from holon.models.util import is_allowed_relation
@@ -82,7 +81,7 @@ class RuleActionChangeAttribute(RuleAction):
         filtered_repository: RepositoryBaseClass,
         value: str,
     ) -> ScenarioAggregate:
-        """Apply a rule action to an object in the queryset"""
+        """Apply a rule action to an object in the repository"""
 
         if self.static_value:
             value = self.static_value

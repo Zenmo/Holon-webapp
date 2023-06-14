@@ -22,9 +22,7 @@ from holon.models.interactive_element import (
     InteractiveElementContinuousValues,
 )
 from holon.models.actor import ActorGroup, ActorSubGroup
-from holon.models.scenario import Scenario
 from holon.models.util import all_subclasses
-from django.db.models.query import QuerySet
 from django.db.models import Q
 from holon.models.config.datamodel_conversion import DatamodelConversion
 from holon.models.filter_subselector import FilterSubSelector
@@ -287,7 +285,7 @@ class ScenarioRule(Rule):
         return value
 
     def subselect_repository(self, filtered_repository: RepositoryBaseClass, value: str):
-        """Apply the rule's query subselection to the filtered queryset"""
+        """Apply the rule's query subselection to the filtered repository"""
 
         subselectors = self.get_filter_subselectors()
         for subselector in subselectors:
@@ -402,7 +400,7 @@ class DatamodelQueryRule(Rule):
 
     # TODO update to new kostenbaten (use group en subgroup to filter)
     def get_filters_attribute_sum(self, scenario_aggregate: ScenarioAggregate) -> float:
-        """Return the sum of a specific attribute of all objects in a queryset"""
+        """Return the sum of a specific attribute of all objects in a repository"""
 
         filtered_repository = self.get_filtered_repository(scenario_aggregate)
 
@@ -441,7 +439,7 @@ class DatamodelQueryRule(Rule):
         model_attribute: str,  # either group or subgroup
         group_to_filter: Union[ActorGroup, ActorSubGroup],
     ) -> Q:
-        """Determine the filter to apply to the queryset based on the group_to_filter, based on the model type and corresponding relation to the actor group"""
+        """Determine the filter to apply to the repository based on the group_to_filter, based on the model type and corresponding relation to the actor group"""
         from holon.models.filter import (
             SecondOrderRelationAttributeFilter,
             RelationAttributeFilter,

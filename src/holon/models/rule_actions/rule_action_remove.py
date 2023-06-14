@@ -10,7 +10,6 @@ from holon.models.rule_actions import RuleAction
 from holon.models.scenario_rule import ScenarioRule
 
 from django.db import models
-from django.db.models.query import QuerySet
 
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel
@@ -51,7 +50,7 @@ class RuleActionRemove(RuleAction):
         filtered_repository: RepositoryBaseClass,
         value: str,
     ) -> ScenarioAggregate:
-        """Apply a rule action to an object in the queryset"""
+        """Apply a rule action to an object in the repository"""
 
         # remove subselection
         if self.remove_mode == RemoveMode.REMOVE_ALL.value:

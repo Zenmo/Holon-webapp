@@ -6,7 +6,6 @@ if TYPE_CHECKING:
 
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet
 from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel
 import random
@@ -21,7 +20,7 @@ class AmountType(models.TextChoices):
 
 
 class FilterSubSelector(PolymorphicModel):
-    """Base class for a class that allows selecting a subset of the elements in a queryset"""
+    """Base class for a class that allows selecting a subset of the elements in a repository"""
 
     use_interactive_element_value = models.BooleanField(default=True)
     number_of_items = models.IntegerField(
@@ -48,10 +47,6 @@ class FilterSubSelector(PolymorphicModel):
         if not self.use_interactive_element_value and self.number_of_items <= 0:
             raise ValidationError("number of items should be larger than zero")
 
-    def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
-        """Select a subset of items from the queryset"""
-        pass
-
     def subselect_repository(
         self, repository: RepositoryBaseClass, value: str
     ) -> RepositoryBaseClass:
@@ -60,7 +55,7 @@ class FilterSubSelector(PolymorphicModel):
 
 
 class Skip(FilterSubSelector):
-    """Class that allows for skipping a certain amount of items in a queryset"""
+    """Class that allows for skipping a certain amount of items in a repository"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_skips")
 
@@ -83,14 +78,14 @@ class Skip(FilterSubSelector):
 
 
 class TakeMode(models.TextChoices):
-    """Different methods of selecting part of a queryset"""
+    """Different methods of selecting part of a repository"""
 
     FIRST = "FIRST"
     RANDOM = "RANDOM"
 
 
 class Take(FilterSubSelector):
-    """Class that takes a certain amount of items in a queryset"""
+    """Class that takes a certain amount of items in a repository"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_takes")
     mode = models.CharField(max_length=32, choices=TakeMode.choices, null=False, blank=False)

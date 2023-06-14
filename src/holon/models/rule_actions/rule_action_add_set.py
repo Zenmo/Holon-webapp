@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 from django.forms import ValidationError
-from holon.models.actor import Actor
 from holon.models.rule_actions import RuleAction
 from django.db import models
-from django.db.models.query import QuerySet
 from holon.models import util
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from polymorphic import utils
 
 from wagtail.admin.edit_handlers import FieldPanel
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils

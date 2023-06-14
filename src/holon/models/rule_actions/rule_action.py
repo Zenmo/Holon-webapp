@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from django.db.models.query import QuerySet
 from polymorphic.models import PolymorphicModel
 
 
@@ -25,6 +24,6 @@ class RuleAction(PolymorphicModel):
         filtered_repository: RepositoryBaseClass,
         value: str,
     ) -> ScenarioAggregate:
-        """Apply a rule action to an object in the queryset"""
+        """Apply a rule action to an object in the repository"""
 
         raise NotImplementedError()
