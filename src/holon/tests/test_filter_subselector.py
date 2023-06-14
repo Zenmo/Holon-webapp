@@ -44,7 +44,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
             )
         )
 
-    def test_subselector_skip_set_value(self) -> None:
+    def test_subselector_skip_set_value_absolute(self) -> None:
         # Arange
 
         rule: ScenarioRule = ScenarioRule.objects.create(
@@ -61,7 +61,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
         # Assert
         self.assertEqual(list(queryset), list(full_queryset[1:]))
 
-    def test_subselector_skip_ie_value(self) -> None:
+    def test_subselector_skip_ie_value_absolute(self) -> None:
         # Arange
 
         rule: ScenarioRule = ScenarioRule.objects.create(
@@ -78,7 +78,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
         # Assert
         self.assertEqual(list(queryset), list(full_queryset[2:]))
 
-    def test_subselector_take_set_value(self) -> None:
+    def test_subselector_take_set_value_absolute(self) -> None:
         # Arange
 
         rule: ScenarioRule = ScenarioRule.objects.create(
@@ -97,7 +97,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
         # Assert
         self.assertEqual(list(queryset), list(full_queryset[:1]))
 
-    def test_subselector_take_ie_value(self) -> None:
+    def test_subselector_take_ie_value_absolute(self) -> None:
         # Arange
 
         rule: ScenarioRule = ScenarioRule.objects.create(
@@ -116,7 +116,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
         # Assert
         self.assertEqual(list(queryset), list(full_queryset[:3]))
 
-    def test_subselector_take_random(self) -> None:
+    def test_subselector_take_random_absolute(self) -> None:
         # Arange
 
         rule: ScenarioRule = ScenarioRule.objects.create(
@@ -134,3 +134,116 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Assert
         self.assertEqual(len(queryset), 3)
+
+    def test_subselector_skip_set_value_relative(self) -> None:
+        # Arange
+
+        rule: ScenarioRule = ScenarioRule.objects.create(
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="BuildingGridConnection",
+        )
+
+        Skip.objects.create(
+            rule=rule,
+            use_interactive_element_value=False,
+            number_of_items=75,
+            amount_type=AmountType.RELATIVE.value,
+        )
+
+        # Act
+        full_queryset = rule.get_queryset(self.scenario)
+        queryset = rule.apply_filter_subselections(full_queryset, "")
+
+        # Assert
+        self.assertEqual(list(queryset), list(full_queryset[3:]))
+
+    def test_subselector_skip_ie_value_relative(self) -> None:
+        # Arange
+
+        rule: ScenarioRule = ScenarioRule.objects.create(
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="BuildingGridConnection",
+        )
+
+        Skip.objects.create(
+            rule=rule,
+            use_interactive_element_value=True,
+            number_of_items=0,
+            amount_type=AmountType.RELATIVE.value,
+        )
+
+        # Act
+        full_queryset = rule.get_queryset(self.scenario)
+        queryset = rule.apply_filter_subselections(full_queryset, "50")
+
+        # Assert
+        self.assertEqual(list(queryset), list(full_queryset[2:]))
+
+    def test_subselector_take_set_value_relative(self) -> None:
+        # Arange
+
+        rule: ScenarioRule = ScenarioRule.objects.create(
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="BuildingGridConnection",
+        )
+
+        Take.objects.create(
+            rule=rule,
+            use_interactive_element_value=False,
+            number_of_items=75,
+            mode=TakeMode.FIRST,
+            amount_type=AmountType.RELATIVE.value,
+        )
+
+        # Act
+        full_queryset = rule.get_queryset(self.scenario)
+        queryset = rule.apply_filter_subselections(full_queryset, "")
+
+        # Assert
+        self.assertEqual(list(queryset), list(full_queryset[:3]))
+
+    def test_subselector_take_ie_value_relative(self) -> None:
+        # Arange
+
+        rule: ScenarioRule = ScenarioRule.objects.create(
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="BuildingGridConnection",
+        )
+
+        Take.objects.create(
+            rule=rule,
+            use_interactive_element_value=True,
+            number_of_items=0,
+            mode=TakeMode.FIRST,
+            amount_type=AmountType.RELATIVE.value,
+        )
+
+        # Act
+        full_queryset = rule.get_queryset(self.scenario)
+        queryset = rule.apply_filter_subselections(full_queryset, "25")
+
+        # Assert
+        self.assertEqual(list(queryset), list(full_queryset[:1]))
+
+    def test_subselector_take_random_relative(self) -> None:
+        # Arange
+
+        rule: ScenarioRule = ScenarioRule.objects.create(
+            model_type=ModelType.GRIDCONNECTION,
+            model_subtype="BuildingGridConnection",
+        )
+
+        Take.objects.create(
+            rule=rule,
+            use_interactive_element_value=False,
+            number_of_items=50,
+            mode=TakeMode.RANDOM,
+            amount_type=AmountType.RELATIVE.value,
+        )
+
+        # Act
+        full_queryset = rule.get_queryset(self.scenario)
+        queryset = rule.apply_filter_subselections(full_queryset, "")
+
+        # Assert
+        self.assertEqual(len(queryset), 2)

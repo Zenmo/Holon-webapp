@@ -7,11 +7,13 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from polymorphic.models import PolymorphicModel
 from holon.models.filter import Filter
+from holon.models.util import is_allowed_relation
 
 from holon.models.interactive_element import (
     InteractiveElementOptions,
     InteractiveElementContinuousValues,
 )
+from holon.models.actor import ActorGroup, ActorSubGroup
 from holon.models.scenario import Scenario
 from holon.models.util import all_subclasses
 from django.db.models.query import QuerySet
@@ -28,6 +30,7 @@ class ModelType(models.TextChoices):
     GRIDNODE = "GridNode"
     GRIDCONNECTION = "GridConnection"
     POLICY = "Policy"
+    SCENARIO = "Scenario"
 
 
 class Rule(PolymorphicModel, ClusterableModel):
@@ -101,7 +104,11 @@ class Rule(PolymorphicModel, ClusterableModel):
         model_type = self.model_type if self.model_subtype is None else self.model_subtype
         model = apps.get_model("holon", model_type)
 
-        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if not field.is_relation or is_allowed_relation(field.name)
+        ]
 
     def model_subtype_options(self) -> list[str]:
         """Get a list of subclass names of the Rule's model type"""
@@ -135,6 +142,8 @@ class Rule(PolymorphicModel, ClusterableModel):
             return scenario.policy_set.all()
         elif self.model_type == ModelType.CONTRACT.value:
             return scenario.contracts
+        elif self.model_type == ModelType.SCENARIO.value:
+            return Scenario.objects.filter(id=scenario.id)
         else:
             raise Exception("Not implemented model type")
 
@@ -240,6 +249,11 @@ class ScenarioRule(Rule):
                         label="Discrete rule action - change attribute",
                     ),
                     InlinePanel(
+                        "discrete_factors_attribute_noise",
+                        heading="Discrete rule actions - attribute noise",
+                        label="Discrete rule action - attribute noise",
+                    ),
+                    InlinePanel(
                         "discrete_factors_remove",
                         heading="Discrete rule actions - remove filtered objects",
                         label="Discrete rule action - remove filtered objects",
@@ -309,6 +323,7 @@ class ScenarioRule(Rule):
         return (
             list(self.continuous_factors.all())
             + list(self.discrete_factors_change_attribute.all())
+            + list(self.discrete_factors_attribute_noise.all())
             + list(self.discrete_factors_add.all())
             + list(self.discrete_factors_remove.all())
             + list(self.discrete_factors_set_count.all())
@@ -381,17 +396,50 @@ class DatamodelQueryRule(Rule):
                     f"{self.model_subtype if self.model_subtype else self.model_type} has no attribute {self.attribute_to_sum}"
                 )
 
-    def get_filters_object_count(self, scenario: Scenario) -> int:
+    def get_filters_object_count(
+        self,
+        scenario: Scenario,
+        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+    ) -> int:
         """Get the number of objects in the combined filter resutls"""
 
         filtered_queryset = self.get_filtered_queryset(scenario)
+        if group_to_filter is not None:
+            filtered_queryset = filtered_queryset.filter(
+                self.determine_group_filter(
+                    model_attribute="group", group_to_filter=group_to_filter
+                )
+            )
+        if subgroup_to_filter is not None:
+            filtered_queryset = filtered_queryset.filter(
+                self.determine_group_filter(
+                    model_attribute="subgroup", group_to_filter=subgroup_to_filter
+                )
+            )
         return filtered_queryset.count()
 
-    def get_filters_attribute_sum(self, scenario: Scenario) -> float:
+    def get_filters_attribute_sum(
+        self,
+        scenario: Scenario,
+        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+    ) -> float:
         """Return the sum of a specific attribute of all objects in a queryset"""
 
         filtered_queryset = self.get_filtered_queryset(scenario)
-
+        if group_to_filter is not None:
+            filtered_queryset = filtered_queryset.filter(
+                self.determine_group_filter(
+                    model_attribute="group", group_to_filter=group_to_filter
+                )
+            )
+        if subgroup_to_filter is not None:
+            filtered_queryset = filtered_queryset.filter(
+                self.determine_group_filter(
+                    model_attribute="subgroup", group_to_filter=subgroup_to_filter
+                )
+            )
         attr_sum = 0.0
         for filtered_object in filtered_queryset:
             try:
@@ -404,13 +452,67 @@ class DatamodelQueryRule(Rule):
 
         return attr_sum
 
-    def get_filter_aggregation_result(self, scenario: Scenario) -> Union[int, float]:
+    def get_filter_aggregation_result(
+        self,
+        scenario: Scenario,
+        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+    ) -> Union[int, float]:
         """Get the filter aggregation result based on the datamodel query rule's conversion type"""
-
+        ## TODO make get filters more DRY (WIES4)
         if self.self_conversion == SelfConversionType.COUNT.value:
-            return self.get_filters_object_count(scenario)
+            return self.get_filters_object_count(scenario, group_to_filter, subgroup_to_filter)
 
         elif self.self_conversion == SelfConversionType.SUM.value:
-            return self.get_filters_attribute_sum(scenario)
+            return self.get_filters_attribute_sum(scenario, group_to_filter, subgroup_to_filter)
 
         raise ValidationError("No valid conversion type set")
+
+    def determine_group_filter(
+        self,
+        model_attribute: str,  # either group or subgroup
+        group_to_filter: Union[ActorGroup, ActorSubGroup],
+    ) -> Q:
+        """Determine the filter to apply to the queryset based on the group_to_filter, based on the model type and corresponding relation to the actor group"""
+        from holon.models.filter import (
+            SecondOrderRelationAttributeFilter,
+            RelationAttributeFilter,
+            AttributeFilterComparator,
+        )
+
+        if self.model_type == ModelType.ENERGYASSET.value:
+            # energyasset -> gridconnection/gridnode -> actor -> group/subgroup
+            rela_node = SecondOrderRelationAttributeFilter(
+                rule=self,
+                relation_field="gridnode",
+                second_order_relation_field="owner_actor",
+                model_attribute=model_attribute,
+                comparator=AttributeFilterComparator.EQUAL.value,
+                value=group_to_filter.id,
+            )
+            rela_con = SecondOrderRelationAttributeFilter(
+                rule=self,
+                relation_field="gridconnection",
+                second_order_relation_field="owner_actor",
+                model_attribute=model_attribute,
+                comparator=AttributeFilterComparator.EQUAL.value,
+                value=group_to_filter.id,
+            )
+            return rela_con.get_q() | rela_node.get_q()
+
+        elif (
+            self.model_type == ModelType.GRIDCONNECTION.value
+            or self.model_type == ModelType.GRIDNODE.value
+        ):
+            # gridconnection -> actor -> group/subgroup
+            rela = RelationAttributeFilter(
+                rule=self,
+                relation_field="owner_actor",
+                model_attribute=model_attribute,
+                comparator=AttributeFilterComparator.EQUAL.value,
+                value=group_to_filter.id,
+            )
+            return rela.get_q()
+
+        else:
+            raise ValidationError("No valid model type set")

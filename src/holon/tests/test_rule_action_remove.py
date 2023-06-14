@@ -11,6 +11,25 @@ class RuleMappingTestClass(TestCase):
         actor: Actor = Actor.objects.create(
             category=ActorType.CONNECTIONOWNER, payload=self.scenario
         )
+        DeliveryContract.objects.create(
+            name="delivery_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=actor,
+            contractScope=actor,
+            deliveryContractType=DeliveryContractType.FIXED,
+            deliveryPrice_eurpkWh=1,
+            feedinPrice_eurpkWh=1,
+        )
+        ConnectionContract.objects.create(
+            name="connection_contract",
+            energyCarrier=EnergyCarrier.ELECTRICITY,
+            actor=actor,
+            contractScope=actor,
+            connectionContractType=ConnectionContractType.DEFAULT,
+            nfATO_capacity_kW=1,
+            nfATO_starttime_h=1,
+            nfATO_endtime_h=1,
+        )
         gridconnection_0: BuildingGridConnection = BuildingGridConnection.objects.create(
             owner_actor=actor,
             capacity_kw=750.0,
@@ -66,6 +85,10 @@ class RuleMappingTestClass(TestCase):
             eta_r=0.95,
             deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
+        )
+        EnergyAsset.objects.create(gridconnection=gridconnection_2, name="asset 2")
+        ConsumptionAsset.objects.create(
+            gridconnection=gridconnection_2, name="asset 2", type="ELECTRICITY_DEMAND"
         )
         ElectricHeatConversionAsset.objects.create(
             gridconnection=gridconnection_2,
@@ -231,3 +254,51 @@ class RuleMappingTestClass(TestCase):
             ]
         )
         assert n_hhc_assets == 3  # was 3
+
+    def test_rule_action_remove_all_gridconnections(self):
+        """Test the remove rule action"""
+
+        # Arrange
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.GRIDCONNECTION,
+        )
+        rule_action_remove = RuleActionRemove.objects.create(
+            rule=rule, remove_mode=RemoveMode.REMOVE_ALL
+        )
+
+        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        assert len(updated_scenario.gridconnection_set.all()) == 0
+        assert len(updated_scenario.assets) == 0
+        assert len(updated_scenario.actor_set.all()) == 1
+
+    def test_rule_action_remove_all_actors(self):
+        """Test the remove rule action"""
+
+        # Arrange
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.ACTOR,
+        )
+        rule_action_remove = RuleActionRemove.objects.create(
+            rule=rule, remove_mode=RemoveMode.REMOVE_ALL
+        )
+
+        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+
+        # Act
+        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
+            self.scenario.id, interactive_elements
+        )
+
+        # Assert
+        assert len(updated_scenario.actor_set.all()) == 0
+        assert len(updated_scenario.gridconnection_set.all()) == 0
+        assert len(updated_scenario.assets) == 0

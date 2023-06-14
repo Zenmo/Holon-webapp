@@ -7,11 +7,16 @@ from holon.models import rule_mapping
 class RuleFiltersTestClass(TestCase):
     def setUp(self) -> None:
         self.scenario: Scenario = Scenario.objects.create(name="test")
-        self.actor: Actor = Actor.objects.create(
-            category=ActorType.CONNECTIONOWNER, payload=self.scenario
+        self.actor_group_1 = ActorGroup.objects.create(name="group 1")
+        self.actor_group_2 = ActorGroup.objects.create(name="group 2")
+        self.actor_1: Actor = Actor.objects.create(
+            category=ActorType.CONNECTIONOWNER, payload=self.scenario, group=self.actor_group_1
+        )
+        self.actor_2: Actor = Actor.objects.create(
+            category=ActorType.CONNECTIONOWNER, payload=self.scenario, group=self.actor_group_2
         )
         self.gridconnection_1: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=self.actor,
+            owner_actor=self.actor_1,
             capacity_kw=750.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.D,
@@ -19,7 +24,7 @@ class RuleFiltersTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         self.gridconnection_2: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=self.actor,
+            owner_actor=self.actor_1,
             capacity_kw=550.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.A,
@@ -27,7 +32,7 @@ class RuleFiltersTestClass(TestCase):
             type=BuildingType.LOGISTICS,
         )
         self.gridconnection_3: BuildingGridConnection = BuildingGridConnection.objects.create(
-            owner_actor=self.actor,
+            owner_actor=self.actor_2,
             capacity_kw=1000.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.B,
@@ -36,7 +41,7 @@ class RuleFiltersTestClass(TestCase):
         )
         self.gridconnection_4: DistrictHeatingGridConnection = (
             DistrictHeatingGridConnection.objects.create(
-                owner_actor=self.actor,
+                owner_actor=self.actor_2,
                 capacity_kw=550.0,
                 payload=self.scenario,
                 heating_type=HeatingType.GASBURNER,
@@ -85,6 +90,25 @@ class RuleFiltersTestClass(TestCase):
 
         # Assert
         self.assertEqual(len(filtered_queryset), 4)
+
+    def test_attribute_filter_allowed_relation(self):
+        # Arrange
+        rule: Rule = Rule.objects.create(
+            model_type=ModelType.ACTOR,
+            model_subtype="",
+        )
+        AttributeFilter.objects.create(
+            rule=rule,
+            model_attribute="group",
+            comparator=AttributeFilterComparator.EQUAL,
+            value=self.actor_group_1.id,
+        )
+
+        # Act
+        filtered_queryset = rule.get_filtered_queryset(self.scenario)
+
+        # Assert
+        self.assertEqual(len(filtered_queryset), 1)
 
     def test_relation_filter_greater_than(self) -> None:
         # Arange
@@ -149,7 +173,7 @@ class RuleFiltersTestClass(TestCase):
         # Arange
         # Add gridconnection with insulationtype none, which should be ignored
         BuildingGridConnection.objects.create(
-            owner_actor=self.actor,
+            owner_actor=self.actor_1,
             capacity_kw=550.0,
             payload=self.scenario,
             insulation_label=InsulationLabel.NONE,
@@ -185,7 +209,7 @@ class RuleFiltersTestClass(TestCase):
             gridconnection=self.gridconnection_1, name="asset 1"
         )
         gridnode = GridNode.objects.create(
-            owner_actor=self.actor, capacity_kw=0, payload=self.scenario
+            owner_actor=self.actor_1, capacity_kw=0, payload=self.scenario
         )
         asset_related_to_gridnode = EnergyAsset.objects.create(gridnode=gridnode, name="asset 2")
         rule_asset = Rule.objects.create(
@@ -212,7 +236,7 @@ class RuleFiltersTestClass(TestCase):
             gridconnection=self.gridconnection_1, name="asset 1"
         )
         gridnode = GridNode.objects.create(
-            owner_actor=self.actor, capacity_kw=0, payload=self.scenario
+            owner_actor=self.actor_1, capacity_kw=0, payload=self.scenario
         )
         asset_related_to_gridnode = EnergyAsset.objects.create(gridnode=gridnode, name="asset 2")
         rule_asset = Rule.objects.create(
@@ -263,10 +287,10 @@ class RuleFiltersTestClass(TestCase):
     def test_second_order_relation_filter(self) -> None:
         # Arange
         electric_gridnode_1 = ElectricGridNode.objects.create(
-            payload=self.scenario, owner_actor=self.actor, capacity_kw=0
+            payload=self.scenario, owner_actor=self.actor_1, capacity_kw=0
         )
         electric_gridnode_2 = ElectricGridNode.objects.create(
-            payload=self.scenario, owner_actor=self.actor, capacity_kw=100
+            payload=self.scenario, owner_actor=self.actor_1, capacity_kw=100
         )
         gridconnection_1 = GridConnection.objects.create(
             payload=self.scenario, parent_electric=electric_gridnode_1, capacity_kw=0
@@ -301,10 +325,10 @@ class RuleFiltersTestClass(TestCase):
     def test_second_order_relation_filter_with_relation_subtype(self) -> None:
         # Arange
         electric_gridnode_1 = ElectricGridNode.objects.create(
-            payload=self.scenario, owner_actor=self.actor, capacity_kw=50
+            payload=self.scenario, owner_actor=self.actor_1, capacity_kw=50
         )
         electric_gridnode_2 = ElectricGridNode.objects.create(
-            payload=self.scenario, owner_actor=self.actor, capacity_kw=100
+            payload=self.scenario, owner_actor=self.actor_1, capacity_kw=100
         )
         gridconnection_1 = BuildingGridConnection.objects.create(
             payload=self.scenario,
