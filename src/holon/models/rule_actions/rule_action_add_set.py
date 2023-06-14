@@ -10,9 +10,11 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 from holon.models.scenario_rule import ScenarioRule
+from holon.models.scenario import Scenario
 from holon.models.asset import EnergyAsset
 from holon.models.contract import Contract
 from holon.models.gridconnection import GridConnection
+from holon.models.scenario_rule import ModelType
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 
 from typing import TYPE_CHECKING
@@ -95,24 +97,10 @@ class GenericRuleActionAdd(RuleAction):
             self.model_to_add = self.gridconnection_to_add
             self.model_to_add_base_class = GridConnection
 
-            (
-                self.asset_children_to_add,
-                self.actor_to_add,
-                self.actor_contracts_to_add,
-            ) = self.__get_gridconnection_children(self.model_to_add)
-
         elif self.contract_to_add:
             assert not (self.asset_to_add or self.gridconnection_to_add)
             self.model_to_add = self.contract_to_add
             self.model_to_add_base_class = Contract
-
-    def __get_gridconnection_children(self, gridconnection):
-        """Retrieve all related children of the given gridconnection"""
-        assets = gridconnection.energyasset_set.get_real_instances()
-        actor = gridconnection.owner_actor
-        actor_contracts = actor.contracts.get_real_instances() if actor else []
-
-        return assets, actor, actor_contracts
 
     class Meta:
         verbose_name = "GenericRuleActionAdd"
@@ -137,7 +125,7 @@ class GenericRuleActionAdd(RuleAction):
                 raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-        base_parent_type = filtered_repository.base_model_type  # TODO make sure repository has this
+        base_parent_type = filtered_repository.base_model_type
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
@@ -152,6 +140,11 @@ class GenericRuleActionAdd(RuleAction):
             )
 
         objects_added = 0
+
+        if self.gridconnection_to_add and base_parent_type == Scenario:
+            gridconnection_children = RuleActionUtils.get_gridconnection_children(
+                self.gridconnection_to_add
+            )
 
         # only take first n objects
         for filtererd_object in filtered_repository.all():
@@ -177,20 +170,10 @@ class GenericRuleActionAdd(RuleAction):
             if not reset_models_before_add or objects_added < n:
                 # add model_to_add to filtered object
 
-                if (
-                    self.contract_to_add
-                ):  # TODO if cloned_contract_scope is indeed unnecessary, this whole if statement can be removed
-                    scenario_aggregate.add_object(
-                        self.model_to_add,
-                        self.model_to_add_base_class.__name__,
-                        {
-                            parent_fk_field_name: filtererd_object,
-                            f"{parent_fk_field_name}_id": filtererd_object.id,
-                            # "contractScope": cloned_contract_scope,
-                            "is_rule_action_template": False,
-                        },
+                if self.gridconnection_to_add and base_parent_type == Scenario:
+                    scenario_aggregate = add_gridconnection_with_children(
+                        scenario_aggregate, self.gridconnection_to_add, gridconnection_children
                     )
-
                 else:
                     scenario_aggregate.add_object(
                         self.model_to_add,
@@ -286,7 +269,6 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
     class Meta:
         verbose_name = "RuleActionAddMultipleUnderEachParent"
 
-    # TODO childmodel duplicate code SEM herstellen
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
@@ -301,31 +283,99 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
             raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
 
         # get parent type and foreign key field name
-
+        base_parent_type = filtered_repository.base_model_type
         try:
             parent_fk_field_name = next(
                 parent_fk_fieldname
                 for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(
                     self.model_to_add.__class__
                 )
-                if filtered_repository.base_model_type == parent_type
+                if base_parent_type == parent_type
             )
         except:
             raise ValueError(
                 f"Type {filtered_repository.base_model_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)} for model type {self.model_to_add.__class__.__name__}"
             )
 
+        if self.gridconnection_to_add and base_parent_type == Scenario:
+            gridconnection_children = RuleActionUtils.get_gridconnection_children(
+                self.gridconnection_to_add
+            )
+
         # only take first n objects
         for filtererd_object in filtered_repository.all():
             for _ in range(n):
-                scenario_aggregate.add_object(
-                    self.model_to_add,
-                    self.model_to_add_base_class.__name__,
-                    {
-                        parent_fk_field_name: filtererd_object,
-                        f"{parent_fk_field_name}_id": filtererd_object.id,
-                        "is_rule_action_template": False,
-                    },
-                )
+                if self.gridconnection_to_add and base_parent_type == Scenario:
+                    scenario_aggregate = add_gridconnection_with_children(
+                        scenario_aggregate, self.gridconnection_to_add, gridconnection_children
+                    )
+                else:
+                    scenario_aggregate.add_object(
+                        self.model_to_add,
+                        self.model_to_add_base_class.__name__,
+                        {
+                            parent_fk_field_name: filtererd_object,
+                            f"{parent_fk_field_name}_id": filtererd_object.id,
+                            "is_rule_action_template": False,
+                        },
+                    )
 
         return scenario_aggregate
+
+
+def add_gridconnection_with_children(
+    scenario_aggregate: ScenarioAggregate,
+    gridconnection: GridConnection,
+    children: tuple[list[EnergyAsset], Actor, list[Contract]],
+) -> ScenarioAggregate:
+    """Add gridconnection with children to scenario aggregate"""
+    assets, actor, actor_contracts = children
+
+    if actor is not None:
+        added_actor = scenario_aggregate.add_object(
+            actor,
+            ModelType.ACTOR.value,
+            {
+                "payload": scenario_aggregate.scenario,
+                "payload_id": scenario_aggregate.scenario.id,
+                "is_rule_action_template": False,
+            },
+        )
+
+        for contract in actor_contracts:
+            scenario_aggregate.add_object(
+                contract,
+                ModelType.CONTRACT.value,
+                {
+                    "actor": added_actor,
+                    "actor_id": added_actor.id,
+                    "is_rule_action_template": False,
+                },
+            )
+    else:
+        added_actor = None
+
+    added_gridconnection = scenario_aggregate.add_object(
+        gridconnection,
+        ModelType.GRIDCONNECTION.value,
+        {
+            "payload": scenario_aggregate.scenario,
+            "payload_id": scenario_aggregate.scenario.id,
+            "owner_actor": added_actor,
+            "owner_actor_id": getattr(added_actor, "id", None),
+            "is_rule_action_template": False,
+        },
+    )
+
+    for asset in assets:
+        scenario_aggregate.add_object(
+            asset,
+            ModelType.ENERGYASSET.value,
+            {
+                "gridconnection": added_gridconnection,
+                "gridconnection_id": added_gridconnection.id,
+                "is_rule_action_template": False,
+            },
+        )
+
+    return scenario_aggregate
