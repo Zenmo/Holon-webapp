@@ -55,3 +55,13 @@ class RuleActionUtils:
             # Return normal class if not polymorphic
             return ChildModel
         return model
+
+    def get_gridconnection_children(
+        gridconnection: GridConnection,
+    ) -> tuple[list[EnergyAsset], Actor, list[Contract]]:
+        """Retrieve all related children of the given gridconnection"""
+        assets = gridconnection.energyasset_set.get_real_instances()
+        actor = gridconnection.owner_actor
+        actor_contracts = actor.contracts.get_real_instances() if actor else []
+
+        return assets, actor, actor_contracts

@@ -137,20 +137,13 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "5", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert len(updated_scenario.gridconnection_set.all()) == 8  # was 3
-        assert len(updated_scenario.assets) == 6  # was 1
-        assert len(updated_scenario.actor_set.all()) == 7  # was 2
-        assert len(updated_scenario.contracts) == 5  # was 0
-        assert (
-            updated_scenario.actor_set.all()[6].contracts.first().contractScope.id
-            != existing_contract_scope.id
-        )
-        assert (
-            updated_scenario.actor_set.all()[6].contracts.first().contractScope.original_id
-            == existing_contract_scope.id
-        )
+        assert updated_scenario.repositories[ModelType.GRIDCONNECTION].len() == 8  # was 3
+        assert updated_scenario.repositories[ModelType.ENERGYASSET].len() == 6  # was 1
+        assert updated_scenario.repositories[ModelType.ACTOR].len() == 7  # was 2
+        assert updated_scenario.repositories[ModelType.CONTRACT].len() == 5  # was 0

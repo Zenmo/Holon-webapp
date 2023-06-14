@@ -5,3 +5,4 @@ from .contract_repository import *  # NOQA
 from .gridconnection_repository import *  # NOQA
 from .gridnode_repository import *  # NOQA
 from .policy_repository import *  # NOQA
+from .scenario_repository import *  # NOQA
