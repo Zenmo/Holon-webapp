@@ -34,6 +34,8 @@ class ModelType(models.TextChoices):
     """Types of models"""
 
     ACTOR = "Actor"
+    ACTOR_GROUP = "ActorGroup"
+    ACTOR_SUB_GROUP = "ActorSubGroup"
     CONTRACT = "Contract"
     ENERGYASSET = "EnergyAsset"
     GRIDNODE = "GridNode"
@@ -386,26 +388,94 @@ class DatamodelQueryRule(Rule):
                     f"{self.model_subtype if self.model_subtype else self.model_type} has no attribute {self.attribute_to_sum}"
                 )
 
-    # TODO update to new kostenbaten (use group en subgroup to filter)
-    def get_filters_object_count(
+    def get_filter_aggregation_result(
         self,
         scenario_aggregate: ScenarioAggregate,
         group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
         subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-    ) -> int:
-        """Get the number of objects in the combined filter resutls"""
+    ) -> Union[int, float]:
+        """Get the filter aggregation result based on the datamodel query rule's conversion type"""
+
+        from holon.models import AttributeFilterComparator
 
         filtered_repository = self.get_filtered_repository(scenario_aggregate)
-        return filtered_repository.len()
 
-    # TODO update to new kostenbaten (use group en subgroup to filter)
-    def get_filters_attribute_sum(self, scenario_aggregate: ScenarioAggregate) -> float:
-        """Return the sum of a specific attribute of all objects in a repository"""
+        if group_to_filter is not None or subgroup_to_filter is not None:
+            # We need to figure out which Actors belong to the group or subgroup
+            # And then select the objects which belong to those actors.
+            # The relevant relations are:
+            # energyasset -> gridconnection/gridnode -> actor -> group/subgroup
 
-        filtered_repository = self.get_filtered_repository(scenario_aggregate)
+            actor_repository = scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR.value
+            )
+            if group_to_filter is not None:
+                actor_repository = actor_repository.filter_attribute_value(
+                    "group_id", AttributeFilterComparator.EQUAL, group_to_filter.id
+                )
+
+            if subgroup_to_filter is not None:
+                actor_repository = actor_repository.filter_attribute_value(
+                    "subgroup_id", AttributeFilterComparator.EQUAL, subgroup_to_filter.id
+                )
+
+            if self.model_type == ModelType.ENERGYASSET.value:
+                # energyasset -> gridconnection/gridnode -> actor -> group/subgroup
+
+                gridnode_repository = scenario_aggregate.get_repository_for_model_type(
+                    ModelType.GRIDNODE.value
+                )
+                gridconnection_repository = scenario_aggregate.get_repository_for_model_type(
+                    ModelType.GRIDCONNECTION.value
+                )
+
+                gridnode_repository = gridnode_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+                gridconnection_repository = gridconnection_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+
+                filtered_repository = filtered_repository.filter_has_relation(
+                    "gridnode", gridnode_repository
+                )
+                filtered_repository = filtered_repository.filter_has_relation(
+                    "gridconnection", gridconnection_repository
+                )
+
+            elif self.model_type == ModelType.GRIDNODE.value:
+                # gridnode -> actor -> group/subgroup
+
+                filtered_repository = filtered_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+
+            elif self.model_type == ModelType.GRIDCONNECTION.value:
+                # gridconnection -> actor -> group/subgroup
+
+                filtered_repository = filtered_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+
+            else:
+                # TODO: this error is triggered for upscaling,
+                # but the group/subgroup division is only relevant for costs.
+                # https://github.com/ZEnMo/Holon-webapp/issues/766
+                raise ValidationError("No valid model type set")
+
+        if self.self_conversion == SelfConversionType.COUNT.value:
+            return filtered_repository.len()
+
+        elif self.self_conversion == SelfConversionType.SUM.value:
+            return self.sum(filtered_repository)
+
+        raise ValidationError("No valid conversion type set")
+
+    def sum(self, repository: RepositoryBaseClass) -> float:
+        """Return the sum of a specific attribute of all objects in a (filtered) repository"""
 
         attr_sum = 0.0
-        for filtered_object in filtered_repository.all():
+        for filtered_object in repository.all():
             try:
                 value = float(getattr(filtered_object, self.attribute_to_sum))
                 attr_sum += value
@@ -416,69 +486,3 @@ class DatamodelQueryRule(Rule):
                 )
 
         return attr_sum
-
-    # TODO update to new kostenbaten (use group en subgroup to filter)
-    def get_filter_aggregation_result(
-        self,
-        scenario_aggregate: ScenarioAggregate,
-        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
-    ) -> Union[int, float]:
-        """Get the filter aggregation result based on the datamodel query rule's conversion type"""
-
-        if self.self_conversion == SelfConversionType.COUNT.value:
-            return self.get_filters_object_count(scenario_aggregate)
-
-        elif self.self_conversion == SelfConversionType.SUM.value:
-            return self.get_filters_attribute_sum(scenario_aggregate)
-
-        raise ValidationError("No valid conversion type set")
-
-    def determine_group_filter(
-        self,
-        model_attribute: str,  # either group or subgroup
-        group_to_filter: Union[ActorGroup, ActorSubGroup],
-    ) -> Q:
-        """Determine the filter to apply to the repository based on the group_to_filter, based on the model type and corresponding relation to the actor group"""
-        from holon.models.filter import (
-            SecondOrderRelationAttributeFilter,
-            RelationAttributeFilter,
-            AttributeFilterComparator,
-        )
-
-        if self.model_type == ModelType.ENERGYASSET.value:
-            # energyasset -> gridconnection/gridnode -> actor -> group/subgroup
-            rela_node = SecondOrderRelationAttributeFilter(
-                rule=self,
-                relation_field="gridnode",
-                second_order_relation_field="owner_actor",
-                model_attribute=model_attribute,
-                comparator=AttributeFilterComparator.EQUAL.value,
-                value=group_to_filter.id,
-            )
-            rela_con = SecondOrderRelationAttributeFilter(
-                rule=self,
-                relation_field="gridconnection",
-                second_order_relation_field="owner_actor",
-                model_attribute=model_attribute,
-                comparator=AttributeFilterComparator.EQUAL.value,
-                value=group_to_filter.id,
-            )
-            return rela_con.get_q() | rela_node.get_q()
-
-        elif (
-            self.model_type == ModelType.GRIDCONNECTION.value
-            or self.model_type == ModelType.GRIDNODE.value
-        ):
-            # gridconnection -> actor -> group/subgroup
-            rela = RelationAttributeFilter(
-                rule=self,
-                relation_field="owner_actor",
-                model_attribute=model_attribute,
-                comparator=AttributeFilterComparator.EQUAL.value,
-                value=group_to_filter.id,
-            )
-            return rela.get_q()
-
-        else:
-            raise ValidationError("No valid model type set")

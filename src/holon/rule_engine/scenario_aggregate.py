@@ -14,8 +14,14 @@ from holon.rule_engine.repositories import (
 from django.apps import apps
 from django.db import models
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
+from holon.rule_engine.repositories.actor_group_repository import ActorGroupRepository
+from holon.rule_engine.repositories.actor_sub_group_repository import ActorSubGroupRepository
 
-from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+from holon.rule_engine.repositories.repository_base import (
+    RepositoryBaseClass,
+    get_instance_base_type,
+    get_base_type,
+)
 
 from holon.models.scenario_rule import ModelType
 from polymorphic import utils
@@ -31,6 +37,11 @@ class ScenarioAggregate:
 
         self.repositories: dict[str, RepositoryBaseClass] = {
             ModelType.ACTOR.value: ActorRepository.from_scenario(self.scenario),
+            # We could also inspect the actors and get the group and subgroup id's from there
+            # and use those to initialize the repositories.
+            # The database is probably faster at doing that.
+            ModelType.ACTOR_GROUP.value: ActorGroupRepository.from_scenario(self.scenario),
+            ModelType.ACTOR_SUB_GROUP.value: ActorSubGroupRepository.from_scenario(self.scenario),
             ModelType.ENERGYASSET.value: EnergyAssetRepository.from_scenario(self.scenario),
             ModelType.CONTRACT.value: ContractRepository.from_scenario(self.scenario),
             ModelType.POLICY.value: PolicyRepository.from_scenario(self.scenario),
@@ -62,7 +73,7 @@ class ScenarioAggregate:
 
         model = apps.get_model("holon", model_type_name)
         relation_model_class = model()._meta.get_field(relation_field_name).related_model
-        relation_model_base_name = utils.get_base_polymorphic_model(relation_model_class).__name__
+        relation_model_base_name = get_base_type(relation_model_class).__name__
 
         return self.get_repository_for_model_type(relation_model_base_name, model_subtype_name)
 
@@ -72,7 +83,7 @@ class ScenarioAggregate:
         """Add an object to self in the correct repository"""
 
         if not base_model_type:
-            base_model_type = utils.get_base_polymorphic_model(object.__class__).__name__
+            base_model_type = get_instance_base_type(object).__name__
 
         for key, value in additional_attributes.items():
             setattr(object, key, value)
@@ -83,7 +94,7 @@ class ScenarioAggregate:
         """Remove object from self including related models according to deletion policy"""
 
         if not base_model_type:
-            base_model_type = utils.get_base_polymorphic_model(object.__class__).__name__
+            base_model_type = get_instance_base_type(object).__name__
 
         relation_fields = [
             field

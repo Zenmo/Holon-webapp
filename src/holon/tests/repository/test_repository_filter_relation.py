@@ -40,7 +40,6 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
         )
 
     def test_filter_relation(self):
-
         filtered_repository = self.asset_repository.filter_has_relation(
             "gridnode", self.gridnode_repository, False
         )
@@ -50,7 +49,6 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
         assert filtered_repository.all()[1].id == 1
 
     def test_filter_relation_inverted(self):
-
         filtered_repository = self.asset_repository.filter_has_relation(
             "gridnode", self.gridnode_repository, True
         )
@@ -59,7 +57,6 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
         assert filtered_repository.all()[0].id == 2
 
     def test_filter_relation_parent_to_child(self):
-
         filtered_repository = self.gridnode_repository.filter_has_relation(
             "energyasset", self.asset_repository, False
         )
@@ -69,7 +66,6 @@ class RepositoryFilterRelationTestClass(unittest.TestCase):
         assert filtered_repository.all()[1].id == 52
 
     def test_filter_relation_parent_to_child_inverted(self):
-
         filtered_repository = self.gridnode_repository.filter_has_relation(
             "energyasset", self.asset_repository, True
         )

@@ -238,11 +238,11 @@ def is_scenario_object_relation_field(field: Union[models.Field, models.ForeignO
      - be part of the scenario aggregate ( no fields referencing rules )
     """
     from holon.models.scenario_rule import ModelType
+    from holon.rule_engine.repositories import get_base_type
 
     return (
         field.is_relation
         and hasattr(field, "on_delete")
         and field.parent_link == False
-        and getattr(utils.get_base_polymorphic_model(field.related_model), "__name__", None)
-        in ModelType.values
+        and get_base_type(field.related_model).__name__ in ModelType.values
     )
