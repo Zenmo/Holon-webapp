@@ -10,5 +10,6 @@ class RepositoryInitTestClass(unittest.TestCase):
         gridconnection_2 = HouseGridConnection(id=2)
         repository = GridConnectionRepository([gridconnection_1, gridconnection_2])
 
+        # original id should be set and the same as the objects id
         for object in repository.all():
-            assert object.original_id is not None
+            assert object.original_id is object.id
