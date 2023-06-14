@@ -7,7 +7,7 @@ from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType
 
 
-class ScenarioAggregateRemoveTestClass(TestCase):
+class ScenarioAggregateInitTestClass(TestCase):
     def setUp(self) -> None:
         self.scenario: Scenario = Scenario.objects.create(name="test")
         self.actor0: Actor = Actor.objects.create(
@@ -78,42 +78,7 @@ class ScenarioAggregateRemoveTestClass(TestCase):
 
         self.scenario_aggregate = ScenarioAggregate(self.scenario)
 
-    def test_remove_assets(self):
-        self.scenario_aggregate.remove_object(self.asset3)
-        assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 3
-        self.scenario_aggregate.remove_object(self.asset1)
-        assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 2
-        self.scenario_aggregate.remove_object(self.asset2)
-        assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 1
-        self.scenario_aggregate.remove_object(self.asset4)
-        assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 0
-
-        self.assertRaises(
-            ValueError,
-            self.scenario_aggregate.remove_object,
-            self.asset4,
-        )
-
-    def test_remove_actors_cascade(self):
-        self.scenario_aggregate.remove_object(self.actor0)
-        assert self.scenario_aggregate.repositories[ModelType.ACTOR.value].len() == 2
-
-        # check if gridconnection0 is deleted according to the CASCADE rule
-        assert self.scenario_aggregate.repositories[ModelType.GRIDCONNECTION.value].len() == 2
-
-        # check if asset1 and asset2 are deleted according to the CASCADE rule
-        assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 2
-
-    # def test_remove_gridconnections(self):
-    #     self.scenario_aggregate.remove_object(self.gridconnection_0)
-    #     assert len(self.scenario_aggregate.repositories[ModelType.ACTOR.value].all()) == 2
-    #     self.scenario_aggregate.remove_object(self.actor1)
-    #     assert len(self.scenario_aggregate.repositories[ModelType.ACTOR.value].all()) == 1
-    #     self.scenario_aggregate.remove_object(self.actor2)
-    #     assert len(self.scenario_aggregate.repositories[ModelType.ACTOR.value].all()) == 0
-
-    #     self.assertRaises(
-    #         ValueError,
-    #         self.scenario_aggregate.remove_object,
-    #         self.actor1,
-    #     )
+    def test_init(self):
+        assert self.scenario_aggregate.repositories[ModelType.ACTOR.value].len() == 3
+        assert self.scenario_aggregate.repositories[ModelType.GRIDCONNECTION.value].len() == 3
+        assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 4
