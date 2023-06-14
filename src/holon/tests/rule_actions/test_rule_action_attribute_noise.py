@@ -4,6 +4,7 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class AttributeNoiseTestClass(TestCase):
@@ -68,14 +69,27 @@ class AttributeNoiseTestClass(TestCase):
         interactive_elements = [{"value": "", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        # Assert
+        old_capacities = np.array(
+            [
+                gc.capacity_kw
+                for gc in scenario_aggregate.get_repository_for_model_type(
+                    GridConnection.__name__
+                ).all()
+            ]
         )
 
-        # Assert
-        old_capacities = np.array([gc.capacity_kw for gc in self.scenario.gridconnection_set.all()])
+        updated_scenario_aggregate: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
+        )
         new_capacities = np.array(
-            [gc.capacity_kw for gc in updated_scenario.gridconnection_set.all()]
+            [
+                gc.capacity_kw
+                for gc in updated_scenario_aggregate.get_repository_for_model_type(
+                    GridConnection.__name__
+                ).all()
+            ]
         )
 
         # assert capacities have changed
@@ -103,14 +117,27 @@ class AttributeNoiseTestClass(TestCase):
         interactive_elements = [{"value": "", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        # Assert
+        old_capacities = np.array(
+            [
+                gc.capacity_kw
+                for gc in scenario_aggregate.get_repository_for_model_type(
+                    GridConnection.__name__
+                ).all()
+            ]
         )
 
-        # Assert
-        old_capacities = np.array([gc.capacity_kw for gc in self.scenario.gridconnection_set.all()])
+        updated_scenario_aggregate: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
+        )
         new_capacities = np.array(
-            [gc.capacity_kw for gc in updated_scenario.gridconnection_set.all()]
+            [
+                gc.capacity_kw
+                for gc in updated_scenario_aggregate.get_repository_for_model_type(
+                    GridConnection.__name__
+                ).all()
+            ]
         )
 
         # assert capacities have changed
@@ -135,14 +162,27 @@ class AttributeNoiseTestClass(TestCase):
         interactive_elements = [{"value": "", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        # Assert
+        old_capacities = np.array(
+            [
+                gc.capacity_kw
+                for gc in scenario_aggregate.get_repository_for_model_type(
+                    GridConnection.__name__
+                ).all()
+            ]
         )
 
-        # Assert
-        old_capacities = np.array([gc.capacity_kw for gc in self.scenario.gridconnection_set.all()])
+        updated_scenario_aggregate: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
+        )
         new_capacities = np.array(
-            [gc.capacity_kw for gc in updated_scenario.gridconnection_set.all()]
+            [
+                gc.capacity_kw
+                for gc in updated_scenario_aggregate.get_repository_for_model_type(
+                    GridConnection.__name__
+                ).all()
+            ]
         )
 
         # assert capacities have changed

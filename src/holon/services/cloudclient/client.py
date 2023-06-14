@@ -13,18 +13,15 @@ from pipit.sentry import sentry_sdk_trace
 class CloudClient:
     """a more convient way of working with the AnyLogic cloud client"""
 
-    def __init__(
-        self, original_scenario: Scenario, scenario: Scenario = None, payload: dict = None
-    ):
+    def __init__(self, payload: dict, scenario: Scenario = None):
         from holon.models.config import AnylogicCloudConfig
 
         # db lookup
-        config: AnylogicCloudConfig = original_scenario.anylogic_config.get()
+        config: AnylogicCloudConfig = scenario.anylogic_config.get()
         self.config = config
 
         # value attributes
         self.url = config.url
-        self.scenario = scenario
         self.client = PatchedAnyLogicCloudClient(config.api_key, config.url)
 
         # method attributes
@@ -32,11 +29,7 @@ class CloudClient:
             model_name=config.model_name, model_version=config.model_version_number
         )
 
-        # TODO remove after rule engine update
-        if payload:
-            self.payload = payload
-        else:
-            self.payload = self.get_scenario_json(scenario)
+        self.payload = payload
 
         # initials
         self._outputs = None

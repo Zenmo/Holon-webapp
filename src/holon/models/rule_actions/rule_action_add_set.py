@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 from django.forms import ValidationError
-from holon.models.actor import Actor
 from holon.models.rule_actions import RuleAction
 from django.db import models
-from django.db.models.query import QuerySet
 from holon.models import util
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from polymorphic import utils
 
 from wagtail.admin.edit_handlers import FieldPanel
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils
@@ -210,11 +207,6 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
 
         return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Set the number of filtered objects with the model specified in rule_action_add to value"""
-
-        self.add_or_set_items_old(filtered_queryset, value, False)
-
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
@@ -246,11 +238,6 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
 
         return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Set the number of filtered objects with the model specified in rule_action_add to value"""
-
-        self.add_or_set_items_old(filtered_queryset, value, True)
-
     def apply_to_scenario_aggregate(
         self,
         scenario_aggregate: ScenarioAggregate,
@@ -281,42 +268,6 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
 
     class Meta:
         verbose_name = "RuleActionAddMultipleUnderEachParent"
-
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Set the number of filtered objects with the model specified in rule_action_add to value"""
-
-        # parse value
-        n = int(float(value))
-        if n < 0:
-            raise ValueError(f"Value to add cannot be smaller than 0. Given value: {n}")
-
-        # get parent type and foreign key field name
-        base_parent_type = RuleActionUtils.get_base_polymorphic_model(
-            filtered_queryset[0].__class__
-        )
-        try:
-            parent_fk_field_name = next(
-                parent_fk_fieldname
-                for parent_type, parent_fk_fieldname in RuleActionUtils.get_parent_classes_and_field_names(
-                    self.model_to_add.__class__
-                )
-                if base_parent_type == parent_type
-            )
-        except:
-            raise ValueError(
-                f"Type {base_parent_type} in the filter does not match found parent type {RuleActionUtils.get_parent_classes_and_field_names(self.model_to_add.__class__)} for model type {self.model_to_add.__class__.__name__}"
-            )
-
-        # only take first n objects
-        for filtererd_object in filtered_queryset:
-            for _ in range(n):
-                util.duplicate_model(
-                    self.model_to_add,
-                    {
-                        parent_fk_field_name: filtererd_object,
-                        "is_rule_action_template": False,
-                    },
-                )
 
     def apply_to_scenario_aggregate(
         self,

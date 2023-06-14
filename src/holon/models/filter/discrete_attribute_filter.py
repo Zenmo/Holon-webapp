@@ -76,26 +76,6 @@ class DiscreteAttributeFilter(Filter):
 
         return [choice[0] for choice in field.choices]
 
-    def get_q(self) -> Q:
-        model_type = self.rule.model_subtype if self.rule.model_subtype else self.rule.model_type
-
-        if self.comparator == AttributeFilterComparator.EQUAL.value:
-            return Q(**{f"{model_type}___{self.model_attribute}": self.value})
-        if self.comparator == AttributeFilterComparator.LESS_THAN.value:
-            ignore_none_value_q = ~Q(**{f"{model_type}___{self.model_attribute}": -1})
-            return (
-                Q(**{f"{model_type}___{self.model_attribute}__lt": self.value})
-                & ignore_none_value_q
-            )
-        if self.comparator == AttributeFilterComparator.GREATER_THAN.value:
-            ignore_none_value_q = ~Q(**{f"{model_type}___{self.model_attribute}": -1})
-            return (
-                Q(**{f"{model_type}___{self.model_attribute}__gt": self.value})
-                & ignore_none_value_q
-            )
-        if self.comparator == AttributeFilterComparator.NOT_EQUAL.value:
-            return ~Q(**{f"{model_type}___{self.model_attribute}": self.value})
-
     def filter_repository(
         self, scenario_aggregate: ScenarioAggregate, repository: RepositoryBaseClass
     ) -> RepositoryBaseClass:
