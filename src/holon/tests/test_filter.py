@@ -66,11 +66,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-
-        filtered_queryset = rule.get_filtered_queryset(self.scenario)
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        filtered_repository = rule.get_filtered_repository(scenario_aggregate)
 
         # Assert
-        self.assertEqual(len(filtered_queryset), 2)
+        self.assertEqual(filtered_repository.len(), 2)
 
     def test_attribute_filter_without_rule_subtype(self) -> None:
         # Arange
@@ -88,10 +88,11 @@ class RuleFiltersTestClass(TestCase):
         )
 
         # Act
-        filtered_queryset = rule.get_filtered_queryset(self.scenario)
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        filtered_repository = rule.get_filtered_repository(scenario_aggregate)
 
         # Assert
-        self.assertEqual(len(filtered_queryset), 4)
+        self.assertEqual(filtered_repository.len(), 4)
 
     def test_attribute_filter_allowed_relation(self):
         # Arrange
