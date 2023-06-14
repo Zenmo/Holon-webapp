@@ -20,6 +20,7 @@ from holon.models.config import (
     KeyValuePairCollection,
     QueryAndConvertConfig,
     StaticConversion,
+    QueryCovertModuleType
 )
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.utils.logging import HolonLogger
