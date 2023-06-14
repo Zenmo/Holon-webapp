@@ -1,3 +1,4 @@
+import { createTinyUrl } from "@/api/tinyUrl";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import { StaticImage } from "@/components/ImageSelector/types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
@@ -203,16 +204,26 @@ export default function SectionBlock({
         let value = sectionItem.currentValue;
         let name = sectionItem.value.name; 
 
-        savedElements[data.id] = { ...savedElements[data.id], [key]: value };
+        savedElements[data.id] = { ...savedElements[data.id], [key]: {
+          value: value, 
+          name: name,
+        }}
       }
     });
     return savedElements;
   };
 
-  const handleSaveScenario = (title: string, description: string) => {
-    setSavedScenarioURL(saveScenario(title, description, data.id));
-    setScenarioModalType("savedScenario");
-  };
+  function handleSaveScenario(title: string, description: string) {
+      const scenarioUrl = saveScenario(title, description, data.id); 
+      createTinyUrl(scenarioUrl)
+      .then(res => {
+        setSavedScenarioURL(res);
+      setScenarioModalType("savedScenario");
+      })
+      .catch((error) => {
+        console.error("Error creating tiny URL:", error);
+      });
+  }
 
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>

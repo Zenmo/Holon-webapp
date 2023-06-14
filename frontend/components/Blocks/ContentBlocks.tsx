@@ -112,33 +112,42 @@ const ContentBlocks = ({
 
   /*Save scenario functionality. Creates a link of the page with the current values of visible interactive elements of the different sections in the params*/
   function saveScenario(title: string, description: string, sectionId: string) {
-    //get baseUrl
+    //get origin url
     const origin =
       typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
 
+    //make sure no exisiting params are including in the new url
     const pathWithoutParams = asPath.split('?')[0]; 
+    //create baseURL
     const baseURL = `${origin}${pathWithoutParams}`;
-    //get params
+
+    //create params
     const params = new URLSearchParams();
-    const data = currentPageValues;
-    //so far so good, data klopt
+    const data = currentPageValues; 
+   
     for (const section in data) {
       for (const key in data[section]) {
-        for (const key in data[section]) {
-          const encodedKey = encodeURIComponent(`${section}.${key}`); // modify key format
-          const encodedValue = encodeURIComponent(data[section][key]);
+          const encodedKey = encodeURIComponent(`${section}.${key}`); 
+          const encodedValue = encodeURIComponent(`${data[section][key].value}.${data[section][key].name}`);
           params.append(encodedKey, encodedValue);
-        }
       }
     }
     params.append("title", encodeURIComponent(title));
     params.append("currentSection", encodeURIComponent(sectionId));
     description && params.append("description", encodeURIComponent(description));
+
     //create link
     const savedScenarioUrl = `${baseURL}?${params.toString()}`;
-    return savedScenarioUrl;
+    return savedScenarioUrl; 
+
+    /*
+    const shortUrl = await createTinyUrl(savedScenarioUrl); 
+    console.log(shortUrl); 
+    return shortUrl; 
+    */
   }
 
+  /*When the page opens it checks whether it has a saved scenario in the params */
   function checkIfSavedScenario() {
     const urlParams =
       typeof window !== "undefined" && window.location.origin
@@ -161,19 +170,23 @@ const ContentBlocks = ({
           setOpeningSection(decodedValue);
         } else {
           const [section, key] = decodedKey.split(".");
+          const [value, name] = decodedValue.split("."); 
           if (!(section in data)) {
             data[section] = {};
           }
-          data[section][key] = decodedValue;
+          data[section][key] = {
+            value: value, 
+            name: name
+          }
         }
       }
     }
-
     setSavedValues(data);
     setCheckedSavedValues(true);
   }
 
-  function addSavedValues(values: SavedElements, content: Content) {
+  //If there is a saved scenario in the params, the values are added to the section data.
+  function addSavedValues(values: SavedElements, content: Content, sectionNumber: Number) {
     //add saved values to content or scenarioDiffElements
     const updatedContent = { ...content }; 
     for (const key in values) {
@@ -192,7 +205,7 @@ const ContentBlocks = ({
             return element.type === "interactive_input" && element.value.id === Number(subKey);
           });
          if (foundElement) {
-            const subValue = value[subKey];
+            const subValue = value[subKey].value;
             foundElement.value.savedValue = subValue;
           }
           else {
@@ -200,20 +213,20 @@ const ContentBlocks = ({
               ...(scenarioDiffElements[content.id] || {}),
       
                 [subKey]: {
-                  value: value[subKey],
+                  value: value[subKey].value,
                   difference: "missing",
+                  section: sectionNumber,
+                  name: value[subKey].name
                 }
-              
             }
           }
         }
       }
     }
 
-     // Check for elements in content that are not in values
+     // Check for elements in content that are not in values to show any differences
      let valuesIds: string[]; 
     values[content.id] ? valuesIds = Object.keys(values[content.id]) : valuesIds = [];
-    console.log(valuesIds); 
   
     for (const element of updatedContent.value.content) {
     if (
@@ -228,12 +241,13 @@ const ContentBlocks = ({
         [subKey]: {
           value: element.value,
           difference: "added",
+          section: sectionNumber,
+          name: element.value.name,
         },
       };
     }
   }
- 
-    return updatedContent;
+  return updatedContent;
   }
 
   return (
@@ -264,7 +278,7 @@ const ContentBlocks = ({
             //if there are any savedValues in the parameters, these are added to the section
             const savedValuesContent =
               Object.keys(savedValues).length !== 0
-                ? addSavedValues(savedValues, newContent)
+                ? addSavedValues(savedValues, newContent, sectionCount)
                 : newContent;
             updateTargetValues(contentItem.value.content);
             return (

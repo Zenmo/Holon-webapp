@@ -1,8 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  LinkedinShareButton
-} from 'next-share';
 import { Fragment, useState } from "react";
 import Button from "../../../Button/Button";
 
@@ -14,7 +11,14 @@ type ScenarioModal = {
   scenarioUrl: string;
   scenarioTitle: string;
   scenarioDescription: string;
-  scenarioDiffElements: {}; 
+  scenarioDiffElements: {} | {
+    subKey: {
+      value: string,
+      difference: string,
+      section: Number,
+      name?: string,
+    }
+  }; 
 };
 
 export default function ScenarioModal({
@@ -33,7 +37,7 @@ export default function ScenarioModal({
   });
   const [copied, setCopied] = useState<boolean>(false);
   const textMessageLink = encodeURIComponent(
-    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: https://shorturl.at/aem27`
+    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: ${scenarioUrl}`
   );
 
   function closeModal() {
@@ -49,22 +53,33 @@ export default function ScenarioModal({
     handleSaveScenario(scenarioDetails.scenarioTitle, scenarioDetails.scenarioDescription);
   }
 
-  function listDifferentElements(values) {
+  function listDifferentElements(values: ScenarioModal["scenarioDiffElements"]) {
    const elements = []; 
     for (const key in values) {
-      console.log(key); 
       const value = values[key];
         for (const subKey in value) {
-          console.log(subKey); 
           if(value[subKey].difference === "missing") {
-           elements.push(<p>{`In section ${key} is interactief element ${subKey} verwijderd van de pagina.`}</p>)
+           elements.push(<p className="text-sm mt-1">{`- In sectie ${value[subKey].section} is interactief element ${value[subKey].name} verwijderd van de pagina.`}</p>)
           }  else if(value[subKey].difference === "added") {
-            elements.push(<p>{`In section ${key} is interactief element ${subKey} toegevoegd aan de pagina.`}</p>)
+            elements.push(<p className="text-sm mt-1">{`- In sectie ${value[subKey].section} is interactief element ${value[subKey].name} toegevoegd aan de pagina.`}</p>)
           }
     }
   }
   return elements; 
 }
+
+/*
+async function createShortUrl(url) {
+  let shortURL; 
+  await createTinyUrl(url)
+  .then(res => {
+    shortURL = res; 
+  })
+  return shortURL; 
+}
+
+const shortURL = createShortUrl(scenarioUrl); 
+*/
 
 
   const ScenarioType = {
@@ -87,17 +102,18 @@ export default function ScenarioModal({
                   type="text"
                   id="scenarioTitle"
                   name="scenarioTitle"
-                  className="border border-holon-gray-200 w-full h-10 my-1 px-2"
+                  className="border border-holon-gray-200 w-full h-10 my-1 px-2 font-semibold"
                   onChange={handleInputChange}
                   required></input>
-                <label>Scenario beschrijving (optioneel)</label>
-                <input
+                <label>Scenario beschrijving (optioneel)*</label>
+                <textarea
                   type="text"
                   id="scenarioDescription"
                   name="scenarioDescription"
                   maxLength={150}
-                  className="border border-holon-gray-200 w-full h-10 my-1 px-2"
-                  onChange={handleInputChange}></input>
+                  className="border border-holon-gray-200 h-20 w-full my-1 px-2 overflow-y-auto font-medium"
+                  onChange={handleInputChange}></textarea>
+                  <p className="text-xs text-holon-gray-300 ml-1">* max 150 tekens</p>
               </form>
             </div>
             <div className="flex flex-row justify-end mt-2">
@@ -151,18 +167,18 @@ export default function ScenarioModal({
                     <EnvelopeIcon className="w-4 h-4 mr-2"></EnvelopeIcon>
                     E-mail
                   </a>
-                  {/* Link werkt nu niet, maar wel met bestaande site met parameters*/}
               
-                  <LinkedinShareButton className="buttonLight mr-2" blankTarget={true} url={`${scenarioUrl}`}>
-                    <span className="buttonLight mr-2">   {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <a className="buttonLight mr-2" rel="noopener noreferrer"
+                    target="_blank" href={`https://www.linkedin.com/sharing/share-offsite/?url=${scenarioUrl}`}>
+                     {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/imgs/linkedin.png"
                         alt="logo LinkedIn"
                         width={20}
                         height={20}
                         className="mr-2"
-                      />LinkedIn</span>
-                  </LinkedinShareButton>
+                      />LinkedIn
+                  </a>
 
                   <a
                     href={`https://twitter.com/intent/tweet?text=${textMessageLink}`}
@@ -202,15 +218,17 @@ export default function ScenarioModal({
             {/*als er verschillen zijn tussen int elm -> hier disclaimer laten zien */}
             {Object.keys(scenarioDiffElements).length !== 0 && (
               <div className="mt-2">
-              <p className="p-4 bg-holon-gray-100 text-holon-blue-900 text-left text-sm">
-                <QuestionMarkCircleIcon className="w-4 h-4" />
-                De interactieve elementen in dit scenario zijn anders dan de opgeslagen elementen:
-                <ul>
-                  {listDifferentElements(scenarioDiffElements).map((element, index) => (
-                    <li key={index}>{element}</li>
-                  ))} 
-                 </ul>
-              </p>
+              <div className="p-4 bg-holon-gray-100 text-holon-blue-900 text-left  flex flex-row">
+                <QuestionMarkCircleIcon className="w-6 h-6 mr-2" />
+                <div>
+                  <p className="text-sm">De interactieve elementen in dit scenario zijn anders dan de opgeslagen elementen:</p>
+                  <ul>
+                    {listDifferentElements(scenarioDiffElements).map((element, index) => (
+                      <li className="text-sm mt-1" key={index}>{element}</li>
+                    ))} 
+                  </ul>
+                 </div>
+              </div>
             </div>
             )}
             
