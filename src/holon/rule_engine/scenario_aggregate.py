@@ -68,7 +68,7 @@ class ScenarioAggregate:
 
     def add_object(
         self, object: PolymorphicModel, base_model_type="", additional_attributes: dict = {}
-    ):
+    ) -> PolymorphicModel:
         """Add an object to self in the correct repository"""
 
         if not base_model_type:
