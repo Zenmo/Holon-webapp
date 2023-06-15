@@ -126,6 +126,14 @@ export default function ImageSlider({
               </div>
             </div>
           )}
+          {sliderstep && (
+            <div className="absolute pointer-events-none w-[calc(100%-19px)] h-[80%] flex justify-between flex-row ml-[9px] z-index[-1] z-[-1]">
+              <span className="flex-[0_0_2px] h-full w-[2px] bg-black"></span>
+              {[...Array(parseInt(slidermax))].map(i => (
+                <span key={i} className="flex-[0_0_2px] h-full w-[2px] bg-black"></span>
+              ))}
+            </div>
+          )}
         </div>
         {unit && <span className="text-base ml-4">{unit}</span>}
       </div>
