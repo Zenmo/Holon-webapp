@@ -46,6 +46,7 @@ class HolonV2Service(generics.CreateAPIView):
         use_caching = use_result_cache(request)
         scenario = None
         cc_payload = None
+        cc = None
 
         try:
             if serializer.is_valid():
