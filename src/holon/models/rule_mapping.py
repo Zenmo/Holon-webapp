@@ -8,6 +8,7 @@ from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
 
+@sentry_sdk_trace
 def apply_rules(
     scenario_aggregate: ScenarioAggregate, interactive_element_inputs: list[InteractiveElementInput]
 ) -> ScenarioAggregate:
