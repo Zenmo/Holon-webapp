@@ -298,7 +298,7 @@ export default function SectionBlock({
 
       <div className="holonContentContainer">
         {pagetype !== "Sandbox" && (
-          <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
+          <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
             <div className="flex-1">
               <button
                 onClick={closeHolarchyModal}
