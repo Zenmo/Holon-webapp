@@ -1,7 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
-import { createTinyUrl } from "../../../../api/tinyUrl";
 import Button from "../../../Button/Button";
 
 type ScenarioModal = {
