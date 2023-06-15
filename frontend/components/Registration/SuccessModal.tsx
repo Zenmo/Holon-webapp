@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 export default function SuccessModal({ onClose }) {
   const handleCloseClick = (e: React.MouseEvent<HTMLElement>) => {

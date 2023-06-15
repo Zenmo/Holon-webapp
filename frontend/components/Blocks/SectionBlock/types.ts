@@ -32,6 +32,7 @@ export type InteractiveInput = {
   name?: string;
   type?: string;
   defaultValueOverride?: string;
+  savedValue?: string;
   targetValue?: string | number | [];
   targetValuePreviousSection: string | number | [];
   animationTag?: string;
@@ -51,3 +52,9 @@ export type InteractiveInputOptions = {
 };
 
 export type Feedbackmodals = Array<FeedbackModal>;
+
+export type SavedElements = {
+  [key: string]: {
+    [key: number]: number | string | string[] | number[] | undefined | null;
+  };
+};
