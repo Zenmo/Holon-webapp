@@ -10,4 +10,4 @@ class ActorGroupRepository(RepositoryBaseClass):
 
     @classmethod
     def from_scenario(cls, scenario: Scenario):
-        return cls(list(ActorGroup.objects.filter(actor__payload=scenario)))
+        return cls(list(ActorGroup.objects.filter(actor__payload=scenario).distinct()))
