@@ -37,6 +37,7 @@ export default function ImageSlider({
   linkWikiPage,
   tooltip,
   unit,
+  ticks,
   selectedLevel,
 }: Props) {
   const [sliderValue, setSliderValue] = useState(defaultValue);
@@ -126,7 +127,7 @@ export default function ImageSlider({
               </div>
             </div>
           )}
-          {sliderstep && (
+          {ticks > 0 && (
             <div className="absolute pointer-events-none w-[calc(100%-19px)] h-[80%] flex justify-between flex-row ml-[9px] z-index[-1] z-[-1]">
               <span className="flex-[0_0_2px] h-full w-[2px] bg-black"></span>
               {[...Array(parseInt(slidermax))].map(i => (
