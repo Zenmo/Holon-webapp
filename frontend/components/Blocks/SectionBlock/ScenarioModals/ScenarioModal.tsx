@@ -70,11 +70,6 @@ export default function ScenarioModal({
   return elements; 
 }
 
-async function createShortUrl(url: string){
-   const shortenedUrl = await createTinyUrl(url); 
-   setShortUrl(shortenedUrl); 
-}
-
   const ScenarioType = {
     saveScenario: {
       title: "Scenario opslaan",
