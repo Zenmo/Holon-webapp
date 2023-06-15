@@ -12,11 +12,11 @@ type ScenarioModal = {
   scenarioUrl?: string;
   scenarioTitle: string;
   scenarioDescription: string;
-  scenarioDiffElements: {} | {
+  scenarioDiffElements: object | {
     subKey: {
       value: string,
       difference: string,
-      section: Number,
+      section: number,
       name?: string,
     }
   }; 
@@ -75,7 +75,7 @@ export default function ScenarioModal({
   return elements; 
 }
 
-async function createShortUrl(url){
+async function createShortUrl(url: string){
    const shortenedUrl = await createTinyUrl(url); 
    setShortUrl(shortenedUrl); 
 }
@@ -137,7 +137,7 @@ async function createShortUrl(url){
           <div>
             <div className="text-holon-blue-900 flex flex-col items-start">
               <p className="text-left">
-                Copy/paste de opgeslagen scenario link om de instellingen met collega's te delen.
+                Copy/paste de opgeslagen scenario link om de instellingen met collega&apos;s te delen.
               </p>
 
               <h3 className="text-left text-base mt-1">Gegenereerd scenario-URL</h3>
@@ -198,7 +198,7 @@ async function createShortUrl(url){
             </div>
             <div className="mt-2">
               <p className="p-4 bg-holon-gray-100 text-holon-blue-900 text-left text-sm">
-                Copy/paste de opgeslagen scenario link om de instellingen met collega's te delen.
+                Copy/paste de opgeslagen scenario link om de instellingen met collega&apos;s te delen.
               </p>
             </div>
           </div>

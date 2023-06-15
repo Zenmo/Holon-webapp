@@ -35,9 +35,9 @@ type Props = {
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
-  savePageValues: SetStateAction<SavedElements>;
+  savePageValues: React.Dispatch<React.SetStateAction<SavedElements>>;
   saveScenario: (title: string, description: string, sectionId: string) => string;
-  scenarioDiffElements: {}; 
+  scenarioDiffElements: object; 
 };
 
 const initialData = {
@@ -242,15 +242,15 @@ export default function SectionBlock({
 
   const saveCurrentValues = (content: Content[]) => {
     //get currentValues of visible interactive elements
-    let savedElements: SavedElements = {
+    const savedElements: SavedElements = {
       [data.id]: {},
     };
 
     content?.map((sectionItem: Content) => {
       if (sectionItem.type === "interactive_input" && sectionItem.value.visible) {
-        let key = `${sectionItem.value.id}`;
-        let value = sectionItem.currentValue;
-        let name = sectionItem.value.name; 
+        const key = `${sectionItem.value.id}`;
+        const value = sectionItem.currentValue;
+        const name = sectionItem.value.name; 
 
         savedElements[data.id] = { ...savedElements[data.id], [key]: {
           value: value, 

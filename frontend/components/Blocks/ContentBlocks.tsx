@@ -44,7 +44,7 @@ const ContentBlocks = ({
   const [openingSection, setOpeningSection] = useState<string>("");
   
   const router = useRouter();
-  let scenarioDiffElements = {}; 
+  const scenarioDiffElements = {}; 
   let sectionCount = 0; 
 
   useEffect(() => {
@@ -180,7 +180,7 @@ const ContentBlocks = ({
   }
 
   //If there is a saved scenario in the params, the values are added to the section data.
-  function addSavedValues(values: SavedElements, content: Content, sectionNumber: Number) {
+  function addSavedValues(values: SavedElements, content: Content, sectionNumber: number) {
     //add saved values to content or scenarioDiffElements
     const updatedContent = { ...content }; 
     for (const key in values) {
