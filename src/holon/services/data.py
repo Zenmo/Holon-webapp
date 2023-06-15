@@ -58,6 +58,7 @@ class Results:
         return result
 
     def __include_scenario(self):
+        return True
         """Only include modified scenario if env variable is set"""
         return get_env_bool("RETURN_SCENARIO", False)
 

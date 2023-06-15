@@ -204,29 +204,6 @@ def is_allowed_relation(field_name: str) -> bool:
     return field_name == "group" or field_name == "subgroup"
 
 
-def serialize_add_models(asset_to_add, gridconnection_to_add, contract_to_add) -> tuple[str]:
-    """Serialize util function for ruleactionadd hashing"""
-    from holon.serializers.datamodel.mapper import (
-        EnergyAssetPolymorphicSerializer,
-        GridConnectionPolymorphicSerializer,
-        ContractPolymorphicSerializer,
-    )
-
-    asset_json = (
-        json.dumps(EnergyAssetPolymorphicSerializer(asset_to_add).data) if asset_to_add else ""
-    )
-    gridconnection_json = (
-        json.dumps(GridConnectionPolymorphicSerializer(gridconnection_to_add).data)
-        if gridconnection_to_add
-        else ""
-    )
-    contract_json = (
-        json.dumps(ContractPolymorphicSerializer(contract_to_add).data) if contract_to_add else ""
-    )
-
-    return asset_json, gridconnection_json, contract_json
-
-
 def is_scenario_object_relation_field(field: Union[models.Field, models.ForeignObjectRel]) -> bool:
     """
     Test if a field is a relation field related to the models that are connected to a Scenario.

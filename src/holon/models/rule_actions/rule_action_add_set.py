@@ -201,11 +201,7 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
         verbose_name = "RuleActionAdd"
 
     def hash(self):
-        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
-            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
-        )
-
-        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+        return f"[A{self.id},{getattr(self.asset_to_add, 'id', None)},{getattr(self.gridconnection_to_add, 'id', None)},{getattr(self.contract_to_add, 'id', None)}]"
 
     def apply_to_scenario_aggregate(
         self,
@@ -232,11 +228,7 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
         verbose_name = "RuleActionSetCount"
 
     def hash(self):
-        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
-            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
-        )
-
-        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+        return f"[A{self.id},{getattr(self.asset_to_add, 'id', None)},{getattr(self.gridconnection_to_add, 'id', None)},{getattr(self.contract_to_add, 'id', None)}]"
 
     def apply_to_scenario_aggregate(
         self,
@@ -260,11 +252,7 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
     )
 
     def hash(self):
-        asset_json, gridconnection_json, contract_json = util.serialize_add_models(
-            self.asset_to_add, self.gridconnection_to_add, self.contract_to_add
-        )
-
-        return f"[A{self.id},{asset_json},{gridconnection_json},{contract_json}]"
+        return f"[A{self.id},{getattr(self.asset_to_add, 'id', None)},{getattr(self.gridconnection_to_add, 'id', None)},{getattr(self.contract_to_add, 'id', None)}]"
 
     class Meta:
         verbose_name = "RuleActionAddMultipleUnderEachParent"
