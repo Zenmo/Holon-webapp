@@ -191,7 +191,9 @@ class CostItem:
             return CostItem.group(actor)
 
     @staticmethod
-    def group_key_name(group: Union[ActorGroup, None], sub_group: Union[ActorSubGroup, None] = None) -> str:
+    def group_key_name(
+        group: Union[ActorGroup, None], sub_group: Union[ActorSubGroup, None] = None
+    ) -> str:
         """Returns the key name for the group"""
         if sub_group is None:
             if group is None:

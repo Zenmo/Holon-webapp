@@ -14,7 +14,9 @@ class RepositoryAddTestClass(unittest.TestCase):
             ]
         )
 
-        distinct_combinations = repository.get_distinct_attribute_values(["capacity_kw", "charging_mode"])
+        distinct_combinations = repository.get_distinct_attribute_values(
+            ["capacity_kw", "charging_mode"]
+        )
 
         expected = [
             {

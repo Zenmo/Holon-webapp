@@ -332,7 +332,9 @@ class Query:
                 ModelType.ACTOR_SUB_GROUP
             )
 
-            unique_sub_group_ids = actor_repository.get_distinct_attribute_values(["group_id", "subgroup_id"])
+            unique_sub_group_ids = actor_repository.get_distinct_attribute_values(
+                ["group_id", "subgroup_id"]
+            )
             unique_sub_groups = {
                 (
                     actor_group_repository.get(d["group_id"])
