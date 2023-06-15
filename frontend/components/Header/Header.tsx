@@ -1,6 +1,7 @@
 import { NavItem } from "@/api/types";
 import Link from "next/link";
 import { useState } from "react";
+import Navbar from "./Navbar";
 
 export default function Header({ navigation }: { navigation: NavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,6 +39,11 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
                 clipRule="evenodd"></path>
             </svg>
           </button>
+          <div
+            className={`${menuOpen ? "" : "hidden"} w-full md:block md:w-auto`}
+            id="navbar-default">
+            <Navbar items={navigation} />
+          </div>
         </div>
       </div>
     </nav>
