@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import logging
-import sentry_sdk
-
 from polymorphic import utils
 from typing import Type
+from django.db.models import Model
 from polymorphic.models import PolymorphicModel
+from modelcluster.models import ClusterableModel
 
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.scenario import Scenario
@@ -16,9 +15,9 @@ from django.db.models.fields.related import ManyToOneRel
 class RepositoryBaseClass:
     """Repository containing all actors in memory"""
 
-    base_model_type = PolymorphicModel
+    base_model_type = Model
 
-    def __init__(self, objects: list[PolymorphicModel]):
+    def __init__(self, objects: list[Model]):
         self.assert_object_ids(objects)  # TODO make property with setter?
         self.objects = objects
 
@@ -30,7 +29,7 @@ class RepositoryBaseClass:
         # start an id counter at an arbitrary high number
         self.id_counter = self.id_counter_generator(objects)
 
-    def assert_object_ids(self, objects: list[PolymorphicModel]):
+    def assert_object_ids(self, objects: list[Model]):
         """Raises a ValueError if any of the objects have invalid or no ids"""
 
         id_list = [object.id for object in objects]
@@ -77,7 +76,7 @@ class RepositoryBaseClass:
         if len(self.objects) == 0:
             return
 
-        base_type = utils.get_base_polymorphic_model(self.objects[0].__class__)
+        base_type = get_instance_base_type(self.objects[0])
 
         if not issubclass(model_subtype, base_type):
             raise Exception(f"${model_subtype} is not a subtype of ${base_type}")
@@ -164,13 +163,13 @@ class RepositoryBaseClass:
         # return a new repository initialized with the subset of objects
         return self.__class__(objects)
 
-    def get(self, object_id: int) -> PolymorphicModel:
+    def get(self, object_id: int) -> Model:
         """Get an item in the objects list by id. Raises IndexError if object was not found"""
 
         list_index = self.get_list_index_for_object_id(object_id)
         return self.objects[list_index]
 
-    def all(self) -> list[PolymorphicModel]:
+    def all(self) -> list[Model]:
         """Return all objects in the repository"""
 
         return self.objects
@@ -193,7 +192,7 @@ class RepositoryBaseClass:
 
         return len(self.objects)
 
-    def update(self, updated_object: PolymorphicModel):
+    def update(self, updated_object: Model):
         """
         Select an object by id in the repository and set it's attribute attribute_name to value.
         Raises an IndexError if the id was not found.
@@ -208,7 +207,7 @@ class RepositoryBaseClass:
 
         self.objects[list_index] = updated_object
 
-    def add(self, new_object: PolymorphicModel) -> PolymorphicModel:
+    def add(self, new_object: Model) -> Model:
         """
         Add an object to the repository.
         The object is cloned and gets a new id regardless of its current id.
@@ -227,7 +226,7 @@ class RepositoryBaseClass:
 
         return cloned_new_object
 
-    def id_counter_generator(self, objects: list[PolymorphicModel]) -> list[int]:
+    def id_counter_generator(self, objects: list[Model]) -> list[int]:
         """Generator to keep track of new ids"""
 
         max_id = max([object.id for object in objects], default=0)
@@ -243,15 +242,25 @@ class RepositoryBaseClass:
         list_index = self.get_list_index_for_object_id(object_id)
         self.objects.pop(list_index)
 
-    def assert_correct_object_type(self, object: PolymorphicModel):
+    def get_distinct_attribute_values(self, attributes: list[str]) -> list[dict]:
+        """Get a list of unique combinations of attributes in the object collection"""
+        # first create set so only unique combinations remain
+        set = {
+            tuple(map(lambda attribute: getattr(s, attribute), attributes)) for s in self.objects
+        }
+
+        # then convert to list of dictionaries so caller code is more readable
+        return [
+            {attribute: value_tuple[i] for i, attribute in enumerate(attributes)}
+            for value_tuple in set
+        ]
+
+    def assert_correct_object_type(self, object: Model):
         """Raises a ValueError if the base model type of object is different from this repository's base model type"""
 
-        if (
-            not self.base_model_type.__name__
-            == utils.get_base_polymorphic_model(object.__class__).__name__
-        ):
+        if not self.base_model_type.__name__ == get_instance_base_type(object).__name__:
             raise ValueError(
-                f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {utils.get_base_polymorphic_model(object.__class__).__name__}"
+                f"Can only insert objects of type {self.base_model_type.__name__}. Object type for attempted insertion: {get_instance_base_type(object).__name__}"
             )
 
 
@@ -288,3 +297,26 @@ def discrete_attribute_passes_none_check(
         return True
 
     return getattr(object, attribute_name) != NONE_VALUE
+
+
+def get_instance_base_type(obj: object) -> type:
+    """
+    Get the base type of the model within our domain.
+    For example, for a DieselVehicleAsset return EnergyAsset,
+    and for a HouseGridConnection return GridConnection
+    """
+    return get_base_type(obj.__class__)
+
+
+def get_base_type(cls: type) -> type:
+    """
+    Get the base type of the model within our domain.
+    For example, for a DieselVehicleAsset return EnergyAsset,
+    and for a HouseGridConnection return GridConnection
+    """
+    while True:
+        base = cls.__base__
+        if base in (PolymorphicModel, Model, ClusterableModel, object):
+            return cls
+        else:
+            cls = base

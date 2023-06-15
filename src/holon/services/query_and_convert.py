@@ -4,7 +4,14 @@ from typing import List
 import etm_service
 import sentry_sdk
 
-from holon.models import DatamodelQueryRule, Scenario
+from holon.models import (
+    DatamodelQueryRule,
+    Scenario,
+    ModelType,
+    ActorGroup,
+    ActorSubGroup,
+    QueryCovertModuleType,
+)
 from holon.models.config import (
     AnyLogicConversion,
     DatamodelConversion,
@@ -309,29 +316,57 @@ class Query:
             "key": c.shadow_key,
         }
 
-    # TODO change copied_scenario to scenario_aggregate and fix methods
     def set_datamodel(self, c: DatamodelConversion):
         """"""
         qr: DatamodelQueryRule = c.datamodel_query_rule.get()
         value = qr.get_filter_aggregation_result(self.scenario_aggregate)
 
-        unique_actors_subgroup = self.copied_scenario.actor_set.distinct("group", "subgroup")
-        # TODO: aren't we double counting now? some guys already got some in their subgroup?
-        unique_actors_group = self.copied_scenario.actor_set.distinct("group")
-
-        for actor in unique_actors_subgroup:
-            g_value = qr.get_filter_aggregation_result(
-                self.copied_scenario, group_to_filter=actor.group, subgroup_to_filter=actor.subgroup
+        if self.config.config_db.module == QueryCovertModuleType.COSTBENEFIT:
+            actor_repository = self.scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR
             )
-            keyname = CostItem.subgroup(actor)
-            self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
-
-        for actor in unique_actors_group:
-            g_value = qr.get_filter_aggregation_result(
-                self.copied_scenario, group_to_filter=actor.group
+            actor_group_repository = self.scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR_GROUP
             )
-            keyname = CostItem.group(actor)
-            self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
+            actor_sub_group_repository = self.scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR_SUB_GROUP
+            )
+
+            unique_sub_group_ids = actor_repository.get_distinct_attribute_values(["group_id", "subgroup_id"])
+            unique_sub_groups = {
+                (
+                    actor_group_repository.get(d["group_id"])
+                    if d["group_id"] is not None
+                    else None,
+                    actor_sub_group_repository.get(d["subgroup_id"])
+                    if d["subgroup_id"] is not None
+                    else None,
+                )
+                for d in unique_sub_group_ids
+            }
+
+            for group_tuple in unique_sub_groups:
+                g_value = qr.get_filter_aggregation_result(
+                    scenario_aggregate=self.scenario_aggregate,
+                    group_to_filter=group_tuple[0],
+                    subgroup_to_filter=group_tuple[1],
+                )
+                keyname = CostItem.group_key_name(group_tuple[0], group_tuple[1])
+                self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
+
+            # TODO: aren't we double counting now? some guys already got some in their subgroup?
+            unique_group_ids = actor_repository.get_distinct_attribute_values(["group_id"])
+            unique_groups = [
+                actor_group_repository.get(d["group_id"]) if d["group_id"] is not None else None
+                for d in unique_group_ids
+            ]
+
+            for group in unique_groups:
+                g_value = qr.get_filter_aggregation_result(
+                    scenario_aggregate=self.scenario_aggregate, group_to_filter=group
+                )
+                keyname = CostItem.group_key_name(group)
+                self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
 
         return {
             "type": "static",  # all non-query conversions are considered static
