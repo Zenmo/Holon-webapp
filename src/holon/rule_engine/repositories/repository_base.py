@@ -211,7 +211,7 @@ class RepositoryBaseClass:
     def add(self, new_object: PolymorphicModel) -> PolymorphicModel:
         """
         Add an object to the repository.
-        The object is deep copied and gets a new id.
+        The object is cloned and gets a new id regardless of its current id.
         Added object is returned.
         """
 
