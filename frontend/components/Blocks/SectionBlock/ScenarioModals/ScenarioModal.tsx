@@ -1,13 +1,13 @@
-import { createTinyUrl } from "@/api/tinyUrl";
 import { Dialog, Transition } from "@headlessui/react";
 import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useEffect, useState } from "react";
+import { createTinyUrl } from "../../../../api/tinyUrl";
 import Button from "../../../Button/Button";
 
 type ScenarioModal = {
   isOpen: boolean;
   onClose: () => void;
-  handleSaveScenario: (title: string, description: string) => void;
+  handleSaveScenario: (title: string, description: string) => string;
   type: "saveScenario" | "savedScenario" | "openScenario";
   scenarioUrl?: string;
   scenarioTitle: string;
@@ -43,14 +43,9 @@ export default function ScenarioModal({
     `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: ${shortUrl}`
   );
 
-
   useEffect(() => {
     createShortUrl(scenarioUrl)
   }, [scenarioUrl]);
-
-
-
-  //<Button variant="dark" onClick={() => createShortUrl(scenarioUrl)}>Korte Url</Button>
 
   function closeModal() {
     onClose();
@@ -97,7 +92,7 @@ async function createShortUrl(url){
                 worden toegevoegd. Daarvoor moet een nieuwe link worden gegenereerd.
               </p>
               <form
-                className="text-base flex flex-col items-start font-semibold w-full"
+                className="text-base flex flex-col items-start font-semibold w-full mt-2"
                 onSubmit={onSaveScenario}
                 id="saveScenario">
                 <label>Scenario naam</label>
@@ -105,7 +100,7 @@ async function createShortUrl(url){
                   type="text"
                   id="scenarioTitle"
                   name="scenarioTitle"
-                  className="border border-holon-gray-200 w-full h-10 my-1 px-2 font-semibold"
+                  className="border border-holon-gray-200 w-full h-10 mb-2 px-2 font-semibold"
                   onChange={handleInputChange}
                   required></input>
                 <label>Scenario beschrijving (optioneel)*</label>
@@ -114,7 +109,7 @@ async function createShortUrl(url){
                   id="scenarioDescription"
                   name="scenarioDescription"
                   maxLength={150}
-                  className="border border-holon-gray-200 h-20 w-full my-1 px-2 overflow-y-auto font-medium"
+                  className="border border-holon-gray-200 h-20 w-full px-2 overflow-y-auto font-medium"
                   onChange={handleInputChange}></textarea>
                   <p className="text-xs text-holon-gray-300 ml-1">* max 150 tekens</p>
               </form>
@@ -145,8 +140,8 @@ async function createShortUrl(url){
                 Copy/paste de opgeslagen scenario link om de instellingen met collega's te delen.
               </p>
 
-              <h3 className="text-left text-base">Gegenereerd scenario-URL</h3>
-              <div className="flex flex-row w-full  mt-2">
+              <h3 className="text-left text-base mt-1">Gegenereerd scenario-URL</h3>
+              <div className="flex flex-row w-full  mt-1">
                 <p className="text-left truncate text-ellipsis border p-1 h-[3rem] border-holon-gray-200">
                   {scenarioUrl}
                 </p>

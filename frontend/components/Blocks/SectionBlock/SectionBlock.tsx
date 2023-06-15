@@ -28,6 +28,7 @@ type Props = {
       textLabelIntermediate: string;
       textLabelLocal: string;
       gridLayout: GridLayout;
+      openingSection?: boolean; 
     };
     id: string;
   };
@@ -264,11 +265,9 @@ export default function SectionBlock({
     const url = saveScenario(title, description, data.id); 
     setSavedScenarioURL(url);
     setScenarioModalType("savedScenario");    
+    return url; 
     } 
   
-
-  
-
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
       {feedbackmodals && (
