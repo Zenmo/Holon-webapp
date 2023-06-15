@@ -107,11 +107,6 @@ class Scenario(ClusterableModel):
 
             return super().delete()
 
-    def delete_async(self) -> None:
-        """Delete the scenario asynchrou"""
-        t = Thread(target=self.delete)
-        t.start()
-
     def hash(self):
         interactive_element_hashes = ",".join(
             [

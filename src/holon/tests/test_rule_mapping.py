@@ -3,6 +3,8 @@ from django.test import TestCase
 from holon.models import *
 from holon.models import rule_mapping
 from holon.models.rule_actions.rule_action_factor import RuleActionFactor
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.models.scenario_rule import ModelType
 
 
 class RuleMappingTestClass(TestCase):
@@ -56,12 +58,15 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        updated_gridconnection = updated_scenario.gridconnection_set.all()[0]
+        updated_gridconnection = updated_scenario.repositories[
+            ModelType.GRIDCONNECTION.value
+        ].first()
         self.assertEqual(updated_gridconnection.capacity_kw, factor.min_value)
 
     def test_rule_mapping_assets(self) -> None:
@@ -77,12 +82,13 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        updated_asset = updated_scenario.assets[0]
+        updated_asset = updated_scenario.repositories[ModelType.ENERGYASSET.value].first()
         self.assertEqual(updated_asset.deliveryTemp_degC, factor.min_value)
 
     def test_rule_mapping_contracts(self) -> None:
@@ -98,10 +104,11 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        updated_contract = updated_scenario.contracts[0]
+        updated_contract = updated_scenario.repositories[ModelType.CONTRACT.value].first()
         self.assertEqual(updated_contract.annualFee_eur, factor.min_value)
