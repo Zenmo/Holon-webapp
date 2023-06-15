@@ -3,8 +3,6 @@ from pathlib import Path
 
 import numpy as np
 
-from holon.models import Scenario
-from holon.serializers import ScenarioSerializer
 from pipit.settings import get_env_bool
 
 
@@ -16,7 +14,7 @@ class Results:
 
     def __init__(
         self,
-        scenario: Scenario,
+        cc_payload: dict,
         request,
         anylogic_outcomes: dict,
         inter_upscaling_outcomes: dict,
@@ -31,8 +29,8 @@ class Results:
         self.cost_outcome = cost_outcome
         self.cost_benefit_overview = cost_benefit_overview
         self.cost_benefit_detail = cost_benefit_detail
-        self.scenario = scenario
         self.request = request
+        self.cc_payload = cc_payload
 
     @property
     def anylogic_outcomes(self):
@@ -55,7 +53,7 @@ class Results:
             },
         }
         if self.__include_scenario():
-            result["scenario"] = ScenarioSerializer(self.scenario).data
+            result["scenario"] = self.cc_payload
 
         return result
 

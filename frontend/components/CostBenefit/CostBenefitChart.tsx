@@ -40,7 +40,7 @@ export default function CostBenefitChart({
 
   /*
   const values = chartdata.flatMap(innerArr => Object.values(innerArr).flat());
-  const numberValues = values.map(Number).filter(Number.isFinite); 
+  const numberValues = values.map(Number).filter(Number.isFinite);
 
   const minValue = Math.min(...filteredValues);
   const maxValue = Math.max(...filteredValues);
@@ -75,7 +75,11 @@ export default function CostBenefitChart({
       {chartdata.length > 0 ? (
         <div className="flex-1">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart barGap={-70} data={chartdata} stackOffset="sign">
+            <BarChart
+              barGap={-70}
+              data={chartdata}
+              stackOffset="sign"
+              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="2" vertical={false} />
               <XAxis orientation="top" dataKey="name" axisLine={false} />
               <YAxis tickFormatter={convertToPositiveEuro} domain={[newMin, newMax]}>
@@ -83,7 +87,7 @@ export default function CostBenefitChart({
                   position="center"
                   angle={-90}
                   value="← Kosten &nbsp;  &nbsp; &nbsp; &nbsp;  Baten &nbsp;  →"
-                  offset={-25}
+                  dx={-25}
                 />
               </YAxis>
               <Tooltip content={<CustomTooltip />} itemSorter={item => item.value} />

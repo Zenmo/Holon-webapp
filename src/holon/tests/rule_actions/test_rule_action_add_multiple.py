@@ -3,6 +3,7 @@ import pytest
 
 from holon.models import *
 from holon.models import rule_mapping
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 
 class RuleMappingTestClass(TestCase):
@@ -76,20 +77,18 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        n_ehc_assets = len(
-            [
-                asset
-                for asset in updated_scenario.assets
-                if asset.__class__.__name__ == "ElectricHeatConversionAsset"
-            ]
+        ehc_assets = updated_scenario.get_repository_for_model_type(
+            "EnergyAsset", "ElectricHeatConversionAsset"
         )
-        assert n_ehc_assets == 13  # was 1, add 3 x 4 assets
+        assert ehc_assets.len() == 13  # was 1, add 3 x 4 assets
 
+    # TODO vanaf hier omschrijven naar nieuwe rule engine - TAVM
     def test_rule_action_add_multiple_gridconnection_with_children(self):
         """Test the add rule action for an actor with contracts"""
 
@@ -138,20 +137,13 @@ class RuleMappingTestClass(TestCase):
         interactive_elements = [{"value": "5", "interactive_element": self.interactive_element}]
 
         # Act
-        updated_scenario = rule_mapping.get_scenario_and_apply_rules(
-            self.scenario.id, interactive_elements
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
         )
 
         # Assert
-        assert len(updated_scenario.gridconnection_set.all()) == 8  # was 3
-        assert len(updated_scenario.assets) == 6  # was 1
-        assert len(updated_scenario.actor_set.all()) == 7  # was 2
-        assert len(updated_scenario.contracts) == 5  # was 0
-        assert (
-            updated_scenario.actor_set.all()[6].contracts.first().contractScope.id
-            != existing_contract_scope.id
-        )
-        assert (
-            updated_scenario.actor_set.all()[6].contracts.first().contractScope.original_id
-            == existing_contract_scope.id
-        )
+        assert updated_scenario.repositories[ModelType.GRIDCONNECTION].len() == 8  # was 3
+        assert updated_scenario.repositories[ModelType.ENERGYASSET].len() == 6  # was 1
+        assert updated_scenario.repositories[ModelType.ACTOR].len() == 7  # was 2
+        assert updated_scenario.repositories[ModelType.CONTRACT].len() == 5  # was 0
