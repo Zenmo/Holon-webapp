@@ -1,4 +1,3 @@
-import { createTinyUrl } from "@/api/tinyUrl";
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import Button from "@/components/Button/Button";
 import { StaticImage } from "@/components/ImageSelector/types";
@@ -118,6 +117,7 @@ export default function SectionBlock({
     setLegendItems(
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
+    savePageValues(saveCurrentValues(content));
 
     if (pagetype !== "Sandbox") {
       debouncedCalculateKPIs(content);
@@ -134,7 +134,7 @@ export default function SectionBlock({
         }, 500);
       }
     }
-    savePageValues(saveCurrentValues(content));
+    
   }, [content, debouncedCalculateKPIs]);
 
   useEffect(() => {
@@ -261,16 +261,13 @@ export default function SectionBlock({
   };
 
   function handleSaveScenario(title: string, description: string) {
-      const scenarioUrl = saveScenario(title, description, data.id); 
-      createTinyUrl(scenarioUrl)
-      .then(res => {
-        setSavedScenarioURL(res);
-      setScenarioModalType("savedScenario");
-      })
-      .catch((error) => {
-        console.error("Error creating tiny URL:", error);
-      });
-  }
+    const url = saveScenario(title, description, data.id); 
+    setSavedScenarioURL(url);
+    setScenarioModalType("savedScenario");    
+    } 
+  
+
+  
 
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>

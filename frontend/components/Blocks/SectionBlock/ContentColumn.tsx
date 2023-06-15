@@ -109,16 +109,26 @@ export default function ContentColumn({
         case "multi_select":
           const defaultValueArray = defaultValue && defaultValue.split(",");
           const targetValueArray = targetValue && targetValue.split(",");
+          const savedValueArray = savedValue && savedValue.split(","); 
           const visible = content.value.visible;
           let options;
 
           if (visible) {
-            options = content.value.options.filter(
-              option =>
-                option.default ||
-                defaultValueArray?.includes(option.option) ||
-                defaultValueArray?.includes(option.label)
-            );
+            if(savedValue) {
+              options = content.value.options.filter(
+                option =>
+                  savedValueArray?.includes(option.option) ||
+                  savedValueArray?.includes(option.label)
+              );
+            } else {
+              options = content.value.options.filter(
+                option =>
+                  option.default ||
+                  defaultValueArray?.includes(option.option) ||
+                  defaultValueArray?.includes(option.label)
+              );
+            }
+           
           } else {
             options = content.value.options.filter(
               option =>

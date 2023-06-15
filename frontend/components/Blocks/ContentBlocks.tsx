@@ -139,12 +139,6 @@ const ContentBlocks = ({
     //create link
     const savedScenarioUrl = `${baseURL}?${params.toString()}`;
     return savedScenarioUrl; 
-
-    /*
-    const shortUrl = await createTinyUrl(savedScenarioUrl); 
-    console.log(shortUrl); 
-    return shortUrl; 
-    */
   }
 
   /*When the page opens it checks whether it has a saved scenario in the params */

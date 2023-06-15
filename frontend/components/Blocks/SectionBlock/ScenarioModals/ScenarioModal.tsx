@@ -1,6 +1,7 @@
+import { createTinyUrl } from "@/api/tinyUrl";
 import { Dialog, Transition } from "@headlessui/react";
 import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Button from "../../../Button/Button";
 
 type ScenarioModal = {
@@ -8,7 +9,7 @@ type ScenarioModal = {
   onClose: () => void;
   handleSaveScenario: (title: string, description: string) => void;
   type: "saveScenario" | "savedScenario" | "openScenario";
-  scenarioUrl: string;
+  scenarioUrl?: string;
   scenarioTitle: string;
   scenarioDescription: string;
   scenarioDiffElements: {} | {
@@ -35,10 +36,21 @@ export default function ScenarioModal({
     scenarioTitle: "",
     scenarioDescription: "",
   });
+  const [shortUrl, setShortUrl] = useState({scenarioUrl}); 
   const [copied, setCopied] = useState<boolean>(false);
+
   const textMessageLink = encodeURIComponent(
-    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: ${scenarioUrl}`
+    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: ${shortUrl}`
   );
+
+
+  useEffect(() => {
+    createShortUrl(scenarioUrl)
+  }, [scenarioUrl]);
+
+
+
+  //<Button variant="dark" onClick={() => createShortUrl(scenarioUrl)}>Korte Url</Button>
 
   function closeModal() {
     onClose();
@@ -68,19 +80,10 @@ export default function ScenarioModal({
   return elements; 
 }
 
-/*
-async function createShortUrl(url) {
-  let shortURL; 
-  await createTinyUrl(url)
-  .then(res => {
-    shortURL = res; 
-  })
-  return shortURL; 
+async function createShortUrl(url){
+   const shortenedUrl = await createTinyUrl(url); 
+   setShortUrl(shortenedUrl); 
 }
-
-const shortURL = createShortUrl(scenarioUrl); 
-*/
-
 
   const ScenarioType = {
     saveScenario: {
@@ -169,7 +172,7 @@ const shortURL = createShortUrl(scenarioUrl);
                   </a>
               
                   <a className="buttonLight mr-2" rel="noopener noreferrer"
-                    target="_blank" href={`https://www.linkedin.com/sharing/share-offsite/?url=${scenarioUrl}`}>
+                    target="_blank" href={`https://www.linkedin.com/sharing/share-offsite/?url=${shortUrl}`}>
                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/imgs/linkedin.png"
