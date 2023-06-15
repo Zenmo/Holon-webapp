@@ -6,7 +6,7 @@ import { Graphcolor } from "@/containers/types";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
-import { SetStateAction, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";

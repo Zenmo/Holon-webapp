@@ -43,7 +43,7 @@ const ContentBlocks = ({
   const [checkedSavedValues, setCheckedSavedValues] = useState(false);
   const [openingSection, setOpeningSection] = useState<string>("");
   
-  const { asPath } = useRouter();
+  const router = useRouter();
   let scenarioDiffElements = {}; 
   let sectionCount = 0; 
 
@@ -117,7 +117,7 @@ const ContentBlocks = ({
       typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
 
     //make sure no exisiting params are including in the new url
-    const pathWithoutParams = asPath.split('?')[0]; 
+    const pathWithoutParams = router.asPath.split('?')[0]; 
     //create baseURL
     const baseURL = `${origin}${pathWithoutParams}`;
 
