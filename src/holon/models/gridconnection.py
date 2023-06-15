@@ -157,6 +157,7 @@ class HousingType(models.TextChoices):
     DETACHED = "DETACHED"
     APPARTMENT = "APPARTMENT"
     HIGHRISE = "HIGHRISE"
+    NONE = "NONE"
 
 
 class HouseGridConnection(BuiltEnvironmentGridConnection):
@@ -171,6 +172,7 @@ class BuildingType(models.TextChoices):
     LOGISTICS = "LOGISTICS"
     FARM = "FARM"
     VILLAGE = "VILLAGE"
+    NONE = "NONE"
 
 
 class BuildingGridConnection(BuiltEnvironmentGridConnection):
