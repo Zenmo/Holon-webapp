@@ -9,13 +9,15 @@ import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
+import { createTinyUrl } from "../../../api/tinyUrl";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import HolarchyTab from "./HolarchyTab/HolarchyTab";
 import { LegendItem } from "./HolarchyTab/LegendModal";
-import { Content, Feedbackmodals, InteractiveContent } from "./types";
+import ScenarioModal from "./ScenarioModals/ScenarioModal";
+import { Content, Feedbackmodals, InteractiveContent, SavedElements } from "./types";
 
 type Props = {
   data: {
@@ -27,12 +29,16 @@ type Props = {
       textLabelIntermediate: string;
       textLabelLocal: string;
       gridLayout: GridLayout;
+      openingSection?: boolean; 
     };
     id: string;
   };
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
+  savePageValues: React.Dispatch<React.SetStateAction<SavedElements>>;
+  saveScenario: (title: string, description: string, sectionId: string) => string;
+  scenarioDiffElements: object; 
 };
 
 const initialData = {
@@ -55,7 +61,15 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors }: Props) {
+export default function SectionBlock({
+  data,
+  pagetype,
+  feedbackmodals,
+  graphcolors,
+  savePageValues,
+  saveScenario,
+  scenarioDiffElements
+}: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
@@ -69,6 +83,12 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
   const [legend, setLegend] = useState<boolean>(false);
+  const [savedScenarioURL, setSavedScenarioURL] = useState<string>("");
+  const [showScenarioModal, setShowScenarioModal] = useState<boolean>(false);
+  const [scenarioModalType, setScenarioModalType] = useState<
+    "saveScenario" | "savedScenario" | "openScenario"
+  >("saveScenario");
+
   const scenario = useContext<number>(ScenarioContext);
   const [dirtyState, setDirtyState] = useState<boolean>(false);
   const [resetState, setResetState] = useState<boolean>(false);
@@ -77,7 +97,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const sectionContainerRef = useRef(null);
 
   const backgroundFullcolor =
-    data.value.background.size == "bg__full" ? data.value.background.color : "";
+    data.value?.background.size == "bg__full" ? data.value.background.color : "";
 
   // Have to create a seperate variable for this since the bg-color is semi-transparent
   // Otherwise they will overlap and will the left be darker since 2 layers
@@ -88,10 +108,18 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
 
   useEffect(() => {
+    if (data.value.openingSection) {
+      setScenarioModalType("openScenario");
+      setShowScenarioModal(true);
+    }
+  }, []);
+
+  useEffect(() => {
     setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
     setLegendItems(
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
+    savePageValues(saveCurrentValues(content));
 
     if (pagetype !== "Sandbox") {
       debouncedCalculateKPIs(content);
@@ -108,6 +136,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
         }, 500);
       }
     }
+    
   }, [content, debouncedCalculateKPIs]);
 
   useEffect(() => {
@@ -212,8 +241,38 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
     return return_arr;
   }
 
+  const saveCurrentValues = (content: Content[]) => {
+    //get currentValues of visible interactive elements
+    const savedElements: SavedElements = {
+      [data.id]: {},
+    };
+
+    content?.map((sectionItem: Content) => {
+      if (sectionItem.type === "interactive_input" && sectionItem.value.visible) {
+        const key = `${sectionItem.value.id}`;
+        const value = sectionItem.currentValue;
+        const name = sectionItem.value.name; 
+
+        savedElements[data.id] = { ...savedElements[data.id], [key]: {
+          value: value, 
+          name: name,
+        }}
+      }
+    });
+    return savedElements;
+  };
+
+  async function handleSaveScenario(title: string, description: string) {
+    const url = saveScenario(title, description, data.id); 
+    const shorturl = await createTinyUrl(url)
+
+    setSavedScenarioURL(shorturl);
+    setScenarioModalType("savedScenario");    
+    return; 
+    } 
+  
   return (
-    <div className={`sectionContainer`} ref={sectionContainerRef}>
+    <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
@@ -222,6 +281,18 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
           handleClose={closeCostBenefitModal}
           graphcolors={graphcolors ?? []}
           costBenefitData={costBenefitData}
+        />
+      )}
+      {showScenarioModal && (
+        <ScenarioModal
+          isOpen={showScenarioModal}
+          onClose={() => setShowScenarioModal(false)}
+          handleSaveScenario={handleSaveScenario}
+          type={scenarioModalType}
+          scenarioUrl={savedScenarioURL}
+          scenarioTitle={data.value.scenarioTitle}
+          scenarioDescription={data.value.scenarioDescription}
+          scenarioDiffElements={scenarioDiffElements}
         />
       )}
 
@@ -323,7 +394,11 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
                 data={kpis}
                 loading={loading}
                 dashboardId={data.id}
-                handleClickCostBen={openCostBenefitModal}></KPIDashboard>
+                handleClickCostBen={openCostBenefitModal}
+                handleClickScenario={() => {
+                  setShowScenarioModal(true);
+                  setScenarioModalType("saveScenario");
+                }}></KPIDashboard>
             </div>
           </div>
         </div>
