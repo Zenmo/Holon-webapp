@@ -9,6 +9,7 @@ import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
+import { createTinyUrl } from "../../../api/tinyUrl";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -261,11 +262,13 @@ export default function SectionBlock({
     return savedElements;
   };
 
-  function handleSaveScenario(title: string, description: string) {
+  async function handleSaveScenario(title: string, description: string) {
     const url = saveScenario(title, description, data.id); 
-    setSavedScenarioURL(url);
+    const shorturl = await createTinyUrl(url)
+
+    setSavedScenarioURL(shorturl);
     setScenarioModalType("savedScenario");    
-    return url; 
+    return; 
     } 
   
   return (

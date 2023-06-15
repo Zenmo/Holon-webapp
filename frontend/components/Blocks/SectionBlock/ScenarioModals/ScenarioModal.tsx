@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { createTinyUrl } from "../../../../api/tinyUrl";
 import Button from "../../../Button/Button";
 
@@ -36,16 +36,11 @@ export default function ScenarioModal({
     scenarioTitle: "",
     scenarioDescription: "",
   });
-  const [shortUrl, setShortUrl] = useState({scenarioUrl}); 
   const [copied, setCopied] = useState<boolean>(false);
 
   const textMessageLink = encodeURIComponent(
-    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: ${shortUrl}`
+    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: ${scenarioUrl}`
   );
-
-  useEffect(() => {
-    createShortUrl(scenarioUrl)
-  }, [scenarioUrl]);
 
   function closeModal() {
     onClose();
@@ -56,7 +51,8 @@ export default function ScenarioModal({
     setScenarioDetails({ ...scenarioDetails, [e.target.name]: e.target.value });
   }
 
-  function onSaveScenario() {
+  function onSaveScenario(e) {
+    e.preventDefault(); 
     handleSaveScenario(scenarioDetails.scenarioTitle, scenarioDetails.scenarioDescription);
   }
 
@@ -142,7 +138,7 @@ async function createShortUrl(url: string){
 
               <h3 className="text-left text-base mt-1">Gegenereerd scenario-URL</h3>
               <div className="flex flex-row w-full  mt-1">
-                <p className="text-left truncate text-ellipsis border p-1 h-[3rem] border-holon-gray-200">
+                <p className="text-left truncate text-ellipsis w-full border p-1 h-[3rem] border-holon-gray-200">
                   {scenarioUrl}
                 </p>
                 <Button
@@ -167,7 +163,7 @@ async function createShortUrl(url: string){
                   </a>
               
                   <a className="buttonLight mr-2" rel="noopener noreferrer"
-                    target="_blank" href={`https://www.linkedin.com/sharing/share-offsite/?url=${shortUrl}`}>
+                    target="_blank" href={`https://www.linkedin.com/sharing/share-offsite/?url=${scenarioUrl}`}>
                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src="/imgs/linkedin.png"
