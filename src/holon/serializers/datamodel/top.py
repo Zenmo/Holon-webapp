@@ -11,17 +11,16 @@ from .mapper import (
     GridConnectionPolymorphicSerializer,
     GridNodePolymorphicSerializer,
     PolicyPolymorphicSerializer,
+    PolicyPolymorphicSerializer,
 )
 from holon.models import Scenario
 
 
 class ScenarioSerializer(serializers.ModelSerializer):
-    actors = ActorPolymorphicSerializer(many=True, read_only=True, source="actor_set")
-    gridconnections = GridConnectionPolymorphicSerializer(
-        many=True, read_only=True, source="gridconnection_set"
-    )
-    gridnodes = GridNodePolymorphicSerializer(many=True, read_only=True, source="gridnode_set")
-    policies = PolicyPolymorphicSerializer(many=True, read_only=True, source="policy_set")
+    actors = ActorPolymorphicSerializer(many=True, read_only=True)
+    gridconnections = GridConnectionPolymorphicSerializer(many=True, read_only=True)
+    gridnodes = GridNodePolymorphicSerializer(many=True, read_only=True)
+    policies = PolicyPolymorphicSerializer(many=True, read_only=True)
 
     class Meta:
         model = Scenario

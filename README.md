@@ -221,3 +221,9 @@ To reset your database while developing, you can do the following steps:
 
 1. Rebuild the whole project OR...
 2. execute the .devcontainer/docker-entrypoint.sh by executing the following commands: cd .devcontainer and second ./docker-entrypoint.sh
+
+### Create all the redentions from the original images
+
+```
+python manage.py wagtail_update_image_renditions
+```
