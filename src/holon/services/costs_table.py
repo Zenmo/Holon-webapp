@@ -1,5 +1,7 @@
 """Create a Costs&Benefits Table """
-from holon.models import Actor
+from typing import Union
+
+from holon.models import Actor, ActorGroup, ActorSubGroup
 
 COSTS_TO_SELF = "Afschrijving"
 
@@ -187,6 +189,22 @@ class CostItem:
             return f"{CostItem.group(actor)} - {actor.subgroup.name}"
         except AttributeError:
             return CostItem.group(actor)
+
+    @staticmethod
+    def group_key_name(
+        group: Union[ActorGroup, None], sub_group: Union[ActorSubGroup, None] = None
+    ) -> str:
+        """Returns the key name for the group"""
+        if sub_group is None:
+            if group is None:
+                return "Onbekend"
+            else:
+                return group.name
+        else:
+            if group is None:
+                return f"Onbekend - {sub_group.name}"
+            else:
+                return f"{group.name} - {sub_group.name}"
 
     @staticmethod
     def price_for(obj) -> float:

@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalKey
 
 
 class ValueTransform(PolymorphicModel):
-    """Base class for a class that allows selecting a subset of the elements in a queryset"""
+    """Base class for a class that allows selecting a subset of the elements in a repository"""
 
     def transform_value(self, value: float) -> float:
         """Transform the value"""
@@ -14,7 +14,7 @@ class ValueTransform(PolymorphicModel):
 
 
 class ValueTranslate(ValueTransform):
-    """Class that allows for skipping a certain amount of items in a queryset"""
+    """Class that allows for skipping a certain amount of items in a repository"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="value_translates")
     amount = models.FloatField(null=False, verbose_name="Amount to add (or subtract)")
@@ -32,7 +32,7 @@ class ValueTranslate(ValueTransform):
 
 
 class ValueScale(ValueTransform):
-    """Class that allows for skipping a certain amount of items in a queryset"""
+    """Class that allows for skipping a certain amount of items in a repository"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="value_scales")
     factor = models.FloatField(null=False, verbose_name="Scaling factor")
@@ -50,7 +50,7 @@ class ValueScale(ValueTransform):
 
 
 class ValueMapRange(ValueTransform):
-    """Class that allows for skipping a certain amount of items in a queryset"""
+    """Class that allows for skipping a certain amount of items in a repository"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="value_map_ranges")
     value_min = models.FloatField(null=False, verbose_name="Minimum possible input value")

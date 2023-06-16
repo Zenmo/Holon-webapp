@@ -1,6 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet
 from polymorphic.models import PolymorphicModel
 from wagtail.admin.edit_handlers import FieldPanel
 import random
@@ -15,7 +20,7 @@ class AmountType(models.TextChoices):
 
 
 class FilterSubSelector(PolymorphicModel):
-    """Base class for a class that allows selecting a subset of the elements in a queryset"""
+    """Base class for a class that allows selecting a subset of the elements in a repository"""
 
     use_interactive_element_value = models.BooleanField(default=True)
     number_of_items = models.IntegerField(
@@ -42,41 +47,49 @@ class FilterSubSelector(PolymorphicModel):
         if not self.use_interactive_element_value and self.number_of_items <= 0:
             raise ValidationError("number of items should be larger than zero")
 
-    def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
-        """Select a subset of items from the queryset"""
+    def subselect_repository(
+        self, repository: RepositoryBaseClass, value: str
+    ) -> RepositoryBaseClass:
+        """Return a subset of items from the object list"""
         pass
 
 
 class Skip(FilterSubSelector):
-    """Class that allows for skipping a certain amount of items in a queryset"""
+    """Class that allows for skipping a certain amount of items in a repository"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_skips")
 
-    def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
-        """Skip a number of items in the queryset"""
+    def subselect_repository(
+        self, repository: RepositoryBaseClass, value: str
+    ) -> RepositoryBaseClass:
+        """Skip a number of items in the object list"""
+
+        # determine number of items to skip
         if self.use_interactive_element_value:
             n = int(float(value))
         else:
             n = self.number_of_items
 
+        # case mode relative
         if self.amount_type == AmountType.RELATIVE.value:
-            n = int(float(n / 100) * len(queryset))
+            n = int(float(n / 100) * repository.len())
 
-        return queryset[n:]
+        # return repository with subset of objects
+        return repository.get_subset_range(start=n)
 
     def hash(self):
         return f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items}]"
 
 
 class TakeMode(models.TextChoices):
-    """Different methods of selecting part of a queryset"""
+    """Different methods of selecting part of a repository"""
 
     FIRST = "FIRST"
     RANDOM = "RANDOM"
 
 
 class Take(FilterSubSelector):
-    """Class that takes a certain amount of items in a queryset"""
+    """Class that takes a certain amount of items in a repository"""
 
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_takes")
     mode = models.CharField(max_length=32, choices=TakeMode.choices, null=False, blank=False)
@@ -90,23 +103,26 @@ class Take(FilterSubSelector):
             f"[S{self.id},{self.use_interactive_element_value},{self.number_of_items},{self.mode}]"
         )
 
-    def subselect_queryset(self, queryset: QuerySet, value: str) -> QuerySet:
-        """Take a number of items from the queryset, either the first n or random n"""
+    def subselect_repository(
+        self, repository: RepositoryBaseClass, value: str
+    ) -> RepositoryBaseClass:
+        """Take a number of items from the object list, either the first n or random n"""
 
+        # determine number of items to take
         if self.use_interactive_element_value:
             n = int(float(value))
         else:
             n = self.number_of_items
 
+        # in case the mode is relative
         if self.amount_type == AmountType.RELATIVE.value:
-            n = int(float(n / 100) * len(queryset))
+            n = int(float(n / 100) * repository.len())
 
+        # take items depending on mode
         if self.mode == TakeMode.FIRST.value:
-            return queryset[:n]
+            return repository.get_subset_range(end=n)
 
         elif self.mode == TakeMode.RANDOM.value:
-            ids = list(queryset.values_list("id", flat=True))
-            random_ids = random.sample(ids, k=n)
-            return queryset.filter(pk__in=random_ids)
-
-        raise NotImplementedError(f"Take mode {self.mode} is not implemented")
+            indices = range(repository.len())
+            random_indices = random.sample(indices, k=n)
+            return repository.get_subset_range(indices=random_indices)
