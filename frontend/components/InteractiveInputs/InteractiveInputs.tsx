@@ -59,12 +59,10 @@ function InteractiveInputs({
 
   //if there is a selectedlevel, it should match, the slider
 
-  let slidermin = 0;
-  let slidermax = 100;
+  const slidermin = options[0]?.sliderValueMin ? options[0].sliderValueMin : 0;
+  const slidermax = options[0]?.sliderValueMax ? options[0].sliderValueMax : 100;
   let sliderstep = null;
   if (pagetype !== "Sandbox") {
-    slidermin = options[0]?.sliderValueMin ? options[0].sliderValueMin : 0;
-    slidermax = options[0]?.sliderValueMax ? options[0].sliderValueMax : 100;
     sliderstep = options[0]?.discretizationSteps;
   }
 
