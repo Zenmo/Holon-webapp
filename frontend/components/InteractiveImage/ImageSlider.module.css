@@ -33,6 +33,10 @@
     var(--tw-shadow);
   cursor: pointer;
 }
+.slider::-moz-range-track,
+.slider::-webkit-slider-runnable-track {
+  z-index: 1;
+}
 
 .slider:disabled::-webkit-slider-thumb {
   background-color: grey;
@@ -70,10 +74,23 @@
   width: 40px;
   margin-bottom: 12px;
   height: 20px;
-  @apply bg-holon-blue-900;
   transform: translateX(-50%);
   text-align: center;
   @apply bg-holon-blue-500;
+}
+.slider + .slidervalue output:after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  @apply bg-holon-blue-500;
+  top: 100%;
+  margin-top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+
+
 }
 .slider:focus + output {
   @apply bg-holon-blue-900;
