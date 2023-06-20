@@ -20,6 +20,8 @@ from holon.models.config import (
     KeyValuePairCollection,
     QueryAndConvertConfig,
     StaticConversion,
+    QueryCovertModuleType,
+    QueryAndConvertConfig,
 )
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.utils.logging import HolonLogger
@@ -56,7 +58,7 @@ CONFIG_KPIS = {
             "value": {
                 "type": "query",
                 "data": "value",
-                "etm_key": "kpi_required_additional_hv_network_percentage",
+                "etm_key": "kpi_relative_future_load_mv_hv_transformer",
             }
         },
         "costs": {"value": {"type": "query", "data": "value", "etm_key": "total_costs"}},
@@ -76,7 +78,7 @@ class ETMConnect:
         ):
             if config.module == "cost":
                 yield from ETMConnect.costs(config)
-            if config.module == "upscaling":
+            if config.module == "upscaling" or config.module == "upscaling-regional":
                 yield ETMConnect.upscaling(config)
 
     @staticmethod
@@ -97,7 +99,7 @@ class ETMConnect:
 
     @staticmethod
     @sentry_sdk_trace
-    def costs(config):
+    def costs(config: QueryAndConvertConfig):
         cost_components = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
 
         span = sentry_sdk.Hub.current.scope.span
@@ -108,11 +110,11 @@ class ETMConnect:
             for key, value in cost_components.items():
                 span.set_data("etm_output_cost_" + key, value)
 
-        yield ("costs", sum(cost_components.values()))
+        yield (QueryCovertModuleType.COST, sum(cost_components.values()))
 
         # Calculate depreciation costs for each actor
         yield (
-            "cost_benefit",
+            QueryCovertModuleType.COSTBENEFIT,
             [
                 {actor: val * cost_components[key] for actor, val in actors.items()}
                 for key, actors in config.distribution_keys.items()
@@ -121,7 +123,7 @@ class ETMConnect:
 
     @staticmethod
     @sentry_sdk_trace
-    def upscaling(config):
+    def upscaling(config: QueryAndConvertConfig):
         new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
 
         kpis = etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS))
@@ -135,7 +137,7 @@ class ETMConnect:
             for key, value in kpis.items():
                 span.set_data("etm_output_kpi_" + key, value)
 
-        return config.name, kpis
+        return config.module, kpis
 
 
 class AssetCombiner:
