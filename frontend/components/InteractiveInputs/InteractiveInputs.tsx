@@ -33,6 +33,7 @@ export type InteractiveInputOptions = {
   sliderValueMax?: number;
   sliderValueMin?: number;
   discretizationSteps?: number;
+  sandboxDiscretizationSteps?: number;
   sliderUnit?: string;
   level?: string;
 };
@@ -62,7 +63,9 @@ function InteractiveInputs({
   const slidermin = options[0]?.sliderValueMin ? options[0].sliderValueMin : 0;
   const slidermax = options[0]?.sliderValueMax ? options[0].sliderValueMax : 100;
   let sliderstep = null;
-  if (pagetype !== "Sandbox") {
+  if (pagetype == "Sandbox") {
+    sliderstep = options[0]?.sandboxDiscretizationSteps;
+  } else {
     sliderstep = options[0]?.discretizationSteps;
   }
 
