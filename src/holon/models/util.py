@@ -3,12 +3,10 @@ import json
 from pathlib import Path
 from typing import TypeVar, Union
 
-from django.db import models
 from django.db.models import Model
 from django.db import models
 from django.db.migrations.operations.models import ModelOptionOperation
 from polymorphic.managers import PolymorphicQuerySet
-from polymorphic import utils
 from django.apps import apps
 
 base_path = Path(__file__).parent.parent / "services" / "jsons"
@@ -201,7 +199,7 @@ def relation_field_subtype_options(rule: "ScenarioRule", relation_field: str) ->
 
 def is_allowed_relation(field_name: str) -> bool:
     # group and subgroup of Actor have stable id's, so they can be used for filtering
-    return field_name == "group" or field_name == "subgroup"
+    return field_name in ("group", "subgroup")
 
 
 def is_scenario_object_relation_field(field: Union[models.Field, models.ForeignObjectRel]) -> bool:

@@ -20,7 +20,6 @@ from holon.models.util import (
     relation_field_subtype_options,
     all_subclasses,
 )
-from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.filter.filter import Filter
 
 
@@ -100,13 +99,10 @@ class SecondOrderRelationAttributeFilter(Filter):
         return second_order_relation_model
 
     def second_order_relation_model_attribute_options(self) -> list[str]:
+        """Return list of fields that can be used for filtering"""
         relation_model = self.get_second_order_relation_model()
 
-        return [
-            field.name
-            for field in relation_model._meta.get_fields()
-            if not field.is_relation and not is_exclude_field(field)
-        ]
+        return _get_model_filter_attribute_fields(relation_model)
 
     def second_order_relation_field_options(self) -> list[str]:
         model = get_relation_model(self.rule, self.relation_field, self.relation_field_subtype)
@@ -160,3 +156,27 @@ class SecondOrderRelationAttributeFilter(Filter):
         return repository.filter_has_relation(
             self.relation_field, first_order_relation_repository, self.invert_filter
         )
+
+
+def _get_model_filter_attribute_fields(model: models.Model) -> list[str]:
+    """Return list of fields that can be used for filtering"""
+    return [
+        # include _id fields so that you can have a third-order filter based on id.
+        field.name + "_id" if field.is_relation else field.name
+        for field in model._meta.get_fields()
+        if _valid_filter_attribute_field(field)
+    ]
+
+
+def _valid_filter_attribute_field(field: models.Field) -> bool:
+    """Return if field is valid for a filter attribute rule"""
+    if is_exclude_field(field):
+        return False
+
+    if not field.is_relation:
+        return True
+
+    if field.one_to_one or field.many_to_one:
+        return True
+
+    return False
