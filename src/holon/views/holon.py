@@ -11,6 +11,7 @@ from sentry_sdk import capture_exception
 
 from holon.cache import holon_endpoint_cache
 from holon.models import Scenario, rule_mapping
+from holon.models.config import QueryCovertModuleType
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer, ScenarioSerializer
@@ -143,17 +144,19 @@ class HolonV2Service(generics.CreateAPIView):
             "inter_upscaling_outcomes": None,
             "depreciation_costs": [],
         }
-        for name, outcome in ETMConnect.connect_from_scenario(
+        for module, outcome in ETMConnect.connect_from_scenario(
             scenario, scenario_aggregate, cc.outputs
         ):
-            if name == "cost":
+            if module == QueryCovertModuleType.COST:
                 etm_outcomes["cost_outcome"] = outcome
-            elif name == "National upscaling":
+            elif module == QueryCovertModuleType.UPSCALING:
                 etm_outcomes["nat_upscaling_outcomes"] = outcome
-            elif name == "Regional upscaling":
+            elif module == QueryCovertModuleType.UPSCALING_REGIONAL:
                 etm_outcomes["inter_upscaling_outcomes"] = outcome
-            elif name == "cost_benefit":
+            elif module == QueryCovertModuleType.COSTBENEFIT:
                 etm_outcomes["depreciation_costs"] = outcome
+            else:
+                raise Exception(f"Unknow ETM module {module}")
 
         return etm_outcomes
 
