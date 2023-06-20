@@ -29,7 +29,7 @@ type Props = {
       textLabelIntermediate: string;
       textLabelLocal: string;
       gridLayout: GridLayout;
-      openingSection?: boolean; 
+      openingSection?: boolean;
     };
     id: string;
   };
@@ -38,7 +38,7 @@ type Props = {
   graphcolors?: Graphcolor[];
   savePageValues: React.Dispatch<React.SetStateAction<SavedElements>>;
   saveScenario: (title: string, description: string, sectionId: string) => string;
-  scenarioDiffElements: object; 
+  scenarioDiffElements: object;
 };
 
 const initialData = {
@@ -68,7 +68,7 @@ export default function SectionBlock({
   graphcolors,
   savePageValues,
   saveScenario,
-  scenarioDiffElements
+  scenarioDiffElements,
 }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
@@ -136,7 +136,6 @@ export default function SectionBlock({
         }, 500);
       }
     }
-    
   }, [content, debouncedCalculateKPIs]);
 
   useEffect(() => {
@@ -251,26 +250,33 @@ export default function SectionBlock({
       if (sectionItem.type === "interactive_input" && sectionItem.value.visible) {
         const key = `${sectionItem.value.id}`;
         const value = sectionItem.currentValue;
-        const name = sectionItem.value.name; 
+        const name = sectionItem.value.name;
 
-        savedElements[data.id] = { ...savedElements[data.id], [key]: {
-          value: value, 
-          name: name,
-        }}
+        savedElements[data.id] = {
+          ...savedElements[data.id],
+          [key]: {
+            value: value,
+            name: name,
+          },
+        };
       }
     });
     return savedElements;
   };
 
   async function handleSaveScenario(title: string, description: string) {
-    const url = saveScenario(title, description, data.id); 
-    const shorturl = await createTinyUrl(url)
+    const longUrl = saveScenario(title, description, data.id);
+    const shortUrl = await createTinyUrl(longUrl);
 
-    setSavedScenarioURL(shorturl);
-    setScenarioModalType("savedScenario");    
-    return; 
-    } 
-  
+    if (shortUrl) {
+      setSavedScenarioURL(shortUrl);
+    } else {
+      setSavedScenarioURL(longUrl);
+    }
+    setScenarioModalType("savedScenario");
+    return;
+  }
+
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
       {feedbackmodals && (
