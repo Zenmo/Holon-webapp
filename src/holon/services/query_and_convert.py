@@ -58,7 +58,7 @@ CONFIG_KPIS = {
             "value": {
                 "type": "query",
                 "data": "value",
-                "etm_key": "kpi_required_additional_hv_network_percentage",
+                "etm_key": "kpi_relative_future_load_mv_hv_transformer",
             }
         },
         "costs": {"value": {"type": "query", "data": "value", "etm_key": "total_costs"}},

@@ -50,7 +50,7 @@ class InteractiveElement(ClusterableModel):
         blank=True,
         help_text=_("If type is 'Continuous (slider)', choose a level. Otherwise, leave it empty"),
     )
-    more_information = models.CharField(max_length=100, blank=True)
+    more_information = models.CharField(max_length=1000, blank=True)
     link_wiki_page = models.ForeignKey(
         "main.WikiPage",
         blank=True,
