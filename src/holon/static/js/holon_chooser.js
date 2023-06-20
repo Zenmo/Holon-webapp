@@ -196,7 +196,7 @@ function setAssetAttributes(model_type_select, model_subtype_select, data) {
         model_subtype_select.val()
             ? data[model_type].model_subtype[model_subtype_select.val()]
             : data[model_type].attributes
-    ).filter((option) => !option.relation); // Exclude foreign keys for model_attribute
+    )
 
     attributeInputs.each(function () {
         convertInputToSelect($(this), options);
@@ -535,7 +535,7 @@ function updateAssetAttributes(model_type_select, model_subtype_select, data) {
             model_subtype_select.val()
                 ? data[model_type].model_subtype[model_subtype_select.val()]
                 : data[model_type].attributes
-        ).filter((option) => !option.relation); // Exclude foreign keys for model_attribute
+        )
 
         for (const value of options) {
             attribute_select.append(
