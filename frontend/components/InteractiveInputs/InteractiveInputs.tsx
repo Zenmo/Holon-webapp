@@ -92,6 +92,7 @@ function InteractiveInputs({
       titleWikiPage={titleWikiPage}
       linkWikiPage={linkWikiPage}
       tooltip={true}
+      ticks={sliderstep}
       selectedLevel={selectedLevel}
       locked={false}></ImageSlider>
   ) : visibleOptions.length ? (
