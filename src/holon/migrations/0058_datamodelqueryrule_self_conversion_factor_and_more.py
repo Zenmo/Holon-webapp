@@ -7,7 +7,7 @@ import modelcluster.fields
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("holon", "0052_alter_datamodelqueryrule_datamodel_conversion_step"),
+        ("holon", "0057_alter_interactiveelementcontinuousvalues_discretization_steps_and_more"),
     ]
 
     operations = [
