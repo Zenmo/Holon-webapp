@@ -1,10 +1,3 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
-
-from typing import Union
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
