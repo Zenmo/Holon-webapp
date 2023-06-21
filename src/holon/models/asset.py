@@ -11,9 +11,9 @@ class EnergyAsset(PolymorphicModel):
     category = "GENERIC"
 
     gridconnection = models.ForeignKey(
-        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+        GridConnection, on_delete=models.CASCADE, null=True, blank=True
     )
-    gridnode = models.ForeignKey(GridNode, on_delete=models.SET_NULL, null=True, blank=True)
+    gridnode = models.ForeignKey(GridNode, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255)
     wildcard_JSON = models.JSONField(
         blank=True,

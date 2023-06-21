@@ -1,9 +1,8 @@
 import copy
 import json
 from pathlib import Path
-from typing import TypeVar
+from typing import TypeVar, Union
 
-from django.db import models
 from django.db.models import Model
 from django.db import models
 from django.db.migrations.operations.models import ModelOptionOperation
@@ -200,27 +199,25 @@ def relation_field_subtype_options(rule: "ScenarioRule", relation_field: str) ->
 
 def is_allowed_relation(field_name: str) -> bool:
     # group and subgroup of Actor have stable id's, so they can be used for filtering
-    return field_name == "group" or field_name == "subgroup"
+    return field_name in ("group", "subgroup")
 
 
-def serialize_add_models(asset_to_add, gridconnection_to_add, contract_to_add) -> tuple[str]:
-    """Serialize util function for ruleactionadd hashing"""
-    from holon.serializers.datamodel.mapper import (
-        EnergyAssetPolymorphicSerializer,
-        GridConnectionPolymorphicSerializer,
-        ContractPolymorphicSerializer,
-    )
+def is_scenario_object_relation_field(field: Union[models.Field, models.ForeignObjectRel]) -> bool:
+    """
+    Test if a field is a relation field related to the models that are connected to a Scenario.
 
-    asset_json = (
-        json.dumps(EnergyAssetPolymorphicSerializer(asset_to_add).data) if asset_to_add else ""
-    )
-    gridconnection_json = (
-        json.dumps(GridConnectionPolymorphicSerializer(gridconnection_to_add).data)
-        if gridconnection_to_add
-        else ""
-    )
-    contract_json = (
-        json.dumps(ContractPolymorphicSerializer(contract_to_add).data) if contract_to_add else ""
-    )
+    Relation field list requirements:
+     - be a relation
+     - have a delete policy
+     - not be a reference to polymorphic parents ( parent_link )
+     - be part of the scenario aggregate ( no fields referencing rules )
+    """
+    from holon.models.scenario_rule import ModelType
+    from holon.rule_engine.repositories import get_base_type
 
-    return asset_json, gridconnection_json, contract_json
+    return (
+        field.is_relation
+        and hasattr(field, "on_delete")
+        and field.parent_link == False
+        and get_base_type(field.related_model).__name__ in ModelType.values
+    )

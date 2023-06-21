@@ -4,7 +4,14 @@ from typing import List
 import etm_service
 import sentry_sdk
 
-from holon.models import DatamodelQueryRule, Scenario
+from holon.models import (
+    DatamodelQueryRule,
+    Scenario,
+    ModelType,
+    ActorGroup,
+    ActorSubGroup,
+    QueryCovertModuleType,
+)
 from holon.models.config import (
     AnyLogicConversion,
     DatamodelConversion,
@@ -13,7 +20,10 @@ from holon.models.config import (
     KeyValuePairCollection,
     QueryAndConvertConfig,
     StaticConversion,
+    QueryCovertModuleType,
+    QueryAndConvertConfig,
 )
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.utils.logging import HolonLogger
 from holon.services.costs_table import CostItem
 from pipit.sentry import sentry_sdk_trace
@@ -48,7 +58,7 @@ CONFIG_KPIS = {
             "value": {
                 "type": "query",
                 "data": "value",
-                "etm_key": "kpi_required_additional_hv_network_percentage",
+                "etm_key": "kpi_relative_future_load_mv_hv_transformer",
             }
         },
         "costs": {"value": {"type": "query", "data": "value", "etm_key": "total_costs"}},
@@ -59,24 +69,37 @@ CONFIG_KPIS = {
 class ETMConnect:
     @staticmethod
     @sentry_sdk_trace
-    def connect_from_scenario(original_scenario, scenario, anylogic_outcomes) -> tuple[str, dict]:
+    def connect_from_scenario(
+        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
+    ) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
-        for config in ETMConnect.query_configs(original_scenario, scenario, anylogic_outcomes):
+        for config in ETMConnect.query_configs(
+            original_scenario, scenario_aggregate, anylogic_outcomes
+        ):
             if config.module == "cost":
                 yield from ETMConnect.costs(config)
-            if config.module == "upscaling":
+            if config.module == "upscaling" or config.module == "upscaling-regional":
                 yield ETMConnect.upscaling(config)
 
     @staticmethod
-    def query_configs(original_scenario, scenario, anylogic_outcomes):
+    def query_configs(
+        original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
+    ):
         return (
-            QConfig(c, anylogic_outcomes=anylogic_outcomes, copied_scenario=scenario)
-            for c in original_scenario.query_and_convert_config.all()
+            QConfig(c, anylogic_outcomes=anylogic_outcomes, scenario_aggregate=scenario_aggregate)
+            for c in original_scenario.query_and_convert_config.prefetch_related(
+                "key_value_pair_collection__float_key_value_pair"
+            )
+            .prefetch_related("etm_query__static_conversion_step")
+            .prefetch_related("etm_query__etm_conversion_step")
+            .prefetch_related("etm_query__datamodel_conversion_step__datamodel_query_rule")
+            .prefetch_related("etm_query__al_conversion_step")
+            .all()
         )
 
     @staticmethod
     @sentry_sdk_trace
-    def costs(config):
+    def costs(config: QueryAndConvertConfig):
         cost_components = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
 
         span = sentry_sdk.Hub.current.scope.span
@@ -87,11 +110,11 @@ class ETMConnect:
             for key, value in cost_components.items():
                 span.set_data("etm_output_cost_" + key, value)
 
-        yield ("costs", sum(cost_components.values()))
+        yield (QueryCovertModuleType.COST, sum(cost_components.values()))
 
         # Calculate depreciation costs for each actor
         yield (
-            "cost_benefit",
+            QueryCovertModuleType.COSTBENEFIT,
             [
                 {actor: val * cost_components[key] for actor, val in actors.items()}
                 for key, actors in config.distribution_keys.items()
@@ -100,7 +123,7 @@ class ETMConnect:
 
     @staticmethod
     @sentry_sdk_trace
-    def upscaling(config):
+    def upscaling(config: QueryAndConvertConfig):
         new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
 
         kpis = etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS))
@@ -114,7 +137,7 @@ class ETMConnect:
             for key, value in kpis.items():
                 span.set_data("etm_output_kpi_" + key, value)
 
-        return config.name, kpis
+        return config.module, kpis
 
 
 class AssetCombiner:
@@ -124,7 +147,10 @@ class AssetCombiner:
 
 class QConfig:
     def __init__(
-        self, config_db: QueryAndConvertConfig, anylogic_outcomes: dict, copied_scenario: Scenario
+        self,
+        config_db: QueryAndConvertConfig,
+        anylogic_outcomes: dict,
+        scenario_aggregate: ScenarioAggregate,
     ) -> None:
         self.config_db = config_db
         self.module = config_db.module
@@ -132,7 +158,7 @@ class QConfig:
         self.api_url = config_db.api_url
         self.etm_scenario_id = config_db.etm_scenario_id
         self.anylogic_outcomes = anylogic_outcomes
-        self.copied_scenario = copied_scenario
+        self.scenario_aggregate = scenario_aggregate
         self.distribution_keys = {}
 
     @property
@@ -172,7 +198,7 @@ class QConfig:
             self.unpack(q)
 
     def unpack(self, q):
-        query = Query(query=q, config=self, copied_scenario=self.copied_scenario)
+        query = Query(query=q, config=self, scenario_aggregate=self.scenario_aggregate)
         self._queries["config"].update(query.to_dict())
 
         self.distribution_keys.update(
@@ -185,14 +211,16 @@ class QConfig:
 
 
 class Query:
-    def __init__(self, query: ETMQuery, config: QConfig, copied_scenario: Scenario) -> None:
+    def __init__(
+        self, query: ETMQuery, config: QConfig, scenario_aggregate: ScenarioAggregate
+    ) -> None:
         self.internal_key = query.internal_key
         self.data_type = query.data_type
         self.endpoint = query.endpoint
         self.etm_key = query.etm_key
         self.config = config
         self.query_db = query
-        self.copied_scenario = copied_scenario
+        self.scenario_aggregate = scenario_aggregate
         self.anylogic_outcomes = config.anylogic_outcomes
         # WHEN FILLED: self.distribution_keys = {group1: val1, group2: val2, ...}
         self.distribution_key = {}
@@ -293,25 +321,56 @@ class Query:
     def set_datamodel(self, c: DatamodelConversion):
         """"""
         qr: DatamodelQueryRule = c.datamodel_query_rule.get()
-        value = qr.get_filter_aggregation_result(self.copied_scenario)
+        value = qr.get_filter_aggregation_result(self.scenario_aggregate)
 
-        unique_actors_subgroup = self.copied_scenario.actor_set.distinct("group", "subgroup")
-        # TODO: aren't we double counting now? some guys already got some in their subgroup?
-        unique_actors_group = self.copied_scenario.actor_set.distinct("group")
-
-        for actor in unique_actors_subgroup:
-            g_value = qr.get_filter_aggregation_result(
-                self.copied_scenario, group_to_filter=actor.group, subgroup_to_filter=actor.subgroup
+        if self.config.config_db.module == QueryCovertModuleType.COSTBENEFIT:
+            actor_repository = self.scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR
             )
-            keyname = CostItem.subgroup(actor)
-            self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
-
-        for actor in unique_actors_group:
-            g_value = qr.get_filter_aggregation_result(
-                self.copied_scenario, group_to_filter=actor.group
+            actor_group_repository = self.scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR_GROUP
             )
-            keyname = CostItem.group(actor)
-            self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
+            actor_sub_group_repository = self.scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR_SUB_GROUP
+            )
+
+            unique_sub_group_ids = actor_repository.get_distinct_attribute_values(
+                ["group_id", "subgroup_id"]
+            )
+            unique_sub_groups = {
+                (
+                    actor_group_repository.get(d["group_id"])
+                    if d["group_id"] is not None
+                    else None,
+                    actor_sub_group_repository.get(d["subgroup_id"])
+                    if d["subgroup_id"] is not None
+                    else None,
+                )
+                for d in unique_sub_group_ids
+            }
+
+            for group_tuple in unique_sub_groups:
+                g_value = qr.get_filter_aggregation_result(
+                    scenario_aggregate=self.scenario_aggregate,
+                    group_to_filter=group_tuple[0],
+                    subgroup_to_filter=group_tuple[1],
+                )
+                keyname = CostItem.group_key_name(group_tuple[0], group_tuple[1])
+                self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
+
+            # TODO: aren't we double counting now? some guys already got some in their subgroup?
+            unique_group_ids = actor_repository.get_distinct_attribute_values(["group_id"])
+            unique_groups = [
+                actor_group_repository.get(d["group_id"]) if d["group_id"] is not None else None
+                for d in unique_group_ids
+            ]
+
+            for group in unique_groups:
+                g_value = qr.get_filter_aggregation_result(
+                    scenario_aggregate=self.scenario_aggregate, group_to_filter=group
+                )
+                keyname = CostItem.group_key_name(group)
+                self.distribution_key.update({keyname: g_value / value if value != 0 else 0})
 
         return {
             "type": "static",  # all non-query conversions are considered static
