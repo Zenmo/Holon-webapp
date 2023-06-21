@@ -33,6 +33,7 @@ export type InteractiveInputOptions = {
   sliderValueMax?: number;
   sliderValueMin?: number;
   discretizationSteps?: number;
+  sandboxDiscretizationSteps?: number;
   sliderUnit?: string;
   level?: string;
 };
@@ -59,13 +60,19 @@ function InteractiveInputs({
 
   //if there is a selectedlevel, it should match, the slider
 
-  let slidermin = 0;
-  let slidermax = 100;
+  const slidermin = options[0]?.sliderValueMin ? options[0].sliderValueMin : 0;
+  const slidermax = options[0]?.sliderValueMax ? options[0].sliderValueMax : 100;
   let sliderstep = null;
-  if (pagetype !== "Sandbox") {
-    slidermin = options[0]?.sliderValueMin ? options[0].sliderValueMin : 0;
-    slidermax = options[0]?.sliderValueMax ? options[0].sliderValueMax : 100;
-    sliderstep = options[0]?.discretizationSteps;
+  if (pagetype == "Sandbox") {
+    sliderstep =
+      options[0]?.sandboxDiscretizationSteps > 1
+        ? options[0]?.sandboxDiscretizationSteps
+        : slidermax - slidermin + 1; //force slider to either use discretizationSteps or steps of 1
+  } else {
+    sliderstep =
+      options[0]?.discretizationSteps > 1
+        ? options[0]?.discretizationSteps
+        : slidermax - slidermin + 1; //force slider to either use discretizationSteps or steps of 1
   }
 
   return type === "continuous" &&
@@ -85,6 +92,7 @@ function InteractiveInputs({
       titleWikiPage={titleWikiPage}
       linkWikiPage={linkWikiPage}
       tooltip={true}
+      ticks={sliderstep}
       selectedLevel={selectedLevel}
       locked={false}></ImageSlider>
   ) : visibleOptions.length ? (
