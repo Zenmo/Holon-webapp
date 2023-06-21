@@ -37,6 +37,7 @@ export default function ImageSlider({
   linkWikiPage,
   tooltip,
   unit,
+  ticks,
   selectedLevel,
 }: Props) {
   const [sliderValue, setSliderValue] = useState(defaultValue);
@@ -68,7 +69,7 @@ export default function ImageSlider({
   }, []);
 
   function updateSliderValue(inputId, slidervalue) {
-    const actualValue = Math.floor((slidervalue / slidermax) * (max - min) + min);
+    const actualValue = Math.round(((slidervalue / slidermax) * (max - min) + min) * 10) / 10;
 
     setSliderValue(slidervalue);
     setRealValue(actualValue);
@@ -117,13 +118,27 @@ export default function ImageSlider({
           />
           {tooltip && (
             <div className={styles.slidervalue}>
-              <div className="relative">
+              <div className="relative z-10">
                 <output
                   className="text-white border-white rounded"
                   style={{ left: "calc((" + sliderTooltipPosition + ") * 100%)" }}>
                   {realValue}
                 </output>
               </div>
+            </div>
+          )}
+          {/* when therer ar more then 12 ticks, hide the ticks because it looks ugly */}
+          {ticks > 0 && ticks < 12 && (
+            <div className="absolute pointer-events-none w-[calc(100%-19px)] flex justify-between flex-row ml-[9px] z-[0] items-center-center">
+              <span className="flex-[0_0_4px] h-[5px] bg-white opacity-0"></span>
+              {[...Array(parseInt(slidermax))].map((x, i) => (
+                <span
+                  key={i}
+                  className={
+                    "flex-[0_0_4px] h-[5px] bg-white " +
+                    (i == parseInt(slidermax - 1) && "opacity-0")
+                  }></span>
+              ))}
             </div>
           )}
         </div>
