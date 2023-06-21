@@ -127,7 +127,8 @@ export default function ImageSlider({
               </div>
             </div>
           )}
-          {ticks > 0 && (
+          {/* when therer ar more then 12 ticks, hide the ticks because it looks ugly */}
+          {ticks > 0 && ticks < 12 && (
             <div className="absolute pointer-events-none w-[calc(100%-19px)] flex justify-between flex-row ml-[9px] z-[0] items-center-center">
               <span className="flex-[0_0_4px] h-[5px] bg-white opacity-0"></span>
               {[...Array(parseInt(slidermax))].map((x, i) => (
