@@ -148,6 +148,7 @@ class GenericRuleActionAdd(RuleAction):
 
         # only take first n objects
         for filtererd_object in filtered_repository.all():
+            print("ADDDDD")
             if reset_models_before_add:
                 # check which objects of the same type as model_to_add are already
                 # connected to our current filtered_object, and remove these

@@ -3,6 +3,7 @@ from .anylogic_cloud import *  # NOQA
 from .anylogic_conversion import *  # NOQA
 from .conversion_operation_type import *  # NOQA
 from .datamodel_conversion import *  # NOQA
+from .rule_action_conversion import *  # NOQA
 from .etm_conversion import *  # NOQA
 from .etm_query import *  # NOQA
 from .key_value_pair_collection import *  # NOQA
