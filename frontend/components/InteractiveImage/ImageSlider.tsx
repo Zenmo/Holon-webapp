@@ -69,7 +69,7 @@ export default function ImageSlider({
   }, []);
 
   function updateSliderValue(inputId, slidervalue) {
-    const actualValue = Math.floor((slidervalue / slidermax) * (max - min) + min);
+    const actualValue = Math.round(((slidervalue / slidermax) * (max - min) + min) * 10) / 10;
 
     setSliderValue(slidervalue);
     setRealValue(actualValue);

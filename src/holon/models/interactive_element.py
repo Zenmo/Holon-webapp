@@ -229,10 +229,8 @@ class InteractiveElementContinuousValues(ClusterableModel):
     discretization_steps = models.IntegerField(
         null=True,
         blank=True,
-        default=5,
-        help_text=_(
-            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
-        ),
+        default=0,
+        help_text=_("Amount of steps the slider has. Leave empty to let the slider be contiuous."),
     )
     slider_unit = models.ForeignKey(
         InteractiveElementUnit,
@@ -244,9 +242,17 @@ class InteractiveElementContinuousValues(ClusterableModel):
     discretization_steps = models.IntegerField(
         null=True,
         blank=True,
-        default=5,
+        default=0,
         help_text=_(
-            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
+            "Storyline and challenge discretization steps: Amount of steps the slider has. Leave empty to let the slider be contiuous."
+        ),
+    )
+    sandbox_discretization_steps = models.IntegerField(
+        null=True,
+        blank=True,
+        default=0,
+        help_text=_(
+            "Sandbox discretization steps: Amount of steps the slider has. Leave empty to let the slider be contiuous."
         ),
     )
 
@@ -254,6 +260,7 @@ class InteractiveElementContinuousValues(ClusterableModel):
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
         FieldPanel("discretization_steps"),
+        FieldPanel("sandbox_discretization_steps"),
         InlinePanel("rules", heading="Rules", label="Rules"),
         FieldPanel("slider_unit"),
     ]
