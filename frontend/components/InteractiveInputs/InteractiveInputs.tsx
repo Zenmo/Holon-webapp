@@ -64,9 +64,15 @@ function InteractiveInputs({
   const slidermax = options[0]?.sliderValueMax ? options[0].sliderValueMax : 100;
   let sliderstep = null;
   if (pagetype == "Sandbox") {
-    sliderstep = options[0]?.sandboxDiscretizationSteps;
+    sliderstep =
+      options[0]?.sandboxDiscretizationSteps > 1
+        ? options[0]?.sandboxDiscretizationSteps
+        : slidermax - slidermin + 1; //force slider to either use discretizationSteps or steps of 1
   } else {
-    sliderstep = options[0]?.discretizationSteps;
+    sliderstep =
+      options[0]?.discretizationSteps > 1
+        ? options[0]?.discretizationSteps
+        : slidermax - slidermin + 1; //force slider to either use discretizationSteps or steps of 1
   }
 
   return type === "continuous" &&
