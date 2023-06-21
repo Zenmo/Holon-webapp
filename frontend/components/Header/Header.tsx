@@ -16,7 +16,14 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
         <div className="flex flex-wrap justify-between items-center mx-auto">
           <Link href="/" className="flex items-center">
             <a className=" text-left uppercase text-2xl font-bold text-holon-blue-900 dark:text-white">
-              Holon
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/imgs/logo_homepagina.png"
+                alt="logo and link homepage Holon"
+                width={150}
+                height={150}
+                className="mr-2"
+              />
             </a>
           </Link>
           <button
