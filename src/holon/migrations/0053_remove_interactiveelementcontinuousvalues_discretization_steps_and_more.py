@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("holon", "0052_alter_datamodelqueryrule_datamodel_conversion_step"),
     ]
