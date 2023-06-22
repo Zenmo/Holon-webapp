@@ -28,11 +28,11 @@ export default function KPIDashboard({
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
       <div className="flex flex-row justify-around items-center">
         <KPIRadioButtons updateValue={setLevel} loading={loading} dashboardId={dashboardId} />
-        <Button onClick={handleClickCostBen} variant="light">
+        <Button onClick={handleClickCostBen} variant="light" disabled={loading}>
           <CurrencyEuroIcon className="h-5 w-5 pr-1" />
           Kosten en Baten
         </Button>
-        <Button onClick={handleClickScenario} variant="light">
+        <Button onClick={handleClickScenario} variant="light" disabled={loading}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/imgs/save.png" alt="icon save" width={20} height={20} className="mr-2" />
           Scenario opslaan

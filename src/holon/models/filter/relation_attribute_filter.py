@@ -91,6 +91,11 @@ class RelationAttributeFilter(Filter):
     ) -> RepositoryBaseClass:
         """Apply the relation attribute filter to a repository"""
 
+        model_attribute = self.model_attribute
+        if is_allowed_relation(model_attribute):
+            # Add id to attribute so it can be updated with an id compared to a model instance
+            model_attribute += "_id"
+
         # get relation repository
         relation_repository = scenario_aggregate.get_repository_for_relation_field(
             self.rule.model_type,
@@ -100,7 +105,7 @@ class RelationAttributeFilter(Filter):
 
         # filter relation_repository on attribute
         relation_repository = relation_repository.filter_attribute_value(
-            self.model_attribute, self.comparator, self.value
+            model_attribute, self.comparator, self.value
         )
 
         # filter repository on which items refer to an item in the filtered relation_repository

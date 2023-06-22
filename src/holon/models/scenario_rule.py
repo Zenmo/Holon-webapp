@@ -23,8 +23,8 @@ from holon.models.interactive_element import (
 )
 from holon.models.actor import ActorGroup, ActorSubGroup
 from holon.models.util import all_subclasses
-from django.db.models import Q
 from holon.models.config.datamodel_conversion import DatamodelConversion
+from holon.models.config.rule_action_conversion import RuleActionConversion
 from holon.models.filter_subselector import FilterSubSelector
 from holon.models.rule_actions.rule_action import RuleAction
 from holon.models.value_tranform import ValueTransform
@@ -348,12 +348,21 @@ class DatamodelQueryRule(Rule):
     """A rule that finds a selection of objects and returns the count or attribute sum based on configuration of filters"""
 
     self_conversion = models.CharField(max_length=255, choices=SelfConversionType.choices)
+    self_conversion_factor = models.FloatField(default=1.0)
     datamodel_conversion_step = ParentalKey(
         DatamodelConversion,
         related_name="datamodel_query_rule",
         # OneToOneField is not included with modelcluster.
         # unique=True creates the same database constraint.
         unique=True,
+        null=True,
+        blank=True,
+    )
+    rule_action_conversion_step = ParentalKey(
+        RuleActionConversion,
+        related_name="rule_action_datamodel_query_rule",
+        null=True,
+        blank=True,
     )
 
     attribute_to_sum = models.CharField(
@@ -365,6 +374,7 @@ class DatamodelQueryRule(Rule):
         + [  # TODO order these panels between the model_(sub)type panels and the filter panels
             FieldPanel("self_conversion"),
             FieldPanel("attribute_to_sum"),  # TODO only show if self_conversion is SUM
+            FieldPanel("self_conversion_factor"),
         ]
     )
 
@@ -463,10 +473,10 @@ class DatamodelQueryRule(Rule):
                 raise ValidationError("No valid model type set")
 
         if self.self_conversion == SelfConversionType.COUNT.value:
-            return filtered_repository.len()
+            return self.self_conversion_factor * filtered_repository.len()
 
         elif self.self_conversion == SelfConversionType.SUM.value:
-            return self.sum(filtered_repository)
+            return self.self_conversion_factor * self.sum(filtered_repository)
 
         raise ValidationError("No valid conversion type set")
 

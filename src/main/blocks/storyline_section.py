@@ -109,6 +109,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_min": option.slider_value_min,
                         "slider_value_max": option.slider_value_max,
                         "discretization_steps": option.discretization_steps,
+                        "sandbox_discretization_steps": option.sandbox_discretization_steps,
                         "slider_unit": option.slider_unit.symbol
                         if option.slider_unit is not None
                         else "",

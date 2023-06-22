@@ -1,5 +1,6 @@
 from django.test import TestCase
 from holon.models.scenario import Scenario
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.services.costs_table import CostTables
 
 
@@ -9,7 +10,8 @@ class CostTableTestClass(TestCase):
     def test_table_totals(self):
         """Test if the totals table is correctly set up"""
         scenario = Scenario.objects.get(pk=1)
-        tables = CostTables.from_al_output(self.__al_output(), scenario)
+        scenario_aggregate = ScenarioAggregate(scenario)
+        tables = CostTables.from_al_output(self.__al_output(), scenario_aggregate)
         costs_table = tables.main_table()
 
         assert "Bedrijventerrein HOLON" in costs_table.keys()

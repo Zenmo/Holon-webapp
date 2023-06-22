@@ -9,9 +9,10 @@ from holon.models.rule_actions import RuleAction
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from django.db import models
+from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 from holon.models.scenario_rule import ScenarioRule
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 
 from holon.models.util import is_allowed_relation
@@ -27,14 +28,25 @@ class ChangeAttributeOperator(models.TextChoices):
     DIVIDE = "/"
 
 
-class RuleActionChangeAttribute(RuleAction):
+class RuleActionChangeAttribute(RuleAction, ClusterableModel):
     """A discrete factor for setting the value of an attribute"""
 
     model_attribute = models.CharField(max_length=255, null=False)
     operator = models.CharField(max_length=255, choices=ChangeAttributeOperator.choices)
     static_value = models.CharField(max_length=255, null=True, blank=True)
 
-    panels = [FieldPanel("model_attribute"), FieldPanel("operator"), FieldPanel("static_value")]
+    panels = [
+        FieldPanel("model_attribute"),
+        FieldPanel("operator"),
+        FieldPanel("static_value"),
+        InlinePanel(
+            "rule_action_conversion_step",
+            heading="Queried value",
+            label="Conversion stap",
+            min_num=0,
+            max_num=1,
+        ),
+    ]
     rule: ScenarioRule = ParentalKey(
         ScenarioRule, on_delete=models.CASCADE, related_name="discrete_factors_change_attribute"
     )
@@ -85,6 +97,10 @@ class RuleActionChangeAttribute(RuleAction):
 
         if self.static_value:
             value = self.static_value
+
+        conversion_step = self.rule_action_conversion_step.first()
+        if conversion_step:
+            value = conversion_step.get_value(scenario_aggregate)
 
         model_attribute = self.model_attribute
         if is_allowed_relation(model_attribute):
