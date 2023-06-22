@@ -73,15 +73,17 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
                   ))}
                   {selectedIndex === 2 && (
                     <div className=" h-full ml-2">
-                      <select
-                        onChange={e => setSubgroup(e.target.value)}
-                        className="bg-white border-[1px] border-holon-slated-blue-900 text-sm focus:ring-holon-slated-blue-300 focus:border-holon-slated-blue-300 h-full w-full">
-                        {Object.keys(costBenefitData.detail).map(item => (
-                          <option value={item} key={item}>
-                            {item}
-                          </option>
-                        ))}
-                      </select>
+                      {costBenefitData.detail && (
+                        <select
+                          onChange={e => setSubgroup(e.target.value)}
+                          className="bg-white border-[1px] border-holon-slated-blue-900 text-sm focus:ring-holon-slated-blue-300 focus:border-holon-slated-blue-300 h-full w-full">
+                          {Object.keys(costBenefitData.detail).map(item => (
+                            <option value={item} key={item}>
+                              {item}
+                            </option>
+                          ))}
+                        </select>
+                      )}
                     </div>
                   )}
                 </Tab.List>
