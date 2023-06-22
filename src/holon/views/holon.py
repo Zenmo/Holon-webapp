@@ -44,7 +44,7 @@ class HolonV2Service(generics.CreateAPIView):
     def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
 
-        use_caching = False  # use_result_cache(request)
+        use_caching = use_result_cache(request)
         scenario = None
         cc_payload = None
         cc = None
