@@ -19,8 +19,8 @@ from holon.models.util import (
     relation_field_options,
     relation_field_subtype_options,
     all_subclasses,
+    is_allowed_relation,
 )
-from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.filter.filter import Filter
 
 
@@ -100,13 +100,10 @@ class SecondOrderRelationAttributeFilter(Filter):
         return second_order_relation_model
 
     def second_order_relation_model_attribute_options(self) -> list[str]:
+        """Return list of fields that can be used for filtering"""
         relation_model = self.get_second_order_relation_model()
 
-        return [
-            field.name
-            for field in relation_model._meta.get_fields()
-            if not field.is_relation and not is_exclude_field(field)
-        ]
+        return _get_model_filter_attribute_fields(relation_model)
 
     def second_order_relation_field_options(self) -> list[str]:
         model = get_relation_model(self.rule, self.relation_field, self.relation_field_subtype)
@@ -132,6 +129,11 @@ class SecondOrderRelationAttributeFilter(Filter):
     ) -> RepositoryBaseClass:
         """Apply the relation attribute filter to a repository"""
 
+        model_attribute = self.model_attribute
+        if is_allowed_relation(model_attribute):
+            # Add id to attribute so it can be updated with an id compared to a model instance
+            model_attribute += "_id"
+
         # get relation repository
         first_order_relation_repository = scenario_aggregate.get_repository_for_relation_field(
             self.rule.model_type,
@@ -148,7 +150,7 @@ class SecondOrderRelationAttributeFilter(Filter):
 
         # filter second_order_relation_repository on attribute
         second_order_relation_repository = second_order_relation_repository.filter_attribute_value(
-            self.model_attribute, self.comparator, self.value
+            model_attribute, self.comparator, self.value
         )
 
         # filter first-order relation repository on which items refer to an item in the filtered relation_repository
@@ -160,3 +162,27 @@ class SecondOrderRelationAttributeFilter(Filter):
         return repository.filter_has_relation(
             self.relation_field, first_order_relation_repository, self.invert_filter
         )
+
+
+def _get_model_filter_attribute_fields(model: models.Model) -> list[str]:
+    """Return list of fields that can be used for filtering"""
+    return [
+        # include _id fields so that you can have a third-order filter based on id.
+        field.name + "_id" if field.is_relation else field.name
+        for field in model._meta.get_fields()
+        if _valid_filter_attribute_field(field)
+    ]
+
+
+def _valid_filter_attribute_field(field: models.Field) -> bool:
+    """Return if field is valid for a filter attribute rule"""
+    if is_exclude_field(field):
+        return False
+
+    if not field.is_relation:
+        return True
+
+    if field.one_to_one or field.many_to_one:
+        return True
+
+    return False

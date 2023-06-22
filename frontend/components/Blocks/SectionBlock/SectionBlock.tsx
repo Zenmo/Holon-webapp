@@ -304,7 +304,7 @@ export default function SectionBlock({
 
       <div className="holonContentContainer">
         {pagetype !== "Sandbox" && (
-          <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
+          <div className="sticky z-20 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]">
             <div className="flex-1">
               <button
                 onClick={closeHolarchyModal}
@@ -362,7 +362,7 @@ export default function SectionBlock({
 
           <div className={`relative flex flex-col ${gridValue.right}`}>
             {dirtyState && (
-              <div className="absolute flex justify-center items-center p-12 top-0 left-0 w-full h-full bg-black/[.8] z-50">
+              <div className="absolute flex justify-center items-center p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
                 <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded">
                   <div>
                     <h2>Reken instellingen door</h2>
