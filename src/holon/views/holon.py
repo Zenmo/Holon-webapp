@@ -44,7 +44,7 @@ class HolonV2Service(generics.CreateAPIView):
     def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
 
-        use_caching = use_result_cache(request)
+        use_caching = False  # use_result_cache(request)
         scenario = None
         cc_payload = None
         cc = None
@@ -92,7 +92,7 @@ class HolonV2Service(generics.CreateAPIView):
 
                 HolonV2Service.logger.log_print("Calculating CostTables")
                 cost_benefit_tables = self._cost_benefit_tables(
-                    etm_outcomes.pop("depreciation_costs"), scenario, cc
+                    etm_outcomes.pop("depreciation_costs"), scenario_aggregate, cc
                 )
 
                 results = Results(
@@ -161,9 +161,9 @@ class HolonV2Service(generics.CreateAPIView):
         return etm_outcomes
 
     def _cost_benefit_tables(
-        self, depreciation_costs, scenario: Scenario, cc: CloudClient
+        self, depreciation_costs, scenario_aggregate: ScenarioAggregate, cc: CloudClient
     ) -> CostTables:
-        tables = CostTables.from_al_output(self._find_contracts(cc), scenario)
+        tables = CostTables.from_al_output(self._find_contracts(cc), scenario_aggregate)
         for costs in depreciation_costs:
             tables.inject_depreciation_costs(costs)
         return tables

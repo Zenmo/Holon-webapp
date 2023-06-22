@@ -253,3 +253,6 @@ class RuleMappingTestClass(TestCase):
         assert int(updated_scenario.repositories[ModelType.ACTOR.value].first().group_id) == int(
             actor_group.id
         )
+        assert int(updated_scenario.repositories[ModelType.ACTOR.value].first().group.id) == int(
+            actor_group.id
+        )
