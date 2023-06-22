@@ -22,9 +22,7 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
   const [subgroup, setSubgroup] = useState("");
 
   useEffect(() => {
-    if (costBenefitData.detail) {
-      setSubgroup(Object.keys(costBenefitData.detail)[0]);
-    }
+    costBenefitData.detail && setSubgroup(Object.keys(costBenefitData.detail)[0]);
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
