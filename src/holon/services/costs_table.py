@@ -2,6 +2,8 @@
 from typing import Union
 
 from holon.models import Actor, ActorGroup, ActorSubGroup
+from holon.models.scenario_rule import ModelType
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 
 COSTS_TO_SELF = "Afschrijving"
 
@@ -43,8 +45,8 @@ class CostTables:
             self.inject_costs_to_self(group, -1 * value)
 
     @classmethod
-    def from_al_output(cls, al_output, scenario):
-        actors = ActorWrapper.from_scenario(scenario)
+    def from_al_output(cls, al_output, scenario_aggregate: ScenarioAggregate):
+        actors = ActorWrapper.from_scenario(scenario_aggregate)
         return cls([CostItem.from_dict(item, actors) for item in al_output])
 
 
@@ -132,14 +134,11 @@ class ActorWrapper:
         return self.id_to_actor[int(actor_name[3:])]
 
     @classmethod
-    def from_scenario(cls, scenario):
+    def from_scenario(cls, scenario_aggregate: ScenarioAggregate):
         # In scenario "Transitie Visie Warmte"
         # doing this eagerly prevents many thousands of queries
         # even though there are only 44 actors.
-        actors = list(
-            scenario.actor_set.all().prefetch_related("group").prefetch_related("subgroup")
-        )
-        id_to_actor: dict[int, Actor] = {actor.id: actor for actor in actors}
+        id_to_actor: dict[int, Actor] = scenario_aggregate.repositories[ModelType.ACTOR].dict()
 
         return cls(id_to_actor)
 
