@@ -43,7 +43,7 @@ class Actor(PolymorphicModel):
     payload = models.ForeignKey(
         Scenario, on_delete=models.CASCADE, null=True, blank=True
     )  # can be null for template gridconnections
-    group = models.ForeignKey(ActorGroup, on_delete=models.SET_NULL, blank=True, null=True)
+    group = models.ForeignKey(ActorGroup, on_delete=models.PROTECT, blank=True, null=False)
     subgroup = models.ForeignKey(ActorSubGroup, on_delete=models.SET_NULL, blank=True, null=True)
     wildcard_JSON = models.JSONField(
         blank=True,
