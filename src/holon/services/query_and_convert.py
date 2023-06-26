@@ -120,10 +120,6 @@ class ETMConnect:
 
         # Calculate depreciation costs for each actor
         if config.module == QueryCovertModuleType.COSTBENEFIT.value:
-            # config.distribution_keys == ZERO everywhere
-            # this leads to zero mapping for all cost components
-            print(cost_components)
-
             return (
                 QueryCovertModuleType.COSTBENEFIT,
                 [

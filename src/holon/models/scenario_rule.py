@@ -452,7 +452,9 @@ class DatamodelQueryRule(Rule):
                     "gridconnection", gridconnection_repository
                 )
 
-                filtered_repository = gridnode_filtered_repository.join(gridconnection_filtered_repository)
+                filtered_repository = gridnode_filtered_repository.join(
+                    gridconnection_filtered_repository
+                )
 
             elif self.model_type == ModelType.GRIDNODE.value:
                 # gridnode -> actor -> group/subgroup
