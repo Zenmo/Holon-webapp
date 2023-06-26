@@ -26,7 +26,7 @@ def initialize_sentry(ingest_dsn: str, environment: str) -> None:
                 middleware_spans=False,
                 # Wagtail produces a lot of signals
                 signals_spans=False,
-            )
+            ),
         ],
         release="0.1.0",
         # We do too many queries on some pages.
