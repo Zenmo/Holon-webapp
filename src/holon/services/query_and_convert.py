@@ -76,9 +76,14 @@ class ETMConnect:
         for config in ETMConnect.query_configs(
             original_scenario, scenario_aggregate, anylogic_outcomes
         ):
-            if config.module == "cost":
-                yield from ETMConnect.costs(config)
-            if config.module == "upscaling" or config.module == "upscaling-regional":
+            if config.module == QueryCovertModuleType.COST.value:
+                yield ETMConnect.costs(config)
+            if config.module == QueryCovertModuleType.COSTBENEFIT.value:
+                yield ETMConnect.costs(config)
+            if (
+                config.module == QueryCovertModuleType.UPSCALING.value
+                or config.module == QueryCovertModuleType.UPSCALING_REGIONAL.value
+            ):
                 yield ETMConnect.upscaling(config)
 
     @staticmethod
@@ -110,16 +115,22 @@ class ETMConnect:
             for key, value in cost_components.items():
                 span.set_data("etm_output_cost_" + key, value)
 
-        yield (QueryCovertModuleType.COST, sum(cost_components.values()))
+        if config.module == QueryCovertModuleType.COST.value:
+            return (QueryCovertModuleType.COST, sum(cost_components.values()))
 
         # Calculate depreciation costs for each actor
-        yield (
-            QueryCovertModuleType.COSTBENEFIT,
-            [
-                {actor: val * cost_components[key] for actor, val in actors.items()}
-                for key, actors in config.distribution_keys.items()
-            ],
-        )
+        if config.module == QueryCovertModuleType.COSTBENEFIT.value:
+            # config.distribution_keys == ZERO everywhere
+            # this leads to zero mapping for all cost components
+            print(cost_components)
+
+            return (
+                QueryCovertModuleType.COSTBENEFIT,
+                [
+                    {actor: val * cost_components[key] for actor, val in actors.items()}
+                    for key, actors in config.distribution_keys.items()
+                ],
+            )
 
     @staticmethod
     @sentry_sdk_trace
