@@ -445,11 +445,15 @@ class DatamodelQueryRule(Rule):
                     "owner_actor", actor_repository
                 )
 
-                filtered_repository = filtered_repository.filter_has_relation(
+                gridnode_filtered_repository = filtered_repository.filter_has_relation(
                     "gridnode", gridnode_repository
                 )
-                filtered_repository = filtered_repository.filter_has_relation(
+                gridconnection_filtered_repository = filtered_repository.filter_has_relation(
                     "gridconnection", gridconnection_repository
+                )
+
+                filtered_repository = gridnode_filtered_repository.join(
+                    gridconnection_filtered_repository
                 )
 
             elif self.model_type == ModelType.GRIDNODE.value:

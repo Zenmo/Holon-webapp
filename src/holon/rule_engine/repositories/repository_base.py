@@ -62,6 +62,13 @@ class RepositoryBaseClass:
         """Clone the object"""
         return self.__class__(self.objects[:])
 
+    def join(self, other: RepositoryBaseClass) -> RepositoryBaseClass:
+        """Join two Repositories"""
+        if self.__class__ == other.__class__:
+            return self.__class__(self.objects[:] + other.objects[:])
+        else:
+            raise TypeError("Repository classes should be of the same type!")
+
     def filter_model_subtype(self, model_subtype: Type) -> RepositoryBaseClass:
         """Keep only items in the repository that are of the specified subtype, including further derived types."""
 
