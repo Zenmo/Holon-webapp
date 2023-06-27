@@ -91,6 +91,21 @@ def check_input_combinations(
     return total_cache_hits
 
 
+def log_all_input_combinations(
+    include_storyline: bool = True,
+    include_challenge: bool = True,
+):
+    """Function to print number of combinations beforehand"""
+    scenarios_with_n_combinations: list[(Scenario, int)] = []
+    for scenario in Scenario.objects.all():
+        holon_input_configurations, n_combinations = get_holon_input_combinations(
+            scenario, include_storyline, include_challenge
+        )
+        scenarios_with_n_combinations.append((scenario, n_combinations))
+    for scenario, n_combinations in scenarios_with_n_combinations:
+        Config.logger.log_print(f"Scenario {scenario} has {n_combinations} combinations")
+
+
 def run_input_combinations(
     scenario: Scenario, include_storyline: bool = True, include_challenge: bool = True
 ):
