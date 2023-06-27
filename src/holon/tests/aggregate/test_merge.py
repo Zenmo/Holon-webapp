@@ -43,6 +43,8 @@ class ScenarioAggregateMergeTestClass(TestCase):
             id=1,
         )
 
+        self.scenario_aggregate = ScenarioAggregate(self.scenario)
+
     def test_merge_repository(self):
         repository_0 = GridConnectionRepository([self.gridconnection_0])
         repository_1 = GridConnectionRepository([self.gridconnection_1])
@@ -61,7 +63,7 @@ class ScenarioAggregateMergeTestClass(TestCase):
 
         merged_repository = repository_0.merge(repository_1)
 
-        assert merged_repository.len() == 3
+        assert merged_repository.len() == 2
 
     def test_merge_repository_different_classes(self):
         gridconnection_repository = GridConnectionRepository([self.gridconnection_0])
