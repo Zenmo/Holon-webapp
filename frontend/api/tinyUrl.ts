@@ -16,14 +16,14 @@ export async function createTinyUrl(url: string) {
   });
 
   if (response.status !== 200) {
-    throw `There was a problem with the fetch operation. Status Code: ${response.status}`;
+    throw Error(`There was a problem with the fetch operation. Status Code: ${response.status}`);
   }
 
   const responseData = await response.json();
   const shortUrl = responseData.data.tiny_url;
 
   if (!shortUrl) {
-    throw `There was a problem with fetching the shortUrl.`;
+    throw Error(`There was a problem with fetching the shortUrl.`);
   }
 
   return shortUrl;
