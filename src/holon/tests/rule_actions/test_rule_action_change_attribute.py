@@ -250,9 +250,43 @@ class RuleMappingTestClass(TestCase):
         )
 
         # Assert
-        assert int(updated_scenario.repositories[ModelType.ACTOR.value].first().group_id) == int(
-            actor_group.id
+        assert (
+            updated_scenario.repositories[ModelType.ACTOR.value].first().group_id == actor_group.id
         )
-        assert int(updated_scenario.repositories[ModelType.ACTOR.value].first().group.id) == int(
-            actor_group.id
+        assert (
+            updated_scenario.repositories[ModelType.ACTOR.value].first().group.id == actor_group.id
         )
+
+    def test_change_attribute_allowed_relation_unset(self):
+        # Arrange
+        actor_sub_group = ActorSubGroup.objects.create(name="soepgroep")
+        actor = self.scenario.actor_set.all()[0]
+        actor.subgroup = actor_sub_group
+        actor.save()
+
+        rule = ScenarioRule.objects.create(
+            interactive_element_continuous_values=self.interactive_element_continuous_values,
+            model_type=ModelType.ACTOR,
+        )
+        RuleActionChangeAttribute.objects.create(
+            model_attribute="subgroup",
+            operator=ChangeAttributeOperator.SET,
+            rule=rule,
+            static_value="Null",
+        )
+
+        interactive_elements = [{"value": 9000, "interactive_element": self.interactive_element}]
+
+        # Act
+        scenario_aggregate = ScenarioAggregate(self.scenario)
+        assert (
+            scenario_aggregate.repositories[ModelType.ACTOR.value].first().subgroup_id is not None
+        )
+        assert scenario_aggregate.repositories[ModelType.ACTOR.value].first().subgroup is not None
+
+        updated_scenario: ScenarioAggregate = rule_mapping.apply_rules(
+            scenario_aggregate, interactive_elements
+        )
+
+        assert updated_scenario.repositories[ModelType.ACTOR.value].first().subgroup_id is None
+        assert updated_scenario.repositories[ModelType.ACTOR.value].first().subgroup is None
