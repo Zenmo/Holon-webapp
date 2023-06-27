@@ -5,7 +5,7 @@ export async function createTinyUrl(url: string) {
     url: url,
   };
 
-  return await fetch("https://api.tinyurl.com/create", {
+  const response = await fetch("https://api.tinyurl.com/create", {
     method: "POST",
     headers: {
       accept: "application/json",
@@ -13,15 +13,18 @@ export async function createTinyUrl(url: string) {
       "content-type": `application/json`,
     },
     body: JSON.stringify(body),
-  })
-    .then(response => {
-      if (response.status != 200) {
-        throw `There was a problem with the fetch operation. Status Code: ${response.status}`;
-      }
-      return response.json();
-    })
-    .then(data => {
-      return data.data.tiny_url;
-    })
-    .catch(error => console.error(error));
+  });
+
+  if (response.status !== 200) {
+    throw `There was a problem with the fetch operation. Status Code: ${response.status}`;
+  }
+
+  const responseData = await response.json();
+  const shortUrl = responseData.data.tiny_url;
+
+  if (!shortUrl) {
+    throw `There was a problem with fetching the shortUrl.`;
+  }
+
+  return shortUrl;
 }

@@ -266,11 +266,12 @@ export default function SectionBlock({
 
   async function handleSaveScenario(title: string, description: string) {
     const longUrl = saveScenario(title, description, data.id);
-    const shortUrl = await createTinyUrl(longUrl);
 
-    if (shortUrl) {
+    try {
+      const shortUrl = await createTinyUrl(longUrl);
       setSavedScenarioURL(shortUrl);
-    } else {
+    } catch (e) {
+      console.error(e);
       setSavedScenarioURL(longUrl);
     }
     setScenarioModalType("savedScenario");
