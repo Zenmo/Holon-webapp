@@ -264,16 +264,22 @@ export default function SectionBlock({
   };
 
   async function handleSaveScenario(title: string, description: string) {
-    const longUrl = saveScenario(title, description, data.id);
+    const url = saveScenario(title, description, data.id);
 
-    const response = await fetch(`/api/tinyUrl?longUrl=${longUrl}`);
+    const response = await fetch(`/api/tinyUrl`, {
+      method: "POST",
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({ url }),
+    });
 
     if (response.ok) {
       const data = await response.json();
       const shortUrl = data.shortUrl;
       setSavedScenarioURL(shortUrl);
     } else {
-      setSavedScenarioURL(longUrl);
+      setSavedScenarioURL(url);
     }
 
     setScenarioModalType("savedScenario");

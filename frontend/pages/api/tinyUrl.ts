@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const API_KEY = process.env.NEXT_PUBLIC_TINY_URL_API_KEY;
 
 export default async function createTinyUrl(req: NextApiRequest, res: NextApiResponse) {
-  const { longUrl } = req.query;
+  const { url } = req.body;
   try {
     const response = await fetch("https://api.tinyurl.com/create", {
       method: "POST",
@@ -12,7 +12,7 @@ export default async function createTinyUrl(req: NextApiRequest, res: NextApiRes
         authorization: `Bearer ${API_KEY}`,
         "content-type": `application/json`,
       },
-      body: JSON.stringify({ url: longUrl }),
+      body: JSON.stringify({ url }),
     });
 
     if (response.status !== 200) {
