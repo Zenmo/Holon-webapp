@@ -452,7 +452,7 @@ class DatamodelQueryRule(Rule):
                     "gridconnection", gridconnection_repository
                 )
 
-                filtered_repository = gridnode_filtered_repository.join(
+                filtered_repository = gridnode_filtered_repository.merge(
                     gridconnection_filtered_repository
                 )
 

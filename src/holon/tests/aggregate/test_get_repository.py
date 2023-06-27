@@ -5,7 +5,7 @@ from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType
 
 
-class ScenarioAggregateAddTestClass(TestCase):
+class ScenarioAggregateGetTestClass(TestCase):
     def setUp(self) -> None:
         self.scenario: Scenario = Scenario.objects.create(name="test")
         self.actor0: Actor = Actor.objects.create(
