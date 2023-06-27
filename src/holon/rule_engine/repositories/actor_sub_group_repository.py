@@ -10,4 +10,9 @@ class ActorSubGroupRepository(RepositoryBaseClass):
 
     @classmethod
     def from_scenario(cls, scenario: Scenario):
-        return cls(list(ActorSubGroup.objects.filter(actor__payload=scenario).distinct()))
+        raise NotImplementedError("Actor sub groups are shared by all scenarios")
+
+    @classmethod
+    def full(cls):
+        """Load all ActorSubGroups: rule actions can assign actors to groups which aren't in the base scenario"""
+        return cls(list(ActorSubGroup.objects.all()))
