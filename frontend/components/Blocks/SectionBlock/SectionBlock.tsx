@@ -9,7 +9,6 @@ import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
-import { createTinyUrl } from "../../../api/tinyUrl";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -266,11 +265,24 @@ export default function SectionBlock({
 
   async function handleSaveScenario(title: string, description: string) {
     const url = saveScenario(title, description, data.id);
-    const shorturl = await createTinyUrl(url);
 
-    setSavedScenarioURL(shorturl);
+    const response = await fetch(`/api/tinyUrl`, {
+      method: "POST",
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({ url }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const shortUrl = data.shortUrl;
+      setSavedScenarioURL(shortUrl);
+    } else {
+      setSavedScenarioURL(url);
+    }
+
     setScenarioModalType("savedScenario");
-    return;
   }
 
   return (

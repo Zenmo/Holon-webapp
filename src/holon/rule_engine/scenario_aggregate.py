@@ -37,11 +37,8 @@ class ScenarioAggregate:
 
         self.repositories: dict[str, RepositoryBaseClass] = {
             ModelType.ACTOR.value: ActorRepository.from_scenario(self.scenario),
-            # We could also inspect the actors and get the group and subgroup id's from there
-            # and use those to initialize the repositories.
-            # The database is probably faster at doing that.
-            ModelType.ACTOR_GROUP.value: ActorGroupRepository.from_scenario(self.scenario),
-            ModelType.ACTOR_SUB_GROUP.value: ActorSubGroupRepository.from_scenario(self.scenario),
+            ModelType.ACTOR_GROUP.value: ActorGroupRepository.full(),
+            ModelType.ACTOR_SUB_GROUP.value: ActorSubGroupRepository.full(),
             ModelType.ENERGYASSET.value: EnergyAssetRepository.from_scenario(self.scenario),
             ModelType.CONTRACT.value: ContractRepository.from_scenario(self.scenario),
             ModelType.POLICY.value: PolicyRepository.from_scenario(self.scenario),

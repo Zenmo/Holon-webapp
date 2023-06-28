@@ -106,6 +106,16 @@ class RuleActionChangeAttribute(RuleAction, ClusterableModel):
         if is_allowed_relation(model_attribute):
             # Add id to attribute so it can be updated with an id compared to a model instance
             model_attribute += "_id"
+            if value is not None:
+                if value.lower() == "none" or value.lower() == "null":
+                    value = None
+                else:
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        raise ValueError(
+                            f"{model_attribute} must be an integer or None, got {repr(value)}"
+                        )
 
         # apply operators to objects
         for filtered_object in filtered_repository.all():
