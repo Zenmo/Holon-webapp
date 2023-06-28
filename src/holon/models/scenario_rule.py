@@ -1,3 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.models.filter.filter import Filter
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
 from typing import Union
 from django.apps import apps
 from django.core.exceptions import ValidationError
@@ -6,28 +14,34 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from polymorphic.models import PolymorphicModel
-from holon.models.filter import Filter
+from holon.models.util import is_allowed_relation
+import sentry_sdk
 
 from holon.models.interactive_element import (
     InteractiveElementOptions,
     InteractiveElementContinuousValues,
 )
-from holon.models.scenario import Scenario
+from holon.models.actor import ActorGroup, ActorSubGroup
 from holon.models.util import all_subclasses
-from django.db.models.query import QuerySet
-from django.db.models import Q
 from holon.models.config.datamodel_conversion import DatamodelConversion
+from holon.models.config.rule_action_conversion import RuleActionConversion
+from holon.models.filter_subselector import FilterSubSelector
+from holon.models.rule_actions.rule_action import RuleAction
+from holon.models.value_tranform import ValueTransform
 
 
 class ModelType(models.TextChoices):
     """Types of models"""
 
     ACTOR = "Actor"
+    ACTOR_GROUP = "ActorGroup"
+    ACTOR_SUB_GROUP = "ActorSubGroup"
     CONTRACT = "Contract"
     ENERGYASSET = "EnergyAsset"
     GRIDNODE = "GridNode"
     GRIDCONNECTION = "GridConnection"
     POLICY = "Policy"
+    SCENARIO = "Scenario"
 
 
 class Rule(PolymorphicModel, ClusterableModel):
@@ -101,7 +115,11 @@ class Rule(PolymorphicModel, ClusterableModel):
         model_type = self.model_type if self.model_subtype is None else self.model_subtype
         model = apps.get_model("holon", model_type)
 
-        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
+        return [
+            field.name
+            for field in model()._meta.get_fields()
+            if not field.is_relation or is_allowed_relation(field.name)
+        ]
 
     def model_subtype_options(self) -> list[str]:
         """Get a list of subclass names of the Rule's model type"""
@@ -120,51 +138,24 @@ class Rule(PolymorphicModel, ClusterableModel):
             + list(self.discrete_attribute_filters.all())
         )
 
-    def get_queryset(self, scenario: Scenario) -> QuerySet:
-        """Create the queryset for a rule based on its model type and model subtype"""
+    def get_filtered_repository(self, scenario_aggregate: ScenarioAggregate) -> RepositoryBaseClass:
+        """Return a repository based on the Rule's model (sub)type and filters"""
 
-        if self.model_type == ModelType.ACTOR.value:
-            return scenario.actor_set.all()
-        elif self.model_type == ModelType.ENERGYASSET.value:
-            return scenario.assets
-        elif self.model_type == ModelType.GRIDNODE.value:
-            return scenario.gridnode_set.all()
-        elif self.model_type == ModelType.GRIDCONNECTION.value:
-            return scenario.gridconnection_set.all()
-        elif self.model_type == ModelType.POLICY.value:
-            return scenario.policy_set.all()
-        elif self.model_type == ModelType.CONTRACT.value:
-            return scenario.contracts
-        else:
-            raise Exception("Not implemented model type")
+        # get the repository corresponding to the model type
+        repository = scenario_aggregate.get_repository_for_model_type(self.model_type)
 
-    def apply_filters_to_queryset(self, queryset: QuerySet) -> QuerySet:
-        """Fetch and apply the rule filters to a queryset"""
-
-        # Use Q() for filtering
-        # chaining filter()/exclude() will lead to duplicate records
-        # filter with dict destructering doesn't have not equal operator
-        queryset_filter = Q()
-
-        # filter: Filter
-        for filter in self.get_filters():
-            queryset_filter &= filter.get_q()
-
+        # filter the repository for model subtype
         if self.model_subtype:
-            submodel = apps.get_model("holon", self.model_subtype)
-            queryset = queryset.instance_of(submodel)
+            model_subtype = apps.get_model("holon", self.model_subtype)
+            repository = repository.filter_model_subtype(model_subtype)
 
-        # Use distinct because of relation filters
-        #   e.q. a filter on gridconnections where energyasset have certain properties will produce duplicate gridconnection in the queryset
-        return queryset.filter(queryset_filter).distinct()
+        # apply rule filters to repository
+        filters = self.get_filters()
+        for filter in filters:
+            repository = filter.filter_repository(scenario_aggregate, repository)
 
-    def get_filtered_queryset(self, scenario: Scenario) -> QuerySet:
-        """Return a queryset based on the Rule's model (sub)type and filters"""
-
-        queryset = self.get_queryset(scenario)
-        filtered_queryset = self.apply_filters_to_queryset(queryset)
-
-        return filtered_queryset
+        # MAKE SURE RESULTS ARE DISTINCT
+        return repository
 
 
 class ScenarioRule(Rule):
@@ -240,6 +231,11 @@ class ScenarioRule(Rule):
                         label="Discrete rule action - change attribute",
                     ),
                     InlinePanel(
+                        "discrete_factors_attribute_noise",
+                        heading="Discrete rule actions - attribute noise",
+                        label="Discrete rule action - attribute noise",
+                    ),
+                    InlinePanel(
                         "discrete_factors_remove",
                         heading="Discrete rule actions - remove filtered objects",
                         label="Discrete rule action - remove filtered objects",
@@ -255,11 +251,6 @@ class ScenarioRule(Rule):
                         label="Discrete rule action - set model count",
                     ),
                     InlinePanel(
-                        "discrete_factors_balancegroup",
-                        heading="Discrete rule actions - balance child models",
-                        label="Discrete rule action - balance child models",
-                    ),
-                    InlinePanel(
                         "discrete_factors_add_multiple_under_each_parent",
                         heading="Discrete rule actions - add duplicate objects",
                         label="Discrete rule action - add duplicate objects",
@@ -272,7 +263,7 @@ class ScenarioRule(Rule):
     class Meta:
         verbose_name = "ScenarioRule"
 
-    def get_value_transforms(self) -> list["ValueTransform"]:
+    def get_value_transforms(self) -> list[ValueTransform]:
         """Get a list of the value transform items"""
 
         return (
@@ -290,37 +281,48 @@ class ScenarioRule(Rule):
 
         return value
 
-    def get_filter_subselectors(self) -> list["FilterSubSelector"]:
+    def subselect_repository(self, filtered_repository: RepositoryBaseClass, value: str):
+        """Apply the rule's query subselection to the filtered repository"""
+
+        subselectors = self.get_filter_subselectors()
+        for subselector in subselectors:
+            filtered_repository = subselector.subselect_repository(filtered_repository, value)
+
+        return filtered_repository
+
+    def get_filter_subselectors(self) -> list[FilterSubSelector]:
         """Get a list of the filter subselection items"""
 
         return list(self.subselector_skips.all()) + list(self.subselector_takes.all())
 
-    def apply_filter_subselections(self, filtered_queryset: QuerySet, value: str):
-        """Apply the rule's query subselection to the filtered queryset"""
+    def apply_rule_actions(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        filtered_repository: RepositoryBaseClass,
+        value: str,
+    ):
+        """Apply rule actions to filtered objects"""
 
-        for subselector in self.get_filter_subselectors():
-            filtered_queryset = subselector.subselect_queryset(filtered_queryset, value)
+        rule_actions = self.get_actions()
+        for rule_action in rule_actions:
+            scenario_aggregate = rule_action.apply_to_scenario_aggregate(
+                scenario_aggregate, filtered_repository, value
+            )
 
-        return filtered_queryset
+        return scenario_aggregate
 
-    def get_actions(self) -> list["RuleAction"]:
+    def get_actions(self) -> list[RuleAction]:
         """Return a list of RuleActions belonging to this rule"""
 
         return (
             list(self.continuous_factors.all())
             + list(self.discrete_factors_change_attribute.all())
+            + list(self.discrete_factors_attribute_noise.all())
             + list(self.discrete_factors_add.all())
             + list(self.discrete_factors_remove.all())
             + list(self.discrete_factors_set_count.all())
-            + list(self.discrete_factors_balancegroup.all())
             + list(self.discrete_factors_add_multiple_under_each_parent.all())
         )
-
-    def apply_rule_actions(self, filtered_queryset: QuerySet, value: str):
-        """Apply rule actions to filtered objects"""
-
-        for rule_action in self.get_actions():
-            rule_action.apply_action_to_queryset(filtered_queryset, value)
 
     def hash(self):
         action_hashes = ",".join([rule_action.hash() for rule_action in self.get_actions()])
@@ -346,8 +348,21 @@ class DatamodelQueryRule(Rule):
     """A rule that finds a selection of objects and returns the count or attribute sum based on configuration of filters"""
 
     self_conversion = models.CharField(max_length=255, choices=SelfConversionType.choices)
+    self_conversion_factor = models.FloatField(default=1.0)
     datamodel_conversion_step = ParentalKey(
-        DatamodelConversion, related_name="datamodel_query_rule"
+        DatamodelConversion,
+        related_name="datamodel_query_rule",
+        # OneToOneField is not included with modelcluster.
+        # unique=True creates the same database constraint.
+        unique=True,
+        null=True,
+        blank=True,
+    )
+    rule_action_conversion_step = ParentalKey(
+        RuleActionConversion,
+        related_name="rule_action_datamodel_query_rule",
+        null=True,
+        blank=True,
     )
 
     attribute_to_sum = models.CharField(
@@ -359,6 +374,7 @@ class DatamodelQueryRule(Rule):
         + [  # TODO order these panels between the model_(sub)type panels and the filter panels
             FieldPanel("self_conversion"),
             FieldPanel("attribute_to_sum"),  # TODO only show if self_conversion is SUM
+            FieldPanel("self_conversion_factor"),
         ]
     )
 
@@ -381,36 +397,105 @@ class DatamodelQueryRule(Rule):
                     f"{self.model_subtype if self.model_subtype else self.model_type} has no attribute {self.attribute_to_sum}"
                 )
 
-    def get_filters_object_count(self, scenario: Scenario) -> int:
-        """Get the number of objects in the combined filter resutls"""
+    def get_filter_aggregation_result(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        group_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+        subgroup_to_filter: Union[ActorGroup, ActorSubGroup, None] = None,
+    ) -> Union[int, float]:
+        """Get the filter aggregation result based on the datamodel query rule's conversion type"""
 
-        filtered_queryset = self.get_filtered_queryset(scenario)
-        return filtered_queryset.count()
+        from holon.models import AttributeFilterComparator
 
-    def get_filters_attribute_sum(self, scenario: Scenario) -> float:
-        """Return the sum of a specific attribute of all objects in a queryset"""
+        filtered_repository = self.get_filtered_repository(scenario_aggregate)
 
-        filtered_queryset = self.get_filtered_queryset(scenario)
+        if group_to_filter is not None or subgroup_to_filter is not None:
+            # We need to figure out which Actors belong to the group or subgroup
+            # And then select the objects which belong to those actors.
+            # The relevant relations are:
+            # energyasset -> gridconnection/gridnode -> actor -> group/subgroup
+
+            actor_repository = scenario_aggregate.get_repository_for_model_type(
+                ModelType.ACTOR.value
+            )
+            if group_to_filter is not None:
+                actor_repository = actor_repository.filter_attribute_value(
+                    "group_id", AttributeFilterComparator.EQUAL, group_to_filter.id
+                )
+
+            if subgroup_to_filter is not None:
+                actor_repository = actor_repository.filter_attribute_value(
+                    "subgroup_id", AttributeFilterComparator.EQUAL, subgroup_to_filter.id
+                )
+
+            if self.model_type == ModelType.ENERGYASSET.value:
+                # energyasset -> gridconnection/gridnode -> actor -> group/subgroup
+
+                gridnode_repository = scenario_aggregate.get_repository_for_model_type(
+                    ModelType.GRIDNODE.value
+                )
+                gridconnection_repository = scenario_aggregate.get_repository_for_model_type(
+                    ModelType.GRIDCONNECTION.value
+                )
+
+                gridnode_repository = gridnode_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+                gridconnection_repository = gridconnection_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+
+                gridnode_filtered_repository = filtered_repository.filter_has_relation(
+                    "gridnode", gridnode_repository
+                )
+                gridconnection_filtered_repository = filtered_repository.filter_has_relation(
+                    "gridconnection", gridconnection_repository
+                )
+
+                filtered_repository = gridnode_filtered_repository.merge(
+                    gridconnection_filtered_repository
+                )
+
+            elif self.model_type == ModelType.GRIDNODE.value:
+                # gridnode -> actor -> group/subgroup
+
+                filtered_repository = filtered_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+
+            elif self.model_type == ModelType.GRIDCONNECTION.value:
+                # gridconnection -> actor -> group/subgroup
+
+                filtered_repository = filtered_repository.filter_has_relation(
+                    "owner_actor", actor_repository
+                )
+
+            else:
+                # TODO: this error is triggered for upscaling,
+                # but the group/subgroup division is only relevant for costs.
+                # https://github.com/ZEnMo/Holon-webapp/issues/766
+                raise ValidationError("No valid model type set")
+
+        if self.self_conversion == SelfConversionType.COUNT.value:
+            return self.self_conversion_factor * filtered_repository.len()
+
+        elif self.self_conversion == SelfConversionType.SUM.value:
+            return self.self_conversion_factor * self.sum(filtered_repository)
+
+        raise ValidationError("No valid conversion type set")
+
+    def sum(self, repository: RepositoryBaseClass) -> float:
+        """Return the sum of a specific attribute of all objects in a (filtered) repository"""
 
         attr_sum = 0.0
-        for filtered_object in filtered_queryset:
+        for filtered_object in repository.all():
             try:
                 value = float(getattr(filtered_object, self.attribute_to_sum))
                 attr_sum += value
             except Exception as e:
+                sentry_sdk.capture_exception(e)
                 print(
                     f"Something went wrong while summing model attributes, let's act as if nothing happend and keep going ({e})"
                 )
 
         return attr_sum
-
-    def get_filter_aggregation_result(self, scenario: Scenario) -> Union[int, float]:
-        """Get the filter aggregation result based on the datamodel query rule's conversion type"""
-
-        if self.self_conversion == SelfConversionType.COUNT.value:
-            return self.get_filters_object_count(scenario)
-
-        elif self.self_conversion == SelfConversionType.SUM.value:
-            return self.get_filters_attribute_sum(scenario)
-
-        raise ValidationError("No valid conversion type set")

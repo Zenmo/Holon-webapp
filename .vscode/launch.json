@@ -8,6 +8,7 @@
             "name": "Debug pipit (only when open in container)",
             "type": "python",
             "request": "launch",
+            "cwd": "${workspaceFolder}/src",
             "program": "${workspaceFolder}/src/manage.py",
             "args": [
                 "runserver",
@@ -16,7 +17,7 @@
                 "--nothreading"
             ],
             "django": true,
-            "justMyCode": false
+            "justMyCode": true
         }
     ]
 }

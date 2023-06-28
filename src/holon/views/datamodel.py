@@ -1,18 +1,14 @@
-from rest_framework import generics
+from rest_framework.views import APIView
 
 from holon.models import Scenario
-from holon.serializers import ScenarioSerializer
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 
-class DatamodelService(generics.RetrieveAPIView):
-    serializer_class = ScenarioSerializer
-    queryset = (
-        Scenario.objects.prefetch_related("actor_set")
-        .prefetch_related("actor_set__contracts")
-        .prefetch_related("gridconnection_set")
-        .prefetch_related("gridconnection_set__energyasset_set")
-        .prefetch_related("gridnode_set")
-        .prefetch_related("gridnode_set__energyasset_set")
-        .prefetch_related("policy_set")
-        .all()
-    )
+class DatamodelService(APIView):
+    def get(self, request, pk):
+        scenario = get_object_or_404(Scenario, id=pk)
+        scenario_aggregate = ScenarioAggregate(scenario)
+
+        return Response(scenario_aggregate.serialize_to_json())

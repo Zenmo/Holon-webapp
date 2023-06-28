@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 export type LegendItem = {
   label: string;
@@ -16,10 +15,11 @@ type LegendModal = {
   };
 };
 
-function LegendModalItems({ legendItems }: LegendItem) {
-  return legendItems.map(legendItem => (
+function LegendModalItems({ legendItems }: Array<LegendItem>) {
+  return legendItems.map((legendItem: LegendItem) => (
     <li key={legendItem.label} className="flex flex-row items-center" title={legendItem.label}>
-      <Image
+       {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         width="16"
         height="16"
         alt=""

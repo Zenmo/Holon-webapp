@@ -10,6 +10,7 @@ type ContentColumn = {
   handleContentChange: React.Dispatch<React.SetStateAction<Content[]>>;
   handleMedia: React.Dispatch<React.SetStateAction<StaticImage>>;
   selectedLevel?: string;
+  pagetype?: string;
 };
 
 export default function ContentColumn({
@@ -18,6 +19,7 @@ export default function ContentColumn({
   handleContentChange,
   handleMedia,
   selectedLevel,
+  pagetype,
 }: ContentColumn) {
   useEffect(() => {
     const contentArr: Content[] = [];
@@ -51,12 +53,17 @@ export default function ContentColumn({
     content: InteractiveContent
   ): string | number | string[] | undefined | null {
     if (content.value) {
+      const savedValue = content.value.savedValue;
       const defaultValue = content.value.defaultValueOverride;
       const targetValue = content.value.targetValuePreviousSection;
 
       switch (content.value.type) {
         case "single_select":
-          if (defaultValue) {
+          if (savedValue) {
+            return content.value.options.find(
+              option => option.option === savedValue || option.label === savedValue
+            )?.option;
+          } else if (defaultValue) {
             return content.value.options.find(
               option => option.option === defaultValue || option.label === defaultValue
             )?.option;
@@ -73,7 +80,9 @@ export default function ContentColumn({
             }
           }
         case "continuous":
-          if (defaultValue !== undefined && defaultValue !== "") {
+          if (savedValue !== undefined && savedValue !== "") {
+            return Number(savedValue);
+          } else if (defaultValue !== undefined && defaultValue !== "") {
             return Number(defaultValue);
           } else if (content.value.visible) {
             if (
@@ -100,16 +109,26 @@ export default function ContentColumn({
         case "multi_select":
           const defaultValueArray = defaultValue && defaultValue.split(",");
           const targetValueArray = targetValue && targetValue.split(",");
+          const savedValueArray = savedValue && savedValue.split(","); 
           const visible = content.value.visible;
           let options;
 
           if (visible) {
-            options = content.value.options.filter(
-              option =>
-                option.default ||
-                defaultValueArray?.includes(option.option) ||
-                defaultValueArray?.includes(option.label)
-            );
+            if(savedValue) {
+              options = content.value.options.filter(
+                option =>
+                  savedValueArray?.includes(option.option) ||
+                  savedValueArray?.includes(option.label)
+              );
+            } else {
+              options = content.value.options.filter(
+                option =>
+                  option.default ||
+                  defaultValueArray?.includes(option.option) ||
+                  defaultValueArray?.includes(option.label)
+              );
+            }
+           
           } else {
             options = content.value.options.filter(
               option =>
@@ -120,7 +139,6 @@ export default function ContentColumn({
                 targetValueArray?.includes(option.label)
             );
           }
-
           return options.length ? options.map(option => option.option) : [];
       }
     }
@@ -185,6 +203,7 @@ export default function ContentColumn({
                 currentValue={ct.currentValue}
                 contentId={ct.id}
                 selectedLevel={selectedLevel}
+                pagetype={pagetype}
                 {...ct.value}
               />
             </React.Fragment>

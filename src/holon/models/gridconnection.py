@@ -157,6 +157,7 @@ class HousingType(models.TextChoices):
     DETACHED = "DETACHED"
     APPARTMENT = "APPARTMENT"
     HIGHRISE = "HIGHRISE"
+    NONE = "NONE"
 
 
 class HouseGridConnection(BuiltEnvironmentGridConnection):
@@ -169,6 +170,9 @@ class BuildingType(models.TextChoices):
     STORE = "STORE"
     OFFICE = "OFFICE"
     LOGISTICS = "LOGISTICS"
+    FARM = "FARM"
+    VILLAGE = "VILLAGE"
+    NONE = "NONE"
 
 
 class BuildingGridConnection(BuiltEnvironmentGridConnection):
@@ -194,6 +198,7 @@ class ProductionGridConnection(GridConnection):
 class IndustryType(models.TextChoices):
     STEEL = "STEEL"
     INDUSTRY_OTHER = "INDUSTRY_OTHER"
+    AGRO_ENERGYHUB = "AGRO_ENERGYHUB"
 
 
 class IndustryGridConnection(UtilityGridConnection):

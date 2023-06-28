@@ -1,3 +1,8 @@
+"""
+Base settings, to be included and optionally overridden by environment-specific settings.
+Which settings are used is controlled by the environment variable DJANGO_SETTINGS_MODULE.
+For example for src/pipit/settings/stage.py, set "DJANGO_SETTINGS_MODULE=pipit.settings.stage".
+"""
 import os
 from typing import Optional
 
@@ -60,6 +65,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "corsheaders",
     # Project specific apps
     "pipit",
@@ -125,7 +131,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "pipit.wsgi.application"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",)
+    "DEFAULT_AUTHENTICATION_CLASSES": ("dj_rest_auth.jwt_auth.JWTCookieAuthentication",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "holon-auth"
@@ -179,7 +186,7 @@ WAGTAIL_SITE_NAME = "Holon-wagtail"
 WAGTAILIMAGES_IMAGE_MODEL = "customimage.CustomImage"
 WAGTAILDOCS_DOCUMENT_MODEL = "customdocument.CustomDocument"
 WAGTAIL_ALLOW_UNICODE_SLUGS = False
-WAGTAILAPI_LIMIT_MAX = 1000
+WAGTAILAPI_LIMIT_MAX = None
 
 WAGTAILSEARCH_BACKENDS = {
     "default": {
@@ -211,7 +218,7 @@ if get_env("AWS_ACCESS_KEY_ID", ""):
 
 # Uploaded media
 MEDIA_URL = "/wt/media/"
-MEDIA_ROOT = "/app/media"
+MEDIA_ROOT = "./media/"
 
 
 # Static files, if in production use static root, else use static dirs
@@ -221,7 +228,7 @@ STATIC_URL = "/wt/static/"
 
 # The absolute path to the directory where collectstatic will collect static
 # files for deployment. Example: "/var/www/example.com/static/"I
-STATIC_ROOT = "/app/static"
+STATIC_ROOT = "./static"
 
 # This setting defines the additional locations the staticfiles will traverse
 STATICFILES_DIRS = (
@@ -272,3 +279,11 @@ CACHES = {
 
 # Disable form length for big interactive element forms
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+# Openapi documentation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "HOLON",
+    "DESCRIPTION": "",
+    "VERSION": "2.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}

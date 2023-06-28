@@ -24,6 +24,8 @@ from holon.models.contract import (
 from holon.models.asset import (
     ConsumptionAsset,
     DieselVehicleAsset,
+    DieselConsumptionAsset,
+    MethaneConsumptionAsset,
     HeatConsumptionAsset,
     ElectricConsumptionAsset,
     HybridConsumptionAsset,
@@ -33,6 +35,7 @@ from holon.models.asset import (
     CookingConversionAsset,
     HeatConversionAsset,
     ChemicalHeatConversionAsset,
+    BiogasMethaneConverter,
     ElectricHeatConversionAsset,
     TransportHeatConversionAsset,
     HybridHeatCoversionAsset,
@@ -40,9 +43,11 @@ from holon.models.asset import (
     ElectricProductionAsset,
     HeatProductionAsset,
     HybridProductionAsset,
+    LiveStock,
     StorageAsset,
     HeatStorageAsset,
     ElectricStorageAsset,
+    GasStorageAsset,
     VehicleElectricStorageAsset,
 )
 
@@ -100,6 +105,18 @@ class DieselVehicleAssetSerializer(EnergyAssetSerializer):
         fields = "__all__"
 
 
+class DieselConsumptionAssetSerializer(EnergyAssetSerializer):
+    class Meta:
+        model = DieselConsumptionAsset
+        fields = "__all__"
+
+
+class MethaneConsumptionAssetSerializer(EnergyAssetSerializer):
+    class Meta:
+        model = MethaneConsumptionAsset
+        fields = "__all__"
+
+
 class HeatConsumptionAssetSerializer(EnergyAssetSerializer):
     class Meta:
         model = HeatConsumptionAsset
@@ -154,6 +171,12 @@ class ChemicalHeatConversionAssetSerializer(EnergyAssetSerializer):
         fields = "__all__"
 
 
+class BiogasMethaneConverterSerializer(EnergyAssetSerializer):
+    class Meta:
+        model = BiogasMethaneConverter
+        fields = "__all__"
+
+
 class ElectricHeatConversionAssetSerializer(EnergyAssetSerializer):
     class Meta:
         model = ElectricHeatConversionAsset
@@ -196,6 +219,12 @@ class HybridProductionAssetSerializer(EnergyAssetSerializer):
         fields = "__all__"
 
 
+class LiveStockSerializer(EnergyAssetSerializer):
+    class Meta:
+        model = LiveStock
+        fields = "__all__"
+
+
 class StorageAssetSerializer(EnergyAssetSerializer):
     class Meta:
         model = StorageAsset
@@ -211,6 +240,12 @@ class HeatStorageAssetSerializer(EnergyAssetSerializer):
 class ElectricStorageAssetSerializer(EnergyAssetSerializer):
     class Meta:
         model = ElectricStorageAsset
+        fields = "__all__"
+
+
+class GasStorageAssetSerializer(EnergyAssetSerializer):
+    class Meta:
+        model = GasStorageAsset
         fields = "__all__"
 
 

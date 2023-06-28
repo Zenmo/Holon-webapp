@@ -50,7 +50,7 @@ class InteractiveElement(ClusterableModel):
         blank=True,
         help_text=_("If type is 'Continuous (slider)', choose a level. Otherwise, leave it empty"),
     )
-    more_information = models.CharField(max_length=100, blank=True)
+    more_information = models.CharField(max_length=1000, blank=True)
     link_wiki_page = models.ForeignKey(
         "main.WikiPage",
         blank=True,
@@ -181,7 +181,6 @@ class InteractiveElementOptions(ClusterableModel, Orderable):
     panels = [
         FieldPanel("option"),
         FieldPanel("label"),
-        FieldPanel("default"),
         FieldPanel("legal_limitation"),
         FieldPanel("level"),
         FieldPanel("color"),
@@ -230,10 +229,8 @@ class InteractiveElementContinuousValues(ClusterableModel):
     discretization_steps = models.IntegerField(
         null=True,
         blank=True,
-        default=5,
-        help_text=_(
-            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
-        ),
+        default=0,
+        help_text=_("Amount of steps the slider has. Leave empty to let the slider be contiuous."),
     )
     slider_unit = models.ForeignKey(
         InteractiveElementUnit,
@@ -245,17 +242,25 @@ class InteractiveElementContinuousValues(ClusterableModel):
     discretization_steps = models.IntegerField(
         null=True,
         blank=True,
-        default=5,
+        default=0,
         help_text=_(
-            "Number of steps the slider has. Leave empty or 0 to let the slider be contiuous."
+            "Storyline and challenge discretization steps: Amount of steps the slider has. Leave empty to let the slider be contiuous."
+        ),
+    )
+    sandbox_discretization_steps = models.IntegerField(
+        null=True,
+        blank=True,
+        default=0,
+        help_text=_(
+            "Sandbox discretization steps: Amount of steps the slider has. Leave empty to let the slider be contiuous."
         ),
     )
 
     panels = [
-        FieldPanel("slider_value_default"),
         FieldPanel("slider_value_min"),
         FieldPanel("slider_value_max"),
         FieldPanel("discretization_steps"),
+        FieldPanel("sandbox_discretization_steps"),
         InlinePanel("rules", heading="Rules", label="Rules"),
         FieldPanel("slider_unit"),
     ]

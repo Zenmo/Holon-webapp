@@ -4,36 +4,34 @@ from anylogiccloudclient.client.cloud_client import CloudClient as ALCloudClient
 from anylogiccloudclient.client.cloud_client import Inputs
 from anylogiccloudclient.client.single_run_outputs import SingleRunOutputs
 from anylogiccloudclient.data.model import Model
+from anylogiccloudclient.data.model_data import ModelData
 
 from holon.models.config import AnylogicCloudInput
 from holon.models.scenario import Scenario
 from pipit.sentry import sentry_sdk_trace
+import sentry_sdk
 
 
 class CloudClient:
     """a more convient way of working with the AnyLogic cloud client"""
 
-    def __init__(
-        self,
-        scenario: Scenario,
-        original_scenario: Scenario,
-    ):
+    def __init__(self, payload: dict, scenario: Scenario = None):
         from holon.models.config import AnylogicCloudConfig
 
         # db lookup
-        config: AnylogicCloudConfig = original_scenario.anylogic_config.get()
+        config: AnylogicCloudConfig = scenario.anylogic_config.get()
         self.config = config
 
         # value attributes
         self.url = config.url
-        self.scenario = scenario
         self.client = PatchedAnyLogicCloudClient(config.api_key, config.url)
 
         # method attributes
         self.model_version = self._get_model_version(
             model_name=config.model_name, model_version=config.model_version_number
         )
-        self.payload = self.get_scenario_json(scenario)
+
+        self.payload = payload
 
         # initials
         self._outputs = None
@@ -84,7 +82,49 @@ class CloudClient:
                 ai: AnylogicCloudInput = additional_input
                 inputs.set_input(ai.anylogic_key, ai.anylogic_value)
 
-        self.outputs = self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
+        outputs = self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
+        self.log_input_output(inputs, outputs)
+        self.outputs = outputs
+
+    def log_input_output(self, inputs: Inputs, outputs: SingleRunOutputs):
+        span = sentry_sdk.Hub.current.scope.span
+        if span is not None and span.sampled is True:
+            span.set_data(
+                "inputs", list(map(self.model_input_value_to_log_format, inputs.inputs_array))
+            )
+            span.set_data(
+                "outputs",
+                list(map(self.model_output_value_to_log_format, outputs.get_raw_outputs())),
+            )
+
+    def model_input_value_to_log_format(self, model_input: dict) -> dict:
+        value = model_input["value"]
+        if isinstance(value, str):
+            try:
+                # Some parameters are received double-encoded.
+                # This removes the double encoding, so it is easier to read.
+                model_input["value"] = json.loads(value)
+            except json.decoder.JSONDecodeError:
+                pass
+
+        return model_input
+
+    def model_output_value_to_log_format(self, model_output: ModelData) -> dict:
+        value = model_output.value
+        if isinstance(value, str):
+            try:
+                # Some parameters are received double-encoded.
+                # This removes the double encoding, so it is easier to read.
+                value = json.loads(value)
+            except json.decoder.JSONDecodeError:
+                pass
+
+        return {
+            "name": model_output.name,
+            "value": value,
+            "type": model_output.type,
+            "unit": model_output.units,
+        }
 
     @property
     def outputs(self) -> dict:

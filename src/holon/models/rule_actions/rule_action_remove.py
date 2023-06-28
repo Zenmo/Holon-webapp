@@ -1,11 +1,20 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+    from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
+
+
 from holon.models.rule_actions import RuleAction
 from holon.models.scenario_rule import ScenarioRule
 
 from django.db import models
-from django.db.models.query import QuerySet
 
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel
+
+from holon.models import Actor
 
 
 class RemoveMode(models.TextChoices):
@@ -35,18 +44,23 @@ class RuleActionRemove(RuleAction):
     def hash(self):
         return f"[A{self.id},{self.remove_mode}]"
 
-    def apply_action_to_queryset(self, filtered_queryset: QuerySet, value: str):
-        """Remove the filtered items"""
+    def apply_to_scenario_aggregate(
+        self,
+        scenario_aggregate: ScenarioAggregate,
+        filtered_repository: RepositoryBaseClass,
+        value: str,
+    ) -> ScenarioAggregate:
+        """Apply a rule action to an object in the repository"""
 
         # remove subselection
         if self.remove_mode == RemoveMode.REMOVE_ALL.value:
-            remove_n = len(filtered_queryset)
+            remove_n = filtered_repository.len()
 
         elif self.remove_mode == RemoveMode.REMOVE_N.value:
             remove_n = int(float(value))
 
         elif self.remove_mode == RemoveMode.KEEP_N.value:
-            remove_n = len(filtered_queryset) - int(float(value))
+            remove_n = filtered_repository.len() - int(float(value))
 
         else:
             raise NotImplementedError(
@@ -54,10 +68,14 @@ class RuleActionRemove(RuleAction):
             )
 
         # remove remove_n items
-        for filtered_object in filtered_queryset:
+        for filtered_object in filtered_repository.all():
             if remove_n <= 0:
-                return
+                return scenario_aggregate
 
-            filtered_object.delete()
+            scenario_aggregate = scenario_aggregate.remove_object(
+                filtered_object, filtered_repository.base_model_type.__name__
+            )
 
             remove_n -= 1
+
+        return scenario_aggregate

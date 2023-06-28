@@ -1,7 +1,7 @@
 version: "3.1"
 services:
   web:
-    image: nginx:alpine
+    image: nginx:1.25.0-alpine3.17
     working_dir: /app
     ports:
       - "80:80"
@@ -22,7 +22,7 @@ services:
   next:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
     ports:
       - "3000:3000"
     depends_on:
@@ -36,7 +36,7 @@ services:
   python:
     build:
       context: ./src
-      dockerfile: Dockerfile.prod
+      dockerfile: prod.Dockerfile
     volumes:
       - "./src:/app"
     depends_on:

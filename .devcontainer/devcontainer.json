@@ -22,7 +22,16 @@
             ]
         }
     },
-    "forwardPorts": [8000, 5000, 5432, 6379, 3000],
+    "forwardPorts": [
+        8000,
+        5000,
+        5432,
+        6379,
+        3000
+    ],
     "remoteUser": "root",
-    "postCreateCommand": ["bash", "./.devcontainer/docker-entrypoint.sh"]
+    "postCreateCommand": [
+        "bash",
+        "./.devcontainer/docker-entrypoint.sh"
+    ]
 }

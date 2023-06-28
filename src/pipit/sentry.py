@@ -26,14 +26,35 @@ def initialize_sentry(ingest_dsn: str, environment: str) -> None:
                 middleware_spans=False,
                 # Wagtail produces a lot of signals
                 signals_spans=False,
-            )
+            ),
         ],
         release="0.1.0",
         # We do too many queries on some pages.
         # Is there a better way to reduce the number of spans?
-        _experiments={"max_spans": 20_000},  # default 1000
+        _experiments={"max_spans": 100_000},  # default 1000
         before_send_transaction=consolidate_db_spans_nothrow,
+        traces_sampler=traces_sampler,
     )
+
+
+# To reduce the number of traces sent to sentry, only send it when the user has set a cookie or query string.
+# Set cookie in browser from javascript console:
+#     document.cookie = "sentry_tracing=true; Path=/; SameSite=Lax"
+def traces_sampler(sampling_context: dict):
+    wsgi_environ = sampling_context.get("wsgi_environ")
+    if wsgi_environ == None:
+        return 0
+
+    query_string = wsgi_environ.get("QUERY_STRING")
+    cookie_string = wsgi_environ.get("HTTP_COOKIE")
+
+    if query_string != None and "sentry_tracing=true" in query_string:
+        return 1
+
+    if cookie_string != None and "sentry_tracing=true" in cookie_string:
+        return 1
+
+    return 0
 
 
 def consolidate_db_spans_nothrow(event: dict[str, any], hint: dict[str, any]) -> dict[str, any]:

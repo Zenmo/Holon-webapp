@@ -9,7 +9,7 @@ services:
         # Update 'VARIANT' to pick a version of Python: 3, 3.10, 3.9, 3.8, 3.7, 3.6
         # Append -bullseye or -buster to pin to an OS version.
         # Use -bullseye variants on local arm64/Apple Silicon.
-        VARIANT: 3-bullseye
+        VARIANT: 3.9-bullseye
         # Optional Node.js version to install
         NODE_VERSION: "16"
     env_file: .env
@@ -27,7 +27,7 @@ services:
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
   db:
-    image: postgres:latest
+    image: postgres:13.9
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data

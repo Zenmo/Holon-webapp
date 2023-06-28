@@ -1,4 +1,5 @@
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
+import Button from "@/components/Button/Button";
 import { StaticImage } from "@/components/ImageSelector/types";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
@@ -7,14 +8,15 @@ import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { getHolonKPIs, InteractiveElement } from "../../../api/holon";
+import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import HolarchyTab from "./HolarchyTab/HolarchyTab";
 import { LegendItem } from "./HolarchyTab/LegendModal";
-import { Content, Feedbackmodals, InteractiveContent } from "./types";
+import ScenarioModal from "./ScenarioModals/ScenarioModal";
+import { Content, Feedbackmodals, InteractiveContent, SavedElements } from "./types";
 
 type Props = {
   data: {
@@ -26,12 +28,16 @@ type Props = {
       textLabelIntermediate: string;
       textLabelLocal: string;
       gridLayout: GridLayout;
+      openingSection?: boolean;
     };
     id: string;
   };
   pagetype?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
+  savePageValues: React.Dispatch<React.SetStateAction<SavedElements>>;
+  saveScenario: (title: string, description: string, sectionId: string) => string;
+  scenarioDiffElements: object;
 };
 
 const initialData = {
@@ -54,10 +60,19 @@ const initialData = {
     selfSufficiency: null,
   },
 };
-export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolors }: Props) {
+export default function SectionBlock({
+  data,
+  pagetype,
+  feedbackmodals,
+  graphcolors,
+  savePageValues,
+  saveScenario,
+  scenarioDiffElements,
+}: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
   const [content, setContent] = useState<Content[]>([]);
+  const [initialContent, setInitialContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
     HolarchyFeedbackImageProps[]
   >([]);
@@ -67,12 +82,21 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
   const [legend, setLegend] = useState<boolean>(false);
+  const [savedScenarioURL, setSavedScenarioURL] = useState<string>("");
+  const [showScenarioModal, setShowScenarioModal] = useState<boolean>(false);
+  const [scenarioModalType, setScenarioModalType] = useState<
+    "saveScenario" | "savedScenario" | "openScenario"
+  >("saveScenario");
+
   const scenario = useContext<number>(ScenarioContext);
+  const [dirtyState, setDirtyState] = useState<boolean>(false);
+  const [resetState, setResetState] = useState<boolean>(false);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
   const sectionContainerRef = useRef(null);
 
   const backgroundFullcolor =
-    data.value.background.size == "bg__full" ? data.value.background.color : "";
+    data.value?.background.size == "bg__full" ? data.value.background.color : "";
 
   // Have to create a seperate variable for this since the bg-color is semi-transparent
   // Otherwise they will overlap and will the left be darker since 2 layers
@@ -83,11 +107,34 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
 
   useEffect(() => {
+    if (data.value.openingSection) {
+      setScenarioModalType("openScenario");
+      setShowScenarioModal(true);
+    }
+  }, []);
+
+  useEffect(() => {
     setHolarchyFeedbackImages(content.filter(content => content.type == "holarchy_feedback_image"));
     setLegendItems(
       convertLegendItems(content.filter(content => content.type == "legend_items")[0])
     );
-    debouncedCalculateKPIs(content);
+    savePageValues(saveCurrentValues(content));
+
+    if (pagetype !== "Sandbox") {
+      debouncedCalculateKPIs(content);
+    } else {
+      if (isInitialLoad) {
+        setInitialContent(createCopyofContent([...content]));
+        debouncedCalculateKPIs(content);
+      }
+
+      if (!isInitialLoad && !resetState) {
+        // Added a timeout for better ux
+        setTimeout(() => {
+          setDirtyState(true);
+        }, 500);
+      }
+    }
   }, [content, debouncedCalculateKPIs]);
 
   useEffect(() => {
@@ -109,6 +156,30 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
     setCostBenefitModal(false);
   }
 
+  function createCopyofContent(input: Content[]) {
+    const returnArr: Content[] = [];
+    input.map(inputObj => {
+      returnArr.push({ ...inputObj });
+    });
+
+    return returnArr;
+  }
+
+  function resetContent() {
+    // First set an empty array and after that fill the content with the initial content
+    // TODO: Find a better way to reset the content. For now it works like this.
+    setResetState(true);
+    setContent([]);
+    setTimeout(() => {
+      setContent(createCopyofContent([...initialContent]));
+      debouncedCalculateKPIs([...initialContent]);
+    });
+    setTimeout(() => {
+      setResetState(false);
+    }, 750);
+    setDirtyState(false);
+  }
+
   function openHolarchyModal() {
     setHolarchyModal(true);
     sectionContainerRef.current.classList.add("h-screen");
@@ -123,6 +194,7 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
   }
 
   function calculateKPIs(content) {
+    setIsInitialLoad(false);
     setLoading(true);
     const interactiveElements = content
       .filter(
@@ -146,9 +218,11 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
         setCostBenefitData(res.costBenefitResults);
         setKPIs(res.dashboardResults);
         setLoading(false);
+        setDirtyState(false);
       })
       .catch(() => {
         setLoading(false);
+        setDirtyState(false);
       });
   }
 
@@ -165,8 +239,54 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
     return return_arr;
   }
 
+  const saveCurrentValues = (content: Content[]) => {
+    //get currentValues of visible interactive elements
+    const savedElements: SavedElements = {
+      [data.id]: {},
+    };
+
+    content?.map((sectionItem: Content) => {
+      if (sectionItem.type === "interactive_input" && sectionItem.value.visible) {
+        const key = `${sectionItem.value.id}`;
+        const value = sectionItem.currentValue;
+        const name = sectionItem.value.name;
+
+        savedElements[data.id] = {
+          ...savedElements[data.id],
+          [key]: {
+            value: value,
+            name: name,
+          },
+        };
+      }
+    });
+    return savedElements;
+  };
+
+  async function handleSaveScenario(title: string, description: string) {
+    const url = saveScenario(title, description, data.id);
+
+    const response = await fetch(`/api/tinyUrl`, {
+      method: "POST",
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({ url }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const shortUrl = data.shortUrl;
+      setSavedScenarioURL(shortUrl);
+    } else {
+      setSavedScenarioURL(url);
+    }
+
+    setScenarioModalType("savedScenario");
+  }
+
   return (
-    <div className={`sectionContainer`} ref={sectionContainerRef}>
+    <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
       {feedbackmodals && (
         <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
       )}
@@ -177,43 +297,57 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
           costBenefitData={costBenefitData}
         />
       )}
+      {showScenarioModal && (
+        <ScenarioModal
+          isOpen={showScenarioModal}
+          onClose={() => setShowScenarioModal(false)}
+          handleSaveScenario={handleSaveScenario}
+          type={scenarioModalType}
+          scenarioUrl={savedScenarioURL}
+          scenarioTitle={data.value.scenarioTitle}
+          scenarioDescription={data.value.scenarioDescription}
+          scenarioDiffElements={scenarioDiffElements}
+        />
+      )}
 
       <div className="holonContentContainer">
-        <div className="sticky z-10 top-[87px] flex flex-row items-center md:top-[110px] bg-white px-10 lg:px-16 pl-4 shadow-md ">
-          <div className="flex-1">
-            <button
-              onClick={closeHolarchyModal}
-              className={`px-6 pb-2 ${
-                holarchyModal
-                  ? "bg-holon-gray-200 text-holon-blue-900"
-                  : "bg-holon-blue-900 text-white"
-              } border-x-2 border-t-2 border-solid h-12`}>
-              Interactiemodus {pagetype}
-            </button>
-            <button
-              onClick={openHolarchyModal}
-              className={`px-6 pb-2 ${
-                holarchyModal
-                  ? "bg-holon-blue-900 text-white"
-                  : "bg-holon-gray-200 text-holon-blue-900"
-              } border-x-2 border-t-2 border-solid h-12`}>
-              Holarchie
-            </button>
-          </div>
-          {holarchyModal &&
-            ((legendItems["color"] && legendItems["color"].length > 0) ||
-              (legendItems["line"] && legendItems["line"].length > 0)) && (
+        {pagetype !== "Sandbox" && (
+          <div className="sticky z-20 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]">
+            <div className="flex-1">
               <button
-                onClick={() => setLegend(!legend)}
-                className={`px-6 py-[0.65rem] bg-white flex ${
-                  legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
-                }`}>
-                <InformationCircleIcon className="mr-2 w-5 inline-block" />
-                Legenda
+                onClick={closeHolarchyModal}
+                className={`px-6 pb-2 ${
+                  holarchyModal
+                    ? "bg-holon-gray-200 text-holon-blue-900"
+                    : "bg-holon-blue-900 text-white"
+                } border-x-2 border-t-2 border-solid h-12`}>
+                Interactiemodus {pagetype}
               </button>
-            )}
-          <div className="flex-1"></div>
-        </div>
+              <button
+                onClick={openHolarchyModal}
+                className={`px-6 pb-2 ${
+                  holarchyModal
+                    ? "bg-holon-blue-900 text-white"
+                    : "bg-holon-gray-200 text-holon-blue-900"
+                } border-x-2 border-t-2 border-solid h-12`}>
+                Holarchie
+              </button>
+            </div>
+            {holarchyModal &&
+              ((legendItems["color"] && legendItems["color"].length > 0) ||
+                (legendItems["line"] && legendItems["line"].length > 0)) && (
+                <button
+                  onClick={() => setLegend(!legend)}
+                  className={`px-6 py-[0.65rem] bg-white flex ${
+                    legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
+                  }`}>
+                  <InformationCircleIcon className="mr-2 w-5 inline-block" />
+                  Legenda
+                </button>
+              )}
+            <div className="flex-1"></div>
+          </div>
+        )}
 
         <div className={`flex flex-col lg:flex-row ${backgroundFullcolor}`}>
           <div
@@ -229,11 +363,40 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
                 content={content}
                 handleContentChange={setContent}
                 handleMedia={setMedia}
+                pagetype={pagetype}
               />
             )}
           </div>
 
-          <div className={`flex flex-col ${gridValue.right}`}>
+          <div className={`relative flex flex-col ${gridValue.right}`}>
+            {dirtyState && (
+              <div className="absolute flex justify-center items-center p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
+                <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded">
+                  <div>
+                    <h2>Reken instellingen door</h2>
+                    <p>
+                      Heb je alle instellingen goed ingesteld, reken dan in een keer alles door. Na
+                      het rekenen zijn de resultaten in het dashboard zichtbaar. Niet het gewenste
+                      resultaat? Maak wijzigingen en reken nogmaals alle instellingen door.
+                    </p>
+
+                    <div className="flex justify-center mt-6 items-center">
+                      <button className="font-bold mr-3 mb-4" onClick={() => resetContent()}>
+                        Reset instellingen
+                      </button>
+                      <Button
+                        onClick={() => {
+                          debouncedCalculateKPIs(content);
+                          setDirtyState(false);
+                        }}>
+                        Reken door
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="lg:sticky top-0">
               <div className="py-12 px-10 lg:px-16 lg:pt-24">
                 {Object.keys(media).length > 0 && (
@@ -245,7 +408,11 @@ export default function SectionBlock({ data, pagetype, feedbackmodals, graphcolo
                 data={kpis}
                 loading={loading}
                 dashboardId={data.id}
-                handleClickCostBen={openCostBenefitModal}></KPIDashboard>
+                handleClickCostBen={openCostBenefitModal}
+                handleClickScenario={() => {
+                  setShowScenarioModal(true);
+                  setScenarioModalType("saveScenario");
+                }}></KPIDashboard>
             </div>
           </div>
         </div>

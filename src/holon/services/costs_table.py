@@ -1,4 +1,11 @@
 """Create a Costs&Benefits Table """
+from typing import Union
+
+from holon.models import Actor, ActorGroup, ActorSubGroup
+from holon.models.scenario_rule import ModelType
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+
+COSTS_TO_SELF = "Afschrijving"
 
 
 class CostTables:
@@ -22,9 +29,24 @@ class CostTables:
         """
         return {group: self.detailed_table(group) for group in self.groups_for_detailed()}
 
+    def inject_costs_to_self(self, group, costs: float):
+        """
+        Injects one cost item into the table
+        """
+        self.cost_items.append(CostToSelfItem(group, costs))
+
+    def inject_depreciation_costs(self, items: dict):
+        """
+        Injects multiple cost items to self into the table
+
+        items[dict]:    key value pairs of actor names and costs
+        """
+        for group, value in items.items():
+            self.inject_costs_to_self(group, -1 * value)
+
     @classmethod
-    def from_al_output(cls, al_output, scenario):
-        actors = ActorWrapper.from_scenario(scenario)
+    def from_al_output(cls, al_output, scenario_aggregate: ScenarioAggregate):
+        actors = ActorWrapper.from_scenario(scenario_aggregate)
         return cls([CostItem.from_dict(item, actors) for item in al_output])
 
 
@@ -43,7 +65,8 @@ class CostTable:
         self._table = {}
         for item in cost_items:
             self.__add_to_table(item)
-            self.__add_to_table(CostItem.reversed(item))
+            if item.reversable():
+                self.__add_to_table(CostItem.reversed(item))
         self.__fill_out_table()
         self.__round_table()
 
@@ -65,16 +88,15 @@ class CostTable:
         Also needs to add self as None
         TODO: move some functionality from fill_out_table here
         """
-        self._table[self.__name_from(item)] = {
-            self.__name_to(item): item.price,
-            self.__name_from(item): 0.0,
-        }
+        self._table[self.__name_from(item)] = {self.__name_to(item): item.price}
 
     def __fill_out_table(self):
         # we can also keep a global set in memory (self) where we add to in __add_from_group
         all_groups = set((key for value in self.table.values() for key in value.keys()))
-        basic = {key: 0.0 for key in all_groups}
+        basic = {key: 0.0 for key in all_groups} | {COSTS_TO_SELF: 0.0}
         for group in all_groups:
+            if group == COSTS_TO_SELF:
+                continue
             self._table[group] = basic | self._table.get(group, {})
             self._table[group]["Netto kosten"] = sum(
                 (value for value in self._table[group].values() if value is not None)
@@ -101,19 +123,24 @@ class CostTable:
 
 
 class ActorWrapper:
-    def __init__(self, actors) -> None:
+    def __init__(self, id_to_actor: dict[int, Actor]) -> None:
         """Where actors is the Django equivalent of AR relation of Actors of the scenario"""
-        self.actors = actors
+        self.id_to_actor = id_to_actor
 
     def find(self, actor_name):
         """
         Strips the AL prefix from the actor name and returns the corresponding Actor
         """
-        return self.actors.get(id=int(actor_name[3:]))
+        return self.id_to_actor[int(actor_name[3:])]
 
     @classmethod
-    def from_scenario(cls, scenario):
-        return cls(scenario.actor_set)
+    def from_scenario(cls, scenario_aggregate: ScenarioAggregate):
+        # In scenario "Transitie Visie Warmte"
+        # doing this eagerly prevents many thousands of queries
+        # even though there are only 44 actors.
+        id_to_actor: dict[int, Actor] = scenario_aggregate.repositories[ModelType.ACTOR].dict()
+
+        return cls(id_to_actor)
 
 
 class CostItem:
@@ -138,10 +165,13 @@ class CostItem:
 
     def with_subgroups(self):
         """Returns groups that are connected to a subgroup"""
-        if self.from_actor.subgroup:
+        if not self.from_actor.subgroup == self.from_actor.group:
             yield self.from_group()
-        if self.to_actor.subgroup:
+        if not self.to_actor.subgroup == self.to_actor.group:
             yield self.to_group()
+
+    def reversable(self):
+        return True
 
     @staticmethod
     def group(actor):
@@ -158,6 +188,22 @@ class CostItem:
             return f"{CostItem.group(actor)} - {actor.subgroup.name}"
         except AttributeError:
             return CostItem.group(actor)
+
+    @staticmethod
+    def group_key_name(
+        group: Union[ActorGroup, None], sub_group: Union[ActorSubGroup, None] = None
+    ) -> str:
+        """Returns the key name for the group"""
+        if sub_group is None:
+            if group is None:
+                return "Onbekend"
+            else:
+                return group.name
+        else:
+            if group is None:
+                return f"Onbekend - {sub_group.name}"
+            else:
+                return f"{group.name} - {sub_group.name}"
 
     @staticmethod
     def price_for(obj) -> float:
@@ -202,3 +248,32 @@ class CostItem:
             from_actor=obj.to_actor,
             price=-obj.price,
         )
+
+
+class CostToSelfItem:
+    def __init__(self, group, price) -> None:
+        if len(group.split("-")) > 1:
+            self.group = " -".join(group.split(" -")[:-1])
+        else:
+            self.group = group
+        self.subgroup = group
+        self.price = price
+
+    def from_group(self):
+        return self.group
+
+    def to_group(self):
+        return COSTS_TO_SELF
+
+    def from_subgroup(self):
+        return self.subgroup
+
+    def to_subgroup(self):
+        return COSTS_TO_SELF
+
+    def with_subgroups(self):
+        if not self.subgroup == self.group:
+            yield self.group
+
+    def reversable(self):
+        return False

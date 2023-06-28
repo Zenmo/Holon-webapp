@@ -82,9 +82,6 @@ class InteractiveInputBlock(blocks.StructBlock):
                     if bool(value["default_value"]):
                         if value["default_value"].lower() == option.option.lower():
                             option_default = True
-                    elif bool(value["target_value"]):
-                        if value["target_value"].lower() == option.option.lower():
-                            option_default = True
                     else:
                         option_default = option.default
                     option_dict = {
@@ -112,6 +109,7 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_min": option.slider_value_min,
                         "slider_value_max": option.slider_value_max,
                         "discretization_steps": option.discretization_steps,
+                        "sandbox_discretization_steps": option.sandbox_discretization_steps,
                         "slider_unit": option.slider_unit.symbol
                         if option.slider_unit is not None
                         else "",

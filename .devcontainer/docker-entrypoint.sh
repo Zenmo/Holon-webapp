@@ -47,7 +47,7 @@ load_fixture_data() {
   python manage.py loaddata holon/fixtures/graph-colors-fixture.json
   python manage.py loaddata holon/fixtures/storylinepageroletype-fixture.json
   python manage.py loaddata holon/fixtures/storylinepageinformationtype-fixture.json
-  python manage.py loaddata holon/fixtures/merged-datamodel-ehub-config-fixture.json 
+  python manage.py loaddata holon/tests/fixtures/merged-datamodel-ehub-config-fixture.json 
 
   echo Fixtures loaded
 }

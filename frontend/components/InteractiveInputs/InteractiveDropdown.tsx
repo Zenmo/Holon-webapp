@@ -18,12 +18,13 @@ function InteractiveDropdown({ defaultValue, onChange, options, ...props }: Prop
         onChange(
           props.contentId,
           e.target.childNodes[e.target.selectedIndex].value,
-          e.target.childNodes[e.target.selectedIndex].value
+          e.target.childNodes[e.target.selectedIndex].getAttribute("data-id")
         )
       }>
       {options.map((inputItem, index: number) => {
         return (
           <option
+            data-id={inputItem.id}
             id={
               props.contentId +
               inputItem.id +
@@ -32,8 +33,8 @@ function InteractiveDropdown({ defaultValue, onChange, options, ...props }: Prop
             }
             key={inputItem.id + index}
             className="p-4 m-4"
-            value={inputItem.id}>
-            {inputItem.option}
+            value={inputItem.option}>
+            {inputItem.label ? inputItem.label : inputItem.option}
           </option>
         );
       })}

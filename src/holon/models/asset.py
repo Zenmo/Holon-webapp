@@ -11,9 +11,9 @@ class EnergyAsset(PolymorphicModel):
     category = "GENERIC"
 
     gridconnection = models.ForeignKey(
-        GridConnection, on_delete=models.SET_NULL, null=True, blank=True
+        GridConnection, on_delete=models.CASCADE, null=True, blank=True
     )
-    gridnode = models.ForeignKey(GridNode, on_delete=models.SET_NULL, null=True, blank=True)
+    gridnode = models.ForeignKey(GridNode, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=255)
     wildcard_JSON = models.JSONField(
         blank=True,
@@ -63,6 +63,8 @@ class ConsumptionAssetType(models.TextChoices):
     HOT_WATER_CONSUMPTION = "HOT_WATER_CONSUMPTION"
     OTHER_ELECTRICITY_CONSUMPTION = "OTHER_ELECTRICITY_CONSUMPTION"
     DIESEL_VEHICLE = "DIESEL_VEHICLE"
+    DIESEL_DEMAND = "DIESEL_DEMAND"
+    METHANE_DEMAND = "METHANE_DEMAND"
 
 
 class ConsumptionAsset(EnergyAsset):
@@ -88,6 +90,18 @@ class DieselVehicleAsset(ConsumptionAsset):
             print(self.type)
             raise ValidationError("DieselVehicleAsset can only have type `DIESEL_VEHICLE`")
         return super().clean()
+
+
+class DieselConsumptionAsset(ConsumptionAsset):
+    name = "DieselConsumptionAsset"
+    type = ConsumptionAssetType.DIESEL_DEMAND
+    yearlyDemandDiesel_kWh = models.FloatField()
+
+
+class MethaneConsumptionAsset(ConsumptionAsset):
+    name = "MethaneConsumptionAsset"
+    type = ConsumptionAssetType.DIESEL_DEMAND
+    yearlyDemandMethane_kWh = models.FloatField()
 
 
 class HeatConsumptionAsset(ConsumptionAsset):
@@ -119,6 +133,7 @@ class ConversionAssetType(models.TextChoices):
     CURTAILER = "CURTAILER"
     CURTAILER_HEAT = "CURTAILER_HEAT"
     METHANE_CHP = "METHANE_CHP"
+    BIOGAS_METHANE_CONVERTER = "BIOGAS_METHANE_CONVERTER"
 
 
 class AmbientTempType(models.TextChoices):
@@ -175,6 +190,12 @@ class ChemicalHeatConversionAsset(HeatConversionAsset):
     capacityHeat_kW = models.FloatField()
 
 
+class BiogasMethaneConverter(ConversionAsset):
+    name = "BiogasMethaneConverter"
+    type = ConversionAssetType.BIOGAS_METHANE_CONVERTER
+    capacityMethane_kW = models.FloatField()
+
+
 class ElectricHeatConversionAsset(HeatConversionAsset):
     capacityElectricity_kW = models.FloatField()
 
@@ -197,6 +218,7 @@ class ProductionAssetType(models.TextChoices):
     WINDMILL = "WINDMILL"
     RESIDUALHEATHT = "RESIDUALHEATHT"
     RESIDUALHEATLT = "RESIDUALHEATLT"
+    LIVESTOCK = "LIVESTOCK"
 
 
 class ProductionAsset(EnergyAsset):
@@ -218,6 +240,12 @@ class HybridProductionAsset(ProductionAsset):
     capacityHeat_kW = models.FloatField()
 
 
+class LiveStock(ProductionAsset):
+    name = "LiveStock"
+    type = ProductionAssetType.LIVESTOCK
+    yearlyProductionMethane_kWh = models.FloatField(blank=False, null=False, default=0.0)
+
+
 # %% Storage assets
 
 
@@ -225,6 +253,7 @@ class StorageAssetType(models.TextChoices):
     ELECTRIC_VEHICLE = "ELECTRIC_VEHICLE"
     STORAGE_ELECTRIC = "STORAGE_ELECTRIC"
     STORAGE_HEAT = "STORAGE_HEAT"
+    STORAGE_GAS = "STORAGE_GAS"
     HEATMODEL = "HEATMODEL"
 
 
@@ -268,6 +297,12 @@ class HeatStorageAsset(StorageAsset):
 
 class ElectricStorageAsset(StorageAsset):
     capacityElectricity_kW = models.FloatField()
+    storageCapacity_kWh = models.FloatField()
+    stateOfCharge_r = models.FloatField()
+
+
+class GasStorageAsset(StorageAsset):
+    capacityGas_kW = models.FloatField()
     storageCapacity_kWh = models.FloatField()
     stateOfCharge_r = models.FloatField()
 
