@@ -23,6 +23,9 @@ setup_django () {
 
     echo Create cache table
     python manage.py createcachetable
+
+    echo Updating search index
+    python manage.py update_index
 }
 
 echo Starting ssh service
