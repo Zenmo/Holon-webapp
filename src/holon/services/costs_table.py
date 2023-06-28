@@ -4,6 +4,8 @@ from typing import Union
 from holon.models import Actor, ActorGroup, ActorSubGroup
 from holon.models.scenario_rule import ModelType
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+import sentry_sdk
+from copy import copy as copy
 
 COSTS_TO_SELF = "Afschrijving"
 
@@ -14,10 +16,61 @@ class CostTables:
         self.cost_items = cost_items
 
     def main_table(self) -> dict:
-        return CostTable(self.cost_items).table
+        # filter the cost_items to only include the main groups, without overlapping subgroups
+        main_cost_items = copy(self.cost_items)
+        for cost_item in main_cost_items:
+            if isinstance(cost_item, CostToSelfItem):
+                # remove undefined cost items but log them!
+                try:
+                    assert (
+                        cost_item.group != "Undefined"
+                    ), "CostToSelfItem with group Undefined found in main table!"
+                except AssertionError as e:
+                    main_cost_items.remove(cost_item)
+                    sentry_sdk.capture_exception(e)
+
+                # remove all groups that are not the main group (to prevent double counting)
+                if cost_item.subgroup is not None:
+                    main_cost_items.remove(cost_item)
+
+        return CostTable(main_cost_items).table
 
     def detailed_table(self, group) -> dict:
-        return CostTable(self.cost_items, use_subgroup=group).table
+        detail_cost_items = copy(self.cost_items)
+
+        for cost_item in detail_cost_items:
+            # only remove the CostToSelfItems
+            if isinstance(cost_item, CostToSelfItem):
+                # remove undefined cost items but log them!
+                try:
+                    assert (
+                        cost_item.group != "Undefined"
+                    ), f"CostToSelfItem with group Undefined found in detail table for group {group}!"
+                except AssertionError as e:
+                    detail_cost_items.remove(cost_item)
+                    sentry_sdk.capture_exception(e)
+
+                # remove all groups that are not the main group (to prevent double counting)
+                if cost_item.subgroup is None:
+                    detail_cost_items.remove(cost_item)
+
+        table = CostTable(detail_cost_items, use_subgroup=group).table
+        # filter out the zero transactions
+        filtered_table = {}
+        to_drop = set()
+        for key, value in table.items():
+            if sum(value.values()) != 0:
+                filtered_table.update({key: value})
+            else:
+                to_drop.add(key)
+
+        # sort the table based on whether the key contains " - " or not (subgroup or not)
+        sorted_table = {
+            key: filtered_table[key]
+            for key in sorted(filtered_table.keys(), key=lambda x: group not in x)
+        }
+
+        return sorted_table
 
     def groups_for_detailed(self) -> set:
         return set((group for item in self.cost_items for group in item.with_subgroups()))
@@ -165,9 +218,9 @@ class CostItem:
 
     def with_subgroups(self):
         """Returns groups that are connected to a subgroup"""
-        if not self.from_actor.subgroup == self.from_actor.group:
+        if not self.from_actor.subgroup is None:
             yield self.from_group()
-        if not self.to_actor.subgroup == self.to_actor.group:
+        if not self.to_actor.subgroup is None:
             yield self.to_group()
 
     def reversable(self):
@@ -253,10 +306,11 @@ class CostItem:
 class CostToSelfItem:
     def __init__(self, group, price) -> None:
         if len(group.split("-")) > 1:
-            self.group = " -".join(group.split(" -")[:-1])
+            self.group = group.split(" - ")[0]
+            self.subgroup = group
         else:
+            self.subgroup = None
             self.group = group
-        self.subgroup = group
         self.price = price
 
     def from_group(self):
@@ -266,13 +320,15 @@ class CostToSelfItem:
         return COSTS_TO_SELF
 
     def from_subgroup(self):
+        if self.subgroup is None:
+            return self.group
         return self.subgroup
 
     def to_subgroup(self):
         return COSTS_TO_SELF
 
     def with_subgroups(self):
-        if not self.subgroup == self.group:
+        if self.subgroup is not None:
             yield self.group
 
     def reversable(self):
