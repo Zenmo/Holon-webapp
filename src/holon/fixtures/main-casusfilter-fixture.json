@@ -1,1 +1,0 @@
-[{"model": "main.casusfilter", "pk": 1, "fields": {"name": "Gemeente", "slug": "gemeente", "icon": "green"}}, {"model": "main.casusfilter", "pk": 2, "fields": {"name": "Nationaal", "slug": "nationaal", "icon": "green"}}, {"model": "main.casusfilter", "pk": 3, "fields": {"name": "Provincie", "slug": "provincie", "icon": "green"}}]

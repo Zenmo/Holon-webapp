@@ -6,18 +6,12 @@ from .casus import CasusPage
 from .storyline import StorylinePage
 from .challengemode import ChallengeModePage
 from .sandbox import SandboxPage
-from main.pages.casus import CasusFilter
 
 
 class CasusOverviewPageSerializer(BasePageSerializer):
     child_casusses = serializers.SerializerMethodField()
-    all_casus_filters = serializers.SerializerMethodField()
 
     def get_child_casusses(self, page):
-        request = self.context.get("request", None)
-        filter_param = None
-        if request:
-            filter_param = request.query_params.get("filter", None)
         all_casusses = CasusPage.objects.descendant_of(page)
 
         return_arr = []
@@ -30,7 +24,6 @@ class CasusOverviewPageSerializer(BasePageSerializer):
 
             casus_to_append = {
                 "title": casus.title,
-                "filter": casus.casus_filter.name if hasattr(casus.casus_filter, "name") else None,
                 "thumbnail": thumbnail,
                 "description": casus.description,
                 "slug": casus.slug,
@@ -63,26 +56,13 @@ class CasusOverviewPageSerializer(BasePageSerializer):
                 ] = connected_casus_content.card_color
                 casus_to_append["connected_casus_content"]["thumbnail"] = thumbnail
 
-            if filter_param:
-                if casus.casus_filter.all().first().name.lower() == filter_param.lower():
-                    return_arr.append(casus_to_append)
-            else:
-                return_arr.append(casus_to_append)
+            return_arr.append(casus_to_append)
         return return_arr
-
-    def get_all_casus_filters(self, page):
-        all = CasusFilter.objects.all()
-        return_all_roles = []
-        for role in all:
-            role_dict = {"name": role.name}
-            return_all_roles.append(role_dict)
-        return return_all_roles
 
     class Meta:
         model = CasusOverviewPage
         fields = [
             "hero",
             "content",
-            "all_casus_filters",
             "child_casusses",
         ] + BasePageSerializer.Meta.fields

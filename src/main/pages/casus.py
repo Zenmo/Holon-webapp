@@ -15,16 +15,10 @@ from .base_card import BaseCard
 
 from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 
-from main.snippets.casus_filter import CasusFilter
-
 new_table_options = {"renderer": "text", "startRows": 3, "editor": "text"}
 
 
 class CasusPage(HeadlessPreviewMixin, BaseCard):
-    casus_filter = ForeignKey(
-        CasusFilter, on_delete=models.DO_NOTHING, related_name="+", null=True, blank=True
-    )
-
     scenario = ForeignKey(Scenario, on_delete=models.SET_NULL, related_name="+", null=True)
 
     linked_best_practices = ParentalManyToManyField("main.bestpracticepage", blank=True)
@@ -59,7 +53,6 @@ class CasusPage(HeadlessPreviewMixin, BaseCard):
 
     content_panels = BaseCard.content_panels + [
         FieldPanel("scenario"),
-        FieldPanel("casus_filter"),
         FieldPanel("linked_best_practices"),
         FieldPanel("content"),
     ]
