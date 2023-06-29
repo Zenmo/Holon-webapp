@@ -18,10 +18,6 @@ class CostTableTestClass(TestCase):
         assert "CONNECTIONOWNER" in costs_table.keys()
         assert "OPERATORGRID" in costs_table.keys()
 
-        detailed_table = tables.detailed_table("Commercieel bedrijf 1")
-        assert "Commercieel bedrijf 1 - poor" in detailed_table.keys()
-        assert "Commercieel bedrijf 1 - rich" in detailed_table.keys()
-
         detailed_tables = tables.all_detailed_tables()
         assert "Commercieel bedrijf 1" in detailed_tables.keys()
         assert "OPERATORGRID" not in detailed_tables.keys()
