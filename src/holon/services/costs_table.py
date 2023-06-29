@@ -15,7 +15,7 @@ class CostTables:
         """cost_items is a list of CostItems, we now loop it a lot - can that be improved?"""
         self.cost_items = cost_items
 
-    def main_table(self) -> dict:
+    def main_table(self) -> dict[str, dict[str, int]]:
         # filter the cost_items to only include the main groups, without overlapping subgroups
         main_cost_items = copy(self.cost_items)
         for cost_item in main_cost_items:
@@ -32,7 +32,7 @@ class CostTables:
 
         return CostTable(main_cost_items).table
 
-    def detailed_table(self, group) -> dict:
+    def detailed_table(self, group: str) -> dict[str, dict[str, int]]:
         detail_cost_items = copy(self.cost_items)
 
         for cost_item in detail_cost_items:
@@ -70,14 +70,14 @@ class CostTables:
     def groups_for_detailed(self) -> set:
         return set((group for item in self.cost_items for group in item.with_subgroups()))
 
-    def all_detailed_tables(self) -> dict:
+    def all_detailed_tables(self) -> dict[str, dict[str, dict[str, int]]]:
         """
         Returns a dict where the keys are the applicable actor groups
         and the values are their detailed tables
         """
         return {group: self.detailed_table(group) for group in self.groups_for_detailed()}
 
-    def inject_costs_to_self(self, group, costs: float):
+    def inject_costs_to_self(self, group: str, costs: float):
         """
         Injects one cost item into the table
         """
