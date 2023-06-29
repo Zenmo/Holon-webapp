@@ -78,7 +78,7 @@ export default function Article({ article }: { article: Content[] }) {
       <nav className=" mx-3 w-1/4 border-l-2 border-gray-200">
         <div className="sticky top-0 mx-3 pt-5 ">
           <h3 className="px-4 pt-1 pb-3">
-            <strong>Inhoudsopgave</strong>
+            <strong>Op deze pagina</strong>
           </h3>
           <div className="wiki-context-menu">
             <ul>
