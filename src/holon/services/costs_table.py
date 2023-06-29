@@ -20,14 +20,11 @@ class CostTables:
         main_cost_items = copy(self.cost_items)
         for cost_item in main_cost_items:
             if isinstance(cost_item, CostToSelfItem):
-                # remove undefined cost items but log them!
-                try:
-                    assert (
-                        cost_item.group != "Undefined"
-                    ), "CostToSelfItem with group Undefined found in main table!"
-                except AssertionError as e:
+                if cost_item.group == "Undefined":
                     main_cost_items.remove(cost_item)
-                    sentry_sdk.capture_exception(e)
+                    sentry_sdk.capture_exception(
+                        ValueError("CostToSelfItem with group Undefined found in main table!")
+                    )
 
                 # remove all groups that are not the main group (to prevent double counting)
                 if cost_item.subgroup is not None:
@@ -42,29 +39,27 @@ class CostTables:
             # only remove the CostToSelfItems
             if isinstance(cost_item, CostToSelfItem):
                 # remove undefined cost items but log them!
-                try:
-                    assert (
-                        cost_item.group != "Undefined"
-                    ), f"CostToSelfItem with group Undefined found in detail table for group {group}!"
-                except AssertionError as e:
+                if cost_item.group == "Undefined":
                     detail_cost_items.remove(cost_item)
-                    sentry_sdk.capture_exception(e)
+                    sentry_sdk.capture_exception(
+                        ValueError(
+                            f"CostToSelfItem with group Undefined found in detail table for group {group}!"
+                        )
+                    )
 
                 # remove all groups that are not the main group (to prevent double counting)
                 if cost_item.subgroup is None:
                     detail_cost_items.remove(cost_item)
 
         table = CostTable(detail_cost_items, use_subgroup=group).table
+
         # filter out the zero transactions
         filtered_table = {}
-        to_drop = set()
         for key, value in table.items():
             if sum(value.values()) != 0:
                 filtered_table.update({key: value})
-            else:
-                to_drop.add(key)
 
-        # sort the table based on whether the key contains " - " or not (subgroup or not)
+        # sort the table based on whether the key contains the group of interest
         sorted_table = {
             key: filtered_table[key]
             for key in sorted(filtered_table.keys(), key=lambda x: group not in x)
