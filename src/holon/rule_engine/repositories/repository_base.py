@@ -227,7 +227,7 @@ class RepositoryBaseClass:
 
         # copy object and set new id
         cloned_new_object = deepcopy(new_object)
-        cloned_new_object.id = next(self.id_counter)
+        cloned_new_object.pk = cloned_new_object.id = next(self.id_counter)
 
         # add new object to list and return new object
         self.objects.append(cloned_new_object)
