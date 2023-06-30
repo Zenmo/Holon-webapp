@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import random
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -53,6 +55,7 @@ class RuleActionFactor(RuleAction):
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
+        number_generator: random.Random,
     ) -> ScenarioAggregate:
         """Apply a rule action to an object in the repository"""
 

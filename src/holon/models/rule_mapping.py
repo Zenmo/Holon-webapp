@@ -1,11 +1,9 @@
-from holon.models.scenario import Scenario
+import random
 from holon.models.scenario_rule import ScenarioRule
 from holon.serializers import InteractiveElementInput
-from holon.models import ChoiceType, ModelType
-from holon.services.clone_scenario import clone_scenario
+from holon.models import ChoiceType
 from pipit.sentry import sentry_sdk_trace
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
-from holon.rule_engine.repositories.repository_base import RepositoryBaseClass
 
 
 @sentry_sdk_trace
@@ -13,6 +11,7 @@ def apply_rules(
     scenario_aggregate: ScenarioAggregate, interactive_element_inputs: list[InteractiveElementInput]
 ) -> ScenarioAggregate:
     """Load a scenario, apply rules from interactive elements and return with mapped fields"""
+    number_generator = random.Random(42)
 
     for interactive_element_input in interactive_element_inputs:
         interactive_element = interactive_element_input["interactive_element"]
@@ -40,10 +39,10 @@ def apply_rules(
                 filtered_repository = rule.get_filtered_repository(scenario_aggregate)
 
                 filtered_repository = rule.subselect_repository(
-                    filtered_repository, transformed_value
+                    filtered_repository, transformed_value, number_generator
                 )
                 scenario_aggregate = rule.apply_rule_actions(
-                    scenario_aggregate, filtered_repository, transformed_value
+                    scenario_aggregate, filtered_repository, transformed_value, number_generator
                 )
 
     return scenario_aggregate
