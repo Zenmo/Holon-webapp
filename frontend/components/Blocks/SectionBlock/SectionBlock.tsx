@@ -1,14 +1,15 @@
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import Button from "@/components/Button/Button";
 import { StaticImage } from "@/components/ImageSelector/types";
+import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
+import { WikiLinks } from "../../../containers/types";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
@@ -33,11 +34,14 @@ type Props = {
     id: string;
   };
   pagetype?: string;
+  pagetitle?: string;
   feedbackmodals: Feedbackmodals[];
   graphcolors?: Graphcolor[];
   savePageValues: React.Dispatch<React.SetStateAction<SavedElements>>;
   saveScenario: (title: string, description: string, sectionId: string) => string;
   scenarioDiffElements: object;
+
+  wikilinks?: WikiLinks[];
 };
 
 const initialData = {
@@ -62,12 +66,14 @@ const initialData = {
 };
 export default function SectionBlock({
   data,
+  wikilinks,
   pagetype,
   feedbackmodals,
   graphcolors,
   savePageValues,
   saveScenario,
   scenarioDiffElements,
+  pagetitle,
 }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
@@ -295,6 +301,9 @@ export default function SectionBlock({
           handleClose={closeCostBenefitModal}
           graphcolors={graphcolors ?? []}
           costBenefitData={costBenefitData}
+          costBenefitWikiLink={costBenefitData}
+          wikilinks={wikilinks}
+          pagetitle={pagetitle}
         />
       )}
       {showScenarioModal && (
@@ -313,7 +322,7 @@ export default function SectionBlock({
       <div className="holonContentContainer">
         {pagetype !== "Sandbox" && (
           <div className="sticky z-20 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]">
-            <div className="flex-1">
+            <div className="flex-1 flex items-center">
               <button
                 onClick={closeHolarchyModal}
                 className={`px-6 pb-2 ${
@@ -332,6 +341,20 @@ export default function SectionBlock({
                 } border-x-2 border-t-2 border-solid h-12`}>
                 Holarchie
               </button>
+              {holarchyModal &&
+                wikilinks
+                  ?.filter(wikilink => wikilink.type === "holarchy")
+                  .map((wikilink, index) => (
+                    <div className="ml-2" key={index}>
+                      <InteractiveInputPopover
+                        textColor="text-holon-blue-900"
+                        name={"Meer informatie"}
+                        titleWikiPage={'Meer informatie over Holarchie binnen "' + pagetitle + '"'}
+                        linkWikiPage={wikilink.value}
+                        target="_blank"
+                      />
+                    </div>
+                  ))}
             </div>
             {holarchyModal &&
               ((legendItems["color"] && legendItems["color"].length > 0) ||
@@ -341,10 +364,10 @@ export default function SectionBlock({
                   className={`px-6 py-[0.65rem] bg-white flex ${
                     legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
                   }`}>
-                  <InformationCircleIcon className="mr-2 w-5 inline-block" />
                   Legenda
                 </button>
               )}
+
             <div className="flex-1"></div>
           </div>
         )}

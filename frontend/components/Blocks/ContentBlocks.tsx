@@ -7,6 +7,7 @@ import {
   PageProps,
   TextAndMediaVariant,
   TitleBlockVariant,
+  WikiLinks,
 } from "../../containers/types";
 import ButtonsAndMediaBlock from "./ButtonsAndMediaBlock/ButtonsAndMediaBlock";
 import CardBlock from "./CardsBlock/CardBlock";
@@ -28,6 +29,8 @@ type ContentBlockProps = PageProps<
 
 const ContentBlocks = ({
   content,
+  wikilinks,
+  pagetitle,
   pagetype,
   feedbackmodals,
   graphcolors,
@@ -36,16 +39,18 @@ const ContentBlocks = ({
   feedbackmodals?: Feedbackmodals[];
   pagetype?: string;
   graphcolors?: Graphcolor[];
+  wikilinks?: WikiLinks[];
+  pagetitle?: string;
 }) => {
   let targetValuesPreviousSections = new Map();
   const [currentPageValues, setCurrentPageValues] = useState({});
   const [savedValues, setSavedValues] = useState({});
   const [checkedSavedValues, setCheckedSavedValues] = useState(false);
   const [openingSection, setOpeningSection] = useState<string>("");
-  
+
   const router = useRouter();
-  const scenarioDiffElements = {}; 
-  let sectionCount = 0; 
+  const scenarioDiffElements = {};
+  let sectionCount = 0;
 
   useEffect(() => {
     checkIfSavedScenario();
@@ -117,19 +122,21 @@ const ContentBlocks = ({
       typeof window !== "undefined" && window.location.origin ? window.location.origin : "";
 
     //make sure no exisiting params are including in the new url
-    const pathWithoutParams = router.asPath.split('?')[0]; 
+    const pathWithoutParams = router.asPath.split("?")[0];
     //create baseURL
     const baseURL = `${origin}${pathWithoutParams}`;
 
     //create params
     const params = new URLSearchParams();
-    const data = currentPageValues; 
-   
+    const data = currentPageValues;
+
     for (const section in data) {
       for (const key in data[section]) {
-          const encodedKey = encodeURIComponent(`${section}.${key}`); 
-          const encodedValue = encodeURIComponent(`${data[section][key].value}.${data[section][key].name}`);
-          params.append(encodedKey, encodedValue);
+        const encodedKey = encodeURIComponent(`${section}.${key}`);
+        const encodedValue = encodeURIComponent(
+          `${data[section][key].value}.${data[section][key].name}`
+        );
+        params.append(encodedKey, encodedValue);
       }
     }
     params.append("title", encodeURIComponent(title));
@@ -138,7 +145,7 @@ const ContentBlocks = ({
 
     //create link
     const savedScenarioUrl = `${baseURL}?${params.toString()}`;
-    return savedScenarioUrl; 
+    return savedScenarioUrl;
   }
 
   /*When the page opens it checks whether it has a saved scenario in the params */
@@ -164,14 +171,14 @@ const ContentBlocks = ({
           setOpeningSection(decodedValue);
         } else {
           const [section, key] = decodedKey.split(".");
-          const [value, name] = decodedValue.split("."); 
+          const [value, name] = decodedValue.split(".");
           if (!(section in data)) {
             data[section] = {};
           }
           data[section][key] = {
-            value: value, 
-            name: name
-          }
+            value: value,
+            name: name,
+          };
         }
       }
     }
@@ -182,7 +189,7 @@ const ContentBlocks = ({
   //If there is a saved scenario in the params, the values are added to the section data.
   function addSavedValues(values: SavedElements, content: Content, sectionNumber: number) {
     //add saved values to content or scenarioDiffElements
-    const updatedContent = { ...content }; 
+    const updatedContent = { ...content };
     for (const key in values) {
       if (key === "title") {
         updatedContent.value.scenarioTitle = values[key];
@@ -192,56 +199,54 @@ const ContentBlocks = ({
         updatedContent.value.openingSection = true;
       } else if (key === content.id) {
         const value = values[key];
-        
-        for (const subKey in value) {
 
+        for (const subKey in value) {
           const foundElement = updatedContent.value.content.find(element => {
             return element.type === "interactive_input" && element.value.id === Number(subKey);
           });
-         if (foundElement) {
+          if (foundElement) {
             const subValue = value[subKey].value;
             foundElement.value.savedValue = subValue;
-          }
-          else {
+          } else {
             scenarioDiffElements[content.id] = {
               ...(scenarioDiffElements[content.id] || {}),
-      
-                [subKey]: {
-                  value: value[subKey].value,
-                  difference: "missing",
-                  section: sectionNumber,
-                  name: value[subKey].name
-                }
-            }
+
+              [subKey]: {
+                value: value[subKey].value,
+                difference: "missing",
+                section: sectionNumber,
+                name: value[subKey].name,
+              },
+            };
           }
         }
       }
     }
 
-     // Check for elements in content that are not in values to show any differences
-     let valuesIds: string[]; 
-    values[content.id] ? valuesIds = Object.keys(values[content.id]) : valuesIds = [];
-  
+    // Check for elements in content that are not in values to show any differences
+    let valuesIds: string[];
+    values[content.id] ? (valuesIds = Object.keys(values[content.id])) : (valuesIds = []);
+
     for (const element of updatedContent.value.content) {
-    if (
-      element.type === "interactive_input" &&
-      element.value.visible === true &&
-      !valuesIds.includes(element.value.id.toString())
-    ) {
-      const subKey = element.value.id.toString();
-   
-      scenarioDiffElements[content.id] = {
-        ...(scenarioDiffElements[content.id] || {}),
-        [subKey]: {
-          value: element.value,
-          difference: "added",
-          section: sectionNumber,
-          name: element.value.name,
-        },
-      };
+      if (
+        element.type === "interactive_input" &&
+        element.value.visible === true &&
+        !valuesIds.includes(element.value.id.toString())
+      ) {
+        const subKey = element.value.id.toString();
+
+        scenarioDiffElements[content.id] = {
+          ...(scenarioDiffElements[content.id] || {}),
+          [subKey]: {
+            value: element.value,
+            difference: "added",
+            section: sectionNumber,
+            name: element.value.name,
+          },
+        };
+      }
     }
-  }
-  return updatedContent;
+    return updatedContent;
   }
 
   return (
@@ -267,7 +272,7 @@ const ContentBlocks = ({
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "section":
-            sectionCount++; 
+            sectionCount++;
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);
             //if there are any savedValues in the parameters, these are added to the section
             const savedValuesContent =
@@ -287,6 +292,8 @@ const ContentBlocks = ({
                   savePageValues={saveSectionValues}
                   saveScenario={saveScenario}
                   scenarioDiffElements={scenarioDiffElements}
+                  wikilinks={wikilinks}
+                  pagetitle={pagetitle}
                 />
               )
             );
