@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import random
+
 from django.forms import ValidationError
 from holon.models.rule_actions import RuleAction
 from django.db import models
@@ -208,6 +210,7 @@ class RuleActionAdd(GenericRuleActionAdd, ClusterableModel):
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
+        number_generator: random.Random,
     ) -> ScenarioAggregate:
         """Apply rule action add to the scenario aggregate using objects in the repository"""
 
@@ -235,6 +238,7 @@ class RuleActionSetCount(GenericRuleActionAdd, ClusterableModel):
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
+        number_generator: random.Random,
     ) -> ScenarioAggregate:
         """Apply rule action set to the scenario aggregate using objects in the repository"""
 
@@ -262,6 +266,7 @@ class RuleActionAddMultipleUnderEachParent(GenericRuleActionAdd, ClusterableMode
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
+        number_generator: random.Random,
     ) -> ScenarioAggregate:
         """Set the number of filtered objects with the model specified in rule_action_add to value"""
 

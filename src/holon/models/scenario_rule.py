@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import random
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -281,12 +283,16 @@ class ScenarioRule(Rule):
 
         return value
 
-    def subselect_repository(self, filtered_repository: RepositoryBaseClass, value: str):
+    def subselect_repository(
+        self, filtered_repository: RepositoryBaseClass, value: str, number_generator: random.Random
+    ):
         """Apply the rule's query subselection to the filtered repository"""
 
         subselectors = self.get_filter_subselectors()
         for subselector in subselectors:
-            filtered_repository = subselector.subselect_repository(filtered_repository, value)
+            filtered_repository = subselector.subselect_repository(
+                filtered_repository, value, number_generator
+            )
 
         return filtered_repository
 
@@ -300,13 +306,14 @@ class ScenarioRule(Rule):
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
+        number_generator: random.Random,
     ):
         """Apply rule actions to filtered objects"""
 
         rule_actions = self.get_actions()
         for rule_action in rule_actions:
             scenario_aggregate = rule_action.apply_to_scenario_aggregate(
-                scenario_aggregate, filtered_repository, value
+                scenario_aggregate, filtered_repository, value, number_generator
             )
 
         return scenario_aggregate

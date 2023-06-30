@@ -1,3 +1,5 @@
+import random
+
 from django.test import TestCase
 
 from holon.models import *
@@ -68,7 +70,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "")
+        filtered_repository = self.rule.subselect_repository(full_repository, "", random.Random(42))
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[1:])
@@ -80,7 +82,9 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "2")
+        filtered_repository = self.rule.subselect_repository(
+            full_repository, "2", random.Random(42)
+        )
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[2:])
@@ -97,7 +101,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "")
+        filtered_repository = self.rule.subselect_repository(full_repository, "", random.Random(42))
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[:1])
@@ -114,7 +118,9 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "3")
+        filtered_repository = self.rule.subselect_repository(
+            full_repository, "3", random.Random(42)
+        )
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[:3])
@@ -131,7 +137,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "")
+        filtered_repository = self.rule.subselect_repository(full_repository, "", random.Random(42))
 
         # Assert
         self.assertEqual(filtered_repository.len(), 2)
@@ -149,7 +155,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "")
+        filtered_repository = self.rule.subselect_repository(full_repository, "", random.Random(42))
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[3:])
@@ -166,7 +172,9 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "50")
+        filtered_repository = self.rule.subselect_repository(
+            full_repository, "50", random.Random(42)
+        )
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[2:])
@@ -184,7 +192,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "")
+        filtered_repository = self.rule.subselect_repository(full_repository, "", random.Random(42))
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[:3])
@@ -202,7 +210,9 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "25")
+        filtered_repository = self.rule.subselect_repository(
+            full_repository, "25", random.Random(42)
+        )
 
         # Assert
         self.assertEqual(filtered_repository.all(), full_repository.all()[:1])
@@ -220,7 +230,7 @@ class RuleFilterSubSelectorTestClass(TestCase):
 
         # Act
         full_repository = self.rule.get_filtered_repository(self.scenario_aggregate)
-        filtered_repository = self.rule.subselect_repository(full_repository, "")
+        filtered_repository = self.rule.subselect_repository(full_repository, "", random.Random(42))
 
         # Assert
         self.assertEqual(filtered_repository.len(), 2)
