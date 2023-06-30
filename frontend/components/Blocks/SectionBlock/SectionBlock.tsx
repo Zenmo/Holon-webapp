@@ -393,8 +393,8 @@ export default function SectionBlock({
 
           <div className={`relative flex flex-col ${gridValue.right}`}>
             {dirtyState && (
-              <div className="absolute flex justify-center items-center p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
-                <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded">
+              <div className="absolute flex justify-center items-start p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
+                <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded sticky top-[50%]">
                   <div>
                     <h2>Reken instellingen door</h2>
                     <p>
