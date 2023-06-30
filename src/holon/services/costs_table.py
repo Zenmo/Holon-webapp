@@ -25,10 +25,12 @@ class CostTables:
                     sentry_sdk.capture_exception(
                         ValueError("CostToSelfItem with group Undefined found in main table!")
                     )
+                    continue
 
                 # remove all groups that are not the main group (to prevent double counting)
                 if cost_item.subgroup is not None:
                     main_cost_items.remove(cost_item)
+                    continue
 
         return CostTable(main_cost_items).table
 
@@ -46,10 +48,12 @@ class CostTables:
                             f"CostToSelfItem with group Undefined found in detail table for group {group}!"
                         )
                     )
+                    continue
 
                 # remove all groups that are not the main group (to prevent double counting)
                 if cost_item.subgroup is None:
                     detail_cost_items.remove(cost_item)
+                    continue
 
         table = CostTable(detail_cost_items, use_subgroup=group).table
 
