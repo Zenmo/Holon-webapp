@@ -17,6 +17,7 @@ from ..blocks import (
     TitleBlock,
     CardsBlock,
     HeaderFullImageBlock,
+    PageChooserBlock,
 )
 
 from main.snippets.storyline_page_role_type import StorylinePageRoleType
@@ -69,6 +70,31 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
     roles = ParentalManyToManyField(StorylinePageRoleType, blank=True)
     information_types = ParentalManyToManyField(StorylinePageInformationType, blank=True)
 
+    wiki_links = StreamField(
+        [
+            (
+                "cost_benefit",
+                PageChooserBlock(
+                    "main.WikiPage",
+                    required=False,
+                    helptext="Link to wiki from cost benefit page",
+                ),
+            ),
+            (
+                "holarchy",
+                PageChooserBlock(
+                    "main.WikiPage",
+                    required=False,
+                    helptext="Link to wiki from holarchy page",
+                ),
+            ),
+        ],
+        use_json_field=True,
+        blank=True,
+        null=True,
+        max_num=2,
+    )
+
     storyline = StreamField(
         [
             ("header_full_image_block", HeaderFullImageBlock()),
@@ -95,6 +121,7 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
             ],
             heading="Page data",
         ),
+        FieldPanel("wiki_links"),
         FieldPanel("storyline"),
     ]
 

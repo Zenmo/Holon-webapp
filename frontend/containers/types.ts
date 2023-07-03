@@ -54,3 +54,8 @@ export type Graphcolor = {
   name: string;
   color: string;
 }
+export type WikiLinks = {
+  id: string;
+  value: string;
+  type: string;
+}

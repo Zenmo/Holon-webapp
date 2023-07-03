@@ -91,7 +91,6 @@ class ScenarioAggregateAddTestClass(TestCase):
             eta_r=0.95,
             deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
-            id=5,
         )
 
         self.assertRaises(
@@ -106,6 +105,7 @@ class ScenarioAggregateAddTestClass(TestCase):
         ) == new_object
 
         assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 5
+        assert new_object != asset5
 
     def test_add_empty_repo_type(self):
         gridnode = GridNode(id=22)

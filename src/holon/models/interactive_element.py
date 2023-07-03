@@ -7,6 +7,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.admin.panels import PageChooserPanel
 from wagtail.core.models import Orderable
 from wagtail.snippets.models import register_snippet
+from wagtail.search import index
 from wagtailmodelchooser import Chooser, register_filter, register_model_chooser
 
 from holon.models.scenario import Scenario
@@ -35,7 +36,7 @@ class Levels(models.TextChoices):
 
 
 @register_snippet
-class InteractiveElement(ClusterableModel):
+class InteractiveElement(ClusterableModel, index.Indexed):
     scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     type = models.CharField(
@@ -85,6 +86,10 @@ class InteractiveElement(ClusterableModel):
             help_text=_("Fill in the options for the continuous input"),
             max_num=1,
         ),
+    ]
+
+    search_fields = [
+        index.SearchField("__str__"),
     ]
 
     def __str__(self):

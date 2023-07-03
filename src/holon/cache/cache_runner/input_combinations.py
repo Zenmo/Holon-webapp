@@ -89,11 +89,9 @@ def get_interactive_input_blocks_per_section(
     """Return a list of sections containing a list of interactive inputs for a on the casuspage"""
 
     try:
-        page_with_interactive_inputs: page_type = page_type.objects.descendant_of(
-            casus_page
-        ).first()
+        pages_with_interactive_inputs = list(page_type.objects.descendant_of(casus_page))
 
-        if page_with_interactive_inputs is None:
+        if len(pages_with_interactive_inputs) == 0:
             Config.logger.log_print(
                 f"No {page_type.__name__} found for for casuspage {casus_page} with id {casus_page.id}"
             )
@@ -101,7 +99,8 @@ def get_interactive_input_blocks_per_section(
 
         sections: list[StorylineSectionBlock] = [
             block
-            for block in page_with_interactive_inputs.storyline
+            for page in pages_with_interactive_inputs
+            for block in page.storyline
             if type(block.block) == StorylineSectionBlock
         ]
         interative_input_blocks_per_section = [

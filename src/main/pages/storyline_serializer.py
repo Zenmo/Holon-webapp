@@ -66,4 +66,5 @@ class StorylinePageSerializer(BasePageSerializer):
             "information_types",
             "scenario",
             "graphcolors",
+            "wiki_links",
         ] + BasePageSerializer.Meta.fields

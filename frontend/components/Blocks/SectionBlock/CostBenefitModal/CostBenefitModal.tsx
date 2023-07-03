@@ -1,7 +1,8 @@
 import CostBenefitChart from "@/components/CostBenefit/CostBenefitChart";
 import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
-import { Graphcolor } from "@/containers/types";
+import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
+import { Graphcolor, WikiLinks } from "@/containers/types";
 import { Tab } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
@@ -14,9 +15,17 @@ type Props = {
     overview: Record<string, unknown>;
   };
   graphcolors: Graphcolor[];
+  wikilinks?: WikiLinks[];
+  pagetitle?: string;
 };
 
-export default function CostBenefitModal({ handleClose, costBenefitData, graphcolors }: Props) {
+export default function CostBenefitModal({
+  handleClose,
+  costBenefitData,
+  graphcolors,
+  wikilinks,
+  pagetitle,
+}: Props) {
   const ignoredLabels = ["name", "Netto kosten"];
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [subgroup, setSubgroup] = useState("");
@@ -87,7 +96,25 @@ export default function CostBenefitModal({ handleClose, costBenefitData, graphco
                     </div>
                   )}
                 </Tab.List>
-                <h2>{tabItems[selectedIndex].tabTitle}</h2>
+                <div className="flex items-center">
+                  <h2>{tabItems[selectedIndex].tabTitle}</h2>
+                  {wikilinks
+                    ?.filter(wikilink => wikilink.type === "cost_benefit")
+                    .map((wikilink, index) => (
+                      <div className="ml-2" key={index}>
+                        <InteractiveInputPopover
+                          key={index}
+                          textColor="text-holon-blue-900"
+                          name={"Meer informatie"}
+                          titleWikiPage={
+                            'Meer informatie over Kosten en baten binnen "' + pagetitle + '"'
+                          }
+                          linkWikiPage={wikilink.value}
+                          target="_blank"
+                        />
+                      </div>
+                    ))}
+                </div>
                 <div className="xl:w-[28%] flex">
                   <button
                     type="button"
