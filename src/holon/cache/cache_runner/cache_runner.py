@@ -13,6 +13,7 @@ N_THREADS = 14
 
 
 def update_cache(
+    # leave empty for all scenarios
     scenario_ids: list[int] = [],
     delete_old_records: bool = True,
     include_storyline: bool = True,
@@ -27,6 +28,14 @@ def update_cache(
     scenarios = get_scenarios(scenario_ids)
     Config.logger.log_print(
         f"Found {len(scenarios)} to cache ({[f'{scenario} ({scenario.id})' for scenario in scenarios]})."
+    )
+
+    # sort from shortest to longest
+    scenarios = sorted(
+        scenarios,
+        key=lambda scenario: get_holon_input_combinations(
+            scenario, include_storyline, include_challenge
+        )[1],
     )
 
     # clear scenarios and call endpoint
@@ -102,6 +111,9 @@ def log_all_input_combinations(
             scenario, include_storyline, include_challenge
         )
         scenarios_with_n_combinations.append((scenario, n_combinations))
+
+    scenarios_with_n_combinations = sorted(scenarios_with_n_combinations, key=lambda x: x[1])
+
     for scenario, n_combinations in scenarios_with_n_combinations:
         Config.logger.log_print(f"Scenario {scenario} has {n_combinations} combinations")
 
