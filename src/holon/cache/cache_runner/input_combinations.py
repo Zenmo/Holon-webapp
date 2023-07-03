@@ -89,9 +89,7 @@ def get_interactive_input_blocks_per_section(
     """Return a list of sections containing a list of interactive inputs for a on the casuspage"""
 
     try:
-        pages_with_interactive_inputs = list(
-            page_type.objects.descendant_of(casus_page)
-        )
+        pages_with_interactive_inputs = list(page_type.objects.descendant_of(casus_page))
 
         if len(pages_with_interactive_inputs) == 0:
             Config.logger.log_print(
