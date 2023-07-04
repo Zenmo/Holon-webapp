@@ -104,7 +104,6 @@ export default function InteractiveInputPopover({
           )}
           {linkWikiPage && (
             <div className="mr-12 ml-4 mb-4">
-              <p className="text-sm">Link naar Wiki-pagina</p>
               {titleWikiPage && <p className="text-lg">{titleWikiPage}</p>}
               <div className="mt-4 flex justify-center">
                 <Link href={`/${linkWikiPage}`}>

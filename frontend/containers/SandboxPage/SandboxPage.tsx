@@ -4,7 +4,7 @@ import styles from "./SandboxPage.module.css";
 import { FeedbackModal } from "@/components/Blocks/ChallengeFeedbackModal/types";
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
 import { ScenarioContext } from "context/ScenarioContext";
-import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant } from "../types";
+import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant, WikiLinks } from "../types";
 
 type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
@@ -15,11 +15,15 @@ const SandboxPage = ({
   scenario,
   feedbackmodals,
   graphcolors,
+  wikiLinks,
+  title,
 }: {
   storyline: Storyline[];
   scenario: number;
   feedbackmodals: Feedbackmodals[];
   graphcolors: Graphcolor[];
+  wikiLinks: WikiLinks[];
+  title: string;
 }) => {
   return (
     <div className={styles["SandboxPage"]}>
@@ -27,6 +31,8 @@ const SandboxPage = ({
         <ContentBlocks
           content={storyline}
           graphcolors={graphcolors ?? []}
+          wikilinks={wikiLinks}
+          pagetitle={title}
           feedbackmodals={feedbackmodals}
           pagetype="Sandbox"
         />
