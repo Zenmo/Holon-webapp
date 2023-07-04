@@ -133,7 +133,7 @@ def run_input_combinations(
     )
 
     Config.logger.log_print(f"Starting ThreadPoolExecutor with {N_THREADS} cores")
-    with ThreadPoolExecutor(max_workers=14) as executor:
+    with ThreadPoolExecutor(max_workers=N_THREADS) as executor:
         executor.map(
             call_holon_endpoint,
             get_endpoint_call_input_generator(

@@ -9,6 +9,7 @@ type Props = {
   value: string | number;
   unit: string;
   view: string;
+  description: string;
 };
 
 const iconMap = {
@@ -18,7 +19,7 @@ const iconMap = {
   selfSufficiency: <MapPinIcon />,
 };
 
-export default function KPIItem({ title, label, value, unit, view }: Props) {
+export default function KPIItem({ title, label, value, unit, view, description }: Props) {
   return (
     <div className={styles[view]}>
       <div>
@@ -28,7 +29,7 @@ export default function KPIItem({ title, label, value, unit, view }: Props) {
               data-class="kpiInfo"
               textColor="text-holon-blue-900"
               name={title}
-              // Perhaps it would be better to display the text in the popover but that is a bit more work.
+              moreInformation={description}
               // This link is brittle since it is a reference to content in the CMS.
               linkWikiPage={"wiki/gebruikershandleiding/3-key-perfomance-indicatoren/kpi-" + title.toLowerCase()} />
         </span>
