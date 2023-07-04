@@ -4,7 +4,7 @@ import styles from "./ChallengeModePage.module.css";
 import { FeedbackModal } from "@/components/Blocks/ChallengeFeedbackModal/types";
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
 import { ScenarioContext } from "context/ScenarioContext";
-import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant } from "../types";
+import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant, WikiLinks } from "../types";
 
 type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
@@ -15,11 +15,15 @@ const ChallengeModePage = ({
   scenario,
   feedbackmodals,
   graphcolors,
+  wikiLinks,
+  title,
 }: {
   storyline: Storyline[];
   scenario: number;
   feedbackmodals: Feedbackmodals[];
   graphcolors: Graphcolor[];
+  wikiLinks: WikiLinks[];
+  title: string;
 }) => {
   return (
     <div className={styles["ChallengeModePage"]}>
@@ -28,6 +32,8 @@ const ChallengeModePage = ({
           content={storyline}
           graphcolors={graphcolors ?? []}
           feedbackmodals={feedbackmodals}
+          pagetitle={title}
+          wikilinks={wikiLinks}
           pagetype="Challenge"
         />
       </ScenarioContext.Provider>
