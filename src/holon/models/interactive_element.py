@@ -115,7 +115,7 @@ class InteractiveElement(ClusterableModel, index.Indexed):
         if self.type == ChoiceType.CHOICE_CONTINUOUS:
             slider: InteractiveElementContinuousValues = self.continuous_values.first()
 
-            return [str(value) for value in slider.get_possible_values()]
+            return [float_to_str(value) for value in slider.get_possible_values()]
 
         # single/multiselect
         else:
@@ -276,7 +276,7 @@ class InteractiveElementContinuousValues(ClusterableModel):
         rule_hashes = ",".join([rule.hash() for rule in self.rules.all()])
         return f"[CV{self.id},{self.slider_value_min},{self.slider_value_max},{self.discretization_steps},{rule_hashes}]"
 
-    def get_possible_values(self) -> list[int]:
+    def get_possible_values(self) -> list[float]:
         """Get a list of the possible discretized values this slider can return"""
 
         # MAKE SURE THESE ARE THE SAME VALUES AS THE FRONTEND SLIDER
@@ -284,6 +284,10 @@ class InteractiveElementContinuousValues(ClusterableModel):
             self.discretization_steps - 1
         )
 
-        return [
-            int(self.slider_value_min + i * step_size) for i in range(self.discretization_steps)
-        ]
+        return [self.slider_value_min + i * step_size for i in range(self.discretization_steps)]
+
+
+def float_to_str(number: float) -> str:
+    """Convert a float to a string, but remove trailing zeros"""
+
+    return str(number).rstrip("0").rstrip(".")
