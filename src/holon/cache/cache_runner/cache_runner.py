@@ -1,4 +1,5 @@
 import os
+import random
 from concurrent.futures import ThreadPoolExecutor
 from typing import Iterator
 
@@ -131,6 +132,14 @@ def run_input_combinations(
     Config.logger.log_print(
         f"Computed {n_combinations} unique input combinations for scenario {scenario.id}"
     )
+
+    holon_input_configurations = list(holon_input_configurations)
+    # Shuffle so that when caching is interrupted
+    # the next starts with a different combination.
+    # That way the load of all systems (Postgres, Python, AnyLogic, ETM)
+    # is the same during the run, plus we make progress from the start
+    # rather than first spending time computing cache keys which are already done.
+    random.shuffle(holon_input_configurations)
 
     Config.logger.log_print(f"Starting ThreadPoolExecutor with {N_THREADS} cores")
     with ThreadPoolExecutor(max_workers=N_THREADS) as executor:
