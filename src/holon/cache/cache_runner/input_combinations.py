@@ -149,6 +149,12 @@ def generate_interactive_input_combinations(
         for interactive_input_block in section:
             interactive_element: InteractiveElement = interactive_input_block["interactive_input"]
 
+            # The Interactive Element was could already be in the dict
+            # if it was used previously with a target value.
+            # We want to always append to the end, so we need to make explicitly remove it from the dict.
+            # We want this because the order has to be the same as the order produced by the front-end.
+            interactive_element_input_lists.pop(interactive_element.id, None)
+
             if not interactive_input_block["visible"] or interactive_input_block["locked"]:
                 interactive_element_input_lists[interactive_element.id] = [
                     InteractiveElementInput(
