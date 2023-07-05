@@ -149,15 +149,16 @@ def generate_interactive_input_combinations(
         for interactive_input_block in section:
             interactive_element: InteractiveElement = interactive_input_block["interactive_input"]
 
-            if not interactive_input_block["visible"]:
+            if not interactive_input_block["visible"] or interactive_input_block["locked"]:
                 interactive_element_input_lists[interactive_element.id] = [
                     InteractiveElementInput(
                         interactive_element,
                         interactive_input_block["default_value"],
                     )
                 ]
+
                 print(
-                    f"   - Invisible interactive element \"{interactive_element}\", default value {interactive_input_block['default_value']}"
+                    f"   - Invisible or locked interactive element \"{interactive_element}\", default value {interactive_input_block['default_value']}"
                 )
 
             else:
