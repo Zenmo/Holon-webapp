@@ -59,14 +59,6 @@ jobs:
           --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ github.ref_name }}
           --push
       - run: >
-          docker buildx build ./src
-          --file ./src/prod.Dockerfile
-          --target clean-scenarios
-          --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-clean-scenarios
-          --cache-from type=gha,scope=${{ github.ref_name }}-clean-scenarios
-          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/clean-scenarios:${{ github.ref_name }}
-          --push
-      - run: >
           docker buildx build ./frontend
           --file ./frontend/prod.Dockerfile
           --build-arg NEXT_PUBLIC_WAGTAIL_API_URL=$NEXT_PUBLIC_WAGTAIL_API_URL

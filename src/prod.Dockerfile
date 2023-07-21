@@ -35,9 +35,6 @@ RUN pip install -r ./requirements/prod.txt
 # Copy project
 COPY . $APP_HOME
 
-FROM base AS clean-scenarios
-ENTRYPOINT ["python", "manage.py", "loop_clean_scenarios"]
-
 FROM base AS wagtail
 RUN pip install gunicorn
 
