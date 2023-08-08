@@ -26,6 +26,7 @@ from holon.models.asset import (
     DieselVehicleAsset,
     DieselConsumptionAsset,
     MethaneConsumptionAsset,
+    HydrogenConsumptionAsset,
     HeatConsumptionAsset,
     ElectricConsumptionAsset,
     HybridConsumptionAsset,
@@ -114,6 +115,12 @@ class DieselConsumptionAssetSerializer(EnergyAssetSerializer):
 class MethaneConsumptionAssetSerializer(EnergyAssetSerializer):
     class Meta:
         model = MethaneConsumptionAsset
+        fields = "__all__"
+
+
+class HydrogenConsumptionAssetSerializer(EnergyAssetSerializer):
+    class Meta:
+        model = HydrogenConsumptionAsset
         fields = "__all__"
 
 

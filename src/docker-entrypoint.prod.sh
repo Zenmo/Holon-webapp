@@ -35,9 +35,12 @@ eval $(printenv | sed -n "s/^\([^=]\+\)=\(.*\)$/export \1=\2/p" | sed 's/"/\\\"/
 wait_for_db
 setup_django
 
-N_CORES=$(grep -c ^processor /proc/cpuinfo)
-# recommended by http://docs.gunicorn.org/en/stable/design.html#how-many-workers
-N_WORKERS=$(( N_CORES * 2 + 1 ))
+if [[ -z "$N_WORKERS" ]]
+then
+    N_CORES=$(grep -c ^processor /proc/cpuinfo)
+    # recommended by http://docs.gunicorn.org/en/stable/design.html#how-many-workers
+    N_WORKERS=$(( N_CORES * 2 + 1 ))
+fi
 
 echo Starting using gunicorn
 ## Long timeout because response from AnyLogic may take some time

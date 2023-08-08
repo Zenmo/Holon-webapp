@@ -17,7 +17,7 @@
                 "--nothreading"
             ],
             "django": true,
-            "justMyCode": true
+            "justMyCode": false
         }
     ]
 }
