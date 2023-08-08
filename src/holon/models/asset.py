@@ -65,6 +65,7 @@ class ConsumptionAssetType(models.TextChoices):
     DIESEL_VEHICLE = "DIESEL_VEHICLE"
     DIESEL_DEMAND = "DIESEL_DEMAND"
     METHANE_DEMAND = "METHANE_DEMAND"
+    HYDROGEN_DEMAND = "HYDROGEN_DEMAND"
 
 
 class ConsumptionAsset(EnergyAsset):
@@ -100,8 +101,14 @@ class DieselConsumptionAsset(ConsumptionAsset):
 
 class MethaneConsumptionAsset(ConsumptionAsset):
     name = "MethaneConsumptionAsset"
-    type = ConsumptionAssetType.DIESEL_DEMAND
+    type = ConsumptionAssetType.METHANE_DEMAND
     yearlyDemandMethane_kWh = models.FloatField()
+
+
+class HydrogenConsumptionAsset(ConsumptionAsset):
+    name = "HydrogenConsumptionAsset"
+    type = ConsumptionAssetType.HYDROGEN_DEMAND
+    yearlyDemandHydrogen_kWh = models.FloatField()
 
 
 class HeatConsumptionAsset(ConsumptionAsset):
