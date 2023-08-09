@@ -88,6 +88,8 @@ def calculate_holon_kpis(anylogic_outcomes: dict) -> dict:
         - (
             get_key_over_all_results("totalDieselImport_MWh")
             + get_key_over_all_results("totalMethaneImport_MWh")
+            # assumption is that all imported hydrogen is grey
+            + get_key_over_all_results("totalHydrogenImport_MWh")
             + UnsustainableImportedElectricity_MWh
         )
         / get_key_over_all_results("TotalEnergyUsed_MWh")
