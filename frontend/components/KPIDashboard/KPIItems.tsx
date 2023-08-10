@@ -44,7 +44,7 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
             label="netload"
             value={valueCheck(data[level].netload)}
             unit="%"
-            description="Deze indicator geeft de maximale belasting gedurende het jaar als percentage van het transformatorvermogen weer."
+            description="Deze indicator geeft de maximale belasting gedurende het jaar als percentage van het transformatorvermogen weer. Een negatieve netbelasting geeft aan dat de maximale belasting optreedt wanneer er een lokaal overschot aan energie is."
           />
           <KPIItem
             view={view}
