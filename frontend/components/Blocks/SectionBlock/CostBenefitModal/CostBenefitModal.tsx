@@ -8,6 +8,14 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 
+export const euroFormatter = new Intl.NumberFormat(
+    'nl-NL', {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+      maximumSignificantDigits: 4
+    })
+
 type Props = {
   handleClose: () => void;
   costBenefitData: {
