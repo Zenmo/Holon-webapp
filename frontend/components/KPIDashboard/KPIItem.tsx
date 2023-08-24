@@ -31,7 +31,8 @@ export default function KPIItem({ title, label, value, unit, view, description }
               name={title}
               moreInformation={description}
               // This link is brittle since it is a reference to content in the CMS.
-              linkWikiPage={"wiki/gebruikershandleiding/3-key-perfomance-indicatoren/kpi-" + title.toLowerCase()} />
+              linkWikiPage={"wiki/gebruikershandleiding/3-key-perfomance-indicatoren/kpi-" + title.toLowerCase()}
+              target="_blank"/>
         </span>
         <span data-class="kpiIcon">{iconMap[label]}</span>
         <div>
