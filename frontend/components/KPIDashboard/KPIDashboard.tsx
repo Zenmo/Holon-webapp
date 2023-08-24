@@ -35,7 +35,7 @@ export default function KPIDashboard({
         <Button onClick={handleClickScenario} variant="light" disabled={loading}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/imgs/save.png" alt="icon save" width={20} height={20} className="mr-2" />
-          Scenario opslaan
+          Scenario delen
         </Button>
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
