@@ -18,7 +18,7 @@ type ScenarioModal = {
       section: number,
       name?: string,
     }
-  }; 
+  };
 };
 
 export default function ScenarioModal({
@@ -51,12 +51,12 @@ export default function ScenarioModal({
   }
 
   function onSaveScenario(e) {
-    e.preventDefault(); 
+    e.preventDefault();
     handleSaveScenario(scenarioDetails.scenarioTitle, scenarioDetails.scenarioDescription);
   }
 
   function listDifferentElements(values: ScenarioModal["scenarioDiffElements"]) {
-   const elements = []; 
+   const elements = [];
     for (const key in values) {
       const value = values[key];
         for (const subKey in value) {
@@ -67,18 +67,19 @@ export default function ScenarioModal({
           }
     }
   }
-  return elements; 
+  return elements;
 }
 
   const ScenarioType = {
     saveScenario: {
-      title: "Scenario opslaan",
+      title: "Scenario delen",
       content: (
         <>
           <div>
             <div className="text-holon-blue-900 flex flex-col items-start">
               <p className="text-left">
-                Sla hier je scenario op. Let op: wijzigingen kunnen niet aan een bestaand scenario
+                Deel hier de instellingen van je scenario op.
+                Let op: wijzigingen kunnen niet aan een bestaand scenario
                 worden toegevoegd. Daarvoor moet een nieuwe link worden gegenereerd.
               </p>
               <form
@@ -113,7 +114,7 @@ export default function ScenarioModal({
                 Annuleren
               </Button>
               <Button variant="dark" type="submit" value="Submit" form="saveScenario">
-                Scenario opslaan
+                Scenario delen
               </Button>
             </div>
           </div>
@@ -155,7 +156,7 @@ export default function ScenarioModal({
                     <EnvelopeIcon className="w-4 h-4 mr-2"></EnvelopeIcon>
                     E-mail
                   </a>
-              
+
                   <a className="buttonLight mr-2" rel="noopener noreferrer"
                     target="_blank" href={`https://www.linkedin.com/sharing/share-offsite/?url=${scenarioUrl}`}>
                      {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -213,13 +214,13 @@ export default function ScenarioModal({
                   <ul>
                     {listDifferentElements(scenarioDiffElements).map((element, index) => (
                       <li className="text-sm mt-1" key={index}>{element}</li>
-                    ))} 
+                    ))}
                   </ul>
                  </div>
               </div>
             </div>
             )}
-            
+
             <div className="flex flex-row justify-center mt-2">
               <Button variant="dark" onClick={closeModal}>
                 Open scenario
