@@ -4,6 +4,7 @@ import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
+import {useLastest} from '@/utils/useLastest'
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -77,6 +78,10 @@ export default function SectionBlock({
 }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
+  const resetData = () => {
+    setKPIs(initialData);
+    setCostBenefitData({});
+  }
   const [content, setContent] = useState<Content[]>([]);
   const [initialContent, setInitialContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
@@ -199,7 +204,10 @@ export default function SectionBlock({
     setHolarchyModal(false);
   }
 
+  const latest = useLastest()
+
   function calculateKPIs(content) {
+    resetData();
     setIsInitialLoad(false);
     setLoading(true);
     const interactiveElements = content
@@ -219,7 +227,7 @@ export default function SectionBlock({
         };
       });
 
-    getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
+    latest(getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario }))
       .then(res => {
         setCostBenefitData(res.costBenefitResults);
         setKPIs(res.dashboardResults);
