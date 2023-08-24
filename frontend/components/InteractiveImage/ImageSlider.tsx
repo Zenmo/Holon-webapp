@@ -92,7 +92,8 @@ export default function ImageSlider({
             name={label}
             moreInformation={moreInformation}
             titleWikiPage={titleWikiPage}
-            linkWikiPage={linkWikiPage}></InteractiveInputPopover>
+            linkWikiPage={linkWikiPage}
+            target="_blank" />
         ) : (
           ""
         )}
