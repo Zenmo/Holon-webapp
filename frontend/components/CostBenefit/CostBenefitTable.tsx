@@ -1,13 +1,6 @@
+import {euroFormatter} from '@/components/Blocks/SectionBlock/CostBenefitModal/CostBenefitModal'
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import styles from "./CostBenefit.module.css";
-
-const numberFormatter = new Intl.NumberFormat(
-    'nl-NL', {
-      style: 'currency',
-      currency: 'EUR',
-      maximumFractionDigits: 0,
-      maximumSignificantDigits: 4
-    })
 
 export default function CostBenefitTable({ tableData }: { tableData: Array<object> }) {
   const backgroundCell = {
@@ -46,7 +39,7 @@ export default function CostBenefitTable({ tableData }: { tableData: Array<objec
         value = Math.abs(value);
     }
 
-    return sign + ' ' + numberFormatter.format(value);
+    return sign + ' ' + euroFormatter.format(value);
   }
 
   const popUp = (labelText: number, innerText: string) => {
