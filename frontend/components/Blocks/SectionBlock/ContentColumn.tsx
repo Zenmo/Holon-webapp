@@ -109,7 +109,7 @@ export default function ContentColumn({
         case "multi_select":
           const defaultValueArray = defaultValue && defaultValue.split(",");
           const targetValueArray = targetValue && targetValue.split(",");
-          const savedValueArray = savedValue && savedValue.split(","); 
+          const savedValueArray = savedValue && savedValue.split(",");
           const visible = content.value.visible;
           let options;
 
@@ -128,7 +128,7 @@ export default function ContentColumn({
                   defaultValueArray?.includes(option.label)
               );
             }
-           
+
           } else {
             options = content.value.options.filter(
               option =>
@@ -190,9 +190,7 @@ export default function ContentColumn({
   }
 
   return (
-    <div
-      data-empty="Er zijn er geen interactieve elementen in te stellen op dit niveau."
-      className="before:empty:content-[attr(data-empty)]">
+    <div>
       {content.map((ct, index) => {
         if (ct.type && ct.value && ct.type === "interactive_input" && ct.value.visible) {
           return (
