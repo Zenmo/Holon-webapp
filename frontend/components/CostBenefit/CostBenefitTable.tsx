@@ -1,4 +1,4 @@
-import {euroFormatter} from '@/components/Blocks/SectionBlock/CostBenefitModal/CostBenefitModal'
+import {betaalt, euroFormatter, ontvangt} from '@/components/Blocks/SectionBlock/CostBenefitModal/CostBenefitModal'
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import styles from "./CostBenefit.module.css";
 
@@ -77,11 +77,11 @@ export default function CostBenefitTable({ tableData }: { tableData: Array<objec
                 : tableCellValue < 0
                 ? popUp(
                     tableCellValue,
-                    ` ${heading} betaalt ${valueCheck(Math.abs(tableCellValue))} aan ${titleItem}`
+                    ` ${heading} ${betaalt(heading)} ${valueCheck(Math.abs(tableCellValue))} aan ${titleItem}`
                   )
                 : popUp(
                     tableCellValue,
-                    `${heading} ontvangt ${valueCheck(Math.abs(tableCellValue))} van ${titleItem}`
+                    `${heading} ${ontvangt(heading)} ${valueCheck(Math.abs(tableCellValue))} van ${titleItem}`
                   )}
             </td>
           );

@@ -1,4 +1,4 @@
-import {euroFormatter} from '@/components/Blocks/SectionBlock/CostBenefitModal/CostBenefitModal'
+import {betaalt, euroFormatter, ontvangt} from '@/components/Blocks/SectionBlock/CostBenefitModal/CostBenefitModal'
 import React from "react";
 
 import {
@@ -62,8 +62,8 @@ export default function CostBenefitChart({
         <div className="p-2 z-10 bg-holon-blue-900 border-2 border-solid text-white rounded-md border-holon-gray-300">
           {`${label}${
             activeItem.value < 0
-              ? ` betaalt ${convertToPositiveEuro(activeItem.value)}  aan `
-              : ` ontvangt ${convertToPositiveEuro(activeItem.value)} van `
+              ? ` ${betaalt(label)} ${convertToPositiveEuro(activeItem.value)}  aan `
+              : ` ${ontvangt(label)} ${convertToPositiveEuro(activeItem.value)} van `
           } ${activeItem.name} `}
         </div>
       );
