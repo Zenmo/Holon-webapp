@@ -3,9 +3,20 @@
 
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom/extend-expect";
 import "@testing-library/jest-dom";
 
 import JestFetchMock from "jest-fetch-mock";
+
+// Mock next/router because it gives an error when running outside of the Next.js environment
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "",
+      pathname: "",
+      query: "",
+      asPath: "",
+    };
+  },
+}));
 
 JestFetchMock.enableMocks();

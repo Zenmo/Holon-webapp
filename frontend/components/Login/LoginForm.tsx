@@ -89,10 +89,12 @@ export default function LoginForm() {
         <div className="flex justify-between flex-col sm:flex-row">
           <p className="flex flex-row py-3 mt-8">
             Nog geen account? &nbsp;
-            <Link href="/registratie">
-              <a className="underline decoration-holon-blue-900 decoration-2 underline-offset-4 hover:underline hover:decoration-gray-300 hover:decoration-2 hover:underline-offset-4 sm:p-0">
+            <Link
+              href="/registratie"
+              className="underline decoration-holon-blue-900 decoration-2 underline-offset-4 hover:underline hover:decoration-gray-300 hover:decoration-2 hover:underline-offset-4 sm:p-0">
+              
                 Registreer je
-              </a>
+              
             </Link>
           </p>
           <button type="submit" className="buttonDark nowrap mt-8">

@@ -2,9 +2,14 @@ import querystring from "querystring";
 import { keysToCamelFromSnake, keysToSnakeFromCamel } from "../utils/caseconverters";
 
 const API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL;
+
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL || "/wt/api/nextjs"; // Use environment variable for browser requests if it exists and the domain root if this variable is empty on production
 
-export async function getPage(path, params, options) {
+export async function getPage(path: string, params, options) {
+  if (path.includes('v1/page_by_path')) {
+    throw new Error(`Aborting possibly recursive request for ${path} with params ${JSON.stringify(params)}`)
+  }
+
   params = params || {};
   params = {
     htmlPath: path,
@@ -66,7 +71,8 @@ export async function getRequest(url, params?, options?) {
     ...headers,
   };
   const queryString = querystring.stringify(params);
-  const res = await fetch(`${url}?${queryString}`, { headers });
+  const fullUrl = `${url}?${queryString}`
+  const res = await fetch(fullUrl, { headers });
 
   if (res.status < 200 || res.status >= 300) {
     const error = new WagtailApiResponseError(res, url, params);

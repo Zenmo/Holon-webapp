@@ -106,12 +106,13 @@ export default function InteractiveInputPopover({
             <div className="mr-12 ml-4 mb-4">
               {titleWikiPage && <p className="text-lg">{titleWikiPage}</p>}
               <div className="mt-4 flex justify-center">
-                <Link href={`/${linkWikiPage}`}>
-                  <a
-                    target={target && target}
-                    className={`gap-4 border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-flex relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}>
+                <Link
+                  href={`/${linkWikiPage}`}
+                  target={target && target}
+                  className={`gap-4 border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-flex relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}>
+                  
                     Lees meer
-                  </a>
+                  
                 </Link>
               </div>
             </div>
