@@ -15,8 +15,7 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
     if (value == undefined || loading) {
       return "-";
     } else if (typeof value == "number") {
-      value = Math.round(value * 10) / 10;
-      return value;
+      return value.toFixed(1)
     } else {
       return value;
     }
@@ -24,14 +23,23 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
 
   function valueCosts(level: string) {
     let value = data[level].costs;
-    if (level == "local") {
-      // divides by 1e3 because "k euro"
-      typeof value == "number" ? (value = value / 1e3) : (value = value);
-    } else {
-      // divides by 1e9 because "mld euro"
-      typeof value == "number" ? (value = value / 1e9) : (value = value);
+    let unitPrefix = ""
+
+    if (value > 1e9) {
+      value = value / 1e9;
+      unitPrefix = "mld.";
+    } else if (value > 1e6) {
+      value = value / 1e6;
+      unitPrefix = "mln.";
+    } else if (value > 1e3) {
+      value = value / 1e3;
+      unitPrefix = "k.";
     }
-    return valueCheck(value);
+
+    return {
+      value: valueCheck(value),
+      unitPrefix,
+    };
   }
 
   return (
@@ -44,14 +52,14 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
             label="netload"
             value={valueCheck(data[level].netload)}
             unit="%"
-            description="Deze indicator geeft de maximale belasting gedurende het jaar als percentage van het transformatorvermogen weer."
+            description="Deze indicator geeft de maximale belasting gedurende het jaar als percentage van het transformatorvermogen weer. Een negatieve netbelasting geeft aan dat de maximale belasting optreedt wanneer er een lokaal overschot aan energie is."
           />
           <KPIItem
             view={view}
             title="Betaalbaarheid"
             label="costs"
-            unit={level === "local" ? "k.EUR/jaar" : "mld.EUR/jaar"}
-            value={valueCosts(level)}
+            unit={valueCosts(level).unitPrefix + "EUR/jaar"}
+            value={valueCosts(level).value}
             description="Op lokaal niveau geeft deze indicator de totale jaarlijkse kosten voor de energievoorziening van het gesimuleerde gebied (EUR/jaar) weer."
           />
           <KPIItem

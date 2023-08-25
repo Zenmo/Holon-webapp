@@ -1,3 +1,4 @@
+import {betaalt, euroFormatter, ontvangt} from '@/components/Blocks/SectionBlock/CostBenefitModal/CostBenefitModal'
 import React from "react";
 
 import {
@@ -29,9 +30,8 @@ export default function CostBenefitChart({
     );
   };
 
-  const convertToPositiveEuro = (tickItem: number) => {
-    return "€ " + Math.abs(tickItem);
-  };
+  const convertToPositiveEuro = (tickItem: number) =>
+    euroFormatter.format(Math.abs(tickItem));
 
   const values = chartdata.flatMap(innerArr => Object.values(innerArr).flat());
   const numberValues = values.map(Number).filter(Number.isFinite);
@@ -62,8 +62,8 @@ export default function CostBenefitChart({
         <div className="p-2 z-10 bg-holon-blue-900 border-2 border-solid text-white rounded-md border-holon-gray-300">
           {`${label}${
             activeItem.value < 0
-              ? ` betaalt ${convertToPositiveEuro(activeItem.value)}  aan `
-              : ` ontvangt ${convertToPositiveEuro(activeItem.value)} van `
+              ? ` ${betaalt(label)} ${convertToPositiveEuro(activeItem.value)}  aan `
+              : ` ${ontvangt(label)} ${convertToPositiveEuro(activeItem.value)} van `
           } ${activeItem.name} `}
         </div>
       );
@@ -82,12 +82,12 @@ export default function CostBenefitChart({
               margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="2" vertical={false} />
               <XAxis orientation="top" dataKey="name" axisLine={false} />
-              <YAxis tickFormatter={convertToPositiveEuro} domain={[newMin, newMax]}>
+              <YAxis tickFormatter={convertToPositiveEuro} width={120} domain={[newMin, newMax]}>
                 <Label
                   position="center"
                   angle={-90}
                   value="← Kosten &nbsp;  &nbsp; &nbsp; &nbsp;  Baten &nbsp;  →"
-                  dx={-25}
+                  dx={-45}
                 />
               </YAxis>
               <Tooltip content={<CustomTooltip />} itemSorter={item => item.value} />

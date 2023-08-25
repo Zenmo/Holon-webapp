@@ -1,3 +1,4 @@
+import {betaalt, euroFormatter, ontvangt} from '@/components/Blocks/SectionBlock/CostBenefitModal/CostBenefitModal'
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
 import styles from "./CostBenefit.module.css";
 
@@ -30,11 +31,15 @@ export default function CostBenefitTable({ tableData }: { tableData: Array<objec
   function valueCheck(value: number | undefined) {
     if (!value) {
       return "-";
-    } else if (value >= 0) {
-      return "€ " + value;
-    } else if (value < 0) {
-      return "-€ " + Math.abs(value);
     }
+
+    let sign = "";
+    if (value < 0) {
+        sign = "-";
+        value = Math.abs(value);
+    }
+
+    return sign + ' ' + euroFormatter.format(value);
   }
 
   const popUp = (labelText: number, innerText: string) => {
@@ -72,11 +77,11 @@ export default function CostBenefitTable({ tableData }: { tableData: Array<objec
                 : tableCellValue < 0
                 ? popUp(
                     tableCellValue,
-                    ` ${heading} betaalt ${valueCheck(Math.abs(tableCellValue))} aan ${titleItem}`
+                    ` ${heading} ${betaalt(heading)} ${valueCheck(Math.abs(tableCellValue))} aan ${titleItem}`
                   )
                 : popUp(
                     tableCellValue,
-                    `${heading} ontvangt ${valueCheck(Math.abs(tableCellValue))} van ${titleItem}`
+                    `${heading} ${ontvangt(heading)} ${valueCheck(Math.abs(tableCellValue))} van ${titleItem}`
                   )}
             </td>
           );

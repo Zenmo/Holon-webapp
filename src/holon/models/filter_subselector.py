@@ -48,7 +48,10 @@ class FilterSubSelector(PolymorphicModel):
             raise ValidationError("number of items should be larger than zero")
 
     def subselect_repository(
-        self, repository: RepositoryBaseClass, value: str
+        self,
+        repository: RepositoryBaseClass,
+        value: str,
+        number_generator: random.Random,
     ) -> RepositoryBaseClass:
         """Return a subset of items from the object list"""
         pass
@@ -60,7 +63,10 @@ class Skip(FilterSubSelector):
     rule = ParentalKey("holon.Rule", on_delete=models.CASCADE, related_name="subselector_skips")
 
     def subselect_repository(
-        self, repository: RepositoryBaseClass, value: str
+        self,
+        repository: RepositoryBaseClass,
+        value: str,
+        number_generator: random.Random,
     ) -> RepositoryBaseClass:
         """Skip a number of items in the object list"""
 
@@ -104,7 +110,10 @@ class Take(FilterSubSelector):
         )
 
     def subselect_repository(
-        self, repository: RepositoryBaseClass, value: str
+        self,
+        repository: RepositoryBaseClass,
+        value: str,
+        number_generator: random.Random,
     ) -> RepositoryBaseClass:
         """Take a number of items from the object list, either the first n or random n"""
 
@@ -124,5 +133,5 @@ class Take(FilterSubSelector):
 
         elif self.mode == TakeMode.RANDOM.value:
             indices = range(repository.len())
-            random_indices = random.sample(indices, k=n)
+            random_indices = number_generator.sample(indices, k=n)
             return repository.get_subset_range(indices=random_indices)

@@ -8,6 +8,24 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 
+export const euroFormatter = new Intl.NumberFormat(
+    'nl-NL', {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+      maximumSignificantDigits: 4
+    })
+
+export const isPlural = (groupName: string) =>
+    groupName.slice(-1) === "s"
+    || groupName.slice(-2) === "en"
+
+export const betaalt = (groupName: string) =>
+    isPlural(groupName) ? "betalen" : "betaalt"
+
+export const ontvangt = (groupName: string) =>
+    isPlural(groupName) ? "ontvangen" : "ontvangt"
+
 type Props = {
   handleClose: () => void;
   costBenefitData: {

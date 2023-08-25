@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import random
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -62,15 +64,14 @@ class RuleActionAttributeNoise(RuleAction):
     def hash(self):
         return f"[A{self.id},{self.model_attribute},{self.noise_type},{self.min_value},{self.max_value},{self.mean},{self.sigma}]"
 
-    def __apply_noise(self, value: float):
+    def __apply_noise(self, value: float, number_generator: random.Random):
         """Cast the input value to the same type of the old value and apply the chosen operator"""
-
         if self.noise_type == NoiseType.UNIFORM.value:
-            return value + np.random.uniform(self.min_value, self.max_value)
+            return value + number_generator.uniform(self.min_value, self.max_value)
         elif self.noise_type == NoiseType.NORMAL.value:
-            return value + np.random.normal(self.mean, self.sigma)
+            return value + number_generator.gauss(self.mean, self.sigma)
         elif self.noise_type == NoiseType.TRIANGLE.value:
-            return value + np.random.triangular(self.min_value, self.mean, self.max_value)
+            return value + number_generator.triangular(self.min_value, self.mean, self.max_value)
 
         raise NotImplementedError(
             f"RuleActionAttributeNoise: Noise type {self.noise_type} not recognized"
@@ -81,6 +82,7 @@ class RuleActionAttributeNoise(RuleAction):
         scenario_aggregate: ScenarioAggregate,
         filtered_repository: RepositoryBaseClass,
         value: str,
+        number_generator: random.Random,
     ) -> ScenarioAggregate:
         """Apply noise to attributes of objects in the repository"""
 
@@ -89,7 +91,7 @@ class RuleActionAttributeNoise(RuleAction):
         # apply operators to objects
         for filtered_object in filtered_repository.all():
             value = float(getattr(filtered_object, model_attribute))
-            new_value = self.__apply_noise(value)
+            new_value = self.__apply_noise(value, number_generator)
 
             setattr(filtered_object, model_attribute, new_value)
             scenario_aggregate.repositories[filtered_repository.base_model_type.__name__].update(
