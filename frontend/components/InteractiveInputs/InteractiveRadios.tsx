@@ -32,7 +32,8 @@ function InteractiveRadios({
             name={name}
             moreInformation={moreInformation}
             titleWikiPage={titleWikiPage}
-            linkWikiPage={linkWikiPage}></InteractiveInputPopover>
+            linkWikiPage={linkWikiPage}
+            target="_blank" />
         ) : (
           ""
         )}
@@ -75,7 +76,8 @@ function InteractiveRadios({
                 legal_limitation={inputItem.legalLimitation}
                 color={inputItem.color}
                 titleWikiPage={inputItem.titleWikiPage}
-                linkWikiPage={inputItem.linkWikiPage}></InteractiveInputPopover>
+                linkWikiPage={inputItem.linkWikiPage}
+                target="_blank" />
             ) : (
               ""
             )}

@@ -4,6 +4,7 @@ import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
+import {useLastest} from '@/utils/useLastest'
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -77,6 +78,10 @@ export default function SectionBlock({
 }: Props) {
   const [kpis, setKPIs] = useState(initialData);
   const [costBenefitData, setCostBenefitData] = useState({});
+  const resetData = () => {
+    setKPIs(initialData);
+    setCostBenefitData({});
+  }
   const [content, setContent] = useState<Content[]>([]);
   const [initialContent, setInitialContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
@@ -199,7 +204,10 @@ export default function SectionBlock({
     setHolarchyModal(false);
   }
 
+  const latest = useLastest()
+
   function calculateKPIs(content) {
+    resetData();
     setIsInitialLoad(false);
     setLoading(true);
     const interactiveElements = content
@@ -219,7 +227,7 @@ export default function SectionBlock({
         };
       });
 
-    getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario })
+    latest(getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario }))
       .then(res => {
         setCostBenefitData(res.costBenefitResults);
         setKPIs(res.dashboardResults);
@@ -396,25 +404,31 @@ export default function SectionBlock({
               <div className="absolute flex justify-center items-start p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
                 <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded sticky top-[50%]">
                   <div>
-                    <h2>Reken instellingen door</h2>
-                    <p>
-                      Heb je alle instellingen goed ingesteld, reken dan in een keer alles door. Na
-                      het rekenen zijn de resultaten in het dashboard zichtbaar. Niet het gewenste
-                      resultaat? Maak wijzigingen en reken nogmaals alle instellingen door.
-                    </p>
-
                     <div className="flex justify-center mt-6 items-center">
-                      <button className="font-bold mr-3 mb-4" onClick={() => resetContent()}>
-                        Reset instellingen
-                      </button>
                       <Button
                         onClick={() => {
                           debouncedCalculateKPIs(content);
                           setDirtyState(false);
                         }}>
-                        Reken door
+                        Reken ingesteld scenario door
                       </Button>
+                      <button className="font-bold pl-3 pb-4" onClick={() => resetContent()}>
+                        Reset instellingen
+                      </button>
                     </div>
+                    <p className="mb-4">
+                      Heb je het energiesysteem zo ingesteld als je wilt?
+                      Klik dan op &apos;Reken ingesteld scneario door&apos; hierboven.
+                      Het holon-simulatiemodel bouwt je ingestelde energiesysteem op
+                      en simuleert het gedrag van iedere energie-asset over een heel jaar.
+                      De resultaten worden samengevat in de vier KPIs.
+                    </p>
+                    <p>
+                      Wil je meer inzicht in de dynamieken, echte data inladen,
+                      of ander gedrag en funcionaliteiten? Waarschijnlijk kan dat,
+                      het simulatiemodel kan veel meer dan wat we hier aan gebruikers kunnen aanbieden.
+                      Informeer via <a style={{display: 'inline'}} href="mailto:info@holontool.nl">info@holontool.nl</a>.
+                    </p>
                   </div>
                 </div>
               </div>
