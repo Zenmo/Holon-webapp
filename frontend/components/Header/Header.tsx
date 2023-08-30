@@ -14,17 +14,15 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
     <nav className="sticky top-0 z-50 bg-white py-6 rounded dark:bg-gray-900 shadow-sm">
       <div className="holonContentContainer px-10 lg:px-16">
         <div className="flex flex-wrap justify-between items-center mx-auto">
-          <Link href="/" className="flex items-center">
-            <a className=" text-left uppercase text-2xl font-bold text-holon-blue-900 dark:text-white">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/imgs/logo_homepagina.png"
-                alt="logo and link homepage Holon"
-                width={150}
-                height={150}
-                className="mr-2"
-              />
-            </a>
+          <Link href="/" className="flex items-center text-left uppercase text-2xl font-bold text-holon-blue-900 dark:text-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/imgs/logo_homepagina.png"
+              alt="logo and link homepage Holon"
+              width={150}
+              height={150}
+              className="mr-2"
+            />
           </Link>
           <button
             onClick={() => handleClick()}

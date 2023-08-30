@@ -23,7 +23,7 @@ function BreadcrumbItem({ listItem }: BreadcrumbItemProps) {
   return (
     <li className="flex">
       {listItem.relativeUrl.length ? (
-        <Link href={"/wiki/" + listItem.relativeUrl}>{listItem.title}</Link>
+        <Link href={"/wiki/" + listItem.relativeUrl} legacyBehavior>{listItem.title}</Link>
       ) : (
         <span>{listItem.title}</span>
       )}

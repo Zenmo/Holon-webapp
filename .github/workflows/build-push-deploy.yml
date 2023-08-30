@@ -1,0 +1,188 @@
+name: Build and deploy to Azure Container Apps
+
+on:
+  push:
+    branches:
+      - main
+      - production
+      - acceptance
+      - container-apps
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  variables:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.variables.outputs.result }}
+      tag: ${{ steps.tag.outputs.result }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Variables
+        uses: actions/github-script@v6
+        id: variables
+        with:
+          script: |
+            const getVariables = require('./.github/workflows/get-variables.js')
+            return getVariables('${{ github.ref_name }}')
+      - name: Tag
+        uses: actions/github-script@v6
+        id: tag
+        with:
+          result-encoding: string
+          script: return '${{ github.ref_name }}-${{ github.run_number }}'
+
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    ## Ideally we shouldn't expose environment variables for runtime during build time.
+    ## This is necessary just to bundle the backend URL in the browser JavaScript.
+    needs: variables
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@main
+      - name: Authenticate with Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      # Create environment variables ACTIONS_RUNTIME_TOKEN and ACTIONS_CACHE_URL
+      # to let docker access the cache.
+      - name: Expose variables
+        uses: crazy-max/ghaction-github-runtime@v2
+      # Need to use driver --driver=docker-container to use GitHub cache integration.
+      # The GitHub cache is per-branch.
+      - name: Docker build and push
+        run: docker buildx create --use --driver=docker-container
+      - run: >
+          docker buildx build ./src
+          --file ./src/prod.Dockerfile
+          --target wagtail
+          --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-wagtail
+          --cache-from type=gha,scope=${{ github.ref_name }}-wagtail
+          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ needs.variables.outputs.tag }}
+          --push
+      - run: >
+          docker buildx build ./frontend
+          --file ./frontend/prod.Dockerfile
+          --build-arg NEXT_PUBLIC_WAGTAIL_API_URL=https://${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}/wt/api/nextjs
+          --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-nextjs
+          --cache-from type=gha,scope=${{ github.ref_name }}-nextjs
+          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ needs.variables.outputs.tag }}
+          --push
+
+  ## This job takes pretty long and can be split up to parallelize the deploy.
+  deploy-wagtail:
+    needs:
+      - build-and-push-images
+      - variables
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          ## https://github.com/Azure/login#configure-a-service-principal-with-a-secret
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#      - name: Create app environment
+#        uses: azure/CLI@v1
+#        with:
+#          azcliversion: 2.51.0
+#          inlineScript: >
+#            az containerapp env create
+#            --name holon-env
+#            --location westeurope
+#            --resource-group HOLON-webapp
+      - name: Deploy-Wagtail
+        uses: azure/CLI@v1
+        with:
+          ## Use generic azure/CLI@v1 instead of specific azure/container-apps-deploy-action@v1
+          ## because it supports the options that we want.
+          azcliversion: 2.51.0
+          inlineScript: >
+            az containerapp create
+            --resource-group HOLON-webapp
+            --environment holon-env
+            --name wagtail-${{ github.ref_name }}
+            --env-vars
+            ALLOWED_HOSTS="*"
+            AZURE_ACCOUNT_NAME=holonstorage
+            AZURE_STORAGE_KEY=${{ secrets.AZURE_STORAGE_KEY }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_NAME=${{ fromJson(needs.variables.outputs.result).DB_NAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            RETURN_SCENARIO=${{ fromJson(needs.variables.outputs.result).RETURN_SCENARIO }}
+            SECRET_KEY="${{ secrets.SECRET_KEY }}"
+            SENTRY_DSN=https://764e9f2b886741bcbcfd2acd74a7f7b0@o4505045746384896.ingest.sentry.io/4505045759361024
+            SENTRY_ENVIRONMENT=${{ fromJson(needs.variables.outputs.result).SENTRY_ENVIRONMENT }}
+            DOMAIN_HOST=${{ fromJson(needs.variables.outputs.result).DOMAIN_HOST }}
+            N_WORKERS=2
+            --target-port 8000
+            --ingress external
+            --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ needs.variables.outputs.tag }}
+            --registry-username ${{ secrets.REGISTRY_USERNAME }}
+            --registry-password ${{ secrets.REGISTRY_PASSWORD }}
+            --registry-server ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            --cpu 0.25
+            --memory 0.5
+            --min-replicas 1
+            --max-replicas 1
+      - name: Bind-Wagtail
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.51.0
+          inlineScript: >
+            az containerapp hostname bind
+            --resource-group HOLON-webapp
+            --environment holon-env
+            --name wagtail-${{ github.ref_name }}
+            --hostname ${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}
+
+
+  deploy-next:
+    needs:
+      - build-and-push-images
+      - variables
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          ## https://github.com/Azure/login#configure-a-service-principal-with-a-secret
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy-Next.js
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.51.0
+          inlineScript: >
+            az containerapp create
+            --resource-group HOLON-webapp
+            --name next-${{ github.ref_name }}
+            --environment holon-env
+            --env-vars
+            NEXT_PUBLIC_BASE_URL=http://wagtail-${{ github.ref_name }}/wt/api/nextjs
+            NEXT_PUBLIC_WAGTAIL_API_URL=https://${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}/wt/api/nextjs
+            NEXT_PUBLIC_TINY_URL_API_KEY=${{ secrets.TINY_URL_API_KEY }}
+            --target-port 3000
+            --ingress external
+            --tags branch=${{ github.ref_name }}
+            --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ needs.variables.outputs.tag }}
+            --registry-username ${{ secrets.REGISTRY_USERNAME }}
+            --registry-password ${{ secrets.REGISTRY_PASSWORD }}
+            --registry-server ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            --cpu 0.25
+            --memory 0.5
+            --min-replicas 1
+            --max-replicas 1
+      - name: Bind-Next.js
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.51.0
+          inlineScript: >
+            az containerapp hostname bind
+            --resource-group HOLON-webapp
+            --environment holon-env
+            --name next-${{ github.ref_name }}
+            --hostname ${{ fromJson(needs.variables.outputs.result).NEXT_HOSTNAME }}
