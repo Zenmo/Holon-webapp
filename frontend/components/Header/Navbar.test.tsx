@@ -1,17 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import Navbar from "./Navbar";
 
-jest.mock("next/router", () => ({
-  useRouter() {
-    return {
-      route: "",
-      pathname: "",
-      query: "",
-      asPath: "",
-    };
-  },
-}));
-
 describe("<Navbar />", () => {
   beforeEach(() => {
     render(

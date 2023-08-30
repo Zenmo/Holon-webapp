@@ -1,17 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import StorylineOverview from "./StorylineOverview";
 
-jest.mock("next/router", () => ({
-  useRouter() {
-    return {
-      route: "",
-      pathname: "",
-      query: "",
-      asPath: "",
-    };
-  },
-}));
-
 describe("<StorylineOverview />", () => {
   describe("renders an empty StorylineOverview", () => {
     beforeEach(() => {
