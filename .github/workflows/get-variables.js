@@ -8,6 +8,11 @@ const configPerBranch = {
         DOMAIN_HOST: 'https://test.holontool.nl',
         DJANGO_SETTINGS_MODULE: 'pipit.settings.test',
         WAGTAIL_HOSTNAME: 'cms-test.holontool.nl',
+        wagtail: {
+            CPU: '0.25',
+            MEMORY: '0.5',
+            N_WORKERS: '4',
+        }
     },
     acceptance: {
         DB_NAME: 'holon-wagtail-v2-acceptatie',
@@ -17,6 +22,11 @@ const configPerBranch = {
         DOMAIN_HOST: 'https://acceptatie.holontool.nl',
         DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms-acceptatie.holontool.nl',
+        wagtail: {
+            CPU: '0.25',
+            MEMORY: '0.5',
+            N_WORKERS: '4',
+        }
     },
     production: {
         DB_NAME: 'holon-wagtail-v2',
@@ -26,10 +36,14 @@ const configPerBranch = {
         DOMAIN_HOST: 'https://holontool.nl',
         DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms.holontool.nl',
+        // It seems we only need to scale Wagtail but not Next.js
+        wagtail: {
+            CPU: '0.5',
+            MEMORY: '1',
+            N_WORKERS: '8',
+        }
     },
 }
-
-configPerBranch['container-apps'] = configPerBranch['main']
 
 module.exports = (branchName) => {
     if (!Object.keys(configPerBranch).includes(branchName)) {

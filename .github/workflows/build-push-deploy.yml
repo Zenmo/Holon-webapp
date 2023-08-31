@@ -6,7 +6,6 @@ on:
       - main
       - production
       - acceptance
-      - container-apps
   workflow_dispatch:
 
 permissions:
@@ -118,17 +117,17 @@ jobs:
             SENTRY_DSN=https://764e9f2b886741bcbcfd2acd74a7f7b0@o4505045746384896.ingest.sentry.io/4505045759361024
             SENTRY_ENVIRONMENT=${{ fromJson(needs.variables.outputs.result).SENTRY_ENVIRONMENT }}
             DOMAIN_HOST=${{ fromJson(needs.variables.outputs.result).DOMAIN_HOST }}
-            N_WORKERS=2
+            N_WORKERS=${{ fromJson(needs.variables.outputs.result).wagtail.N_WORKERS }}
             --target-port 8000
             --ingress external
             --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ needs.variables.outputs.tag }}
             --registry-username ${{ secrets.REGISTRY_USERNAME }}
             --registry-password ${{ secrets.REGISTRY_PASSWORD }}
             --registry-server ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            --cpu 0.25
-            --memory 0.5
+            --cpu ${{ fromJson(needs.variables.outputs.result).wagtail.CPU }}
+            --memory ${{ fromJson(needs.variables.outputs.result).wagtail.MEMORY }}
             --min-replicas 1
-            --max-replicas 1
+            --max-replicas 2
       - name: Bind-Wagtail
         uses: azure/CLI@v1
         with:
