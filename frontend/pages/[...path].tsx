@@ -38,7 +38,6 @@ export async function getServerSideProps({ req, params, res }) {
     } = await getPage("/", queryParams, {
       headers: {
         cookie: req.headers.cookie,
-        host,
       },
     });
 
@@ -54,7 +53,6 @@ export async function getServerSideProps({ req, params, res }) {
     } = await getPage(path, queryParams, {
       headers: {
         cookie: req.headers.cookie,
-        host,
       },
     });
 

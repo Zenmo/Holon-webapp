@@ -1,4 +1,4 @@
-// import i18n from '../../i18n';
+
 import { basePageWrap } from "@/containers/BasePage";
 import LoginForm from "@/components/Login";
 

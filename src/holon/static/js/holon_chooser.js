@@ -151,10 +151,9 @@ $(document).ready(function () {
 
                     const interactiveElementName = $(element)
                         .closest(".w-panel__content")
-                        .find("span.title")[0];
+                        .find(".chooser__title")[0];
 
-                    let name, type, options;
-                    [name, type, options] =
+                    const [scenarioName, name, type, options] =
                         interactiveElementName.innerText.split("|");
                     interactiveElementName.innerText = name;
                     if (type !== "single_select") {
@@ -165,9 +164,9 @@ $(document).ready(function () {
                         if (defaultValueInput.prop("tagName") !== "INPUT")
                             convertSelectToInput(defaultValueInput);
                         defaultValueInput.attr("type", "number");
-                        defaultValueInput.attr("min", "0");
-                        defaultValueInput.attr("max", "100");
-                        label.text("Default value (between 0 and 100)");
+                        // defaultValueInput.attr("min", "0");
+                        // defaultValueInput.attr("max", "100");
+                        // label.text("Default value (between 0 and 100)");
                     } else {
                         convertInputToSelect(
                             defaultValueInput,

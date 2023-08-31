@@ -28,7 +28,7 @@ interface DocumentItemProps {
 
 function Document({ docItem }: DocumentItemProps) {
   return (
-    <Link href={docItem.relativeUrl}>
+    <Link href={docItem.relativeUrl} legacyBehavior>
       <span className={"block cursor-pointer bg-inherit pr-4 pt-1 pb-3 "}>{docItem.title}</span>
     </Link>
   );
@@ -38,7 +38,7 @@ function Folder({ folderItem }: FolderItemProps) {
   return (
     <details open className="order-1 p-0 ">
       <summary className="text-md cursor-pointer bg-inherit py-3 pr-4">
-        <Link href={folderItem.relativeUrl}>
+        <Link href={folderItem.relativeUrl} legacyBehavior>
           <strong>{folderItem.title}</strong>
         </Link>
       </summary>
