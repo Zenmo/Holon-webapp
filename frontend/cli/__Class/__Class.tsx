@@ -1,6 +1,4 @@
 import { PureComponent } from 'react';
-
-// import i18n from '../../i18n';
 // import PropTypes from 'prop-types';
 import { basePageWrap } from '../BasePage';
 import styles from './__Class.module.css';

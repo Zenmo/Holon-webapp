@@ -25,8 +25,14 @@ const appInsights = new ApplicationInsights({
   },
 });
 
-if (typeof window !== "undefined") {
-  appInsights.loadAppInsights();
+// Prevent loading twice in case the user clears cookies and then accepts the cookie banner again.
+let isLoaded = false;
+
+const loadAppInsights = () => {
+    if (typeof window !== "undefined" && !isLoaded) {
+        isLoaded = true;
+        appInsights.loadAppInsights();
+    }
 }
 
-export { appInsights, reactPlugin };
+export { loadAppInsights, reactPlugin };

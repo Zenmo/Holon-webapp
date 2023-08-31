@@ -1,12 +1,11 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
-import { initGA } from "@/utils/gtag";
 import { getCookieConsentValue } from "react-cookie-consent";
 import CookieBar from "@/components/CookieBar";
 import Header from "@/components/Header/Header";
 import { NavItem } from "@/api/types";
+import {loadAppInsights} from "@/utils/appInsightsHistory";
 
 const WagtailUserbar = dynamic(() => import("@/components/WagtailUserbar"));
 
@@ -51,10 +50,6 @@ const BasePage = ({ children, navigation, seo = {}, staticPageTitle, wagtailUser
     canonicalLink,
   } = seo;
 
-  useEffect(() => {
-    getCookieConsentValue() === "true" && initGA();
-  }, []);
-
   return (
     <>
       <Head>
@@ -77,7 +72,7 @@ const BasePage = ({ children, navigation, seo = {}, staticPageTitle, wagtailUser
       </Head>
       <Header navigation={navigation} />
       <div className="BasePage">{children}</div>
-      <CookieBar onAccept={initGA} />
+      <CookieBar onAccept={loadAppInsights} />
       {!!wagtailUserbar && <WagtailUserbar {...wagtailUserbar} />}
     </>
   );
