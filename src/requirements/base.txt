@@ -19,6 +19,7 @@ djangorestframework-simplejwt==5.2.2
 django-rest-polymorphic==0.1.10
 wagtail-color-panel==1.4.1
 drf-spectacular==0.26.2
+base58==2.1.1
 
 # cloudclient
 anylogiccloudclient @ https://cloud.anylogic.com/files/api-8.5.0/clients/anylogiccloudclient-8.5.0-py3-none-any.whl#egg=anylogiccloudclient

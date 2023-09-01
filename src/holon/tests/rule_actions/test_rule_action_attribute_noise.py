@@ -5,6 +5,7 @@ import pytest
 from holon.models import *
 from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.serializers import InteractiveElementInput
 
 
 class AttributeNoiseTestClass(TestCase):
@@ -66,7 +67,12 @@ class AttributeNoiseTestClass(TestCase):
             rule=self.rule,
         )
 
-        interactive_elements = [{"value": "", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -114,7 +120,12 @@ class AttributeNoiseTestClass(TestCase):
             rule=self.rule,
         )
 
-        interactive_elements = [{"value": "", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -159,7 +170,12 @@ class AttributeNoiseTestClass(TestCase):
             rule=self.rule,
         )
 
-        interactive_elements = [{"value": "", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
