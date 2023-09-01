@@ -4,6 +4,7 @@ import pytest
 from holon.models import *
 from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
+from holon.serializers import InteractiveElementInput
 
 
 class RuleMappingTestClass(TestCase):
@@ -79,7 +80,12 @@ class RuleMappingTestClass(TestCase):
         )
         # no filters
 
-        interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="4",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -123,7 +129,12 @@ class RuleMappingTestClass(TestCase):
         )
         # no filters
 
-        interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="4",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -167,7 +178,12 @@ class RuleMappingTestClass(TestCase):
         )
         # no filters
 
-        interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="4",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -210,7 +226,12 @@ class RuleMappingTestClass(TestCase):
         )
         # no filters
 
-        interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="4",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -258,7 +279,12 @@ class RuleMappingTestClass(TestCase):
             value=self.gridconnection_0.id,
         )
 
-        interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="4",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)

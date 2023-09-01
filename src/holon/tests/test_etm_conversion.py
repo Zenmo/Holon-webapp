@@ -1,9 +1,8 @@
 from django.test import TestCase
 
 from holon.models import *
-from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
-from holon.services import ETMConnect, QConfig
+from holon.services import ETMConnect
 
 
 class RuleFiltersTestClass(TestCase):

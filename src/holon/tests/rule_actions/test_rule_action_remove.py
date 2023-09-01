@@ -5,6 +5,7 @@ from holon.models import *
 from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType
+from holon.serializers import InteractiveElementInput
 
 
 class RuleMappingTestClass(TestCase):
@@ -120,7 +121,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule, remove_mode=RemoveMode.REMOVE_ALL
         )
 
-        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -147,7 +153,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule, remove_mode=RemoveMode.REMOVE_N
         )
 
-        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -174,7 +185,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule, remove_mode=RemoveMode.REMOVE_N
         )
 
-        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="1",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -201,7 +217,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule, remove_mode=RemoveMode.KEEP_N
         )
 
-        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="1",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -228,7 +249,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule, remove_mode=RemoveMode.KEEP_N
         )
 
-        interactive_elements = [{"value": "3", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="3",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -255,7 +281,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule, remove_mode=RemoveMode.REMOVE_ALL
         )
 
-        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -280,7 +311,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule, remove_mode=RemoveMode.REMOVE_ALL
         )
 
-        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
