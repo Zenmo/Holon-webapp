@@ -72,6 +72,7 @@ export async function getRequest(url, params?, options?) {
   };
   const queryString = querystring.stringify(params);
   const fullUrl = `${url}?${queryString}`
+  console.log(`- OUTGOING GET ${fullUrl}`);
   const res = await fetch(fullUrl, { headers });
 
   if (res.status < 200 || res.status >= 300) {
@@ -96,6 +97,7 @@ export async function postRequest(url, params, options) {
     "Content-Type": "application/json",
     ...headers,
   };
+  console.log(`- OUTGOING POST ${url}`)
   const res = await fetch(url, {
     method: "POST",
     body: JSON.stringify(params),
