@@ -5,6 +5,7 @@ from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 from holon.models.scenario_rule import ModelType
+from holon.serializers import InteractiveElementInput
 
 
 class RuleMappingTestClass(TestCase):
@@ -106,7 +107,12 @@ class RuleMappingTestClass(TestCase):
         )
         rule_action_add = RuleActionAdd.objects.create(asset_to_add=default_ehc, rule=rule)
 
-        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="2",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -168,7 +174,12 @@ class RuleMappingTestClass(TestCase):
         )
         rule_action_add = RuleActionAdd.objects.create(asset_to_add=default_ehc, rule=rule)
 
-        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="2",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -217,7 +228,12 @@ class RuleMappingTestClass(TestCase):
         )
         RuleActionAdd.objects.create(contract_to_add=default_contract, rule=rule)
 
-        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="1",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -294,7 +310,12 @@ class RuleMappingTestClass(TestCase):
         )
         RuleActionAdd.objects.create(contract_to_add=default_contract, rule=rule)
 
-        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="2",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -414,7 +435,12 @@ class RuleMappingTestClass(TestCase):
         )
         RuleActionAdd.objects.create(contract_to_add=default_contract, rule=add_rule)
 
-        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="2",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -507,7 +533,12 @@ class RuleMappingTestClass(TestCase):
             model_type=ModelType.SCENARIO,
         )
         RuleActionAdd.objects.create(gridconnection_to_add=gridconnection_0, rule=rule)
-        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="2",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)

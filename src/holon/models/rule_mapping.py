@@ -14,18 +14,18 @@ def apply_rules(
     number_generator = random.Random(42)
 
     for interactive_element_input in interactive_element_inputs:
-        interactive_element = interactive_element_input["interactive_element"]
+        interactive_element = interactive_element_input.interactive_element
 
         if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS:
             interactive_element_options = interactive_element.continuous_values.all()
 
         else:  # single and multi select
-            options = interactive_element_input["value"].split(",")
+            options = interactive_element_input.value.split(",")
             interactive_element_options = interactive_element.options.filter(option__in=options)
 
         for option in interactive_element_options:
             value = (
-                interactive_element_input["value"]
+                interactive_element_input.value
                 if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS
                 else option.option
             )

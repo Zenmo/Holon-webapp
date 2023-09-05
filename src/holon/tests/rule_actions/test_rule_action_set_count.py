@@ -5,6 +5,7 @@ from holon.models import *
 from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType
+from holon.serializers import InteractiveElementInput
 
 
 class RuleMappingTestClass(TestCase):
@@ -105,7 +106,12 @@ class RuleMappingTestClass(TestCase):
             asset_to_add=default_ehc, rule=rule
         )
 
-        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="2",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -140,7 +146,12 @@ class RuleMappingTestClass(TestCase):
             asset_to_add=default_ehc, rule=rule
         )
 
-        interactive_elements = [{"value": "4", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="4",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)

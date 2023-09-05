@@ -5,6 +5,7 @@ from holon.models import *
 from holon.models import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType
+from holon.serializers import InteractiveElementInput
 
 
 class RuleMappingTestClass(TestCase):
@@ -42,7 +43,12 @@ class RuleMappingTestClass(TestCase):
             model_attribute="capacity_kw", operator=ChangeAttributeOperator.SET, rule=rule
         )
 
-        interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="250.0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -73,7 +79,12 @@ class RuleMappingTestClass(TestCase):
             rule=rule,
         )
 
-        interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="250.0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -100,7 +111,12 @@ class RuleMappingTestClass(TestCase):
             model_attribute="capacity_kw", operator=ChangeAttributeOperator.ADD, rule=rule
         )
 
-        interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="250.0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -127,7 +143,12 @@ class RuleMappingTestClass(TestCase):
             model_attribute="capacity_kw", operator=ChangeAttributeOperator.SUBTRACT, rule=rule
         )
 
-        interactive_elements = [{"value": "250.0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="250.0",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -154,7 +175,12 @@ class RuleMappingTestClass(TestCase):
             model_attribute="capacity_kw", operator=ChangeAttributeOperator.MULTIPLY, rule=rule
         )
 
-        interactive_elements = [{"value": "2", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="2",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -181,7 +207,12 @@ class RuleMappingTestClass(TestCase):
             model_attribute="capacity_kw", operator=ChangeAttributeOperator.DIVIDE, rule=rule
         )
 
-        interactive_elements = [{"value": "3", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="3",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -209,7 +240,12 @@ class RuleMappingTestClass(TestCase):
             model_attribute="insulation_label", operator=ChangeAttributeOperator.SET, rule=rule
         )
 
-        interactive_elements = [{"value": "1", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="1",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -240,7 +276,10 @@ class RuleMappingTestClass(TestCase):
 
         actor_group = ActorGroup.objects.create(name="group")
         interactive_elements = [
-            {"value": str(actor_group.id), "interactive_element": self.interactive_element}
+            InteractiveElementInput(
+                value=str(actor_group.id),
+                interactive_element=self.interactive_element,
+            )
         ]
 
         # Act
@@ -275,7 +314,12 @@ class RuleMappingTestClass(TestCase):
             static_value="Null",
         )
 
-        interactive_elements = [{"value": 9000, "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(
+                value="9000",
+                interactive_element=self.interactive_element,
+            )
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
