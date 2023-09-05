@@ -185,3 +185,14 @@ jobs:
             --environment holon-env
             --name next-${{ github.ref_name }}
             --hostname ${{ fromJson(needs.variables.outputs.result).NEXT_HOSTNAME }}
+      - name: Bind-www
+        if: github.ref_name == 'production'
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.51.0
+          inlineScript: >
+            az containerapp hostname bind
+            --resource-group HOLON-webapp
+            --environment holon-env
+            --name next-${{ github.ref_name }}
+            --hostname www.holontool.nl
