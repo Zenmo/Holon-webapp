@@ -5,6 +5,7 @@ from holon.models import rule_mapping
 from holon.models.rule_actions.rule_action_factor import RuleActionFactor
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType
+from holon.serializers import InteractiveElementInput
 
 
 class RuleMappingTestClass(TestCase):
@@ -55,7 +56,9 @@ class RuleMappingTestClass(TestCase):
         factor = RuleActionFactor.objects.create(
             model_attribute="capacity_kw", min_value=5, max_value=55, rule=rule
         )
-        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(value="0", interactive_element=self.interactive_element)
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -79,7 +82,9 @@ class RuleMappingTestClass(TestCase):
         factor = RuleActionFactor.objects.create(
             model_attribute="deliveryTemp_degC", min_value=5, max_value=55, rule=rule
         )
-        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(value="0", interactive_element=self.interactive_element)
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -101,7 +106,9 @@ class RuleMappingTestClass(TestCase):
         factor = RuleActionFactor.objects.create(
             model_attribute="annualFee_eur", min_value=5, max_value=55, rule=rule
         )
-        interactive_elements = [{"value": "0", "interactive_element": self.interactive_element}]
+        interactive_elements = [
+            InteractiveElementInput(value="0", interactive_element=self.interactive_element)
+        ]
 
         # Act
         scenario_aggregate = ScenarioAggregate(self.scenario)

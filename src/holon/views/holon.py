@@ -46,78 +46,73 @@ class HolonV2Service(generics.CreateAPIView):
 
         use_caching = use_result_cache(request)
         scenario = None
-        cc_payload = None
         cc = None
 
         try:
-            if serializer.is_valid():
-                data = serializer.validated_data
-                scenario = data["scenario"]
-
-                if use_caching:
-                    cache_key = holon_endpoint_cache.generate_key(
-                        scenario, data["interactive_elements"]
-                    )
-                    value = holon_endpoint_cache.get(cache_key)
-
-                    if value:
-                        HolonV2Service.logger.log_print(f"HOLON cache hit on: {cache_key}")
-                        return Response(
-                            value,
-                            status=status.HTTP_200_OK,
-                        )
-
-                # RULE ENGINE - APPLY INTERACTIVE ELEMENTS
-                HolonV2Service.logger.log_print("Applying interactive elements to scenario")
-
-                scenario = data["scenario"]
-                interactive_elements = data["interactive_elements"]
-
-                scenario_aggregate = ScenarioAggregate(scenario)
-                scenario_aggregate = rule_mapping.apply_rules(
-                    scenario_aggregate, interactive_elements
-                )
-
-                cc_payload = scenario_aggregate.serialize_to_json()
-                cc = CloudClient(payload=cc_payload, scenario=scenario)
-
-                # RUN ANYLOGIC
-                HolonV2Service.logger.log_print("Running Anylogic model")
-
-                cc.run()
-
-                # ETM MODULE
-                HolonV2Service.logger.log_print("Running ETM module")
-                etm_outcomes = self._etm_results(scenario, scenario_aggregate, cc)
-
-                HolonV2Service.logger.log_print("Calculating CostTables")
-                cost_benefit_tables = self._cost_benefit_tables(
-                    etm_outcomes.pop("depreciation_costs"), scenario_aggregate, cc
-                )
-
-                results = Results(
-                    cc_payload=cc_payload,
-                    request=request,
-                    anylogic_outcomes=cc.outputs,
-                    cost_benefit_overview=cost_benefit_tables.main_table(),
-                    cost_benefit_detail=cost_benefit_tables.all_detailed_tables(),
-                    **etm_outcomes,
-                )
-
-                HolonV2Service.logger.log_print("200 OK")
-
-                result = results.to_dict()
-
-                if use_caching:
-                    holon_endpoint_cache.set(cache_key, result)
-
-                return Response(
-                    result,
-                    status=status.HTTP_200_OK,
-                )
-
-            else:
+            if not serializer.is_valid():
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            data = serializer.validated_data
+            scenario_id = data["scenario"]
+            interactive_elements = serializer.create_interactive_elements()
+
+            if use_caching:
+                cache_key = holon_endpoint_cache.generate_key(scenario_id, interactive_elements)
+
+                value = holon_endpoint_cache.get(cache_key)
+
+                if value:
+                    HolonV2Service.logger.log_print(f"HOLON cache hit on: {cache_key}")
+                    return Response(
+                        value,
+                        status=status.HTTP_200_OK,
+                    )
+
+            # RULE ENGINE - APPLY INTERACTIVE ELEMENTS
+            HolonV2Service.logger.log_print("Applying interactive elements to scenario")
+
+            scenario = Scenario.queryset_with_relations().get(id=scenario_id)
+
+            scenario_aggregate = ScenarioAggregate(scenario)
+            scenario_aggregate = rule_mapping.apply_rules(scenario_aggregate, interactive_elements)
+
+            cc_payload = scenario_aggregate.serialize_to_json()
+            cc = CloudClient(payload=cc_payload, scenario=scenario)
+
+            # RUN ANYLOGIC
+            HolonV2Service.logger.log_print("Running Anylogic model")
+
+            cc.run()
+
+            # ETM MODULE
+            HolonV2Service.logger.log_print("Running ETM module")
+            etm_outcomes = self._etm_results(scenario, scenario_aggregate, cc)
+
+            HolonV2Service.logger.log_print("Calculating CostTables")
+            cost_benefit_tables = self._cost_benefit_tables(
+                etm_outcomes.pop("depreciation_costs"), scenario_aggregate, cc
+            )
+
+            results = Results(
+                cc_payload=cc_payload,
+                request=request,
+                anylogic_outcomes=cc.outputs,
+                cost_benefit_overview=cost_benefit_tables.main_table(),
+                cost_benefit_detail=cost_benefit_tables.all_detailed_tables(),
+                **etm_outcomes,
+            )
+
+            HolonV2Service.logger.log_print("200 OK")
+
+            result = results.to_dict()
+
+            if use_caching:
+                holon_endpoint_cache.set(cache_key, result)
+
+            return Response(
+                result,
+                status=status.HTTP_200_OK,
+            )
         except (Exception, ETMConnectionError) as e:
             HolonV2Service.logger.log_print(e)
             traceback.print_exc()
@@ -193,7 +188,7 @@ class HolonCacheCheck(generics.CreateAPIView):
             if serializer.is_valid():
                 data = serializer.validated_data
                 cache_key = holon_endpoint_cache.generate_key(
-                    data["scenario"], data["interactive_elements"]
+                    data["scenario"].id, data["interactive_elements"]
                 )
                 key_exists = holon_endpoint_cache.exists(cache_key)
 

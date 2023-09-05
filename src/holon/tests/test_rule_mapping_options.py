@@ -5,6 +5,7 @@ from holon.models import rule_mapping
 from holon.models.rule_actions import RuleActionFactor
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType
+from holon.serializers import InteractiveElementInput
 
 
 class RuleMappingTestClass(TestCase):
@@ -57,10 +58,10 @@ class RuleMappingTestClass(TestCase):
     def test_rule_mapping_single_select_option_1(self) -> None:
         # Arange
         interactive_elements = [
-            {
-                "value": str(self.interactive_element_option_1.option),
-                "interactive_element": self.interactive_element,
-            }
+            InteractiveElementInput(
+                value=str(self.interactive_element_option_1.option),
+                interactive_element=self.interactive_element,
+            )
         ]
 
         # Act
@@ -82,10 +83,10 @@ class RuleMappingTestClass(TestCase):
     def test_rule_mapping_single_select_option_3(self) -> None:
         # Arange
         interactive_elements = [
-            {
-                "value": str(self.interactive_element_option_3.option),
-                "interactive_element": self.interactive_element,
-            }
+            InteractiveElementInput(
+                value=str(self.interactive_element_option_3.option),
+                interactive_element=self.interactive_element,
+            )
         ]
 
         # Act
@@ -105,10 +106,10 @@ class RuleMappingTestClass(TestCase):
     def test_rule_mapping_single_select_multiselect(self) -> None:
         # Arange
         interactive_elements = [
-            {
-                "value": f"{self.interactive_element_option_1.option},{self.interactive_element_option_3.option}",
-                "interactive_element": self.interactive_element,
-            }
+            InteractiveElementInput(
+                value=f"{self.interactive_element_option_1.option},{self.interactive_element_option_3.option}",
+                interactive_element=self.interactive_element,
+            )
         ]
 
         # Act

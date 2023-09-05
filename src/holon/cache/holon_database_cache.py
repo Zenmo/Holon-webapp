@@ -48,7 +48,7 @@ class HolonDatabaseCache(DatabaseCache):
         table = connections[db].ops.quote_name(self._table)
 
         with connections[db].cursor() as cursor:
-            cursor.execute(f"delete FROM {table} WHERE cache_key LIKE ':{version}:{scenario_id}_%'")
+            cursor.execute(f"delete FROM {table} WHERE cache_key LIKE ':{version}:s{scenario_id}_%'")
 
     def clear_all(self) -> None:
         """Clear all cached records beloning to a specific scenario"""
