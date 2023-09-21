@@ -38,8 +38,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_STORAGE = "pipit.storages.AzureStaticStorage"
 DEFAULT_FILE_STORAGE = "pipit.storages.AzureMediaStorage"
 
-STATIC_LOCATION = get_env("CUSTOM_STATIC_LOCATION", "static")
-MEDIA_LOCATION = get_env("CUSTOM_MEDIA_LOCATION", "media")
+STATIC_LOCATION = get_env("STATIC_LOCATION", "static")
+MEDIA_LOCATION = get_env("MEDIA_LOCATION", "media")
 
 AZURE_ACCOUNT_NAME = get_env("AZURE_ACCOUNT_NAME")
 AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
