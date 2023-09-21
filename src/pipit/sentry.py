@@ -39,7 +39,7 @@ def initialize_sentry(ingest_dsn: str, environment: str) -> None:
 
 # To reduce the number of traces sent to sentry, only send it when the user has set a cookie or query string.
 # Set cookie in browser from javascript console:
-#     document.cookie = "sentry_tracing=true; Path=/; SameSite=Lax"
+#     document.cookie = "sentry_tracing=true; Path=/; SameSite=none; domain=holontool.nl; secure"
 def traces_sampler(sampling_context: dict):
     wsgi_environ = sampling_context.get("wsgi_environ")
     if wsgi_environ == None:
