@@ -26,7 +26,7 @@ def use_result_cache(request: Request) -> bool:
     """
     Caching simulation results is enabled by default unless cookie or query param is set.
     Set cookie in javascript console:
-    document.cookie = "caching=false; Path=/wt/api/nextjs/v2/holon; SameSite=Lax;"
+    document.cookie = "caching=false; Path=/; SameSite=none; domain=holontool.nl; secure"
     """
     if request.query_params.get("caching", "true").lower() == "false":
         return False

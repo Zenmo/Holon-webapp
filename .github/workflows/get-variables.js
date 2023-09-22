@@ -6,8 +6,10 @@ const configPerBranch = {
         SENTRY_ENVIRONMENT: 'azure-test',
         NEXT_HOSTNAME: 'test.holontool.nl',
         DOMAIN_HOST: 'https://test.holontool.nl',
-        DJANGO_SETTINGS_MODULE: 'pipit.settings.test',
+        DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms-test.holontool.nl',
+        MEDIA_LOCATION: 'media-test',
+        STATIC_LOCATION: 'static-test',
         wagtail: {
             CPU: '0.25',
             MEMORY: '0.5',
@@ -22,6 +24,8 @@ const configPerBranch = {
         DOMAIN_HOST: 'https://acceptatie.holontool.nl',
         DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms-acceptatie.holontool.nl',
+        MEDIA_LOCATION: 'media-acceptatie',
+        STATIC_LOCATION: 'static-acceptatie',
         wagtail: {
             CPU: '0.25',
             MEMORY: '0.5',
@@ -36,6 +40,8 @@ const configPerBranch = {
         DOMAIN_HOST: 'https://holontool.nl',
         DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms.holontool.nl',
+        MEDIA_LOCATION: 'media',
+        STATIC_LOCATION: 'static',
         // It seems we only need to scale Wagtail but not Next.js
         wagtail: {
             CPU: '0.5',

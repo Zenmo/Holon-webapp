@@ -1,7 +1,7 @@
 """
 Base settings, to be included and optionally overridden by environment-specific settings.
 Which settings are used is controlled by the environment variable DJANGO_SETTINGS_MODULE.
-For example for src/pipit/settings/stage.py, set "DJANGO_SETTINGS_MODULE=pipit.settings.stage".
+For example for src/pipit/settings/prod.py, set "DJANGO_SETTINGS_MODULE=pipit.settings.prod".
 """
 import os
 from typing import Optional
