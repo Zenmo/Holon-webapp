@@ -82,7 +82,8 @@ export default function RawHtml({ html }: { html: string }) {
                     <div className="mt-4 flex justify-center">
                       <a
                         className={`gap-4 border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-flex relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
-                        href={modal.modalLink}>
+                        href={modal.modalLink}
+                        target="_blank">
                         Lees meer
                         <span className="w-[20px]">
                           <ArrowRightIcon />
