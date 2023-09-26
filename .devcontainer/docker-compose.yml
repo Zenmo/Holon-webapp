@@ -30,6 +30,7 @@ services:
   db:
     image: postgres:13.9
     restart: unless-stopped
+#    command: "-c log_statement=all"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:

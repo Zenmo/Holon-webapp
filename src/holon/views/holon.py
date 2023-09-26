@@ -184,26 +184,19 @@ class HolonCacheCheck(generics.CreateAPIView):
     def post(self, request: Request):
         serializer = HolonRequestSerializer(data=request.data)
 
-        try:
-            if serializer.is_valid():
-                data = serializer.validated_data
-                cache_key = holon_endpoint_cache.generate_key(
-                    data["scenario"].id, data["interactive_elements"]
-                )
-                key_exists = holon_endpoint_cache.exists(cache_key)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-                return Response(
-                    key_exists,
-                    status=status.HTTP_200_OK,
-                )
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        cache_key = holon_endpoint_cache.generate_key(
+            data["scenario"], serializer.create_interactive_elements()
+        )
+        key_exists = holon_endpoint_cache.exists(cache_key)
 
-        except Exception as e:
-            return Response(
-                key_exists,
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        return Response(
+            {"is_cached": key_exists},
+            status=status.HTTP_200_OK,
+        )
 
 
 class HolonCMSLogic(generics.RetrieveAPIView):
