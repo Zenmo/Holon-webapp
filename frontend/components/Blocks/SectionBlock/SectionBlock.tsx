@@ -4,12 +4,11 @@ import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
-import {useLastest} from '@/utils/useLastest'
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
-import { InteractiveElement, getHolonKPIs } from "../../../api/holon";
+import {InteractiveElement} from "../../../api/holon";
 import { WikiLinks } from "../../../containers/types";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { Background, GridLayout } from "../types";
@@ -19,6 +18,7 @@ import HolarchyTab from "./HolarchyTab/HolarchyTab";
 import { LegendItem } from "./HolarchyTab/LegendModal";
 import ScenarioModal from "./ScenarioModals/ScenarioModal";
 import { Content, Feedbackmodals, InteractiveContent, SavedElements } from "./types";
+import { useSimulation } from "@/services/use-simulation";
 
 type Props = {
   data: {
@@ -45,26 +45,6 @@ type Props = {
   wikilinks?: WikiLinks[];
 };
 
-const initialData = {
-  local: {
-    netload: null,
-    costs: null,
-    sustainability: null,
-    selfSufficiency: null,
-  },
-  intermediate: {
-    netload: null,
-    costs: null,
-    sustainability: null,
-    selfSufficiency: null,
-  },
-  national: {
-    netload: null,
-    costs: null,
-    sustainability: null,
-    selfSufficiency: null,
-  },
-};
 export default function SectionBlock({
   data,
   wikilinks,
@@ -76,12 +56,20 @@ export default function SectionBlock({
   scenarioDiffElements,
   pagetitle,
 }: Props) {
-  const [kpis, setKPIs] = useState(initialData);
-  const [costBenefitData, setCostBenefitData] = useState({});
-  const resetData = () => {
-    setKPIs(initialData);
-    setCostBenefitData({});
-  }
+  const {
+      simulationState: {
+          simulationResult: {
+              dashboardResults: kpis,
+              costBenefitResults: costBenefitData,
+          },
+          loadingState,
+      },
+      calculateKPIs,
+      setDirty,
+  } = useSimulation()
+
+  const loading = loadingState === 'SENT' || loadingState === 'SIMULATING'
+  const isInitialLoad = loadingState === 'INITIAL'
   const [content, setContent] = useState<Content[]>([]);
   const [initialContent, setInitialContent] = useState<Content[]>([]);
   const [holarchyFeedbackImages, setHolarchyFeedbackImages] = useState<
@@ -89,7 +77,6 @@ export default function SectionBlock({
   >([]);
   const [legendItems, setLegendItems] = useState([]);
   const [media, setMedia] = useState<StaticImage>({});
-  const [loading, setLoading] = useState<boolean>(false);
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
   const [legend, setLegend] = useState<boolean>(false);
@@ -102,7 +89,6 @@ export default function SectionBlock({
   const scenario = useContext<number>(ScenarioContext);
   const [dirtyState, setDirtyState] = useState<boolean>(false);
   const [resetState, setResetState] = useState<boolean>(false);
-  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
   const sectionContainerRef = useRef(null);
 
@@ -115,7 +101,7 @@ export default function SectionBlock({
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
   const gridValue = getGrid(data.value.gridLayout.grid);
 
-  const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIs, 1000), []);
+  const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIsCb, 1000), []);
 
   useEffect(() => {
     if (data.value.openingSection) {
@@ -204,12 +190,8 @@ export default function SectionBlock({
     setHolarchyModal(false);
   }
 
-  const latest = useLastest()
-
-  function calculateKPIs(content) {
-    resetData();
-    setIsInitialLoad(false);
-    setLoading(true);
+  function calculateKPIsCb(content) {
+    setDirty()
     const interactiveElements = content
       .filter(
         (element): element is InteractiveContent =>
@@ -227,17 +209,7 @@ export default function SectionBlock({
         };
       });
 
-    latest(getHolonKPIs({ interactiveElements: interactiveElements, scenario: scenario }))
-      .then(res => {
-        setCostBenefitData(res.costBenefitResults);
-        setKPIs(res.dashboardResults);
-        setLoading(false);
-        setDirtyState(false);
-      })
-      .catch(() => {
-        setLoading(false);
-        setDirtyState(false);
-      });
+    calculateKPIs({ interactiveElements: interactiveElements, scenario: scenario })
   }
 
   function convertLegendItems(items: Array<LegendItem>) {
@@ -443,13 +415,14 @@ export default function SectionBlock({
               </div>
               <KPIDashboard
                 data={kpis}
+                loadingState={loadingState}
                 loading={loading}
                 dashboardId={data.id}
                 handleClickCostBen={openCostBenefitModal}
                 handleClickScenario={() => {
                   setShowScenarioModal(true);
                   setScenarioModalType("saveScenario");
-                }}></KPIDashboard>
+                }} />
             </div>
           </div>
         </div>
