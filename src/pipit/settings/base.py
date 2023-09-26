@@ -86,6 +86,7 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://pizzaoven.holontool.nl"]
+CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
