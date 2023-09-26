@@ -1,13 +1,15 @@
-import { CurrencyEuroIcon } from "@heroicons/react/24/outline";
+import { Cog8ToothIcon, CurrencyEuroIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import Button from "../Button/Button";
 import KPIItems from "./KPIItems";
 import KPIRadioButtons from "./KPIRadiobuttons";
 import { KPIData } from "./types";
+import { LoadingState } from "@/services/use-simulation";
 
 type KPIDashboardProps = {
   data: KPIData;
   loading: boolean;
+  loadingState: LoadingState;
   dashboardId: string;
   handleClickCostBen: () => void;
   handleClickScenario: () => void;
@@ -16,6 +18,7 @@ type KPIDashboardProps = {
 export default function KPIDashboard({
   data,
   loading,
+  loadingState,
   dashboardId,
   handleClickCostBen,
   handleClickScenario,
@@ -43,7 +46,10 @@ export default function KPIDashboard({
           <KPIItems view="kpiStoryline" data={data} level={level} loading={loading} />
         ) : (
           <div className="flex flex-row justify-around items-center text-white min-h-[170px] w-full">
-            <div className="font-bold text-lg">Instellingen aan het doorrekenen...</div>
+            <div className="font-bold text-lg">
+              {loadingState === "SENT" && <Cog8ToothIcon className="animate-spin h-8 w-8" style={{animationDuration: '3s'}}/>}
+              {loadingState === "SIMULATING" && "Het scenario wordt doorgerekend. Dit duurt even."}
+            </div>
           </div>
         )}
       </div>
