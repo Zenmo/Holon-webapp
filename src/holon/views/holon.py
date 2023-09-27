@@ -182,6 +182,13 @@ class HolonCacheCheck(generics.CreateAPIView):
     serializer_class = HolonRequestSerializer
 
     def post(self, request: Request):
+        if not use_result_cache(request):
+            # This gives the right experience in the frontend
+            return Response(
+                {"is_cached": False},
+                status=status.HTTP_200_OK,
+            )
+
         serializer = HolonRequestSerializer(data=request.data)
 
         if not serializer.is_valid():
