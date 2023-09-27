@@ -121,8 +121,6 @@ export default function CostBenefitChart({
                 dataKey="Netto kosten"
                 shape={<CustomBarWithTarget />}
                 fill="#FF1818"
-                onMouseOver={() => (columnLabel = "Netto kosten")}
-                onMouseLeave={() => (columnLabel = "")}
                 isAnimationActive={false}
               />
             </BarChart>
