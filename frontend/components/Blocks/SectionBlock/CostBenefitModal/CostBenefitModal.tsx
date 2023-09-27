@@ -71,9 +71,9 @@ export default function CostBenefitModal({
   };
 
   const tabItems = [
-    { tabName: "Grafiek", tabTitle: "Kosten en baten per categorie" },
-    { tabName: "Tabel", tabTitle: "Kosten en baten per categorie" },
-    { tabName: "Detail", tabTitle: "Kosten en baten per subcategorie" },
+    { tabName: "Grafiek", tabTitle: "Kosten en baten per stakeholder groep" },
+    { tabName: "Tabel", tabTitle: "Kosten en baten per stakeholder groep" },
+    { tabName: "Detail", tabTitle: "Kosten en baten per stakeholder subgroep" },
   ];
 
   return (

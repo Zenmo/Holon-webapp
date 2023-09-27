@@ -30,6 +30,31 @@ class ChangeAttributeOperator(models.TextChoices):
     DIVIDE = "/"
 
 
+def cast(new_value, old_value):
+    if new_value is None:
+        # Not sure if this is possible to configure, only hit in tests.
+        return None
+
+    if old_value is None:
+        # This is dumb.
+        # We should instead get the target type by inspecting the model metadata
+        return new_value
+
+    target_type = type(old_value)
+
+    if target_type == bool:
+        # match statement available in python 3.10
+        lower = new_value.lower()
+        if lower == "true":
+            return True
+        if lower == "false":
+            return False
+
+        raise ValueError(f"Cannot cast {new_value} to bool")
+
+    return target_type(new_value)
+
+
 class RuleActionChangeAttribute(RuleAction, ClusterableModel):
     """A discrete factor for setting the value of an attribute"""
 
@@ -125,12 +150,12 @@ class RuleActionChangeAttribute(RuleAction, ClusterableModel):
             old_value = getattr(filtered_object, model_attribute)
             new_value = self.__apply_operator(old_value, value)
 
-            # change the new value type to the same as the old one
             try:
-                cast_new_value = type(old_value)(new_value)
-            except:
-                # fallback when old_value is None
-                cast_new_value = new_value
+                cast_new_value = cast(new_value, old_value)
+            except Exception as e:
+                raise ValueError(
+                    f"RuleActionChangeAttribute(id={self.id}) failed to cast {new_value} to type of {old_value} for {filtered_object.__class__.__name__}.{model_attribute}: error {e}"
+                )
 
             # update scenario aggregate
             setattr(filtered_object, model_attribute, cast_new_value)

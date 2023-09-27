@@ -108,6 +108,8 @@ jobs:
             ALLOWED_HOSTS="*"
             AZURE_ACCOUNT_NAME=holonstorage
             AZURE_STORAGE_KEY=${{ secrets.AZURE_STORAGE_KEY }}
+            MEDIA_LOCATION=${{ fromJson(needs.variables.outputs.result).MEDIA_LOCATION }}
+            STATIC_LOCATION=${{ fromJson(needs.variables.outputs.result).STATIC_LOCATION }}
             DB_HOST=${{ secrets.DB_HOST }}
             DB_USER=${{ secrets.DB_USER }}
             DB_NAME=${{ fromJson(needs.variables.outputs.result).DB_NAME }}
@@ -185,3 +187,14 @@ jobs:
             --environment holon-env
             --name next-${{ github.ref_name }}
             --hostname ${{ fromJson(needs.variables.outputs.result).NEXT_HOSTNAME }}
+      - name: Bind-www
+        if: github.ref_name == 'production'
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.51.0
+          inlineScript: >
+            az containerapp hostname bind
+            --resource-group HOLON-webapp
+            --environment holon-env
+            --name next-${{ github.ref_name }}
+            --hostname www.holontool.nl

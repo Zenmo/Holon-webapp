@@ -4,6 +4,7 @@ from typing import Iterable
 import pkg_resources
 import base58
 
+from holon.models import AnylogicCloudConfig
 from holon.models.scenario import Scenario
 from holon.serializers.interactive_element import InteractiveElementInput, hash_collection
 
@@ -25,8 +26,11 @@ def generate_key(scenario_id: int, interactive_inputs: Iterable[InteractiveEleme
         sha256(hash_collection(interactive_inputs).encode("utf-8")).digest()
     ).decode("ascii")
 
+    any_logic_config = AnylogicCloudConfig.objects.get(scenario_id=scenario_id)
+    any_logic_hash = f"{any_logic_config.model_name}_{any_logic_config.model_version_number}"
+
     etm_hash = pkg_resources.get_distribution("etm_service").version
 
-    hashed_key = f"s{scenario_id}_{input_and_cms_config_hash}_{etm_hash}"
+    hashed_key = f"s{scenario_id}_{input_and_cms_config_hash}_{etm_hash}_{any_logic_hash}"
 
     return hashed_key

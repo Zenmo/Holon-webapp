@@ -101,6 +101,7 @@ export async function postRequest(url, params, options) {
   const res = await fetch(url, {
     method: "POST",
     body: JSON.stringify(params),
+    credentials: "include",
     headers,
   });
 

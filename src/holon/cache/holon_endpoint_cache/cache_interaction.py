@@ -36,7 +36,7 @@ def get(key: str) -> dict:
 def exists(key: str) -> bool:
     """Check if a record in the holon_cache database exists"""
 
-    if caches[Config.cache_name].get(key):
+    if key in caches[Config.cache_name]:
         return True
 
     return False
