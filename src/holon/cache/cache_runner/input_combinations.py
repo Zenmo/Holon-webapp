@@ -155,6 +155,9 @@ def generate_interactive_input_combinations(
             # We want this because the order has to be the same as the order produced by the front-end.
             interactive_element_input_lists.pop(interactive_element.id, None)
 
+            # We abuse "locked" to reduce the number of cache combinations.
+            # At the time of writing this is only used in the challenge of case Buurtelektrificatie
+            # with the elements "compliance" and "isolatie".
             if not interactive_input_block["visible"] or interactive_input_block["locked"]:
                 interactive_element_input_lists[interactive_element.id] = [
                     InteractiveElementInput(

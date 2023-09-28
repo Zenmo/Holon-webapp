@@ -38,7 +38,7 @@ a {
     @apply text-2xl font-semibold;
   }
 
-  p {
+  p, li {
     @apply text-base lg:leading-7;
   }
 
