@@ -24,8 +24,8 @@ const configPerBranch = {
         DOMAIN_HOST: 'https://acceptatie.holontool.nl',
         DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms-acceptatie.holontool.nl',
-        MEDIA_LOCATION: 'media-acceptatie',
-        STATIC_LOCATION: 'static-acceptatie',
+        MEDIA_LOCATION: 'media', // TODO: change to media-acceptatie
+        STATIC_LOCATION: 'static', // TODO: change to static-acceptatie
         wagtail: {
             CPU: '0.25',
             MEMORY: '0.5',
