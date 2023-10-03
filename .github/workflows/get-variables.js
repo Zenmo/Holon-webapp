@@ -6,7 +6,6 @@ const configPerBranch = {
         SENTRY_ENVIRONMENT: 'azure-test',
         NEXT_HOSTNAME: 'test.holontool.nl',
         DOMAIN_HOST: 'https://test.holontool.nl',
-        DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms-test.holontool.nl',
         MEDIA_LOCATION: 'media-test',
         STATIC_LOCATION: 'static-test',
@@ -22,10 +21,9 @@ const configPerBranch = {
         SENTRY_ENVIRONMENT: 'azure-acceptance',
         NEXT_HOSTNAME: 'acceptatie.holontool.nl',
         DOMAIN_HOST: 'https://acceptatie.holontool.nl',
-        DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms-acceptatie.holontool.nl',
-        MEDIA_LOCATION: 'media', // TODO: change to media-acceptatie
-        STATIC_LOCATION: 'static', // TODO: change to static-acceptatie
+        MEDIA_LOCATION: 'media-acceptatie',
+        STATIC_LOCATION: 'static-acceptatie',
         wagtail: {
             CPU: '0.25',
             MEMORY: '0.5',
@@ -38,7 +36,6 @@ const configPerBranch = {
         SENTRY_ENVIRONMENT: 'azure-production',
         NEXT_HOSTNAME: 'holontool.nl',
         DOMAIN_HOST: 'https://holontool.nl',
-        DJANGO_SETTINGS_MODULE: 'pipit.settings.prod',
         WAGTAIL_HOSTNAME: 'cms.holontool.nl',
         MEDIA_LOCATION: 'media',
         STATIC_LOCATION: 'static',
