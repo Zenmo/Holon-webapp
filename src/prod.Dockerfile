@@ -42,7 +42,6 @@ RUN pip install gunicorn
 RUN chown -R app:app $APP_HOME
 RUN chmod -R +x $APP_HOME
 
-# Start and enable SSH
 RUN chmod +x ./docker-entrypoint.prod.sh
 
 # Run entrypoint.prod.sh

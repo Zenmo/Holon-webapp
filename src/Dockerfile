@@ -8,7 +8,6 @@ ENV PYTHONUNBUFFERED=1 \
     SECRET_KEY=generatesecretkeyhere \
     MEDIA_PATH=/app/media \
     STATIC_PATH=/app/static \
-    REQUIREMENTS=local.txt \
     DB_USER=postgres \
     DB_PASSWORD=postgres \
     DB_NAME=postgres \
@@ -18,17 +17,14 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app
 ADD . /app/
 
-RUN apt-get update \
-    && apt-get install -y netcat gcc libpq-dev \
-    && apt-get install -y binutils libproj-dev gdal-bin \
-    && apt-get install -y vim curl gettext \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk update \
+    && apk add netcat-openbsd gcc libpq-dev binutils vim curl gettext linux-headers musl-dev
 
 RUN pip install --upgrade pip \
-    && pip install -r requirements/$REQUIREMENTS --no-cache-dir \
+    && pip install -r requirements/prod.txt --no-cache-dir \
     && pip install ipython ipdb
 
 EXPOSE 8000
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["sh", "./docker-entrypoint.sh"]
 CMD ["runserver"]
