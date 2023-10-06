@@ -1,9 +1,8 @@
 import operator
 from django.test import TestCase
-import pytest
 
 from holon.models import *
-from holon.models import rule_mapping
+from holon.rule_engine import rule_mapping
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.serializers import InteractiveElementInput
 
