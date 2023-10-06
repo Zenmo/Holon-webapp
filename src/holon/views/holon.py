@@ -10,7 +10,8 @@ from rest_framework.response import Response
 from sentry_sdk import capture_exception
 
 from holon.cache import holon_endpoint_cache
-from holon.models import Scenario, rule_mapping
+from holon.models import Scenario
+from holon.rule_engine import rule_mapping
 from holon.models.config import QueryCovertModuleType
 from holon.models.scenario_rule import ModelType
 from holon.models.util import all_subclasses, is_exclude_field
