@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from holon.models import *
-from holon.models import rule_mapping
+from holon.rule_engine import rule_mapping
 from holon.models.rule_actions.rule_action_factor import RuleActionFactor
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.models.scenario_rule import ModelType

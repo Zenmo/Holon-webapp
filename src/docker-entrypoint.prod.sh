@@ -28,10 +28,6 @@ setup_django () {
     python manage.py update_index
 }
 
-echo Starting ssh service
-/usr/sbin/sshd
-eval $(printenv | sed -n "s/^\([^=]\+\)=\(.*\)$/export \1=\2/p" | sed 's/"/\\\"/g' | sed '/=/s//="/' | sed 's/$/"/' >> /etc/profile)
-
 wait_for_db
 setup_django
 

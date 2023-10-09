@@ -58,6 +58,8 @@ class Rule(PolymorphicModel, ClusterableModel):
 
     class Meta:
         verbose_name = "Rule"
+        # important: this ensures rule execution order
+        ordering = ["id"]
 
     panels = [
         MultiFieldPanel(

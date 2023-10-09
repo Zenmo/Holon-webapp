@@ -1,23 +1,23 @@
 version: "3.1"
 services:
-  web:
-    image: nginx:1.25.0-alpine3.17
-    working_dir: /app
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - python
-    volumes:
-      - "./docker/files/static/502.html:/app/502.html"
-      - "./docker/files/config/nginx.pizza.conf:/etc/nginx/templates/default.conf.template"
-      - "./docker/files/certs:/etc/nginx/certs"
-    environment:
-      - PYTHON_HOST=http://python
-      - NEXT_HOST=http://next
-      - SERVER_NAME=pizzaoven.holontool.nl
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+#  web:
+#    image: nginx:1.25.0-alpine3.17
+#    working_dir: /app
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    depends_on:
+#      - python
+#    volumes:
+#      - "./docker/files/static/502.html:/app/502.html"
+#      - "./docker/files/config/nginx.pizza.conf:/etc/nginx/templates/default.conf.template"
+#      - "./docker/files/certs:/etc/nginx/certs"
+#    environment:
+#      - PYTHON_HOST=http://python
+#      - NEXT_HOST=http://next
+#      - SERVER_NAME=pizzaoven.holontool.nl
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
 
   next:
     build:
@@ -25,26 +25,40 @@ services:
       dockerfile: prod.Dockerfile
     ports:
       - "3000:3000"
-    depends_on:
-      - web
     environment:
-      - WAGTAIL_API_URL=http://python:8000/wt/
-      - NEXT_PUBLIC_WAGTAIL_API_URL=https://pizzaoven.holontool.nl/wt/api/nextjs
-      - NEXT_PUBLIC_BASE_URL=https://pizzaoven.holontool.nl/wt
-      - RETURN_SCENARIO=True
+      NEXT_PUBLIC_BASE_URL: http://python:8000/wt/api/nextjs
+      NEXT_PUBLIC_WAGTAIL_API_URL: http://python:8000/wt/api/nextjs
+      NEXT_PUBLIC_TINY_URL_API_KEY: wasd
 
   python:
     build:
       context: ./src
-      dockerfile: prod.Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
     volumes:
       - "./src:/app"
     depends_on:
       - db
+    environment:
+      ALLOWED_HOSTS: "*"
+      AZURE_ACCOUNT_NAME: holonstorage
+#      AZURE_STORAGE_KEY:
+      MEDIA_LOCATION: media-dev
+      STATIC_LOCATION: static-dev
+      DB_HOST: db
+      DB_USER: postgres
+      DB_NAME: postgres
+      DB_PASSWORD: postgres
+      RETURN_SCENARIO: false
+      SECRET_KEY: 5746384
+      DOMAIN_HOST: http://localhost:8000
+      N_WORKERS: 2
+      DJANGO_SETTINGS_MODULE: pipit.settings.prod
     env_file: ./docker/config/python.env
 
   db:
-    image: prod_db
+    image: postgres:13.9
     volumes:
       - postgres-data:/var/lib/postgresql/data
     build:

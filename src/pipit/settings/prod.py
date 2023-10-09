@@ -33,7 +33,7 @@ CACHES = {
     },
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_STORAGE = "pipit.storages.AzureStaticStorage"
 DEFAULT_FILE_STORAGE = "pipit.storages.AzureMediaStorage"
