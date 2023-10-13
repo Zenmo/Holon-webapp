@@ -85,7 +85,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://pizzaoven.holontool.nl"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [

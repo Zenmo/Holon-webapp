@@ -25,12 +25,11 @@ services:
       dockerfile: prod.Dockerfile
       args:
         NEXT_PUBLIC_WAGTAIL_API_URL: http://localhost:8000/wt/api/nextjs
+        NEXT_PUBLIC_TINY_URL_API_KEY: wasd
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_BASE_URL: http://python:8000/wt/api/nextjs
-      NEXT_PUBLIC_WAGTAIL_API_URL: http://python:8000/wt/api/nextjs
-      NEXT_PUBLIC_TINY_URL_API_KEY: wasd
+      WAGTAIL_API_URL: http://python:8000/wt/api/nextjs
 
   python:
     build:

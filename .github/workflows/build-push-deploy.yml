@@ -163,7 +163,7 @@ jobs:
             --name next-${{ github.ref_name }}
             --environment holon-env
             --env-vars
-            NEXT_PUBLIC_BASE_URL=http://wagtail-${{ github.ref_name }}/wt/api/nextjs
+            WAGTAIL_API_URL=http://wagtail-${{ github.ref_name }}/wt/api/nextjs
             NEXT_PUBLIC_WAGTAIL_API_URL=https://${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}/wt/api/nextjs
             NEXT_PUBLIC_TINY_URL_API_KEY=${{ secrets.TINY_URL_API_KEY }}
             --target-port 3000
