@@ -1,5 +1,5 @@
 """ Streamfields """
-from wagtail.core import blocks
+import wagtail.blocks as blocks
 from wagtail.embeds.blocks import EmbedBlock
 from main.blocks.rich_text_block import RichtextBlock
 from .holon_image_chooser import HolonImageChooserBlock
