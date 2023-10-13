@@ -1,4 +1,4 @@
-FROM python:3.9-alpine AS base
+FROM python:3.11-alpine AS base
 
 # Create app directory
 RUN mkdir -p /home/app
