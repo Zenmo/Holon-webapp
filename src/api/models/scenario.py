@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 
 
 # Create your models here.

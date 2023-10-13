@@ -4,7 +4,7 @@ from wagtail.admin.panels import FieldPanel
 from django.db import models
 from wagtail.fields import StreamField, RichTextField
 from wagtail.contrib.table_block.blocks import TableBlock
-from wagtail.core.blocks import StreamBlock
+from wagtail.blocks import StreamBlock
 from main.blocks.paragraph import ParagraphBlock
 
 from .base import BasePage

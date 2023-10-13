@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 from django.core.exceptions import ValidationError
 from django.db import models
 from polymorphic.models import PolymorphicModel
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 import random
 from modelcluster.fields import ParentalKey
 

@@ -3,8 +3,8 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
-from wagtail.core.models import Orderable
+from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.models import Orderable
 from wagtail.models import Page
 from wagtail.admin.panels import PageChooserPanel
 from main.snippets.interactive_element_unit import InteractiveElementUnit

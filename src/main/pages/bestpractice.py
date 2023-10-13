@@ -4,7 +4,7 @@ from django import forms
 
 from modelcluster.fields import ParentalManyToManyField
 
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 from wagtail.fields import StreamField
 from wagtail.contrib.table_block.blocks import TableBlock

@@ -21,11 +21,8 @@ ENV PYTHONUNBUFFERED 1
 # Install server packages
 RUN apk update \
     && apk add postgresql-dev make automake gcc g++ subversion python3-dev musl-dev libffi-dev openssl-dev \
-    && apk add jpeg-dev libwebp-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev libxml2-dev libxslt-dev libxml2 git screen
-
-# Install ImageMagick
-RUN apk add --no-cache imagemagick && \
-    apk add --no-cache imagemagick-dev
+    jpeg-dev libwebp-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev libxml2-dev \
+    libxslt-dev libxml2 git screen imagemagick imagemagick-dev
 
 # Install Python packages
 RUN pip install pip --upgrade

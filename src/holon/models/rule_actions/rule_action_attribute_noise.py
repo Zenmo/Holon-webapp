@@ -13,7 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from modelcluster.fields import ParentalKey
 from holon.models.scenario_rule import ScenarioRule
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from django.db.models.query import QuerySet
 
 import numpy as np
