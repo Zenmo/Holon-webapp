@@ -4,7 +4,6 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from django.utils.translation import gettext_lazy as _
 
-from threading import Thread
 from hashlib import sha512
 
 
@@ -53,7 +52,7 @@ class Scenario(ClusterableModel):
 
     @property
     def assets(self) -> "list[EnergyAsset]":
-        from holon.models.asset import EnergyAsset
+        from holon.models.scenario.asset import EnergyAsset
 
         assets = EnergyAsset.objects.none()
         for gridconnection in self.gridconnection_set.all():
@@ -65,7 +64,7 @@ class Scenario(ClusterableModel):
 
     @property
     def contracts(self) -> "list[Contract]":
-        from holon.models import Contract
+        from holon.models.scenario import Contract
 
         contracts = Contract.objects.none()
         for actor in self.actor_set.all():
@@ -97,7 +96,7 @@ class Scenario(ClusterableModel):
         with transaction.atomic():
             # Delete polymorphic models individually
             # django-polymorphic can't handle deletion of mixed object types
-            from holon.models import Contract
+            from holon.models.scenario import Contract
 
             delete_individualy(self.assets)
             delete_individualy(self.gridconnection_set.all())

@@ -8,9 +8,6 @@ from holon.models import (
     DatamodelQueryRule,
     Scenario,
     ModelType,
-    ActorGroup,
-    ActorSubGroup,
-    QueryCovertModuleType,
 )
 from holon.models.config import (
     AnyLogicConversion,
@@ -18,7 +15,6 @@ from holon.models.config import (
     ETMConversion,
     ETMQuery,
     KeyValuePairCollection,
-    QueryAndConvertConfig,
     StaticConversion,
     QueryCovertModuleType,
     QueryAndConvertConfig,

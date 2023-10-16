@@ -23,7 +23,7 @@ from holon.models.interactive_element import (
     InteractiveElementOptions,
     InteractiveElementContinuousValues,
 )
-from holon.models.actor import ActorGroup, ActorSubGroup
+from holon.models.scenario.actor import ActorGroup, ActorSubGroup
 from holon.models.util import all_subclasses
 from holon.models.config.datamodel_conversion import DatamodelConversion
 from holon.models.config.rule_action_conversion import RuleActionConversion

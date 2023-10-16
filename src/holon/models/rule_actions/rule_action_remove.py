@@ -16,8 +16,6 @@ from django.db import models
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import FieldPanel
 
-from holon.models import Actor
-
 
 class RemoveMode(models.TextChoices):
     """Types of remove modes"""

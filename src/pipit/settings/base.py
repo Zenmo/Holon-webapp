@@ -79,7 +79,6 @@ INSTALLED_APPS = [
     "holon",
     "dj_rest_auth",
     "dj_rest_auth.registration",
-    # allauth
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -89,7 +88,6 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
-    "allauth.account.middleware.AccountMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -97,6 +95,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
