@@ -2,7 +2,7 @@ from typing import Iterable
 
 from django.db import transaction
 
-from holon.models import (
+from holon.models.scenario import (
     Scenario,
     EnergyAsset,
     GridNode,

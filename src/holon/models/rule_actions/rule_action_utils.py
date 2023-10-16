@@ -1,14 +1,12 @@
-from holon.models.asset import EnergyAsset
-from holon.models.contract import Contract
-from holon.models.gridconnection import GridConnection
-from holon.models.actor import Actor
-from holon.models.gridnode import GridNode
+from holon.models.scenario.asset import EnergyAsset
+from holon.models.scenario.contract import Contract
+from holon.models.scenario.gridconnection import GridConnection
+from holon.models.scenario.actor import Actor
+from holon.models.scenario.gridnode import GridNode
 from holon.models.scenario import Scenario
 from django.apps import apps
 
 from polymorphic import utils
-from polymorphic.base import PolymorphicModelBase
-from polymorphic.models import PolymorphicModel
 from holon.models.util import all_subclasses
 
 

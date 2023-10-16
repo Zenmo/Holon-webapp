@@ -1,9 +1,7 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from holon.models.asset import EnergyAsset
-
-from holon.models.gridconnection import GridConnection
-from holon.models.asset import EnergyAsset
+from holon.models.scenario.gridconnection import GridConnection
+from holon.models.scenario.asset import EnergyAsset
 from holon.models.scenario import Scenario
 from django.templatetags.static import static
 from django.utils.html import format_html

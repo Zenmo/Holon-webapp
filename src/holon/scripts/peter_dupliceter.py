@@ -3,19 +3,13 @@ from functools import partial
 import numpy as np
 from django.db.models import Q
 
-from holon.models import (
-    BuildingGridConnection,
-    DistrictHeatingGridConnection,
-    ElectricGridNode,
+from holon.models.scenario import (
     EnergyAsset,
     HouseGridConnection,
     Scenario,
 )
-from holon.models.asset import (
-    DieselVehicleAsset,
+from holon.models.scenario.asset import (
     ElectricConsumptionAsset,
-    HeatConsumptionAsset,
-    HybridConsumptionAsset,
 )
 from holon.models.util import duplicate_model
 

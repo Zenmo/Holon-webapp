@@ -1,4 +1,4 @@
-from holon.models import ActorSubGroup
+from holon.models.scenario import ActorSubGroup
 from holon.models.scenario import Scenario
 from .repository_base import RepositoryBaseClass
 

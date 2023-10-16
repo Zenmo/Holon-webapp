@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from polymorphic.models import PolymorphicModel
 
-from holon.models.gridconnection import GridConnection
-from holon.models.gridnode import GridNode
+from holon.models.scenario.gridconnection import GridConnection
+from holon.models.scenario.gridnode import GridNode
 
 
 class EnergyAsset(PolymorphicModel):

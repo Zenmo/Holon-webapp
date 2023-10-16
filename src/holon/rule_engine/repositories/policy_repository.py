@@ -1,5 +1,4 @@
-from holon.models import Policy
-from holon.models.scenario import Scenario
+from holon.models.scenario import Policy
 from .repository_base import RepositoryBaseClass
 
 

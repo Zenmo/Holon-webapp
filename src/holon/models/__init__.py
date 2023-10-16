@@ -1,14 +1,13 @@
-from .actor import *  # NOQA
-from .asset import *  # NOQA
-from .contract import *  # NOQA
-from .rule_actions import *  # NOQA
-from .filter import *  # NOQA
-from .gridconnection import *  # NOQA
-from .gridnode import *  # NOQA
-from .interactive_element import *  # NOQA
-from .config import *  # NOQA
-from .policy import *  # NOQA
-from .scenario import *  # NOQA
-from .scenario_rule import *  # NOQA
-from .filter_subselector import *  # NOQA
-from .value_tranform import *  # NOQA
+# This module shouldn't be imported anywhere else.
+#
+# These imports need to be here because the module <app>.models
+# is where Django looks for the database models by default.
+from .rule_actions import *
+from .filter import *
+from .interactive_element import *
+from .config import *
+from .scenario_root import *
+from .scenario import *
+from .scenario_rule import *
+from .filter_subselector import *
+from .value_tranform import *

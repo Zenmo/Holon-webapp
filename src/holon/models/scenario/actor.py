@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
 
-from holon.models.scenario import Scenario
+from holon.models.scenario_root import Scenario
 
 
 class ActorGroup(models.Model):
