@@ -62,102 +62,6 @@ CONFIG_KPIS = {
 }
 
 
-class ETMConnect:
-    @staticmethod
-    @sentry_sdk_trace
-    def connect_from_scenario(
-        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
-    ) -> tuple[str, dict]:
-        """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
-        for config in ETMConnect.query_configs(
-            original_scenario, scenario_aggregate, anylogic_outcomes
-        ):
-            if config.module == QueryCovertModuleType.COST.value:
-                yield ETMConnect.costs(config)
-            if config.module == QueryCovertModuleType.COSTBENEFIT.value:
-                yield ETMConnect.costs(config)
-            if (
-                config.module == QueryCovertModuleType.UPSCALING.value
-                or config.module == QueryCovertModuleType.UPSCALING_REGIONAL.value
-            ):
-                yield ETMConnect.upscaling(config)
-
-    @staticmethod
-    def query_configs(
-        original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
-    ):
-        return (
-            QConfig(c, anylogic_outcomes=anylogic_outcomes, scenario_aggregate=scenario_aggregate)
-            for c in original_scenario.query_and_convert_config.prefetch_related(
-                "key_value_pair_collection__float_key_value_pair"
-            )
-            .prefetch_related("etm_query__static_conversion_step")
-            .prefetch_related("etm_query__etm_conversion_step")
-            .prefetch_related("etm_query__datamodel_conversion_step__datamodel_query_rule")
-            .prefetch_related("etm_query__al_conversion_step")
-            .all()
-        )
-
-    @staticmethod
-    @sentry_sdk_trace
-    def costs(config: QueryAndConvertConfig):
-        cost_components = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
-
-        ETMConnect.log_costs(config.etm_scenario_id, config, cost_components)
-
-        if config.module == QueryCovertModuleType.COST.value:
-            return (QueryCovertModuleType.COST, sum(cost_components.values()))
-
-        # Calculate depreciation costs for each actor
-        if config.module == QueryCovertModuleType.COSTBENEFIT.value:
-            return (
-                QueryCovertModuleType.COSTBENEFIT,
-                [
-                    {actor: val * cost_components[key] for actor, val in actors.items()}
-                    for key, actors in config.distribution_keys.items()
-                ],
-            )
-
-    @staticmethod
-    def log_costs(etm_scenario_id: int, config, cost_components: dict):
-        span = sentry_sdk.Hub.current.scope.span
-        if span is not None and span.sampled is True:
-            span.set_data("new_scenario_id", etm_scenario_id)
-            for key, value in config.queries.items():
-                span.set_data("etm_query_" + key, value)
-
-            for key, value in cost_components.items():
-                span.set_data("etm_output_cost_" + key, value)
-
-    @staticmethod
-    @sentry_sdk_trace
-    def upscaling(config: QueryAndConvertConfig):
-        new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
-
-        kpis = etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS))
-
-        ETMConnect.log_upscaling(config.etm_scenario_id, new_scenario_id, config, kpis)
-
-        return config.module, kpis
-
-    @staticmethod
-    def log_upscaling(source_scenario_id: int, new_scenario_id: int, config, kpis: dict):
-        span = sentry_sdk.Hub.current.scope.span
-        if span is not None and span.sampled is True:
-            span.set_data("etm_source_scenario_id", source_scenario_id)
-            span.set_data("etm_new_scenario_id", new_scenario_id)
-            for key, value in config.queries.items():
-                span.set_data("etm_query_" + key, value)
-
-            for key, value in kpis.items():
-                span.set_data("etm_output_kpi_" + key, value)
-
-
-class AssetCombiner:
-    def __init__(self, qconfig, etm_results) -> None:
-        pass
-
-
 class QConfig:
     def __init__(
         self,
@@ -221,6 +125,97 @@ class QConfig:
                 else {"Undefined": 1.0}
             }
         )
+
+
+class ETMConnect:
+    @staticmethod
+    @sentry_sdk_trace
+    def connect_from_scenario(
+        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
+    ) -> tuple[str, dict]:
+        """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
+        for config in ETMConnect.query_configs(
+            original_scenario, scenario_aggregate, anylogic_outcomes
+        ):
+            if config.module == QueryCovertModuleType.COST.value:
+                yield ETMConnect.costs(config)
+            if config.module == QueryCovertModuleType.COSTBENEFIT.value:
+                yield ETMConnect.costs(config)
+            if (
+                config.module == QueryCovertModuleType.UPSCALING.value
+                or config.module == QueryCovertModuleType.UPSCALING_REGIONAL.value
+            ):
+                yield ETMConnect.upscaling(config)
+
+    @staticmethod
+    def query_configs(
+        original_scenario: Scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
+    ):
+        return (
+            QConfig(c, anylogic_outcomes=anylogic_outcomes, scenario_aggregate=scenario_aggregate)
+            for c in original_scenario.query_and_convert_config.prefetch_related(
+                "key_value_pair_collection__float_key_value_pair"
+            )
+            .prefetch_related("etm_query__static_conversion_step")
+            .prefetch_related("etm_query__etm_conversion_step")
+            .prefetch_related("etm_query__datamodel_conversion_step__datamodel_query_rule")
+            .prefetch_related("etm_query__al_conversion_step")
+            .all()
+        )
+
+    @staticmethod
+    @sentry_sdk_trace
+    def costs(config: QConfig):
+        cost_components = etm_service.retrieve_results(config.etm_scenario_id, config.queries)
+
+        ETMConnect.log_costs(config.etm_scenario_id, config, cost_components)
+
+        if config.module == QueryCovertModuleType.COST.value:
+            return (QueryCovertModuleType.COST, sum(cost_components.values()))
+
+        # Calculate depreciation costs for each actor
+        if config.module == QueryCovertModuleType.COSTBENEFIT.value:
+            return (
+                QueryCovertModuleType.COSTBENEFIT,
+                [
+                    {actor: val * cost_components[key] for actor, val in actors.items()}
+                    for key, actors in config.distribution_keys.items()
+                ],
+            )
+
+    @staticmethod
+    def log_costs(etm_scenario_id: int, config, cost_components: dict):
+        span = sentry_sdk.Hub.current.scope.span
+        if span is not None and span.sampled is True:
+            span.set_data("new_scenario_id", etm_scenario_id)
+            for key, value in config.queries.items():
+                span.set_data("etm_query_" + key, value)
+
+            for key, value in cost_components.items():
+                span.set_data("etm_output_cost_" + key, value)
+
+    @staticmethod
+    @sentry_sdk_trace
+    def upscaling(config: QConfig):
+        new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
+
+        kpis = etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS))
+
+        ETMConnect.log_upscaling(config.etm_scenario_id, new_scenario_id, config, kpis)
+
+        return config.module, kpis
+
+    @staticmethod
+    def log_upscaling(source_scenario_id: int, new_scenario_id: int, config, kpis: dict):
+        span = sentry_sdk.Hub.current.scope.span
+        if span is not None and span.sampled is True:
+            span.set_data("etm_source_scenario_id", source_scenario_id)
+            span.set_data("etm_new_scenario_id", new_scenario_id)
+            for key, value in config.queries.items():
+                span.set_data("etm_query_" + key, value)
+
+            for key, value in kpis.items():
+                span.set_data("etm_output_kpi_" + key, value)
 
 
 class Query:
