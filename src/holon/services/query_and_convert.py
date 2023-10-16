@@ -251,24 +251,17 @@ class Query:
         except AttributeError:
             self._convert_with = []
 
-        conversions: List[ETMQuery] = [
-            *query.static_conversion_step.all(),
-            *query.etm_conversion_step.all(),
-            *query.datamodel_conversion_step.all(),
-            *query.al_conversion_step.all(),
-        ]
+        for c in query.static_conversion_step.all():
+            self._convert_with.append(self.set_static(c))
 
-        for c in conversions:
-            if isinstance(c, StaticConversion):
-                self._convert_with.append(self.set_static(c))
-            elif isinstance(c, ETMConversion):
-                self._convert_with.append(self.set_etm(c))
-            elif isinstance(c, AnyLogicConversion):
-                self._convert_with.append(self.set_anylogic(c))
-            elif isinstance(c, DatamodelConversion):
-                self._convert_with.append(self.set_datamodel(c))
-            else:
-                raise NotImplementedError(f"Conversion of type {c.__name__} is not implemented!")
+        for c in query.etm_conversion_step.all():
+            self._convert_with.append(self.set_etm(c))
+
+        for c in query.datamodel_conversion_step.all():
+            self._convert_with.append(self.set_datamodel(c))
+
+        for c in query.al_conversion_step.all():
+            self._convert_with.append(self.set_anylogic(c))
 
         return self._convert_with
 
