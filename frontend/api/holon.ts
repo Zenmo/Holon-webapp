@@ -12,6 +12,10 @@ export type InteractiveElement = {
 export type SimulationInput = {
   interactiveElements: InteractiveElement[],
   scenario: number,
+  // to request specific simulation output
+  anylogicOutputKeys: string[],
+  // to request specific model input
+  datamodelQueryRules: number[],
 }
 
 export type KPIQuad = {

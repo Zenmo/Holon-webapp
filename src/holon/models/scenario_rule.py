@@ -18,6 +18,8 @@ from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from polymorphic.models import PolymorphicModel
 from holon.models.util import is_allowed_relation
 import sentry_sdk
+from wagtail.snippets.models import register_snippet
+from wagtail.snippets.views import snippets
 
 from holon.models.interactive_element import (
     InteractiveElementOptions,
@@ -387,6 +389,20 @@ class DatamodelQueryRule(Rule):
         ]
     )
 
+    def __str__(self):
+        type = (
+            self.model_type
+            if self.model_subtype is None or self.model_subtype == ""
+            else self.model_subtype
+        )
+
+        title = f"{self.id} - {self.self_conversion} {type}"
+
+        if self.attribute_to_sum is not None and self.attribute_to_sum != "":
+            title += f".{self.attribute_to_sum}"
+
+        return title
+
     class Meta:
         verbose_name = "DatamodelQueryRule"
 
@@ -508,3 +524,20 @@ class DatamodelQueryRule(Rule):
                 )
 
         return attr_sum
+
+
+class DatamodelQueryRuleModalSnippetViewset(snippets.SnippetViewSet):
+    """
+    DatamodelQueryRule for modals.
+    I would like to give the snippet page a custom title, but can't find how.
+    """
+
+    model = DatamodelQueryRule
+
+    def get_queryset(self, request):
+        return DatamodelQueryRule.objects.filter(datamodel_conversion_step__isnull=True).filter(
+            rule_action_conversion_step__isnull=True
+        )
+
+
+register_snippet(DatamodelQueryRuleModalSnippetViewset)

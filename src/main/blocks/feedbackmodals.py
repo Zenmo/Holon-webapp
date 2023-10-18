@@ -4,9 +4,20 @@ from wagtail import blocks
 from wagtail.fields import StreamBlock
 from wagtailmodelchooser.blocks import ModelChooserBlock
 
+from wagtailmodelchooser import Chooser, register_model_chooser
+from holon.models import DatamodelQueryRule
 from holon.models.interactive_element import InteractiveElement
 
 from .holon_image_chooser import HolonImageChooserBlock
+
+
+class OperatorChoices(models.TextChoices):
+    BIGGER = "bigger", "Bigger"
+    BIGGEREQUAL = "biggerequal", "Bigger or Equal"
+    EQUAL = "equal", "Equal"
+    NOTEQUAL = "notequal", "Not Equal"
+    LOWER = "lower", "Lower"
+    LOWEREQUAL = "lowerequal", "Lower or Equal"
 
 
 class FeedbackModalKPICondition(blocks.StructBlock):
@@ -19,14 +30,6 @@ class FeedbackModalKPICondition(blocks.StructBlock):
         NATIONALNETLOAD = "national|netload", "National Netload"
         NATIONALSELF_SUFFICIENCY = "national|self_sufficiency", "National Sufficiency"
         NATIONALSUSTAINABILITY = "national|sustainability", "National Sustainability"
-
-    class OperatorChoices(models.TextChoices):
-        BIGGER = "bigger", "Bigger"
-        BIGGEREQUAL = "biggerequal", "Bigger or Equal"
-        EQUAL = "equal", "Equal"
-        NOTEQUAL = "notequal", "Not Equal"
-        LOWER = "lower", "Lower"
-        LOWEREQUAL = "lowerequal", "Lower or Equal"
 
     parameter = blocks.ChoiceBlock(
         max_length=100,
@@ -62,8 +65,8 @@ class FeedbackModalInteractiveInputCondition(blocks.StructBlock):
 
     operator = blocks.ChoiceBlock(
         max_length=50,
-        choices=FeedbackModalKPICondition.OperatorChoices.choices,
-        default=FeedbackModalKPICondition.OperatorChoices.EQUAL,
+        choices=OperatorChoices.choices,
+        default=OperatorChoices.EQUAL,
         required=True,
         help_text=_("Set the operator of this condition"),
     )
@@ -74,6 +77,59 @@ class FeedbackModalInteractiveInputCondition(blocks.StructBlock):
         help_text=_(
             "Set the value of this condition to compare to, this is the value of the slider or the value of the radio/checkbox (field 'Option' within Interactive Element )"
         ),
+    )
+
+
+class FeedbackModalAnyLogicOutputCondition(blocks.StructBlock):
+    anylogic_output_key = blocks.CharBlock(
+        max_length=255,
+        required=True,
+        help_text=_("AnyLogic output key"),
+    )
+
+    operator = blocks.ChoiceBlock(
+        max_length=50,
+        choices=OperatorChoices.choices,
+        default=OperatorChoices.EQUAL,
+        required=True,
+        help_text=_("Set the operator of this condition"),
+    )
+
+    value = blocks.CharBlock(
+        max_length=255,
+        required=True,
+        help_text=_("Set the value of this condition to compare to"),
+    )
+
+
+@register_model_chooser
+class DatamodelQueryRuleChooser(Chooser):
+    model = DatamodelQueryRule
+
+    def get_queryset(self, request):
+        return DatamodelQueryRule.objects.filter(datamodel_conversion_step__isnull=True).filter(
+            rule_action_conversion_step__isnull=True
+        )
+
+
+class FeedbackModalDatamodelQueryCondition(blocks.StructBlock):
+    datamodel_query_rule = ModelChooserBlock(
+        target_model=DatamodelQueryRule,
+        required=True,
+    )
+
+    operator = blocks.ChoiceBlock(
+        max_length=50,
+        choices=OperatorChoices.choices,
+        default=OperatorChoices.EQUAL,
+        required=True,
+        help_text=_("Set the operator of this condition"),
+    )
+
+    value = blocks.CharBlock(
+        max_length=255,
+        required=True,
+        help_text=_("Set the value of this condition to compare to"),
     )
 
 
@@ -111,6 +167,8 @@ class FeedbackModal(blocks.StructBlock):
         [
             ("kpi_condition", FeedbackModalKPICondition()),
             ("interactive_input_condition", FeedbackModalInteractiveInputCondition()),
+            ("anylogic_output_condition", FeedbackModalAnyLogicOutputCondition()),
+            ("datamodel_query_condition", FeedbackModalDatamodelQueryCondition()),
         ],
         block_counts={},
         use_json_field=True,
