@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from wagtail.fields import StreamField
-from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
+from wagtail.admin.panels import MultiFieldPanel, FieldPanel
 
 from .base_storyline_challengemode import BaseStorylineChallengeMode
 from ..blocks import FeedbackModal

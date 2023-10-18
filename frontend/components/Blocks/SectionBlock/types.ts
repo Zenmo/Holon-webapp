@@ -1,6 +1,5 @@
 import { HolarchyFeedbackImageProps } from "@/components/Blocks/HolarchyFeedbackImage/HolarchyFeedbackImage";
 import { StaticImage } from "@/components/ImageSelector/types";
-import { FeedbackModal } from "../ChallengeFeedbackModal/types";
 
 export type Content =
   | {
@@ -50,8 +49,6 @@ export type InteractiveInputOptions = {
   sliderValueMax?: number;
   sliderValueMin?: number;
 };
-
-export type Feedbackmodals = Array<FeedbackModal>;
 
 export type SavedElements = {
   [key: string]: {

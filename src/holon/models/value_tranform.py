@@ -1,7 +1,7 @@
 import math
 from django.db import models
 from polymorphic.models import PolymorphicModel
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from modelcluster.fields import ParentalKey
 
 

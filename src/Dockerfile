@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.11-alpine
 LABEL version="v0.0.0"
 
 ENV PYTHONUNBUFFERED=1 \
@@ -14,11 +14,11 @@ ENV PYTHONUNBUFFERED=1 \
     DB_HOST=db \
     PYTHONPATH="${PYTHONPATH}:/app"
 
-WORKDIR /app
-ADD . /app/
-
 RUN apk update \
     && apk add netcat-openbsd gcc libpq-dev binutils vim curl gettext linux-headers musl-dev
+
+WORKDIR /app
+ADD . /app/
 
 RUN pip install --upgrade pip \
     && pip install -r requirements/prod.txt --no-cache-dir \

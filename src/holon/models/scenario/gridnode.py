@@ -2,8 +2,8 @@ from django.db import models
 from polymorphic.models import PolymorphicModel
 from django.utils.translation import gettext_lazy as _
 
-from holon.models.actor import Actor
-from holon.models.scenario import Scenario
+from holon.models.scenario.actor import Actor
+from holon.models.scenario_root import Scenario
 
 
 class EnergyType(models.TextChoices):

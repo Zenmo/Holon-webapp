@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from wagtail.fields import StreamBlock
-from wagtail.core import blocks
+from wagtail import blocks
 
 from .holon_image_chooser import HolonImageChooserBlock
 

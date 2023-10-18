@@ -9,11 +9,10 @@ from .custom import (
     ActorSerializer,
     GridConnectionSerializer,
     GridNodeSerializer,
-    PolicySerializer,
 )
 
 
-from holon.models.contract import (
+from holon.models.scenario.contract import (
     DeliveryContract,
     ConnectionContract,
     TaxContract,
@@ -21,7 +20,7 @@ from holon.models.contract import (
 )
 
 
-from holon.models.asset import (
+from holon.models.scenario.asset import (
     ConsumptionAsset,
     DieselVehicleAsset,
     DieselConsumptionAsset,
@@ -53,10 +52,10 @@ from holon.models.asset import (
 )
 
 
-from holon.models.actor import ActorGroup, ActorSubGroup
+from holon.models.scenario.actor import ActorGroup, ActorSubGroup
 
 
-from holon.models.gridconnection import (
+from holon.models.scenario.gridconnection import (
     BuiltEnvironmentGridConnection,
     UtilityGridConnection,
     HouseGridConnection,
@@ -67,7 +66,7 @@ from holon.models.gridconnection import (
 )
 
 
-from holon.models.gridnode import ElectricGridNode, HeatGridNode
+from holon.models.scenario.gridnode import ElectricGridNode, HeatGridNode
 
 
 class DeliveryContractSerializer(ContractSerializer):

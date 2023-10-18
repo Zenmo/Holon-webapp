@@ -6,7 +6,7 @@ from django.db import models
 import inspect
 from jinja2 import Template
 from pathlib import Path
-from holon.models import BuiltEnvironmentGridConnection
+from holon.models.scenario import BuiltEnvironmentGridConnection
 
 
 def pprint(msg: str) -> None:

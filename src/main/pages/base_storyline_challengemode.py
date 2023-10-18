@@ -7,7 +7,7 @@ from modelcluster.fields import ParentalManyToManyField
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 from wagtail.fields import StreamField
-from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
+from wagtail.admin.panels import MultiFieldPanel, FieldPanel
 from .base import BasePage
 from .base_card import BaseCard
 from ..blocks import (

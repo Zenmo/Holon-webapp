@@ -1,4 +1,4 @@
-from holon.models import Contract
+from holon.models.scenario import Contract
 from holon.models.scenario import Scenario
 from .repository_base import RepositoryBaseClass
 

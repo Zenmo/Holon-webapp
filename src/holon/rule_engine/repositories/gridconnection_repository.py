@@ -1,4 +1,4 @@
-from holon.models import GridConnection
+from holon.models.scenario import GridConnection
 from .repository_base import RepositoryBaseClass
 
 

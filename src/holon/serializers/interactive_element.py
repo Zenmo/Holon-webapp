@@ -36,6 +36,16 @@ class HolonRequestSerializer(serializers.Serializer):
 
     interactive_elements = InteractiveElementInputSerializer(many=True)
 
+    anylogic_output_keys = serializers.ListField(
+        child=serializers.CharField(max_length=255),
+        required=False,
+    )
+
+    datamodel_query_rules = serializers.ListField(
+        child=serializers.IntegerField(min_value=1),
+        required=False,
+    )
+
     def create_interactive_elements(self) -> list[InteractiveElementInput]:
         """
         Some custom code to prevent N+1 queries which we would have if we used

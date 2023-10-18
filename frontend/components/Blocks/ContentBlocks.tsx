@@ -21,8 +21,6 @@ import TableBlock from "./TableBlock/TableBlock";
 import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock";
 import TitleBlock from "./TitleBlock/TitleBlock";
 
-export type Feedbackmodals = [FeedbackModal];
-
 type ContentBlockProps = PageProps<
   TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
 >;
@@ -36,7 +34,7 @@ const ContentBlocks = ({
   graphcolors,
 }: {
   content: ContentBlockProps[];
-  feedbackmodals?: Feedbackmodals[];
+  feedbackmodals?: FeedbackModal[];
   pagetype?: string;
   graphcolors?: Graphcolor[];
   wikilinks?: WikiLinks[];

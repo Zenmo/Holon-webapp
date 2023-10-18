@@ -23,12 +23,13 @@ services:
     build:
       context: ./frontend
       dockerfile: prod.Dockerfile
+      args:
+        NEXT_PUBLIC_WAGTAIL_API_URL: http://localhost:8000/wt/api/nextjs
+        NEXT_PUBLIC_TINY_URL_API_KEY: wasd
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_BASE_URL: http://python:8000/wt/api/nextjs
-      NEXT_PUBLIC_WAGTAIL_API_URL: http://python:8000/wt/api/nextjs
-      NEXT_PUBLIC_TINY_URL_API_KEY: wasd
+      WAGTAIL_API_URL: http://python:8000/wt/api/nextjs
 
   python:
     build:
@@ -61,8 +62,6 @@ services:
     image: postgres:13.9
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    build:
-      context: ./db
     ports:
       - "8083:5432"
     environment:

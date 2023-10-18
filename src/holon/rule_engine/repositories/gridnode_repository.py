@@ -1,4 +1,4 @@
-from holon.models import GridNode
+from holon.models.scenario import GridNode
 from .repository_base import RepositoryBaseClass
 
 
