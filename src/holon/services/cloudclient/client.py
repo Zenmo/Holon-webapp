@@ -24,7 +24,7 @@ class CloudClient:
 
         # value attributes
         self.url = config.url
-        self.client = PatchedAnyLogicCloudClient(config.api_key, config.url)
+        self.client = ALCloudClient(config.api_key, config.url)
 
         # method attributes
         self.model_version = self._get_model_version(
@@ -140,18 +140,3 @@ class CloudClient:
         self._outputs_raw = {
             name: anylogic_outputs.value(name) for name in anylogic_outputs.names()
         }
-
-
-class PatchedAnyLogicCloudClient(ALCloudClient):
-    """Patched version of the AnyLogic Cloud Client.
-
-    On April 25th 2023 AnyLogic published a different variant of the v8.5.0 client.
-    The method get_model_by_name was changed from GET to POST
-    and the "name" parameter was moved from the path to the request body.
-    This did not work with our private cloud.
-    """
-
-    def get_model_by_name(self, name: str) -> Model:
-        response = self._http_client.api_request("models/name/" + name)
-        model = Model.from_json(response)
-        return model
