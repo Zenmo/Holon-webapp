@@ -32,7 +32,7 @@ qc_logger = HolonLogger("QConfig")
 
 # Hardcoded because not bound to change at any point during this project
 CONFIG_KPIS = {
-    "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+    "api_url": "https://engine.energytransitionmodel.com/api/v3/scenarios/",
     "config": {
         "sustainability": {
             "value": {"type": "query", "data": "value", "etm_key": "dashboard_renewability"},
