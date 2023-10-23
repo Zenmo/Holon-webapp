@@ -12,7 +12,7 @@ const configPerBranch = {
         wagtail: {
             CPU: '0.25',
             MEMORY: '0.5',
-            N_WORKERS: '4',
+            N_WORKERS: '2',
         }
     },
     acceptance: {
@@ -27,7 +27,7 @@ const configPerBranch = {
         wagtail: {
             CPU: '0.25',
             MEMORY: '0.5',
-            N_WORKERS: '4',
+            N_WORKERS: '2',
         }
     },
     production: {
