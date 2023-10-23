@@ -20,7 +20,8 @@ class QueryAndConvertConfig(ClusterableModel):
     name = models.CharField(max_length=255, null=False, blank=True)
 
     api_url = models.URLField(
-        default="https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
+        default="https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+        db_comment="This is currently not used and should be removed",
     )
     etm_scenario_id = models.IntegerField()
 
