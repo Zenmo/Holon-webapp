@@ -1,5 +1,7 @@
 version: "3.1"
 services:
+  # Setup to run a reverse proxy in front of the app
+  # to run them from a single domain.
 #  web:
 #    image: nginx:1.25.0-alpine3.17
 #    working_dir: /app
@@ -19,17 +21,32 @@ services:
 #    extra_hosts:
 #      - "host.docker.internal:host-gateway"
 
+  # prod mode
+#  next:
+#    build:
+#      context: ./frontend
+#      dockerfile: prod.Dockerfile
+#      args:
+#        NEXT_PUBLIC_WAGTAIL_API_URL: http://localhost:8000/wt/api/nextjs
+#        NEXT_PUBLIC_TINY_URL_API_KEY: wasd
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      WAGTAIL_API_URL: http://python:8000/wt/api/nextjs
+
+  # dev mode
   next:
-    build:
-      context: ./frontend
-      dockerfile: prod.Dockerfile
-      args:
-        NEXT_PUBLIC_WAGTAIL_API_URL: http://localhost:8000/wt/api/nextjs
-        NEXT_PUBLIC_TINY_URL_API_KEY: wasd
+    image: node:20.5.1
+    command: npm run dev
+    working_dir: /app
+    volumes:
+      - "./frontend:/app"
     ports:
       - "3000:3000"
     environment:
       WAGTAIL_API_URL: http://python:8000/wt/api/nextjs
+      NEXT_PUBLIC_WAGTAIL_API_URL: http://localhost:8000/wt/api/nextjs
+      NEXT_PUBLIC_TINY_URL_API_KEY: wasd
 
   python:
     build:
