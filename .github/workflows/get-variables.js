@@ -10,8 +10,8 @@ const configPerBranch = {
         MEDIA_LOCATION: 'media-test',
         STATIC_LOCATION: 'static-test',
         wagtail: {
-            CPU: '0.25',
-            MEMORY: '0.5',
+            CPU: '2',
+            MEMORY: '4',
             N_WORKERS: '2',
         }
     },
@@ -25,8 +25,8 @@ const configPerBranch = {
         MEDIA_LOCATION: 'media-acceptatie',
         STATIC_LOCATION: 'static-acceptatie',
         wagtail: {
-            CPU: '2',
-            MEMORY: '4',
+            CPU: '0.5',
+            MEMORY: '1',
             N_WORKERS: '4',
         }
     },
