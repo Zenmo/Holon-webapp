@@ -12,7 +12,7 @@ const configPerBranch = {
         wagtail: {
             CPU: '0.25',
             MEMORY: '0.5',
-            N_WORKERS: '4',
+            N_WORKERS: '2',
         }
     },
     acceptance: {
@@ -25,8 +25,8 @@ const configPerBranch = {
         MEDIA_LOCATION: 'media-acceptatie',
         STATIC_LOCATION: 'static-acceptatie',
         wagtail: {
-            CPU: '0.25',
-            MEMORY: '0.5',
+            CPU: '2',
+            MEMORY: '4',
             N_WORKERS: '4',
         }
     },
