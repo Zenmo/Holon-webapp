@@ -86,13 +86,11 @@ export const useSimulation = (): UseSimulation => {
 
         cacheCheck(data)
             .then(isCached => {
-                console.log('isCached', isCached, 'requestOrdinal', requestOrdinal, 'simulationOrdinal', simulationOrdinal.current)
                 if (requestOrdinal !== simulationOrdinal.current) {
                     return
                 }
 
                 if (!isCached) {
-                  console.log("setSimulating")
                   setSimulating()
                 }
             })

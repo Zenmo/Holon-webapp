@@ -8,6 +8,7 @@ from anylogiccloudclient.data.model_data import ModelData
 
 from holon.models.config import AnylogicCloudInput
 from holon.models.scenario import Scenario
+from holon.services.cloudclient.output import AnyLogicOutput
 from pipit.sentry import sentry_sdk_trace
 import sentry_sdk
 
@@ -63,7 +64,7 @@ class CloudClient:
         return ScenarioSerializer(scenario).data
 
     @sentry_sdk_trace
-    def run(self) -> None:
+    def run(self) -> AnyLogicOutput:
         """run the scenario, outputs are set to the .outputs attribute"""
 
         inputs: Inputs = self.client.create_default_inputs(self.model_version)
@@ -84,7 +85,8 @@ class CloudClient:
 
         outputs = self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
         self.log_input_output(inputs, outputs)
-        self.outputs = outputs
+
+        return AnyLogicOutput.from_source(outputs, self.config.anylogic_cloud_output.all())
 
     def log_input_output(self, inputs: Inputs, outputs: SingleRunOutputs):
         span = sentry_sdk.Hub.current.scope.span

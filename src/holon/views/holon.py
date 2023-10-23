@@ -18,6 +18,7 @@ from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
+from holon.services.cloudclient.output import AnyLogicOutput
 from holon.services.data import Results
 from holon.utils.logging import HolonLogger
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
@@ -46,8 +47,8 @@ class HolonV2Service(generics.CreateAPIView):
         serializer = HolonRequestSerializer(data=request.data)
 
         use_caching = use_result_cache(request)
-        scenario = None
-        cc = None
+        scenario: Scenario | None = None
+        anylogic_output: AnyLogicOutput | None = None
 
         try:
             if not serializer.is_valid():
@@ -57,6 +58,7 @@ class HolonV2Service(generics.CreateAPIView):
             scenario_id = data["scenario"]
             interactive_elements = serializer.create_interactive_elements()
 
+            cache_key: None | str = None
             if use_caching:
                 cache_key = holon_endpoint_cache.generate_key(scenario_id, interactive_elements)
 
@@ -78,29 +80,30 @@ class HolonV2Service(generics.CreateAPIView):
             scenario_aggregate = rule_mapping.apply_rules(scenario_aggregate, interactive_elements)
 
             cc_payload = scenario_aggregate.serialize_to_json()
-            cc = CloudClient(payload=cc_payload, scenario=scenario)
 
             # RUN ANYLOGIC
             HolonV2Service.logger.log_print("Running Anylogic model")
 
-            cc.run()
+            anylogic_output = CloudClient(payload=cc_payload, scenario=scenario).run()
 
             # ETM MODULE
             HolonV2Service.logger.log_print("Running ETM module")
-            etm_outcomes = self._etm_results(scenario, scenario_aggregate, cc)
+            etm_outcomes = self._etm_results(scenario, scenario_aggregate, anylogic_output)
 
             HolonV2Service.logger.log_print("Calculating CostTables")
             cost_benefit_tables = self._cost_benefit_tables(
-                etm_outcomes.pop("depreciation_costs"), scenario_aggregate, cc
+                etm_outcomes.pop("depreciation_costs"), scenario_aggregate, anylogic_output
             )
 
             results = Results(
                 cc_payload=cc_payload,
                 request=request,
-                anylogic_outcomes=cc.outputs,
+                anylogic_outcomes=anylogic_output,
                 cost_benefit_overview=cost_benefit_tables.main_table(),
                 cost_benefit_detail=cost_benefit_tables.all_detailed_tables(),
                 **etm_outcomes,
+                requested_anylogic_outputs={},  # TODO
+                requested_datamodel_queries={},
             )
 
             HolonV2Service.logger.log_print("200 OK")
@@ -122,8 +125,8 @@ class HolonV2Service(generics.CreateAPIView):
             response_body = {"error_msg": f"something went wrong: {e}"}
             if scenario:
                 response_body["scenario"] = ScenarioSerializer(scenario).data
-            if cc:
-                response_body["anylogic_outcomes"] = cc.outputs
+            if anylogic_output:
+                response_body["anylogic_outcomes"] = anylogic_output.decoded
 
             return Response(
                 response_body,
@@ -131,7 +134,10 @@ class HolonV2Service(generics.CreateAPIView):
             )
 
     def _etm_results(
-        self, scenario: Scenario, scenario_aggregate: ScenarioAggregate, cc: CloudClient
+        self,
+        scenario: Scenario,
+        scenario_aggregate: ScenarioAggregate,
+        anylogic_output: AnyLogicOutput,
     ):
         """Returns a dict with results from the ETM"""
         etm_outcomes = {
@@ -141,7 +147,7 @@ class HolonV2Service(generics.CreateAPIView):
             "depreciation_costs": [],
         }
         for module, outcome in ETMConnect.connect_from_scenario(
-            scenario, scenario_aggregate, cc.outputs
+            scenario, scenario_aggregate, anylogic_output.decoded
         ):
             if module == QueryCovertModuleType.COST:
                 etm_outcomes["cost_outcome"] = outcome
@@ -157,25 +163,28 @@ class HolonV2Service(generics.CreateAPIView):
         return etm_outcomes
 
     def _cost_benefit_tables(
-        self, depreciation_costs, scenario_aggregate: ScenarioAggregate, cc: CloudClient
+        self,
+        depreciation_costs,
+        scenario_aggregate: ScenarioAggregate,
+        anylogic_output: AnyLogicOutput,
     ) -> CostTables:
-        tables = CostTables.from_al_output(self._find_contracts(cc), scenario_aggregate)
+        tables = CostTables.from_al_output(
+            self._find_contracts(anylogic_output), scenario_aggregate
+        )
         for costs in depreciation_costs:
             tables.inject_depreciation_costs(costs)
         return tables
 
-    def _find_contracts(self, cc: CloudClient):
+    def _find_contracts(self, anylogic_output: AnyLogicOutput):
         """Finds contracts in the AnyLogic outcomes, needed for cost tables"""
         try:
-            return cc.outputs["contracts"]
+            return anylogic_output.decoded["contract_data"]
         except KeyError as err:
             HolonV2Service.logger.log_print(
                 "Contract data is not mapped, trying to find the correct output..."
             )
-            for cc_key, alternative_output in cc._outputs_raw.items():
-                if "contract" in cc_key:
-                    return json.loads(alternative_output)
-            raise KeyError("No contract found in cc keys") from err
+            key = anylogic_output.source.find_name_including("contract")
+            return json.loads(anylogic_output.source.value(key))
 
 
 class HolonCacheCheck(generics.CreateAPIView):
