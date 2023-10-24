@@ -1,43 +1,45 @@
 import json
 from pathlib import Path
+from typing import Any
+from dataclasses import dataclass
 
 import numpy as np
 
+from holon.services.cloudclient.output import AnyLogicOutput
 from pipit.settings import get_env_bool
 
 
 class Results:
-    # TODO:
-    # accept etm data
-    # do something on the datamodel (grid node something)
-    # check this with the model bois
-
     def __init__(
         self,
         cc_payload: dict,
         request,
-        anylogic_outcomes: dict,
+        anylogic_outcomes: AnyLogicOutput,
         inter_upscaling_outcomes: dict,
         nat_upscaling_outcomes: dict,
         cost_outcome: float,
         cost_benefit_overview: dict,
         cost_benefit_detail: dict,
+        anylogic_outputs: dict[str, Any],
+        datamodel_query_results: dict[int, Any],
     ) -> None:
+        self.cc_payload = cc_payload
+        self.request = request
         self.anylogic_outcomes = anylogic_outcomes
         self.inter_upscaling_outcomes = inter_upscaling_outcomes
         self.nat_upscaling_outcomes = nat_upscaling_outcomes
         self.cost_outcome = cost_outcome
         self.cost_benefit_overview = cost_benefit_overview
         self.cost_benefit_detail = cost_benefit_detail
-        self.request = request
-        self.cc_payload = cc_payload
+        self.anylogic_outputs = anylogic_outputs
+        self.datamodel_query_results = datamodel_query_results
 
     @property
     def anylogic_outcomes(self):
         return self._anylogic_outcomes
 
     @anylogic_outcomes.setter
-    def anylogic_outcomes(self, anylogic_outcomes: dict):
+    def anylogic_outcomes(self, anylogic_outcomes: AnyLogicOutput):
         self._anylogic_outcomes = calculate_holon_kpis(anylogic_outcomes)
 
     def to_dict(self):
@@ -51,6 +53,8 @@ class Results:
                 "overview": self.cost_benefit_overview,
                 "detail": self.cost_benefit_detail,
             },
+            "anylogic_outputs": self.anylogic_outputs,
+            "datamodel_query_results": self.datamodel_query_results,
         }
         if self.__include_scenario():
             result["scenario"] = self.cc_payload
@@ -62,15 +66,9 @@ class Results:
         return get_env_bool("RETURN_SCENARIO", False)
 
 
-def calculate_holon_kpis(anylogic_outcomes: dict) -> dict:
-    def get_key_over_all_results(key: str) -> float:
-        value = 1
-        for subdict in anylogic_outcomes.values():
-            try:
-                value = subdict[0][key]  # TODO why is this like this? Seems like jackson artefact
-            except KeyError:
-                pass
-        return value
+def calculate_holon_kpis(anylogic_outcomes: AnyLogicOutput) -> dict:
+    def get_key_over_all_results(key):
+        return anylogic_outcomes.get_key_over_all_results(key)
 
     import_curve_MWh = np.array(
         list(get_key_over_all_results("SystemHourlyElectricityImport_MWh").values())[:8760]

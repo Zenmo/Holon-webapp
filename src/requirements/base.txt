@@ -25,4 +25,4 @@ base58==2.1.1
 anylogiccloudclient @ https://cloud.anylogic.com/files/api-8.5.0/clients/anylogiccloudclient-8.5.0-py3-none-any.whl#egg=anylogiccloudclient
 
 # ETM-service
-https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.4.4/etm_service-0.4.4.tar.gz
+https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.4.8/etm_service-0.4.8.tar.gz

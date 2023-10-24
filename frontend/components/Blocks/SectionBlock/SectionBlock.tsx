@@ -66,6 +66,8 @@ export default function SectionBlock({
           simulationResult: {
               dashboardResults: kpis,
               costBenefitResults: costBenefitData,
+              datamodelQueryResults,
+              anylogicOutputs,
           },
           loadingState,
       },
@@ -293,7 +295,12 @@ export default function SectionBlock({
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
       {feedbackmodals && (
-        <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
+        <ChallengeFeedbackModal
+          feedbackmodals={feedbackmodals}
+          kpis={kpis}
+          anylogicOutputs={anylogicOutputs}
+          datamodelQueryResults={datamodelQueryResults}
+          content={content} />
       )}
       {costBenefitModal && costBenefitData && (
         <CostBenefitModal

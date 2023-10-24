@@ -10,9 +10,7 @@ def run():
 
     # print(cc.client.create_default_inputs(cc.model_version).names())
 
-    cc.run()
-
-    cc.outputs
+    outputs = cc.run()
 
     with open("outputs-anylogic-fixture.json", "w") as outfile:
-        json.dump(cc.outputs, outfile)
+        json.dump(outputs.decoded, outfile)
