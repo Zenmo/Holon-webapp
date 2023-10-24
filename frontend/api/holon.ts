@@ -32,6 +32,8 @@ export type SimulationResult = {
     national: KPIQuad
   }
   costBenefitResults: Record<string, unknown>
+  anylogicOutputs: Record<string, number>
+  datamodelQueryResults: Record<number, number>
 }
 
 export async function getHolonKPIs(data: SimulationInput): Promise<SimulationResult> {
