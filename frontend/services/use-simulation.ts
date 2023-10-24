@@ -70,7 +70,6 @@ export const useSimulation = (): UseSimulation => {
         const requestOrdinal = ++simulationOrdinal.current
         getHolonKPIs(data)
             .then((response) => {
-                // console.log('response', response, 'requestOrdinal', requestOrdinal, 'simulationOrdinal', simulationOrdinal.current)
                 if (requestOrdinal != simulationOrdinal.current) {
                     return
                 }

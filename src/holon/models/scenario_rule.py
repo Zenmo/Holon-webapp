@@ -525,6 +525,16 @@ class DatamodelQueryRule(Rule):
 
         return attr_sum
 
+    @classmethod
+    def execute_multiple(
+        cls, rule_ids: list[int], scenario_aggregate: ScenarioAggregate
+    ) -> dict[int, float | int]:
+        rules = cls.objects.filter(id__in=rule_ids)
+        if len(rules) != len(rule_ids):
+            raise ValidationError("One or more data query rule ids are invalid.")
+
+        return {rule.id: rule.get_filter_aggregation_result(scenario_aggregate) for rule in rules}
+
 
 class DatamodelQueryRuleModalSnippetViewset(snippets.SnippetViewSet):
     """

@@ -41,3 +41,6 @@ class AnyLogicOutput:
             except KeyError:
                 pass
         return value
+
+    def create_dict(self, keys: list[str]) -> dict:
+        return {key: self.get_key_over_all_results(key) for key in keys}

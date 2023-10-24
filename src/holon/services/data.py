@@ -20,24 +20,26 @@ class Results:
         cost_outcome: float,
         cost_benefit_overview: dict,
         cost_benefit_detail: dict,
-        requested_anylogic_outputs: dict[str, Any],
-        requested_datamodel_queries: dict[int, Any],
+        anylogic_outputs: dict[str, Any],
+        datamodel_query_results: dict[int, Any],
     ) -> None:
+        self.cc_payload = cc_payload
+        self.request = request
         self.anylogic_outcomes = anylogic_outcomes
         self.inter_upscaling_outcomes = inter_upscaling_outcomes
         self.nat_upscaling_outcomes = nat_upscaling_outcomes
         self.cost_outcome = cost_outcome
         self.cost_benefit_overview = cost_benefit_overview
         self.cost_benefit_detail = cost_benefit_detail
-        self.request = request
-        self.cc_payload = cc_payload
+        self.anylogic_outputs = anylogic_outputs
+        self.datamodel_query_results = datamodel_query_results
 
     @property
     def anylogic_outcomes(self):
         return self._anylogic_outcomes
 
     @anylogic_outcomes.setter
-    def anylogic_outcomes(self, anylogic_outcomes: dict):
+    def anylogic_outcomes(self, anylogic_outcomes: AnyLogicOutput):
         self._anylogic_outcomes = calculate_holon_kpis(anylogic_outcomes)
 
     def to_dict(self):
@@ -51,6 +53,8 @@ class Results:
                 "overview": self.cost_benefit_overview,
                 "detail": self.cost_benefit_detail,
             },
+            "anylogic_outputs": self.anylogic_outputs,
+            "datamodel_query_results": self.datamodel_query_results,
         }
         if self.__include_scenario():
             result["scenario"] = self.cc_payload

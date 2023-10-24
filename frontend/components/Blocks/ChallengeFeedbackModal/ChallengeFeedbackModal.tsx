@@ -1,14 +1,17 @@
 import Button from "@/components/Button/Button";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+import {Dialog, Transition} from "@headlessui/react";
+import {Fragment, useEffect, useState} from "react";
 import Confetti from "react-confetti";
-import { KPIData } from "../../KPIDashboard/types";
-import { Content } from "../SectionBlock/types";
-import { FeedbackModal } from "./types";
+import {KPIData} from "../../KPIDashboard/types";
+import {Content} from "../SectionBlock/types";
+import {ConditionType, FeedbackModal} from "./types";
 import {KPIQuad} from "@/api/holon";
+import {snakeToCamel} from "@/utils/caseconverters";
 
 type ChallengeFeedbackModalProps = {
   kpis: KPIData;
+  anylogicOutputs: Record<string, number>
+  datamodelQueryResults: Record<number, number>
   loading: boolean;
   modalshowonce: boolean;
   dashboardId: string;
@@ -18,6 +21,8 @@ type ChallengeFeedbackModalProps = {
 
 export default function ChallengeFeedbackModal({
   kpis,
+  anylogicOutputs,
+  datamodelQueryResults,
   content,
   feedbackmodals,
 }: ChallengeFeedbackModalProps) {
@@ -56,11 +61,22 @@ export default function ChallengeFeedbackModal({
                   const [level, kpi]: [keyof KPIData, keyof KPIQuad] = conditionItem.value.parameter.split("|");
                   kpivalue = kpis[level][kpi]
                   break;
-                case "model_query_condition":
-                case "anylogic_condition":
-                  throw new Error("Not implemented condition type " + conditionItem.type)
+                case ConditionType.datamodel_query_condition:
+                  if (datamodelQueryResults === undefined) {
+                    // it's probably still loading
+                    return false;
+                  }
+                  kpivalue = datamodelQueryResults[conditionItem.value.datamodelQueryRule]
+                  break;
+                case ConditionType.anylogic_output_condition:
+                  if (anylogicOutputs === undefined) {
+                    // it's probably still loading
+                    return false;
+                  }
+                  kpivalue = anylogicOutputs[snakeToCamel(conditionItem.value.anylogicOutputKey)]
+                  break;
                 default:
-                  throw new Error("Unknown condition type" + conditionItem.type)
+                  throw new Error("Unknown condition type " + conditionItem.type)
               }
 
               const conditionValue = parseFloat(conditionItem.value.value);

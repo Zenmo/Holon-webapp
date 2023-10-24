@@ -13,7 +13,7 @@ from holon.cache import holon_endpoint_cache
 from holon.models import Scenario
 from holon.rule_engine import rule_mapping
 from holon.models.config import QueryCovertModuleType
-from holon.models.scenario_rule import ModelType
+from holon.models.scenario_rule import ModelType, DatamodelQueryRule
 from holon.models.util import all_subclasses, is_exclude_field
 from holon.serializers import HolonRequestSerializer, ScenarioSerializer
 from holon.services import CostTables, ETMConnect
@@ -83,7 +83,6 @@ class HolonV2Service(generics.CreateAPIView):
 
             # RUN ANYLOGIC
             HolonV2Service.logger.log_print("Running Anylogic model")
-
             anylogic_output = CloudClient(payload=cc_payload, scenario=scenario).run()
 
             # ETM MODULE
@@ -102,8 +101,10 @@ class HolonV2Service(generics.CreateAPIView):
                 cost_benefit_overview=cost_benefit_tables.main_table(),
                 cost_benefit_detail=cost_benefit_tables.all_detailed_tables(),
                 **etm_outcomes,
-                requested_anylogic_outputs={},  # TODO
-                requested_datamodel_queries={},
+                anylogic_outputs=anylogic_output.create_dict(data["anylogic_output_keys"]),
+                datamodel_query_results=DatamodelQueryRule.execute_multiple(
+                    data["datamodel_query_rules"], scenario_aggregate
+                ),
             )
 
             HolonV2Service.logger.log_print("200 OK")
