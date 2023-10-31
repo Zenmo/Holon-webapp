@@ -5,9 +5,9 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.models import ClusterableModel
 from polymorphic.models import PolymorphicModel
 
-from holon.models.actor import Actor
-from holon.models.gridnode import ElectricGridNode, HeatGridNode
-from holon.models.scenario import Scenario
+from holon.models.scenario.actor import Actor
+from holon.models.scenario.gridnode import ElectricGridNode, HeatGridNode
+from holon.models.scenario_root import Scenario
 
 holon_app = apps.get_app_config("holon")
 

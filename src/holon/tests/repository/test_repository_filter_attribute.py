@@ -1,11 +1,7 @@
 import unittest
 
-from holon.models import (
-    GridConnection,
-    UtilityGridConnection,
-    HeatStorageAsset,
-    AttributeFilterComparator,
-)
+from holon.models import AttributeFilterComparator
+from holon.models.scenario import GridConnection
 from holon.rule_engine.repositories import GridConnectionRepository
 
 

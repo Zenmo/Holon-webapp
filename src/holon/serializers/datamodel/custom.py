@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from holon.models import (
+from holon.models.scenario import (
     ActorGroup,
     ActorSubGroup,
     Actor,

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.core.blocks import StreamBlock, StructBlock, CharBlock, ChoiceBlock
+from wagtail.blocks import StreamBlock, StructBlock, CharBlock, ChoiceBlock
 from wagtail.embeds.blocks import EmbedBlock
 
 from main.blocks.rich_text_block import RichtextBlock

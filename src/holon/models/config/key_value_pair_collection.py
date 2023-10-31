@@ -1,6 +1,5 @@
 from django.db import models
-from wagtail.admin.edit_handlers import InlinePanel
-from django.utils.translation import gettext_lazy as _
+from wagtail.admin.panels import InlinePanel
 
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey

@@ -14,9 +14,7 @@ from holon.models.scenario_rule import ScenarioRule
 from django.db import models
 
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import FieldPanel
-
-from holon.models import Actor
+from wagtail.admin.panels import FieldPanel
 
 
 class RemoveMode(models.TextChoices):

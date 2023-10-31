@@ -1,5 +1,4 @@
-from holon.models import Actor
-from holon.models.scenario import Scenario
+from holon.models.scenario import Actor
 from .repository_base import RepositoryBaseClass
 
 

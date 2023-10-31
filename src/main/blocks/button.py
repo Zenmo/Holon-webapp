@@ -1,5 +1,5 @@
 from django.utils.translation import gettext_lazy as _
-from wagtail.core.blocks import StructBlock, CharBlock, ChoiceBlock, StreamBlock, URLBlock
+from wagtail.blocks import StructBlock, CharBlock, ChoiceBlock, StreamBlock, URLBlock
 from .page_chooser_block import PageChooserBlock
 
 

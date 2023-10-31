@@ -4,36 +4,35 @@ from django.db import models
 from polymorphic.models import PolymorphicModel
 
 
-# Create your models here.
-class Factor(PolymorphicModel):
-    """Abstract base class for factors"""
-
-    asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
-    # rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
-
-    min_value = models.IntegerField()
-    max_value = models.IntegerField()
-
-    def clean(self):
-        super().clean()
-
-        if not (
-            self.asset_attribute == "asset_attribute_not_supplied"
-            or self.asset_attribute in self.asset_attributes_options()
-        ):
-            raise ValidationError("Invalid value asset_attribute")
-
-    def asset_attributes_options(self):
-        model_type = (
-            self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
-        )
-        model = apps.get_model("holon", model_type)
-
-        return [field.name for field in model()._meta.get_fields() if not field.is_relation]
-
-    def map_factor_value(self, value: str):
-        """Process an input value with the factors parameters and return a new value"""
-        pass
+# class Factor(PolymorphicModel):
+#     """Abstract base class for factors"""
+#
+#     asset_attribute = models.CharField(max_length=100, default="asset_attribute_not_supplied")
+#     # rule = models.ForeignKey(ScenarioRule, on_delete=models.CASCADE)
+#
+#     min_value = models.IntegerField()
+#     max_value = models.IntegerField()
+#
+#     def clean(self):
+#         super().clean()
+#
+#         if not (
+#             self.asset_attribute == "asset_attribute_not_supplied"
+#             or self.asset_attribute in self.asset_attributes_options()
+#         ):
+#             raise ValidationError("Invalid value asset_attribute")
+#
+#     def asset_attributes_options(self):
+#         model_type = (
+#             self.rule.model_type if self.rule.model_subtype is None else self.rule.model_subtype
+#         )
+#         model = apps.get_model("holon", model_type)
+#
+#         return [field.name for field in model()._meta.get_fields() if not field.is_relation]
+#
+#     def map_factor_value(self, value: str):
+#         """Process an input value with the factors parameters and return a new value"""
+#         pass
 
 
 # class DiscreteFactor(Factor):

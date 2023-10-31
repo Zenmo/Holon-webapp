@@ -1,7 +1,7 @@
 """Create a Costs&Benefits Table """
 from typing import Union
 
-from holon.models import Actor, ActorGroup, ActorSubGroup
+from holon.models.scenario import Actor, ActorGroup, ActorSubGroup
 from holon.models.scenario_rule import ModelType
 from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 import sentry_sdk

@@ -5,17 +5,16 @@ import random
 from django.forms import ValidationError
 from holon.models.rule_actions import RuleAction
 from django.db import models
-from holon.models import util
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from holon.models.rule_actions.rule_action_utils import RuleActionUtils
 from holon.models.scenario_rule import ScenarioRule
 from holon.models.scenario import Scenario
-from holon.models.asset import EnergyAsset
-from holon.models.contract import Contract
-from holon.models.gridconnection import GridConnection
+from holon.models.scenario.asset import EnergyAsset
+from holon.models.scenario.contract import Contract
+from holon.models.scenario.gridconnection import GridConnection
 from holon.models.scenario_rule import ModelType
 from holon.models.filter.attribute_filter_comparator import AttributeFilterComparator
 

@@ -5,7 +5,7 @@
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 
-from holon.models.contract import (
+from holon.models.scenario.contract import (
     Contract,
     DeliveryContract,
     ConnectionContract,
@@ -14,7 +14,7 @@ from holon.models.contract import (
 )
 
 
-from holon.models.asset import (
+from holon.models.scenario.asset import (
     EnergyAsset,
     ConsumptionAsset,
     DieselVehicleAsset,
@@ -47,10 +47,10 @@ from holon.models.asset import (
 )
 
 
-from holon.models.actor import Actor, ActorGroup, ActorSubGroup
+from holon.models.scenario.actor import Actor, ActorGroup, ActorSubGroup
 
 
-from holon.models.gridconnection import (
+from holon.models.scenario.gridconnection import (
     GridConnection,
     BuiltEnvironmentGridConnection,
     UtilityGridConnection,
@@ -62,10 +62,10 @@ from holon.models.gridconnection import (
 )
 
 
-from holon.models.gridnode import GridNode, ElectricGridNode, HeatGridNode
+from holon.models.scenario.gridnode import GridNode, ElectricGridNode, HeatGridNode
 
 
-from holon.models.policy import (
+from holon.models.scenario.policy import (
     Policy,
 )
 

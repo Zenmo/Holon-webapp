@@ -1,6 +1,6 @@
 import unittest
 
-from holon.models import GridConnection, EnergyAsset
+from holon.models.scenario import GridConnection, EnergyAsset
 from holon.rule_engine.repositories import GridConnectionRepository
 
 

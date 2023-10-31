@@ -2,7 +2,7 @@ import { httpGet } from "@/utils/Http";
 import * as Cookies from "es-cookie";
 import { postRequest } from "./wagtail";
 
-const API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL || "/wt/api/nextjs";
+const NEXT_PUBLIC_WAGTAIL_API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL || "/wt/api/nextjs";
 
 export type InteractiveElement = {
   interactiveElement: number;
@@ -12,6 +12,10 @@ export type InteractiveElement = {
 export type SimulationInput = {
   interactiveElements: InteractiveElement[],
   scenario: number,
+  // to request specific simulation output
+  anylogicOutputKeys: string[],
+  // to request specific model input
+  datamodelQueryRules: number[],
 }
 
 export type KPIQuad = {
@@ -28,10 +32,12 @@ export type SimulationResult = {
     national: KPIQuad
   }
   costBenefitResults: Record<string, unknown>
+  anylogicOutputs: Record<string, number>
+  datamodelQueryResults: Record<number, number>
 }
 
 export async function getHolonKPIs(data: SimulationInput): Promise<SimulationResult> {
-  const {json} = await postRequest(`${API_URL}/v2/holon/`, data, {
+  const {json} = await postRequest(`${NEXT_PUBLIC_WAGTAIL_API_URL}/v2/holon/`, data, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken"),
     },
@@ -41,7 +47,7 @@ export async function getHolonKPIs(data: SimulationInput): Promise<SimulationRes
 };
 
 export async function cacheCheck(data: SimulationInput): Promise<boolean> {
-  const {json} = await postRequest(`${API_URL}/v2/cache_check/`, data, {
+  const {json} = await postRequest(`${NEXT_PUBLIC_WAGTAIL_API_URL}/v2/cache_check/`, data, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken"),
     },

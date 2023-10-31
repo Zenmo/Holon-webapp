@@ -17,8 +17,13 @@ import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import HolarchyTab from "./HolarchyTab/HolarchyTab";
 import { LegendItem } from "./HolarchyTab/LegendModal";
 import ScenarioModal from "./ScenarioModals/ScenarioModal";
-import { Content, Feedbackmodals, InteractiveContent, SavedElements } from "./types";
+import { Content, InteractiveContent, SavedElements } from "./types";
 import { useSimulation } from "@/services/use-simulation";
+import {
+  AnyLogicOutputCondition,
+  DatamodelQueryCondition,
+  FeedbackModal
+} from "@/components/Blocks/ChallengeFeedbackModal/types";
 
 type Props = {
   data: {
@@ -36,7 +41,7 @@ type Props = {
   };
   pagetype?: string;
   pagetitle?: string;
-  feedbackmodals: Feedbackmodals[];
+  feedbackmodals: FeedbackModal[];
   graphcolors?: Graphcolor[];
   savePageValues: React.Dispatch<React.SetStateAction<SavedElements>>;
   saveScenario: (title: string, description: string, sectionId: string) => string;
@@ -61,6 +66,8 @@ export default function SectionBlock({
           simulationResult: {
               dashboardResults: kpis,
               costBenefitResults: costBenefitData,
+              datamodelQueryResults,
+              anylogicOutputs,
           },
           loadingState,
       },
@@ -209,7 +216,21 @@ export default function SectionBlock({
         };
       });
 
-    calculateKPIs({ interactiveElements: interactiveElements, scenario: scenario })
+    const conditions = feedbackmodals.flatMap(feedbackmodal => feedbackmodal.value.conditions)
+    const anylogicOutputKeys = conditions
+      .filter((condition): condition is AnyLogicOutputCondition => condition.type === "anylogic_output_condition")
+      .map(condition => condition.value.anylogicOutputKey)
+
+    const datamodelQueryRules = conditions
+      .filter((condition): condition is DatamodelQueryCondition => condition.type === "datamodel_query_condition")
+      .map(condition => condition.value.datamodelQueryRule)
+
+    calculateKPIs({
+      interactiveElements: interactiveElements,
+      scenario: scenario,
+      anylogicOutputKeys,
+      datamodelQueryRules,
+    })
   }
 
   function convertLegendItems(items: Array<LegendItem>) {
@@ -274,7 +295,12 @@ export default function SectionBlock({
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
       {feedbackmodals && (
-        <ChallengeFeedbackModal feedbackmodals={feedbackmodals} kpis={kpis} content={content} />
+        <ChallengeFeedbackModal
+          feedbackmodals={feedbackmodals}
+          kpis={kpis}
+          anylogicOutputs={anylogicOutputs}
+          datamodelQueryResults={datamodelQueryResults}
+          content={content} />
       )}
       {costBenefitModal && costBenefitData && (
         <CostBenefitModal

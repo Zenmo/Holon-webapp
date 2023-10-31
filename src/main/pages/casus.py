@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from wagtail_headless_preview.models import HeadlessPreviewMixin
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.fields import StreamField
 from django.db import models

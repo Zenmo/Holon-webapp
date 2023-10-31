@@ -1,4 +1,4 @@
-from wagtail.core.blocks import StructBlock, CharBlock, ChoiceBlock, StreamBlock
+from wagtail.blocks import StructBlock, CharBlock, ChoiceBlock, StreamBlock
 from .button import ButtonBlock
 from main.blocks.rich_text_block import RichtextBlock
 

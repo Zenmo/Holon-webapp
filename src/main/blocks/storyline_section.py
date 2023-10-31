@@ -1,6 +1,6 @@
 """ Scenario Block """
 from django.utils.translation import gettext_lazy as _
-from wagtail.core import blocks
+from wagtail import blocks
 from wagtailmodelchooser import Chooser, register_model_chooser
 from wagtailmodelchooser.blocks import ModelChooserBlock
 

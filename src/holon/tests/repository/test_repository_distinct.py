@@ -1,6 +1,6 @@
 import unittest
 
-from holon.models import GridConnection, ChargingMode
+from holon.models.scenario import GridConnection, ChargingMode
 from holon.rule_engine.repositories import GridConnectionRepository, RepositoryBaseClass
 
 

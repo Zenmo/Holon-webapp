@@ -70,7 +70,6 @@ export const useSimulation = (): UseSimulation => {
         const requestOrdinal = ++simulationOrdinal.current
         getHolonKPIs(data)
             .then((response) => {
-                // console.log('response', response, 'requestOrdinal', requestOrdinal, 'simulationOrdinal', simulationOrdinal.current)
                 if (requestOrdinal != simulationOrdinal.current) {
                     return
                 }
@@ -86,13 +85,11 @@ export const useSimulation = (): UseSimulation => {
 
         cacheCheck(data)
             .then(isCached => {
-                console.log('isCached', isCached, 'requestOrdinal', requestOrdinal, 'simulationOrdinal', simulationOrdinal.current)
                 if (requestOrdinal !== simulationOrdinal.current) {
                     return
                 }
 
                 if (!isCached) {
-                  console.log("setSimulating")
                   setSimulating()
                 }
             })

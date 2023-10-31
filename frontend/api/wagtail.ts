@@ -1,9 +1,9 @@
 import querystring from "querystring";
 import { keysToCamelFromSnake, keysToSnakeFromCamel } from "../utils/caseconverters";
 
-const API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL;
+const WAGTAIL_API_URL = process.env.WAGTAIL_API_URL;
 
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_WAGTAIL_API_URL || "/wt/api/nextjs"; // Use environment variable for browser requests if it exists and the domain root if this variable is empty on production
+const NEXT_PUBLIC_API_URL = process.env.WAGTAIL_API_URL || "/wt/api/nextjs"; // Use environment variable for browser requests if it exists and the domain root if this variable is empty on production
 
 export async function getPage(path: string, params, options) {
   if (path.includes('v1/page_by_path')) {
@@ -16,7 +16,7 @@ export async function getPage(path: string, params, options) {
     ...params,
   };
 
-  return await getRequest(`${API_URL}/v1/page_by_path/`, params, options);
+  return await getRequest(`${WAGTAIL_API_URL}/v1/page_by_path/`, params, options);
 }
 
 export async function getPasswordProtectedPage(restrictionId, pageId, params, options) {
@@ -29,7 +29,7 @@ export async function getPasswordProtectedPage(restrictionId, pageId, params, op
 }
 
 export async function getAllPages(params, options, source = "page_relative_urls") {
-  return await getRequest(`${API_URL}/v1/${source}/`, params, options);
+  return await getRequest(`${WAGTAIL_API_URL}/v1/${source}/`, params, options);
 }
 
 export async function getPagePreview(contentType, token, params, options) {
@@ -40,7 +40,7 @@ export async function getPagePreview(contentType, token, params, options) {
     ...params,
   };
 
-  return await getRequest(`${API_URL}/v1/page_preview/`, params, options);
+  return await getRequest(`${WAGTAIL_API_URL}/v1/page_preview/`, params, options);
 }
 
 export async function getPublicViewData(slug, params?, options?) {
@@ -48,7 +48,7 @@ export async function getPublicViewData(slug, params?, options?) {
 }
 
 export async function getViewData(slug, params, options) {
-  return await getRequest(`${API_URL}/v1/external_view_data/${slug}/`, params, options);
+  return await getRequest(`${WAGTAIL_API_URL}/v1/external_view_data/${slug}/`, params, options);
 }
 
 export async function getRedirect(path, params, options) {
@@ -58,7 +58,7 @@ export async function getRedirect(path, params, options) {
     ...params,
   };
 
-  return await getRequest(`${API_URL}/v1/redirect_by_path/`, params, options);
+  return await getRequest(`${WAGTAIL_API_URL}/v1/redirect_by_path/`, params, options);
 }
 
 export async function getRequest(url, params?, options?) {

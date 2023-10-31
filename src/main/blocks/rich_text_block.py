@@ -1,5 +1,5 @@
-from wagtail.core import blocks
-from wagtail.core.rich_text import expand_db_html
+from wagtail import blocks
+from wagtail.rich_text import expand_db_html
 
 
 class RichtextBlock(blocks.RichTextBlock):
