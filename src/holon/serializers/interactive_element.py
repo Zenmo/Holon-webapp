@@ -39,11 +39,13 @@ class HolonRequestSerializer(serializers.Serializer):
     anylogic_output_keys = serializers.ListField(
         child=serializers.CharField(max_length=255),
         required=False,
+        default=[],
     )
 
     datamodel_query_rules = serializers.ListField(
         child=serializers.IntegerField(min_value=1),
         required=False,
+        default=[],
     )
 
     def create_interactive_elements(self) -> list[InteractiveElementInput]:
