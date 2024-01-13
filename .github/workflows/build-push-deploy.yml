@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   variables:
@@ -41,16 +42,16 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@main
-      - name: Authenticate with Azure Container Registry
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
       # Create environment variables ACTIONS_RUNTIME_TOKEN and ACTIONS_CACHE_URL
       # to let docker access the cache.
       - name: Expose variables
         uses: crazy-max/ghaction-github-runtime@v2
+      - name: Log in GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       # Need to use driver --driver=docker-container to use GitHub cache integration.
       # The GitHub cache is per-branch.
       - name: Docker build and push
@@ -61,7 +62,7 @@ jobs:
           --target wagtail
           --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-wagtail
           --cache-from type=gha,scope=${{ github.ref_name }}-wagtail
-          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ needs.variables.outputs.tag }}
+          --tag ghcr.io/zenmo/holon-wagtail:${{ needs.variables.outputs.tag }}
           --push
       - run: >
           docker buildx build ./frontend
@@ -69,7 +70,7 @@ jobs:
           --build-arg NEXT_PUBLIC_WAGTAIL_API_URL=https://${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}/wt/api/nextjs
           --cache-to type=gha,mode=min,scope=${{ github.ref_name }}-nextjs
           --cache-from type=gha,scope=${{ github.ref_name }}-nextjs
-          --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ needs.variables.outputs.tag }}
+          --tag ghcr.io/zenmo/holon-nextjs:${{ needs.variables.outputs.tag }}
           --push
 
   ## This job takes pretty long and can be split up to parallelize the deploy.
@@ -122,10 +123,7 @@ jobs:
             N_WORKERS=${{ fromJson(needs.variables.outputs.result).wagtail.N_WORKERS }}
             --target-port 8000
             --ingress external
-            --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/wagtail:${{ needs.variables.outputs.tag }}
-            --registry-username ${{ secrets.REGISTRY_USERNAME }}
-            --registry-password ${{ secrets.REGISTRY_PASSWORD }}
-            --registry-server ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            --image ghcr.io/zenmo/holon-wagtail:${{ needs.variables.outputs.tag }}
             --cpu ${{ fromJson(needs.variables.outputs.result).wagtail.CPU }}
             --memory ${{ fromJson(needs.variables.outputs.result).wagtail.MEMORY }}
             --min-replicas 1
@@ -169,10 +167,7 @@ jobs:
             --target-port 3000
             --ingress external
             --tags branch=${{ github.ref_name }}
-            --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/nextjs:${{ needs.variables.outputs.tag }}
-            --registry-username ${{ secrets.REGISTRY_USERNAME }}
-            --registry-password ${{ secrets.REGISTRY_PASSWORD }}
-            --registry-server ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            --image ghcr.io/zenmo/holon-nextjs:${{ needs.variables.outputs.tag }}
             --cpu 0.25
             --memory 0.5
             --min-replicas 1
