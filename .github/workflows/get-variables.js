@@ -2,6 +2,8 @@
 const configPerBranch = {
     main: {
         DB_NAME: 'holon-wagtail-v2-test',
+        DB_USER: 'holon_wagtail_test',
+        DB_PASSWORD_KEY: 'DB_PASSWORD_TEST',
         RETURN_SCENARIO: 'True',
         SENTRY_ENVIRONMENT: 'azure-test',
         NEXT_HOSTNAME: 'test.holontool.nl',
@@ -17,6 +19,8 @@ const configPerBranch = {
     },
     acceptance: {
         DB_NAME: 'holon-wagtail-v2-acceptatie',
+        DB_USER: 'holon_wagtail_acceptance',
+        DB_PASSWORD_KEY: 'DB_PASSWORD_ACCEPTANCE',
         RETURN_SCENARIO: 'True',
         SENTRY_ENVIRONMENT: 'azure-acceptance',
         NEXT_HOSTNAME: 'acceptatie.holontool.nl',
@@ -32,6 +36,8 @@ const configPerBranch = {
     },
     production: {
         DB_NAME: 'holon-wagtail-v2',
+        DB_USER: 'holon_wagtail_prod',
+        DB_PASSWORD_KEY: 'DB_PASSWORD_PROD',
         RETURN_SCENARIO: 'False',
         SENTRY_ENVIRONMENT: 'azure-production',
         NEXT_HOSTNAME: 'holontool.nl',
