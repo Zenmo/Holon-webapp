@@ -112,7 +112,7 @@ jobs:
             MEDIA_LOCATION=${{ fromJson(needs.variables.outputs.result).MEDIA_LOCATION }}
             STATIC_LOCATION=${{ fromJson(needs.variables.outputs.result).STATIC_LOCATION }}
             DB_HOST=${{ secrets.DB_HOST }}
-            DB_USER=${{ secrets.DB_USER }}
+            DB_USER=${{ fromJson(needs.variables.outputs.result).DB_USER }}
             DB_NAME=${{ fromJson(needs.variables.outputs.result).DB_NAME }}
             DB_PASSWORD=${{ secrets[fromJson(needs.variables.outputs.result).DB_PASSWORD_KEY] }}
             RETURN_SCENARIO=${{ fromJson(needs.variables.outputs.result).RETURN_SCENARIO }}
