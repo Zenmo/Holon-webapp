@@ -114,7 +114,7 @@ jobs:
             DB_HOST=${{ secrets.DB_HOST }}
             DB_USER=${{ secrets.DB_USER }}
             DB_NAME=${{ fromJson(needs.variables.outputs.result).DB_NAME }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_PASSWORD=${{ secrets[fromJson(needs.variables.outputs.result).DB_PASSWORD_KEY] }}
             RETURN_SCENARIO=${{ fromJson(needs.variables.outputs.result).RETURN_SCENARIO }}
             SECRET_KEY="${{ secrets.SECRET_KEY }}"
             SENTRY_DSN=https://764e9f2b886741bcbcfd2acd74a7f7b0@o4505045746384896.ingest.sentry.io/4505045759361024
