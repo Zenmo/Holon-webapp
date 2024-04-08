@@ -2,6 +2,7 @@
 -r test.txt
 
 # Add local extra requirements here (django-debug etc)
+pydevd-pycharm~=241.14494.241
 black
 django-debug-toolbar
 isort

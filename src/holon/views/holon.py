@@ -149,8 +149,6 @@ class HolonV2Service(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-
-
     def _etm_results(
         self,
         scenario: Scenario,

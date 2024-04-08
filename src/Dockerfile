@@ -21,7 +21,7 @@ WORKDIR /app
 ADD . /app/
 
 RUN pip install --upgrade pip \
-    && pip install -r requirements/prod.txt --no-cache-dir \
+    && pip install -r requirements/local.txt --no-cache-dir \
     && pip install ipython ipdb
 
 EXPOSE 8000
