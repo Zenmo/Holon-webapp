@@ -90043,7 +90043,7 @@
             "scenario": 1,
             "module": "upscaling",
             "name": "National upscaling",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "api_url": "https://engine.energytransitionmodel.com/api/v3/scenarios/",
             "etm_scenario_id": 123456
         }
     },
@@ -90054,7 +90054,7 @@
             "scenario": 1,
             "module": "cost",
             "name": "Gebiedskosten",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "api_url": "https://engine.energytransitionmodel.com/api/v3/scenarios/",
             "etm_scenario_id": 123456
         }
     },
@@ -90065,7 +90065,7 @@
             "scenario": 1,
             "module": "costbenefit",
             "name": "National upscaling",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "api_url": "https://engine.energytransitionmodel.com/api/v3/scenarios/",
             "etm_scenario_id": 123456
         }
     },
@@ -90076,7 +90076,7 @@
             "scenario": 1,
             "module": "costbenefit",
             "name": "Cost module",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "api_url": "https://engine.energytransitionmodel.com/api/v3/scenarios/",
             "etm_scenario_id": 123456
         }
     },

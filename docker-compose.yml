@@ -1,4 +1,4 @@
-version: "3.1"
+
 services:
   # Setup to run a reverse proxy in front of the app
   # to run them from a single domain.
@@ -73,6 +73,29 @@ services:
       DOMAIN_HOST: http://localhost:8000
       N_WORKERS: 2
       DJANGO_SETTINGS_MODULE: pipit.settings.prod
+    env_file: ./docker/config/python.env
+
+  python-test:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    entrypoint: "python manage.py"
+    command: "test"
+    volumes:
+      - "./src:/app"
+    depends_on:
+      - db
+    environment:
+      ALLOWED_HOSTS: "*"
+      DB_HOST: db
+      DB_USER: postgres
+      DB_NAME: djangotest
+      DB_PASSWORD: postgres
+      RETURN_SCENARIO: false
+      SECRET_KEY: 5746384
+      DOMAIN_HOST: http://localhost:8000
+      N_WORKERS: 2
+      DJANGO_SETTINGS_MODULE: pipit.settings.test
     env_file: ./docker/config/python.env
 
   db:
