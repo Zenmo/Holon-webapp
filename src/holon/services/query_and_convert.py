@@ -131,7 +131,9 @@ class ETMConnect:
     @staticmethod
     @sentry_sdk_trace
     def connect_from_scenario(
-        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
+        original_scenario: Scenario,
+        scenario_aggregate: ScenarioAggregate,
+        anylogic_outcomes: dict,
     ) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
         for config in ETMConnect.query_configs(
