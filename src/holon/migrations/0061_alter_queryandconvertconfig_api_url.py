@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='queryandconvertconfig',
             name='api_url',
-            field=models.URLField(db_comment='This is currently not used and should be removed', default='https://beta-engine.energytransitionmodel.com/api/v3/scenarios/'),
+            field=models.URLField(db_comment='This is currently not used and should be removed', default='https://engine.energytransitionmodel.com/api/v3/scenarios/'),
         ),
     ]

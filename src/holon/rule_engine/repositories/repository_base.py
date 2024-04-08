@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from polymorphic import utils
-from typing import Type
+from typing import Type, Iterator
 from django.db.models import Model
 from polymorphic.models import PolymorphicModel
 from modelcluster.models import ClusterableModel
@@ -227,14 +227,20 @@ class RepositoryBaseClass:
 
         # copy object and set new id
         cloned_new_object = deepcopy(new_object)
-        cloned_new_object.pk = cloned_new_object.id = next(self.id_counter)
+
+        new_id = next(self.id_counter)
+        if new_object.id is not None:
+            while new_id <= new_object.id:
+                new_id = next(self.id_counter)
+
+        cloned_new_object.pk = cloned_new_object.id = new_id
 
         # add new object to list and return new object
         self.objects.append(cloned_new_object)
 
         return cloned_new_object
 
-    def id_counter_generator(self, objects: list[Model]) -> list[int]:
+    def id_counter_generator(self, objects: list[Model]) -> Iterator[int]:
         """Generator to keep track of new ids"""
 
         max_id = max([object.id for object in objects], default=0)

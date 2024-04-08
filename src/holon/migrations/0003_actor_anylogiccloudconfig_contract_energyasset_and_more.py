@@ -1316,7 +1316,7 @@ class Migration(migrations.Migration):
                 (
                     "api_url",
                     models.URLField(
-                        default="https://beta-engine.energytransitionmodel.com/api/v3/scenarios/"
+                        default="https://engine.energytransitionmodel.com/api/v3/scenarios/"
                     ),
                 ),
                 ("etm_scenario_id", models.IntegerField()),

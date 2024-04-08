@@ -24,7 +24,7 @@ class ScenarioAggregateAddTestClass(TestCase):
             insulation_label=InsulationLabel.A,
             heating_type=HeatingType.GASBURNER,
             type=BuildingType.LOGISTICS,
-            id=0,
+            # id=0,
         )
         self.gridconnection_1: BuildingGridConnection = BuildingGridConnection.objects.create(
             owner_actor=self.actor1,
@@ -33,7 +33,7 @@ class ScenarioAggregateAddTestClass(TestCase):
             insulation_label=InsulationLabel.A,
             heating_type=HeatingType.GASBURNER,
             type=BuildingType.LOGISTICS,
-            id=1,
+            # id=1,
         )
         self.gridconnection_2: BuildingGridConnection = BuildingGridConnection.objects.create(
             owner_actor=self.actor2,
@@ -42,7 +42,7 @@ class ScenarioAggregateAddTestClass(TestCase):
             insulation_label=InsulationLabel.A,
             heating_type=HeatingType.GASBURNER,
             type=BuildingType.LOGISTICS,
-            id=2,
+            # id=2,
         )
         self.asset1 = ElectricHeatConversionAsset.objects.create(
             gridconnection=self.gridconnection_0,
@@ -51,7 +51,7 @@ class ScenarioAggregateAddTestClass(TestCase):
             eta_r=0.95,
             deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
-            id=1,
+            # id=1,
         )
         self.asset2 = ElectricHeatConversionAsset.objects.create(
             gridconnection=self.gridconnection_0,
@@ -60,7 +60,7 @@ class ScenarioAggregateAddTestClass(TestCase):
             eta_r=0.95,
             deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
-            id=2,
+            # id=2,
         )
         self.asset3 = ElectricHeatConversionAsset.objects.create(
             gridconnection=self.gridconnection_1,
@@ -69,7 +69,7 @@ class ScenarioAggregateAddTestClass(TestCase):
             eta_r=0.95,
             deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
-            id=3,
+            # id=3,
         )
         self.asset4 = ElectricHeatConversionAsset.objects.create(
             gridconnection=self.gridconnection_2,
@@ -78,7 +78,7 @@ class ScenarioAggregateAddTestClass(TestCase):
             eta_r=0.95,
             deliveryTemp_degC=70.0,
             capacityElectricity_kW=30.0,
-            id=4,
+            # id=4,
         )
 
         self.scenario_aggregate = ScenarioAggregate(self.scenario)
@@ -100,12 +100,13 @@ class ScenarioAggregateAddTestClass(TestCase):
         )
         new_object = self.scenario_aggregate.add_object(asset5)
 
-        self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].get(
-            new_object.id
-        ) == new_object
+        self.assertEqual(
+            self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].get(new_object.id),
+            new_object,
+        )
 
         assert self.scenario_aggregate.repositories[ModelType.ENERGYASSET.value].len() == 5
-        assert new_object != asset5
+        self.assertNotEqual(new_object, asset5)
 
     def test_add_empty_repo_type(self):
         gridnode = GridNode(id=22)
