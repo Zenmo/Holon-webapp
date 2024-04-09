@@ -116,7 +116,7 @@ class RuleFiltersTestClass(TestCase):
         expected = {
             "module": "upscaling",
             "name": "divide capacity by actors",
-            "api_url": "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/",
+            "api_url": "https://engine.energytransitionmodel.com/api/v3/scenarios/",
             "etm_scenario_id": 1337,
             "config": {
                 "divide_capacity_by_actors_internal": {

@@ -16,6 +16,14 @@ def get_env(name, default=None):
     raise ImproperlyConfigured(f"Set the {name} env variable")
 
 
+def get_env_int(name: str, default: int = None):
+    string_value = os.getenv(name)
+    if string_value is None:
+        return default
+
+    return int(string_value)
+
+
 def get_env_bool(name: str, default: bool = None) -> bool:
     if name in os.environ:
         string_value = os.environ[name].upper()

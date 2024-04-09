@@ -39,6 +39,15 @@ def use_result_cache(request: Request) -> bool:
     return True
 
 
+def default_etm_outcomes():
+    return {
+        "cost_outcome": None,
+        "nat_upscaling_outcomes": None,
+        "inter_upscaling_outcomes": None,
+        "depreciation_costs": [],
+    }
+
+
 class HolonV2Service(generics.CreateAPIView):
     logger = HolonLogger("holon-endpoint")
     serializer_class = HolonRequestSerializer
@@ -85,9 +94,16 @@ class HolonV2Service(generics.CreateAPIView):
             HolonV2Service.logger.log_print("Running Anylogic model")
             anylogic_output = CloudClient(payload=cc_payload, scenario=scenario).run()
 
-            # ETM MODULE
-            HolonV2Service.logger.log_print("Running ETM module")
-            etm_outcomes = self._etm_results(scenario, scenario_aggregate, anylogic_output)
+            # ETM Module
+            # We want to be resilient in the face of errors
+            etm_outcomes = default_etm_outcomes()
+            try:
+                HolonV2Service.logger.log_print("Running ETM module")
+                etm_outcomes = self._etm_results(scenario, scenario_aggregate, anylogic_output)
+            except Exception as e:
+                HolonV2Service.logger.log_print(e)
+                traceback.print_exception(e)
+                capture_exception(e)
 
             HolonV2Service.logger.log_print("Calculating CostTables")
             cost_benefit_tables = self._cost_benefit_tables(
@@ -118,8 +134,7 @@ class HolonV2Service(generics.CreateAPIView):
                 result,
                 status=status.HTTP_200_OK,
             )
-        except (Exception, ETMConnectionError) as e:
-            HolonV2Service.logger.log_print(e)
+        except Exception as e:
             traceback.print_exc()
             capture_exception(e)
 
@@ -141,12 +156,8 @@ class HolonV2Service(generics.CreateAPIView):
         anylogic_output: AnyLogicOutput,
     ):
         """Returns a dict with results from the ETM"""
-        etm_outcomes = {
-            "cost_outcome": None,
-            "nat_upscaling_outcomes": None,
-            "inter_upscaling_outcomes": None,
-            "depreciation_costs": [],
-        }
+        etm_outcomes = default_etm_outcomes()
+
         for module, outcome in ETMConnect.connect_from_scenario(
             scenario, scenario_aggregate, anylogic_output.decoded
         ):
