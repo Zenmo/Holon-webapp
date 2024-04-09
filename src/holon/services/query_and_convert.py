@@ -26,12 +26,19 @@ from pipit.sentry import sentry_sdk_trace
 
 qc_logger = HolonLogger("QConfig")
 
-# Hardcoded because not bound to change at any point during this project
-CONFIG_KPIS = {
+# Configuration to map ETM outputs to Holon KPI's at regional and national level.
+# Hardcoded because not bound to change at any point during this project.
+# fmt: off
+UPSCALING_KPI_CONFIGS = {
     "api_url": "https://engine.energytransitionmodel.com/api/v3/scenarios/",
     "config": {
+        # Holon KPI
         "sustainability": {
-            "value": {"type": "query", "data": "value", "etm_key": "dashboard_renewability"},
+            "value": {
+                "type": "query",
+                "data": "value",
+                "etm_key": "dashboard_renewability"
+            },
             "convert_with": [
                 {
                     "type": "static",
@@ -43,6 +50,7 @@ CONFIG_KPIS = {
                 }
             ],
         },
+        # Holon KPI
         "self_sufficiency": {
             "value": {
                 "type": "query",
@@ -50,6 +58,7 @@ CONFIG_KPIS = {
                 "etm_key": "kpi_self_sufficiency_local_production_of_primary_demand",
             }
         },
+        # Holon KPI
         "netload": {
             "value": {
                 "type": "query",
@@ -57,9 +66,17 @@ CONFIG_KPIS = {
                 "etm_key": "kpi_relative_future_load_mv_hv_transformer",
             }
         },
-        "costs": {"value": {"type": "query", "data": "value", "etm_key": "total_costs"}},
+        # Holon KPI
+        "costs": {
+            "value": {
+                "type": "query",
+                "data": "value",
+                "etm_key": "total_costs"
+            }
+        },
     },
 }
+# fmt: on
 
 
 class QConfig:
@@ -76,6 +93,7 @@ class QConfig:
         self.etm_scenario_id = config_db.etm_scenario_id
         self.anylogic_outcomes = anylogic_outcomes
         self.scenario_aggregate = scenario_aggregate
+        # used in cost-benefit to distribute costs over actors
         self.distribution_keys = {}
 
     @property
@@ -131,7 +149,9 @@ class ETMConnect:
     @staticmethod
     @sentry_sdk_trace
     def connect_from_scenario(
-        original_scenario, scenario_aggregate: ScenarioAggregate, anylogic_outcomes: dict
+        original_scenario: Scenario,
+        scenario_aggregate: ScenarioAggregate,
+        anylogic_outcomes: dict,
     ) -> tuple[str, dict]:
         """Returns a tuple (outcome name, outcome) for each available etm config found in the scenario"""
         for config in ETMConnect.query_configs(
@@ -199,7 +219,7 @@ class ETMConnect:
     def upscaling(config: QConfig):
         new_scenario_id = etm_service.scale_copy_and_send(config.etm_scenario_id, config.queries)
 
-        kpis = etm_service.retrieve_results(new_scenario_id, copy(CONFIG_KPIS))
+        kpis = etm_service.retrieve_results(new_scenario_id, copy(UPSCALING_KPI_CONFIGS))
 
         ETMConnect.log_upscaling(config.etm_scenario_id, new_scenario_id, config, kpis)
 

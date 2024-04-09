@@ -6,7 +6,7 @@ For example for src/pipit/settings/prod.py, set "DJANGO_SETTINGS_MODULE=pipit.se
 import os
 from typing import Optional
 
-from pipit.settings import get_env, get_env_bool
+from pipit.settings import get_env, get_env_bool, get_env_int
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -16,6 +16,10 @@ APP_VERSION = "0.1.0"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env("SECRET_KEY")
+
+# PyCharm or IntelliJ debugger
+PYCHARM_IP = os.getenv("PYCHARM_IP")
+PYCHARM_PORT = get_env_int("PYCHARM_PORT")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

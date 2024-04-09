@@ -1,6 +1,7 @@
 Django==4.2.6
 boto3>1.19,<1.25
 django-storages==1.14.2
+django-storages[azure]
 psycopg==3.1.12
 sentry_sdk==1.32.0
 python-dotenv==0.21
@@ -25,4 +26,4 @@ base58==2.1.1
 anylogiccloudclient @ https://cloud.anylogic.com/files/api-8.5.0/clients/anylogiccloudclient-8.5.0-py3-none-any.whl#egg=anylogiccloudclient
 
 # ETM-service
-https://github.com/ZEnMo/HOLON-ETM/releases/download/v0.4.8/etm_service-0.4.8.tar.gz
+https://github.com/Zenmo/HOLON-ETM/releases/download/v0.4.9/etm_service-0.4.9.tar.gz
