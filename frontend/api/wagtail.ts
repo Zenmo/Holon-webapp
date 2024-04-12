@@ -106,7 +106,11 @@ export async function postRequest(url, params, options) {
   });
 
   if (res.status < 200 || res.status >= 300) {
-    const error = new WagtailApiResponseError(res, url, params);
+    let responseBody = null
+    try {
+      responseBody = await res.json();
+    } catch (e) { }
+    const error = new WagtailApiResponseError(res, url, params, responseBody);
     error.response = res;
     throw error;
   }
@@ -121,8 +125,8 @@ export async function postRequest(url, params, options) {
 export class WagtailApiResponseError extends Error {
   public name: any;
 
-  constructor(res, url, params) {
-    super(`${res.statusText}. Url: ${url}. Params: ${JSON.stringify(params)}`);
+  constructor(res, url, params, responseBody = null) {
+    super(`${res.statusText}. Url: ${url}. Params: ${JSON.stringify(params)}, Response: ${JSON.stringify(responseBody)}`)
     this.name = "WagtailApiResponseError";
   }
 }
