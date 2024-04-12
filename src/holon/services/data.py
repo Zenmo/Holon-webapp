@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 from typing import Any
-from dataclasses import dataclass
 
 import numpy as np
 
@@ -22,6 +21,7 @@ class Results:
         cost_benefit_detail: dict,
         anylogic_outputs: dict[str, Any],
         datamodel_query_results: dict[int, Any],
+        error: Exception = None,
     ) -> None:
         self.cc_payload = cc_payload
         self.request = request
@@ -33,6 +33,7 @@ class Results:
         self.cost_benefit_detail = cost_benefit_detail
         self.anylogic_outputs = anylogic_outputs
         self.datamodel_query_results = datamodel_query_results
+        self.error = error
 
     @property
     def anylogic_outcomes(self):
@@ -55,6 +56,7 @@ class Results:
             },
             "anylogic_outputs": self.anylogic_outputs,
             "datamodel_query_results": self.datamodel_query_results,
+            "error": repr(self.error) if self.error is not None else None,
         }
         if self.__include_scenario():
             result["scenario"] = self.cc_payload
