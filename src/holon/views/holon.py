@@ -95,13 +95,15 @@ class HolonV2Service(generics.CreateAPIView):
             anylogic_output = CloudClient(payload=cc_payload, scenario=scenario).run()
 
             # ETM Module
-            # We want to be resilient in the face of errors
+            # We want to be resilient in the face of errors.
+            # When the ETM module fails, we return the results of the AnyLogic part.
             etm_outcomes = default_etm_outcomes()
+            error = None
             try:
                 HolonV2Service.logger.log_print("Running ETM module")
                 etm_outcomes = self._etm_results(scenario, scenario_aggregate, anylogic_output)
             except Exception as e:
-                HolonV2Service.logger.log_print(e)
+                error = e
                 traceback.print_exception(e)
                 capture_exception(e)
 
@@ -121,6 +123,7 @@ class HolonV2Service(generics.CreateAPIView):
                 datamodel_query_results=DatamodelQueryRule.execute_multiple(
                     data["datamodel_query_rules"], scenario_aggregate
                 ),
+                error=error,
             )
 
             HolonV2Service.logger.log_print("200 OK")
