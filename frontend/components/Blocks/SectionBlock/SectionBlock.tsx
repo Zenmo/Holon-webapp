@@ -62,18 +62,19 @@ export default function SectionBlock({
   pagetitle,
 }: Props) {
   const {
-      simulationState: {
-          simulationResult: {
-              dashboardResults: kpis,
-              costBenefitResults: costBenefitData,
-              datamodelQueryResults,
-              anylogicOutputs,
-          },
-          loadingState,
-      },
+      simulationState,
       calculateKPIs,
       setDirty,
   } = useSimulation()
+  const {
+      simulationResult: {
+          dashboardResults: kpis,
+              costBenefitResults: costBenefitData,
+              datamodelQueryResults,
+              anylogicOutputs,
+      },
+      loadingState,
+  } = simulationState
 
   const loading = loadingState === 'SENT' || loadingState === 'SIMULATING'
   const isInitialLoad = loadingState === 'INITIAL'
@@ -441,6 +442,7 @@ export default function SectionBlock({
               </div>
               <KPIDashboard
                 data={kpis}
+                simulationState={simulationState}
                 loadingState={loadingState}
                 loading={loading}
                 dashboardId={data.id}
