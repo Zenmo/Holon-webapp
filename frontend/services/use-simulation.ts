@@ -6,7 +6,8 @@ export type LoadingState =
     'SENT' | // Waiting for cache check and simulation result
     'SIMULATING' | // Cache check response indicated that the result is not in the cache. Waiting for simulation result.
     'DONE' | // Results are back and should be displayed
-    'DIRTY';  // User has changed the inputs and the results are outdated
+    'DIRTY' | // User has changed the inputs and the results are outdated
+    'ERROR' ;
 
 type UseSimulation = {
     simulationState: SimulationState
@@ -14,9 +15,10 @@ type UseSimulation = {
     calculateKPIs(data: SimulationInput): void
 }
 
-type SimulationState = {
+export type SimulationState = {
     loadingState: LoadingState
     simulationResult: SimulationResult
+    error?: Error
 }
 
 const initialQuad: KPIQuad = {
@@ -73,13 +75,24 @@ export const useSimulation = (): UseSimulation => {
                 if (requestOrdinal != simulationOrdinal.current) {
                     return
                 }
-
                 // increment so that any cache check response that comes in after this is ignored
-                ++simulationOrdinal.current
+                simulationOrdinal.current += 1
 
                 setSimulationState({
                     loadingState: 'DONE',
                     simulationResult: response,
+                })
+            }).catch(error => {
+                if (requestOrdinal != simulationOrdinal.current) {
+                  return
+                }
+                // increment so that any cache check response that comes in after this is ignored
+                simulationOrdinal.current += 1
+
+                setSimulationState({
+                    loadingState: 'ERROR',
+                    simulationResult: initialSimulationState.simulationResult,
+                    error: error,
                 })
             })
 

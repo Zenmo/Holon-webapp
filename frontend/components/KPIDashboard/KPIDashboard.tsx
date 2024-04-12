@@ -4,9 +4,10 @@ import Button from "../Button/Button";
 import KPIItems from "./KPIItems";
 import KPIRadioButtons from "./KPIRadiobuttons";
 import { KPIData } from "./types";
-import { LoadingState } from "@/services/use-simulation";
+import {LoadingState, SimulationState} from "@/services/use-simulation";
 
 type KPIDashboardProps = {
+  simulationState: SimulationState;
   data: KPIData;
   loading: boolean;
   loadingState: LoadingState;
@@ -16,6 +17,7 @@ type KPIDashboardProps = {
 };
 
 export default function KPIDashboard({
+  simulationState,
   data,
   loading,
   loadingState,
@@ -42,13 +44,27 @@ export default function KPIDashboard({
         </Button>
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
-        {!loading ? (
+        {["INITIAL", "DONE", "DIRTY"].includes(loadingState) ? (
           <KPIItems view="kpiStoryline" data={data} level={level} loading={loading} />
         ) : (
           <div className="flex flex-row justify-around items-center text-white min-h-[170px] w-full">
             <div className="font-bold text-lg">
               {loadingState === "SENT" && <Cog8ToothIcon className="animate-spin h-8 w-8" style={{animationDuration: '3s'}}/>}
-              {loadingState === "SIMULATING" && "Het scenario wordt doorgerekend. Dit duurt even."}
+              {loadingState === "SIMULATING" && (
+                  <>
+                    <Cog8ToothIcon className="animate-spin h-8 w-8" style={{animationDuration: '3s', display: 'inline' }} />
+                    &nbsp;&nbsp;
+                    Het scenario wordt doorgerekend. Dit duurt even.
+                  </>
+                )
+              }
+              {loadingState === "ERROR" && (
+                  <>
+                    <div>Er is een fout opgetreden.</div>
+                    <div style={{fontSize: '.7rem'}}>Details: ${simulationState.error?.message}</div>
+                  </>
+                )
+              }
             </div>
           </div>
         )}

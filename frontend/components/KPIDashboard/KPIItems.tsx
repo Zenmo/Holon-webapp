@@ -80,7 +80,7 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
           />
         </React.Fragment>
       ) : (
-        <span className={styles["kpiHolarchy__nodata"]}>Er is geen data op dit niveau.</span>
+        <span className={styles[view]}>Er is geen data op dit niveau.</span>
       )}
     </React.Fragment>
   );
