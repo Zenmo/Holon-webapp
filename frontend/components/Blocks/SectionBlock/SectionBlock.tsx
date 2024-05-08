@@ -328,7 +328,7 @@ export default function SectionBlock({
 
       <div className="holonContentContainer">
         {pagetype !== "Sandbox" && (
-          <div className="sticky z-20 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]">
+          <div className={`${holarchyModal ? "sticky" : ""} z-20 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]`}>
             <div className="flex-1 flex items-center">
               <button
                 onClick={closeHolarchyModal}
@@ -433,8 +433,17 @@ export default function SectionBlock({
               </div>
             )}
 
-            <div className="lg:sticky top-0">
-              <div className="py-12 px-10 lg:px-16 lg:pt-24">
+            <div className="lg:sticky top-24" style={{
+              display: "flex",
+              flexDirection: "column",
+              // minHeight makes it a bit more spacious on large screens
+              minHeight: "calc(100vh - 16rem)",
+            }}>
+              <div className="py-12 px-10 lg:px-16" style={{
+                flexGrow: 1,
+                display: "flex",
+                alignItems: "center",
+              }}>
                 {Object.keys(media).length > 0 && (
                   /* eslint-disable @next/next/no-img-element */
                   <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
