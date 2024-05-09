@@ -47,6 +47,7 @@ test("Simulation success flow", async () => {
 
   expect(result.current.simulationState).toStrictEqual({
     loadingState: "DONE",
+    previousResult: initialSimulationState.previousResult,
     simulationResult: 12,
   });
 });
@@ -67,6 +68,7 @@ test("Simulation interrupted flow", async () => {
 
   expect(result.current.simulationState).toStrictEqual({
     loadingState: 'SENT',
+    previousResult: initialSimulationState.previousResult,
     simulationResult: initialSimulationState.simulationResult,
   });
 
@@ -78,6 +80,7 @@ test("Simulation interrupted flow", async () => {
 
   expect(result.current.simulationState).toStrictEqual({
     loadingState: 'DONE',
+    previousResult: initialSimulationState.previousResult,
     simulationResult: 14,
   });
 });
@@ -97,6 +100,7 @@ test("Simulation interrupted first call finishes last", async () => {
 
   expect(result.current.simulationState).toStrictEqual({
     loadingState: 'DONE',
+    previousResult: initialSimulationState.previousResult,
     simulationResult: 14,
   });
 
@@ -109,6 +113,7 @@ test("Simulation interrupted first call finishes last", async () => {
 
   expect(result.current.simulationState).toStrictEqual({
     loadingState: 'DONE',
+    previousResult: initialSimulationState.previousResult,
     simulationResult: 14,
   });
 });
@@ -135,6 +140,7 @@ test("Simulation not cached", async () => {
 
   expect(result.current.simulationState).toStrictEqual({
     loadingState: 'DONE',
+    previousResult: initialSimulationState.previousResult,
     simulationResult: 13,
   });
 });
