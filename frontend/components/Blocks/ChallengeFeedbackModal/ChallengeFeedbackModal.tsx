@@ -2,14 +2,13 @@ import Button from "@/components/Button/Button";
 import {Dialog, Transition} from "@headlessui/react";
 import {Fragment, useEffect, useState} from "react";
 import Confetti from "react-confetti";
-import {KPIData} from "../../KPIDashboard/types";
 import {Content} from "../SectionBlock/types";
 import {ConditionType, FeedbackModal} from "./types";
-import {KPIQuad} from "@/api/holon";
+import {KPIQuad, KPIsByScale} from "@/api/holon";
 import {snakeToCamel} from "@/utils/caseconverters";
 
 type ChallengeFeedbackModalProps = {
-  kpis: KPIData;
+  kpis: KPIsByScale;
   anylogicOutputs: Record<string, number>
   datamodelQueryResults: Record<number, number>
   loading: boolean;
@@ -58,7 +57,7 @@ export default function ChallengeFeedbackModal({
                   )?.currentValue;
                   break;
                 case "kpi_condition":
-                  const [level, kpi]: [keyof KPIData, keyof KPIQuad] = conditionItem.value.parameter.split("|");
+                  const [level, kpi]: [keyof KPIsByScale, keyof KPIQuad] = conditionItem.value.parameter.split("|");
                   kpivalue = kpis[level][kpi]
                   break;
                 case ConditionType.datamodel_query_condition:
