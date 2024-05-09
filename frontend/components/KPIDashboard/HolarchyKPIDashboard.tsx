@@ -1,10 +1,10 @@
 import React from "react";
 import KPIItems from "./KPIItems";
 import styles from "./KPIItem.module.css";
-import { KPIData } from "./types";
+import {KPIsByScale} from "@/api/holon";
 
 type KPIDashboardProps = {
-  data: KPIData;
+  data: KPIsByScale;
   loading: boolean;
   textLabelNational: string;
   textLabelIntermediate: string;
