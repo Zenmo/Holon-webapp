@@ -1,13 +1,13 @@
 import React from "react";
 import {KPIItem} from "./KPIItem";
 import styles from "./KPIItem.module.css";
-import { KPIData } from "./types";
 import {calcChangeDirection, ChangeAppreciation} from "@/components/KPIDashboard/ChangeIcon";
+import {KPIsByScale} from "@/api/holon";
 
 type KPIItems = {
   view: string;
-  previousData: KPIData;
-  data: KPIData;
+  previousData: KPIsByScale;
+  data: KPIsByScale;
   level: string;
   loading: boolean;
 };

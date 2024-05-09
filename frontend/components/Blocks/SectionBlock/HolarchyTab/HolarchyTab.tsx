@@ -1,12 +1,12 @@
 import { Content } from "@/components/Blocks/SectionBlock/types";
 import { StaticImage } from "@/components/ImageSelector/types";
 import HolarchyKPIDashboard from "@/components/KPIDashboard/HolarchyKPIDashboard";
-import { KPIData } from "@/components/KPIDashboard/types";
 import HolarchyFeedbackImage, {
   HolarchyFeedbackImageProps,
 } from "../../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import ContentColumn from "../ContentColumn";
 import LegendModal, { LegendItem } from "./LegendModal";
+import {KPIsByScale} from "@/api/holon";
 
 type HolarchyTab = {
   holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
@@ -19,7 +19,7 @@ type HolarchyTab = {
   textLabelIntermediate: string;
   textLabelLocal: string;
   loading: boolean;
-  kpis: KPIData;
+  kpis: KPIsByScale;
   legend: boolean;
 };
 

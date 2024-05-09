@@ -3,12 +3,12 @@ import { useState } from "react";
 import Button from "../Button/Button";
 import KPIItems from "./KPIItems";
 import KPIRadioButtons from "./KPIRadiobuttons";
-import { KPIData } from "./types";
 import {LoadingState, SimulationState} from "@/services/use-simulation";
+import {KPIsByScale} from "@/api/holon";
 
 type KPIDashboardProps = {
   simulationState: SimulationState;
-  data: KPIData;
+  data: KPIsByScale;
   loading: boolean;
   loadingState: LoadingState;
   dashboardId: string;
