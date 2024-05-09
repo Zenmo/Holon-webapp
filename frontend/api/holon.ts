@@ -25,12 +25,14 @@ export type KPIQuad = {
   selfSufficiency: number | null
 }
 
+export type KPIsByScale = {
+  local: KPIQuad
+  intermediate: KPIQuad
+  national: KPIQuad
+}
+
 export type SimulationResult = {
-  dashboardResults: {
-    local: KPIQuad
-    intermediate: KPIQuad
-    national: KPIQuad
-  }
+  dashboardResults: KPIsByScale
   costBenefitResults: Record<string, unknown>
   anylogicOutputs: Record<string, number>
   datamodelQueryResults: Record<number, number>

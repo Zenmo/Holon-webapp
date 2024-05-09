@@ -3,12 +3,12 @@ import { useState } from "react";
 import Button from "../Button/Button";
 import KPIItems from "./KPIItems";
 import KPIRadioButtons from "./KPIRadiobuttons";
-import { KPIData } from "./types";
 import {LoadingState, SimulationState} from "@/services/use-simulation";
+import {KPIsByScale} from "@/api/holon";
 
 type KPIDashboardProps = {
   simulationState: SimulationState;
-  data: KPIData;
+  data: KPIsByScale;
   loading: boolean;
   loadingState: LoadingState;
   dashboardId: string;
@@ -45,7 +45,7 @@ export default function KPIDashboard({
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
         {["INITIAL", "DONE", "DIRTY"].includes(loadingState) ? (
-          <KPIItems view="kpiStoryline" data={data} level={level} loading={loading} />
+          <KPIItems view="kpiStoryline" previousData={simulationState.previousResult.dashboardResults} data={data} level={level} loading={loading} />
         ) : (
           <div className="flex flex-row justify-around items-center text-white min-h-[170px] w-full">
             <div className="font-bold text-lg">
