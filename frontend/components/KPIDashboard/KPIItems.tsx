@@ -1,19 +1,21 @@
 import React from "react";
-import KPIItem from "./KPIItem";
+import {KPIItem} from "./KPIItem";
 import styles from "./KPIItem.module.css";
 import { KPIData } from "./types";
+import {calcChangeDirection, ChangeAppreciation} from "@/components/KPIDashboard/ChangeIcon";
 
 type KPIItems = {
   view: string;
+  previousData: KPIData;
   data: KPIData;
   level: string;
   loading: boolean;
 };
 
-export default function KPIItems({ view, data, level, loading }: KPIItems) {
-  function valueCheck(value: number): number | string {
+export default function KPIItems({ view, previousData, data, level, loading }: KPIItems) {
+  function formatValue(value: number, empty = "-"): number | string {
     if (value == undefined || loading) {
-      return "-";
+      return empty;
     } else if (typeof value == "number") {
       return value.toFixed(1)
     } else {
@@ -21,8 +23,11 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
     }
   }
 
-  function valueCosts(level: string) {
-    let value = data[level].costs;
+  function formatPreviousValue(value: number): number | string {
+    return formatValue(value, "");
+  }
+
+  function formatCosts(value: number, empty = "-") {
     let unitPrefix = ""
 
     if (value > 1e9) {
@@ -37,7 +42,7 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
     }
 
     return {
-      value: valueCheck(value),
+      value: formatValue(value, empty),
       unitPrefix,
     };
   }
@@ -50,7 +55,10 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
             view={view}
             title="Netbelasting"
             label="netload"
-            value={valueCheck(data[level].netload)}
+            changeDirection={calcChangeDirection(abs(previousData[level].netload), abs(data[level].netload))}
+            changeAppreciation={ChangeAppreciation.MORE_IS_WORSE}
+            previousValue={formatPreviousValue(previousData[level].netload)}
+            value={formatValue(data[level].netload)}
             unit="%"
             description="Deze indicator geeft de maximale belasting gedurende het jaar als percentage van het transformatorvermogen weer. Een negatieve netbelasting geeft aan dat de maximale belasting optreedt wanneer er een lokaal overschot aan energie is."
           />
@@ -58,15 +66,22 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
             view={view}
             title="Betaalbaarheid"
             label="costs"
-            unit={valueCosts(level).unitPrefix + "EUR/jaar"}
-            value={valueCosts(level).value}
+            changeDirection={calcChangeDirection(previousData[level].costs, data[level].costs)}
+            changeAppreciation={ChangeAppreciation.MORE_IS_WORSE}
+            previousValue={formatCosts(previousData[level].costs, "").value}
+            value={formatCosts(data[level].costs).value}
+            unit={formatCosts(data[level].costs).unitPrefix + "€/jaar"}
+            previousUnit={formatCosts(previousData[level].costs, "").unitPrefix + "€/jaar"}
             description="Op lokaal niveau geeft deze indicator de totale jaarlijkse kosten voor de energievoorziening van het gesimuleerde gebied (EUR/jaar) weer."
           />
           <KPIItem
             view={view}
             title="Duurzaamheid"
             label="sustainability"
-            value={valueCheck(data[level].sustainability)}
+            changeDirection={calcChangeDirection(previousData[level].sustainability, data[level].sustainability)}
+            changeAppreciation={ChangeAppreciation.MORE_IS_BETTER}
+            previousValue={formatPreviousValue(previousData[level].sustainability)}
+            value={formatValue(data[level].sustainability)}
             unit="%"
             description="De indicator duurzaamheid staat voor het percentage duurzame energie van het totale energieverbruik in het gemodelleerde gebied."
           />
@@ -74,7 +89,10 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
             view={view}
             title="Zelfvoorzienendheid"
             label="selfSufficiency"
-            value={valueCheck(data[level].selfSufficiency)}
+            changeDirection={calcChangeDirection(previousData[level].selfSufficiency, data[level].selfSufficiency)}
+            changeAppreciation={ChangeAppreciation.MORE_IS_BETTER}
+            previousValue={formatPreviousValue(previousData[level].selfSufficiency)}
+            value={formatValue(data[level].selfSufficiency)}
             unit="%"
             description="De indicator zelfvoorzienendheid staat voor het percentage van het totale energieverbruik dat wordt ingevuld met eigen, gelijktijdige energieopwekking."
           />
@@ -84,4 +102,12 @@ export default function KPIItems({ view, data, level, loading }: KPIItems) {
       )}
     </React.Fragment>
   );
+}
+
+function abs(value: number): number {
+    if (typeof value !== "number" || Number.isNaN(value)) {
+        return NaN
+    }
+
+    return Math.abs(value)
 }
