@@ -1,4 +1,4 @@
-import {cacheCheck, getHolonKPIs, KPIQuad, SimulationInput, SimulationResult} from "@/api/holon";
+import {cacheCheck, getHolonKPIs, KPIQuad, KPIsByScale, SimulationInput, SimulationResult} from "@/api/holon";
 import {useRef, useState} from "react";
 
 export type LoadingState =
@@ -17,6 +17,7 @@ type UseSimulation = {
 
 export type SimulationState = {
     loadingState: LoadingState
+    previousResult: SimulationResult
     simulationResult: SimulationResult
     error?: Error
 }
@@ -28,14 +29,20 @@ const initialQuad: KPIQuad = {
     selfSufficiency: null,
 }
 
+const initialKPIsByScale: KPIsByScale = {
+    local: initialQuad,
+    intermediate: initialQuad,
+    national: initialQuad,
+}
+
 export const initialSimulationState: SimulationState = {
     loadingState: 'INITIAL',
+    previousResult: {
+        dashboardResults: initialKPIsByScale,
+        costBenefitResults: {},
+    },
     simulationResult: {
-        dashboardResults: {
-            local: initialQuad,
-            intermediate: initialQuad,
-            national: initialQuad,
-        },
+        dashboardResults: initialKPIsByScale,
         costBenefitResults: {},
     }
 }
@@ -46,28 +53,43 @@ export const useSimulation = (): UseSimulation => {
     const simulationOrdinal = useRef(0)
 
     const setDirty = () => {
-        ++simulationOrdinal.current
-        setSimulationState({
-          loadingState: 'DIRTY',
-          simulationResult: initialSimulationState.simulationResult,
-        })
+      ++simulationOrdinal.current
+
+      setSimulationState(previousState => {
+        if (previousState.simulationResult.dashboardResults.local.netload && (simulationState.loadingState === 'DONE' || simulationState.loadingState === 'INITIAL')) {
+          return {
+            ...previousState,
+            loadingState: 'DIRTY',
+            previousResult: previousState.simulationResult,
+          }
+        } else {
+          return {
+            ...previousState,
+            loadingState: 'DIRTY',
+            simulationResult: initialSimulationState.simulationResult,
+          }
+        }
+      })
     }
 
     const setSent = () => {
-        setSimulationState({
-          loadingState: 'SENT',
-          simulationResult: initialSimulationState.simulationResult,
-        })
+      setSimulationState( previousState => ({
+        ...previousState,
+        loadingState: 'SENT',
+        simulationResult: initialSimulationState.simulationResult,
+      }))
     }
 
   const setSimulating = () => {
-    setSimulationState({
+    setSimulationState(previousState => ({
+      ...previousState,
       loadingState: 'SIMULATING',
       simulationResult: initialSimulationState.simulationResult,
-    })
+    }))
   }
 
     const calculateKPIs = (data: SimulationInput) => {
+        setDirty()
         setSent()
         const requestOrdinal = ++simulationOrdinal.current
         getHolonKPIs(data)
@@ -78,10 +100,11 @@ export const useSimulation = (): UseSimulation => {
                 // increment so that any cache check response that comes in after this is ignored
                 simulationOrdinal.current += 1
 
-                setSimulationState({
+                setSimulationState(previousState => ({
+                    ...previousState,
                     loadingState: 'DONE',
                     simulationResult: response,
-                })
+                }))
             }).catch(error => {
                 if (requestOrdinal != simulationOrdinal.current) {
                   return
@@ -89,11 +112,12 @@ export const useSimulation = (): UseSimulation => {
                 // increment so that any cache check response that comes in after this is ignored
                 simulationOrdinal.current += 1
 
-                setSimulationState({
+                setSimulationState(previousState => ({
+                    ...previousState,
                     loadingState: 'ERROR',
                     simulationResult: initialSimulationState.simulationResult,
                     error: error,
-                })
+                }))
             })
 
         cacheCheck(data)
