@@ -2,6 +2,7 @@ import React from "react";
 import KPIItems from "./KPIItems";
 import styles from "./KPIItem.module.css";
 import {KPIsByScale} from "@/api/holon";
+import {initialKPIsByScale} from "@/services/use-simulation";
 
 type KPIDashboardProps = {
   data: KPIsByScale;
@@ -56,7 +57,7 @@ export default function HolarchyKPIDashboard({
                 ? textLabelIntermediate
                 : ""}
             </p>
-            <KPIItems view="kpiHolarchy" data={data} level={level.dataobject} loading={loading} />
+            <KPIItems view="kpiHolarchy" previousData={initialKPIsByScale} data={data} level={level.dataobject} loading={loading} />
           </div>
         </div>
       ))}

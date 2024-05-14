@@ -29,7 +29,7 @@ const initialQuad: KPIQuad = {
     selfSufficiency: null,
 }
 
-const initialKPIsByScale: KPIsByScale = {
+export const initialKPIsByScale: KPIsByScale = {
     local: initialQuad,
     intermediate: initialQuad,
     national: initialQuad,
