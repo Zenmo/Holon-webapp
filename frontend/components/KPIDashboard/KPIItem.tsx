@@ -52,18 +52,20 @@ export const KPIItem: FunctionComponent<Props> = ({
             target="_blank"/>
         </span>
         <span data-class="kpiIcon">{iconMap[label]}</span>
-        <div style={{
-          fontSize: "1rem",
-          color: "lightgray",
-          alignSelf: "start",
-          height: "1lh",
-        }}>
-          <output style={{
+        {view === "kpiStoryline" &&
+          <div style={{
             fontSize: "1rem",
-            fontWeight: "normal",
-          }}>{previousValue}</output>
-          <span>{previousValue && (previousUnit || unit)}</span>
-        </div>
+            color: "lightgray",
+            alignSelf: "start",
+            height: "1lh",
+          }}>
+            <output style={{
+              fontSize: "1rem",
+              fontWeight: "normal",
+            }}>{previousValue}</output>
+            <span>{previousValue && (previousUnit || unit)}</span>
+          </div>
+        }
         <div>
           <ChangeIcon changeDirection={changeDirection} changeAppreciation={changeAppreciation} />
           <output>{value} </output>
