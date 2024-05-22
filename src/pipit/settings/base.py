@@ -3,6 +3,7 @@ Base settings, to be included and optionally overridden by environment-specific 
 Which settings are used is controlled by the environment variable DJANGO_SETTINGS_MODULE.
 For example for src/pipit/settings/prod.py, set "DJANGO_SETTINGS_MODULE=pipit.settings.prod".
 """
+
 import os
 from typing import Optional
 
@@ -181,7 +182,20 @@ USE_TZ = True
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 # Email
-DEFAULT_FROM_EMAIL = get_env("DEFAULT_FROM_EMAIL", default="noreply@example.com")
+DEFAULT_FROM_EMAIL = get_env("DEFAULT_FROM_EMAIL", default="info@holontool.nl")
+EMAIL_HOST = get_env("EMAIL_HOST", "smtp.azurecomm.net")
+EMAIL_PORT = get_env_int("EMAIL_PORT", 587)
+EMAIL_HOST_USER = get_env(
+    "EMAIL_HOST_USER",
+    "zerocomms.8d695763-536c-4753-a1bb-9aaafa18a3c7.1d9c9a28-bfa5-49e1-b0b5-08e4041f77b1",
+)
+EMAIL_HOST_PASSWORD = get_env("EMAIL_HOST_PASSWORD", "")
+# Azure uses STARTTLS
+EMAIL_USE_TLS = get_env_bool("EMAIL_USE_TLS", True)
+EMAIL_USE_SSL = get_env_bool("EMAIL_USE_SSL", False)
+
+# For URL generation in emails
+WAGTAILADMIN_BASE_URL = get_env("WAGTAILADMIN_BASE_URL", "http://localhost:8000")
 
 # Auth
 AUTH_USER_MODEL = "customuser.User"
