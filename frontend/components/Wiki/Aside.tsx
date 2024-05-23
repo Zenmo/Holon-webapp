@@ -1,5 +1,6 @@
 import Link from "next/link";
-import React from "react";
+import React, {CSSProperties} from "react";
+import {usePathname} from "next/navigation";
 
 interface Props {
   posts: PostItemProps[];
@@ -27,17 +28,29 @@ interface DocumentItemProps {
 }
 
 function Document({ docItem }: DocumentItemProps) {
+  const currentPath = usePathname()
+  const style: CSSProperties = {}
+  if (docItem.relativeUrl === currentPath) {
+    style.backgroundColor = "lightblue"
+  }
   return (
     <Link href={docItem.relativeUrl} legacyBehavior>
-      <span className={"block cursor-pointer bg-inherit pr-4 pt-1 pb-3 "}>{docItem.title}</span>
+      <span className={"block cursor-pointer bg-inherit py-2 px-4"} style={style}>
+        {docItem.title}
+      </span>
     </Link>
   );
 }
 
 function Folder({ folderItem }: FolderItemProps) {
+  const currentPath = usePathname()
+  const style: CSSProperties = {}
+  if (folderItem.relativeUrl === currentPath) {
+    style.backgroundColor = "lightblue"
+  }
   return (
     <details open className="order-1 p-0 ">
-      <summary className="text-md cursor-pointer bg-inherit py-3 pr-4">
+      <summary className="text-md cursor-pointer bg-inherit py-3 px-4" style={style}>
         <Link href={folderItem.relativeUrl} legacyBehavior>
           <strong>{folderItem.title}</strong>
         </Link>
