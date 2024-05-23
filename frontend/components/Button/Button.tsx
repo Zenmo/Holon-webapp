@@ -48,7 +48,7 @@ export default function Button<T extends React.ElementType>({
 
   return (
     <Tag
-      className={`${className} ${colorClasses} flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}
+      className={`${colorClasses} flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50 ${className}`.trim()}
       {...rest}
       href={details?.buttonLink[0].value}
       {...externLinkProps}>

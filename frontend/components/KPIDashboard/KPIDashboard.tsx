@@ -31,17 +31,21 @@ export default function KPIDashboard({
 
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
-      <div className="flex flex-row justify-around items-center">
-        <KPIRadioButtons updateValue={setLevel} loading={loading} dashboardId={dashboardId} />
-        <Button onClick={handleClickCostBen} variant="light" disabled={loading}>
-          <CurrencyEuroIcon className="h-5 w-5 pr-1" />
-          Kosten en Baten
-        </Button>
-        <Button onClick={handleClickScenario} variant="light" disabled={loading}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/imgs/save.png" alt="icon save" width={20} height={20} className="mr-2" />
-          Scenario delen
-        </Button>
+      <div className="flex flex-row justify-between items-center" style={{
+        margin: ".5rem 0 .5rem 1.5rem"
+      }}>
+        <KPIRadioButtons updateValue={setLevel} loading={loading} dashboardId={dashboardId}/>
+        <div className="flex flex-col items-stretch">
+          <Button onClick={handleClickCostBen} variant="light" disabled={loading} className="px-6">
+            <CurrencyEuroIcon className="h-5 w-5 pr-1" />
+            Kosten en Baten
+          </Button>
+          <Button onClick={handleClickScenario} variant="light" disabled={loading} className="px-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/imgs/save.png" alt="icon save" width={20} height={20} className="mr-2" />
+            Scenario delen
+          </Button>
+        </div>
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
         {["INITIAL", "DONE", "DIRTY"].includes(loadingState) ? (
