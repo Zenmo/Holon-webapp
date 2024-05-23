@@ -133,7 +133,7 @@ export default function CostBenefitModal({
                       </div>
                     ))}
                 </div>
-                <div className="xl:w-[28%] flex">
+                <div className="xl:w-[28%] flex flex-row-reverse">
                   <CloseButton onClick={handleClick} />
                 </div>
               </div>

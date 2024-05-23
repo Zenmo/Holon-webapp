@@ -1,4 +1,4 @@
-import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
+import {ArrowsPointingOutIcon} from "@heroicons/react/24/outline";
 import {ComponentProps, FunctionComponent} from "react";
 
 /**
@@ -12,7 +12,7 @@ export const EnlargeButton: FunctionComponent<ComponentProps<"button">> = ({ ...
             padding: "1rem",
             /* tailwind has already removed the browser default button styling */
     }}>
-        <ArrowTopRightOnSquareIcon style={{
+        <ArrowsPointingOutIcon style={{
             height: "2rem",
         }} />
     </button>
