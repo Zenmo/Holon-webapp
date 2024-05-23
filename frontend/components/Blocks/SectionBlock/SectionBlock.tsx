@@ -6,7 +6,7 @@ import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import { Graphcolor } from "@/containers/types";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import {InteractiveElement} from "../../../api/holon";
 import { WikiLinks } from "../../../containers/types";
@@ -24,6 +24,8 @@ import {
   DatamodelQueryCondition,
   FeedbackModal
 } from "@/components/Blocks/ChallengeFeedbackModal/types";
+import {EnlargeButton} from "@/components/Button/EnlargeButton";
+import {CloseButton} from "@/components/Button/CloseButton";
 
 type Props = {
   data: {
@@ -330,24 +332,6 @@ export default function SectionBlock({
         {pagetype !== "Sandbox" && (
           <div className={`${holarchyModal ? "sticky" : ""} z-20 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]`}>
             <div className="flex-1 flex items-center">
-              <button
-                onClick={closeHolarchyModal}
-                className={`px-6 pb-2 ${
-                  holarchyModal
-                    ? "bg-holon-gray-200 text-holon-blue-900"
-                    : "bg-holon-blue-900 text-white"
-                } border-x-2 border-t-2 border-solid h-12`}>
-                Interactiemodus {pagetype}
-              </button>
-              <button
-                onClick={openHolarchyModal}
-                className={`px-6 pb-2 ${
-                  holarchyModal
-                    ? "bg-holon-blue-900 text-white"
-                    : "bg-holon-gray-200 text-holon-blue-900"
-                } border-x-2 border-t-2 border-solid h-12`}>
-                Holarchie
-              </button>
               {holarchyModal &&
                 wikilinks
                   ?.filter(wikilink => wikilink.type === "holarchy")
@@ -374,14 +358,25 @@ export default function SectionBlock({
                   Legenda
                 </button>
               )}
+            {holarchyModal && (
+              <CloseButton onClick={closeHolarchyModal} style={{
+                position: "absolute",
+                padding: ".5rem",
+                height: "100%",
+                width: "3rem",
+                right: 0,
+                top: 0,
+              }}/>
+            )}
 
             <div className="flex-1"></div>
           </div>
         )}
 
-        <div className={`flex flex-col lg:flex-row ${backgroundFullcolor}`}>
+        <div className={`flex flex-col lg:flex-row ${backgroundFullcolor} relative`}>
           <div
-            className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${gridValue.left} ${backgroundLeftColor}`}>
+            className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${gridValue.left} ${backgroundLeftColor}`}
+          >
             {data.value.background.size !== "bg_full" && !holarchyModal ? (
               <span className={`extra_bg ${backgroundLeftColor}`}></span>
             ) : (
@@ -400,7 +395,8 @@ export default function SectionBlock({
 
           <div className={`relative flex flex-col ${gridValue.right}`}>
             {dirtyState && (
-              <div className="absolute flex justify-center items-start p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
+              <div
+                className="absolute flex justify-center items-start p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
                 <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded sticky top-[50%]">
                   <div>
                     <div className="flex justify-center mt-6 items-center">
@@ -439,6 +435,11 @@ export default function SectionBlock({
               // minHeight makes it a bit more spacious on large screens
               minHeight: "calc(100vh - 16rem)",
             }}>
+              <EnlargeButton onClick={openHolarchyModal} style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+              }}/>
               <div className="py-12 px-10 lg:px-16" style={{
                 flexGrow: 1,
                 display: "flex",
@@ -446,7 +447,7 @@ export default function SectionBlock({
               }}>
                 {Object.keys(media).length > 0 && (
                   /* eslint-disable @next/next/no-img-element */
-                  <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900" />
+                  <img src={media.img?.src} alt={media.img?.alt} width="1600" height="900"/>
                 )}
               </div>
               <KPIDashboard
@@ -459,9 +460,10 @@ export default function SectionBlock({
                 handleClickScenario={() => {
                   setShowScenarioModal(true);
                   setScenarioModalType("saveScenario");
-                }} />
+                }}/>
             </div>
           </div>
+          <hr className="border-holon-blue-900 absolute bottom-0 right-0" style={{width: "calc(100% - 2rem)"}}/>
         </div>
 
         <div>

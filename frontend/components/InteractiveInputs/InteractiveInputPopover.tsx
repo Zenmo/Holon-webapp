@@ -1,7 +1,8 @@
 import { Popover } from "@headlessui/react";
-import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
+import {CloseButton} from "@/components/Button/CloseButton";
 
 type Props = {
   name: string | undefined;
@@ -110,20 +111,21 @@ export default function InteractiveInputPopover({
                   href={`/${linkWikiPage}`}
                   target={target && target}
                   className={`gap-4 border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500  inline-flex relative rounded border-2 nowrap px-4 py-3 text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50`.trim()}>
-                  
+
                     Lees meer
-                  
+
                 </Link>
               </div>
             </div>
           )}
         </div>
-        <button
+        <CloseButton
           onClick={() => buttonRef.current?.click()}
-          aria-label="Sluiten"
-          className="w-8 h-8 absolute rounded-full right-3 top-3 font-bold">
-          <XMarkIcon />
-        </button>
+          style={{
+            position: "absolute",
+            right: ".75rem",
+            top: ".75rem",
+          }}/>
       </Popover.Panel>
     </Popover>
   );
