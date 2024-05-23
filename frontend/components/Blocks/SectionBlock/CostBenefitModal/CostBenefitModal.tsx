@@ -4,9 +4,9 @@ import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
 import { Graphcolor, WikiLinks } from "@/containers/types";
 import { Tab } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
+import {CloseButton} from "@/components/Button/CloseButton";
 
 export const euroFormatter = new Intl.NumberFormat(
     'nl-NL', {
@@ -134,12 +134,7 @@ export default function CostBenefitModal({
                     ))}
                 </div>
                 <div className="xl:w-[28%] flex">
-                  <button
-                    type="button"
-                    className="text-holon-blue-900 w-8 ml-auto"
-                    onClick={handleClick}>
-                    <XMarkIcon />
-                  </button>
+                  <CloseButton onClick={handleClick} />
                 </div>
               </div>
 

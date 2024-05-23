@@ -41,7 +41,7 @@ export default function HolarchyTab({
 
   return (
     <div className="w-screen h-screen bg-white">
-      <div className="bg-white fixed top-[7.9rem] min-[700px]:top-[5.1rem] overflow-auto md:overflow-hidden inset-x-0 mx-auto h-[calc(100%-11rem)] min-[700px]:h-[calc(100%-8rem)] w-screen z-15 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
+      <div className="bg-white fixed top-[4.7rem] min-[700px]:top-[4.7rem] overflow-auto md:overflow-hidden inset-x-0 mx-auto h-[calc(100%-11rem)] min-[700px]:h-[calc(100%-8rem)] w-screen z-15 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
         {/*Interactive input -  left column */}
         {levels.map((level, index) => {
           const cssClasses = [

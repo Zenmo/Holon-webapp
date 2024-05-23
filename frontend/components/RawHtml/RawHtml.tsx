@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import s from "./RawHtml.module.css";
 import { Dialog, Transition } from "@headlessui/react";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import {CloseButton} from "@/components/Button/CloseButton";
 
 export default function RawHtml({ html }: { html: string }) {
   const [modal, setModal] = useState<{
@@ -90,12 +90,10 @@ export default function RawHtml({ html }: { html: string }) {
                         </span>
                       </a>
                     </div>
-                    <button
+                    <CloseButton
                       onClick={closeModal}
-                      aria-label="Sluiten"
-                      className="w-6 h-6 absolute rounded-full right-6 top-6 ">
-                      <XMarkIcon />
-                    </button>
+                      className="w-6 h-6 absolute right-6 top-6 "
+                    />
                   </Dialog.Panel>
                 </Transition.Child>
               </div>
