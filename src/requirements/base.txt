@@ -1,11 +1,11 @@
-Django==4.2.6
+Django==4.2.13
 boto3>1.19,<1.25
 django-storages==1.14.2
 django-storages[azure]
 psycopg==3.1.12
 sentry_sdk==1.45.0
 python-dotenv==0.21
-wagtail==5.1.2
+wagtail==5.2.5
 wagtail-meta-preview
 wagtail-modelchooser
 wagtail-trash==1.0.1
