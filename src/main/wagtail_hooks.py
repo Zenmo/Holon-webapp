@@ -2,13 +2,15 @@ import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from django.utils.translation import gettext
 from wagtail import hooks
 from wagtail.admin.rich_text.converters import editor_html
+from wagtail.rich_text import FeatureRegistry
+
 from main.contentstate import term_link_entity
 
 from main.handlers import TermLinkHTMLHandler, TermLinkElementHandler, TermLinkEditorHandler
 
 
 @hooks.register("register_rich_text_features")
-def register_stock_feature(features):
+def register_stock_feature(features: FeatureRegistry):
     features.register_link_type(TermLinkHTMLHandler)
     """
     Registering the `stock` feature, which uses the `STOCK` Draft.js entity type,
@@ -48,4 +50,4 @@ def register_stock_feature(features):
         },
     )
 
-    features.default_features.append("term")
+    features.default_features = ["h1", *features.default_features, "term"]
