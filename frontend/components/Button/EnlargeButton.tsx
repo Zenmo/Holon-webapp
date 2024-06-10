@@ -8,10 +8,14 @@ export const EnlargeButton: FunctionComponent<ComponentProps<"button">> = ({ ...
     <button
         {...props}
         style={{
-            ...props.style,
+            display: "flex",
+            alignItems: "center",
+            gap: ".2rem",
             padding: "1rem",
+            ...props.style,
             /* tailwind has already removed the browser default button styling */
     }}>
+        Holarchie
         <ArrowsPointingOutIcon style={{
             height: "2rem",
         }} />

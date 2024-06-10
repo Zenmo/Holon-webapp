@@ -300,7 +300,7 @@ const ContentBlocks = ({
               <ButtonsAndMediaBlock key={`buttonsmedia ${contentItem.id}`} data={contentItem} />
             );
           default:
-            null;
+            console.log("Unknown block type", contentItem);
         }
       })}
     </React.Fragment>

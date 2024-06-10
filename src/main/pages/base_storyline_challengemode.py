@@ -100,7 +100,7 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
             ("header_full_image_block", HeaderFullImageBlock()),
             ("text_and_media", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
-            ("heroblock", HeroBlock()),
+            ("hero_block", HeroBlock()),
             ("title_block", TitleBlock()),
             ("card_block", CardsBlock()),
         ],
