@@ -1,2 +1,10 @@
 .StorylinePage {
+    display: flex;
+}
+
+.Steps {
+    max-width: 16rem;
+    @media (width <= 1250px) {
+        display: none;
+    }
 }
