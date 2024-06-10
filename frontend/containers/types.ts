@@ -1,8 +1,9 @@
 import CardBlock from "@/components/Blocks/CardsBlock";
 import HeroBlock from "@/components/Blocks/HeroBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock";
-import Section from "@/components/Section/Section";
 import TextAndMedia from "@/components/TextAndMedia";
+import {Background, GridLayout} from "@/components/Blocks/types";
+import {Content} from "@/components/Blocks/SectionBlock/types";
 
 export type CardBlockVariant = {
   type: "card_block";
@@ -14,7 +15,17 @@ export type HeroBlockVariant = {
 
 export type SectionVariant = {
   type: "section";
-} & React.ComponentProps<typeof Section>["data"];
+  value: {
+    background: Background;
+    content: Content[];
+    textLabelNational: string;
+    textLabelIntermediate: string;
+    textLabelLocal: string;
+    gridLayout: GridLayout;
+    openingSection?: boolean;
+  };
+  id: string;
+};
 
 export type TextAndMediaVariant = {
   type: "text_image_block";
