@@ -98,7 +98,7 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
     storyline = StreamField(
         [
             ("header_full_image_block", HeaderFullImageBlock()),
-            ("text_and_media", TextAndMediaBlock()),
+            ("text_image_block", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
             ("hero_block", HeroBlock()),
             ("title_block", TitleBlock()),
