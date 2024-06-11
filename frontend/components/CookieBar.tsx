@@ -16,15 +16,7 @@ export default function CookieBar({ onAccept }: { onAccept: () => void }) {
         <img alt="cookie image" src="/imgs/cookie.png" width={245} height={100} />
       </div>
       <div className="mx-1">
-        Deze website maakt gebruik van cookies. Lees{" "}
-        <a
-          className="inline underline"
-          href="/cookie-policy"
-          target="_blank"
-          rel="noreferrer noopener">
-          hier
-        </a>{" "}
-        onze cookie policy.
+        Bij het accepteren wordt Azure Application Insights ingeschakeld.
       </div>
     </CookieConsent>
   );

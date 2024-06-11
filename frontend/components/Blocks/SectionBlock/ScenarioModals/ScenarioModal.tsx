@@ -1,7 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { EnvelopeIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
 import Button from "../../../Button/Button";
+import {CloseButton} from "@/components/Button/CloseButton";
 
 type ScenarioModal = {
   isOpen: boolean;
@@ -265,9 +266,7 @@ export default function ScenarioModal({
                       className="leading-6 text-2xl text-holon-blue-900 font-bold text-left">
                       {ScenarioType[type].title}
                     </Dialog.Title>
-                    <button type="button" className="text-gray-800" onClick={closeModal}>
-                      <XMarkIcon className="h-6 w-6 " />
-                    </button>
+                    <CloseButton onClick={closeModal} className="text-gray-800" />
                   </div>
                   <div>{ScenarioType[type].content}</div>
                 </Dialog.Panel>

@@ -121,6 +121,8 @@ jobs:
             SENTRY_ENVIRONMENT=${{ fromJson(needs.variables.outputs.result).SENTRY_ENVIRONMENT }}
             DOMAIN_HOST=${{ fromJson(needs.variables.outputs.result).DOMAIN_HOST }}
             N_WORKERS=${{ fromJson(needs.variables.outputs.result).wagtail.N_WORKERS }}
+            EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}
+            WAGTAILADMIN_BASE_URL=https://${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}
             --target-port 8000
             --ingress external
             --image ghcr.io/zenmo/holon-wagtail:${{ needs.variables.outputs.tag }}
