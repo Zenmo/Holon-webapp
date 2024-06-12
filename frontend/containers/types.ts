@@ -1,7 +1,7 @@
 import CardBlock from "@/components/Blocks/CardsBlock";
 import HeroBlock from "@/components/Blocks/HeroBlock";
 import TitleBlock from "@/components/Blocks/TitleBlock";
-import TextAndMedia from "@/components/TextAndMedia";
+import TextAndMedia from "@/components/Blocks/TextAndMediaBlock";
 import {Background, GridLayout} from "@/components/Blocks/types";
 import {Content} from "@/components/Blocks/SectionBlock/types";
 
@@ -26,6 +26,18 @@ export type SectionVariant = {
   };
   id: string;
 };
+
+export type StepIndicatorVariant = {
+    type: "step_indicator"
+    value: (SectionVariant | StepAnchorVariant)[]
+    id: string;
+}
+
+export type StepAnchorVariant = {
+    type: "step_anchor";
+    value: string
+    id: string;
+}
 
 export type TextAndMediaVariant = {
   type: "text_image_block";

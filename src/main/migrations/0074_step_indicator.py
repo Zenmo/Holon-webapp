@@ -21,9 +21,10 @@ def wrap_storyline_sections_in_steps(apps, schema_editor):
         for block in blocks:
             block: StructBlock
             if block.block_type == "section":
+                i += 1
                 step_and_section_blocks.append({
                     "type_name": "step_anchor",
-                    "value": f"Stap {++i}",
+                    "value": f"Stap {i}",
                     "block_id": str(uuid.uuid4()),
                 }.values())
                 step_and_section_blocks.append(block)

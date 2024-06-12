@@ -4,7 +4,7 @@ import {
   CardBlockVariant,
   Graphcolor,
   HeroBlockVariant,
-  PageProps,
+  PageProps, SectionVariant, StepIndicatorVariant,
   TextAndMediaVariant,
   TitleBlockVariant,
   WikiLinks,
@@ -20,9 +20,10 @@ import { Content, SavedElements } from "./SectionBlock/types";
 import TableBlock from "./TableBlock/TableBlock";
 import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock";
 import TitleBlock from "./TitleBlock/TitleBlock";
+import {StepIndicatorWrapper} from "@/components/Storyline/Steps/StepIndicatorWrapper";
 
 type ContentBlockProps = PageProps<
-  TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant
+  TextAndMediaVariant | HeroBlockVariant | TitleBlockVariant | CardBlockVariant | SectionVariant | StepIndicatorVariant
 >;
 
 const ContentBlocks = ({
@@ -269,6 +270,52 @@ const ContentBlocks = ({
             return <TitleBlock key={`titleblock ${contentItem.id}`} data={contentItem} />;
           case "card_block":
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
+          case "step_indicator":
+            return (
+              <StepIndicatorWrapper stepIndicatorBlock={contentItem}>
+                  {contentItem.value.map((section) => {
+                      switch (section.type) {
+                        case "step_anchor":
+                          // anchor to scroll to
+                          return (
+                            <span id={section.id} key={section.id} style={{
+                              display: "block",
+                              position: "relative",
+                              top: "-4.75rem", // compensate for fixed site header
+                              visibility: "hidden",
+                            }} />
+                          )
+                        case "section":
+                          sectionCount++;
+                          const newContent = addTargetValues(targetValuesPreviousSections, section);
+                          //if there are any savedValues in the parameters, these are added to the section
+                          const savedValuesContent =
+                            Object.keys(savedValues).length !== 0
+                              ? addSavedValues(savedValues, newContent, sectionCount)
+                              : newContent;
+                          updateTargetValues(section.value.content);
+
+                          return (
+                            <SectionBlock
+                              key={`section ${section.id}`}
+                              pageSectionCount={sectionCount}
+                              data={savedValuesContent}
+                              pagetype={pagetype}
+                              feedbackmodals={feedbackmodals ?? []}
+                              graphcolors={graphcolors ?? []}
+                              savePageValues={saveSectionValues}
+                              saveScenario={saveScenario}
+                              scenarioDiffElements={scenarioDiffElements}
+                              wikilinks={wikilinks}
+                              pagetitle={pagetitle}
+                            />
+                          )
+                        default:
+                          console.log("Not implemented block type: ", section);
+                      }
+                  })}
+              </StepIndicatorWrapper>
+            )
           case "section":
             sectionCount++;
             const newContent = addTargetValues(targetValuesPreviousSections, contentItem);

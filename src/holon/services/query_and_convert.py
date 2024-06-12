@@ -138,9 +138,9 @@ class QConfig:
 
         self.distribution_keys.update(
             {
-                query.internal_key: query.distribution_key
-                if query.distribution_key
-                else {"Undefined": 1.0}
+                query.internal_key: (
+                    query.distribution_key if query.distribution_key else {"Undefined": 1.0}
+                )
             }
         )
 
@@ -360,12 +360,16 @@ class Query:
             )
             unique_sub_groups = {
                 (
-                    actor_group_repository.get(d["group_id"])
-                    if d["group_id"] is not None
-                    else None,
-                    actor_sub_group_repository.get(d["subgroup_id"])
-                    if d["subgroup_id"] is not None
-                    else None,
+                    (
+                        actor_group_repository.get(d["group_id"])
+                        if d["group_id"] is not None
+                        else None
+                    ),
+                    (
+                        actor_sub_group_repository.get(d["subgroup_id"])
+                        if d["subgroup_id"] is not None
+                        else None
+                    ),
                 )
                 for d in unique_sub_group_ids
             }
