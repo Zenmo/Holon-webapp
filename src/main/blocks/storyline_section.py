@@ -164,3 +164,6 @@ class StorylineSectionBlock(blocks.StructBlock):
         ],
         block_counts={"static_image": {"max_num": 1}},
     )
+
+    class Meta:
+        icon = "cog"
