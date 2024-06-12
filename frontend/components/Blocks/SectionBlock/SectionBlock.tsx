@@ -284,13 +284,6 @@ export default function SectionBlock({
 
   return (
     <div className={`sectionContainer`} ref={sectionContainerRef}>
-      {/* anchor to scroll to */}
-      <span id={data.id} style={{
-        display: "block",
-        position: "relative",
-        top: "-5.75rem", // compensate for fixed site header
-        visibility: "hidden",
-      }} />
       {feedbackmodals && (
         <ChallengeFeedbackModal
           feedbackmodals={feedbackmodals}

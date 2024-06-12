@@ -1,4 +1,5 @@
 """Create a Costs&Benefits Table """
+
 from typing import Union
 
 from holon.models.scenario import Actor, ActorGroup, ActorSubGroup

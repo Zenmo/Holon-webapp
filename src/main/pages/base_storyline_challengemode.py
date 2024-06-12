@@ -104,21 +104,30 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
             ("hero_block", HeroBlock()),
             ("title_block", TitleBlock()),
             ("card_block", CardsBlock()),
-            ("step_indicator", StreamBlock(
-            [
-                    ("step_anchor", CharBlock(required=False, help_text=_("Optional text to show in the step indicator."), icon="tag")),
-                    ("section", StorylineSectionBlock()),
-                ],
-                help_text=_("Scrollable steps to indicate progress in the storyline. "
-                           "Add a Step Anchor to create a new step."),
-                block_counts={"section": {"min_num": 1}},
-                use_json_field=True,
-                icon="list-ol")),
+            (
+                "step_indicator",
+                StreamBlock(
+                    [
+                        (
+                            "step_anchor",
+                            CharBlock(
+                                required=False,
+                                help_text=_("Optional text to show in the step indicator."),
+                                icon="tag",
+                            ),
+                        ),
+                        ("section", StorylineSectionBlock()),
+                    ],
+                    help_text=_(
+                        "Scrollable steps to indicate progress in the storyline. "
+                        "Add a Step Anchor to create a new step."
+                    ),
+                    block_counts={"section": {"min_num": 1}},
+                    use_json_field=True,
+                    icon="list-ol",
+                ),
+            ),
         ],
-        block_counts={
-            "header_full_image_block": {"min_num": 1},
-            "section": {"min_num": 1},
-        },
         use_json_field=True,
         null=True,
         blank=True,
