@@ -20,24 +20,6 @@ const CasusPage = ({
   return (
     <div className={styles[""]}>
       <ContentBlocks content={content} />
-      {childPages && (
-        <div className="holonContentContainer">
-          <div className="defaultBlockPadding ">
-            <div className="flex flex-row gap-4 ">
-              {childPages?.map((child, index) => {
-                return (
-                  <a
-                    key={index}
-                    className="border-holon-blue-900 text-white bg-holon-blue-900 hover:bg-holon-blue-500 flex flex-row justify-center items-center relative rounded border-2 nowrap px-4 py-3 mb-4 min-w-[8rem] text-center font-medium leading-5 transition enabled:active:translate-x-holon-bh-x enabled:active:translate-y-holon-bh-y disabled:opacity-50"
-                    href={child.slug}>
-                    {child.title}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
 
       {linkedBestPractices && linkedBestPractices.length > 0 && (
         <div className="holonContentContainer">
