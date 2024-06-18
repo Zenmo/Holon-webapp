@@ -4,7 +4,7 @@ import {StepIndicatorVariant} from "@/containers/types"
 
 export const StepIndicatorWrapper: FunctionComponent<PropsWithChildren<{ stepIndicatorBlock: StepIndicatorVariant }>> =
     ({stepIndicatorBlock, children}) => (
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex", justifyContent: "center"}}>
             <div>
                 <StepIndicator stepIndicatorBlock={stepIndicatorBlock}/>
             </div>

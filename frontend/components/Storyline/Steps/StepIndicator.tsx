@@ -26,7 +26,7 @@ export const StepIndicator: FunctionComponent<{
         return () => {
             window.removeEventListener("scroll", handleScroll)
         }
-    })
+    }, [])
 
     return (
         <div className={`${styles.Steps} ${className}`}>
