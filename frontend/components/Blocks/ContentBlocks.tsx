@@ -272,7 +272,7 @@ const ContentBlocks = ({
             return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />;
           case "step_indicator":
             return (
-              <StepIndicatorWrapper stepIndicatorBlock={contentItem}>
+              <StepIndicatorWrapper key={contentItem.id} stepIndicatorBlock={contentItem}>
                   {contentItem.value.map((section) => {
                       switch (section.type) {
                         case "step_anchor":
