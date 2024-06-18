@@ -1,4 +1,5 @@
 """ Streamfields """
+
 from wagtail import blocks
 from main.blocks.rich_text_block import RichtextBlock
 from .grid_chooser import GridChooserBlock

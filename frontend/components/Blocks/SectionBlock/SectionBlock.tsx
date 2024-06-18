@@ -3,7 +3,7 @@ import Button from "@/components/Button/Button";
 import { StaticImage } from "@/components/ImageSelector/types";
 import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
-import { Graphcolor } from "@/containers/types";
+import {Graphcolor, SectionVariant} from "@/containers/types";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -11,7 +11,6 @@ import { getGrid } from "services/grid";
 import {InteractiveElement} from "../../../api/holon";
 import { WikiLinks } from "../../../containers/types";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
-import { Background, GridLayout } from "../types";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
 import HolarchyTab from "./HolarchyTab/HolarchyTab";
@@ -28,19 +27,7 @@ import {EnlargeButton} from "@/components/Button/EnlargeButton";
 import {CloseButton} from "@/components/Button/CloseButton";
 
 type Props = {
-  data: {
-    type: string;
-    value: {
-      background: Background;
-      content: Content[];
-      textLabelNational: string;
-      textLabelIntermediate: string;
-      textLabelLocal: string;
-      gridLayout: GridLayout;
-      openingSection?: boolean;
-    };
-    id: string;
-  };
+  data: SectionVariant,
   pagetype?: string;
   pagetitle?: string;
   feedbackmodals: FeedbackModal[];
@@ -296,7 +283,7 @@ export default function SectionBlock({
   }
 
   return (
-    <div className={`sectionContainer`} ref={sectionContainerRef} id={data.id}>
+    <div className={`sectionContainer`} ref={sectionContainerRef}>
       {feedbackmodals && (
         <ChallengeFeedbackModal
           feedbackmodals={feedbackmodals}

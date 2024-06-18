@@ -1,0 +1,17 @@
+
+.Steps {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+
+    min-width: 4rem;
+    position: sticky;
+
+    top: 5rem;
+
+    padding: 1rem;
+    padding-top: 2rem;
+    z-index: 20;
+}

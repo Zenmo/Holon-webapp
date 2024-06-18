@@ -249,9 +249,9 @@ class HolonCMSLogic(generics.RetrieveAPIView):
             }
 
             for subclass in all_subclasses(model_type_class):
-                response[model_name]["model_subtype"][
-                    subclass.__name__
-                ] = self.get_attributes_and_relations(subclass)
+                response[model_name]["model_subtype"][subclass.__name__] = (
+                    self.get_attributes_and_relations(subclass)
+                )
 
         return Response(response)
 

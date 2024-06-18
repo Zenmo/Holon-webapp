@@ -12,15 +12,15 @@ import wagtail.fields
 import wagtailmodelchooser.blocks
 
 
+
 class Migration(migrations.Migration):
     """
-    Rename heroblock to hero_block in the storyline StreamField
-    to line up with the front-end and other elements.
-    Applying "MigrateStreamData" to the SandboxPage doesn't work due to some bug.
+    Rename text_and_media to text_image_block to align with the frontend
+    and with the other entities.
     """
 
     dependencies = [
-        ("main", "0070_alter_challengemodepage_feedbackmodals_and_more"),
+        ("main", "0071_rename_hero_block"),
     ]
 
     operations = [
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             model_name="ChallengeModePage",
             field_name="storyline",
             operations_and_block_paths=[
-                (RenameStreamChildrenOperation(old_name="heroblock", new_name="hero_block"), ""),
+                (RenameStreamChildrenOperation(old_name="text_and_media", new_name="text_image_block"), ""),
             ]
         ),
         MigrateStreamData(
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             model_name="StorylinePage",
             field_name="storyline",
             operations_and_block_paths=[
-                (RenameStreamChildrenOperation(old_name="heroblock", new_name="hero_block"), ""),
+                (RenameStreamChildrenOperation(old_name="text_and_media", new_name="text_image_block"), ""),
             ]
         ),
         MigrateStreamData(
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
             field_name="storyline",
             revisions_from=datetime.fromisoformat('2024-01-01'),
             operations_and_block_paths=[
-                (RenameStreamChildrenOperation(old_name="heroblock", new_name="hero_block"), ""),
+                (RenameStreamChildrenOperation(old_name="text_and_media", new_name="text_image_block"), ""),
             ]
         ),
     ]

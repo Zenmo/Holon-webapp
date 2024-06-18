@@ -11,7 +11,7 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white py-6 rounded dark:bg-gray-900 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white py-4 rounded dark:bg-gray-900 shadow-sm">
       <div className="holonContentContainer px-10 lg:px-16">
         <div className="flex flex-wrap justify-between items-center mx-auto">
           <Link href="/" className="flex items-center text-left uppercase text-2xl font-bold text-holon-blue-900 dark:text-white">
