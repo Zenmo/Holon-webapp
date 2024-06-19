@@ -2,7 +2,7 @@ import CostBenefitChart from "@/components/CostBenefit/CostBenefitChart";
 import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
-import { Graphcolor, WikiLinks } from "@/containers/types";
+import { Graphcolor, WikiLink } from "@/containers/types";
 import { Tab } from "@headlessui/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ type Props = {
     overview: Record<string, unknown>;
   };
   graphcolors: Graphcolor[];
-  wikilinks?: WikiLinks[];
+  wikilinks?: WikiLink[];
   pagetitle?: string;
 };
 
@@ -78,7 +78,7 @@ export default function CostBenefitModal({
 
   return (
     <div className="h-screen bg-white">
-      <div className="bg-white py-6 px-10 lg:px-16 fixed top-[5rem] min-[699px]:top-[5.5rem] inset-x-0 mx-auto h-[calc(100%-5rem)] md:h-[calc(100%-5.5rem)] z-30">
+      <div className="bg-white py-6 px-10 lg:px-16 fixed top-[4.5rem] min-[699px]:top-[5rem] inset-x-0 mx-auto h-[calc(100%-5rem)] md:h-[calc(100%-5.5rem)] z-30">
         <div className="block h-full w-full">
           <div className="flex flex-1 flex-col h-full">
             <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>

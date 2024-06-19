@@ -3,7 +3,7 @@ import styles from "./StorylinePage.module.css";
 
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
 import { ScenarioContext } from "context/ScenarioContext";
-import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant, WikiLinks } from "../types";
+import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant, WikiLink } from "../types";
 
 export type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
@@ -17,7 +17,7 @@ const StorylinePage = ({
   storyline?: Storyline[];
   scenario: number;
   graphcolors?: Graphcolor[];
-  wikiLinks: WikiLinks[];
+  wikiLinks: WikiLink[];
   title: string;
 }) => {
   return (

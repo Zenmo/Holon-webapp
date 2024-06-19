@@ -1,7 +1,6 @@
 import ChallengeFeedbackModal from "@/components/Blocks/ChallengeFeedbackModal/ChallengeFeedbackModal";
 import Button from "@/components/Button/Button";
 import { StaticImage } from "@/components/ImageSelector/types";
-import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
 import KPIDashboard from "@/components/KPIDashboard/KPIDashboard";
 import {Graphcolor, SectionVariant} from "@/containers/types";
 import { ScenarioContext } from "context/ScenarioContext";
@@ -9,7 +8,7 @@ import { debounce } from "lodash";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getGrid } from "services/grid";
 import {InteractiveElement} from "../../../api/holon";
-import { WikiLinks } from "../../../containers/types";
+import { WikiLink } from "../../../containers/types";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
 import ContentColumn from "./ContentColumn";
 import CostBenefitModal from "./CostBenefitModal/CostBenefitModal";
@@ -24,7 +23,6 @@ import {
   FeedbackModal
 } from "@/components/Blocks/ChallengeFeedbackModal/types";
 import {EnlargeButton} from "@/components/Button/EnlargeButton";
-import {CloseButton} from "@/components/Button/CloseButton";
 
 type Props = {
   data: SectionVariant,
@@ -36,7 +34,7 @@ type Props = {
   saveScenario: (title: string, description: string, sectionId: string) => string;
   scenarioDiffElements: object;
 
-  wikilinks?: WikiLinks[];
+  wikilinks?: WikiLink[];
 };
 
 export default function SectionBlock({
@@ -76,7 +74,6 @@ export default function SectionBlock({
   const [media, setMedia] = useState<StaticImage>({});
   const [costBenefitModal, setCostBenefitModal] = useState<boolean>(false);
   const [holarchyModal, setHolarchyModal] = useState<boolean>(false);
-  const [legend, setLegend] = useState<boolean>(false);
   const [savedScenarioURL, setSavedScenarioURL] = useState<string>("");
   const [showScenarioModal, setShowScenarioModal] = useState<boolean>(false);
   const [scenarioModalType, setScenarioModalType] = useState<
@@ -316,50 +313,6 @@ export default function SectionBlock({
       )}
 
       <div className="holonContentContainer">
-        {pagetype !== "Sandbox" && (
-          <div className={`${holarchyModal ? "sticky" : ""} z-20 top-[87px] flex flex-row items-center md:top-[90px] bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]`}>
-            <div className="flex-1 flex items-center">
-              {holarchyModal &&
-                wikilinks
-                  ?.filter(wikilink => wikilink.type === "holarchy")
-                  .map((wikilink, index) => (
-                    <div className="ml-2" key={index}>
-                      <InteractiveInputPopover
-                        textColor="text-holon-blue-900"
-                        name={"Meer informatie"}
-                        titleWikiPage={'Meer informatie over Holarchie binnen "' + pagetitle + '"'}
-                        linkWikiPage={wikilink.value}
-                        target="_blank"
-                      />
-                    </div>
-                  ))}
-            </div>
-            {holarchyModal &&
-              ((legendItems["color"] && legendItems["color"].length > 0) ||
-                (legendItems["line"] && legendItems["line"].length > 0)) && (
-                <button
-                  onClick={() => setLegend(!legend)}
-                  className={`px-6 py-[0.65rem] bg-white flex ${
-                    legend && "bg-holon-gray-200 border border-holon-slated-blue-900"
-                  }`}>
-                  Legenda
-                </button>
-              )}
-            {holarchyModal && (
-              <CloseButton onClick={closeHolarchyModal} style={{
-                position: "absolute",
-                padding: ".5rem",
-                height: "100%",
-                width: "3rem",
-                right: 0,
-                top: 0,
-              }}/>
-            )}
-
-            <div className="flex-1"></div>
-          </div>
-        )}
-
         <div className={`flex flex-col lg:flex-row ${backgroundFullcolor} relative`}>
           <div
             className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${gridValue.left} ${backgroundLeftColor}`}
@@ -453,9 +406,10 @@ export default function SectionBlock({
           <hr className="border-holon-blue-900 absolute bottom-0 right-0" style={{width: "calc(100% - 2rem)"}}/>
         </div>
 
-        <div>
           {holarchyModal && (
             <HolarchyTab
+              pagetitle={pagetitle}
+              wikilink={wikilinks?.find(wikilink => wikilink.type === "holarchy")}
               holarchyFeedbackImages={holarchyFeedbackImages}
               legendItems={legendItems}
               content={content}
@@ -467,9 +421,8 @@ export default function SectionBlock({
               textLabelLocal={data.value.textLabelLocal}
               loading={loading}
               kpis={kpis}
-              legend={legend}></HolarchyTab>
+              closeHolarchyModal={closeHolarchyModal} />
           )}
-        </div>
       </div>
     </div>
   );
