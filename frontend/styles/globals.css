@@ -15,10 +15,6 @@ body {
   scroll-behavior: smooth;
 }
 
-a {
-  display: block;
-}
-
 @layer base {
   body {
     @apply text-sm text-holon-blue-900;
