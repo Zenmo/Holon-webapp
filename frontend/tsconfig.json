@@ -25,7 +25,8 @@
     "moduleResolution": "node",
     "isolatedModules": true,
     "jsx": "preserve",
-    "types": ["node", "jest", "@testing-library/jest-dom"]
+    "jsxImportSource": "@emotion/react",
+    "types": ["node", "jest", "@testing-library/jest-dom"],
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
