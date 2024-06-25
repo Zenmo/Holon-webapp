@@ -7,8 +7,16 @@ import HolarchyFeedbackImage, {
 import ContentColumn from "../ContentColumn";
 import LegendModal, { LegendItem } from "./LegendModal";
 import {KPIsByScale} from "@/api/holon";
+import {CloseButton} from "@/components/Button/CloseButton"
+import {ChevronLeftIcon} from "@heroicons/react/20/solid"
+import {WikiLink} from "@/containers/types"
+import InteractiveInputPopover, {
+    PopoverHorizontalPosition,
+} from "@/components/InteractiveInputs/InteractiveInputPopover"
 
 type HolarchyTab = {
+  pagetitle: string;
+  wikilink?: WikiLink;
   holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
   legendItems: Array<LegendItem>;
   content: Array<Content>;
@@ -20,10 +28,12 @@ type HolarchyTab = {
   textLabelLocal: string;
   loading: boolean;
   kpis: KPIsByScale;
-  legend: boolean;
+  closeHolarchyModal: () => void,
 };
 
 export default function HolarchyTab({
+  pagetitle,
+  wikilink,
   holarchyFeedbackImages,
   legendItems,
   content,
@@ -35,48 +45,74 @@ export default function HolarchyTab({
   textLabelLocal,
   loading,
   kpis,
-  legend,
+  closeHolarchyModal,
 }: HolarchyTab) {
   const levels = ["national", "intermediate", "local"];
 
   return (
-    <div className="w-screen h-screen bg-white">
-      <div className="bg-white fixed top-[4.7rem] min-[700px]:top-[4.7rem] overflow-auto md:overflow-hidden inset-x-0 mx-auto h-[calc(100%-11rem)] min-[700px]:h-[calc(100%-8rem)] w-screen z-15 mt-14 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3 ">
-        {/*Interactive input -  left column */}
-        {levels.map((level, index) => {
-          const cssClasses = [
-            "row-start-1 bg-holon-holarchy-national",
-            "row-start-2 bg-holon-holarchy-intermediate",
-            "row-start-3 bg-holon-holarchy-local",
-          ];
-          return (
-            <div
-              key={index}
-              className={`${cssClasses[index]} p-4  overflow-auto row-span-1 col-start-1 col-span-1 md:col-start-1 md:col-span-1  md:row-span-1  `}>
-              <p className="font-semibold	">
-                {level == "national"
-                  ? textLabelNational
-                  : level == "local"
-                  ? textLabelLocal
-                  : level == "intermediate"
-                  ? textLabelIntermediate
-                  : ""}
-              </p>
-              <ContentColumn
-                dataContent={dataContent}
-                content={content}
-                handleContentChange={handleContentChange}
-                handleMedia={handleMedia}
-                selectedLevel={level}
-              />
-            </div>
-          );
-        })}
+    <div
+        className="bg-white fixed top-[4.7rem] min-[700px]:top-[4.7rem] overflow-auto md:overflow-hidden inset-x-0 mx-auto w-screen"
+        style={{
+            height: "calc(100vh - 4.7rem)",
+            display: "flex",
+            flexDirection: "column",
+            zIndex: 25,
+        }}
+    >
+        <div
+            className="sticky flex flex-row items-center bg-white px-10 lg:px-16 pl-4 shadow-[0_3px_2px_-2px_rgba(0,0,0,0.3)]"
+            style={{
+                justifyContent: "space-between",
+            }}
+        >
+          <button onClick={closeHolarchyModal} style={{display: "flex", alignItems: "center"}}>
+              <ChevronLeftIcon style={{width: "2rem"}}/>
+              Terug naar {pagetitle}
+          </button>
+          <CloseButton onClick={closeHolarchyModal} style={{
+            padding: ".5rem",
+            height: "100%",
+            width: "3rem",
+          }}/>
+        </div>
+        <div className="bg-white z-15 grid grid-rows-9 grid-cols-1 md:grid-cols-3 md:grid-rows-3" style={{
+            flexGrow: "1",
+            overflow: "hidden",
+        }}>
+          {/* Left column: Legend + Interactive input in  */}
+          <div className="bg-gray-100 p-4 grid-rows-3 overflow-auto row-span-3 col-start-1 col-span-1 relative">
+            {wikilink && (
+                <InteractiveInputPopover
+                    style={{position: "absolute", top: "1rem", right: "1rem"}}
+                    textColor="text-holon-blue-900"
+                    name={"Meer informatie"}
+                    titleWikiPage={`Meer informatie over Holarchie binnen ${pagetitle}`}
+                    linkWikiPage={wikilink.value}
+                    target="_blank"
+                    popoverHorizontalPosition={PopoverHorizontalPosition.LEFT}
+                />
+            )}
+            <LegendModal data={legendItems}/>
+            <br/>
+            {/* Display content in order national - regional - local */}
+            {levels.map((level, index) => {
+              return (
+                  <ContentColumn
+                    key={index}
+                    dataContent={dataContent}
+                    content={content}
+                    handleContentChange={handleContentChange}
+                    handleMedia={handleMedia}
+                    selectedLevel={level}
+                  />
+              );
+            })}
+          </div>
 
         <div className="row-span-1 row-start-4 col-start-1 col-span-1 md:col-start-2  md:col-span-1  md:row-span-3 md:row-start-1 grid grid-rows grid-rows-3 overflow-hidden">
           {/*image - highest block*/}
           <div className="row-start-1 bg-holon-holarchy-national row-span-1 col-start-1 col-span-1 ">
-            {legend && <LegendModal data={legendItems} />}
+
           </div>
 
           {/*image - middle block showing image*/}

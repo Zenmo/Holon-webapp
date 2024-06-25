@@ -61,7 +61,6 @@ services:
     environment:
       ALLOWED_HOSTS: "*"
       AZURE_ACCOUNT_NAME: holonstorage
-#      AZURE_STORAGE_KEY:
       MEDIA_LOCATION: media-dev
       STATIC_LOCATION: static-dev
       DB_HOST: db
@@ -73,6 +72,7 @@ services:
       DOMAIN_HOST: http://localhost:8000
       N_WORKERS: 2
       DJANGO_SETTINGS_MODULE: pipit.settings.prod
+      SENTRY_ENVIRONMENT: local
     env_file: ./docker/config/python.env
 
   python-test:

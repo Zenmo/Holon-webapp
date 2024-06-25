@@ -18,8 +18,9 @@
   font-size: 1rem;
 }
 .Container a {
-  display: inline-block;
-  text-decoration: underline;
+  color: theme(colors.holon-blue-500);
+  border-bottom: 2px solid theme(colors.holon-blue-500);
+  text-decoration: none;
 }
 .Container ul,
 .Container ol {
@@ -43,9 +44,10 @@
 }
 .Container a[data-introduction-text] {
   cursor: help;
-  text-decoration: none;
-  border-bottom: 1px dotted black;
+  color: green;
+  border-bottom: 2px dashed rgb(0, 170, 0);
 }
+
 .Container > *:last-child {
   margin-bottom: 0;
 }

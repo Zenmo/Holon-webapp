@@ -7,7 +7,7 @@ import {
   PageProps, SectionVariant, StepIndicatorVariant,
   TextAndMediaVariant,
   TitleBlockVariant,
-  WikiLinks,
+  WikiLink,
 } from "../../containers/types";
 import ButtonsAndMediaBlock from "./ButtonsAndMediaBlock/ButtonsAndMediaBlock";
 import CardBlock from "./CardsBlock/CardBlock";
@@ -38,7 +38,7 @@ const ContentBlocks = ({
   feedbackmodals?: FeedbackModal[];
   pagetype?: string;
   graphcolors?: Graphcolor[];
-  wikilinks?: WikiLinks[];
+  wikilinks?: WikiLink[];
   pagetitle?: string;
 }) => {
   let targetValuesPreviousSections = new Map();

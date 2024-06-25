@@ -1,7 +1,7 @@
 import { Popover } from "@headlessui/react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useLayoutEffect, useRef, useState } from "react";
+import {CSSProperties, useLayoutEffect, useRef, useState} from "react"
 import {CloseButton} from "@/components/Button/CloseButton";
 
 type Props = {
@@ -13,9 +13,11 @@ type Props = {
   titleWikiPage?: string;
   linkWikiPage?: string;
   target?: string;
+  style?: CSSProperties;
+  popoverHorizontalPosition?: PopoverHorizontalPosition;
 };
 
-enum PopoverHorizontalPosition {
+export enum PopoverHorizontalPosition {
   LEFT = "LEFT",
   RIGHT = "RIGHT",
 }
@@ -29,6 +31,8 @@ export default function InteractiveInputPopover({
   titleWikiPage,
   linkWikiPage,
   target,
+  style,
+  popoverHorizontalPosition,
 }: Props) {
   const buttonRef = useRef<HTMLButtonElement>();
 
@@ -51,22 +55,25 @@ export default function InteractiveInputPopover({
     return bgColor;
   };
 
-  const [popoverHorizontalPosition, setPopoverHorizontalPosition] = useState(
-    PopoverHorizontalPosition.RIGHT
+  const [popoverHorizontalPositionState, setPopoverHorizontalPositionState] = useState(
+      popoverHorizontalPosition ?? PopoverHorizontalPosition.RIGHT
   );
   useLayoutEffect(() => {
+    if (popoverHorizontalPosition) {
+      return;
+    }
     const { left } = buttonRef.current.getBoundingClientRect();
     if (left / window.innerWidth < 0.5) {
       // This element is on left half of the screen.
       // Let the popover flow to the right.
-      setPopoverHorizontalPosition(PopoverHorizontalPosition.RIGHT);
+      setPopoverHorizontalPositionState(PopoverHorizontalPosition.RIGHT);
     } else {
-      setPopoverHorizontalPosition(PopoverHorizontalPosition.LEFT);
+      setPopoverHorizontalPositionState(PopoverHorizontalPosition.LEFT);
     }
   }, []);
 
   const selectPopoverLocationStyle = () => {
-    if (popoverHorizontalPosition == PopoverHorizontalPosition.LEFT) {
+    if (popoverHorizontalPositionState == PopoverHorizontalPosition.LEFT) {
       return { right: 0 };
     } else {
       return {}; // equivalent to left: 0
@@ -74,13 +81,13 @@ export default function InteractiveInputPopover({
   };
 
   return (
-    <Popover className="relative" data-testid="input-popover" style={{zIndex: 20}}>
+    <Popover className="relative" data-testid="input-popover" style={{zIndex: 20, ...style}}>
       <Popover.Button className="w-6 h-6 mt-1" ref={buttonRef}>
         <InformationCircleIcon />
       </Popover.Button>
 
       <Popover.Panel
-        className="absolute z-10 bg-white w-[350px] sm:w-[400px] xl:w-[475px] border-2 border-solid rounded-md border-holon-gray-300 "
+        className="absolute z-50 bg-white w-[350px] sm:w-[400px] xl:w-[475px] border-2 border-solid rounded-md border-holon-gray-300 "
         style={selectPopoverLocationStyle()}>
         <div className={textColor}>
           <div className=" mt-4 mx-4 mb-2">
