@@ -173,14 +173,9 @@ export default function SectionBlock({
 
   function openHolarchyModal() {
     setHolarchyModal(true);
-    sectionContainerRef.current.classList.add("h-screen");
-    setTimeout(() => {
-      sectionContainerRef.current.scrollIntoView();
-    }, 0);
   }
 
   function closeHolarchyModal() {
-    sectionContainerRef.current.classList.remove("h-screen");
     setHolarchyModal(false);
   }
 
