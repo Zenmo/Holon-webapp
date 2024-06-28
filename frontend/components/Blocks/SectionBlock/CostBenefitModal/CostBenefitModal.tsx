@@ -52,7 +52,6 @@ export default function CostBenefitModal({
     costBenefitData.detail && setSubgroup(Object.keys(costBenefitData.detail)[0]);
 
       window.location.hash = "#kosten-baten-" + Math.round(Math.random() * 10_000)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const handlePopState = (event: PopStateEvent) => {
           handleClose()
       }

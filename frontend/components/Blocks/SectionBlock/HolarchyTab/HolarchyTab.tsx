@@ -52,7 +52,6 @@ export default function HolarchyTab({
 
   useEffect(() => {
       window.location.hash = "#holarchie-" + Math.round(Math.random() * 10_000)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const handlePopState = (event: PopStateEvent) => {
           closeHolarchyModal()
       }
