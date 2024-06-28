@@ -4,6 +4,7 @@ from django import forms
 from autoslug import AutoSlugField
 
 from modelcluster.fields import ParentalManyToManyField
+from wagtail.blocks import StreamBlock, CharBlock
 from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 from wagtail.fields import StreamField
@@ -98,16 +99,35 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
     storyline = StreamField(
         [
             ("header_full_image_block", HeaderFullImageBlock()),
-            ("text_and_media", TextAndMediaBlock()),
+            ("text_image_block", TextAndMediaBlock()),
             ("section", StorylineSectionBlock()),
             ("hero_block", HeroBlock()),
             ("title_block", TitleBlock()),
             ("card_block", CardsBlock()),
+            (
+                "step_indicator",
+                StreamBlock(
+                    [
+                        (
+                            "step_anchor",
+                            CharBlock(
+                                required=False,
+                                help_text=_("Optional text to show in the step indicator."),
+                                icon="tag",
+                            ),
+                        ),
+                        ("section", StorylineSectionBlock()),
+                    ],
+                    help_text=_(
+                        "Scrollable steps to indicate progress in the storyline. "
+                        "Add a Step Anchor to create a new step."
+                    ),
+                    block_counts={"section": {"min_num": 1}},
+                    use_json_field=True,
+                    icon="list-ol",
+                ),
+            ),
         ],
-        block_counts={
-            "header_full_image_block": {"min_num": 1},
-            "section": {"min_num": 1},
-        },
         use_json_field=True,
         null=True,
         blank=True,

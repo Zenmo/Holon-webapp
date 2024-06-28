@@ -23,8 +23,8 @@ function InteractiveRadios({
   const defaultCheckedValue = type === "single_select" ? [defaultValue] : defaultValue;
 
   return (
-    <div className="mb-4 font-bold text-base">
-      <div className="flex flex-row mb-2 gap-3 items-center">
+    <div className="mb-4 text-base">
+      <div className="flex flex-row mb-2 gap-3 items-center" style={{ fontWeight: "bold" }}>
         <p>{name}</p>
         {/* if selectedLevel, then you are in the holarchy view and popover is not shown */}
         {!selectedLevel && (moreInformation || linkWikiPage) ? (
@@ -67,7 +67,7 @@ function InteractiveRadios({
                 onChange={e => setValue(contentId, e.target.checked, inputItem.id)}
                 className={`${cssClass} flex h-5 w-5 min-w-[1.25rem] appearance-none items-center justify-center border-2 border-holon-blue-900 from-inherit bg-center py-2 text-white checked:bg-holon-blue-500`}
               />
-              <span className="">{inputItem.label || inputItem.option}</span>
+              <span>{inputItem.label || inputItem.option}</span>
             </label>
             {/* if selectedLevel, then you are in the holarchy view and popover is not shown */}
             {!selectedLevel && (inputItem.legalLimitation || inputItem.linkWikiPage) ? (

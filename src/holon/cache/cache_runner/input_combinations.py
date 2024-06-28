@@ -1,6 +1,12 @@
 import itertools
 import traceback
-from typing import Iterator
+from typing import Iterator, cast
+
+from wagtail.blocks import StructBlock, StreamBlock, Block, StructValue
+from wagtail.blocks.stream_block import StreamValue
+
+StreamChild = StreamValue.StreamChild
+
 from holon.models.interactive_element import (
     InteractiveElement,
 )
@@ -18,6 +24,9 @@ from main.pages.base_storyline_challengemode import BaseStorylineChallengeMode
 
 from typing import Type
 
+# import pydevd_pycharm
+# pydevd_pycharm.settrace('172.27.0.1', port=9222, stdoutToServer=True, stderrToServer=True)
+
 
 def get_holon_input_combinations(
     scenario: Scenario, include_storyline: bool = True, include_challenge: bool = True
@@ -25,9 +34,14 @@ def get_holon_input_combinations(
     """Return a HolonInputConfigurationGenerator which can return all possible combinations of input options for each interactive element for a challange in a scenario"""
     try:
         casus_page = CasusPage.objects.filter(scenario=scenario).first()
+        if casus_page is None:
+            Config.logger.log_print(
+                f"No CasusPage found for scenario {scenario} with id {scenario.id}"
+            )
+            return ([], 0)
 
         Config.logger.log_print(
-            f"Computing input combinations for scenario {scenario} ({scenario.id})"
+            f"Computing input combinations for scenario '{scenario}' ({scenario.id})"
         )
 
         casus_combinations_iterators = []
@@ -54,9 +68,6 @@ def get_holon_input_combinations(
             n_casus_combinations + n_challenge_combinations,
         )
 
-    except CasusPage.DoesNotExist:
-        Config.logger.log_print(f"No CasusPage found for scenario {scenario} with id {scenario.id}")
-        return ([], 0)
     except Exception as e:
         Config.logger.log_print(f"Error while computing combinations: {e}")
         print(traceback.format_exc())
@@ -85,7 +96,7 @@ def get_holon_input_combinations_per_page(
 
 def get_interactive_input_blocks_per_section(
     casus_page: CasusPage, page_type: Type[BaseStorylineChallengeMode] = StorylinePage
-) -> list[list[InteractiveInputBlock]]:
+) -> list[list[StreamValue.StreamChild]]:
     """Return a list of sections containing a list of interactive inputs for a on the casuspage"""
 
     try:
@@ -97,16 +108,33 @@ def get_interactive_input_blocks_per_section(
             )
             return []
 
-        sections: list[StorylineSectionBlock] = [
-            block
+        blocks: list[StreamValue.StreamChild] = [
+            cast(StreamValue.StreamChild, stream_child)
             for page in pages_with_interactive_inputs
-            for block in page.storyline
-            if type(block.block) == StorylineSectionBlock
+            for stream_child in page.storyline
         ]
-        interative_input_blocks_per_section = [
+
+        top_level_sections: list[StreamValue.StreamChild] = [
+            block for block in blocks if type(block.block) == StorylineSectionBlock
+        ]
+
+        nested_sections: list[StreamValue.StreamChild] = [
+            sub_block
+            for block in blocks
+            if block.block_type == "step_indicator"
+            for sub_block in block.value
+            if type(sub_block.block) == StorylineSectionBlock
+            # for sub_block in cast(StreamBlock, block).child_blocks.values()
+            # if cast(Block, sub_block).name == "section"
+        ]
+
+        sections: list[StreamValue.StreamChild] = top_level_sections + nested_sections
+
+        interative_input_blocks_per_section: list[list[StreamValue.StreamChild]] = [
             [
-                dict(block.value)
-                for block in section.value["content"]
+                block
+                for block in (cast(StructValue, section.value)["content"])
+                # for block in cast(StreamBlock, section.child_blocks["content"]).child_blocks.values()
                 if type(block.block) == InteractiveInputBlock
             ]
             for section in sections
@@ -117,13 +145,18 @@ def get_interactive_input_blocks_per_section(
         Config.logger.log_print(
             f"Something went wrong generating interactive input combinations for scenario  {casus_page} with id {casus_page.id}. {e}"
         )
+        traceback.print_exception(e)
         return []
 
 
 def generate_interactive_input_combinations(
-    sections: list[list[InteractiveInputBlock]],
+    sections: list[list[StreamValue.StreamChild]],
 ) -> tuple[list[Iterator[tuple[InteractiveElementInput]]], int]:
-    """Return a list of generators which can return all possible combinations of input options for each interactive element for the given sections. Also returns the total number of combinations"""
+    """
+    Return a list of generators which can return all possible combinations of input options
+    for each interactive element for the given sections.
+    Also returns the total number of combinations.
+    """
 
     iterators: list(Iterator[tuple[InteractiveElementInput]]) = []
     target_value_blocks: dict[int, InteractiveInputBlock] = {}
@@ -146,7 +179,8 @@ def generate_interactive_input_combinations(
                 )
             ]
 
-        for interactive_input_block in section:
+        for stream_child in section:
+            interactive_input_block = stream_child.value
             interactive_element: InteractiveElement = interactive_input_block["interactive_input"]
 
             # The Interactive Element was could already be in the dict

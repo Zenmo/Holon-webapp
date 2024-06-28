@@ -17,15 +17,15 @@ def apply_rules(
         interactive_element = interactive_element_input.interactive_element
 
         if interactive_element.type == ChoiceType.CHOICE_CONTINUOUS:
-            interactive_element_options: list[
-                InteractiveElementContinuousValues
-            ] = interactive_element.continuous_values.all()
+            interactive_element_options: list[InteractiveElementContinuousValues] = (
+                interactive_element.continuous_values.all()
+            )
 
         else:  # single and multi select
             options = interactive_element_input.value.split(",")
-            interactive_element_options: list[
-                InteractiveElementOptions
-            ] = interactive_element.options.filter(option__in=options)
+            interactive_element_options: list[InteractiveElementOptions] = (
+                interactive_element.options.filter(option__in=options)
+            )
 
         for option in interactive_element_options:
             value = (

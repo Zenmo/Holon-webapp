@@ -2,7 +2,7 @@ import CostBenefitChart from "@/components/CostBenefit/CostBenefitChart";
 import CostBenefitDetail from "@/components/CostBenefit/CostBenefitDetail";
 import CostBenefitTable from "@/components/CostBenefit/CostBenefitTable";
 import InteractiveInputPopover from "@/components/InteractiveInputs/InteractiveInputPopover";
-import { Graphcolor, WikiLinks } from "@/containers/types";
+import { Graphcolor, WikiLink } from "@/containers/types";
 import { Tab } from "@headlessui/react";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ type Props = {
     overview: Record<string, unknown>;
   };
   graphcolors: Graphcolor[];
-  wikilinks?: WikiLinks[];
+  wikilinks?: WikiLink[];
   pagetitle?: string;
 };
 
@@ -50,12 +50,16 @@ export default function CostBenefitModal({
 
   useEffect(() => {
     costBenefitData.detail && setSubgroup(Object.keys(costBenefitData.detail)[0]);
-  }, []);
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    handleClose();
-  };
+      window.location.hash = "#kosten-baten-" + Math.round(Math.random() * 10_000)
+      const handlePopState = (event: PopStateEvent) => {
+          handleClose()
+      }
+
+      window.addEventListener('popstate', handlePopState)
+
+      return () => window.removeEventListener('popstate', handlePopState)
+  }, []);
 
   const convertGraphData = data => {
     const returnArr: unknown[] = [];
@@ -78,7 +82,9 @@ export default function CostBenefitModal({
 
   return (
     <div className="h-screen bg-white">
-      <div className="bg-white py-6 px-10 lg:px-16 fixed top-[5rem] min-[699px]:top-[5.5rem] inset-x-0 mx-auto h-[calc(100%-5rem)] md:h-[calc(100%-5.5rem)] z-30">
+      <div className="bg-white py-6 px-10 top-0 lg:px-16 fixed inset-x-0 mx-auto z-50" style={{
+          height: "100%",
+      }}>
         <div className="block h-full w-full">
           <div className="flex flex-1 flex-col h-full">
             <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
@@ -134,7 +140,7 @@ export default function CostBenefitModal({
                     ))}
                 </div>
                 <div className="xl:w-[28%] flex flex-row-reverse">
-                  <CloseButton onClick={handleClick} />
+                  <CloseButton onClick={() => history.back()} />
                 </div>
               </div>
 

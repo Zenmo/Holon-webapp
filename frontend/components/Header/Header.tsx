@@ -1,6 +1,6 @@
 import { NavItem } from "@/api/types";
 import Link from "next/link";
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react"
 import Navbar from "./Navbar";
 
 export default function Header({ navigation }: { navigation: NavItem[] }) {
@@ -10,8 +10,28 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
     setMenuOpen(!menuOpen);
   };
 
+    const prevScrollPos = useRef(0)
+    const [visible, setVisible] = useState(true)
+
+    const handleScroll = () => {
+        const currentScrollPos = window.scrollY
+
+        setVisible(currentScrollPos < prevScrollPos.current)
+
+        prevScrollPos.current = currentScrollPos
+    }
+
+    useEffect( () => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll)
+    })
+
+
   return (
-    <nav className="sticky top-0 z-50 bg-white py-6 rounded dark:bg-gray-900 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white py-4 rounded dark:bg-gray-900 shadow-sm" style={{
+        position: visible ? "sticky" : "static",
+    }}>
       <div className="holonContentContainer px-10 lg:px-16">
         <div className="flex flex-wrap justify-between items-center mx-auto">
           <Link href="/" className="flex items-center text-left uppercase text-2xl font-bold text-holon-blue-900 dark:text-white">

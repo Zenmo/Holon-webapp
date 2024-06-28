@@ -3,33 +3,33 @@ import styles from "./StorylinePage.module.css";
 
 import ContentBlocks from "@/components/Blocks/ContentBlocks";
 import { ScenarioContext } from "context/ScenarioContext";
-import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant, WikiLinks } from "../types";
+import { Graphcolor, PageProps, SectionVariant, TextAndMediaVariant, WikiLink } from "../types";
 
-type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
+export type Storyline = PageProps<SectionVariant | TextAndMediaVariant>;
 
 const StorylinePage = ({
-  storyline,
+  storyline = [],
   scenario,
-  graphcolors,
+  graphcolors = [],
   wikiLinks,
   title,
 }: {
-  storyline: Storyline[];
+  storyline?: Storyline[];
   scenario: number;
-  graphcolors: Graphcolor[];
-  wikiLinks: WikiLinks[];
+  graphcolors?: Graphcolor[];
+  wikiLinks: WikiLink[];
   title: string;
 }) => {
   return (
-    <div className={styles["StorylinePage"]}>
+    <div>
       <ScenarioContext.Provider value={scenario}>
-        <ContentBlocks
-          content={storyline}
-          pagetitle={title}
-          wikilinks={wikiLinks}
-          graphcolors={graphcolors ?? []}
-          pagetype={"Storyline"}
-        />
+          <ContentBlocks
+            content={storyline}
+            pagetitle={title}
+            wikilinks={wikiLinks}
+            graphcolors={graphcolors ?? []}
+            pagetype={"Storyline"}
+          />
       </ScenarioContext.Provider>
     </div>
   );

@@ -1,4 +1,5 @@
 """ Serializes """
+
 from rest_framework import serializers
 
 from api.models.scenario import Scenario

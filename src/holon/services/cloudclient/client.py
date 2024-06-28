@@ -90,14 +90,15 @@ class CloudClient:
 
     def log_input_output(self, inputs: Inputs, outputs: SingleRunOutputs):
         span = sentry_sdk.Hub.current.scope.span
-        if span is not None and span.sampled is True:
-            span.set_data(
-                "inputs", list(map(self.model_input_value_to_log_format, inputs.inputs_array))
-            )
-            span.set_data(
-                "outputs",
-                list(map(self.model_output_value_to_log_format, outputs.get_raw_outputs())),
-            )
+        ## Disabled because it's too much data and Sentry seems to drop it.
+        # if span is not None and span.sampled is True:
+        #     span.set_data(
+        #         "inputs", list(map(self.model_input_value_to_log_format, inputs.inputs_array))
+        #     )
+        #     span.set_data(
+        #         "outputs",
+        #         list(map(self.model_output_value_to_log_format, outputs.get_raw_outputs())),
+        #     )
 
     def model_input_value_to_log_format(self, model_input: dict) -> dict:
         value = model_input["value"]

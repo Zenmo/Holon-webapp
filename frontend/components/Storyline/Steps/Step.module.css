@@ -1,0 +1,10 @@
+
+.Step:hover .StepNumber {
+    color: white;
+    @apply bg-holon-blue-500;
+}
+
+.active {
+    @apply bg-holon-slated-blue-900;
+    color: white;
+}

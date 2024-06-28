@@ -1,4 +1,5 @@
 """ Scenario Block """
+
 from django.utils.translation import gettext_lazy as _
 from wagtail import blocks
 from wagtailmodelchooser import Chooser, register_model_chooser
@@ -110,9 +111,9 @@ class InteractiveInputBlock(blocks.StructBlock):
                         "slider_value_max": option.slider_value_max,
                         "discretization_steps": option.discretization_steps,
                         "sandbox_discretization_steps": option.sandbox_discretization_steps,
-                        "slider_unit": option.slider_unit.symbol
-                        if option.slider_unit is not None
-                        else "",
+                        "slider_unit": (
+                            option.slider_unit.symbol if option.slider_unit is not None else ""
+                        ),
                     }
                     options_arr.append(option_dict)
 
@@ -134,9 +135,9 @@ class InteractiveInputBlock(blocks.StructBlock):
 
             if interactive_input.link_wiki_page is not None:
                 interactive_input_info["title_wiki_page"] = interactive_input.link_wiki_page.title
-                interactive_input_info[
-                    "link_wiki_page"
-                ] = interactive_input.link_wiki_page.get_url_parts()[2]
+                interactive_input_info["link_wiki_page"] = (
+                    interactive_input.link_wiki_page.get_url_parts()[2]
+                )
 
             return interactive_input_info
 
@@ -164,3 +165,6 @@ class StorylineSectionBlock(blocks.StructBlock):
         ],
         block_counts={"static_image": {"max_num": 1}},
     )
+
+    class Meta:
+        icon = "cog"
