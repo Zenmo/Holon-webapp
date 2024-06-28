@@ -43,7 +43,7 @@
   margin-bottom: 0.5rem;
 }
 .Container a[data-introduction-text] {
-  cursor: help;
+  cursor: url("/imgs/wiki-pointer.svg") 35 34, help;
   color: green;
   border-bottom: 2px dashed rgb(0, 170, 0);
 }

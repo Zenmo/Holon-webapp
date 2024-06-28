@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="70"
+     height="80"
+     fill="black"
+     stroke="white"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     style="font-family: sans-serif; font-weight: 1000; font-size: 2.2rem; filter: drop-shadow(0px 2px 1px black);"
+>
+    <text y="41" x="19" stroke-width="2" style="font-size: 1.5em">?</text>
+    <text y="76" x="2" stroke-width="1.3">wiki</text>
+</svg>
