@@ -13,6 +13,7 @@ import {WikiLink} from "@/containers/types"
 import InteractiveInputPopover, {
     PopoverHorizontalPosition,
 } from "@/components/InteractiveInputs/InteractiveInputPopover"
+import {useEffect} from "react"
 
 type HolarchyTab = {
   pagetitle: string;
@@ -49,14 +50,25 @@ export default function HolarchyTab({
 }: HolarchyTab) {
   const levels = ["national", "intermediate", "local"];
 
+  useEffect(() => {
+      window.location.hash = "#holarchie-" + Math.round(Math.random() * 10_000)
+      const handlePopState = (event: PopStateEvent) => {
+          closeHolarchyModal()
+      }
+
+      window.addEventListener('popstate', handlePopState)
+
+      return () => window.removeEventListener('popstate', handlePopState)
+  })
+
   return (
     <div
-        className="bg-white fixed top-[4.7rem] min-[700px]:top-[4.7rem] overflow-auto md:overflow-hidden inset-x-0 mx-auto w-screen"
+        className="bg-white fixed top-0 overflow-auto md:overflow-hidden inset-x-0 mx-auto w-screen"
         style={{
-            height: "calc(100vh - 4.7rem)",
+            height: "100vh",
             display: "flex",
             flexDirection: "column",
-            zIndex: 25,
+            zIndex: 50,
         }}
     >
         <div
@@ -65,11 +77,11 @@ export default function HolarchyTab({
                 justifyContent: "space-between",
             }}
         >
-          <button onClick={closeHolarchyModal} style={{display: "flex", alignItems: "center"}}>
+          <button onClick={() => history.back()} style={{display: "flex", alignItems: "center"}}>
               <ChevronLeftIcon style={{width: "2rem"}}/>
               Terug naar {pagetitle}
           </button>
-          <CloseButton onClick={closeHolarchyModal} style={{
+          <CloseButton onClick={() => history.back()} style={{
             padding: ".5rem",
             height: "100%",
             width: "3rem",

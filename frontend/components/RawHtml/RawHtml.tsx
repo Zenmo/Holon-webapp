@@ -47,7 +47,7 @@ export default function RawHtml({ html }: { html: string }) {
 
   return (
     <Fragment>
-      <div ref={RawHtmlItem} className={s.Container} dangerouslySetInnerHTML={{ __html: html }} />
+      <div ref={RawHtmlItem} className={s.Container} dangerouslySetInnerHTML={{ __html: html }}/>
       {modal.modalText && (
         <Transition appear show={modal.isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50" onClose={closeModal}>
