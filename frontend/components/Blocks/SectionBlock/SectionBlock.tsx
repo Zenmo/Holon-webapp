@@ -22,7 +22,7 @@ import {
   DatamodelQueryCondition,
   FeedbackModal
 } from "@/components/Blocks/ChallengeFeedbackModal/types";
-import {EnlargeButton} from "@/components/Button/EnlargeButton";
+import {ShareButton} from "@/components/Button/ShareButton";
 
 type Props = {
   data: SectionVariant,
@@ -370,7 +370,10 @@ export default function SectionBlock({
               // minHeight makes it a bit more spacious on large screens
               minHeight: "calc(100vh - 16rem)",
             }}>
-              <EnlargeButton onClick={openHolarchyModal} style={{
+              <ShareButton onClick={() => {
+                  setShowScenarioModal(true);
+                  setScenarioModalType("saveScenario");
+              }} style={{
                 position: "absolute",
                 top: 0,
                 right: 0,
@@ -391,11 +394,8 @@ export default function SectionBlock({
                 loadingState={loadingState}
                 loading={loading}
                 dashboardId={data.id}
-                handleClickCostBen={openCostBenefitModal}
-                handleClickScenario={() => {
-                  setShowScenarioModal(true);
-                  setScenarioModalType("saveScenario");
-                }}/>
+                handleClickHolarchy={openHolarchyModal}
+                handleClickCostBen={openCostBenefitModal} />
             </div>
           </div>
           <hr className="border-holon-blue-900 absolute bottom-0 right-0" style={{width: "calc(100% - 2rem)"}}/>

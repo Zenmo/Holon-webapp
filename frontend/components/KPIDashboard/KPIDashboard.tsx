@@ -1,10 +1,11 @@
-import { Cog8ToothIcon, CurrencyEuroIcon } from "@heroicons/react/24/outline";
+import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import Button from "../Button/Button";
 import KPIItems from "./KPIItems";
 import KPIRadioButtons from "./KPIRadiobuttons";
 import {LoadingState, SimulationState} from "@/services/use-simulation";
 import {KPIsByScale} from "@/api/holon";
+import {CostBenefitButton} from "@/components/KPIDashboard/CostBenefitButton"
+import {HolarchyButton} from "@/components/KPIDashboard/HolarchyButton"
 
 type KPIDashboardProps = {
   simulationState: SimulationState;
@@ -13,7 +14,7 @@ type KPIDashboardProps = {
   loadingState: LoadingState;
   dashboardId: string;
   handleClickCostBen: () => void;
-  handleClickScenario: () => void;
+  handleClickHolarchy: () => void;
 };
 
 export default function KPIDashboard({
@@ -23,7 +24,7 @@ export default function KPIDashboard({
   loadingState,
   dashboardId,
   handleClickCostBen,
-  handleClickScenario,
+  handleClickHolarchy,
 }: KPIDashboardProps) {
   const [level, setLevel] = useState("local");
 
@@ -36,15 +37,8 @@ export default function KPIDashboard({
       }}>
         <KPIRadioButtons updateValue={setLevel} loading={loading} dashboardId={dashboardId}/>
         <div className="flex flex-col items-stretch">
-          <Button onClick={handleClickCostBen} variant="light" disabled={loading} className="px-6">
-            <CurrencyEuroIcon className="h-5 w-5 pr-1" />
-            Kosten en Baten
-          </Button>
-          <Button onClick={handleClickScenario} variant="light" disabled={loading} className="px-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/imgs/save.png" alt="icon save" width={20} height={20} className="mr-2" />
-            Scenario delen
-          </Button>
+          <CostBenefitButton onClick={handleClickCostBen} disabled={loading} style={{height: "3rem"}} />
+          <HolarchyButton onClick={handleClickHolarchy} disabled={loading} style={{height: "3rem"}} />
         </div>
       </div>
       <div className={`flex flex-row ${backgroundColor}`}>
