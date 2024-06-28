@@ -3,7 +3,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 type ButtonVariant = keyof typeof variants;
 
-type Props<T extends React.ElementType> = {
+export type ButtonProps<T extends React.ElementType> = {
   children: React.ReactNode;
   className?: string;
   tag?: React.ElementType;
@@ -25,7 +25,7 @@ export default function Button<T extends React.ElementType>({
   variant = "dark",
   details,
   ...rest
-}: Props<T>) {
+}: ButtonProps<T>) {
   const colorClasses = variants[variant] || variants.dark;
 
   let externLinkProps:
