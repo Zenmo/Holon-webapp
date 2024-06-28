@@ -403,6 +403,7 @@ export default function SectionBlock({
 
           {holarchyModal && (
             <HolarchyTab
+              id={data.id}
               pagetitle={pagetitle}
               wikilink={wikilinks?.find(wikilink => wikilink.type === "holarchy")}
               holarchyFeedbackImages={holarchyFeedbackImages}

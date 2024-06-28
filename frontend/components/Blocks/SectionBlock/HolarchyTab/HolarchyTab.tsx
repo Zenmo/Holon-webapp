@@ -16,6 +16,7 @@ import InteractiveInputPopover, {
 import {useEffect} from "react"
 
 type HolarchyTab = {
+  id: string;
   pagetitle: string;
   wikilink?: WikiLink;
   holarchyFeedbackImages: Array<HolarchyFeedbackImageProps>;
@@ -33,6 +34,7 @@ type HolarchyTab = {
 };
 
 export default function HolarchyTab({
+  id,
   pagetitle,
   wikilink,
   holarchyFeedbackImages,
@@ -51,8 +53,10 @@ export default function HolarchyTab({
   const levels = ["national", "intermediate", "local"];
 
   useEffect(() => {
-      window.location.hash = "#holarchie-" + Math.round(Math.random() * 10_000)
+      window.location.hash = "#holarchie-" + id
       const handlePopState = (event: PopStateEvent) => {
+          // prevent scrolling back to a section after closing the modal
+          window.location.hash = "#"
           closeHolarchyModal()
       }
 

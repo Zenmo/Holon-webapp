@@ -281,7 +281,7 @@ const ContentBlocks = ({
                             <span id={section.id} key={section.id} style={{
                               display: "block",
                               position: "relative",
-                              top: "-4.75rem", // compensate for fixed site header
+                              top: "-4.5rem", // compensate for fixed site header
                               visibility: "hidden",
                             }} />
                           )
