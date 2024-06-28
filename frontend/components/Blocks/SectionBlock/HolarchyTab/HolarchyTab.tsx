@@ -92,7 +92,7 @@ export default function HolarchyTab({
             overflow: "hidden",
         }}>
           {/* Left column: Legend + Interactive input in  */}
-          <div className="bg-gray-100 p-4 grid-rows-3 overflow-auto row-span-3 col-start-1 col-span-1 relative">
+          <div className="bg-gray-100 p-4 grid-rows-3 overflow-y-auto row-span-3 col-start-1 col-span-1 relative">
             {wikilink && (
                 <InteractiveInputPopover
                     style={{position: "absolute", top: "1rem", right: "1rem"}}
