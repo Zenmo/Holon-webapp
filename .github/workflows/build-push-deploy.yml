@@ -6,6 +6,7 @@ on:
       - main
       - production
       - acceptance
+      - swarm
   workflow_dispatch:
 
 permissions:
@@ -74,7 +75,7 @@ jobs:
           --push
 
   ## This job takes pretty long and can be split up to parallelize the deploy.
-  deploy-wagtail:
+  deploy-wagtail-azure:
     needs:
       - build-and-push-images
       - variables
@@ -141,8 +142,7 @@ jobs:
             --name wagtail-${{ github.ref_name }}
             --hostname ${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}
 
-
-  deploy-next:
+  deploy-next-azure:
     needs:
       - build-and-push-images
       - variables
@@ -195,3 +195,41 @@ jobs:
             --environment holon-env
             --name next-${{ github.ref_name }}
             --hostname www.holontool.nl
+
+  deploy-swarm:
+      runs-on: ubuntu-latest
+      environment: ${{ fromJson(needs.variables.outputs.result).GITHUB_ENVIRONMENT }}
+      needs:
+          - build-and-push-images
+          - variables
+      steps:
+          -   name: Check out repository
+              uses: actions/checkout@v4
+              with:
+                  sparse-checkout: docker
+          -   name: Deploy to Docker Swarm
+              uses: sagebind/docker-swarm-deploy-action@v2
+              env:
+                  # Shared
+                  TAG: ${{ needs.variables.outputs.tag }}
+                  WAGTAIL_HOSTNAME: ${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}
+                  # Wagtail
+                  AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+                  MEDIA_LOCATION: ${{ fromJson(needs.variables.outputs.result).MEDIA_LOCATION }}
+                  STATIC_LOCATION: ${{ fromJson(needs.variables.outputs.result).STATIC_LOCATION }}
+                  DB_USER: ${{ fromJson(needs.variables.outputs.result).DB_USER }}
+                  DB_NAME: ${{ fromJson(needs.variables.outputs.result).DB_NAME }}
+                  DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+                  RETURN_SCENARIO: ${{ fromJson(needs.variables.outputs.result).RETURN_SCENARIO }}
+                  SECRET_KEY: "${{ secrets.SECRET_KEY }}"
+                  SENTRY_ENVIRONMENT: ${{ fromJson(needs.variables.outputs.result).SENTRY_ENVIRONMENT }}
+                  DOMAIN_HOST: ${{ fromJson(needs.variables.outputs.result).DOMAIN_HOST }}
+                  EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+                  # NextJS
+                  NEXT_HOSTNAME: ${{ fromJson(needs.variables.outputs.result).NEXT_HOSTNAME }}
+                  NEXT_PUBLIC_TINY_URL_API_KEY: ${{ secrets.TINY_URL_API_KEY }}
+              with:
+                  remote_host: ssh://root@server.zenmo.com
+                  ssh_private_key: ${{ secrets.SWARM_SSH_PRIVATE_KEY }}
+                  ssh_public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ1E4LUG22qgzc8U7oNYGWCn0cyA31+iyX2pck9wcPMS
+                  args: stack deploy --compose-file ./docker/compose-prod.yaml holon-${{ fromJson(needs.variables.outputs.result).GITHUB_ENVIRONMENT.toLowerCase() }}
