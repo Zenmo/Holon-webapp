@@ -1,6 +1,7 @@
 
 const configPerBranch = {
     main: {
+        GITHUB_ENVIRONMENT: 'test',
         DB_NAME: 'holon-wagtail-v2-test',
         DB_USER: 'holon_wagtail_test',
         DB_PASSWORD_KEY: 'DB_PASSWORD_TEST',
@@ -18,6 +19,7 @@ const configPerBranch = {
         }
     },
     acceptance: {
+        GITHUB_ENVIRONMENT: 'acceptance',
         DB_NAME: 'holon-wagtail-v2-acceptatie',
         DB_USER: 'holon_wagtail_acceptance',
         DB_PASSWORD_KEY: 'DB_PASSWORD_ACCEPTANCE',
@@ -35,6 +37,7 @@ const configPerBranch = {
         }
     },
     production: {
+        GITHUB_ENVIRONMENT: 'production',
         DB_NAME: 'holon-wagtail-v2',
         DB_USER: 'holon_wagtail_prod',
         DB_PASSWORD_KEY: 'DB_PASSWORD_PROD',
@@ -51,6 +54,18 @@ const configPerBranch = {
             MEMORY: '1',
             N_WORKERS: '4',
         }
+    },
+    swarm: {
+        GITHUB_ENVIRONMENT: 'swarm_test',
+        DB_NAME: 'holon-test',
+        DB_USER: 'holon-test',
+        RETURN_SCENARIO: 'True',
+        SENTRY_ENVIRONMENT: 'swarm-test',
+        NEXT_HOSTNAME: 'swarm.holontool.nl',
+        DOMAIN_HOST: 'https://swarm.holontool.nl',
+        WAGTAIL_HOSTNAME: 'cms-swarm.holontool.nl',
+        MEDIA_LOCATION: 'media-test',
+        STATIC_LOCATION: 'static-test',
     },
 }
 
