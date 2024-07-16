@@ -11,7 +11,7 @@ from pipit.settings import get_env_bool
 class Results:
     def __init__(
         self,
-        cc_payload: dict,
+        debug_values: dict | None,
         request,
         anylogic_outcomes: AnyLogicOutput,
         inter_upscaling_outcomes: dict,
@@ -23,7 +23,7 @@ class Results:
         datamodel_query_results: dict[int, Any],
         error: Exception = None,
     ) -> None:
-        self.cc_payload = cc_payload
+        self.debug_values = debug_values
         self.request = request
         self.anylogic_outcomes = anylogic_outcomes
         self.inter_upscaling_outcomes = inter_upscaling_outcomes
@@ -58,14 +58,11 @@ class Results:
             "datamodel_query_results": self.datamodel_query_results,
             "error": repr(self.error) if self.error is not None else None,
         }
-        if self.__include_scenario():
-            result["scenario"] = self.cc_payload
+
+        if should_return_debug_values():
+            result["debug_values"] = self.debug_values
 
         return result
-
-    def __include_scenario(self):
-        """Only include modified scenario if env variable is set"""
-        return get_env_bool("RETURN_SCENARIO", False)
 
 
 def calculate_holon_kpis(anylogic_outcomes: AnyLogicOutput) -> dict:
@@ -116,3 +113,7 @@ def calculate_holon_kpis(anylogic_outcomes: AnyLogicOutput) -> dict:
         "netload": round(netOverload_pct, 1),
     }
     return KPIs
+
+
+def should_return_debug_values():
+    return get_env_bool("RETURN_SCENARIO", False)

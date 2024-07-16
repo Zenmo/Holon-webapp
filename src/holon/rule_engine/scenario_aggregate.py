@@ -1,6 +1,3 @@
-# from __future__ import annotations
-# from typing import TYPE_CHECKING
-
 from holon.models.scenario import Scenario
 from holon.rule_engine.repositories import (
     ActorRepository,
