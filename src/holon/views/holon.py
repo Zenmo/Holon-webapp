@@ -3,7 +3,6 @@ import traceback
 
 from django.apps import apps
 from django.shortcuts import render
-from etm_service.etm_session.session import ETMConnectionError
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -15,9 +14,10 @@ from holon.rule_engine import rule_mapping
 from holon.models.config import QueryCovertModuleType
 from holon.models.scenario_rule import ModelType, DatamodelQueryRule
 from holon.models.util import all_subclasses, is_exclude_field
-from holon.serializers import HolonRequestSerializer, ScenarioSerializer
+from holon.serializers import HolonRequestSerializer
 from holon.services import CostTables, ETMConnect
 from holon.services.cloudclient import CloudClient
+from holon.services.cloudclient.input import inputs_to_debug_values
 from holon.services.cloudclient.output import AnyLogicOutput
 from holon.services.data import Results
 from holon.utils.logging import HolonLogger
@@ -58,6 +58,13 @@ class HolonV2Service(generics.CreateAPIView):
         use_caching = use_result_cache(request)
         scenario: Scenario | None = None
         anylogic_output: AnyLogicOutput | None = None
+        debug_values = {
+            "scenario": {},
+            "anylogic": {
+                "input": {},
+                "output": {},
+            },
+        }
 
         try:
             if not serializer.is_valid():
@@ -84,15 +91,28 @@ class HolonV2Service(generics.CreateAPIView):
             HolonV2Service.logger.log_print("Applying interactive elements to scenario")
 
             scenario = Scenario.queryset_with_relations().get(id=scenario_id)
+            debug_values["scenario"] = {
+                "id": scenario.id,
+                "name": scenario.name,
+            }
 
             scenario_aggregate = ScenarioAggregate(scenario)
             scenario_aggregate = rule_mapping.apply_rules(scenario_aggregate, interactive_elements)
 
-            cc_payload = scenario_aggregate.serialize_to_json()
-
             # RUN ANYLOGIC
             HolonV2Service.logger.log_print("Running Anylogic model")
-            anylogic_output = CloudClient(payload=cc_payload, scenario=scenario).run()
+            anylogic_client = CloudClient(payload=scenario_aggregate, scenario=scenario)
+            debug_values["anylogic"]["input"] = {
+                # TODO: this is quite computationally expensive, see if we can do it only when needed
+                "debug": inputs_to_debug_values(anylogic_client.create_inputs())
+            }
+            anylogic_output = anylogic_client.run()
+            debug_values["anylogic"]["output"] = {
+                # TODO: this is quite computationally expensive, see if we can do it only when needed
+                "debug": anylogic_output.get_debug_output(),
+                # It would be useful to include the interpreted values but the response is getting too big
+                # "decoded": anylogic_output.decoded,
+            }
 
             # ETM Module
             # We want to be resilient in the face of errors.
@@ -113,7 +133,7 @@ class HolonV2Service(generics.CreateAPIView):
             )
 
             results = Results(
-                cc_payload=cc_payload,
+                debug_values=debug_values,
                 request=request,
                 anylogic_outcomes=anylogic_output,
                 cost_benefit_overview=cost_benefit_tables.main_table(),
@@ -141,11 +161,10 @@ class HolonV2Service(generics.CreateAPIView):
             traceback.print_exc()
             capture_exception(e)
 
-            response_body = {"error_msg": f"something went wrong: {e}"}
-            if scenario:
-                response_body["scenario"] = ScenarioSerializer(scenario).data
-            if anylogic_output:
-                response_body["anylogic_outcomes"] = anylogic_output.decoded
+            response_body = {
+                "error_msg": f"something went wrong: {e}",
+                "debug_values": debug_values,
+            }
 
             return Response(
                 response_body,

@@ -19,9 +19,6 @@ class AnyLogicOutput:
     # and JSON strings decoded
     decoded: dict[str, Any]
 
-    # TODO: get rid of this
-    _outputs_raw: dict[str, Any]
-
     @classmethod
     def from_source(cls, source: SingleRunOutputs, key_mappings: Iterable[AnylogicCloudOutput]):
         decoded = {
@@ -29,9 +26,7 @@ class AnyLogicOutput:
             for key_mapping in key_mappings
         }
 
-        _outputs_raw = {name: source.value(name) for name in source.names()}
-
-        return cls(source=source, decoded=decoded, _outputs_raw=_outputs_raw)
+        return cls(source=source, decoded=decoded)
 
     def get_key_over_all_results(self, key: str) -> float:
         value = 1
@@ -44,3 +39,20 @@ class AnyLogicOutput:
 
     def create_dict(self, keys: list[str]) -> dict:
         return {key: self.get_key_over_all_results(key) for key in keys}
+
+    def get_debug_output(self) -> dict:
+        """
+        Do some heuristics to parse values.
+        These values should never be used directly, only for debugging
+        """
+        return {name: try_json_decode(self.source.value(name)) for name in self.source.names()}
+
+
+def try_json_decode(val):
+    if type(val) is not str:
+        return val
+
+    try:
+        return json.loads(val)
+    except json.decoder.JSONDecodeError:
+        return val

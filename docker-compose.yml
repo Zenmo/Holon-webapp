@@ -67,7 +67,7 @@ services:
       DB_USER: postgres
       DB_NAME: postgres
       DB_PASSWORD: postgres
-      RETURN_SCENARIO: false
+      RETURN_SCENARIO: True
       SECRET_KEY: 5746384
       DOMAIN_HOST: http://localhost:8000
       N_WORKERS: 2
