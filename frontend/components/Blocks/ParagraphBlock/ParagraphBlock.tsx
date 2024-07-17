@@ -1,5 +1,5 @@
 import RawHtml from "@/components/RawHtml";
-import { getGrid } from "services/grid";
+import { getGridCss } from "services/grid";
 import { GridLayout, Background } from "../types";
 
 type Props = {
@@ -24,7 +24,7 @@ export default function Paragraph({ data, ignoreLayout }: Props) {
   const backgroundLeftColor =
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
 
-  const gridValue = getGrid(data.value.gridLayout.grid);
+  const gridValue = getGridCss(data.value.gridLayout.grid);
 
   if (ignoreLayout === true) {
     return <RawHtml html={data.value?.text} />;
@@ -35,7 +35,8 @@ export default function Paragraph({ data, ignoreLayout }: Props) {
       <div className="holonContentContainer">
         <div className="flex flex-col lg:flex-row">
           <div
-            className={`flex flex-col relative defaultBlockPadding ${gridValue.left} ${backgroundLeftColor}`}
+            css={gridValue.left}
+            className={`flex flex-col relative defaultBlockPadding ${backgroundLeftColor}`}
             data-testid="paragraph">
             {data.value.background.size !== "bg_full" && (
               <span className={`extra_bg ${backgroundLeftColor}`}></span>

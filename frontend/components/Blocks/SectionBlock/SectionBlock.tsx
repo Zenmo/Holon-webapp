@@ -6,7 +6,7 @@ import {Graphcolor, SectionVariant} from "@/containers/types";
 import { ScenarioContext } from "context/ScenarioContext";
 import { debounce } from "lodash";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { getGrid } from "services/grid";
+import { getGridCss } from "services/grid";
 import {InteractiveElement} from "../../../api/holon";
 import { WikiLink } from "../../../containers/types";
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage";
@@ -93,7 +93,7 @@ export default function SectionBlock({
   // Otherwise they will overlap and will the left be darker since 2 layers
   const backgroundLeftColor =
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
-  const gridValue = getGrid(data.value.gridLayout.grid);
+  const gridValue = getGridCss(data.value.gridLayout.grid);
 
   const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIsCb, 1000), []);
 
@@ -310,7 +310,8 @@ export default function SectionBlock({
       <div className="holonContentContainer">
         <div className={`flex flex-col lg:flex-row ${backgroundFullcolor} relative`}>
           <div
-            className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${gridValue.left} ${backgroundLeftColor}`}
+              css={gridValue.left}
+            className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${backgroundLeftColor}`}
           >
             {data.value.background.size !== "bg_full" && !holarchyModal ? (
               <span className={`extra_bg ${backgroundLeftColor}`}></span>
@@ -328,7 +329,7 @@ export default function SectionBlock({
             )}
           </div>
 
-          <div className={`relative flex flex-col ${gridValue.right}`}>
+          <div className="relative flex flex-col" css={gridValue.right}>
             {dirtyState && (
               <div
                 className="absolute flex justify-center items-start p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">

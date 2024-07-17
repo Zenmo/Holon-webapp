@@ -1,17 +1,18 @@
-export function getGrid(gridData: string) {
-    let left = "",
-      right = "";
+import {css} from "@emotion/react"
 
-    if (gridData === "33_66") {
-      (left = "lg:w-1/3"), (right = "lg:w-2/3");
-    } else if (gridData == "50_50") {
-      (left = "lg:w-1/2"), (right = "lg:w-1/2");
-    } else if (gridData == "66_33") {
-      (left = "lg:w-2/3"), (right = "lg:w-1/3");
-    }
+export function getGridCss(gridData: string) {
+    const [_, left, right] = /(\d+)_(\d+)/.exec(gridData)
 
     return {
-      left: left,
-      right: right,
-    };
-  }
+        left: css({
+            "@media (min-width: 1024px)": {
+                width: `calc(100% * ${left} / (${left} + ${right}))`,
+            },
+        }),
+        right: css({
+            "@media (min-width: 1024px)": {
+                width: `calc(100% * ${right} / (${left} + ${right}))`,
+            },
+        }),
+    }
+}
