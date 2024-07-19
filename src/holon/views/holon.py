@@ -107,12 +107,13 @@ class HolonV2Service(generics.CreateAPIView):
                 "debug": inputs_to_debug_values(anylogic_client.create_inputs())
             }
             anylogic_output = anylogic_client.run()
-            debug_values["anylogic"]["output"] = {
-                # TODO: this is quite computationally expensive, see if we can do it only when needed
-                "debug": anylogic_output.get_debug_output(),
-                # It would be useful to include the interpreted values but the response is getting too big
-                # "decoded": anylogic_output.decoded,
-            }
+            # Disabled because it makes the response too big for common tooling
+            # debug_values["anylogic"]["output"] = {
+            #     # TODO: this is quite computationally expensive, see if we can do it only when needed
+            #     "debug": anylogic_output.get_debug_output(),
+            #     # It would be useful to include the interpreted values but the response is getting too big
+            #     # "decoded": anylogic_output.decoded,
+            # }
 
             # ETM Module
             # We want to be resilient in the face of errors.
