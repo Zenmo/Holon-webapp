@@ -1,7 +1,7 @@
 import RawHtml from "@/components/RawHtml";
 import MediaContent from "@/components/MediaContent/MediaContent";
 import ButtonBlock from "@/components/Button/ButtonBlock";
-import { getGrid } from "services/grid";
+import { getGridCss } from "services/grid";
 import { GridLayout, Background } from "../types";
 
 type Props = {
@@ -29,7 +29,7 @@ export default function TextAndMedia({ data }: Props) {
   const backgroundLeftColor =
     data.value.background.size == "bg__full" ? "" : data.value.background.color;
 
-  const gridValue = getGrid(data.value.gridLayout.grid);
+  const gridValue = getGridCss(data.value.gridLayout.grid);
   const direction =
     data.value.columnOrder === "invert" ? "lg:flex-row-reverse inverseColumns" : "lg:flex-row";
 
@@ -38,7 +38,8 @@ export default function TextAndMedia({ data }: Props) {
       <div className="holonContentContainer">
         <div className={`flex flex-col ${direction}`}>
           <div
-            className={`flex flex-col relative defaultBlockPadding ${gridValue.left} ${backgroundLeftColor}`}
+            css={gridValue.left}
+            className={`flex flex-col relative defaultBlockPadding ${backgroundLeftColor}`}
             data-testid="textMedia">
             {data.value.background.size !== "bg_full" && (
               <span className={`extra_bg ${backgroundLeftColor}`}></span>
@@ -46,7 +47,7 @@ export default function TextAndMedia({ data }: Props) {
             <RawHtml html={data.value?.text} />
           </div>
 
-          <div className={`flex flex-col ${gridValue.right}`}>
+          <div className="flex flex-col" css={gridValue.right}>
             <div className="lg:sticky defaultBlockPadding top-0">
               <MediaContent media={data.value.media} alt={data.value.altText} />
             </div>

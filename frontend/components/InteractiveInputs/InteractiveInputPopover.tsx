@@ -81,7 +81,7 @@ export default function InteractiveInputPopover({
   };
 
   return (
-    <Popover className="relative" data-testid="input-popover" style={{zIndex: 20, ...style}}>
+    <Popover className="relative" data-testid="input-popover" style={{...style}}>
       <Popover.Button className="w-6 h-6 mt-1" ref={buttonRef}>
         <InformationCircleIcon />
       </Popover.Button>

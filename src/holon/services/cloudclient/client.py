@@ -8,6 +8,7 @@ from anylogiccloudclient.data.model_data import ModelData
 
 from holon.models.config import AnylogicCloudInput
 from holon.models.scenario import Scenario
+from holon.rule_engine.scenario_aggregate import ScenarioAggregate
 from holon.services.cloudclient.output import AnyLogicOutput
 from pipit.sentry import sentry_sdk_trace
 import sentry_sdk
@@ -16,7 +17,7 @@ import sentry_sdk
 class CloudClient:
     """a more convient way of working with the AnyLogic cloud client"""
 
-    def __init__(self, payload: dict, scenario: Scenario = None):
+    def __init__(self, payload: ScenarioAggregate, scenario: Scenario = None):
         from holon.models.config import AnylogicCloudConfig
 
         # db lookup
@@ -67,26 +68,34 @@ class CloudClient:
     def run(self) -> AnyLogicOutput:
         """run the scenario, outputs are set to the .outputs attribute"""
 
-        inputs: Inputs = self.client.create_default_inputs(self.model_version)
-
-        inputs.set_input("P grid connection config JSON", self.payload["gridconnections"])
-        inputs.set_input("P grid node config JSON", self.payload["gridnodes"])
-        inputs.set_input("P policies config JSON", self.payload["policies"])
-        inputs.set_input("P actors config JSON", self.payload["actors"])
-
-        # Oh lord why!
-        inputs.set_input("P import local config jsons", False)
-
-        additional_inputs = self.config.anylogic_cloud_input.all()
-        if len(additional_inputs) > 0:
-            for additional_input in additional_inputs:
-                ai: AnylogicCloudInput = additional_input
-                inputs.set_input(ai.anylogic_key, ai.anylogic_value)
+        inputs = self.create_inputs()
 
         outputs = self.client.create_simulation(inputs).get_outputs_and_run_if_absent()
         self.log_input_output(inputs, outputs)
 
         return AnyLogicOutput.from_source(outputs, self.config.anylogic_cloud_output.all())
+
+    def create_inputs(self) -> Inputs:
+        inputs = self.client.create_default_inputs(self.model_version)
+        inputs.set_input("P import local config jsons", False)
+
+        self.__add_datamodel_inputs(inputs)
+        self.__add_custom_inputs(inputs)
+
+        return inputs
+
+    def __add_datamodel_inputs(self, inputs: Inputs):
+        json_data = self.payload.serialize_to_json()
+        inputs.set_input("P grid connection config JSON", json_data["gridconnections"])
+        inputs.set_input("P grid node config JSON", json_data["gridnodes"])
+        inputs.set_input("P policies config JSON", json_data["policies"])
+        inputs.set_input("P actors config JSON", json_data["actors"])
+
+    def __add_custom_inputs(self, inputs: Inputs):
+        additional_inputs = self.config.anylogic_cloud_input.all()
+        for additional_input in additional_inputs:
+            ai: AnylogicCloudInput = additional_input
+            inputs.set_input(ai.anylogic_key, ai.anylogic_value)
 
     def log_input_output(self, inputs: Inputs, outputs: SingleRunOutputs):
         span = sentry_sdk.Hub.current.scope.span
@@ -127,19 +136,4 @@ class CloudClient:
             "value": value,
             "type": model_output.type,
             "unit": model_output.units,
-        }
-
-    @property
-    def outputs(self) -> dict:
-        return self._outputs
-
-    @outputs.setter
-    def outputs(self, anylogic_outputs: SingleRunOutputs):
-        self._outputs = {
-            co.internal_key: json.loads(anylogic_outputs.value(co.anylogic_key))
-            for co in self.config.anylogic_cloud_output.all()
-        }
-        # store raw results
-        self._outputs_raw = {
-            name: anylogic_outputs.value(name) for name in anylogic_outputs.names()
         }

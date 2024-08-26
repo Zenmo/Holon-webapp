@@ -88,19 +88,25 @@ export async function getRequest(url, params?, options?) {
   };
 }
 
-export async function postRequest(url, params, options) {
-  params = params || {};
-  params = keysToSnakeFromCamel(params);
+export async function postRequest(
+    url: string,
+    bodyJson: object,
+    options?: RequestInit,
+    queryParams: URLSearchParams = new URLSearchParams(),
+) {
+    bodyJson = bodyJson || {}
+    bodyJson = keysToSnakeFromCamel(bodyJson);
 
   let headers = options?.headers || {};
   headers = {
     "Content-Type": "application/json",
     ...headers,
   };
+  url = queryParams.size > 0 ? `${url}?${queryParams.toString()}` : url;
   console.log(`- OUTGOING POST ${url}`)
   const res = await fetch(url, {
     method: "POST",
-    body: JSON.stringify(params),
+    body: JSON.stringify(bodyJson),
     credentials: "include",
     headers,
   });
@@ -110,7 +116,7 @@ export async function postRequest(url, params, options) {
     try {
       responseBody = await res.json();
     } catch (e) { }
-    const error = new WagtailApiResponseError(res, url, params, responseBody);
+    const error = new WagtailApiResponseError(res, url, bodyJson, responseBody);
     error.response = res;
     throw error;
   }

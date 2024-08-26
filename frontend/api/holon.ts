@@ -39,16 +39,23 @@ export type SimulationResult = {
 }
 
 export async function getHolonKPIs(data: SimulationInput): Promise<SimulationResult> {
+    const searchParams = new URLSearchParams()
+    searchParams.append("caching", cachingDisabled() ? "false" : "true")
+
   const {json} = await postRequest(`${NEXT_PUBLIC_WAGTAIL_API_URL}/v2/holon/`, data, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken"),
     },
-  });
+  }, searchParams);
 
   return json;
 };
 
 export async function cacheCheck(data: SimulationInput): Promise<boolean> {
+    if (cachingDisabled()) {
+        return false
+    }
+
   const {json} = await postRequest(`${NEXT_PUBLIC_WAGTAIL_API_URL}/v2/cache_check/`, data, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken"),
@@ -65,3 +72,6 @@ export async function getHolonDataSegments() {
 export async function getHolonDataSegmentsDetail() {
   return await httpGet(`/api/dummy-kosten-baten`);
 }
+
+const cachingDisabled = (): boolean =>
+    window.location.search.toLowerCase().includes("caching=false")
