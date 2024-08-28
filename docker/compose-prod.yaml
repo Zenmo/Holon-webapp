@@ -18,7 +18,7 @@ services:
             SECRET_KEY: ${SECRET_KEY}
             SENTRY_DSN: "https://764e9f2b886741bcbcfd2acd74a7f7b0@o4505045746384896.ingest.sentry.io/4505045759361024"
             SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT}
-            DOMAIN_HOST: ${DOMAIN_HOST}
+            DOMAIN_HOST: https://${NEXT_HOSTNAME}
             N_WORKERS: 8
             EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
             WAGTAILADMIN_BASE_URL: https://${WAGTAIL_HOSTNAME}
@@ -42,7 +42,7 @@ services:
             NEXT_PUBLIC_WAGTAIL_API_URL: https://${WAGTAIL_HOSTNAME}/wt/api/nextjs
             NEXT_PUBLIC_TINY_URL_API_KEY: ${NEXT_PUBLIC_TINY_URL_API_KEY}
         labels:
-            caddy: ${NEXT_HOSTNAME}
+            caddy: ${NEXT_CADDY_HOSTS}
             caddy.reverse_proxy: "{{upstreams 3000}}"
         networks:
             - caddy_default
