@@ -96,7 +96,7 @@ jobs:
                   STATIC_LOCATION: ${{ fromJson(needs.variables.outputs.result).STATIC_LOCATION }}
                   DB_USER: ${{ fromJson(needs.variables.outputs.result).DB_USER }}
                   DB_NAME: ${{ fromJson(needs.variables.outputs.result).DB_NAME }}
-                  DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+                  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
                   RETURN_SCENARIO: ${{ fromJson(needs.variables.outputs.result).RETURN_SCENARIO }}
                   SECRET_KEY: "${{ secrets.SECRET_KEY }}"
                   SENTRY_ENVIRONMENT: ${{ fromJson(needs.variables.outputs.result).SENTRY_ENVIRONMENT }}
