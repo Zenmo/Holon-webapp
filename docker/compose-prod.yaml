@@ -1,0 +1,61 @@
+## Compose file for Docker Swarm environments
+version: "3.8"
+
+services:
+    wagtail:
+        image: ghcr.io/zenmo/holon-wagtail:${TAG}
+        environment:
+            ALLOWED_HOSTS: "*"
+            AZURE_ACCOUNT_NAME: holonstorage
+            AZURE_STORAGE_KEY: ${AZURE_STORAGE_KEY}
+            MEDIA_LOCATION: ${MEDIA_LOCATION}
+            STATIC_LOCATION: ${STATIC_LOCATION}
+            DB_HOST: postgres
+            DB_USER: ${DB_USER}
+            DB_NAME: ${DB_NAME}
+            DB_PASSWORD: ${DB_PASSWORD}
+            RETURN_SCENARIO: ${RETURN_SCENARIO}
+            SECRET_KEY: ${SECRET_KEY}
+            SENTRY_DSN: "https://764e9f2b886741bcbcfd2acd74a7f7b0@o4505045746384896.ingest.sentry.io/4505045759361024"
+            SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT}
+            DOMAIN_HOST: https://${NEXT_HOSTNAME}
+            N_WORKERS: 8
+            EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+            WAGTAILADMIN_BASE_URL: https://${WAGTAIL_HOSTNAME}
+        labels:
+            caddy: ${WAGTAIL_HOSTNAME}
+            caddy.reverse_proxy: "{{upstreams 8000}}"
+        networks:
+            - caddy_default
+            - postgres_default
+            - default
+        deploy:
+            resources:
+                limits:
+                    cpus: "8"
+                    memory: 8G
+
+    nextjs:
+        image: ghcr.io/zenmo/holon-nextjs:${TAG}
+        environment:
+            WAGTAIL_API_URL: http://wagtail:8000/wt/api/nextjs
+            NEXT_PUBLIC_WAGTAIL_API_URL: https://${WAGTAIL_HOSTNAME}/wt/api/nextjs
+            NEXT_PUBLIC_TINY_URL_API_KEY: ${NEXT_PUBLIC_TINY_URL_API_KEY}
+        labels:
+            caddy: ${NEXT_CADDY_HOSTS}
+            caddy.reverse_proxy: "{{upstreams 3000}}"
+        networks:
+            - caddy_default
+            - default
+        deploy:
+            resources:
+                limits:
+                    cpus: "4"
+                    memory: 4G
+
+networks:
+    caddy_default:
+        external: true
+    postgres_default:
+        external: true
+    default:
