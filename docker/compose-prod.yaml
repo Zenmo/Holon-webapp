@@ -42,8 +42,10 @@ services:
             NEXT_PUBLIC_WAGTAIL_API_URL: https://${WAGTAIL_HOSTNAME}/wt/api/nextjs
             NEXT_PUBLIC_TINY_URL_API_KEY: ${NEXT_PUBLIC_TINY_URL_API_KEY}
         labels:
-            caddy: ${NEXT_CADDY_HOSTS}
-            caddy.reverse_proxy: "{{upstreams 3000}}"
+            caddy_0: ${NEXT_HOSTNAME}
+            caddy_0.reverse_proxy: "{{upstreams 3000}}"
+            caddy_1: ${NEXT_REDIRECT_HOSTS}
+            caddy_1.redir: ${NEXT_HOSTNAME}
         networks:
             - caddy_default
             - default
