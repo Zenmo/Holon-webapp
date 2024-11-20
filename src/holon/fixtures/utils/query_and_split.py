@@ -16,7 +16,7 @@ local = False
 if local:
     url = f"http://localhost:8000/wt/api/nextjs/v2/datamodel/{SCENARIO_ID}/"
 else:
-    url = f"https://holontool.nl/wt/api/nextjs/v2/datamodel/{SCENARIO_ID}/"
+    url = f"https://holons.energy/wt/api/nextjs/v2/datamodel/{SCENARIO_ID}/"
 
 
 r = requests.get(url)

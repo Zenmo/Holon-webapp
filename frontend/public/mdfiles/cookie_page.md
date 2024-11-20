@@ -15,7 +15,7 @@ Cookies zijn kleine tekst bestanden die een website op jouw computer, tablet of 
 
 2.  Niet-functionele cookies
 
-    Naast functionele cookies plaatst holontool.nl ook standaard analytische cookies. Standaard analytische cookies zijn niet-functionele cookies, omdat ze niet noodzakelijk zijn om de website goed te laten werken.
+    Naast functionele cookies plaatst holons.energy ook standaard analytische cookies. Standaard analytische cookies zijn niet-functionele cookies, omdat ze niet noodzakelijk zijn om de website goed te laten werken.
 
 ## Analytische cookies
 
