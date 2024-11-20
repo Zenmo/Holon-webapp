@@ -39,7 +39,7 @@ export default function ScenarioModal({
   const [copied, setCopied] = useState<boolean>(false);
 
   const textMessageLink = encodeURIComponent(
-    `Ik heb een scenario aangemaakt op https://holontool.nl. Bekijk het scenario via deze link: ${scenarioUrl}`
+    `Ik heb een scenario aangemaakt op https://holons.energy. Bekijk het scenario via deze link: ${scenarioUrl}`
   );
 
   function closeModal() {

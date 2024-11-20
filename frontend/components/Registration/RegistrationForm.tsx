@@ -53,10 +53,10 @@ export default function RegistrationForm() {
 
   return (
     <div className="flex flex-col items-center m-8">
-      <h2>Registreer je voor Holontool.nl</h2>
+      <h2>Registreer je voor Holons.energy</h2>
 
       <p className="mt-4 w-3/4 md:w-2/3 lg:w-1/3 text-center">
-        Registreer je hier om een account aan te maken op holontool.nl. De onderstaande velden zijn
+        Registreer je hier om een account aan te maken op holons.energy. De onderstaande velden zijn
         verplicht om een account aan te maken.{" "}
       </p>
 

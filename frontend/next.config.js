@@ -16,7 +16,7 @@ let nextConfig = {
   basePath,
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   images: {
-    domains: ["localhost", "holontool.nl"],
+    domains: ["localhost", "holons.energy"],
   },
   async rewrites() {
     return [

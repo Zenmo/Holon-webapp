@@ -25,9 +25,9 @@ export default function SuccessModal({ onClose }) {
             <Link
               href="/inloggen"
               className="inline underline mt-8 decoration-holon-blue-900 decoration-2 underline-offset-4 hover:underline hover:decoration-gray-300 hover:decoration-2 hover:underline-offset-4 sm:p-0">
-              
-                holontool.nl/inloggen
-              
+
+                holons.energy/inloggen
+
             </Link>{" "}
             .
           </p>
