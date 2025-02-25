@@ -6,6 +6,7 @@ import {LoadingState, SimulationState} from "@/services/use-simulation";
 import {KPIsByScale} from "@/api/holon";
 import {CostBenefitButton} from "@/components/KPIDashboard/CostBenefitButton"
 import {HolarchyButton} from "@/components/KPIDashboard/HolarchyButton"
+import {KpiRow} from "@/components/IJzerboeren/KpiRow"
 
 type KPIDashboardProps = {
   simulationState: SimulationState;
@@ -16,8 +17,6 @@ type KPIDashboardProps = {
   handleClickCostBen: () => void;
   handleClickHolarchy: () => void;
 };
-
-export const KPIBackgroundColorClass = "bg-holon-slated-blue-900"
 
 export default function KPIDashboard({
   simulationState,
@@ -30,8 +29,6 @@ export default function KPIDashboard({
 }: KPIDashboardProps) {
   const [level, setLevel] = useState("local");
 
-  const backgroundColor = loading ? "bg-holon-gray-400" : KPIBackgroundColorClass;
-
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">
       <div className="flex flex-row justify-between items-center" style={{
@@ -43,7 +40,7 @@ export default function KPIDashboard({
           <HolarchyButton onClick={handleClickHolarchy} disabled={loading} style={{height: "3rem"}} />
         </div>
       </div>
-      <div className={`flex flex-row ${backgroundColor}`}>
+      <KpiRow>
         {["INITIAL", "DONE", "DIRTY"].includes(loadingState) ? (
           <KPIItems view="kpiStoryline" previousData={simulationState.previousResult.dashboardResults} data={data} level={level} loading={loading} />
         ) : (
@@ -68,7 +65,7 @@ export default function KPIDashboard({
             </div>
           </div>
         )}
-      </div>
+      </KpiRow>
     </div>
   );
 }

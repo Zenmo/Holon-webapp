@@ -1,5 +1,6 @@
 import InteractiveDropdown from "./InteractiveDropdown";
 import InteractiveInputPopover from "./InteractiveInputPopover";
+import type {Props} from "./InteractiveInputs"
 
 function InteractiveRadios({
   contentId,

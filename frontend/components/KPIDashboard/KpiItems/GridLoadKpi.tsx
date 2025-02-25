@@ -21,9 +21,12 @@ export const GridLoadKpi: FunctionComponent<KpiDisplayProps> = ({previousValue, 
 }
 
 /**
- * Math.abs handles null and undefined fine (returns NaN), but it doesn't type check.
+ * Math.abs doesn't handle null like it should
  */
 function abs(value: Nullable<number>) {
-    // @ts-ignore
+    if (typeof value !== "number") {
+        return NaN
+    }
+
     return Math.abs(value)
 }

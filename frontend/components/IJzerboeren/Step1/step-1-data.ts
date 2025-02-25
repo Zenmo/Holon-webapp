@@ -1,40 +1,54 @@
 
-type Step1DataType = {
-    inputs: {
-        ironPowder_tonnes: number,
-    }
-    outputs: {
-        gridLoad_r: number,
-        fuelCost_eur: number,
-    }
+export enum HeatingType {
+    GAS_BURNER = "GAS_BURNER",
+    DISTRICT_HEATING = "DISTRICT_HEATING",
+    HEAT_PUMP = "HEAT_PUMP"
 }
 
-export const Step1Data: Step1DataType[] = [
+export interface Step1DataType {
+    inputs: Step1Inputs
+    outputs: Step1Outputs
+}
+
+export interface Step1Inputs {
+    heatingType: keyof typeof HeatingType,
+}
+
+export interface Step1Outputs {
+    gridLoad_r: number,
+    cost_eur: number,
+    sustainability_r: number,
+}
+
+export const step1Data: Step1DataType[] = [
     {
         "inputs": {
-            "ironPowder_tonnes": 0,
-        },
-        "outputs": {
-            "gridLoad_r": 1.2,
-            "fuelCost_eur": 15000,
-        }
-    },
-    {
-        "inputs": {
-            "ironPowder_tonnes": 10,
-        },
-        "outputs": {
-            "gridLoad_r": 1,
-            "fuelCost_eur": 16000,
-        }
-    },
-    {
-        "inputs": {
-            "ironPowder_tonnes": 20,
+            "heatingType": "GAS_BURNER",
         },
         "outputs": {
             "gridLoad_r": 0.8,
-            "fuelCost_eur": 17000,
+            "cost_eur": 20000,
+            "sustainability_r": 0.2,
+        }
+    },
+    {
+        "inputs": {
+            "heatingType": "HEAT_PUMP",
+        },
+        "outputs": {
+            "gridLoad_r": 1.6,
+            "cost_eur": 18000,
+            "sustainability_r": 0.8,
+        }
+    },
+    {
+        "inputs": {
+            "heatingType": "DISTRICT_HEATING",
+        },
+        "outputs": {
+            "gridLoad_r": 0.7,
+            "cost_eur": 22000,
+            "sustainability_r": 1,
         }
     },
 ]
