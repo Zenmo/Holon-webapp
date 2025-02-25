@@ -41,7 +41,7 @@ function getAppreciation(changeDirection: ChangeDirection, changeAppreciation: C
     return Appreciation.SAME;
 }
 
-export function calcChangeDirection(previous: number, current: number): ChangeDirection {
+export function calcChangeDirection(previous: Nullable<number>, current: Nullable<number>): ChangeDirection {
     if (typeof previous !== "number" || typeof current !== "number" || Number.isNaN(previous) || Number.isNaN(current)) {
         return ChangeDirection.SAME;
     }

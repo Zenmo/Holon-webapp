@@ -25,10 +25,16 @@ export type KPIQuad = {
   selfSufficiency: number | null
 }
 
+export enum Level {
+    local = "local",
+    intermediate = "intermediate",
+    national = "national",
+}
+
+export const levels: Level[] = [Level.local, Level.intermediate, Level.national]
+
 export type KPIsByScale = {
-  local: KPIQuad
-  intermediate: KPIQuad
-  national: KPIQuad
+    [key in Level]: KPIQuad
 }
 
 export type SimulationResult = {

@@ -17,6 +17,8 @@ type KPIDashboardProps = {
   handleClickHolarchy: () => void;
 };
 
+export const KPIBackgroundColorClass = "bg-holon-slated-blue-900"
+
 export default function KPIDashboard({
   simulationState,
   data,
@@ -28,7 +30,7 @@ export default function KPIDashboard({
 }: KPIDashboardProps) {
   const [level, setLevel] = useState("local");
 
-  const backgroundColor = loading ? "bg-holon-gray-400" : "bg-holon-slated-blue-900";
+  const backgroundColor = loading ? "bg-holon-gray-400" : KPIBackgroundColorClass;
 
   return (
     <div className="flex flex-col w-full " data-testid="KPIDashboard">

@@ -1,20 +1,22 @@
 import {BoltIcon, CurrencyEuroIcon, GlobeEuropeAfricaIcon, MapPinIcon,} from "@heroicons/react/24/solid";
 
-import styles from "./KPIItem.module.css";
-import InteractiveInputPopover from "../InteractiveInputs/InteractiveInputPopover";
+import styles from "../kpi.module.css";
+import InteractiveInputPopover from "../../InteractiveInputs/InteractiveInputPopover";
 import {ChangeAppreciation, ChangeDirection, ChangeIcon} from "@/components/KPIDashboard/ChangeIcon";
 import {FunctionComponent} from "react";
+
+export type KpiView = "kpiStoryline" | "kpiHolarchy"
 
 type Props = {
   title: string;
   label: string;
   changeDirection: ChangeDirection;
   changeAppreciation: ChangeAppreciation;
-  previousValue: string | number;
+  previousValue: string;
   previousUnit?: string;
-  value: string | number;
+  value: string;
   unit: string;
-  view: string;
+  view?: KpiView;
   description: string;
 };
 
@@ -25,14 +27,23 @@ const iconMap = {
   selfSufficiency: <MapPinIcon />,
 };
 
-export const KPIItem: FunctionComponent<Props> = ({
+export type KpiDisplayValue = {
+    value: string, // formatted number
+    multiplier?: string, // "k" or "mln"
+    unit: string,
+}
+
+/**
+ * Component which doesn't do any number formatting, just put the strings in the layout
+ */
+export const KpiDisplay: FunctionComponent<Props> = ({
     title,
     label,
     previousValue,
     value,
     unit,
     previousUnit,
-    view,
+    view = "kpiStoryline",
     description,
     changeDirection,
     changeAppreciation,

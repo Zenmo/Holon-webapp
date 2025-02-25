@@ -1,6 +1,6 @@
 import React from "react";
 import KPIItems from "./KPIItems";
-import styles from "./KPIItem.module.css";
+import styles from "./kpi.module.css";
 import {KPIsByScale} from "@/api/holon";
 import {initialKPIsByScale} from "@/services/use-simulation";
 
