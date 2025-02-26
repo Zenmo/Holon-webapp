@@ -309,8 +309,7 @@ export default function SectionBlock({
         />
       )}
 
-      <div className="holonContentContainer">
-        <div className={`flex flex-col lg:flex-row ${backgroundFullcolor} relative`}>
+        <div className={`flex flex-col lg:flex-row ${backgroundFullcolor} relative holonContentContainer`}>
           <div
               css={gridValue.left}
             className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${backgroundLeftColor}`}
@@ -422,7 +421,6 @@ export default function SectionBlock({
               kpis={kpis}
               closeHolarchyModal={closeHolarchyModal} />
           )}
-      </div>
     </div>
   );
 }
