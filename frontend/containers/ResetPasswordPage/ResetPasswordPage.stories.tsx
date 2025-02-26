@@ -1,13 +1,13 @@
 /* global module */
 
-import React from 'react';
-import ResetPasswordPage from './ResetPasswordPage';
-import data from './ResetPasswordPage.data';
+import React from "react"
+import ResetPasswordPage from "./ResetPasswordPage"
+import data from "./ResetPasswordPage.data"
 
 export default {
-    title: 'Components/ResetPasswordPage',
+    title: "Components/ResetPasswordPage",
     component: ResetPasswordPage,
-};
+}
 
-export const ResetPasswordPageWithoutData = () => <ResetPasswordPage />;
-export const ResetPasswordPageWithData = () => <ResetPasswordPage {...data} />;
+export const ResetPasswordPageWithoutData = () => <ResetPasswordPage />
+export const ResetPasswordPageWithData = () => <ResetPasswordPage {...data} />

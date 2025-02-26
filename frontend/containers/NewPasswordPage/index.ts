@@ -1,3 +1,3 @@
-import NewPasswordPage from './NewPasswordPage';
+import NewPasswordPage from "./NewPasswordPage"
 
-export default NewPasswordPage;
+export default NewPasswordPage

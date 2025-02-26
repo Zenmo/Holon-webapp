@@ -1,13 +1,13 @@
 /* global module */
 
-import React from 'react';
-import BestPracticePage from './BestPracticePage';
-import data from './BestPracticePage.data';
+import React from "react"
+import BestPracticePage from "./BestPracticePage"
+import data from "./BestPracticePage.data"
 
 export default {
-    title: 'Components/BestPracticePage',
+    title: "Components/BestPracticePage",
     component: BestPracticePage,
-};
+}
 
-export const BestPracticePageWithoutData = () => <BestPracticePage />;
-export const BestPracticePageWithData = () => <BestPracticePage {...data} />;
+export const BestPracticePageWithoutData = () => <BestPracticePage />
+export const BestPracticePageWithData = () => <BestPracticePage {...data} />

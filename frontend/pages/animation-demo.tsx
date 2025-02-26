@@ -1,7 +1,7 @@
-import InteractiveImage from "../components/InteractiveImage/InteractiveImage";
+import InteractiveImage from "../components/InteractiveImage/InteractiveImage"
 
 function InteractImage() {
-  return <InteractiveImage></InteractiveImage>;
+    return <InteractiveImage></InteractiveImage>
 }
 
-export default InteractImage;
+export default InteractImage

@@ -1,139 +1,139 @@
-import querystring from "querystring";
-import { WagtailApiResponseError, getAllPages, getPage, getRedirect } from "../api/wagtail";
-import LazyContainers from "../containers/LazyContainers";
+import querystring from "querystring"
+import { WagtailApiResponseError, getAllPages, getPage, getRedirect } from "../api/wagtail"
+import LazyContainers from "../containers/LazyContainers"
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === "production"
 
 export default function CatchAllPage({ componentName, componentProps }) {
-  const Component = LazyContainers[componentName];
-  if (!Component) {
-    return <h1>Component {componentName} not found</h1>;
-  }
-  return <Component {...componentProps} />;
+    const Component = LazyContainers[componentName]
+    if (!Component) {
+        return <h1>Component {componentName} not found</h1>
+    }
+    return <Component {...componentProps} />
 }
 
 // For SSR
 export async function getServerSideProps({ req, params, res }) {
-  let path = params?.path || [];
-  path = path.join("/");
+    let path = params?.path || []
+    path = path.join("/")
 
-  let queryParams = new URL(req.url, 'https://example.com').search;
-  if (queryParams.indexOf("?") === 0) {
-    queryParams = queryParams.substr(1);
-  }
-  queryParams = querystring.parse(queryParams);
+    let queryParams = new URL(req.url, "https://example.com").search
+    if (queryParams.indexOf("?") === 0) {
+        queryParams = queryParams.substr(1)
+    }
+    queryParams = querystring.parse(queryParams)
 
-  const nonWagtailPages = {
-    inloggen: "LoginPage",
-    registratie: "RegistrationPage",
-    profiel: "UserProfilePage",
-    "wachtwoord-aanmaken": "NewPasswordPage",
-    "wachtwoord-aanvragen": "ResetPasswordPage",
-  };
-
-  if (nonWagtailPages[path]) {
-    const {
-      json: { componentProps },
-    } = await getPage("/", queryParams, {
-      headers: {
-        cookie: req.headers.cookie,
-      },
-    });
-
-    const componentName = nonWagtailPages[path];
-    return { props: { componentName, componentProps } };
-  }
-
-  // Try to serve page
-  try {
-    const {
-      json: { componentName, componentProps, redirect, customResponse },
-      headers,
-    } = await getPage(path, queryParams, {
-      headers: {
-        cookie: req.headers.cookie,
-      },
-    });
-
-    // Forward any cookie we encounter
-    const cookies = headers.get("set-cookie");
-    if (cookies) {
-      res.setHeader("Set-Cookie", cookies);
+    const nonWagtailPages = {
+        inloggen: "LoginPage",
+        registratie: "RegistrationPage",
+        profiel: "UserProfilePage",
+        "wachtwoord-aanmaken": "NewPasswordPage",
+        "wachtwoord-aanvragen": "ResetPasswordPage",
     }
 
-    if (customResponse) {
-      const { body, body64, contentType } = customResponse;
-      res.setHeader("Content-Type", contentType);
-      res.statusCode = 200;
-      res.write(body64 ? Buffer.from(body64, "base64") : body);
-      res.end();
+    if (nonWagtailPages[path]) {
+        const {
+            json: { componentProps },
+        } = await getPage("/", queryParams, {
+            headers: {
+                cookie: req.headers.cookie,
+            },
+        })
 
-      return { props: {} };
+        const componentName = nonWagtailPages[path]
+        return { props: { componentName, componentProps } }
     }
 
-    if (redirect) {
-      const { destination, isPermanent } = redirect;
-      return {
-        redirect: {
-          destination: destination,
-          permanent: isPermanent,
-        },
-      };
+    // Try to serve page
+    try {
+        const {
+            json: { componentName, componentProps, redirect, customResponse },
+            headers,
+        } = await getPage(path, queryParams, {
+            headers: {
+                cookie: req.headers.cookie,
+            },
+        })
+
+        // Forward any cookie we encounter
+        const cookies = headers.get("set-cookie")
+        if (cookies) {
+            res.setHeader("Set-Cookie", cookies)
+        }
+
+        if (customResponse) {
+            const { body, body64, contentType } = customResponse
+            res.setHeader("Content-Type", contentType)
+            res.statusCode = 200
+            res.write(body64 ? Buffer.from(body64, "base64") : body)
+            res.end()
+
+            return { props: {} }
+        }
+
+        if (redirect) {
+            const { destination, isPermanent } = redirect
+            return {
+                redirect: {
+                    destination: destination,
+                    permanent: isPermanent,
+                },
+            }
+        }
+
+        if (componentName === "WikiPage") {
+            const { json: wikiMenu } = await getAllPages({ type: "main.WikiPage", limit: 99999999 })
+            componentProps.wikiMenu = wikiMenu
+        }
+
+        return { props: { componentName, componentProps } }
+    } catch (err) {
+        if (!(err instanceof WagtailApiResponseError)) {
+            throw err
+        }
+
+        // When in development, show django error page on error
+        if (!isProd && err.response.status >= 500) {
+            const html = await err.response.text()
+            return {
+                props: {
+                    componentName: "PureHtmlPage",
+                    componentProps: { html },
+                },
+            }
+        }
+
+        if (err.response.status >= 500) {
+            throw err
+        }
     }
 
-    if (componentName === "WikiPage") {
-      const { json: wikiMenu } = await getAllPages({ type: "main.WikiPage", limit: 99999999 });
-      componentProps.wikiMenu = wikiMenu;
+    // Try to serve redirect
+    try {
+        const { json: redirect } = await getRedirect(path, queryParams, {
+            headers: {
+                cookie: req.headers.cookie,
+            },
+        })
+        const { destination, isPermanent } = redirect
+        return {
+            redirect: {
+                destination: destination,
+                permanent: isPermanent,
+            },
+        }
+    } catch (err) {
+        if (!(err instanceof WagtailApiResponseError)) {
+            throw err
+        }
+
+        if (err.response.status >= 500) {
+            throw err
+        }
     }
 
-    return { props: { componentName, componentProps } };
-  } catch (err) {
-    if (!(err instanceof WagtailApiResponseError)) {
-      throw err;
-    }
-
-    // When in development, show django error page on error
-    if (!isProd && err.response.status >= 500) {
-      const html = await err.response.text();
-      return {
-        props: {
-          componentName: "PureHtmlPage",
-          componentProps: { html },
-        },
-      };
-    }
-
-    if (err.response.status >= 500) {
-      throw err;
-    }
-  }
-
-  // Try to serve redirect
-  try {
-    const { json: redirect } = await getRedirect(path, queryParams, {
-      headers: {
-        cookie: req.headers.cookie,
-      },
-    });
-    const { destination, isPermanent } = redirect;
-    return {
-      redirect: {
-        destination: destination,
-        permanent: isPermanent,
-      },
-    };
-  } catch (err) {
-    if (!(err instanceof WagtailApiResponseError)) {
-      throw err;
-    }
-
-    if (err.response.status >= 500) {
-      throw err;
-    }
-  }
-
-  // Serve 404 page
-  return { notFound: true };
+    // Serve 404 page
+    return { notFound: true }
 }
 
 // For SSG

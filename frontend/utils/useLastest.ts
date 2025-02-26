@@ -1,5 +1,5 @@
-import {cancellablePromise} from '@/utils/cancellablePromise'
-import {useRef} from 'react'
+import { cancellablePromise } from "@/utils/cancellablePromise"
+import { useRef } from "react"
 
 export type Latest<T> = (promise: Promise<T>) => Promise<T>
 

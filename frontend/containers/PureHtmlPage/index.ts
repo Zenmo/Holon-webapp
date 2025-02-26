@@ -1,3 +1,3 @@
-import PureHtmlPage from './PureHtmlPage';
+import PureHtmlPage from "./PureHtmlPage"
 
-export default PureHtmlPage;
+export default PureHtmlPage

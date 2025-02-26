@@ -10,7 +10,7 @@ in these factories and the frontend test suite will fail for all modules not com
 We cold get a generic structure of an object by simply importing it from the file:
 
 ```js
-import imageStructure from './image';
+import imageStructure from "./image"
 ```
 
 This would give us representation of an image.
@@ -19,13 +19,13 @@ Each file _should_ also contains a factory which can be used to override the fie
 how factory-boy works:
 
 ```js
-import { factory as imageFactory } from './image';
+import { factory as imageFactory } from "./image"
 
 const imageStructure = imageFactory({
-    url: 'https://place-hold.it/300x500',
+    url: "https://place-hold.it/300x500",
     width: 300,
     height: 500,
-});
+})
 ```
 
 the imageStructure will still have fields except the overriden ones. like ´alt´ and so on.

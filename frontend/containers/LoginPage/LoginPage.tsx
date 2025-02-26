@@ -1,7 +1,6 @@
+import { basePageWrap } from "@/containers/BasePage"
+import LoginForm from "@/components/Login"
 
-import { basePageWrap } from "@/containers/BasePage";
-import LoginForm from "@/components/Login";
+const LoginPage = () => <LoginForm />
 
-const LoginPage = () => <LoginForm />;
-
-export default basePageWrap(LoginPage);
+export default basePageWrap(LoginPage)

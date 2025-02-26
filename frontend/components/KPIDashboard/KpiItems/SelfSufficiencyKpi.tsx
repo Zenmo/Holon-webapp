@@ -1,10 +1,17 @@
-import React, {FunctionComponent} from "react"
-import {calcChangeDirection, ChangeAppreciation} from "@/components/KPIDashboard/ChangeIcon"
-import {KpiDisplay} from "@/components/KPIDashboard/KpiItems/KpiDisplay"
-import {KpiDisplayProps} from "@/components/KPIDashboard/KpiItems/types"
-import {formatCurrentKpiNumber, formatPreviousKpiNumber} from "@/components/KPIDashboard/KpiItems/number-format"
+import React, { FunctionComponent } from "react"
+import { calcChangeDirection, ChangeAppreciation } from "@/components/KPIDashboard/ChangeIcon"
+import { KpiDisplay } from "@/components/KPIDashboard/KpiItems/KpiDisplay"
+import { KpiDisplayProps } from "@/components/KPIDashboard/KpiItems/types"
+import {
+    formatCurrentKpiNumber,
+    formatPreviousKpiNumber,
+} from "@/components/KPIDashboard/KpiItems/number-format"
 
-export const SelfSufficiencyKpi: FunctionComponent<KpiDisplayProps> = ({view, currentValue, previousValue}) => {
+export const SelfSufficiencyKpi: FunctionComponent<KpiDisplayProps> = ({
+    view,
+    currentValue,
+    previousValue,
+}) => {
     return (
         <KpiDisplay
             view={view}

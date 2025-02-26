@@ -1,11 +1,15 @@
-import React, {FunctionComponent} from "react"
-import {KpiDisplayProps} from "@/components/KPIDashboard/KpiItems/types"
-import {calcChangeDirection, ChangeAppreciation} from "@/components/KPIDashboard/ChangeIcon"
-import {KpiDisplay} from "@/components/KPIDashboard/KpiItems/KpiDisplay"
-import {formatKpiNumber} from "@/components/KPIDashboard/KpiItems/number-format"
-import {isNumber} from "lodash"
+import React, { FunctionComponent } from "react"
+import { KpiDisplayProps } from "@/components/KPIDashboard/KpiItems/types"
+import { calcChangeDirection, ChangeAppreciation } from "@/components/KPIDashboard/ChangeIcon"
+import { KpiDisplay } from "@/components/KPIDashboard/KpiItems/KpiDisplay"
+import { formatKpiNumber } from "@/components/KPIDashboard/KpiItems/number-format"
+import { isNumber } from "lodash"
 
-export const CostKpi: FunctionComponent<KpiDisplayProps> = ({view, currentValue, previousValue}) => {
+export const CostKpi: FunctionComponent<KpiDisplayProps> = ({
+    view,
+    currentValue,
+    previousValue,
+}) => {
     return (
         <KpiDisplay
             view={view}
@@ -33,18 +37,18 @@ function formatCosts(value: Nullable<number>, empty = "-") {
     }
 
     if (value > 1e9) {
-        value = value / 1e9;
-        multiplier = "mld.";
+        value = value / 1e9
+        multiplier = "mld."
     } else if (value > 1e6) {
-        value = value / 1e6;
-        multiplier = "mln.";
+        value = value / 1e6
+        multiplier = "mln."
     } else if (value > 1e3) {
-        value = value / 1e3;
-        multiplier = "k.";
+        value = value / 1e3
+        multiplier = "k."
     }
 
     return {
         value: formatKpiNumber(value, empty),
         multiplier,
-    };
+    }
 }

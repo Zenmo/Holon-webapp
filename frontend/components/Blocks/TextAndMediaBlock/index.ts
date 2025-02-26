@@ -1,3 +1,3 @@
-import TextAndMediaBlock from "./TextAndMediaBlock";
+import TextAndMediaBlock from "./TextAndMediaBlock"
 
-export default TextAndMediaBlock;
+export default TextAndMediaBlock

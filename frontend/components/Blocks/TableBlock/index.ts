@@ -1,3 +1,3 @@
-import TableBlock from "./TableBlock";
+import TableBlock from "./TableBlock"
 
-export default TableBlock;
+export default TableBlock

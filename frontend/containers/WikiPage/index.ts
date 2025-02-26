@@ -1,3 +1,3 @@
-import WikiPage from './WikiPage';
+import WikiPage from "./WikiPage"
 
-export default WikiPage;
+export default WikiPage

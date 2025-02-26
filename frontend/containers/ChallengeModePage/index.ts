@@ -1,3 +1,3 @@
-import ChallengeModePage from './ChallengeModePage';
+import ChallengeModePage from "./ChallengeModePage"
 
-export default ChallengeModePage;
+export default ChallengeModePage

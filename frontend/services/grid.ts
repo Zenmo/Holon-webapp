@@ -1,4 +1,4 @@
-import {css} from "@emotion/react"
+import { css } from "@emotion/react"
 
 export function getGridCss(gridData: string) {
     const [_, left, right] = /(\d+)_(\d+)/.exec(gridData)

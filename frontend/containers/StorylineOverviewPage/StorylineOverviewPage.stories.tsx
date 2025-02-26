@@ -1,13 +1,13 @@
 /* global module */
 
-import React from 'react';
-import StorylineOverviewPage from './StorylineOverviewPage';
-import data from './StorylineOverviewPage.data';
+import React from "react"
+import StorylineOverviewPage from "./StorylineOverviewPage"
+import data from "./StorylineOverviewPage.data"
 
 export default {
-    title: 'Components/StorylineOverviewPage',
+    title: "Components/StorylineOverviewPage",
     component: StorylineOverviewPage,
-};
+}
 
-export const StorylineOverviewPageWithoutData = () => <StorylineOverviewPage />;
-export const StorylineOverviewPageWithData = () => <StorylineOverviewPage {...data} />;
+export const StorylineOverviewPageWithoutData = () => <StorylineOverviewPage />
+export const StorylineOverviewPageWithData = () => <StorylineOverviewPage {...data} />

@@ -1,3 +1,3 @@
-import NewPasswordRequest from "./NewPasswordRequest";
+import NewPasswordRequest from "./NewPasswordRequest"
 
-export default NewPasswordRequest;
+export default NewPasswordRequest

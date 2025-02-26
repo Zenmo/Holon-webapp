@@ -1,17 +1,17 @@
 // import { getCookie } from './Cookie';
 
-const parseJSON = (response) => response.json();
+const parseJSON = response => response.json()
 
 const defaultHeaders = {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-};
+    Accept: "application/json",
+    "Content-Type": "application/json",
+}
 
 const buildHeaders = () => {
     return {
         ...defaultHeaders,
-    };
-};
+    }
+}
 
 // const buildHeadersWithCsrf = () => {
 //     return {
@@ -20,42 +20,42 @@ const buildHeaders = () => {
 //     }
 // }
 
-const checkStatus = (response) => {
+const checkStatus = response => {
     if (response.status >= 200 && response.status < 300) {
-        return response;
+        return response
     }
 
-    const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
-};
+    const error = new Error(response.statusText)
+    error.response = response
+    throw error
+}
 
-const httpGet = (url) =>
+const httpGet = url =>
     fetch(url, {
         headers: buildHeaders(),
-        credentials: 'same-origin',
+        credentials: "same-origin",
     })
         .then(checkStatus)
-        .then(parseJSON);
+        .then(parseJSON)
 
 const httpPostWithCsrfToken = (url, data) =>
     fetch(url, {
-        method: 'post',
+        method: "post",
         headers: buildHeadersWithCsrf(),
         body: JSON.stringify(data),
-        credentials: 'same-origin',
+        credentials: "same-origin",
     })
         .then(checkStatus)
-        .then(parseJSON);
+        .then(parseJSON)
 
 const httpPost = (url, data) =>
     fetch(url, {
-        method: 'post',
+        method: "post",
         headers: buildHeaders(),
         body: JSON.stringify(data),
-        credentials: 'same-origin',
+        credentials: "same-origin",
     })
         .then(checkStatus)
-        .then(parseJSON);
+        .then(parseJSON)
 
-export { httpPostWithCsrfToken, httpGet, httpPost };
+export { httpPostWithCsrfToken, httpGet, httpPost }

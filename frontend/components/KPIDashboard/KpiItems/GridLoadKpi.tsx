@@ -1,10 +1,17 @@
-import React, {FunctionComponent} from "react"
-import {KpiDisplay} from "@/components/KPIDashboard/KpiItems/KpiDisplay"
-import {calcChangeDirection, ChangeAppreciation} from "@/components/KPIDashboard/ChangeIcon"
-import {formatCurrentKpiNumber, formatPreviousKpiNumber} from "@/components/KPIDashboard/KpiItems/number-format"
-import {KpiDisplayProps} from "@/components/KPIDashboard/KpiItems/types"
+import React, { FunctionComponent } from "react"
+import { KpiDisplay } from "@/components/KPIDashboard/KpiItems/KpiDisplay"
+import { calcChangeDirection, ChangeAppreciation } from "@/components/KPIDashboard/ChangeIcon"
+import {
+    formatCurrentKpiNumber,
+    formatPreviousKpiNumber,
+} from "@/components/KPIDashboard/KpiItems/number-format"
+import { KpiDisplayProps } from "@/components/KPIDashboard/KpiItems/types"
 
-export const GridLoadKpi: FunctionComponent<KpiDisplayProps> = ({previousValue, currentValue, view}) => {
+export const GridLoadKpi: FunctionComponent<KpiDisplayProps> = ({
+    previousValue,
+    currentValue,
+    view,
+}) => {
     return (
         <KpiDisplay
             view={view}

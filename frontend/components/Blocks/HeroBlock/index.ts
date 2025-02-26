@@ -1,3 +1,3 @@
-import HeroBlock from "./HeroBlock";
+import HeroBlock from "./HeroBlock"
 
-export default HeroBlock;
+export default HeroBlock

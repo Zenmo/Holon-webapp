@@ -1,3 +1,3 @@
-import NewPasswordCreate from "./NewPasswordCreate";
+import NewPasswordCreate from "./NewPasswordCreate"
 
-export default NewPasswordCreate;
+export default NewPasswordCreate

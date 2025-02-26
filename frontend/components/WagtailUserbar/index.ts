@@ -1,3 +1,3 @@
-import WagtailUserbar from './WagtailUserbar';
+import WagtailUserbar from "./WagtailUserbar"
 
-export default WagtailUserbar;
+export default WagtailUserbar

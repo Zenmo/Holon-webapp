@@ -1,6 +1,6 @@
-import RegistrationForm from "@/components/Registration";
-import { basePageWrap } from "@/containers/BasePage";
+import RegistrationForm from "@/components/Registration"
+import { basePageWrap } from "@/containers/BasePage"
 
-const RegistrationPage = () => <RegistrationForm />;
+const RegistrationPage = () => <RegistrationForm />
 
-export default basePageWrap(RegistrationPage);
+export default basePageWrap(RegistrationPage)

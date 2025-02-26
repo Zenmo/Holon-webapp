@@ -1,7 +1,7 @@
-import {FunctionComponent} from "react"
-import {HeatingType} from "@/components/IJzerboeren/Step1/step-1-data"
+import { FunctionComponent } from "react"
+import { HeatingType } from "@/components/IJzerboeren/Step1/step-1-data"
 import InteractiveRadios from "@/components/InteractiveInputs/InteractiveRadios"
-import {InteractiveInputOptions} from "@/components/InteractiveInputs/InteractiveInputs"
+import { InteractiveInputOptions } from "@/components/InteractiveInputs/InteractiveInputs"
 
 interface Props {
     heatingType?: HeatingType
@@ -23,12 +23,10 @@ const options = [
         id: 3333,
         option: HeatingType.DISTRICT_HEATING,
         label: "Warmtenet",
-    }
+    },
 ]
 
-export const HeatingTypeRadios: FunctionComponent<Props> = ({
-    heatingType, setHeatingType
-}) => {
+export const HeatingTypeRadios: FunctionComponent<Props> = ({ heatingType, setHeatingType }) => {
     return (
         <InteractiveRadios
             contentId="HeatingTypeRadios"
@@ -39,6 +37,7 @@ export const HeatingTypeRadios: FunctionComponent<Props> = ({
                 setHeatingType(option.option)
             }}
             type="single_select"
-            defaultValue={heatingType} />
+            defaultValue={heatingType}
+        />
     )
 }

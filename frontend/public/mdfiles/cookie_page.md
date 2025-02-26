@@ -1,11 +1,10 @@
-
 # Cookie Policy
 
-Holontool.nl gebruikt verschillende soorten cookies. Omdat het belangrijk is voor jou als gebruiker hier controle over te hebben, leggen we op deze pagina uit welke cookies we inzetten en voor welk doel. 
+Holontool.nl gebruikt verschillende soorten cookies. Omdat het belangrijk is voor jou als gebruiker hier controle over te hebben, leggen we op deze pagina uit welke cookies we inzetten en voor welk doel.
 
 ## Wat zijn cookies?
 
-Cookies zijn kleine tekst bestanden die een website op jouw computer, tablet of mobiel plaatst wanneer je de website bezoekt. Deze bestanden houden informatie bij over je bezoek op de website. Dit zorgt er bijvoorbeeld voor dat de volgende keer dat je naar dezelfde website gaat, deze je herkent als bekende gebruiker. 
+Cookies zijn kleine tekst bestanden die een website op jouw computer, tablet of mobiel plaatst wanneer je de website bezoekt. Deze bestanden houden informatie bij over je bezoek op de website. Dit zorgt er bijvoorbeeld voor dat de volgende keer dat je naar dezelfde website gaat, deze je herkent als bekende gebruiker.
 
 ## Welke cookies gebruiken we?
 
@@ -24,7 +23,6 @@ Analytische cookies helpen eigenaren van websites begrijpen hoe bezoekers hun we
 | Naam    | Aanbieder            | Doel                                                                                                                                                                          | Vervaltermijn | Type  |
 | ------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----- |
 | collect | google-analytics.com | Wordt gebruikt om gegevens over het apparaat en het gedrag van de bezoeker naar Google Analytics te sturen. Volgt de bezoeker op verschillende apparaten en marketingkanalen. | Sessie        | Pixel |
-
 
 ## Google Analytics
 
