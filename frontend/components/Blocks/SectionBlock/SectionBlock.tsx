@@ -37,6 +37,10 @@ type Props = {
   wikilinks?: WikiLink[];
 };
 
+/**
+ * Contains simulation input controls, outputs (KPI's), text, and many other features.
+ * Better name: SimulationBlock
+ */
 export default function SectionBlock({
   data,
   wikilinks,
@@ -83,8 +87,6 @@ export default function SectionBlock({
   const scenario = useContext<number>(ScenarioContext);
   const [dirtyState, setDirtyState] = useState<boolean>(false);
   const [resetState, setResetState] = useState<boolean>(false);
-
-  const sectionContainerRef = useRef(null);
 
   const backgroundFullcolor =
     data.value?.background.size == "bg__full" ? data.value.background.color : "";
@@ -275,7 +277,7 @@ export default function SectionBlock({
   }
 
   return (
-    <div className={`sectionContainer`} ref={sectionContainerRef}>
+    <div className={`sectionContainer`}>
       {feedbackmodals && (
         <ChallengeFeedbackModal
           feedbackmodals={feedbackmodals}

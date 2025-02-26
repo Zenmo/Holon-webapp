@@ -1,11 +1,10 @@
-
 import {KpiRow} from "@/components/IJzerboeren/KpiRow"
 import {GridLoadKpi} from "@/components/KPIDashboard/KpiItems/GridLoadKpi"
 import {CostKpi} from "@/components/KPIDashboard/KpiItems/CostKpi"
 import {SustainabilityKpi} from "@/components/KPIDashboard/KpiItems/SustainabilityKpi"
 import {HeatingTypeRadios} from "@/components/IJzerboeren/Step1/HeatingTypeRadios"
-import {Dispatch, SetStateAction, useState} from "react"
 import {HeatingType, step1Data, Step1Outputs} from "@/components/IJzerboeren/Step1/step-1-data"
+import {useStateWithHistory} from "@/components/IJzerboeren/useStateWithHistory"
 
 export const Step1 = () => {
     const [heatingType, previousHeatingType, setHeatingType] = useStateWithHistory<HeatingType | null>(null)
@@ -38,21 +37,3 @@ export const Step1 = () => {
     )
 }
 
-/**
- * returns current value, previous value, and setter
- */
-function useStateWithHistory<S>(defaultValue: S): [S, S | null, Dispatch<SetStateAction<S>>] {
-    const [currentValue, setCurrentValue] = useState(defaultValue)
-    const [previousValue, setPreviousValue] = useState<S | null>(null)
-
-    function setValue(newValue: SetStateAction<S>) {
-        setPreviousValue(currentValue)
-        setCurrentValue(newValue)
-    }
-
-    return [
-        currentValue,
-        previousValue,
-        setValue,
-    ]
-}
