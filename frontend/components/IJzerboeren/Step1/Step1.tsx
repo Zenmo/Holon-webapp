@@ -23,29 +23,31 @@ export const Step1: FunctionComponent = () => {
     }
 
     return (
-        <TwoColumnSimulationLayout>
-            <div>
-                <p>Hier een mooi verhaal over wat de afwegingen zijn bij het kiezen voor een energiesysteem</p>
-                <HeatingTypeRadios setHeatingType={setHeatingType} />
-            </div>
-            <div style={{
-                flexDirection: "column-reverse",
-            }}>
-                <KpiRow>
-                    <GridLoadKpi
-                        currentValue={currentOutputs && currentOutputs.gridLoad_r * 100}
-                        previousValue={previousOutputs && previousOutputs.gridLoad_r * 100}
-                    />
-                    <CostKpi
-                        currentValue={currentOutputs && currentOutputs.cost_eur}
-                        previousValue={previousOutputs && previousOutputs.cost_eur}
-                    />
-                    <SustainabilityKpi
-                        currentValue={currentOutputs && currentOutputs.sustainability_r * 100}
-                        previousValue={previousOutputs && previousOutputs.sustainability_r * 100}
-                    />
-                </KpiRow>
-            </div>
-        </TwoColumnSimulationLayout>
+        <div className="holonContentContainer">
+            <TwoColumnSimulationLayout>
+                <div>
+                    <p>Hier een mooi verhaal over wat de afwegingen zijn bij het kiezen voor een energiesysteem</p>
+                    <HeatingTypeRadios setHeatingType={setHeatingType} />
+                </div>
+                <div style={{
+                    flexDirection: "column-reverse",
+                }}>
+                    <KpiRow>
+                        <GridLoadKpi
+                            currentValue={currentOutputs && currentOutputs.gridLoad_r * 100}
+                            previousValue={previousOutputs && previousOutputs.gridLoad_r * 100}
+                        />
+                        <CostKpi
+                            currentValue={currentOutputs && currentOutputs.cost_eur}
+                            previousValue={previousOutputs && previousOutputs.cost_eur}
+                        />
+                        <SustainabilityKpi
+                            currentValue={currentOutputs && currentOutputs.sustainability_r * 100}
+                            previousValue={previousOutputs && previousOutputs.sustainability_r * 100}
+                        />
+                    </KpiRow>
+                </div>
+            </TwoColumnSimulationLayout>
+        </div>
     )
 }
