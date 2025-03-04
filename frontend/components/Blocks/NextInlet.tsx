@@ -1,4 +1,4 @@
-import {Component, FunctionComponent, ReactComponentElement} from "react"
+import {FunctionComponent} from "react"
 import {Step1} from "@/components/IJzerboeren/Step1/Step1"
 
 const inletComponents = new Map<string, FunctionComponent>();
@@ -18,7 +18,7 @@ export const NextInletBlock: FunctionComponent<Props> = ({ contentItem: {value: 
     const Component = inletComponents.get(inlet)
 
     if (!Component) {
-        return <p style={{color: "red"}}>Can't find component {inlet}.</p>
+        return <p style={{color: "red"}}>Can&apos;t find component {inlet}.</p>
     }
 
     return <Component/>

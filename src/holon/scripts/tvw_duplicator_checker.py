@@ -68,7 +68,7 @@ def run():
         gridnode = scenario.gridnode_set.get(id=m["id"])
         for ma in m["action"]:
             print(
-                f"\U0001F449 Should find {ma['factor']+1} instances of type {ma['model'].__name__} ({ma['type']})"
+                f"\U0001f449 Should find {ma['factor']+1} instances of type {ma['model'].__name__} ({ma['type']})"
             )
 
             if ma["type"] is None:
@@ -83,7 +83,7 @@ def run():
             if count == ma["factor"] + 1:
                 check = "\U00002705"
             else:
-                check = "\U0000214C"
+                check = "\U0000214c"
 
             print(
                 f"\t {check} Found {count} instances of type {ma['model'].__name__} ({ma['type']}){check}\n "

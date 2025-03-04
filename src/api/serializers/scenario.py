@@ -1,4 +1,4 @@
-""" Serializes """
+"""Serializes"""
 
 from rest_framework import serializers
 

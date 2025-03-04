@@ -6,7 +6,6 @@ import { Graphcolor, SectionVariant } from "@/containers/types"
 import { ScenarioContext } from "context/ScenarioContext"
 import { debounce } from "lodash"
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
-import { getGridCss } from "services/grid"
 import { InteractiveElement } from "../../../api/holon"
 import { WikiLink } from "../../../containers/types"
 import { HolarchyFeedbackImageProps } from "../HolarchyFeedbackImage/HolarchyFeedbackImage"
@@ -83,14 +82,10 @@ export default function SectionBlock({
 
     const sectionContainerRef = useRef(null)
 
-    const backgroundFullcolor =
-        data.value?.background.size == "bg__full" ? data.value.background.color : ""
-
     // Have to create a seperate variable for this since the bg-color is semi-transparent
     // Otherwise they will overlap and will the left be darker since 2 layers
     const backgroundLeftColor =
         data.value.background.size == "bg__full" ? "" : data.value.background.color
-    const gridValue = getGridCss(data.value.gridLayout.grid)
 
     const debouncedCalculateKPIs = useMemo(() => debounce(calculateKPIsCb, 1000), [])
 

@@ -1,4 +1,4 @@
-""" Streamfields """
+"""Streamfields"""
 
 from wagtail import blocks
 from .holon_header_image_chooser import HolonHeaderImageChooserBlock

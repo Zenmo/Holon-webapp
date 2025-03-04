@@ -1,7 +1,6 @@
 import { FunctionComponent } from "react"
 import { HeatingType } from "@/components/IJzerboeren/Step1/step-1-data"
 import InteractiveRadios from "@/components/InteractiveInputs/InteractiveRadios"
-import { InteractiveInputOptions } from "@/components/InteractiveInputs/InteractiveInputs"
 import {findSingle} from "@/utils/arrayFindSingle"
 
 interface Props {

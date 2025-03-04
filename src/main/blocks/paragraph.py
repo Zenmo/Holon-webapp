@@ -1,4 +1,4 @@
-""" Streamfields """
+"""Streamfields"""
 
 from wagtail import blocks
 from main.blocks.rich_text_block import RichtextBlock

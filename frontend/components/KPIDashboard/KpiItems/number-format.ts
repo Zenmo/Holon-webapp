@@ -6,7 +6,7 @@ export function formatCurrentKpiNumber(value: number | null | undefined) {
     return formatKpiNumber(value, "-")
 }
 
-export function formatKpiNumber(value: number | null | undefined, empty: string = "-"): string {
+export function formatKpiNumber(value: number | null | undefined, empty = "-"): string {
     if (value == undefined) {
         return empty
     } else if (typeof value == "number") {
