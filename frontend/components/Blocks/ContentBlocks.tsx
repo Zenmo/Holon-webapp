@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import {
     CardBlockVariant,
     Graphcolor,
-    HeroBlockVariant,
+    HeroBlockVariant, NextInletVariant,
     PageProps,
     SectionVariant,
     StepIndicatorVariant,
@@ -23,6 +23,7 @@ import TableBlock from "./TableBlock/TableBlock"
 import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock"
 import TitleBlock from "./TitleBlock/TitleBlock"
 import { StepIndicatorWrapper } from "@/components/Storyline/Steps/StepIndicatorWrapper"
+import {NextInletBlock} from "@/components/Blocks/NextInlet"
 
 type ContentBlockProps = PageProps<
     | TextAndMediaVariant
@@ -31,6 +32,7 @@ type ContentBlockProps = PageProps<
     | CardBlockVariant
     | SectionVariant
     | StepIndicatorVariant
+    | NextInletVariant
 >
 
 const ContentBlocks = ({
@@ -293,6 +295,8 @@ const ContentBlocks = ({
                                 data={contentItem}
                             />
                         )
+                    case "next_inlet_block":
+                        return <NextInletBlock key={contentItem.id} contentItem={contentItem} />
                     case "hero_block":
                         return <HeroBlock key={`heroblock ${contentItem.id}`} data={contentItem} />
                     case "title_block":

@@ -39,6 +39,11 @@ export type StepAnchorVariant = {
     id: string
 }
 
+export type NextInletVariant = {
+    type: "next_inlet_block"
+    inlet: string,
+}
+
 export type TextAndMediaVariant = {
     type: "text_image_block"
 } & React.ComponentProps<typeof TextAndMedia>["data"]

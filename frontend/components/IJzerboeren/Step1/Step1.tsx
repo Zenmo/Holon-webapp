@@ -6,8 +6,9 @@ import { HeatingTypeRadios } from "@/components/IJzerboeren/Step1/HeatingTypeRad
 import { HeatingType, step1Data, Step1Outputs } from "@/components/IJzerboeren/Step1/step-1-data"
 import { useStateWithHistory } from "@/components/IJzerboeren/useStateWithHistory"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
+import {FunctionComponent} from "react"
 
-export const Step1 = () => {
+export const Step1: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
         useStateWithHistory<HeatingType | null>(null)
 
