@@ -2,13 +2,15 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
+            "@/tailwind.config": ["./tailwind.config.js"],
             "@/components/*": ["./components/*"],
             "@/containers/*": ["./containers/*"],
             "@/pages/*": ["./pages/*"],
             "@/api/*": ["./api/*"],
             "@/utils/*": ["./utils/*"],
             "@/public/*": ["./public/*"],
-            "@/services/*": ["./services/*"]
+            "@/services/*": ["./services/*"],
+            "@/styles/*": ["./styles/*"]
         },
         "target": "es6",
         "downlevelIteration": true,

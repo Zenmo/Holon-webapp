@@ -2,6 +2,7 @@ import { FunctionComponent } from "react"
 import { HeatingType } from "@/components/IJzerboeren/Step1/step-1-data"
 import InteractiveRadios from "@/components/InteractiveInputs/InteractiveRadios"
 import { InteractiveInputOptions } from "@/components/InteractiveInputs/InteractiveInputs"
+import {findSingle} from "@/utils/arrayFindSingle"
 
 interface Props {
     heatingType?: HeatingType
@@ -33,7 +34,7 @@ export const HeatingTypeRadios: FunctionComponent<Props> = ({ heatingType, setHe
             name="Verwarmingssysteem"
             options={options}
             setValue={(contentId, checked, optionId) => {
-                const option = options.find(o => o.id === optionId)
+                const option = findSingle(options, o => o.id === optionId)
                 setHeatingType(option.option)
             }}
             type="single_select"

@@ -1,13 +1,7 @@
 import React from "react"
-import { KpiDisplay, KpiView } from "./KpiItems/KpiDisplay"
+import { KpiView } from "./KpiItems/KpiDisplay"
 import styles from "./kpi.module.css"
-import { calcChangeDirection, ChangeAppreciation } from "@/components/KPIDashboard/ChangeIcon"
 import { KPIsByScale, Level } from "@/api/holon"
-import {
-    formatCurrentKpiNumber,
-    formatKpiNumber,
-    formatPreviousKpiNumber,
-} from "@/components/KPIDashboard/KpiItems/number-format"
 import { GridLoadKpi } from "@/components/KPIDashboard/KpiItems/GridLoadKpi"
 import { CostKpi } from "@/components/KPIDashboard/KpiItems/CostKpi"
 import { SustainabilityKpi } from "@/components/KPIDashboard/KpiItems/SustainabilityKpi"
@@ -21,7 +15,7 @@ type KPIItems = {
     loading: boolean
 }
 
-export default function KPIItems({ view, previousData, data, level, loading }: KPIItems) {
+export default function KPIItems({ view, previousData, data, level }: KPIItems) {
     return (
         <React.Fragment>
             {data[level] ?

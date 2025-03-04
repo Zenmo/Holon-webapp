@@ -23,6 +23,7 @@ import {
     FeedbackModal,
 } from "@/components/Blocks/ChallengeFeedbackModal/types"
 import { ShareButton } from "@/components/Button/ShareButton"
+import {TwoColumnSimulationLayoutTwo} from "@/components/Blocks/SectionBlock/TwoColumn"
 
 type Props = {
     data: SectionVariant
@@ -314,11 +315,8 @@ export default function SectionBlock({
             )}
 
             <div className="holonContentContainer">
-                <div className={`flex flex-col lg:flex-row ${backgroundFullcolor} relative`}>
-                    <div
-                        css={gridValue.left}
-                        className={`flex flex-col py-12 px-10 lg:px-16 lg:pt-16 relative ${backgroundLeftColor}`}
-                    >
+                <TwoColumnSimulationLayoutTwo columnSpec={data.value.gridLayout.grid}>
+                    <div className={backgroundLeftColor}>
                         {data.value.background.size !== "bg_full" && !holarchyModal ?
                             <span className={`extra_bg ${backgroundLeftColor}`}></span>
                         :   ""}
@@ -333,7 +331,7 @@ export default function SectionBlock({
                         )}
                     </div>
 
-                    <div className="relative flex flex-col" css={gridValue.right}>
+                    <div>
                         {dirtyState && (
                             <div className="absolute flex justify-center items-start p-12 top-0 left-0 w-full h-full bg-black/[.8] z-20">
                                 <div className="bg-white p-12 w-50 inline-block mx-auto h-auto rounded sticky top-[50%]">
@@ -434,7 +432,7 @@ export default function SectionBlock({
                         className="border-holon-blue-900 absolute bottom-0 right-0"
                         style={{ width: "calc(100% - 2rem)" }}
                     />
-                </div>
+                </TwoColumnSimulationLayoutTwo>
 
                 {holarchyModal && (
                     <HolarchyTab
