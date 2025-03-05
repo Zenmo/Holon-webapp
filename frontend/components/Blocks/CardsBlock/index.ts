@@ -1,3 +1,3 @@
-import CardBlock from "./CardBlock";
+import CardBlock from "./CardBlock"
 
-export default CardBlock;
+export default CardBlock

@@ -1,10 +1,14 @@
+/**
+ * @type import("prettier").Options
+ */
 module.exports = {
-  trailingComma: "es5",
-  printWidth: 100,
-  tabWidth: 2,
-  singleQuote: false,
-  semi: true,
-  jsxBracketSameLine: true,
-  arrowParens: "avoid",
-  endOfLine: "lf",
+    experimentalTernaries: true,
+    experimentalOperatorPosition: "start",
+    printWidth: 100,
+    tabWidth: 4,
+    singleQuote: false,
+    semi: false,
+    bracketSameLine: false,
+    arrowParens: "avoid",
+    endOfLine: "lf",
 };

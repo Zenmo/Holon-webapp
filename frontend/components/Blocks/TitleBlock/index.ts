@@ -1,3 +1,3 @@
-import TitleBlock from "./TitleBlock";
+import TitleBlock from "./TitleBlock"
 
-export default TitleBlock;
+export default TitleBlock

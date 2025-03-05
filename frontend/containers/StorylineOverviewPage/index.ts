@@ -1,3 +1,3 @@
-import StorylineOverviewPage from './StorylineOverviewPage';
+import StorylineOverviewPage from "./StorylineOverviewPage"
 
-export default StorylineOverviewPage;
+export default StorylineOverviewPage

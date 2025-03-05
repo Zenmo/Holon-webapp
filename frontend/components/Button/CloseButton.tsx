@@ -1,5 +1,5 @@
-import {ComponentProps, FunctionComponent} from "react";
-import {XMarkIcon} from "@heroicons/react/24/outline";
+import { ComponentProps, FunctionComponent } from "react"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 
 /**
  * "X" button that closes a modal or fullscreen view.
@@ -7,7 +7,7 @@ import {XMarkIcon} from "@heroicons/react/24/outline";
  *
  * Tailwind has already removed the browser default button styling
  */
-export const CloseButton: FunctionComponent<ComponentProps<"button">> = ({...props}) => (
+export const CloseButton: FunctionComponent<ComponentProps<"button">> = ({ ...props }) => (
     <button
         aria-label="Sluiten"
         type="button"
@@ -18,8 +18,10 @@ export const CloseButton: FunctionComponent<ComponentProps<"button">> = ({...pro
         }}
         className={`text-holon-blue-900 ${props.className}`}
     >
-        <XMarkIcon style={{
-            height: "100%",
-        }}/>
+        <XMarkIcon
+            style={{
+                height: "100%",
+            }}
+        />
     </button>
 )

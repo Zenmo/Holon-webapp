@@ -1,24 +1,24 @@
-import {FunctionComponent, useEffect, useState} from "react"
-import {Step, StepData} from "@/components/Storyline/Steps/Step"
+import { FunctionComponent, useEffect, useState } from "react"
+import { Step, StepData } from "@/components/Storyline/Steps/Step"
 import styles from "./Steps.module.css"
-import {StepAnchorVariant, StepIndicatorVariant} from "@/containers/types"
+import { StepAnchorVariant, StepIndicatorVariant } from "@/containers/types"
 
 export const StepIndicator: FunctionComponent<{
-    stepIndicatorBlock: StepIndicatorVariant,
+    stepIndicatorBlock: StepIndicatorVariant
     className?: string
-}> = ({stepIndicatorBlock, className = ""}) => {
+}> = ({ stepIndicatorBlock, className = "" }) => {
     const [steps, setSteps] = useState<StepData[]>(anchorsToStepData(stepIndicatorBlock))
 
     useEffect(() => {
         const handleScroll = () => {
             const activeStepId = findVisibleStepId(steps)
 
-            setSteps(steps => steps.map(
-                step => ({
+            setSteps(steps =>
+                steps.map(step => ({
                     ...step,
                     active: step.id === activeStepId,
-                })
-            ))
+                })),
+            )
         }
         // execute once on component load
         handleScroll()
@@ -30,10 +30,8 @@ export const StepIndicator: FunctionComponent<{
 
     return (
         <div className={`${styles.Steps} ${className}`}>
-            {steps.map((step) => {
-                return (
-                    <Step key={step.id} {...step} />
-                )
+            {steps.map(step => {
+                return <Step key={step.id} {...step} />
             })}
         </div>
     )

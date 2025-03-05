@@ -33,7 +33,7 @@ def run():
     outputs = []
 
     ## LOOP
-    pprint("Autoserializer activated bleep bloop \U0001F916")
+    pprint("Autoserializer activated bleep bloop \U0001f916")
     for module_name, main_class in MODS:
         module_name = f"holon.models.{module_name}"
 
@@ -60,7 +60,7 @@ def run():
         outputs.append(output)
 
     ## Write to files
-    pprint("...Populating templates \U0001F4D1")
+    pprint("...Populating templates \U0001f4d1")
     with open(fp_templates / "subserializers.py.j2", "r") as infile:
         template_string_sub = infile.read()
         template_sub = Template(template_string_sub)
@@ -83,14 +83,14 @@ def run():
                 )
             )
 
-    pprint("...Formatting \U0001F9D0")
+    pprint("...Formatting \U0001f9d0")
     try:
         mode = black.Mode(line_length=100)
         black.format_file_in_place(fp_mapper, mode=mode, fast=False, write_back=WriteBack.YES)
         black.format_file_in_place(
             fp_subserializers, mode=mode, fast=False, write_back=WriteBack.YES
         )
-        pprint("Done! \U0001F973")
+        pprint("Done! \U0001f973")
     except InvalidInput as e:
         pprint(
             "\U00002757 formatting failed, probably the output is not functional Python \U00002757"

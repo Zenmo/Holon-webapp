@@ -1,4 +1,4 @@
-"""Create a Costs&Benefits Table """
+"""Create a Costs&Benefits Table"""
 
 from typing import Union
 

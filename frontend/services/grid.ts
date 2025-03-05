@@ -1,16 +1,33 @@
-import {css} from "@emotion/react"
+import { css } from "@emotion/react"
+import {lg} from "@/styles/breakpoints"
+import {assertDefined} from "@/utils/assertDefined"
 
-export function getGridCss(gridData: string) {
-    const [_, left, right] = /(\d+)_(\d+)/.exec(gridData)
+/**
+ * Parse a string which specifies column widths like "30_70"
+ */
+export function parseTwoColumnSpec(columnSpec: string) {
+    const [_, left, right] = assertDefined(/(\d+)_(\d+)/.exec(columnSpec))
+
+    return {
+        left: parseInt(left),
+        right: parseInt(right),
+    }
+}
+
+/**
+ * Parse a string which specifies column widths like "30_70" and convert it to CSS specifications for both columns.
+ */
+export function getGridCss(columnSpec: string) {
+    const {left, right} = parseTwoColumnSpec(columnSpec)
 
     return {
         left: css({
-            "@media (min-width: 1024px)": {
+            [lg]: {
                 width: `calc(100% * ${left} / (${left} + ${right}))`,
             },
         }),
         right: css({
-            "@media (min-width: 1024px)": {
+            [lg]: {
                 width: `calc(100% * ${right} / (${left} + ${right}))`,
             },
         }),

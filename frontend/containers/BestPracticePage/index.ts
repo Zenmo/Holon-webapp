@@ -1,3 +1,3 @@
-import BestPracticePage from './BestPracticePage';
+import BestPracticePage from "./BestPracticePage"
 
-export default BestPracticePage;
+export default BestPracticePage

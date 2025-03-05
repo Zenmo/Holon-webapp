@@ -5,13 +5,13 @@
 Zenmo B.V. is als penvoerder van het Holon Consortium de verantwoordelijke rechtspersoon voor het zorgvuldig omgaan met je privacy.
 
 Adres:
-    Zenmo B.V., 
-    Hoefstraat 1a,
-    5255PB Herpt
+Zenmo B.V.,
+Hoefstraat 1a,
+5255PB Herpt
 
 Kamer van Koophandel:
-    Zenmo B.V.,
-    nummer 71609113
+Zenmo B.V.,
+nummer 71609113
 
 Contact inzake privacy: [privacy@holontool.nl](mailto:privacy@holontool.nl)
 
@@ -26,6 +26,7 @@ Het doel van de verwerking van de gegevens is slechts het krijgen van input voor
 We hebben twee aparte datasets waarvan we je graag de oorsprong vertellen en hoe we per dataset met je gegevens om zullen gaan. De eerste is een maillijst, via welke je hoogstwaarschijnlijk bent benaderd. De tweede zijn de gegevens die we verzamelen via een survey.
 
 #### Maillijst
+
 Alle persoonsgegevens op de maillijst die wij hebben samengesteld komen uit het persoonlijke netwerk van het Holon consortium, een groep van experts en modelleurs die onderzoek doen naar semiautonome energiesystemen. Voor meer informatie over Holon, zie: [topsectorenergie.nl](https://www.topsectorenergie.nl/nieuws/groot-onderzoekstraject-holon-van-start).
 
 #### Surveygegevens

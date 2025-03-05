@@ -1,5 +1,6 @@
-
-export const cancellablePromise = <T>(promise: Promise<T>): [cancel: () => void, promise: Promise<T>] => {
+export const cancellablePromise = <T>(
+    promise: Promise<T>,
+): [cancel: () => void, promise: Promise<T>] => {
     let cancelled = false
     const cancel = () => {
         cancelled = true
@@ -8,16 +9,16 @@ export const cancellablePromise = <T>(promise: Promise<T>): [cancel: () => void,
     return [
         cancel,
         new Promise((resolve, reject) => {
-            promise.then((result) => {
+            promise.then(result => {
                 if (!cancelled) {
                     resolve(result)
                 }
             })
-            promise.catch((error) => {
+            promise.catch(error => {
                 if (!cancelled) {
                     reject(error)
                 }
             })
-        })
+        }),
     ]
 }

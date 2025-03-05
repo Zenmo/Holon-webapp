@@ -1,3 +1,3 @@
-import CasusOverviewPage from './CasusOverviewPage';
+import CasusOverviewPage from "./CasusOverviewPage"
 
-export default CasusOverviewPage;
+export default CasusOverviewPage

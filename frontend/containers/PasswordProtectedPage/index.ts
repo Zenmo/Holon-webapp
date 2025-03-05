@@ -1,3 +1,3 @@
-import PasswordProtectedPage from './PasswordProtectedPage';
+import PasswordProtectedPage from "./PasswordProtectedPage"
 
-export default PasswordProtectedPage;
+export default PasswordProtectedPage

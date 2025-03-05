@@ -90,6 +90,7 @@ jobs:
                   # Shared
                   TAG: ${{ needs.variables.outputs.tag }}
                   WAGTAIL_HOSTNAME: ${{ fromJson(needs.variables.outputs.result).WAGTAIL_HOSTNAME }}
+                  STACK_NAME: ${{ fromJson(needs.variables.outputs.result).STACK_NAME }}
                   # Wagtail
                   AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
                   MEDIA_LOCATION: ${{ fromJson(needs.variables.outputs.result).MEDIA_LOCATION }}
@@ -110,4 +111,4 @@ jobs:
                   remote_host: ssh://root@server.zenmo.com
                   ssh_private_key: ${{ secrets.SWARM_SSH_PRIVATE_KEY }}
                   ssh_public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ1E4LUG22qgzc8U7oNYGWCn0cyA31+iyX2pck9wcPMS
-                  args: stack deploy --compose-file ./docker/compose-prod.yaml holon-${{ fromJson(needs.variables.outputs.result).GITHUB_ENVIRONMENT }}
+                  args: stack deploy --compose-file ./docker/compose-prod.yaml ${{ fromJson(needs.variables.outputs.result).STACK_NAME }}

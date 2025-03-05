@@ -1,6 +1,6 @@
-import NewPasswordCreate from "@/components/NewPasswordCreate";
-import { basePageWrap } from "@/containers/BasePage";
+import NewPasswordCreate from "@/components/NewPasswordCreate"
+import { basePageWrap } from "@/containers/BasePage"
 
-const NewPasswordPage = () => <NewPasswordCreate />;
+const NewPasswordPage = () => <NewPasswordCreate />
 
-export default basePageWrap(NewPasswordPage);
+export default basePageWrap(NewPasswordPage)

@@ -1,4 +1,4 @@
-import {FunctionComponent} from "react";
+import { FunctionComponent } from "react"
 
 export enum ChangeDirection {
     MORE = "MORE",
@@ -12,9 +12,9 @@ export enum ChangeAppreciation {
 }
 
 const icons = {
-    [ChangeDirection.MORE]: '↑',
-    [ChangeDirection.LESS]: '↓',
-    [ChangeDirection.SAME]: '',
+    [ChangeDirection.MORE]: "↑",
+    [ChangeDirection.LESS]: "↓",
+    [ChangeDirection.SAME]: "",
 }
 
 enum Appreciation {
@@ -29,45 +29,62 @@ const colors = {
     [Appreciation.SAME]: "white",
 }
 
-function getAppreciation(changeDirection: ChangeDirection, changeAppreciation: ChangeAppreciation): Appreciation {
+function getAppreciation(
+    changeDirection: ChangeDirection,
+    changeAppreciation: ChangeAppreciation,
+): Appreciation {
     if (changeDirection === ChangeDirection.MORE) {
-        return changeAppreciation === ChangeAppreciation.MORE_IS_BETTER ? Appreciation.BETTER : Appreciation.WORSE;
+        return changeAppreciation === ChangeAppreciation.MORE_IS_BETTER ?
+                Appreciation.BETTER
+            :   Appreciation.WORSE
     }
 
     if (changeDirection === ChangeDirection.LESS) {
-        return changeAppreciation === ChangeAppreciation.MORE_IS_BETTER ? Appreciation.WORSE : Appreciation.BETTER;
+        return changeAppreciation === ChangeAppreciation.MORE_IS_BETTER ?
+                Appreciation.WORSE
+            :   Appreciation.BETTER
     }
 
-    return Appreciation.SAME;
+    return Appreciation.SAME
 }
 
-export function calcChangeDirection(previous: number, current: number): ChangeDirection {
-    if (typeof previous !== "number" || typeof current !== "number" || Number.isNaN(previous) || Number.isNaN(current)) {
-        return ChangeDirection.SAME;
+export function calcChangeDirection(
+    previous: Nullable<number>,
+    current: Nullable<number>,
+): ChangeDirection {
+    if (
+        typeof previous !== "number"
+        || typeof current !== "number"
+        || Number.isNaN(previous)
+        || Number.isNaN(current)
+    ) {
+        return ChangeDirection.SAME
     }
 
     if (current > previous) {
-        return ChangeDirection.MORE;
+        return ChangeDirection.MORE
     }
 
     if (current < previous) {
-      return ChangeDirection.LESS;
+        return ChangeDirection.LESS
     }
 
-    return ChangeDirection.SAME;
+    return ChangeDirection.SAME
 }
 
 export const ChangeIcon: FunctionComponent<{
-    changeDirection: ChangeDirection,
-    changeAppreciation: ChangeAppreciation,
-    style?: React.CSSProperties,
+    changeDirection: ChangeDirection
+    changeAppreciation: ChangeAppreciation
+    style?: React.CSSProperties
 }> = ({ changeDirection, changeAppreciation, style = {} }) => (
-    <span style={{
-        color: colors[getAppreciation(changeDirection, changeAppreciation)],
-        fontSize: "2rem",
-        fontWeight: "bold",
-        ...style,
-    }}>
+    <span
+        style={{
+            color: colors[getAppreciation(changeDirection, changeAppreciation)],
+            fontSize: "2rem",
+            fontWeight: "bold",
+            ...style,
+        }}
+    >
         {icons[changeDirection]}
     </span>
 )

@@ -1,20 +1,20 @@
 export type LegendItem = {
-    label: string;
+    label: string
     imageSelector: {
         img: {
-            src: string;
-        };
-    };
-};
+            src: string
+        }
+    }
+}
 
 type LegendModal = {
     data: {
-        color: LegendItem[];
-        line: LegendItem[];
-    };
-};
+        color: LegendItem[]
+        line: LegendItem[]
+    }
+}
 
-function LegendModalItems({legendItems}: Array<LegendItem>) {
+function LegendModalItems({ legendItems }: Array<LegendItem>) {
     return legendItems.map((legendItem: LegendItem) => (
         <li key={legendItem.label} className="flex flex-row items-center" title={legendItem.label}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -30,21 +30,22 @@ function LegendModalItems({legendItems}: Array<LegendItem>) {
     ))
 }
 
-export default function LegendModal({data}: LegendModal) {
+export default function LegendModal({ data }: LegendModal) {
     return (
         <>
             <h3>Legenda</h3>
-            <br/>
+            <br />
             <div
                 role="figure"
                 aria-label="Legend for colors and lines within image"
-                className="gap-4 py-2 min-w-[350px] h-auto flex flex-row justify-around">
+                className="gap-4 py-2 min-w-[350px] h-auto flex flex-row justify-around"
+            >
                 <div>
                     <p>Type kleur</p>
 
                     {data["color"] && (
                         <ul>
-                            <LegendModalItems legendItems={data["color"]}/>
+                            <LegendModalItems legendItems={data["color"]} />
                         </ul>
                     )}
                 </div>
@@ -53,7 +54,7 @@ export default function LegendModal({data}: LegendModal) {
 
                     {data["line"] && (
                         <ul>
-                            <LegendModalItems legendItems={data["line"]}/>
+                            <LegendModalItems legendItems={data["line"]} />
                         </ul>
                     )}
                 </div>

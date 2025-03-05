@@ -1,10 +1,10 @@
-import React from "react";
-import FloorPlan from "../components/FloorPlan/FloorPlan";
+import React from "react"
+import FloorPlan from "../components/FloorPlan/FloorPlan"
 
 export default function Tiles() {
-  return (
-    <React.Fragment>
-      <FloorPlan />
-    </React.Fragment>
-  );
+    return (
+        <React.Fragment>
+            <FloorPlan />
+        </React.Fragment>
+    )
 }

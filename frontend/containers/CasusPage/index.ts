@@ -1,3 +1,3 @@
-import CasusPage from './CasusPage';
+import CasusPage from "./CasusPage"
 
-export default CasusPage;
+export default CasusPage

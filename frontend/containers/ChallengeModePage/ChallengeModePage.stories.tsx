@@ -1,13 +1,13 @@
 /* global module */
 
-import React from 'react';
-import ChallengeModePage from './ChallengeModePage';
-import data from './ChallengeModePage.data';
+import React from "react"
+import ChallengeModePage from "./ChallengeModePage"
+import data from "./ChallengeModePage.data"
 
 export default {
-    title: 'Components/ChallengeModePage',
+    title: "Components/ChallengeModePage",
     component: ChallengeModePage,
-};
+}
 
-export const ChallengeModePageWithoutData = () => <ChallengeModePage />;
-export const ChallengeModePageWithData = () => <ChallengeModePage {...data} />;
+export const ChallengeModePageWithoutData = () => <ChallengeModePage />
+export const ChallengeModePageWithData = () => <ChallengeModePage {...data} />

@@ -1,3 +1,3 @@
-import BestPracticeOverviewPage from './BestPracticeOverviewPage';
+import BestPracticeOverviewPage from "./BestPracticeOverviewPage"
 
-export default BestPracticeOverviewPage;
+export default BestPracticeOverviewPage

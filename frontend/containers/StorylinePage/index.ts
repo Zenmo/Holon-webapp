@@ -1,3 +1,3 @@
-import StorylinePage from './StorylinePage';
+import StorylinePage from "./StorylinePage"
 
-export default StorylinePage;
+export default StorylinePage

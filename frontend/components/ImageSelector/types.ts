@@ -1,10 +1,10 @@
-  export type StaticImage = {
-    id?: number;
-    title?: string;
+export type StaticImage = {
+    id?: number
+    title?: string
     img: {
-      alt: string;
-      height: number;
-      width: number;
-      src: string;
-    };
-  };
+        alt: string
+        height: number
+        width: number
+        src: string
+    }
+}

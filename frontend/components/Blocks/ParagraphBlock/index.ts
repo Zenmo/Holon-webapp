@@ -1,3 +1,3 @@
-import ParagraphBlock from "./ParagraphBlock";
+import ParagraphBlock from "./ParagraphBlock"
 
-export default ParagraphBlock;
+export default ParagraphBlock

@@ -1,3 +1,3 @@
-import SandboxPage from './SandboxPage';
+import SandboxPage from "./SandboxPage"
 
-export default SandboxPage;
+export default SandboxPage

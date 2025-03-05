@@ -1,4 +1,4 @@
-""" Streamfields """
+"""Streamfields"""
 
 import wagtail.blocks as blocks
 from wagtail.embeds.blocks import EmbedBlock

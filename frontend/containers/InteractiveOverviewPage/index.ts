@@ -1,3 +1,3 @@
-import InteractiveOverviewPage from './InteractiveOverviewPage';
+import InteractiveOverviewPage from "./InteractiveOverviewPage"
 
-export default InteractiveOverviewPage;
+export default InteractiveOverviewPage

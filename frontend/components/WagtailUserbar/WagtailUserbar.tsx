@@ -1,49 +1,49 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react"
 
 const WagtailUserbar = ({ html }: { html: string }) => {
     useEffect(() => {
         // This  code is copy pasted from
         // https://github.com/wagtail/wagtail/blob/19ad01ddd5d051230318a2bbfa890ac5290f295a/client/src/entrypoints/admin/userbar.js
-        const userbar = document.querySelector('[data-wagtail-userbar]');
-        const trigger = userbar.querySelector('[data-wagtail-userbar-trigger]');
-        const list = userbar.querySelector('[role=menu]');
-        const listItems = list.querySelectorAll('li');
-        const isActiveClass = 'is-active';
+        const userbar = document.querySelector("[data-wagtail-userbar]")
+        const trigger = userbar.querySelector("[data-wagtail-userbar-trigger]")
+        const list = userbar.querySelector("[role=menu]")
+        const listItems = list.querySelectorAll("li")
+        const isActiveClass = "is-active"
 
         // querySelector for all items that can be focused
         // tabIndex has been removed for roving tabindex compatibility
         // source: https://stackoverflow.com/questions/1599660/which-html-elements-can-receive-focus
         const focusableItemSelector = `a[href],
             button:not([disabled]),
-            input:not([disabled])`;
+            input:not([disabled])`
 
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        trigger.addEventListener('click', toggleUserbar, false);
+        trigger.addEventListener("click", toggleUserbar, false)
 
         // make sure userbar is hidden when navigating back
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        window.addEventListener('pageshow', hideUserbar, false);
+        window.addEventListener("pageshow", hideUserbar, false)
 
         // Handle keyboard events on the trigger
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        userbar.addEventListener('keydown', handleTriggerKeyDown);
+        userbar.addEventListener("keydown", handleTriggerKeyDown)
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        list.addEventListener('focusout', handleFocusChange);
+        list.addEventListener("focusout", handleFocusChange)
 
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        resetItemsTabIndex(); // On initialisation, all menu items should be disabled for roving tab index
+        resetItemsTabIndex() // On initialisation, all menu items should be disabled for roving tab index
 
         function showUserbar(shouldFocus) {
-            userbar.classList.add(isActiveClass);
-            trigger.setAttribute('aria-expanded', 'true');
+            userbar.classList.add(isActiveClass)
+            trigger.setAttribute("aria-expanded", "true")
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            list.addEventListener('click', sandboxClick, false);
+            list.addEventListener("click", sandboxClick, false)
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            window.addEventListener('click', clickOutside, false);
+            window.addEventListener("click", clickOutside, false)
 
             // Start handling keyboard input now that the userbar is open.
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            userbar.addEventListener('keydown', handleUserbarItemsKeyDown, false);
+            userbar.addEventListener("keydown", handleUserbarItemsKeyDown, false)
 
             // The userbar has role=menu which means that the first link should be focused on popup
             // For weird reasons shifting focus only works after some amount of delay
@@ -53,73 +53,72 @@ const WagtailUserbar = ({ html }: { html: string }) => {
                 if (list.querySelector(focusableItemSelector)) {
                     setTimeout(() => {
                         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-                        setFocusToFirstItem();
-                    }, 300); // Less than 300ms doesn't seem to work
+                        setFocusToFirstItem()
+                    }, 300) // Less than 300ms doesn't seem to work
                 }
             }
         }
 
         function hideUserbar() {
-            userbar.classList.remove(isActiveClass);
-            trigger.setAttribute('aria-expanded', 'false');
+            userbar.classList.remove(isActiveClass)
+            trigger.setAttribute("aria-expanded", "false")
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            list.addEventListener('click', sandboxClick, false);
+            list.addEventListener("click", sandboxClick, false)
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            window.removeEventListener('click', clickOutside, false);
+            window.removeEventListener("click", clickOutside, false)
 
             // Cease handling keyboard input now that the userbar is closed.
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            userbar.removeEventListener('keydown', handleUserbarItemsKeyDown, false);
+            userbar.removeEventListener("keydown", handleUserbarItemsKeyDown, false)
         }
 
         function toggleUserbar(e2) {
-            e2.stopPropagation();
+            e2.stopPropagation()
             if (userbar.classList.contains(isActiveClass)) {
-                hideUserbar();
+                hideUserbar()
             } else {
-                showUserbar(true);
+                showUserbar(true)
             }
         }
 
         function isFocusOnItems() {
             return (
-                document.activeElement &&
-                !!document.activeElement.closest('.wagtail-userbar-items')
-            );
+                document.activeElement && !!document.activeElement.closest(".wagtail-userbar-items")
+            )
         }
 
         /** Reset all focusable menu items to `tabIndex = -1` */
         function resetItemsTabIndex() {
-            listItems.forEach((listItem) => {
+            listItems.forEach(listItem => {
                 // eslint-disable-next-line no-param-reassign
-                listItem.firstElementChild.tabIndex = -1;
-            });
+                listItem.firstElementChild.tabIndex = -1
+            })
         }
 
         /** Focus element using a roving tab index */
         function focusElement(el) {
-            resetItemsTabIndex();
+            resetItemsTabIndex()
             // eslint-disable-next-line no-param-reassign
-            el.tabIndex = 0;
+            el.tabIndex = 0
             setTimeout(() => {
-                el.focus();
-            }, 100); // Workaround, changing focus only works after a timeout
+                el.focus()
+            }, 100) // Workaround, changing focus only works after a timeout
         }
 
         function setFocusToTrigger() {
-            setTimeout(() => trigger.focus(), 300);
-            resetItemsTabIndex();
+            setTimeout(() => trigger.focus(), 300)
+            resetItemsTabIndex()
         }
 
         function setFocusToFirstItem() {
             if (listItems.length > 0) {
-                focusElement(listItems[0].firstElementChild);
+                focusElement(listItems[0].firstElementChild)
             }
         }
 
         function setFocusToLastItem() {
             if (listItems.length > 0) {
-                focusElement(listItems[listItems.length - 1].firstElementChild);
+                focusElement(listItems[listItems.length - 1].firstElementChild)
             }
         }
 
@@ -128,13 +127,13 @@ const WagtailUserbar = ({ html }: { html: string }) => {
                 // Check which item is currently focused
                 if (element.firstElementChild === document.activeElement) {
                     if (idx + 1 < listItems.length) {
-                        focusElement(listItems[idx + 1].firstElementChild);
+                        focusElement(listItems[idx + 1].firstElementChild)
                     } else {
                         // Loop around
-                        setFocusToFirstItem();
+                        setFocusToFirstItem()
                     }
                 }
-            });
+            })
         }
 
         function setFocusToPreviousItem() {
@@ -142,12 +141,12 @@ const WagtailUserbar = ({ html }: { html: string }) => {
                 // Check which item is currently focused
                 if (element.firstElementChild === document.activeElement) {
                     if (idx > 0) {
-                        focusElement(listItems[idx - 1].firstElementChild);
+                        focusElement(listItems[idx - 1].firstElementChild)
                     } else {
-                        setFocusToLastItem();
+                        setFocusToLastItem()
                     }
                 }
-            });
+            })
         }
 
         /**
@@ -160,52 +159,51 @@ const WagtailUserbar = ({ html }: { html: string }) => {
         */
         function handleUserbarItemsKeyDown(event) {
             // Only handle keyboard input if the userbar is open
-            if (trigger.getAttribute('aria-expanded') === 'true') {
-                if (event.key === 'Escape') {
-                    hideUserbar();
-                    setFocusToTrigger();
-                    return false;
+            if (trigger.getAttribute("aria-expanded") === "true") {
+                if (event.key === "Escape") {
+                    hideUserbar()
+                    setFocusToTrigger()
+                    return false
                 }
 
                 // List items are in focus, move focus if needed
                 if (isFocusOnItems()) {
                     switch (event.key) {
-                        case 'ArrowDown':
-                            event.preventDefault();
-                            setFocusToNextItem();
-                            return false;
-                        case 'ArrowUp':
-                            event.preventDefault();
-                            setFocusToPreviousItem();
-                            return false;
-                        case 'Home':
-                            event.preventDefault();
-                            setFocusToFirstItem();
-                            return false;
-                        case 'End':
-                            event.preventDefault();
-                            setFocusToLastItem();
-                            return false;
+                        case "ArrowDown":
+                            event.preventDefault()
+                            setFocusToNextItem()
+                            return false
+                        case "ArrowUp":
+                            event.preventDefault()
+                            setFocusToPreviousItem()
+                            return false
+                        case "Home":
+                            event.preventDefault()
+                            setFocusToFirstItem()
+                            return false
+                        case "End":
+                            event.preventDefault()
+                            setFocusToLastItem()
+                            return false
                         default:
-                            break;
+                            break
                     }
                 }
             }
-            return true;
+            return true
         }
 
         function handleFocusChange(event) {
             // Is the focus is still in the menu? If so, don't to anything
             if (
-                event.relatedTarget == null ||
-                (event.relatedTarget &&
-                    event.relatedTarget.closest('.wagtail-userbar-items'))
+                event.relatedTarget == null
+                || (event.relatedTarget && event.relatedTarget.closest(".wagtail-userbar-items"))
             ) {
-                return;
+                return
             }
             // List items not in focus - the menu should close
-            resetItemsTabIndex();
-            hideUserbar();
+            resetItemsTabIndex()
+            hideUserbar()
         }
 
         /**
@@ -215,42 +213,42 @@ const WagtailUserbar = ({ html }: { html: string }) => {
         function handleTriggerKeyDown(event) {
             // Check if the userbar is focused (but not open yet) and should be opened by keyboard input
             if (
-                trigger === document.activeElement &&
-                trigger.getAttribute('aria-expanded') === 'false'
+                trigger === document.activeElement
+                && trigger.getAttribute("aria-expanded") === "false"
             ) {
                 switch (event.key) {
-                    case 'ArrowUp':
-                        event.preventDefault();
-                        showUserbar(false);
+                    case "ArrowUp":
+                        event.preventDefault()
+                        showUserbar(false)
 
                         // Workaround for focus bug
                         // Needs extra delay to account for the userbar open animation. Otherwise won't focus properly.
-                        setTimeout(() => setFocusToLastItem(), 300);
-                        break;
-                    case 'ArrowDown':
-                        event.preventDefault();
-                        showUserbar(false);
+                        setTimeout(() => setFocusToLastItem(), 300)
+                        break
+                    case "ArrowDown":
+                        event.preventDefault()
+                        showUserbar(false)
 
                         // Workaround for focus bug
                         // Needs extra delay to account for the userbar open animation. Otherwise won't focus properly.
-                        setTimeout(() => setFocusToFirstItem(), 300);
-                        break;
+                        setTimeout(() => setFocusToFirstItem(), 300)
+                        break
                     default:
-                        break;
+                        break
                 }
             }
         }
 
         function sandboxClick(e2) {
-            e2.stopPropagation();
+            e2.stopPropagation()
         }
 
         function clickOutside() {
-            hideUserbar();
+            hideUserbar()
         }
-    });
+    })
 
-    return <div dangerouslySetInnerHTML={{ __html: html }} />;
-};
+    return <div dangerouslySetInnerHTML={{ __html: html }} />
+}
 
-export default WagtailUserbar;
+export default WagtailUserbar

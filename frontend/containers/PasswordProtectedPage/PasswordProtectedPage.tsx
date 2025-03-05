@@ -1,86 +1,86 @@
-import React, { useState } from "react";
-import { getPasswordProtectedPage, WagtailApiResponseError } from "../../api/wagtail";
-import LazyContainers from "../LazyContainers";
+import React, { useState } from "react"
+import { getPasswordProtectedPage, WagtailApiResponseError } from "../../api/wagtail"
+import LazyContainers from "../LazyContainers"
 
 type Props = {
-  restrictionId: number;
-  pageId: number;
-  csrfToken: string;
-};
+    restrictionId: number
+    pageId: number
+    csrfToken: string
+}
 
 const PasswordProtectedPage = ({ restrictionId, pageId, csrfToken }: Props) => {
-  const [values, setValues] = useState({ password: "" });
-  const [error, setError] = useState(null);
-  const [pageData, setPageData] = useState(null);
+    const [values, setValues] = useState({ password: "" })
+    const [error, setError] = useState(null)
+    const [pageData, setPageData] = useState(null)
 
-  const handleFormChange = async e => {
-    e.preventDefault();
+    const handleFormChange = async e => {
+        e.preventDefault()
 
-    try {
-      const { json } = await getPasswordProtectedPage(
-        restrictionId,
-        pageId,
-        {
-          ...values,
-        },
-        {
-          headers: {
-            "X-CSRFToken": csrfToken,
-          },
+        try {
+            const { json } = await getPasswordProtectedPage(
+                restrictionId,
+                pageId,
+                {
+                    ...values,
+                },
+                {
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                    },
+                },
+            )
+
+            setPageData(json)
+        } catch (e) {
+            if (!(e instanceof WagtailApiResponseError)) {
+                throw e
+            }
+
+            switch (e.response.status) {
+                case 403:
+                    setError("Forbidden")
+                    break
+                case 401:
+                    setError("Invalid password")
+                    break
+                default:
+                    setError("Technical issues")
+                    break
+            }
         }
-      );
-
-      setPageData(json);
-    } catch (e) {
-      if (!(e instanceof WagtailApiResponseError)) {
-        throw e;
-      }
-
-      switch (e.response.status) {
-        case 403:
-          setError("Forbidden");
-          break;
-        case 401:
-          setError("Invalid password");
-          break;
-        default:
-          setError("Technical issues");
-          break;
-      }
     }
-  };
 
-  const handlePasswordChange = e => {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
-  };
-
-  if (pageData) {
-    const { componentName, componentProps } = pageData;
-    const Component = LazyContainers[componentName];
-    if (!Component) {
-      return <h1>Component {componentName} not found</h1>;
+    const handlePasswordChange = e => {
+        const { name, value } = e.target
+        setValues({ ...values, [name]: value })
     }
-    return <Component {...componentProps} />;
-  }
 
-  return (
-    <div>
-      <h1>Password is required</h1>
-      <p>You need a password to access this website</p>
+    if (pageData) {
+        const { componentName, componentProps } = pageData
+        const Component = LazyContainers[componentName]
+        if (!Component) {
+            return <h1>Component {componentName} not found</h1>
+        }
+        return <Component {...componentProps} />
+    }
 
-      {!!error && <p>{error}</p>}
-      <p>
-        <input
-          type="password"
-          name="password"
-          onChange={handlePasswordChange}
-          placeholder="Password"
-        />
-      </p>
-      <button onClick={handleFormChange}>Continue</button>
-    </div>
-  );
-};
+    return (
+        <div>
+            <h1>Password is required</h1>
+            <p>You need a password to access this website</p>
 
-export default PasswordProtectedPage;
+            {!!error && <p>{error}</p>}
+            <p>
+                <input
+                    type="password"
+                    name="password"
+                    onChange={handlePasswordChange}
+                    placeholder="Password"
+                />
+            </p>
+            <button onClick={handleFormChange}>Continue</button>
+        </div>
+    )
+}
+
+export default PasswordProtectedPage
