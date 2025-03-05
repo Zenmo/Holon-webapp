@@ -2,6 +2,7 @@
 const configPerBranch = {
     main: {
         GITHUB_ENVIRONMENT: 'test',
+        STACK_NAME: "holon-test",
         DB_NAME: 'holon-test',
         DB_USER: 'holon-test',
         RETURN_SCENARIO: 'True',
@@ -14,6 +15,7 @@ const configPerBranch = {
     },
     acceptance: {
         GITHUB_ENVIRONMENT: 'acceptance',
+        STACK_NAME: "holon-acceptance",
         DB_NAME: 'holon-acceptance',
         DB_USER: 'holon-acceptance',
         RETURN_SCENARIO: 'True',
@@ -26,6 +28,7 @@ const configPerBranch = {
     },
     production: {
         GITHUB_ENVIRONMENT: 'production',
+        STACK_NAME: "holon-production",
         DB_NAME: 'holon-production',
         DB_USER: 'holon-production',
         RETURN_SCENARIO: 'False',

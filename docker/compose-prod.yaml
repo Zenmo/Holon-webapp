@@ -26,7 +26,7 @@ services:
             caddy: ${WAGTAIL_HOSTNAME}
             caddy.reverse_proxy: "{{upstreams 8000}}"
         networks:
-            - caddy_default
+            - caddy
             - postgres_default
             - default
         deploy:
@@ -47,7 +47,7 @@ services:
             caddy_1: ${NEXT_REDIRECT_HOSTS}
             caddy_1.redir: https://${NEXT_HOSTNAME}{uri} permanent
         networks:
-            - caddy_default
+            - caddy
             - default
         deploy:
             resources:
@@ -56,7 +56,10 @@ services:
                     memory: 4G
 
 networks:
-    caddy_default:
+    # we need a different caddy network per stack
+    # so that the different OTAP stacks don't interfere with each other
+    caddy:
+        name: caddy_${STACK_NAME}
         external: true
     postgres_default:
         external: true
