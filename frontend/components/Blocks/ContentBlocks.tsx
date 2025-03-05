@@ -360,7 +360,7 @@ const ContentBlocks = ({
                                                 />
                                             )
                                         default:
-                                            console.log("Not implemented block type: ", section)
+                                            return <ContentBlocks content={[section]} />
                                     }
                                 })}
                             </StepIndicatorWrapper>

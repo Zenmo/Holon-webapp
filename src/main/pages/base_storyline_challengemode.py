@@ -23,6 +23,7 @@ from ..blocks import (
 
 from main.snippets.storyline_page_role_type import StorylinePageRoleType
 from main.snippets.storyline_page_information_type import StorylinePageInformationType
+from ..blocks.step_indicator import StepIndicator
 
 ICON_CHOICES = (
     ("book", "Book"),
@@ -106,25 +107,10 @@ class BaseStorylineChallengeMode(HeadlessPreviewMixin, BaseCard):
             ("card_block", CardsBlock()),
             (
                 "step_indicator",
-                StreamBlock(
+                StepIndicator(
                     [
-                        (
-                            "step_anchor",
-                            CharBlock(
-                                required=False,
-                                help_text=_("Optional text to show in the step indicator."),
-                                icon="tag",
-                            ),
-                        ),
                         ("section", StorylineSectionBlock()),
-                    ],
-                    help_text=_(
-                        "Scrollable steps to indicate progress in the storyline. "
-                        "Add a Step Anchor to create a new step."
-                    ),
-                    block_counts={"section": {"min_num": 1}},
-                    use_json_field=True,
-                    icon="list-ol",
+                    ]
                 ),
             ),
         ],
