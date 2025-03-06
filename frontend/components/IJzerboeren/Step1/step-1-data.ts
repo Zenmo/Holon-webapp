@@ -15,9 +15,15 @@ export interface Step1Inputs {
     heatingType: keyof typeof HeatingType
 }
 
+export interface SankeyLink {
+    source: string
+    target: string
+    value: number
+}
+
 export interface Step1Outputs {
     kpis: Step1Kpis
-    sankey: any[]
+    sankey: SankeyLink[]
 }
 
 export interface Step1Kpis {
