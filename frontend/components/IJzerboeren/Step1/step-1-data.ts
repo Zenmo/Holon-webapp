@@ -1,3 +1,5 @@
+
+
 export enum HeatingType {
     GAS_BURNER = "GAS_BURNER",
     DISTRICT_HEATING = "DISTRICT_HEATING",
@@ -14,6 +16,11 @@ export interface Step1Inputs {
 }
 
 export interface Step1Outputs {
+    kpis: Step1Kpis
+    sankey: any[]
+}
+
+export interface Step1Kpis {
     gridLoad_r: number
     cost_eur: number
     sustainability_r: number
@@ -25,9 +32,28 @@ export const step1Data: Step1DataType[] = [
             heatingType: "GAS_BURNER",
         },
         outputs: {
-            gridLoad_r: 0.8,
-            cost_eur: 20000,
-            sustainability_r: 0.2,
+            kpis: {
+                gridLoad_r: 0.8,
+                cost_eur: 20000,
+                sustainability_r: 0.2,
+            },
+            sankey: [
+                {
+                    source: "Opwek groene stroom",
+                    target: "Elektrolyzer",
+                    value: 1000,
+                },
+                {
+                    source: "Elektrolyzer",
+                    target: "Verlies",
+                    value: 600,
+                },
+                {
+                    source: "Elektrolyzer",
+                    target: "Reductie ijzeroxide",
+                    value: 400,
+                },
+            ],
         },
     },
     {
@@ -35,9 +61,12 @@ export const step1Data: Step1DataType[] = [
             heatingType: "HEAT_PUMP",
         },
         outputs: {
-            gridLoad_r: 1.6,
-            cost_eur: 18000,
-            sustainability_r: 0.8,
+            kpis: {
+                gridLoad_r: 1.6,
+                cost_eur: 18000,
+                sustainability_r: 0.8,
+            },
+            sankey: [],
         },
     },
     {
@@ -45,9 +74,12 @@ export const step1Data: Step1DataType[] = [
             heatingType: "DISTRICT_HEATING",
         },
         outputs: {
-            gridLoad_r: 0.7,
-            cost_eur: 22000,
-            sustainability_r: 1,
+            kpis: {
+                gridLoad_r: 0.7,
+                cost_eur: 22000,
+                sustainability_r: 1,
+            },
+            sankey: [],
         },
     },
 ]
