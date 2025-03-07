@@ -1,4 +1,5 @@
 import {DataType} from "csstype"
+import {sankeyNodes} from "@/components/IJzerboeren/Sankey/nodes"
 
 
 export enum HeatingType {
@@ -23,11 +24,6 @@ export interface SankeyLink {
     label?: string
 }
 
-export interface SankeyNode {
-    name: string
-    color: DataType.Color
-}
-
 export interface Step1Outputs {
     kpis: Step1Kpis
     sankey: SankeyLink[]
@@ -38,45 +34,6 @@ export interface Step1Kpis {
     cost_eur: number
     sustainability_r: number
 }
-
-export const sankeyNodes: SankeyNode[] = [
-    {
-        name: "Import gas",
-        color: "brown",
-    },
-    {
-        name: "Import stroom",
-        color: "grey",
-    },
-    {
-        name: "Verlies",
-        color: "white",
-    },
-    {
-        name: "Elektrolyzer",
-        color: "lightblue",
-    },
-    {
-        name: "Reductie",
-        color: "orange",
-    },
-    {
-        name: "Reductie",
-        color: "orange",
-    },
-    {
-        name: "Warmtenet",
-        color: "red",
-    },
-    {
-        name: "Huishoudens",
-        color: "pink",
-    },
-    {
-        name: "Warmtepomp",
-        color: "blueviolet",
-    }
-]
 
 export function getColorByNodeName(nodeName: string): DataType.Color {
     const node = sankeyNodes.find(it => it.name === nodeName)
@@ -238,12 +195,12 @@ export const step1Data: Step1DataType[] = [
                 },
                 {
                     source: "Elektrolyzer",
-                    target: "Reductie",
+                    target: "Reductie ijzeroxide",
                     value: 5,
                     label: "Waterstof",
                 },
                 {
-                    source: "Reductie",
+                    source: "Reductie ijzeroxide",
                     target: "Warmtenet",
                     value: 5, // I assume about 5 GWh heat demand
                     label: "IJzerpoeder"
