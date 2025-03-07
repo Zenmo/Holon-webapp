@@ -1,23 +1,27 @@
 "use client"
 
 import {FunctionComponent, useLayoutEffect, useRef} from "react"
-import {getColorByNodeName, SankeyLink, sankeyNodes} from "@/components/IJzerboeren/Step1/step-1-data"
+import {getColorByNodeName, SankeyLink} from "@/components/IJzerboeren/Step1/step-1-data"
 import {uniq, uniqBy} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
+import chroma from "chroma-js";
+import {sankeyNodes} from "@/components/IJzerboeren/Sankey/nodes"
 
 function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
     const nodeStrings: string[] = links.flatMap(link => [link.source, link.target])
     const uniqueNodeStrings = uniq(nodeStrings)
-    const colors = uniqueNodeStrings.map(getColorByNodeName)
+    const nodeColors = uniqueNodeStrings.map(getColorByNodeName)
 
     const sources = links.map(link => uniqueNodeStrings.indexOf(link.source))
     const targets = links.map(link => uniqueNodeStrings.indexOf(link.target))
     const values = links.map(link => link.value)
     const labels = links.map(link => link.label || null)
+    const linkColors = links.map(link => chroma(getColorByNodeName(link.source)).alpha(.5).hex())
 
     return {
         type: "sankey",
+        name: "main",
         orientation: "h",
         valuesuffix: "GWh",
         node: {
@@ -28,13 +32,15 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
                 width: 0.5
             },
             label: uniqueNodeStrings,
-            color: colors,
+            color: nodeColors,
         },
         link: {
+            hoverinfo: "all",
             source: sources,
             target: targets,
             value:  values,
             label: labels,
+            color: linkColors,
         }
     }
 }
@@ -46,10 +52,11 @@ const plotlySankeyLayout: Partial<Plotly.Layout> = {
     font: {
         size: 14,
     },
+    height: 600,
     // I would like to set Y size option here but it seems not possible
 }
 
-const transitionTimeMs = 800
+const transitionTimeMs = 700
 
 function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLink[], startTimeMs = 0): void {
     requestAnimationFrame((currentTimeMs: DOMHighResTimeStamp) => {
@@ -72,7 +79,8 @@ function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLin
             const newLink = newLinks.find(newLink => newLink.target == link.target && newLink.source == link.source)
             const newValue = newLink ? newLink.value : 0
 
-            const intermediateValue = oldValue + (newValue - oldValue) * ratio
+            const easeOutCubic = (t: number) => (--t) * t * t + 1;
+            const intermediateValue = oldValue + (newValue - oldValue) * easeOutCubic(ratio)
 
             return {
                 ...link,
@@ -90,24 +98,21 @@ function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLin
 
 export const IronPowderSankey: FunctionComponent<{links: SankeyLink[]}> = ({links}) => {
     const divId = "sankey" + useRandomInt()
+    const divRef = useRef<HTMLDivElement | null>(null)
 
-    const previousLinks = useRef<SankeyLink[]>(null)
+    const previousLinks = useRef<SankeyLink[] | null>(null)
 
     useLayoutEffect(() => {
+        const width = divRef.current?.parentElement?.clientWidth;
         if (previousLinks.current === null) {
-            Plotly.react(divId, [convertSankeyDataToPlotly(links)], plotlySankeyLayout)
+            console.log(Plotly.react(divId, [convertSankeyDataToPlotly(links)], { ...plotlySankeyLayout, width }))
         } else {
             doTransition(divId, previousLinks.current, links)
         }
-        // not sure why typescript/intellij doesn't like this assignment
         previousLinks.current = links
-        // const width = rightColumnRef.current?.clientWidth;
-        // if (width) {
-        //     setSankeyWidth(width);
-        // }
     }, [links]);
 
     return (
-        <div id={divId} style={{color: "aqua"}}/>
+        <div id={divId} ref={divRef}/>
     )
 }
