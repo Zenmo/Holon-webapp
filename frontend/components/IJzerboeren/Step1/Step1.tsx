@@ -33,7 +33,7 @@ export const Step1: FunctionComponent = () => {
 
     return (
         <div className="holonContentContainer">
-            <TwoColumnSimulationLayout>
+            <TwoColumnSimulationLayout style={{minHeight: "50rem"}}>
                 <div>
                     <p>Hier een mooi verhaal over wat de afwegingen zijn bij het kiezen voor een verwarmingssysteem</p>
                     <HeatingTypeRadios setHeatingType={setHeatingType} />
@@ -45,6 +45,7 @@ export const Step1: FunctionComponent = () => {
                     {currentOutputs &&
                         <IronPowderSankey links={currentOutputs.sankey} />
                     }
+                    <div></div>
                     <KpiRow>
                         <GridLoadKpi
                             currentValue={currentKpis && currentKpis.gridLoad_r * 100}
