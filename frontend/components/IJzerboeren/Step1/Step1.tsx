@@ -6,9 +6,15 @@ import { HeatingTypeRadios } from "@/components/IJzerboeren/Step1/HeatingTypeRad
 import {HeatingType, SankeyLink, step1Data, Step1Outputs} from "@/components/IJzerboeren/Step1/step-1-data"
 import { useStateWithHistory } from "@/components/IJzerboeren/useStateWithHistory"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
-import {FunctionComponent, useLayoutEffect, useRef, useState} from "react"
+import {FunctionComponent} from "react"
 import {uniq} from "lodash"
-import Plotly, {SankeyData} from "plotly.js-dist-min"
+import dynamic from 'next/dynamic'
+
+// This prevents an issue with server-side rendering
+const IronPowderSankey = dynamic(
+    () => import('../Sankey').then(res => res.IronPowderSankey),
+    { ssr: false }
+)
 
 /**
  * Convert our format to the format expected by recharts
@@ -32,37 +38,6 @@ function convertSankeyDataToRecharts(links: SankeyLink[]) {
     }
 }
 
-function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
-    return {
-        type: "sankey",
-        orientation: "h",
-        node: {
-            pad: 15,
-            thickness: 30,
-            line: {
-                color: "black",
-                width: 0.5
-            },
-            label: ["A1", "A2", "B1", "B2", "C1", "C2"],
-            color: ["blue", "blue", "blue", "blue", "blue", "blue"]
-        },
-        link: {
-            source: [0,1,0,2,3,3],
-            target: [2,3,3,4,4,5],
-            value:  [8,4,2,8,4,2]
-        }
-    }
-}
-
-const plotlySankeyLayout = {
-    title: {
-        text: "Basic Sankey"
-    },
-    font: {
-        size: 10
-    }
-}
-
 export const Step1: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
         useStateWithHistory<HeatingType | null>(null)
@@ -79,25 +54,6 @@ export const Step1: FunctionComponent = () => {
     }
     const previousKpis = previousOutputs?.kpis
 
-    const rightColumnRef = useRef<HTMLDivElement | null>(null)
-    const sankeyDivId = "sankeyStep1" // todo make non-unique
-    const [sankeyWidth, setSankeyWidth] = useState(100);
-    useLayoutEffect(() => {
-        if (!currentOutputs) {
-            return
-        }
-
-        Plotly.react(sankeyDivId, [convertSankeyDataToPlotly(currentOutputs.sankey)], plotlySankeyLayout)
-        // const width = rightColumnRef.current?.clientWidth;
-        // if (width) {
-        //     setSankeyWidth(width);
-        // }
-    }, [currentOutputs]);
-
-    if (currentOutputs?.sankey) {
-        console.log(convertSankeyDataToRecharts(currentOutputs.sankey))
-    }
-
     return (
         <div className="holonContentContainer">
             <TwoColumnSimulationLayout>
@@ -105,12 +61,12 @@ export const Step1: FunctionComponent = () => {
                     <p>Hier een mooi verhaal over wat de afwegingen zijn bij het kiezen voor een energiesysteem</p>
                     <HeatingTypeRadios setHeatingType={setHeatingType} />
                 </div>
-                <div ref={rightColumnRef} style={{
+                <div style={{
                     flexDirection: "column",
                     justifyContent: "space-between",
                 }}>
                     {currentOutputs &&
-                        <div id="sankeyStep1"></div>
+                        <IronPowderSankey links={currentOutputs.sankey} />
                     }
                     <KpiRow>
                         <GridLoadKpi

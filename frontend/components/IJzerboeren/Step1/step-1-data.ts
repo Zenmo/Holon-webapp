@@ -19,6 +19,7 @@ export interface SankeyLink {
     source: string
     target: string
     value: number
+    label?: string
 }
 
 export interface Step1Outputs {
@@ -45,20 +46,46 @@ export const step1Data: Step1DataType[] = [
             },
             sankey: [
                 {
-                    source: "Opwek groene stroom",
+                    source: "Import gas",
+                    target: "Huishoudens",
+                    value: 5,
+                    label: "Aardgas",
+                },
+                {
+                    source: "Import stroom",
                     target: "Elektrolyzer",
-                    value: 1000,
+                    value: 0,
+                    label: "Electriciteit",
                 },
                 {
                     source: "Elektrolyzer",
                     target: "Verlies",
-                    value: 600,
+                    value: 0,
                 },
                 {
                     source: "Elektrolyzer",
-                    target: "Reductie ijzeroxide",
-                    value: 400,
+                    target: "Reductie",
+                    value: 0,
+                    label: "Waterstof",
                 },
+                {
+                    source: "Reductie",
+                    target: "Warmtenet",
+                    value: 0, // I assume about 5 GWh heat demand
+                    label: "IJzerpoeder"
+                },
+                {
+                    source: "Warmtenet",
+                    target: "Huishoudens",
+                    value: 0,
+                    label: "Heet water",
+                },
+                {
+                    source: "Import stroom",
+                    target: "Huishoudens",
+                    value: 2,
+                    label: "Verbruik huishoudens"
+                }
             ],
         },
     },
@@ -72,7 +99,59 @@ export const step1Data: Step1DataType[] = [
                 cost_eur: 18000,
                 sustainability_r: 0.8,
             },
-            sankey: [],
+            sankey: [
+                {
+                    source: "Import gas",
+                    target: "Huishoudens",
+                    value: 0,
+                    label: "Aardgas",
+                },
+                {
+                    source: "Import stroom",
+                    target: "Elektrolyzer",
+                    value: 0,
+                    label: "Electriciteit",
+                },
+                {
+                    source: "Elektrolyzer",
+                    target: "Verlies",
+                    value: 0,
+                },
+                {
+                    source: "Elektrolyzer",
+                    target: "Reductie",
+                    value: 0,
+                    label: "Waterstof",
+                },
+                {
+                    source: "Reductie",
+                    target: "Warmtenet",
+                    value: 0, // I assume about 5 GWh heat demand
+                    label: "IJzerpoeder"
+                },
+                {
+                    source: "Warmtenet",
+                    target: "Huishoudens",
+                    value: 0,
+                    label: "Heet water",
+                },
+                {
+                    source: "Import stroom",
+                    target: "Warmtepomp",
+                    value: 2,
+                },
+                {
+                    source: "Import stroom",
+                    target: "Huishoudens",
+                    value: 2,
+                    label: "Verbruik huishoudens"
+                },
+                {
+                    source: "Warmtepomp",
+                    target: "Huishoudens",
+                    value: 5,
+                },
+            ],
         },
     },
     {
@@ -85,7 +164,49 @@ export const step1Data: Step1DataType[] = [
                 cost_eur: 22000,
                 sustainability_r: 1,
             },
-            sankey: [],
+            sankey: [
+                {
+                    source: "Import gas",
+                    target: "Huishoudens",
+                    value: 0,
+                    label: "Aardgas",
+                },
+                {
+                    source: "Import stroom",
+                    target: "Elektrolyzer",
+                    value: 7,
+                    label: "Electriciteit",
+                },
+                {
+                    source: "Elektrolyzer",
+                    target: "Verlies",
+                    value: 2,
+                },
+                {
+                    source: "Elektrolyzer",
+                    target: "Reductie",
+                    value: 5,
+                    label: "Waterstof",
+                },
+                {
+                    source: "Reductie",
+                    target: "Warmtenet",
+                    value: 5, // I assume about 5 GWh heat demand
+                    label: "IJzerpoeder"
+                },
+                {
+                    source: "Warmtenet",
+                    target: "Huishoudens",
+                    value: 5,
+                    label: "Heet water",
+                },
+                {
+                    source: "Import stroom",
+                    target: "Huishoudens",
+                    value: 2,
+                    label: "Verbruik huishoudens"
+                }
+            ],
         },
     },
 ]
