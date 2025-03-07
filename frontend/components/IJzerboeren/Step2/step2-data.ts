@@ -1,16 +1,20 @@
-export enum HeatingType {
-    GAS_BURNER = "GAS_BURNER",
+import {DataType} from "csstype"
+import {sankeyNodes} from "@/components/IJzerboeren/Sankey/nodes"
+
+
+export enum FavoriteClown {
+    BASSIE = "BASSIE",
     DISTRICT_HEATING = "DISTRICT_HEATING",
     HEAT_PUMP = "HEAT_PUMP",
 }
 
-export interface Step1DataType {
-    inputs: Step1Inputs
+export interface Step2DataType {
+    inputs: Step2Inputs
     outputs: Step1Outputs
 }
 
-export interface Step1Inputs {
-    heatingType: keyof typeof HeatingType
+export interface Step2Inputs {
+    heatingType: keyof typeof FavoriteClown
 }
 
 export interface SankeyLink {
@@ -31,10 +35,19 @@ export interface Step1Kpis {
     sustainability_r: number
 }
 
-export const step1Data: Step1DataType[] = [
+export function getColorByNodeName(nodeName: string): DataType.Color {
+    const node = sankeyNodes.find(it => it.name === nodeName)
+    if (node) {
+        return node.color
+    } else {
+        return "blue"
+    }
+}
+
+export const step2Data: Step2DataType[] = [
     {
         inputs: {
-            heatingType: "GAS_BURNER",
+            heatingType: "BASSIE",
         },
         outputs: {
             kpis: {

@@ -1,12 +1,12 @@
 "use client"
 
 import {FunctionComponent, useLayoutEffect, useRef} from "react"
-import {getColorByNodeName, SankeyLink} from "@/components/IJzerboeren/Step1/step-1-data"
+import {SankeyLink} from "@/components/IJzerboeren/Step1/step-1-data"
 import {uniq, uniqBy} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
 import chroma from "chroma-js";
-import {sankeyNodes} from "@/components/IJzerboeren/Sankey/nodes"
+import {getColorByNodeName} from "@/components/IJzerboeren/Sankey/nodes"
 
 function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
     const nodeStrings: string[] = links.flatMap(link => [link.source, link.target])

@@ -15,7 +15,7 @@ const IronPowderSankey = dynamic(
     { ssr: false }
 )
 
-export const Step1: FunctionComponent = () => {
+export const Step2: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
         useStateWithHistory<HeatingType | null>(null)
 
@@ -35,7 +35,7 @@ export const Step1: FunctionComponent = () => {
         <div className="holonContentContainer">
             <TwoColumnSimulationLayout>
                 <div>
-                    <p>Hier een mooi verhaal over wat de afwegingen zijn bij het kiezen voor een verwarmingssysteem</p>
+                    <p>Dit is stap 2 en hier komt een ander verhaal.</p>
                     <HeatingTypeRadios setHeatingType={setHeatingType} />
                 </div>
                 <div style={{
