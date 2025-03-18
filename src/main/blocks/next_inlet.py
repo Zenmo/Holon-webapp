@@ -8,5 +8,6 @@ class NextInletBlock(StructBlock):
         choices=[
             ("IJzerboerenStep1", "IJzerboerenStep1"),
             ("IJzerboerenStep2", "IJzerboerenStep2"),
+            ("IJzerboerenStep3", "IJzerboerenStep3"),
         ]
     )
