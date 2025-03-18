@@ -1,166 +1,143 @@
-import {DataType} from "csstype"
-import {sankeyNodes} from "@/components/IJzerboeren/Sankey/nodes"
 
-
-export enum FavoriteClown {
-    BASSIE = "BASSIE",
-    DISTRICT_HEATING = "DISTRICT_HEATING",
-    HEAT_PUMP = "HEAT_PUMP",
-}
+import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
+import {HeatingType} from "@/components/IJzerboeren/Step3/step3-data"
+import {IJzerboerenKPIs} from "@/components/IJzerboeren/KPIs/KPIs"
 
 export interface Step2DataType {
     inputs: Step2Inputs
-    outputs: Step1Outputs
+    outputs: Step2Outputs
 }
 
 export interface Step2Inputs {
-    heatingType: keyof typeof FavoriteClown
+    heatingType: keyof typeof HeatingType
 }
 
-export interface SankeyLink {
-    source: string
-    target: string
-    value: number
-    label?: string
-}
-
-export interface Step1Outputs {
-    kpis: Step1Kpis
+export interface Step2Outputs {
+    kpis: IJzerboerenKPIs
     sankey: SankeyLink[]
 }
 
-export interface Step1Kpis {
-    gridLoad_r: number
-    cost_eur: number
-    sustainability_r: number
-}
-
-export function getColorByNodeName(nodeName: string): DataType.Color {
-    const node = sankeyNodes.find(it => it.name === nodeName)
-    if (node) {
-        return node.color
-    } else {
-        return "blue"
-    }
-}
-
 export const step2Data: Step2DataType[] = [
-    {
-        inputs: {
-            heatingType: "BASSIE",
-        },
-        outputs: {
-            kpis: {
-                gridLoad_r: 0.8,
-                cost_eur: 20000,
-                sustainability_r: 0.2,
-            },
-            sankey: [
-                {
-                    source: "Import gas",
-                    target: "Huishoudens",
-                    value: 5,
-                    label: "Aardgas",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Elektrolyzer",
-                    value: 0,
-                    label: "Electriciteit",
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Verlies",
-                    value: 0,
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Reductie",
-                    value: 0,
-                    label: "Waterstof",
-                },
-                {
-                    source: "Reductie",
-                    target: "Warmtenet",
-                    value: 0, // I assume about 5 GWh heat demand
-                    label: "IJzerpoeder"
-                },
-                {
-                    source: "Warmtenet",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Heet water",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Huishoudens",
-                    value: 2,
-                    label: "Verbruik huishoudens"
-                }
-            ],
-        },
-    },
     {
         inputs: {
             heatingType: "HEAT_PUMP",
         },
         outputs: {
             kpis: {
-                gridLoad_r: 1.6,
-                cost_eur: 18000,
-                sustainability_r: 0.8,
+                gelijktijdigheid_kW: 2.6,
+                lcoeVerwarmen_eurocentpkWh: 12,
+                co2emission_t: 138,
             },
             sankey: [
                 {
+                    source: "Import elektriciteit",
+                    target: "Lokaal verbruik",
+                    value: 294,
+                },
+                {
+                    source: "Opwek elektriciteit",
+                    target: "Lokaal verbruik",
+                    value: 114,
+                },
+                {
+                    source: "Opwek elektriciteit",
+                    target: "Export",
+                    value: 54,
+                },
+
+                {
+                    source: "Lokaal verbruik",
+                    target: "Laden EV's",
+                    value: 54,
+                },
+                {
+                    source: "Lokaal verbruik",
+                    target: "Huishoudverbruik",
+                    value: 123,
+                },
+                {
+                    source: "Lokaal verbruik",
+                    target: "Verwarming",
+                    value: 172,
+                },
+                {
+                    source: "Lokaal verbruik",
+                    target: "Warm water",
+                    value: 41,
+                },
+                {
+                    source: "Lokaal verbruik",
+                    target: "Koken",
+                    value: 18,
+                },
+
+                {
+                    source: "Import benzine",
+                    target: "Brandstofauto's",
+                    value: 299,
+                },
+            ],
+        },
+    },
+    {
+        inputs: {
+            heatingType: "GAS_BURNER",
+        },
+        outputs: {
+            kpis: {
+                gelijktijdigheid_kW: 1.5,
+                lcoeVerwarmen_eurocentpkWh: 15,
+                co2emission_t: 305,
+            },
+            sankey: [
+                {
+                    source: "Import elektriciteit",
+                    target: "Lokaal verbruik",
+                    value: 177,
+                },
+                {
+                    source: "Opwek elektriciteit",
+                    target: "Lokaal verbruik",
+                    value: 37,
+                },
+                {
+                    source: "Opwek elektriciteit",
+                    target: "Export",
+                    value: 96,
+                },
+
+
+                {
+                    source: "Lokaal verbruik",
+                    target: "Laden EV's",
+                    value: 54,
+                },
+                {
+                    source: "Lokaal verbruik",
+                    target: "Huishoudverbruik",
+                    value: 150,
+                },
+
+                {
                     source: "Import gas",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Aardgas",
+                    target: "Koken",
+                    value: 22,
                 },
                 {
-                    source: "Import stroom",
-                    target: "Elektrolyzer",
-                    value: 0,
-                    label: "Electriciteit",
+                    source: "Import gas",
+                    target: "Warm water",
+                    value: 125,
                 },
                 {
-                    source: "Elektrolyzer",
-                    target: "Verlies",
-                    value: 0,
+                    source: "Import gas",
+                    target: "Verwarming",
+                    value: 368,
                 },
+
                 {
-                    source: "Elektrolyzer",
-                    target: "Reductie",
-                    value: 0,
-                    label: "Waterstof",
-                },
-                {
-                    source: "Reductie",
-                    target: "Warmtenet",
-                    value: 0, // I assume about 5 GWh heat demand
-                    label: "IJzerpoeder"
-                },
-                {
-                    source: "Warmtenet",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Heet water",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Warmtepomp",
-                    value: 2,
-                },
-                {
-                    source: "Import stroom",
-                    target: "Huishoudens",
-                    value: 2,
-                    label: "Verbruik huishoudens"
-                },
-                {
-                    source: "Warmtepomp",
-                    target: "Huishoudens",
-                    value: 5,
+                    source: "Import benzine",
+                    target: "Brandstofauto's",
+                    value: 299,
                 },
             ],
         },
@@ -171,52 +148,59 @@ export const step2Data: Step2DataType[] = [
         },
         outputs: {
             kpis: {
-                gridLoad_r: 0.7,
-                cost_eur: 22000,
-                sustainability_r: 1,
+                gelijktijdigheid_kW: 2.1,
+                lcoeVerwarmen_eurocentpkWh: 22,
+                co2emission_t: 115, // TIJDELIJK!!!!!!!!!!!!!!!
             },
             sankey: [
                 {
-                    source: "Import gas",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Aardgas",
+                    source: "Import elektriciteit",
+                    target: "Lokaal verbruik",
+                    value: 183,
                 },
                 {
-                    source: "Import stroom",
-                    target: "Elektrolyzer",
-                    value: 7,
-                    label: "Electriciteit",
+                    source: "Opwek elektriciteit",
+                    target: "Lokaal verbruik",
+                    value: 40,
                 },
                 {
-                    source: "Elektrolyzer",
-                    target: "Verlies",
-                    value: 2,
+                    source: "Opwek elektriciteit",
+                    target: "Export",
+                    value: 93,
+                },
+
+                {
+                    source: "Lokaal verbruik",
+                    target: "Laden EV's",
+                    value: 54,
                 },
                 {
-                    source: "Elektrolyzer",
-                    target: "Reductie ijzeroxide",
-                    value: 5,
-                    label: "Waterstof",
+                    source: "Lokaal verbruik",
+                    target: "Huishoudverbruik",
+                    value: 105,
                 },
                 {
-                    source: "Reductie ijzeroxide",
-                    target: "Warmtenet",
-                    value: 5, // I assume about 5 GWh heat demand
-                    label: "IJzerpoeder"
+                    source: "Lokaal verbruik",
+                    target: "Koken",
+                    value: 18,
+                },
+
+                {
+                    source: "Afname warmtenet",
+                    target: "Warm water",
+                    value: 125,
                 },
                 {
-                    source: "Warmtenet",
-                    target: "Huishoudens",
-                    value: 5,
-                    label: "Heet water",
+                    source: "Afname warmtenet",
+                    target: "Verwarming",
+                    value: 368,
                 },
+
                 {
-                    source: "Import stroom",
-                    target: "Huishoudens",
-                    value: 2,
-                    label: "Verbruik huishoudens"
-                }
+                    source: "Import benzine",
+                    target: "Brandstofauto's",
+                    value: 299,
+                },
             ],
         },
     },

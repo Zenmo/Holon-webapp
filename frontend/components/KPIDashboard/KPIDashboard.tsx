@@ -6,7 +6,7 @@ import { LoadingState, SimulationState } from "@/services/use-simulation"
 import { KPIsByScale } from "@/api/holon"
 import { CostBenefitButton } from "@/components/KPIDashboard/CostBenefitButton"
 import { HolarchyButton } from "@/components/KPIDashboard/HolarchyButton"
-import { KpiRow } from "@/components/IJzerboeren/KpiRow"
+import { KpiRow } from "@/components/IJzerboeren/KPIs/KpiRow"
 
 type KPIDashboardProps = {
     simulationState: SimulationState

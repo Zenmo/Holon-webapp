@@ -6,14 +6,84 @@ export interface SankeyNode {
 }
 
 export const sankeyNodes: SankeyNode[] = [
+    // fossils
     {
         name: "Import gas",
         color: "brown",
     },
     {
-        name: "Import stroom",
-        color: "grey",
+        name: "Import benzine",
+        color: "orange",
     },
+    {
+        name: "Brandstofauto's",
+        color: "orange",
+    },
+
+    // electricity production
+    {
+        name: "Import elektriciteit",
+        color: "mediumpurple",
+    },
+    {
+        name: "Opwek elektriciteit",
+        color: "green",
+    },
+    {
+        name: "Export",
+        color: "green",
+    },
+
+    // electricity consumption
+    {
+        name: "Lokaal verbruik",
+        color: "mediumpurple",
+    },
+    {
+        name: "Lokaal verbruik",
+        color: "mediumpurple",
+    },
+    {
+        name: "Huishoudverbruik",
+        color: "mediumpurple",
+    },
+    {
+        name: "Laden EV's",
+        color: "mediumpurple",
+    },
+    {
+        name: "Huishoudverbruik",
+        color: "mediumpurple",
+    },
+    {
+        name: "Huishoudverbruik",
+        color: "mediumpurple",
+    },
+    {
+        name: "Koken",
+        color: "pink",
+    },
+
+    // Heat
+    {
+        name: "Verwarming",
+        color: "red",
+    },
+    {
+        name: "Warm water",
+        color: "red",
+    },
+    {
+        name: "Afname warmtenet",
+        color: "red",
+    },
+    {
+        name: "Import ijzerpoeder",
+        color: "grey"
+    },
+
+
+    // Old stuff
     {
         name: "Verlies",
         color: "white",
@@ -26,14 +96,7 @@ export const sankeyNodes: SankeyNode[] = [
         name: "Reductie",
         color: "orange",
     },
-    {
-        name: "Reductie",
-        color: "orange",
-    },
-    {
-        name: "Warmtenet",
-        color: "red",
-    },
+
     {
         name: "Huishoudens",
         color: "pink",

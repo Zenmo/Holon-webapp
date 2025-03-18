@@ -1,12 +1,12 @@
 "use client"
 
 import {FunctionComponent, useLayoutEffect, useRef} from "react"
-import {SankeyLink} from "@/components/IJzerboeren/Step1/step-1-data"
 import {uniq, uniqBy} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
 import chroma from "chroma-js";
 import {getColorByNodeName} from "@/components/IJzerboeren/Sankey/nodes"
+import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 
 function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
     const nodeStrings: string[] = links.flatMap(link => [link.source, link.target])
@@ -23,7 +23,7 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
         type: "sankey",
         name: "main",
         orientation: "h",
-        valuesuffix: "GWh",
+        valuesuffix: "MWh",
         node: {
             pad: 15,
             thickness: 30,
@@ -33,9 +33,11 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
             },
             label: uniqueNodeStrings,
             color: nodeColors,
+            hovertemplate: "%{label}",
         },
         link: {
             hoverinfo: "all",
+            hovertemplate: "%{source.label} ➔ %{target.label}",
             source: sources,
             target: targets,
             value:  values,
@@ -110,7 +112,7 @@ export const IronPowderSankey: FunctionComponent<{links: SankeyLink[]}> = ({link
             doTransition(divId, previousLinks.current, links)
         }
         previousLinks.current = links
-    }, [links]);
+    }, [links, divId]);
 
     return (
         <div id={divId} ref={divRef}/>

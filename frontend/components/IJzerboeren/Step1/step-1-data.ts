@@ -1,210 +1,104 @@
-export enum HeatingType {
-    GAS_BURNER = "GAS_BURNER",
-    DISTRICT_HEATING = "DISTRICT_HEATING",
-    HEAT_PUMP = "HEAT_PUMP",
-}
+import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 
-export interface Step1DataType {
-    inputs: Step1Inputs
-    outputs: Step1Outputs
-}
+export const sankeyLinks: SankeyLink[] = [
+    /* import E */
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Laden EV's",
+    //     value: 43,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Huishoudverbruik",
+    //     value: 94,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Verwarming",
+    //     value: 102,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Warm water",
+    //     value: 41,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Koken",
+    //     value: 14,
+    // },
 
-export interface Step1Inputs {
-    heatingType: keyof typeof HeatingType
-}
-
-export interface SankeyLink {
-    source: string
-    target: string
-    value: number
-    label?: string
-}
-
-export interface Step1Outputs {
-    kpis: Step1Kpis
-    sankey: SankeyLink[]
-}
-
-export interface Step1Kpis {
-    gridLoad_r: number
-    cost_eur: number
-    sustainability_r: number
-}
-
-export const step1Data: Step1DataType[] = [
     {
-        inputs: {
-            heatingType: "GAS_BURNER",
-        },
-        outputs: {
-            kpis: {
-                gridLoad_r: 0.8,
-                cost_eur: 20000,
-                sustainability_r: 0.2,
-            },
-            sankey: [
-                {
-                    source: "Import gas",
-                    target: "Huishoudens",
-                    value: 5,
-                    label: "Aardgas",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Elektrolyzer",
-                    value: 0,
-                    label: "Electriciteit",
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Verlies",
-                    value: 0,
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Reductie",
-                    value: 0,
-                    label: "Waterstof",
-                },
-                {
-                    source: "Reductie",
-                    target: "Warmtenet",
-                    value: 0, // I assume about 5 GWh heat demand
-                    label: "IJzerpoeder"
-                },
-                {
-                    source: "Warmtenet",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Heet water",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Huishoudens",
-                    value: 2,
-                    label: "Verbruik huishoudens"
-                }
-            ],
-        },
+        source: "Import elektriciteit",
+        target: "Lokaal verbruik",
+        value: 294,
     },
     {
-        inputs: {
-            heatingType: "HEAT_PUMP",
-        },
-        outputs: {
-            kpis: {
-                gridLoad_r: 1.6,
-                cost_eur: 18000,
-                sustainability_r: 0.8,
-            },
-            sankey: [
-                {
-                    source: "Import gas",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Aardgas",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Elektrolyzer",
-                    value: 0,
-                    label: "Electriciteit",
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Verlies",
-                    value: 0,
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Reductie",
-                    value: 0,
-                    label: "Waterstof",
-                },
-                {
-                    source: "Reductie",
-                    target: "Warmtenet",
-                    value: 0, // I assume about 5 GWh heat demand
-                    label: "IJzerpoeder"
-                },
-                {
-                    source: "Warmtenet",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Heet water",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Warmtepomp",
-                    value: 2,
-                },
-                {
-                    source: "Import stroom",
-                    target: "Huishoudens",
-                    value: 2,
-                    label: "Verbruik huishoudens"
-                },
-                {
-                    source: "Warmtepomp",
-                    target: "Huishoudens",
-                    value: 5,
-                },
-            ],
-        },
+        source: "Opwek elektriciteit",
+        target: "Lokaal verbruik",
+        value: 114,
     },
     {
-        inputs: {
-            heatingType: "DISTRICT_HEATING",
-        },
-        outputs: {
-            kpis: {
-                gridLoad_r: 0.7,
-                cost_eur: 22000,
-                sustainability_r: 1,
-            },
-            sankey: [
-                {
-                    source: "Import gas",
-                    target: "Huishoudens",
-                    value: 0,
-                    label: "Aardgas",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Elektrolyzer",
-                    value: 7,
-                    label: "Electriciteit",
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Verlies",
-                    value: 2,
-                },
-                {
-                    source: "Elektrolyzer",
-                    target: "Reductie ijzeroxide",
-                    value: 5,
-                    label: "Waterstof",
-                },
-                {
-                    source: "Reductie ijzeroxide",
-                    target: "Warmtenet",
-                    value: 5, // I assume about 5 GWh heat demand
-                    label: "IJzerpoeder"
-                },
-                {
-                    source: "Warmtenet",
-                    target: "Huishoudens",
-                    value: 5,
-                    label: "Heet water",
-                },
-                {
-                    source: "Import stroom",
-                    target: "Huishoudens",
-                    value: 2,
-                    label: "Verbruik huishoudens"
-                }
-            ],
-        },
+        source: "Opwek elektriciteit",
+        target: "Export",
+        value: 54,
+    },
+
+
+    {
+        source: "Lokaal verbruik",
+        target: "Laden EV's",
+        value: 54,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Huishoudverbruik",
+        value: 123,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Verwarming",
+        value: 172,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Warm water",
+        value: 41,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Koken",
+        value: 18,
+    },
+
+
+
+    /* opwek E */
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Laden EV's",
+    //     value: 11,
+    // },
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Huishoudverbruik",
+    //     value: 29,
+    // },
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Koken",
+    //     value: 4,
+    // },
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Verwarming",
+    //     value: 70,
+    // },
+
+
+    {
+        source: "Import benzine",
+        target: "Brandstofauto's",
+        value: 299,
     },
 ]
