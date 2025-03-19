@@ -2,6 +2,7 @@
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import {IJzerboerenKPIs} from "@/components/IJzerboeren/KPIs/KPIs"
+import {fillInMissingLinksRoot} from "@/components/IJzerboeren/Sankey/fillInMissingLinks"
 
 export interface Step2DataType {
     inputs: Step2Inputs
@@ -17,7 +18,7 @@ export interface Step2Outputs {
     sankey: SankeyLink[]
 }
 
-export const step2Data: Step2DataType[] = [
+export const step2RawData: Step2DataType[] = [
     {
         inputs: {
             heatingType: "HEAT_PUMP",
@@ -185,12 +186,12 @@ export const step2Data: Step2DataType[] = [
                 },
 
                 {
-                    source: "Afname warmtenet",
+                    source: "Warmtenet",
                     target: "Warm water",
                     value: 125,
                 },
                 {
-                    source: "Afname warmtenet",
+                    source: "Warmtenet",
                     target: "Verwarming",
                     value: 368,
                 },
@@ -204,3 +205,5 @@ export const step2Data: Step2DataType[] = [
         },
     },
 ]
+
+export const step2Data = fillInMissingLinksRoot(step2RawData)

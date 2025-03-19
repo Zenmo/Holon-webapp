@@ -1,5 +1,6 @@
-import {step2Data, Step2DataType} from "@/components/IJzerboeren/Step2/step2-data"
+import {Step2DataType, step2RawData} from "@/components/IJzerboeren/Step2/step2-data"
 import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
+import {fillInMissingLinksRoot} from "@/components/IJzerboeren/Sankey/fillInMissingLinks"
 
 export type Step3DataType = Step2DataType
 
@@ -71,4 +72,4 @@ const ironPowderOutputs: Step3DataType = {
     }
 }
 
-export const step3Data: Step3DataType[] = [...step2Data, ironPowderOutputs]
+export const step3Data: Step3DataType[] = fillInMissingLinksRoot([...step2RawData, ironPowderOutputs])

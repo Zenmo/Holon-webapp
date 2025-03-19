@@ -74,7 +74,7 @@ export const sankeyNodes: SankeyNode[] = [
         color: "red",
     },
     {
-        name: "Afname warmtenet",
+        name: "Warmtenet",
         color: "red",
     },
     {
