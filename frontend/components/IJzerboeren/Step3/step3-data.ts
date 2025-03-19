@@ -43,16 +43,21 @@ const ironPowderOutputs: Step3DataType = {
 
             {
                 source: "Import ijzerpoeder",
+                target: "Warmtenet",
+                value: 917,
+            },
+            {
+                source: "Warmtenet",
                 target: "Koken",
                 value: 22,
             },
             {
-                source: "Import ijzerpoeder",
+                source: "Warmtenet",
                 target: "Warm water",
                 value: 123,
             },
             {
-                source: "Import ijzerpoeder",
+                source: "Warmtenet",
                 target: "Verwarming",
                 value: 361,
             },

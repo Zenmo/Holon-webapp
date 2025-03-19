@@ -78,6 +78,10 @@ export const sankeyNodes: SankeyNode[] = [
         color: "red",
     },
     {
+        name: "Warmtenet",
+        color: "red",
+    },
+    {
         name: "Import ijzerpoeder",
         color: "grey"
     },
@@ -95,11 +99,6 @@ export const sankeyNodes: SankeyNode[] = [
     {
         name: "Reductie",
         color: "orange",
-    },
-
-    {
-        name: "Huishoudens",
-        color: "pink",
     },
     {
         name: "Warmtepomp",
