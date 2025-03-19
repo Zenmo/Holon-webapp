@@ -25,6 +25,7 @@
         "@microsoft/applicationinsights-react-js": "^17.3.1",
         "@microsoft/applicationinsights-web": "^3.3.1",
         "@types/chroma-js": "^3.1.1",
+        "@types/lodash": "^4.17.16",
         "@types/plotly.js-dist-min": "^2.3.4",
         "@types/prettier": "^2.7.3",
         "@types/react": "^18.0.15",

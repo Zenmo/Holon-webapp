@@ -83,7 +83,7 @@ export const sankeyNodes: SankeyNode[] = [
     },
     {
         name: "Import ijzerpoeder",
-        color: "grey"
+        color: "lightblue"
     },
 
 

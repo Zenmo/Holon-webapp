@@ -24,6 +24,22 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
         name: "main",
         orientation: "h",
         valuesuffix: "MWh",
+        textfont: {
+            // copied from globals.css
+            family: [
+                "Roboto",
+                "Oxygen",
+                "Ubuntu",
+                "Cantarell",
+                "Fira Sans",
+                "Droid Sans",
+                "Helvetica Neue",
+                "sans-serif",
+            ],
+            size: 17,
+            weight: "bold",
+            color: "white",
+        },
         node: {
             pad: 15,
             thickness: 30,
@@ -105,7 +121,7 @@ export const IronPowderSankey: FunctionComponent<{links: SankeyLink[]}> = ({link
     const previousLinks = useRef<SankeyLink[] | null>(null)
 
     useLayoutEffect(() => {
-        const width = divRef.current?.parentElement?.clientWidth;
+        const width = divRef.current?.clientWidth;
         if (previousLinks.current === null) {
             Plotly.react(divId, [convertSankeyDataToPlotly(links)], { ...plotlySankeyLayout, width })
         } else {
@@ -115,6 +131,6 @@ export const IronPowderSankey: FunctionComponent<{links: SankeyLink[]}> = ({link
     }, [links, divId]);
 
     return (
-        <div id={divId} ref={divRef}/>
+        <div id={divId} ref={divRef} style={{maxWidth: "45rem", alignSelf: "center"}}/>
     )
 }

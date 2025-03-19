@@ -1,6 +1,6 @@
 
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
-import {HeatingType} from "@/components/IJzerboeren/Step3/step3-data"
+import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import {IJzerboerenKPIs} from "@/components/IJzerboeren/KPIs/KPIs"
 
 export interface Step2DataType {
@@ -29,6 +29,7 @@ export const step2Data: Step2DataType[] = [
                 co2emission_t: 138,
             },
             sankey: [
+                // electricity
                 {
                     source: "Import elektriciteit",
                     target: "Lokaal verbruik",
@@ -44,7 +45,6 @@ export const step2Data: Step2DataType[] = [
                     target: "Export",
                     value: 54,
                 },
-
                 {
                     source: "Lokaal verbruik",
                     target: "Laden EV's",
@@ -117,7 +117,6 @@ export const step2Data: Step2DataType[] = [
                     target: "Huishoudverbruik",
                     value: 150,
                 },
-
                 {
                     source: "Import gas",
                     target: "Koken",
