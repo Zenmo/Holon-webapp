@@ -1,10 +1,10 @@
-import { KpiRow } from "@/components/IJzerboeren/KPIs/KpiRow"
-import { HeatingTypeRadios } from "@/components/IJzerboeren/HeatingType/HeatingTypeRadios"
+import {KpiRow} from "@/components/IJzerboeren/KPIs/KpiRow"
+import {HeatingTypeRadios} from "@/components/IJzerboeren/HeatingType/HeatingTypeRadios"
 import {Step2Outputs} from "@/components/IJzerboeren/Step2/step2-data"
-import { useStateWithHistory } from "@/components/IJzerboeren/useStateWithHistory"
+import {useStateWithHistory} from "@/components/IJzerboeren/useStateWithHistory"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
 import {FunctionComponent} from "react"
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic"
 import {GelijktijdigheidKpi} from "@/components/IJzerboeren/KPIs/GelijktijdigheidKPI"
 import {LCOEVerwarmen} from "@/components/IJzerboeren/KPIs/LCOEVerwarmen"
 import {CO2EmissionKPI} from "@/components/IJzerboeren/KPIs/CO2EmissionKPI"
@@ -20,7 +20,7 @@ const IronPowderSankey = dynamic(
 
 export const Step3: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
-        useStateWithHistory<HeatingType | null>(null)
+        useStateWithHistory<HeatingType>(HeatingType.HEAT_PUMP)
 
     let currentOutputs: Nullable<Step2Outputs> = null
     if (heatingType) {
@@ -38,7 +38,10 @@ export const Step3: FunctionComponent = () => {
         <div className="holonContentContainer">
             <TwoColumnSimulationLayout style={{minHeight: "50rem"}}>
                 <div className={rawHtml.Container}>
-                    <HeatingTypeRadios setHeatingType={setHeatingType} contentId="heatingTypeStep3" />
+                    <HeatingTypeRadios
+                        heatingType={heatingType}
+                        setHeatingType={setHeatingType} c
+                        ontentId="heatingTypeStep3" />
                 </div>
                 <div style={{
                     flexDirection: "column",

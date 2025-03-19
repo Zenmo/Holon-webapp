@@ -18,10 +18,15 @@ export const TwoColumnSimulationLayout = styled.div<{
     flexDirection: "column",
     [lg]: {
         flexDirection: "row",
+        "& > :nth-child(1)": {
+            width: `calc(100% * ${left} / (${left} + ${right}))`,
+        },
+        "& > :nth-child(2)": {
+            width: `calc(100% * ${right} / (${left} + ${right}))`,
+        },
     },
     position: "relative",
     "& > :nth-child(1)": {
-        width: `calc(100% * ${left} / (${left} + ${right}))`,
         display: "flex",
         flexDirection: "column",
         paddingTop: "3rem",
@@ -35,7 +40,6 @@ export const TwoColumnSimulationLayout = styled.div<{
         backgroundColor: tailwind.theme.extend.colors["holon-gray-100"],
     },
     "& > :nth-child(2)": {
-        width: `calc(100% * ${right} / (${left} + ${right}))`,
         display: "flex",
         flexDirection: "column",
         position: "relative",

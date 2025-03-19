@@ -1,6 +1,6 @@
 .kpiStoryline {
     color: #fff;
-    width: 25%;
+    max-width: 33%;
     padding: 1.5rem;
 }
 .kpiStoryline > div {

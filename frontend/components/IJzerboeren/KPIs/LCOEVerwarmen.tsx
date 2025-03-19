@@ -13,13 +13,17 @@ export const LCOEVerwarmen: FunctionComponent<KpiDisplayProps> = ({
         <KpiDisplay
             view={view}
             title="LCOE verwarmen"
-            label="cost"
+            label="costs"
             changeDirection={calcChangeDirection(previousValue, currentValue)}
             changeAppreciation={ChangeAppreciation.MORE_IS_WORSE}
             previousValue={formatPreviousKpiNumber(previousValue)}
             value={formatCurrentKpiNumber(currentValue)}
             unit="eurocent/kWh"
-            description="Het piekverbruik per huishouden waarmee de netbeheerder rekent voor de huishoudens tezamen."
+            description={`
+                LCOE staat voor Levelized Cost Of Energy.
+                Dit geeft de kosten weer rekening houdend met alle factoren,
+                inclusief de financieringskosten en de levensduur van investeringen.
+            `}
         />
     )
 }

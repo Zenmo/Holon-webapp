@@ -107,7 +107,7 @@ export const IronPowderSankey: FunctionComponent<{links: SankeyLink[]}> = ({link
     useLayoutEffect(() => {
         const width = divRef.current?.parentElement?.clientWidth;
         if (previousLinks.current === null) {
-            console.log(Plotly.react(divId, [convertSankeyDataToPlotly(links)], { ...plotlySankeyLayout, width }))
+            Plotly.react(divId, [convertSankeyDataToPlotly(links)], { ...plotlySankeyLayout, width })
         } else {
             doTransition(divId, previousLinks.current, links)
         }

@@ -19,7 +19,7 @@ const IronPowderSankey = dynamic(
 
 export const Step2: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
-        useStateWithHistory<HeatingType | null>(null)
+        useStateWithHistory<HeatingType>(HeatingType.HEAT_PUMP)
 
     let currentOutputs: Nullable<Step2Outputs> = null
     if (heatingType) {
@@ -41,15 +41,19 @@ export const Step2: FunctionComponent = () => {
                         woningen. Zowel gas als een warmtenet kun je hier instellen om de (net)situatie te vergelijken
                         met het warmtepomp scenario.</p>
 
-                    <HeatingTypeRadios setHeatingType={setHeatingType} options={[
-                        HeatingType.GAS_BURNER,
-                        HeatingType.HEAT_PUMP,
-                        HeatingType.DISTRICT_HEATING,
-                    ]} contentId="heatingTypeStep2" />
+                    <HeatingTypeRadios
+                        heatingType={heatingType}
+                        setHeatingType={setHeatingType}
+                        options={[
+                            HeatingType.GAS_BURNER,
+                            HeatingType.HEAT_PUMP,
+                            HeatingType.DISTRICT_HEATING,
+                        ]}
+                        contentId="heatingTypeStep2"/>
 
                     <p>Aan de CO2 uitstoot KPI kun je zien waarom we in Nederland niet doorgaans niet meer voor gas
                         kiezen. De CO2 uitstoot verdubbeld bijna ten opzichte van het warmtepomp scenario. De
-                        gelijktijdigheid gaat echter wel flink omlaag, wat de bouwen van de wijk mogelijk maakt.</p>
+                        gelijktijdigheid gaat echter wel flink omlaag, wat de bouw van de wijk mogelijk maakt.</p>
 
                     <p>Het warmtenet met restwarmte lijkt alle voordelen te bieden die de bouw van de wijken mogelijk
                         maakt. Lage netcongestie en lage CO2 uitstoot. Hierbij rekenen we voor restwarmte in dit geval
