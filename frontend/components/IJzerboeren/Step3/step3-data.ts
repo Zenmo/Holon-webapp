@@ -10,63 +10,63 @@ const ironPowderOutputs: Step3DataType = {
     },
     outputs: {
         kpis: {
-            gelijktijdigheid_kW: 2.1,
-            lcoeVerwarmen_eurocentpkWh: 16,
-            co2emission_t: 115,
+            gelijktijdigheid_kW: 2.2,
+            lcoeVerwarmen_eurocentpkWh: 18,
+            co2emission_t: 105,
         },
         sankey: [
             {
                 source: "Import elektriciteit",
                 target: "Lokaal verbruik",
-                value: 183,
+                value: 142,
             },
             {
                 source: "Opwek elektriciteit",
                 target: "Lokaal verbruik",
-                value: 40,
+                value: 64,
             },
             {
                 source: "Opwek elektriciteit",
                 target: "Export",
-                value: 93,
+                value: 77,
             },
 
             {
                 source: "Lokaal verbruik",
                 target: "Laden EV's",
-                value: 54,
+                value: 57,
             },
             {
                 source: "Lokaal verbruik",
                 target: "Huishoudverbruik",
-                value: 170,
+                value: 129,
+            },
+            {
+                source: "Lokaal verbruik",
+                target: "Koken",
+                value: 20,
             },
 
             {
                 source: "Import ijzerpoeder",
+                target: "Verbranding",
+                value: 198,
+            },
+            {
+                source: "Verbranding",
                 target: "Warmtenet",
-                value: 917,
+                value: 178,
             },
             {
                 source: "Warmtenet",
-                target: "Koken",
-                value: 22,
-            },
-            {
-                source: "Warmtenet",
-                target: "Warm water",
-                value: 123,
-            },
-            {
-                source: "Warmtenet",
-                target: "Verwarming",
-                value: 361,
+                target: "Warmtegebruik in huis",
+                value: 169,
             },
 
             {
                 source: "Import benzine",
                 target: "Brandstofauto's",
-                value: 299,
+                value: 259,
             },
         ],
     }

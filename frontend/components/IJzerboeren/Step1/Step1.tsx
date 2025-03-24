@@ -1,5 +1,5 @@
 import { KpiRow } from "@/components/IJzerboeren/KPIs/KpiRow"
-import {sankeyLinks} from "@/components/IJzerboeren/Step1/step-1-data"
+import {heatPumpKpis, heatPumpSankeyLinks} from "@/components/IJzerboeren/Step1/step-1-data"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
 import {FunctionComponent} from "react"
 import dynamic from 'next/dynamic'
@@ -20,29 +20,36 @@ export const Step1: FunctionComponent = () => {
             <TwoColumnSimulationLayout style={{minHeight: "50rem"}}>
                 <div className={rawHtml.Container}>
                     <p>
-                        Voor de 50 huizen heeft de gemeente Budel de volgende ontwikkelingsplannen met de ontwikkelaar
-                        afgestemd:</p>
+                        Welkom in de buurt &apos;Cranendonck&apos; in Budel. Als onderdeel van de woonopgave heeft de gemeente
+                        hier een locatie gereserveerd om 50 huizen te bouwen met de volgende eigenschappen: </p>
 
                     <ul>
                         <li>8 vrijstaande huizen, 18 twee-onder-één-kap woningen, 24 appartementen</li>
-                        <li>Alle woningen goed geisoleerd</li>
+                        <li>Alle woningen goed geïsoleerd</li>
                         <li>Alle daken met zonnepanelen (2 tot 4 kWp per woning)</li>
                         <li>Ze verwachten ongeveer 30% elektrische auto&apos;s</li>
                     </ul>
 
-                    <p>Over de warmtesystemen zijn ze nog aan het twijfelen. Normaliter zouden ze voor warmtepompen
-                        kiezen. Maar gezien de woonopgave en de congestieproblemen in de gemeente is het belangrijk om
-                        de gelijktijdigheid van de netbelasting zo laag mogelijk houden. De gemeente wil daarom
-                        verschillende opties verkennen. Wat betekenen de verschillende opties voor de netbelasting, voor
-                        de duurzaamheid, en voor de kosten van de bewoners?</p>
+                    <p>Voor het warmtesysteem van deze huizen hebben ze echter een probleem. Normaliter zouden ze voor
+                        warmtepompen gaan. Maar Enexis heeft aangegeven dat er niet voldoende netruimte is volledige
+                        woonopgave te voldoen met nieuwbouwhuizen met warmtepompen, EVs en zonnepanelen. Daarom wil de
+                        gemeente beter inzicht in wat de verschillende warmte systemen energetisch voor impact hebben en
+                        ook wat het betekent voor de bewoners in termen van energiekosten. Die gewenste inzichten zal
+                        deze casus geven. Laten we beginnen met de situatie waarin alle huizen wel warmtepompen
+                        gebruiken voor verwarming en warm water. </p>
 
-                    <p>Hier rechts in het stromings-diagram kun je bekijken hoeveel energie en voor welk doeleind de
-                        vijftig huizen consumeren als ze met warmtepompen zouden verwarmen. Ook kun je de drie
-                        belangrijke KPI&apos;s van deze casus bekijken: de piek van de gelijktijdige netbelasting per huis,
-                        de kosten voor verwarming per kWh (uitgedrukt in life-cycle cost of energy, LCOE), en de totale
-                        CO2 uitstoot van de geconsumeerde energie door de woningen.</p>
+                    <p>Met het holon-model is deze casus op basis van veel echte data doorberekend. Bekijk hier rechts
+                        het stromings-diagram waarin alle energiedragers en de gebruiksdoelen voor deze 50 woningen
+                        worden gekwanitficeerd. </p>
 
-                    <p>Bekijk het stromings-diagram en de KPIs goed. In de volgende stappen gaan we die vergelijken met
+                    <p>Voor deze casus hebben we tevens drie KPIs gedefinieerd:</p>
+                    <ol>
+                        <li>de piek van de gelijktijdige netbelasting per huis,</li>
+                        <li>de kosten voor verwarming per kWh (uitgedrukt in life-cycle cost of energy, LCOE), en</li>
+                        <li>    de totale CO2 uitstoot alle 50 woningen samen. </li>
+                    </ol>
+
+                    <p>Verken de stromings-diagram en de KPIs goed. In de volgende stappen gaan we die vergelijken met
                         andere scenario&apos;s.
                     </p>
                 </div>
@@ -50,12 +57,12 @@ export const Step1: FunctionComponent = () => {
                     flexDirection: "column",
                     justifyContent: "space-between",
                 }}>
-                    <IronPowderSankey links={sankeyLinks} />
+                    <IronPowderSankey links={heatPumpSankeyLinks} />
                     <div></div>
                     <KpiRow>
-                        <GelijktijdigheidKpi currentValue={2.6} />
-                        <LCOEVerwarmen currentValue={12} />
-                        <CO2EmissionKPI currentValue={138} />
+                        <GelijktijdigheidKpi currentValue={heatPumpKpis.gelijktijdigheid_kW} />
+                        <LCOEVerwarmen currentValue={heatPumpKpis.lcoeVerwarmen_eurocentpkWh} />
+                        <CO2EmissionKPI currentValue={heatPumpKpis.co2emission_t} />
                     </KpiRow>
                 </div>
             </TwoColumnSimulationLayout>

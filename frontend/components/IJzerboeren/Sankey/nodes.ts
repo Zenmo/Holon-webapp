@@ -70,6 +70,10 @@ export const sankeyNodes: SankeyNode[] = [
         color: "red",
     },
     {
+        name: "Warmtegebruik in huis",
+        color: "red",
+    },
+    {
         name: "Warm water",
         color: "red",
     },

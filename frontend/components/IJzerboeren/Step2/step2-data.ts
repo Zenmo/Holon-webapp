@@ -3,6 +3,7 @@ import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import {IJzerboerenKPIs} from "@/components/IJzerboeren/KPIs/KPIs"
 import {fillInMissingLinksRoot} from "@/components/IJzerboeren/Sankey/fillInMissingLinks"
+import {heatPumpKpis, heatPumpSankeyLinks} from "@/components/IJzerboeren/Step1/step-1-data"
 
 export interface Step2DataType {
     inputs: Step2Inputs
@@ -24,60 +25,8 @@ export const step2RawData: Step2DataType[] = [
             heatingType: "HEAT_PUMP",
         },
         outputs: {
-            kpis: {
-                gelijktijdigheid_kW: 2.6,
-                lcoeVerwarmen_eurocentpkWh: 12,
-                co2emission_t: 138,
-            },
-            sankey: [
-                // electricity
-                {
-                    source: "Import elektriciteit",
-                    target: "Lokaal verbruik",
-                    value: 294,
-                },
-                {
-                    source: "Opwek elektriciteit",
-                    target: "Lokaal verbruik",
-                    value: 114,
-                },
-                {
-                    source: "Opwek elektriciteit",
-                    target: "Export",
-                    value: 54,
-                },
-                {
-                    source: "Lokaal verbruik",
-                    target: "Laden EV's",
-                    value: 54,
-                },
-                {
-                    source: "Lokaal verbruik",
-                    target: "Huishoudverbruik",
-                    value: 123,
-                },
-                {
-                    source: "Lokaal verbruik",
-                    target: "Verwarming",
-                    value: 172,
-                },
-                {
-                    source: "Lokaal verbruik",
-                    target: "Warm water",
-                    value: 41,
-                },
-                {
-                    source: "Lokaal verbruik",
-                    target: "Koken",
-                    value: 18,
-                },
-
-                {
-                    source: "Import benzine",
-                    target: "Brandstofauto's",
-                    value: 299,
-                },
-            ],
+            kpis: heatPumpKpis,
+            sankey: heatPumpSankeyLinks,
         },
     },
     {
@@ -86,25 +35,25 @@ export const step2RawData: Step2DataType[] = [
         },
         outputs: {
             kpis: {
-                gelijktijdigheid_kW: 1.5,
+                gelijktijdigheid_kW: 2.0,
                 lcoeVerwarmen_eurocentpkWh: 15,
-                co2emission_t: 305,
+                co2emission_t: 137,
             },
             sankey: [
                 {
                     source: "Import elektriciteit",
                     target: "Lokaal verbruik",
-                    value: 177,
+                    value: 129,
                 },
                 {
                     source: "Opwek elektriciteit",
                     target: "Lokaal verbruik",
-                    value: 37,
+                    value: 57,
                 },
                 {
                     source: "Opwek elektriciteit",
                     target: "Export",
-                    value: 96,
+                    value: 84,
                 },
 
 
@@ -116,28 +65,28 @@ export const step2RawData: Step2DataType[] = [
                 {
                     source: "Lokaal verbruik",
                     target: "Huishoudverbruik",
-                    value: 150,
+                    value: 129,
                 },
                 {
                     source: "Import gas",
                     target: "Koken",
-                    value: 22,
+                    value: 20,
                 },
                 {
                     source: "Import gas",
                     target: "Warm water",
-                    value: 125,
+                    value: 94,
                 },
                 {
                     source: "Import gas",
                     target: "Verwarming",
-                    value: 368,
+                    value: 84,
                 },
 
                 {
                     source: "Import benzine",
                     target: "Brandstofauto's",
-                    value: 299,
+                    value: 259,
                 },
             ],
         },
@@ -148,58 +97,53 @@ export const step2RawData: Step2DataType[] = [
         },
         outputs: {
             kpis: {
-                gelijktijdigheid_kW: 2.1,
-                lcoeVerwarmen_eurocentpkWh: 22,
-                co2emission_t: 115, // TIJDELIJK!!!!!!!!!!!!!!!
+                gelijktijdigheid_kW: 2.2,
+                lcoeVerwarmen_eurocentpkWh: 20,
+                co2emission_t: 105,
             },
             sankey: [
                 {
                     source: "Import elektriciteit",
                     target: "Lokaal verbruik",
-                    value: 183,
+                    value: 142,
                 },
                 {
                     source: "Opwek elektriciteit",
                     target: "Lokaal verbruik",
-                    value: 40,
+                    value: 64,
                 },
                 {
                     source: "Opwek elektriciteit",
                     target: "Export",
-                    value: 93,
+                    value: 77,
                 },
 
                 {
                     source: "Lokaal verbruik",
                     target: "Laden EV's",
-                    value: 54,
+                    value: 57,
                 },
                 {
                     source: "Lokaal verbruik",
                     target: "Huishoudverbruik",
-                    value: 105,
+                    value: 129,
                 },
                 {
                     source: "Lokaal verbruik",
                     target: "Koken",
-                    value: 18,
+                    value: 20,
                 },
 
                 {
                     source: "Warmtenet",
-                    target: "Warm water",
-                    value: 125,
-                },
-                {
-                    source: "Warmtenet",
-                    target: "Verwarming",
-                    value: 368,
+                    target: "Warmtegebruik in huis",
+                    value: 169,
                 },
 
                 {
                     source: "Import benzine",
                     target: "Brandstofauto's",
-                    value: 299,
+                    value: 259,
                 },
             ],
         },

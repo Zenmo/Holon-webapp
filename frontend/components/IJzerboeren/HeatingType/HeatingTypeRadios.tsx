@@ -25,7 +25,7 @@ const inputOptions = [
     {
         id: 33,
         option: HeatingType.DISTRICT_HEATING,
-        label: "Warmtenet",
+        label: "Warmtenet met restwarmte",
     },
     {
         id: 44,

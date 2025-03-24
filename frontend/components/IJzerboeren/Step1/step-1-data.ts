@@ -1,6 +1,7 @@
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
+import {IJzerboerenKPIs} from "@/components/IJzerboeren/KPIs/KPIs"
 
-export const sankeyLinks: SankeyLink[] = [
+export const heatPumpSankeyLinks: SankeyLink[] = [
     /* import E */
     // {
     //     source: "Import elektriciteit",
@@ -31,44 +32,44 @@ export const sankeyLinks: SankeyLink[] = [
     {
         source: "Import elektriciteit",
         target: "Lokaal verbruik",
-        value: 294,
+        value: 185,
     },
     {
         source: "Opwek elektriciteit",
         target: "Lokaal verbruik",
-        value: 114,
+        value: 72,
     },
     {
         source: "Opwek elektriciteit",
         target: "Export",
-        value: 54,
+        value: 69,
     },
 
 
     {
         source: "Lokaal verbruik",
         target: "Laden EV's",
-        value: 54,
+        value: 57,
     },
     {
         source: "Lokaal verbruik",
         target: "Huishoudverbruik",
-        value: 123,
+        value: 129,
     },
     {
         source: "Lokaal verbruik",
         target: "Verwarming",
-        value: 172,
+        value: 24,
     },
     {
         source: "Lokaal verbruik",
         target: "Warm water",
-        value: 41,
+        value: 27,
     },
     {
         source: "Lokaal verbruik",
         target: "Koken",
-        value: 18,
+        value: 20,
     },
 
 
@@ -99,6 +100,12 @@ export const sankeyLinks: SankeyLink[] = [
     {
         source: "Import benzine",
         target: "Brandstofauto's",
-        value: 299,
+        value: 259,
     },
 ]
+
+export const heatPumpKpis: IJzerboerenKPIs = {
+    gelijktijdigheid_kW: 3.0,
+    lcoeVerwarmen_eurocentpkWh: 12,
+    co2emission_t: 117,
+}
