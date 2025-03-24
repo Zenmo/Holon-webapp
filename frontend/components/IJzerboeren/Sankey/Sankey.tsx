@@ -1,6 +1,6 @@
 "use client"
 
-import {FunctionComponent, useLayoutEffect, useRef} from "react"
+import {FunctionComponent, useLayoutEffect, useMemo, useRef} from "react"
 import {uniq, uniqBy} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
@@ -37,6 +37,7 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
                 "sans-serif",
             ],
             size: 17,
+            // todo add to typescript definitions
             weight: "bold",
             color: "white",
         },
@@ -50,6 +51,8 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
             label: uniqueNodeStrings,
             color: nodeColors,
             hovertemplate: "%{label}",
+            // todo add to typescript definitions
+            // align: "right",
         },
         link: {
             hoverinfo: "all",
@@ -76,7 +79,7 @@ const plotlySankeyLayout: Partial<Plotly.Layout> = {
 
 const transitionTimeMs = 700
 
-function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLink[], startTimeMs = 0): void {
+function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLink[], layout: Partial<Plotly.Layout>, startTimeMs = 0): void {
     requestAnimationFrame((currentTimeMs: DOMHighResTimeStamp) => {
         if (startTimeMs === 0) {
             startTimeMs = currentTimeMs
@@ -106,31 +109,45 @@ function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLin
             }
         })
 
-        Plotly.react(divId, [convertSankeyDataToPlotly(linksWithIntermediateValues)], plotlySankeyLayout)
+        Plotly.react(divId, [convertSankeyDataToPlotly(linksWithIntermediateValues)], layout)
 
         if (ratio < 1) {
-            doTransition(divId, oldLinks, newLinks, startTimeMs)
+            doTransition(divId, oldLinks, newLinks, layout, startTimeMs)
         }
     })
 }
 
-export const IronPowderSankey: FunctionComponent<{links: SankeyLink[]}> = ({links}) => {
+export const IronPowderSankey: FunctionComponent<{
+    links: SankeyLink[]
+    maxWidth?: string,
+    svgHeight?: number,
+}> = ({
+    links,
+    maxWidth = "45rem",
+    svgHeight = 600,
+}) => {
     const divId = "sankey" + useRandomInt()
     const divRef = useRef<HTMLDivElement | null>(null)
 
     const previousLinks = useRef<SankeyLink[] | null>(null)
 
+    const width = divRef.current?.clientWidth;
+    const layout = useMemo(() => ({
+        ...plotlySankeyLayout,
+        width,
+        // height: svgHeight
+    }), [width]);
+
     useLayoutEffect(() => {
-        const width = divRef.current?.clientWidth;
         if (previousLinks.current === null) {
-            Plotly.react(divId, [convertSankeyDataToPlotly(links)], { ...plotlySankeyLayout, width })
+            Plotly.react(divId, [convertSankeyDataToPlotly(links)], layout)
         } else {
-            doTransition(divId, previousLinks.current, links)
+            doTransition(divId, previousLinks.current, links, layout)
         }
         previousLinks.current = links
     }, [links, divId]);
 
     return (
-        <div id={divId} ref={divRef} style={{maxWidth: "45rem", alignSelf: "center"}}/>
+        <div id={divId} ref={divRef} style={{maxWidth, alignSelf: "center"}}/>
     )
 }
