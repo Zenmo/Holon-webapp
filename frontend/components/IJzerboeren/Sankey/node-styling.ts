@@ -91,19 +91,30 @@ export const sankeyNodes: SankeyNode[] = [
     },
 
 
-    // Old stuff
+    // Iron powder processing
     {
-        name: "Verlies",
-        color: "white",
+        name: "Wind + zon",
+        color: "green",
     },
     {
-        name: "Elektrolyzer",
+        name: "Verlies",
+        color: "lightgrey",
+    },
+    {
+        name: "Regeneratie",
+        color: "orange",
+    },
+    {
+        name: "Elektrolyse",
         color: "lightblue",
     },
     {
-        name: "Reductie",
-        color: "orange",
+        name: "Warmteafname huizen",
+        color: "red",
     },
+
+
+    // Unused
     {
         name: "Warmtepomp",
         color: "blueviolet",

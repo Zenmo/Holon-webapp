@@ -66,7 +66,7 @@ function* linkGenerator(includeLoss: boolean): Generator<SankeyLink> {
     const [districtHeatingOutput, districtHeatingLoss] = ratio(burnOutput, .95)
     yield {
         source: "Warmtenet",
-        target: "Warmte bij huizen",
+        target: "Warmteafname huizen",
         value: districtHeatingOutput,
     }
     if (includeLoss) {
@@ -78,7 +78,7 @@ function* linkGenerator(includeLoss: boolean): Generator<SankeyLink> {
     }
 }
 
-const links = Array.from(linkGenerator(false))
+const links = Array.from(linkGenerator(true))
 
 export const IronPowderProcessSankey: FunctionComponent = () => (
     <IronPowderSankey

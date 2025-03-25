@@ -5,8 +5,9 @@ import {uniq, uniqBy, merge} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
 import chroma from "chroma-js";
-import {getColorByNodeName} from "@/components/IJzerboeren/Sankey/nodes"
+import {getColorByNodeName} from "@/components/IJzerboeren/Sankey/node-styling"
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
+import {getLinkColor} from "@/components/IJzerboeren/Sankey/link-styling"
 
 function convertSankeyDataToPlotly(
     links: SankeyLink[],
@@ -21,7 +22,7 @@ function convertSankeyDataToPlotly(
     const values = links.map(link => link.value)
     const labels = links.map(link => link.label || null)
     // const linkLabelColors = links.map(link => getColorByNodeName(link.source))
-    const linkColors = links.map(link => chroma(getColorByNodeName(link.source)).alpha(.5).hex())
+    const linkColors = links.map(link => chroma(getLinkColor(link)).alpha(.5).hex())
 
     return {
         type: "sankey",
