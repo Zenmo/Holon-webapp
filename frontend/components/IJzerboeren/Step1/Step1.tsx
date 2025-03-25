@@ -45,8 +45,8 @@ export const Step1: FunctionComponent = () => {
                     <p>Voor deze casus hebben we tevens drie KPIs gedefinieerd:</p>
                     <ol>
                         <li>de piek van de gelijktijdige netbelasting per huis,</li>
-                        <li>de kosten voor verwarming per kWh (uitgedrukt in life-cycle cost of energy, LCOE), en</li>
-                        <li>    de totale CO2 uitstoot alle 50 woningen samen. </li>
+                        <li>de kosten voor verwarming per kWh (uitgedrukt in levelized cost of energy, LCOE), en</li>
+                        <li>de totale CO2 uitstoot alle 50 woningen samen. </li>
                     </ol>
 
                     <p>Verken de stromings-diagram en de KPIs goed. In de volgende stappen gaan we die vergelijken met
