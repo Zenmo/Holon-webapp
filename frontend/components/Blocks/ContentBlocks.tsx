@@ -360,7 +360,7 @@ const ContentBlocks = ({
                                                 />
                                             )
                                         default:
-                                            return <ContentBlocks content={[section]} />
+                                            return <ContentBlocks content={[section]} key={`section ${section.id}`} />
                                     }
                                 })}
                             </StepIndicatorWrapper>

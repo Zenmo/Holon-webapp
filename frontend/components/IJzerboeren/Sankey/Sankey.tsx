@@ -17,6 +17,7 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
     const targets = links.map(link => uniqueNodeStrings.indexOf(link.target))
     const values = links.map(link => link.value)
     const labels = links.map(link => link.label || null)
+    // const linkLabelColors = links.map(link => getColorByNodeName(link.source))
     const linkColors = links.map(link => chroma(getColorByNodeName(link.source)).alpha(.5).hex())
 
     return {
@@ -50,13 +51,29 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
             },
             label: uniqueNodeStrings,
             color: nodeColors,
-            hovertemplate: "%{label}",
+            hoverlabel: {
+                font: {
+                    weight: "bold",
+                    color: "white",
+                },
+            },
+            /**
+             * d = whole numbers
+             */
+            hovertemplate: "%{label} <extra>%{value:d} %{fullData.valuesuffix}</extra>",
             // todo add to typescript definitions
             // align: "right",
         },
         link: {
-            hoverinfo: "all",
-            hovertemplate: "%{source.label} ➔ %{target.label}",
+            hoverlabel: {
+                font: {
+                    weight: "bold",
+                    color: "white",
+                },
+                // I would like to set the opaclabels from .65 opacity to 1 but it seems not possible.
+                // property "bgcolor" only changes the color
+            },
+            hovertemplate: "%{source.label} ➔ %{target.label} <extra>%{value:d} %{fullData.valuesuffix}</extra>",
             source: sources,
             target: targets,
             value:  values,
@@ -74,7 +91,7 @@ const plotlySankeyLayout: Partial<Plotly.Layout> = {
         size: 14,
     },
     height: 600,
-    // I would like to set Y size option here but it seems not possible
+    // I would like to set Y scale here but it seems not possible
 }
 
 const transitionTimeMs = 400
@@ -123,7 +140,7 @@ export const IronPowderSankey: FunctionComponent<{
     svgHeight?: number,
 }> = ({
     links,
-    maxWidth = "45rem",
+    maxWidth = "50rem",
     svgHeight = 600,
 }) => {
     const divId = "sankey" + useRandomInt()
