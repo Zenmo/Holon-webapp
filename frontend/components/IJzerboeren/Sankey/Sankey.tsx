@@ -77,7 +77,7 @@ const plotlySankeyLayout: Partial<Plotly.Layout> = {
     // I would like to set Y size option here but it seems not possible
 }
 
-const transitionTimeMs = 700
+const transitionTimeMs = 400
 
 function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLink[], layout: Partial<Plotly.Layout>, startTimeMs = 0): void {
     requestAnimationFrame((currentTimeMs: DOMHighResTimeStamp) => {

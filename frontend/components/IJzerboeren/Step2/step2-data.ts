@@ -98,7 +98,7 @@ export const step2RawData: Step2DataType[] = [
         outputs: {
             kpis: {
                 gelijktijdigheid_kW: 2.2,
-                lcoeVerwarmen_eurocentpkWh: 20,
+                lcoeVerwarmen_eurocentpkWh: 22,
                 co2emission_t: 105,
             },
             sankey: [

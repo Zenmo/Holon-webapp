@@ -20,7 +20,7 @@ const IronPowderSankey = dynamic(
 
 export const Step3: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
-        useStateWithHistory<HeatingType>(HeatingType.HEAT_PUMP)
+        useStateWithHistory<HeatingType>(HeatingType.DISTRICT_HEATING)
 
     let currentOutputs: Nullable<Step2Outputs> = null
     if (heatingType) {
@@ -57,10 +57,10 @@ export const Step3: FunctionComponent = () => {
                         ijzerpoederketen rekentool (IPA tool – link) ontwikkelt in het TSE project ‘Met Energie de Boer
                         Op’. Daarbij komt de LCEO van verwarmen met ijzerpoeder uit op circa 0.17 eruo/kWh. Daar bovenop
                         houden we ook nog rekening met 0.03 euro/kWh voor de lokale infrastructuur</p>
-                    <img src="/imgs/lcoe-ijzerpoeder.png" alt="LCOE opbouw van warmte opwekken met ijzerpoeder" />
+                    <img src="/imgs/lcoe-ijzerpoeder.png" alt="LCOE opbouw van warmte opwekken met ijzerpoeder"/>
                     <p></p>
-                    <p>Voor de geintereseerde sturen raden we aan om de <a href="https://example.org">IPA tool</a> te verkennen. Daar kunnen verschillende
-                        systeem configuraties voor de productie van ijzerpoeder in detail verkend en geoptimilaseerd
+                    <p>Geïnteresseerden raden we aan om de <a href="https://example.org">IPA tool</a> te verkennen. Daar
+                        kunnen verschillende systeemconfiguraties voor de productie van ijzerpoeder in detail verkend en geoptimaliseerd
                         worden.</p>
                 </div>
                 <div style={{

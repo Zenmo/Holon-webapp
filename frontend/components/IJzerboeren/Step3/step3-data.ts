@@ -11,7 +11,7 @@ const ironPowderOutputs: Step3DataType = {
     outputs: {
         kpis: {
             gelijktijdigheid_kW: 2.2,
-            lcoeVerwarmen_eurocentpkWh: 18,
+            lcoeVerwarmen_eurocentpkWh: 20,
             co2emission_t: 105,
         },
         sankey: [
