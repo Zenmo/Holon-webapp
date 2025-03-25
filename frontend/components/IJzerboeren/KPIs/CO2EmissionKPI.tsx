@@ -16,8 +16,8 @@ export const CO2EmissionKPI: FunctionComponent<KpiDisplayProps> = ({
             label="sustainability"
             changeDirection={calcChangeDirection(previousValue, currentValue)}
             changeAppreciation={ChangeAppreciation.MORE_IS_WORSE}
-            previousValue={formatPreviousKpiNumber(previousValue)}
-            value={formatCurrentKpiNumber(currentValue)}
+            previousValue={formatPreviousKpiNumber(previousValue, 0)}
+            value={formatCurrentKpiNumber(currentValue, 0)}
             unit="ton CO2"
             description=""
         />

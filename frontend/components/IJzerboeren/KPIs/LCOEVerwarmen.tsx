@@ -16,8 +16,8 @@ export const LCOEVerwarmen: FunctionComponent<KpiDisplayProps> = ({
             label="costs"
             changeDirection={calcChangeDirection(previousValue, currentValue)}
             changeAppreciation={ChangeAppreciation.MORE_IS_WORSE}
-            previousValue={formatPreviousKpiNumber(previousValue)}
-            value={formatCurrentKpiNumber(currentValue)}
+            previousValue={formatPreviousKpiNumber(previousValue, 0)}
+            value={formatCurrentKpiNumber(currentValue, 0)}
             unit="eurocent/kWh"
             description={`
                 LCOE staat voor Levelized Cost Of Energy.
