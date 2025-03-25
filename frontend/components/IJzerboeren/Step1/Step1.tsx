@@ -51,8 +51,14 @@ export const Step1: FunctionComponent = () => {
                     flexDirection: "column",
                     justifyContent: "space-between",
                 }}>
-                    <IronPowderSankey links={heatPumpSankeyLinks} />
-                    <div></div>
+                    <div style={{
+                        flexGrow: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                    }}>
+                        <IronPowderSankey links={heatPumpSankeyLinks} />
+                    </div>
                     <KpiRow>
                         <GelijktijdigheidKpi currentValue={heatPumpKpis.gelijktijdigheid_kW} />
                         <LCOEVerwarmen currentValue={heatPumpKpis.lcoeVerwarmen_eurocentpkWh} />

@@ -10,16 +10,14 @@ import {CO2EmissionKPI} from "@/components/IJzerboeren/KPIs/CO2EmissionKPI"
 import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
 import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
+import {findSingle} from "@/utils/arrayFindSingle"
 
 export const Step2: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
         useStateWithHistory<HeatingType>(HeatingType.HEAT_PUMP)
 
-    let currentOutputs: Nullable<Step2Outputs> = null
-    if (heatingType) {
-        currentOutputs = step2Data.find(r => r.inputs.heatingType === heatingType)?.outputs
-    }
-    const currentKpis = currentOutputs?.kpis
+    const currentOutputs = findSingle(step2Data, r => r.inputs.heatingType === heatingType).outputs
+    const currentKpis = currentOutputs.kpis
 
     let previousOutputs: Nullable<Step2Outputs> = null
     if (previousHeatingType) {
@@ -61,10 +59,14 @@ export const Step2: FunctionComponent = () => {
                     flexDirection: "column",
                     justifyContent: "space-between",
                 }}>
-                    {currentOutputs &&
+                    <div style={{
+                        flexGrow: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                    }}>
                         <IronPowderSankey links={currentOutputs.sankey} />
-                    }
-                    <div></div>
+                    </div>
                     <KpiRow>
                         <GelijktijdigheidKpi
                             currentValue={currentKpis && currentKpis.gelijktijdigheid_kW}

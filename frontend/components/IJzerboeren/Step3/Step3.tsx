@@ -1,6 +1,6 @@
 import {KpiRow} from "@/components/IJzerboeren/KPIs/KpiRow"
 import {HeatingTypeRadios} from "@/components/IJzerboeren/HeatingType/HeatingTypeRadios"
-import {Step2Outputs} from "@/components/IJzerboeren/Step2/step2-data"
+import {step2Data, Step2Outputs} from "@/components/IJzerboeren/Step2/step2-data"
 import {useStateWithHistory} from "@/components/IJzerboeren/useStateWithHistory"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
 import {FunctionComponent} from "react"
@@ -11,16 +11,14 @@ import {step3Data} from "@/components/IJzerboeren/Step3/step3-data"
 import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
 import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
+import {findSingle} from "@/utils/arrayFindSingle"
 
 export const Step3: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
         useStateWithHistory<HeatingType>(HeatingType.DISTRICT_HEATING)
 
-    let currentOutputs: Nullable<Step2Outputs> = null
-    if (heatingType) {
-        currentOutputs = step3Data.find(r => r.inputs.heatingType === heatingType)?.outputs
-    }
-    const currentKpis = currentOutputs?.kpis
+    const currentOutputs = findSingle(step2Data, r => r.inputs.heatingType === heatingType).outputs
+    const currentKpis = currentOutputs.kpis
 
     let previousOutputs: Nullable<Step2Outputs> = null
     if (previousHeatingType) {
@@ -61,10 +59,14 @@ export const Step3: FunctionComponent = () => {
                     flexDirection: "column",
                     justifyContent: "space-between",
                 }}>
-                    {currentOutputs &&
+                    <div style={{
+                        flexGrow: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                    }}>
                         <IronPowderSankey links={currentOutputs.sankey} />
-                    }
-                    <div></div>
+                    </div>
                     <KpiRow>
                         <GelijktijdigheidKpi
                             currentValue={currentKpis && currentKpis.gelijktijdigheid_kW}
