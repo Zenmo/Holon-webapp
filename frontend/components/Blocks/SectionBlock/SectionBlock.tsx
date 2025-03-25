@@ -22,7 +22,7 @@ import {
     FeedbackModal,
 } from "@/components/Blocks/ChallengeFeedbackModal/types"
 import { ShareButton } from "@/components/Button/ShareButton"
-import {TwoColumnSimulationLayoutTwo} from "@/components/Blocks/SectionBlock/TwoColumn"
+import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
 
 type Props = {
     data: SectionVariant
@@ -310,7 +310,7 @@ export default function SectionBlock({
             )}
 
             <div className="holonContentContainer">
-                <TwoColumnSimulationLayoutTwo columnSpec={data.value.gridLayout.grid}>
+                <TwoColumnSimulationLayout columnSpec={data.value.gridLayout.grid}>
                     <div className={backgroundLeftColor}>
                         {data.value.background.size !== "bg_full" && !holarchyModal ?
                             <span className={`extra_bg ${backgroundLeftColor}`}></span>
@@ -423,11 +423,7 @@ export default function SectionBlock({
                             />
                         </div>
                     </div>
-                    <hr
-                        className="border-holon-blue-900 absolute bottom-0 right-0"
-                        style={{ width: "calc(100% - 2rem)" }}
-                    />
-                </TwoColumnSimulationLayoutTwo>
+                </TwoColumnSimulationLayout>
 
                 {holarchyModal && (
                     <HolarchyTab
