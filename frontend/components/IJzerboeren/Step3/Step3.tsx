@@ -4,19 +4,13 @@ import {Step2Outputs} from "@/components/IJzerboeren/Step2/step2-data"
 import {useStateWithHistory} from "@/components/IJzerboeren/useStateWithHistory"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
 import {FunctionComponent} from "react"
-import dynamic from "next/dynamic"
 import {GelijktijdigheidKpi} from "@/components/IJzerboeren/KPIs/GelijktijdigheidKPI"
 import {LCOEVerwarmen} from "@/components/IJzerboeren/KPIs/LCOEVerwarmen"
 import {CO2EmissionKPI} from "@/components/IJzerboeren/KPIs/CO2EmissionKPI"
 import {step3Data} from "@/components/IJzerboeren/Step3/step3-data"
 import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
-
-// This prevents an issue with server-side rendering
-const IronPowderSankey = dynamic(
-    () => import('../Sankey/Sankey').then(res => res.IronPowderSankey),
-    { ssr: false }
-)
+import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
 
 export const Step3: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =

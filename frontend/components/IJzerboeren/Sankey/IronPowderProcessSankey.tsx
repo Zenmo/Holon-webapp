@@ -1,7 +1,7 @@
 
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 import {FunctionComponent} from "react"
-import dynamic from "next/dynamic"
+import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
 
 /**
  Wind + zon 100%
@@ -80,14 +80,8 @@ function* linkGenerator(includeLoss: boolean): Generator<SankeyLink> {
 
 const links = Array.from(linkGenerator(false))
 
-// This prevents an issue with server-side rendering
-const IronPowderSankey = dynamic(
-    () => import('../Sankey/Sankey').then(res => res.IronPowderSankey),
-    { ssr: false }
-)
-
 export const IronPowderProcessSankey: FunctionComponent = () => (
-    <IronPowderSankey links={links} maxWidth="" svgHeight={200} />
+    <IronPowderSankey links={links} maxWidth="" />
 )
 
 function ratio(input: number, ratio: number): [number, number] {

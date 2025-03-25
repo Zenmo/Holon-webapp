@@ -1,7 +1,7 @@
 "use client"
 
 import {FunctionComponent, useLayoutEffect, useMemo, useRef} from "react"
-import {uniq, uniqBy} from "lodash"
+import {uniq, uniqBy, merge} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
 import chroma from "chroma-js";
@@ -137,11 +137,11 @@ function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLin
 export const IronPowderSankey: FunctionComponent<{
     links: SankeyLink[]
     maxWidth?: string,
-    svgHeight?: number,
+    plotlyLayout?: Partial<Plotly.Layout>,
 }> = ({
     links,
     maxWidth = "50rem",
-    svgHeight = 600,
+    plotlyLayout = {},
 }) => {
     const divId = "sankey" + useRandomInt()
     const divRef = useRef<HTMLDivElement | null>(null)
@@ -149,11 +149,11 @@ export const IronPowderSankey: FunctionComponent<{
     const previousLinks = useRef<SankeyLink[] | null>(null)
 
     const width = divRef.current?.clientWidth;
-    const layout = useMemo(() => ({
+    const layout = useMemo(() => (merge({
         ...plotlySankeyLayout,
         width,
         // height: svgHeight
-    }), [width]);
+    }, plotlyLayout)), [width]);
 
     useLayoutEffect(() => {
         if (previousLinks.current === null) {

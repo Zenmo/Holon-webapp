@@ -2,17 +2,11 @@ import { KpiRow } from "@/components/IJzerboeren/KPIs/KpiRow"
 import {heatPumpKpis, heatPumpSankeyLinks} from "@/components/IJzerboeren/Step1/step-1-data"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
 import {FunctionComponent} from "react"
-import dynamic from 'next/dynamic'
 import {GelijktijdigheidKpi} from "@/components/IJzerboeren/KPIs/GelijktijdigheidKPI"
 import {LCOEVerwarmen} from "@/components/IJzerboeren/KPIs/LCOEVerwarmen"
 import {CO2EmissionKPI} from "@/components/IJzerboeren/KPIs/CO2EmissionKPI"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
-
-// Importing like this prevents an issue with server-side rendering
-const IronPowderSankey = dynamic(
-    () => import('../Sankey/Sankey').then(res => res.IronPowderSankey),
-    { ssr: false }
-)
+import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
 
 export const Step1: FunctionComponent = () => {
     return (
