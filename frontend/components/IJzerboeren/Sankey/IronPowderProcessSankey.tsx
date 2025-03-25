@@ -81,7 +81,19 @@ function* linkGenerator(includeLoss: boolean): Generator<SankeyLink> {
 const links = Array.from(linkGenerator(false))
 
 export const IronPowderProcessSankey: FunctionComponent = () => (
-    <IronPowderSankey links={links} maxWidth="" />
+    <IronPowderSankey
+        links={links}
+        style={{
+            maxWidth: "",
+        }}
+        plotlyLayout={{
+            title: {
+                text: "Energiestromen CO2-vrije ijzerpoederketen",
+            },
+        }}
+        plotyData={{
+            valuesuffix: "%",
+        }}/>
 )
 
 function ratio(input: number, ratio: number): [number, number] {

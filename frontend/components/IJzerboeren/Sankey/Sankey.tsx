@@ -1,6 +1,6 @@
 "use client"
 
-import {FunctionComponent, useLayoutEffect, useMemo, useRef} from "react"
+import {CSSProperties, FunctionComponent, useLayoutEffect, useMemo, useRef} from "react"
 import {uniq, uniqBy, merge} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
@@ -8,7 +8,10 @@ import chroma from "chroma-js";
 import {getColorByNodeName} from "@/components/IJzerboeren/Sankey/nodes"
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 
-function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
+function convertSankeyDataToPlotly(
+    links: SankeyLink[],
+    plotlyData: Partial<SankeyData>
+): Partial<SankeyData> {
     const nodeStrings: string[] = links.flatMap(link => [link.source, link.target])
     const uniqueNodeStrings = uniq(nodeStrings)
     const nodeColors = uniqueNodeStrings.map(getColorByNodeName)
@@ -79,7 +82,8 @@ function convertSankeyDataToPlotly(links: SankeyLink[]): Partial<SankeyData> {
             value:  values,
             label: labels,
             color: linkColors,
-        }
+        },
+        ...plotlyData
     }
 }
 
@@ -96,7 +100,14 @@ const plotlySankeyLayout: Partial<Plotly.Layout> = {
 
 const transitionTimeMs = 400
 
-function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLink[], layout: Partial<Plotly.Layout>, startTimeMs = 0): void {
+function doTransition(
+    divId: string,
+    oldLinks: SankeyLink[],
+    newLinks: SankeyLink[],
+    layout: Partial<Plotly.Layout>,
+    plotlyData: Partial<Plotly.Data>,
+    startTimeMs = 0,
+): void {
     requestAnimationFrame((currentTimeMs: DOMHighResTimeStamp) => {
         if (startTimeMs === 0) {
             startTimeMs = currentTimeMs
@@ -126,22 +137,26 @@ function doTransition(divId: string, oldLinks: SankeyLink[], newLinks: SankeyLin
             }
         })
 
-        Plotly.react(divId, [convertSankeyDataToPlotly(linksWithIntermediateValues)], layout)
+        Plotly.react(divId, [convertSankeyDataToPlotly(linksWithIntermediateValues, plotlyData)], layout)
 
         if (ratio < 1) {
-            doTransition(divId, oldLinks, newLinks, layout, startTimeMs)
+            doTransition(divId, oldLinks, newLinks, layout, plotlyData, startTimeMs)
         }
     })
 }
 
 export const IronPowderSankey: FunctionComponent<{
     links: SankeyLink[]
-    maxWidth?: string,
+    style?: CSSProperties,
+    // To customize plotly settings
     plotlyLayout?: Partial<Plotly.Layout>,
+    // To customize plotly settings
+    plotyData?: Partial<SankeyData>,
 }> = ({
     links,
-    maxWidth = "50rem",
+    style = {},
     plotlyLayout = {},
+    plotyData = {},
 }) => {
     const divId = "sankey" + useRandomInt()
     const divRef = useRef<HTMLDivElement | null>(null)
@@ -149,22 +164,25 @@ export const IronPowderSankey: FunctionComponent<{
     const previousLinks = useRef<SankeyLink[] | null>(null)
 
     const width = divRef.current?.clientWidth;
-    const layout = useMemo(() => (merge({
+    const layout = useMemo(() => merge({}, {
         ...plotlySankeyLayout,
         width,
-        // height: svgHeight
-    }, plotlyLayout)), [width]);
+    }, plotlyLayout), [width, JSON.stringify(plotlyLayout)]);
 
     useLayoutEffect(() => {
         if (previousLinks.current === null) {
-            Plotly.react(divId, [convertSankeyDataToPlotly(links)], layout)
+            Plotly.react(divId, [convertSankeyDataToPlotly(links, plotyData)], layout)
         } else {
-            doTransition(divId, previousLinks.current, links, layout)
+            doTransition(divId, previousLinks.current, links, layout, plotyData)
         }
         previousLinks.current = links
     }, [links, divId]);
 
     return (
-        <div id={divId} ref={divRef} style={{maxWidth, alignSelf: "center"}}/>
+        <div id={divId} ref={divRef} style={{
+            alignSelf: "center",
+            maxWidth: "50rem",
+            ...style
+        }} />
     )
 }
