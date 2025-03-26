@@ -7,6 +7,7 @@ from wagtail.contrib.table_block.blocks import TableBlock
 from .base import BasePage
 from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 from ..blocks.next_inlet import NextInletBlock
+from ..blocks.row import RowBlock
 from ..blocks.step_indicator import StepIndicator
 
 new_table_options = {"renderer": "text", "startRows": 3, "editor": "text"}
@@ -15,6 +16,7 @@ new_table_options = {"renderer": "text", "startRows": 3, "editor": "text"}
 class StaticPage(HeadlessPreviewMixin, BasePage):
     content = StreamField(
         [
+            ("row_block", RowBlock()),
             ("title_block", TitleBlock()),
             ("header_full_image_block", HeaderFullImageBlock()),
             ("text_image_block", TextAndMediaBlock()),

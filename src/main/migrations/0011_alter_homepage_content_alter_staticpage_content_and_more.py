@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(required=False),
+                                    main.blocks.rich_text_block.RichTextBlock(required=False),
                                 ),
                             ]
                         ),
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(required=True),
+                                    main.blocks.rich_text_block.RichTextBlock(required=True),
                                 ),
                                 (
                                     "media",
@@ -166,7 +166,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         help_text="Add your text",
                                         required=True,
                                         rows=15,
@@ -296,7 +296,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(required=False),
+                                    main.blocks.rich_text_block.RichTextBlock(required=False),
                                 ),
                             ]
                         ),
@@ -360,7 +360,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         help_text="Add your text",
                                         required=True,
                                         rows=15,
@@ -519,7 +519,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         help_text="Add your text",
                                         required=True,
                                         rows=15,
@@ -620,7 +620,7 @@ class Migration(migrations.Migration):
                                         [
                                             (
                                                 "text",
-                                                main.blocks.rich_text_block.RichtextBlock(),
+                                                main.blocks.rich_text_block.RichTextBlock(),
                                             ),
                                             (
                                                 "slider",
@@ -694,7 +694,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(required=True),
+                                    main.blocks.rich_text_block.RichTextBlock(required=True),
                                 ),
                                 (
                                     "media",
@@ -755,7 +755,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(required=False),
+                                    main.blocks.rich_text_block.RichTextBlock(required=False),
                                 ),
                             ]
                         ),

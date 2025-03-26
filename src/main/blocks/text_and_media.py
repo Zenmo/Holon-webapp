@@ -2,7 +2,7 @@
 
 import wagtail.blocks as blocks
 from wagtail.embeds.blocks import EmbedBlock
-from main.blocks.rich_text_block import RichtextBlock
+from main.blocks.rich_text_block import RichTextBlock
 from .holon_image_chooser import HolonImageChooserBlock
 from .button import ButtonBlock
 from .grid_chooser import GridChooserBlock
@@ -26,7 +26,7 @@ class TextAndMediaBlock(blocks.StructBlock):
 
     background = BackgroundChooserBlock()
 
-    text = RichtextBlock(required=True, help_text="Add your text", rows=15)
+    text = RichTextBlock(required=True, help_text="Add your text", rows=15)
 
     media = blocks.StreamBlock(
         [
