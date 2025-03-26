@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from wagtail.blocks import StreamBlock, StructBlock, CharBlock, ChoiceBlock
 from wagtail.embeds.blocks import EmbedBlock
 
-from main.blocks.rich_text_block import RichtextBlock
+from main.blocks.rich_text_block import RichTextBlock
 from .button import ButtonBlock
 from .holon_header_image_chooser import HolonHeaderImageChooserBlock
 
@@ -23,7 +23,7 @@ class HeroBlock(StructBlock):
     )
 
     title = CharBlock(classname="title", required=True)
-    text = RichtextBlock(required=True)
+    text = RichTextBlock(required=True)
     media = StreamBlock(
         [
             ("image", HolonHeaderImageChooserBlock(required=False)),

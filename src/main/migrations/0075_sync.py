@@ -129,7 +129,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         help_text="Add your text",
                                         required=True,
                                         rows=15,
@@ -351,7 +351,7 @@ class Migration(migrations.Migration):
                                         [
                                             (
                                                 "text",
-                                                main.blocks.rich_text_block.RichtextBlock(),
+                                                main.blocks.rich_text_block.RichTextBlock(),
                                             ),
                                             (
                                                 "interactive_input",
@@ -575,7 +575,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         required=True
                                     ),
                                 ),
@@ -742,7 +742,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         required=False
                                     ),
                                 ),
@@ -1139,7 +1139,7 @@ class Migration(migrations.Migration):
                                                     [
                                                         (
                                                             "text",
-                                                            main.blocks.rich_text_block.RichtextBlock(),
+                                                            main.blocks.rich_text_block.RichTextBlock(),
                                                         ),
                                                         (
                                                             "interactive_input",
@@ -1465,7 +1465,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         help_text="Add your text",
                                         required=True,
                                         rows=15,
@@ -1687,7 +1687,7 @@ class Migration(migrations.Migration):
                                         [
                                             (
                                                 "text",
-                                                main.blocks.rich_text_block.RichtextBlock(),
+                                                main.blocks.rich_text_block.RichTextBlock(),
                                             ),
                                             (
                                                 "interactive_input",
@@ -1911,7 +1911,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         required=True
                                     ),
                                 ),
@@ -2078,7 +2078,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         required=False
                                     ),
                                 ),
@@ -2475,7 +2475,7 @@ class Migration(migrations.Migration):
                                                     [
                                                         (
                                                             "text",
-                                                            main.blocks.rich_text_block.RichtextBlock(),
+                                                            main.blocks.rich_text_block.RichTextBlock(),
                                                         ),
                                                         (
                                                             "interactive_input",
@@ -2801,7 +2801,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         help_text="Add your text",
                                         required=True,
                                         rows=15,
@@ -3023,7 +3023,7 @@ class Migration(migrations.Migration):
                                         [
                                             (
                                                 "text",
-                                                main.blocks.rich_text_block.RichtextBlock(),
+                                                main.blocks.rich_text_block.RichTextBlock(),
                                             ),
                                             (
                                                 "interactive_input",
@@ -3247,7 +3247,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         required=True
                                     ),
                                 ),
@@ -3414,7 +3414,7 @@ class Migration(migrations.Migration):
                                 ),
                                 (
                                     "text",
-                                    main.blocks.rich_text_block.RichtextBlock(
+                                    main.blocks.rich_text_block.RichTextBlock(
                                         required=False
                                     ),
                                 ),
@@ -3811,7 +3811,7 @@ class Migration(migrations.Migration):
                                                     [
                                                         (
                                                             "text",
-                                                            main.blocks.rich_text_block.RichtextBlock(),
+                                                            main.blocks.rich_text_block.RichTextBlock(),
                                                         ),
                                                         (
                                                             "interactive_input",

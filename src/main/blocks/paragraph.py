@@ -1,7 +1,7 @@
 """Streamfields"""
 
 from wagtail import blocks
-from main.blocks.rich_text_block import RichtextBlock
+from main.blocks.rich_text_block import RichTextBlock
 from .grid_chooser import GridChooserBlock
 from .background_chooser import BackgroundChooserBlock
 
@@ -16,7 +16,7 @@ class ParagraphBlock(blocks.StructBlock):
 
     background = BackgroundChooserBlock()
 
-    text = RichtextBlock(required=True, help_text="Add your text", rows=15)
+    text = RichTextBlock(required=True, help_text="Add your text", rows=15)
 
     class Meta:  # NOQA
         icon = "form"

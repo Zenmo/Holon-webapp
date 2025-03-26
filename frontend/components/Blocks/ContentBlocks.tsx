@@ -4,7 +4,7 @@ import {
     CardBlockVariant,
     Graphcolor,
     HeroBlockVariant, NextInletVariant,
-    PageProps,
+    PageProps, RowBlockVariant,
     SectionVariant,
     StepIndicatorVariant,
     TextAndMediaVariant,
@@ -18,12 +18,14 @@ import HeaderFullImageBlock from "./HeaderFullImageBlock/HeaderFullImageBlock"
 import HeroBlock from "./HeroBlock/HeroBlock"
 import ParagraphBlock from "./ParagraphBlock"
 import SectionBlock from "./SectionBlock/SectionBlock"
-import { Content, SavedElements } from "./SectionBlock/types"
+import {Content, RichTextBlock, SavedElements} from "./SectionBlock/types"
 import TableBlock from "./TableBlock/TableBlock"
 import TextAndMediaBlock from "./TextAndMediaBlock/TextAndMediaBlock"
 import TitleBlock from "./TitleBlock/TitleBlock"
 import { StepIndicatorWrapper } from "@/components/Storyline/Steps/StepIndicatorWrapper"
 import {NextInletBlock} from "@/components/Blocks/NextInlet"
+import {RowBlock} from "@/components/Blocks/RowBlock"
+import RawHtml from "@/components/RawHtml"
 
 type ContentBlockProps = PageProps<
     | TextAndMediaVariant
@@ -33,6 +35,8 @@ type ContentBlockProps = PageProps<
     | SectionVariant
     | StepIndicatorVariant
     | NextInletVariant
+    | RowBlockVariant
+    | RichTextBlock
 >
 
 const ContentBlocks = ({
@@ -305,6 +309,8 @@ const ContentBlocks = ({
                         )
                     case "card_block":
                         return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />
+                    case "row_block":
+                        return <RowBlock key={`rowblock-${contentItem.id}`} {...contentItem} />
                     case "step_indicator":
                         return (
                             <StepIndicatorWrapper
@@ -401,6 +407,8 @@ const ContentBlocks = ({
                                 data={contentItem}
                             />
                         )
+                    case "text":
+                        return <RawHtml key={`text_${contentItem.id}`} html={contentItem.value} />
                     default:
                         console.log("Unknown block type", contentItem)
                 }
