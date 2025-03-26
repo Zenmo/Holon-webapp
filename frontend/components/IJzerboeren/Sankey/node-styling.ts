@@ -89,6 +89,10 @@ export const sankeyNodes: SankeyNode[] = [
         name: "Import ijzerpoeder",
         color: "lightblue"
     },
+    {
+        name: "Verbranding",
+        color: "brown",
+    },
 
 
     // Iron powder processing
@@ -102,7 +106,7 @@ export const sankeyNodes: SankeyNode[] = [
     },
     {
         name: "Regeneratie",
-        color: "orange",
+        color: "dimgrey",
     },
     {
         name: "Elektrolyse",

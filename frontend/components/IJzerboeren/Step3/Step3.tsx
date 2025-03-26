@@ -1,6 +1,6 @@
 import {KpiRow} from "@/components/IJzerboeren/KPIs/KpiRow"
 import {HeatingTypeRadios} from "@/components/IJzerboeren/HeatingType/HeatingTypeRadios"
-import {step2Data, Step2Outputs} from "@/components/IJzerboeren/Step2/step2-data"
+import {Step2Outputs} from "@/components/IJzerboeren/Step2/step2-data"
 import {useStateWithHistory} from "@/components/IJzerboeren/useStateWithHistory"
 import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
 import {FunctionComponent} from "react"
@@ -17,7 +17,7 @@ export const Step3: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
         useStateWithHistory<HeatingType>(HeatingType.DISTRICT_HEATING)
 
-    const currentOutputs = findSingle(step2Data, r => r.inputs.heatingType === heatingType).outputs
+    const currentOutputs = findSingle(step3Data, r => r.inputs.heatingType === heatingType).outputs
     const currentKpis = currentOutputs.kpis
 
     let previousOutputs: Nullable<Step2Outputs> = null
