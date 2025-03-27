@@ -1,6 +1,6 @@
 "use client"
 
-import {CSSProperties, FunctionComponent, useLayoutEffect, useMemo, useRef} from "react"
+import {CSSProperties, FunctionComponent, MutableRefObject, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react"
 import {uniq, uniqBy, merge} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
@@ -160,11 +160,10 @@ export const IronPowderSankey: FunctionComponent<{
     plotyData = {},
 }) => {
     const divId = "sankey" + useRandomInt()
-    const divRef = useRef<HTMLDivElement | null>(null)
+    const [divRef, width] = useElementWidth()
 
     const previousLinks = useRef<SankeyLink[] | null>(null)
 
-    const width = divRef.current?.clientWidth;
     const layout = useMemo(() => merge({}, {
         ...plotlySankeyLayout,
         width,
@@ -177,13 +176,34 @@ export const IronPowderSankey: FunctionComponent<{
             doTransition(divId, previousLinks.current, links, layout, plotyData)
         }
         previousLinks.current = links
-    }, [links, divId]);
+    }, [links, divId, width]);
 
     return (
         <div id={divId} ref={divRef} style={{
-            alignSelf: "center",
             maxWidth: "50rem",
             ...style
         }} />
     )
+}
+
+function useElementWidth(): [MutableRefObject<HTMLElement | undefined>, number | undefined] {
+    const divRef = useRef<HTMLElement | null>(null)
+    const [width, setWidth] = useState<number | undefined>(divRef.current?.clientWidth)
+
+    useEffect(() => {
+        const listener = () => {
+            console.log(divRef.current?.clientWidth)
+            setWidth(divRef.current?.clientWidth)
+        }
+        window.addEventListener("resize", listener);
+        return () => {
+            window.removeEventListener("resize", listener)
+        }
+    }, [])
+
+    useEffect(() => {
+        setWidth(divRef.current?.clientWidth)
+    }, [divRef.current])
+
+    return [divRef, width]
 }
