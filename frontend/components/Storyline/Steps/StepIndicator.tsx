@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react"
 import { Step, StepData } from "@/components/Storyline/Steps/Step"
-import styles from "./Steps.module.css"
+
 import { StepAnchorVariant, StepIndicatorVariant } from "@/containers/types"
 
 export const StepIndicator: FunctionComponent<{
@@ -29,7 +29,22 @@ export const StepIndicator: FunctionComponent<{
     }, [])
 
     return (
-        <div className={`${styles.Steps} ${className}`}>
+        <div className={className} css={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "start",
+            alignItems: "center",
+            gap: "1.6rem",
+
+            minWidth: "4rem",
+            position: "sticky",
+
+            top: "5rem",
+
+            padding: "1rem",
+            paddingTop: "2rem",
+            zIndex: 20,
+        }}>
             {steps.map(step => {
                 return <Step key={step.id} {...step} />
             })}
