@@ -1,11 +1,7 @@
 import {DataType} from "csstype"
+import {SankeyNode} from "@/components/IJzerboeren/Sankey/node"
 
-export interface SankeyNode {
-    name: string
-    color: DataType.Color
-}
-
-export const sankeyNodes: SankeyNode[] = [
+export const defaultSankeyNodes: SankeyNode[] = [
     // fossils
     {
         name: "Import gas",
@@ -40,19 +36,11 @@ export const sankeyNodes: SankeyNode[] = [
         color: "mediumpurple",
     },
     {
-        name: "Lokaal verbruik",
-        color: "mediumpurple",
-    },
-    {
         name: "Huishoudverbruik",
         color: "mediumpurple",
     },
     {
         name: "Laden EV's",
-        color: "mediumpurple",
-    },
-    {
-        name: "Huishoudverbruik",
         color: "mediumpurple",
     },
     {
@@ -125,11 +113,15 @@ export const sankeyNodes: SankeyNode[] = [
     },
 ]
 
-export function getColorByNodeName(nodeName: string): DataType.Color {
+export function getColorByNodeName(nodeName: string, sankeyNodes: SankeyNode[]): DataType.Color {
     const node = sankeyNodes.find(it => it.name === nodeName)
-    if (node) {
-        return node.color
-    } else {
-        return "blue"
-    }
+    return node?.color ?? "blue"
+}
+
+export function getXByNodeName(nodeName: string, sankeyNodes: SankeyNode[]): number | undefined {
+    return sankeyNodes.find(it => it.name === nodeName)?.x
+}
+
+export function getYByNodeName(nodeName: string, sankeyNodes: SankeyNode[]): number | undefined {
+    return sankeyNodes.find(it => it.name === nodeName)?.y
 }

@@ -5,24 +5,32 @@ import {uniq, uniqBy, merge} from "lodash"
 import { useRandomInt } from "@/utils/useRandomInt"
 import Plotly, {SankeyData} from "plotly.js-dist-min"
 import chroma from "chroma-js";
-import {getColorByNodeName} from "@/components/IJzerboeren/Sankey/node-styling"
+import {
+    defaultSankeyNodes,
+    getColorByNodeName,
+    getXByNodeName,
+    getYByNodeName,
+} from "@/components/IJzerboeren/Sankey/node-styling"
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 import {getLinkColor} from "@/components/IJzerboeren/Sankey/link-styling"
+import {SankeyNode} from "@/components/IJzerboeren/Sankey/node"
 
 function convertSankeyDataToPlotly(
     links: SankeyLink[],
-    plotlyData: Partial<SankeyData>
+    plotlyData: Partial<SankeyData>,
+    nodes: SankeyNode[],
 ): Partial<SankeyData> {
     const nodeStrings: string[] = links.flatMap(link => [link.source, link.target])
     const uniqueNodeStrings = uniq(nodeStrings)
-    const nodeColors = uniqueNodeStrings.map(getColorByNodeName)
+    const nodeColors = uniqueNodeStrings.map(nodeString => getColorByNodeName(nodeString, nodes))
+    const nodeXs = uniqueNodeStrings.map(nodeString => getXByNodeName(nodeString, nodes))
+    const nodeYs = uniqueNodeStrings.map(nodeString => getYByNodeName(nodeString, nodes))
 
     const sources = links.map(link => uniqueNodeStrings.indexOf(link.source))
     const targets = links.map(link => uniqueNodeStrings.indexOf(link.target))
     const values = links.map(link => link.value)
-    const labels = links.map(link => link.label || null)
     // const linkLabelColors = links.map(link => getColorByNodeName(link.source))
-    const linkColors = links.map(link => chroma(getLinkColor(link)).alpha(.5).hex())
+    const linkColors = links.map(link => chroma(getLinkColor(link, nodes)).alpha(.5).hex())
 
     return {
         type: "sankey",
@@ -42,7 +50,7 @@ function convertSankeyDataToPlotly(
                 "sans-serif",
             ],
             size: 17,
-            // todo add to typescript definitions
+            // @ts-expect-error todo missing typescript definitions
             weight: "bold",
             color: "white",
         },
@@ -57,20 +65,28 @@ function convertSankeyDataToPlotly(
             color: nodeColors,
             hoverlabel: {
                 font: {
+                    // @ts-expect-error todo missing typescript definitions
                     weight: "bold",
                     color: "white",
                 },
             },
+            // @ts-expect-error
+            x: nodeXs,
+            // @ts-expect-error
+            y: nodeYs,
             /**
              * d = whole numbers
              */
             hovertemplate: "%{label} <extra>%{value:d} %{fullData.valuesuffix}</extra>",
-            // todo add to typescript definitions
+            // todo missing typescript definitions
             // align: "right",
         },
         link: {
+            // I'd like to try permanently visible labels here
+            // but it seems not implemented.
             hoverlabel: {
                 font: {
+                    // @ts-expect-error todo missing typescript definitions
                     weight: "bold",
                     color: "white",
                 },
@@ -81,7 +97,6 @@ function convertSankeyDataToPlotly(
             source: sources,
             target: targets,
             value:  values,
-            label: labels,
             color: linkColors,
         },
         ...plotlyData
@@ -106,7 +121,8 @@ function doTransition(
     oldLinks: SankeyLink[],
     newLinks: SankeyLink[],
     layout: Partial<Plotly.Layout>,
-    plotlyData: Partial<Plotly.Data>,
+    plotlyData: Partial<Plotly.SankeyData>,
+    nodes: SankeyNode[],
     startTimeMs = 0,
 ): void {
     requestAnimationFrame((currentTimeMs: DOMHighResTimeStamp) => {
@@ -138,16 +154,17 @@ function doTransition(
             }
         })
 
-        Plotly.react(divId, [convertSankeyDataToPlotly(linksWithIntermediateValues, plotlyData)], layout)
+        Plotly.react(divId, [convertSankeyDataToPlotly(linksWithIntermediateValues, plotlyData, nodes)], layout)
 
         if (ratio < 1) {
-            doTransition(divId, oldLinks, newLinks, layout, plotlyData, startTimeMs)
+            doTransition(divId, oldLinks, newLinks, layout, plotlyData, nodes, startTimeMs)
         }
     })
 }
 
 export const IronPowderSankey: FunctionComponent<{
     links: SankeyLink[]
+    nodes?: SankeyNode[]
     style?: CSSProperties,
     // To customize plotly settings
     plotlyLayout?: Partial<Plotly.Layout>,
@@ -155,12 +172,13 @@ export const IronPowderSankey: FunctionComponent<{
     plotyData?: Partial<SankeyData>,
 }> = ({
     links,
+    nodes = defaultSankeyNodes,
     style = {},
     plotlyLayout = {},
     plotyData = {},
 }) => {
     const divId = "sankey" + useRandomInt()
-    const [divRef, width] = useElementWidth()
+    const [divRef, width] = useElementWidth<HTMLDivElement>()
 
     const previousLinks = useRef<SankeyLink[] | null>(null)
 
@@ -171,9 +189,9 @@ export const IronPowderSankey: FunctionComponent<{
 
     useLayoutEffect(() => {
         if (previousLinks.current === null) {
-            Plotly.react(divId, [convertSankeyDataToPlotly(links, plotyData)], layout)
+            Plotly.react(divId, [convertSankeyDataToPlotly(links, plotyData, nodes)], layout)
         } else {
-            doTransition(divId, previousLinks.current, links, layout, plotyData)
+            doTransition(divId, previousLinks.current, links, layout, plotyData, nodes)
         }
         previousLinks.current = links
     }, [links, divId, width]);
@@ -186,8 +204,8 @@ export const IronPowderSankey: FunctionComponent<{
     )
 }
 
-function useElementWidth(): [MutableRefObject<HTMLElement | undefined>, number | undefined] {
-    const divRef = useRef<HTMLElement | null>(null)
+function useElementWidth<E extends HTMLElement>(): [MutableRefObject<E | null>, number | undefined] {
+    const divRef = useRef<E | null>(null)
     const [width, setWidth] = useState<number | undefined>(divRef.current?.clientWidth)
 
     useEffect(() => {

@@ -1,7 +1,7 @@
-
 import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
 import {FunctionComponent} from "react"
 import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
+import {NodeList} from "@/components/IJzerboeren/Sankey/node-list"
 
 /**
  Wind + zon 100%
@@ -83,6 +83,27 @@ const links = Array.from(linkGenerator(true))
 export const IronPowderProcessSankey: FunctionComponent = () => (
     <IronPowderSankey
         links={links}
+        nodes={NodeList.DEFAULT.update({
+            name: "Regeneratie",
+            x: .4,
+            y: .3,
+        }).update({
+            name: "Verbranding",
+            x: .6,
+            y: .10,
+        }).update({
+            name: "Warmtenet",
+            x: .8,
+            y: .09,
+        }).update({
+            name: "Warmteafname huizen",
+            x: 1,
+            y: .15,
+        }).update({
+            name: "Verlies",
+            x: 1,
+            y: .7,
+        }).toArray()}
         style={{
             maxWidth: "",
         }}
