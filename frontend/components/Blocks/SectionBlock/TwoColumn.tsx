@@ -12,6 +12,7 @@ interface TwoColumnSimulationLayoutProps extends HTMLAttributes<HTMLDivElement> 
     columnSpec?: string
     left?: number
     right?: number
+    bottomRuler?: boolean,
 }
 
 /**
@@ -22,6 +23,7 @@ export const TwoColumnSimulationLayout: FunctionComponent<TwoColumnSimulationLay
     columnSpec,
     left = 5,
     right = 7,
+    bottomRuler = true,
     ...rest
 }) => {
     if (columnSpec) {
@@ -61,9 +63,9 @@ export const TwoColumnSimulationLayout: FunctionComponent<TwoColumnSimulationLay
         }
     }} {...rest}>
         {children}
-        <hr
+        {bottomRuler && <hr
             className="border-holon-blue-900 absolute bottom-0 right-0"
             style={{ width: "calc(100% - 2rem)" }}
-        />
+        />}
     </div>
 }

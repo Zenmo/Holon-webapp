@@ -12,6 +12,7 @@ import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
 import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
 import {findSingle} from "@/utils/arrayFindSingle"
+import {stepShadow} from "@/components/IJzerboeren/Step1/Step1"
 
 export const Step3: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
@@ -27,8 +28,8 @@ export const Step3: FunctionComponent = () => {
     const previousKpis = previousOutputs?.kpis
 
     return (
-        <div className="holonContentContainer">
-            <TwoColumnSimulationLayout style={{minHeight: "50rem"}}>
+        <div className="holonContentContainer" css={stepShadow}>
+            <TwoColumnSimulationLayout bottomRuler={false} style={{minHeight: "50rem"}}>
                 <div className={rawHtml.Container}>
                     <p>Omdat een warmtenet op restwarmte hier niet mogelijk is, zou dit in potentie een geschikte casus
                         zijn voor een warmtenet met verbranding van ijzerpoeder. Doordat de verbrander van ijzerpoeder
@@ -49,7 +50,9 @@ export const Step3: FunctionComponent = () => {
                         ijzerpoederketen rekentool (IPA tool – link) ontwikkelt in het TSE project ‘Met Energie de Boer
                         Op’. Daarbij komt de LCEO van verwarmen met ijzerpoeder uit op circa 0.17 eruo/kWh. Daar bovenop
                         houden we ook nog rekening met 0.03 euro/kWh voor de lokale infrastructuur</p>
-                    <img src="/imgs/lcoe-ijzerpoeder.png" alt="LCOE opbouw van warmte opwekken met ijzerpoeder"/>
+                    <img src="/imgs/lcoe-ijzerpoeder.png" alt="LCOE opbouw van warmte opwekken met ijzerpoeder" style={{
+                        boxShadow: "-1px 1px 10px 0px lightgrey",
+                    }}/>
                     <p></p>
                     <p>Geïnteresseerden raden we aan om de <a href="https://example.org">IPA tool</a> te verkennen. Daar
                         kunnen verschillende systeemconfiguraties voor de productie van ijzerpoeder in detail verkend en geoptimaliseerd

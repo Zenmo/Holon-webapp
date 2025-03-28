@@ -11,6 +11,7 @@ import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
 import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
 import {findSingle} from "@/utils/arrayFindSingle"
+import {stepShadow} from "@/components/IJzerboeren/Step1/Step1"
 
 export const Step2: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
@@ -26,8 +27,8 @@ export const Step2: FunctionComponent = () => {
     const previousKpis = previousOutputs?.kpis
 
     return (
-        <div className="holonContentContainer">
-            <TwoColumnSimulationLayout style={{minHeight: "50rem"}}>
+        <div className="holonContentContainer" css={stepShadow}>
+            <TwoColumnSimulationLayout bottomRuler={false} style={{minHeight: "50rem"}}>
                 <div className={rawHtml.Container}>
                     <p>De gemeente wil graag verkennen hoe andere oplossingen zouden presteren voor de 50 nieuwbouw
                         woningen. Zowel gas als een warmtenet kun je hier instellen om de (net)situatie te vergelijken

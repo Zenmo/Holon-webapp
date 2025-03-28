@@ -70,9 +70,9 @@ function convertSankeyDataToPlotly(
                     color: "white",
                 },
             },
-            // @ts-expect-error
+            // @ts-expect-error seems to work fine to have undefined in here
             x: nodeXs,
-            // @ts-expect-error
+            // @ts-expect-error seems to work fine to have undefined in here
             y: nodeYs,
             /**
              * d = whole numbers

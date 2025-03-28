@@ -7,11 +7,17 @@ import {LCOEVerwarmen} from "@/components/IJzerboeren/KPIs/LCOEVerwarmen"
 import {CO2EmissionKPI} from "@/components/IJzerboeren/KPIs/CO2EmissionKPI"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
 import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
+import {css} from "@emotion/react"
+
+export const stepShadow = css({
+    boxShadow: "-1px 1px 5px 2px #ddd",
+    marginBottom: "2rem",
+})
 
 export const Step1: FunctionComponent = () => {
     return (
-        <div className="holonContentContainer">
-            <TwoColumnSimulationLayout style={{minHeight: "50rem"}}>
+        <div className="holonContentContainer" css={stepShadow}>
+            <TwoColumnSimulationLayout bottomRuler={false} style={{minHeight: "50rem"}}>
                 <div className={rawHtml.Container}>
                     <p>
                         Welkom in de buurt &apos;Cranendonck&apos; in Budel. Als onderdeel van de woonopgave heeft de gemeente
