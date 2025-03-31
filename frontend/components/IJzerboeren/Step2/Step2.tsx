@@ -1,17 +1,17 @@
-import {KpiRow} from "@/components/IJzerboeren/KPIs/KpiRow"
-import {HeatingTypeRadios} from "@/components/IJzerboeren/HeatingType/HeatingTypeRadios"
-import {step2Data, Step2Outputs} from "@/components/IJzerboeren/Step2/step2-data"
-import {useStateWithHistory} from "@/components/IJzerboeren/useStateWithHistory"
-import {TwoColumnSimulationLayout} from "@/components/Blocks/SectionBlock/TwoColumn"
-import {FunctionComponent} from "react"
-import {GelijktijdigheidKpi} from "@/components/IJzerboeren/KPIs/GelijktijdigheidKPI"
-import {LCOEVerwarmen} from "@/components/IJzerboeren/KPIs/LCOEVerwarmen"
-import {CO2EmissionKPI} from "@/components/IJzerboeren/KPIs/CO2EmissionKPI"
-import {HeatingType} from "@/components/IJzerboeren/HeatingType/heating-type"
+import { TwoColumnSimulationLayout } from "@/components/Blocks/SectionBlock/TwoColumn"
+import { HeatingType } from "@/components/IJzerboeren/HeatingType/heating-type"
+import { HeatingTypeRadios } from "@/components/IJzerboeren/HeatingType/HeatingTypeRadios"
+import { CO2EmissionKPI } from "@/components/IJzerboeren/KPIs/CO2EmissionKPI"
+import { GelijktijdigheidKpi } from "@/components/IJzerboeren/KPIs/GelijktijdigheidKPI"
+import { KpiRow } from "@/components/IJzerboeren/KPIs/KpiRow"
+import { LCOEVerwarmen } from "@/components/IJzerboeren/KPIs/LCOEVerwarmen"
+import { IronPowderSankey } from "@/components/IJzerboeren/Sankey/dynamic-import"
+import { stepShadow } from "@/components/IJzerboeren/Step1/Step1"
+import { step2Data, Step2Outputs } from "@/components/IJzerboeren/Step2/step2-data"
+import { useStateWithHistory } from "@/components/IJzerboeren/useStateWithHistory"
 import rawHtml from "@/components/RawHtml/RawHtml.module.css"
-import {IronPowderSankey} from "@/components/IJzerboeren/Sankey/dynamic-import"
-import {findSingle} from "@/utils/arrayFindSingle"
-import {stepShadow} from "@/components/IJzerboeren/Step1/Step1"
+import { findSingle } from "@/utils/arrayFindSingle"
+import { FunctionComponent } from "react"
 
 export const Step2: FunctionComponent = () => {
     const [heatingType, previousHeatingType, setHeatingType] =
@@ -30,9 +30,9 @@ export const Step2: FunctionComponent = () => {
         <div className="holonContentContainer" css={stepShadow}>
             <TwoColumnSimulationLayout bottomRuler={false} style={{minHeight: "50rem"}}>
                 <div className={rawHtml.Container}>
-                    <p>De gemeente wil graag verkennen hoe andere oplossingen zouden presteren voor de 50 nieuwbouw
-                        woningen. Zowel gas als een warmtenet kun je hier instellen om de (net)situatie te vergelijken
-                        met het warmtepomp scenario.</p>
+                    <p>Om de gemeente te helpen met het verkennen van de prestatie van de andere warmteoplossingen kun je
+                        hieronder de opties 'gas' en 'warmtenet met restwarmte' instellen en vergelijken met de 
+                        (net)situatie van het warmtepomp scenario.</p>
 
                     <HeatingTypeRadios
                         heatingType={heatingType}
@@ -44,17 +44,19 @@ export const Step2: FunctionComponent = () => {
                         ]}
                         contentId="heatingTypeStep2"/>
 
-                    <p>Aan de CO2 uitstoot KPI kun je zien waarom we in Nederland niet doorgaans niet meer voor gas
-                        kiezen. De CO2 uitstoot verdubbeld bijna ten opzichte van het warmtepomp scenario. De
-                        gelijktijdigheid gaat echter wel flink omlaag, wat de bouw van de wijk mogelijk maakt.</p>
+                    <p>Aan de CO2 uitstoot KPI kun je zien waarom we in Nederland doorgaans niet meer voor gas
+                        kiezen. De CO2 uitstoot bij gas ligt bijna 40% hoger dan met warmtepompen. Een groot deel
+                        van die uitstoot is overigens het resultaat van de 70% benzine auto's bij woningen die in 
+                        elk scenario hetzelfde blijft. De gelijktijdigheid bij gas gaat echter wel flink omlaag.
+                        Dit betekent dat het de bouw van de wijk wel mogelijk maakt, een zeer belangrijk criterium.</p>
 
-                    <p>Het warmtenet met restwarmte lijkt alle voordelen te bieden die de bouw van de wijken mogelijk
-                        maakt. Lage netcongestie en lage CO2 uitstoot. Hierbij rekenen we voor restwarmte in dit geval
-                        geen CO2 uitstoot mee, hoe realistisch dat is staat ter discussie. Echter, er moet hoe dan ook
+                    <p>De optie 'warmtenet met restwarmte' lijkt de voordelen te bieden die de bouw van de wijken 
+                        mogelijk maakt. Lage netcongestie en lage CO2 uitstoot. Voor restwarmte rekenen we geen CO2 
+                        uitstoot mee, dat is mogelijk niet op alle situaties van toepassing. Echter, er moet hoe dan ook
                         restwarmte beschikbaar zijn voor een dergelijke oplossing. De gemeente heeft een inventarisatie
-                        gedaan van mogelijke bronnen in de omgeving, en er blijkt helaas niet voldoende restwarmte
-                        dichtbij Cranendonck te zijn. Daar komt bij dat ook de prijs voor de consument van restwarmte
-                        vaak niet de meest gunstige is.</p>
+                        gedaan van mogelijke bronnen in de omgeving, maar er blijkt helaas niet voldoende restwarmte
+                        in de nabijheid Cranendonck te zijn. Daar komt bij dat de prijs van restwarmte voor de consument 
+                        niet het meest gunstige is.</p>
                 </div>
                 <div style={{
                     flexDirection: "column",
