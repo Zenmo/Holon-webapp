@@ -30,9 +30,9 @@ export const Step2: FunctionComponent = () => {
         <div className="holonContentContainer" css={stepShadow}>
             <TwoColumnSimulationLayout bottomRuler={false} style={{minHeight: "50rem"}}>
                 <div className={rawHtml.Container}>
-                    <p>Om de gemeente te helpen met het verkennen van de prestatie van de andere warmteoplossingen kun je
-                        hieronder de opties 'gas' en 'warmtenet met restwarmte' instellen en vergelijken met de 
-                        (net)situatie van het warmtepomp scenario.</p>
+                    <p>Om de gemeente te ondersteunen bij het verkennen van de prestaties verschillende warmteoplossingen kun je
+                        hieronder de opties &apos;gas&apos; en &apos;warmtenet met restwarmte&apos; instellen en vergelijken met de 
+                        (net)situatie in het warmtepompscenario.</p>
 
                     <HeatingTypeRadios
                         heatingType={heatingType}
@@ -44,18 +44,18 @@ export const Step2: FunctionComponent = () => {
                         ]}
                         contentId="heatingTypeStep2"/>
 
-                    <p>Aan de CO2 uitstoot KPI kun je zien waarom we in Nederland doorgaans niet meer voor gas
-                        kiezen. De CO2 uitstoot bij gas ligt bijna 40% hoger dan met warmtepompen. Een groot deel
-                        van die uitstoot is overigens het resultaat van de 70% benzine auto's bij woningen die in 
-                        elk scenario hetzelfde blijft. De gelijktijdigheid bij gas gaat echter wel flink omlaag.
-                        Dit betekent dat het de bouw van de wijk wel mogelijk maakt, een zeer belangrijk criterium.</p>
+                    <p>De KPI voor CO₂-uitstoot laat duidelijk zien waarom we in Nederland doorgaans niet meer voor gas kiezen. 
+                        De uitstoot bij gas ligt bijna 40% hoger dan bij het gebruik van warmtepompen. Een aanzienlijk deel van 
+                        die uitstoot komt overigens voort uit het hoge aandeel benzineauto&apos;s bij woningen die in elk scenario 
+                        gelijk blijft. De gelijktijdigheid bij gas gaat aanzienlijk omlaag. Dat betekent dat het de bouw van de wijk 
+                        mogelijk maakt, wat voor de gemeente een belangrijk criterium is.</p>
 
-                    <p>De optie 'warmtenet met restwarmte' lijkt de voordelen te bieden die de bouw van de wijken 
-                        mogelijk maakt. Lage netcongestie en lage CO2 uitstoot. Voor restwarmte rekenen we geen CO2 
+                    <p>De optie &apos;warmtenet met restwarmte&apos; lijkt de voordelen te bieden die de bouw van de wijken 
+                        mogelijk maakt. Lage netcongestie en lage CO2 uitstoot. Voor restwarmte rekenen we geen CO₂ 
                         uitstoot mee, dat is mogelijk niet op alle situaties van toepassing. Echter, er moet hoe dan ook
                         restwarmte beschikbaar zijn voor een dergelijke oplossing. De gemeente heeft een inventarisatie
                         gedaan van mogelijke bronnen in de omgeving, maar er blijkt helaas niet voldoende restwarmte
-                        in de nabijheid Cranendonck te zijn. Daar komt bij dat de prijs van restwarmte voor de consument 
+                        in de nabijheid van Cranendonck te zijn. Daar komt bij dat de prijs van restwarmte voor de consument 
                         niet het meest gunstige is.</p>
                 </div>
                 <div style={{

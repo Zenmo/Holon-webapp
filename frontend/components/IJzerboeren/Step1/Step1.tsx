@@ -21,31 +21,31 @@ export const Step1: FunctionComponent = () => {
                 <div className={rawHtml.Container}>
                     <p>
                         Welkom in de buurt &apos;Cranendonck&apos; in Budel. Als onderdeel van de woonopgave heeft de gemeente
-                        hier een locatie gereserveerd om 50 huizen te bouwen met de volgende eigenschappen: </p>
+                        hier een locatie gereserveerd om 50 woningen te bouwen met de volgende eigenschappen: </p>
 
                     <ul>
-                        <li>8 vrijstaande huizen, 18 twee-onder-één-kap woningen, 24 appartementen</li>
+                        <li>8 vrijstaande woningen, 18 twee-onder-één-kap woningen, 24 appartementen</li>
                         <li>Alle woningen worden goed geïsoleerd</li>
                         <li>Zonnepanelen op alle (2 tot 4 kWp per woning)</li>
                         <li>30% van de huizen met elektrische auto&apos;s</li>
                     </ul>
 
-                    <p>Voor het warmtesysteem van deze huizen heeft de gemeente echter een probleem. Normaliter zouden ze 
-                        voor warmtepompen gaan. Maar Enexis heeft aangegeven dat er niet voldoende netruimte is om de
-                        woonopgave te voldoen met volledig ge-elektrificeerde nieuwbouwhuizen. Daarom wil de
-                        gemeente beter inzicht in de verschillen tussen opties voor warmtesystemen, maar ook in
-                        wat ze zouden betekenen voor de bewoners in termen van energiekosten. Deze casus op holontool.nl
-                        zal die inzichten bieden. Laten we beginnen met het verkennen van de situatie waarbij alle huizen 
-                        warmtepompen gebruiken voor ruimteverwarming en warm water. </p>
+                    <p>Voor het warmtesysteem van deze woningen staat de gemeente voor een uitdaging. Normaliter zou er gekozen
+                        worden voor warmtepompen, maar Enexis heeft aangegeven dat het elektriciteitsnet niet voldoende capaciteit 
+                        heeft om de volledige woonopgave te realiseren met volledig geëlektrificeerde nieuwbouwhuizen Daarom wil 
+                        de gemeente beter inzicht in de verschillen tussen opties voor warmtesystemen — én wat die keuzes zouden 
+                        betekenen voor bewoners, bijvoorbeeld qua energiekosten.. Deze casus op holontool.nl zal die inzichten 
+                        bieden. Laten we beginnen met het verkennen van het scenario waarbij alle woningen gebruikmaken van 
+                        warmtepompen voor ruimteverwarming en warm tapwater. </p>
 
                     <p>Het holon-model is, net als in de andere casussen, gebruikt om het energiesysteem van deze casus op 
-                        kwartierbasis door te rekenen, hierbij is veel echte data van woonhuizen gebruikt. Bekijk hier rechts
+                        kwartierbasis door te rekenen, hierbij is echte data van woningen gebruikt. Bekijk hier rechts
                         de stromingsdiagram waarin alle energiedragers en de gebruiksdoelen voor deze 50 woningen
                         worden gekwanitficeerd. Met je muis kun je de waarde van ieder blok in de diagram bekijken. </p>
 
                     <p>Voor deze casus zijn drie KPIs gedefinieerd:</p>
                     <ol>
-                        <li>de piek van de gelijktijdige netbelasting per huis,</li>
+                        <li>de piek van de gelijktijdige netbelasting per woning,</li>
                         <li>de kosten voor verwarming per kWh (uitgedrukt in levelized cost of energy, LCOE), en</li>
                         <li>de totale CO2 uitstoot van alle 50 woningen samen. </li>
                     </ol>
