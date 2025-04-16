@@ -11,7 +11,7 @@ from holon.models.interactive_element import (
     InteractiveElementContinuousValues,
     InteractiveElementOptions,
 )
-from main.blocks.rich_text_block import RichtextBlock
+from main.blocks.rich_text_block import RichTextBlock
 
 from .background_chooser import BackgroundChooserBlock
 from .grid_chooser import GridChooserBlock
@@ -157,7 +157,7 @@ class StorylineSectionBlock(blocks.StructBlock):
 
     content = blocks.StreamBlock(
         [
-            ("text", RichtextBlock()),
+            ("text", RichTextBlock()),
             ("interactive_input", InteractiveInputBlock()),
             ("static_image", HolonImageChooserBlock(required=False)),
             ("holarchy_feedback_image", HolarchyFeedbackImage()),

@@ -5,23 +5,19 @@ import { StaticImage } from "../ImageSelector/types"
 interface Props {
     media: MediaDetails
     alt: string
+    caption?: string
 }
 
-type MediaDetails = {
-    media: [
-        | {
-              type: "video"
-              id: string
-              value: string
-          }
-        | {
-              type: "image"
-              value: StaticImage
-          },
-    ]
-}
+type MediaDetails = Array<{
+    type: "video"
+    id: string
+    value: string
+} | {
+    type: "image"
+    value: StaticImage
+}>
 
-export default function MediaContent({ media, alt }: Props) {
+export default function MediaContent({ media, alt, caption }: Props) {
     const [hasWindow, setHasWindow] = useState(false)
 
     // UseEffect used for Hydration Error fix. Keep it
@@ -35,7 +31,7 @@ export default function MediaContent({ media, alt }: Props) {
         return null
     }
 
-    function showMedia(mediaDetail: MediaDetails["media"][0]) {
+    function showMedia(mediaDetail: MediaDetails[0]) {
         switch (mediaDetail.type) {
             case "video":
                 return mediaDetail.value && hasWindow ?
@@ -64,8 +60,20 @@ export default function MediaContent({ media, alt }: Props) {
         }
     }
 
-    // for now it is only possible to show one mediaitem (image or video).
-    // If more items can be added in wagtail then this should be altered to
-    // mapping and styling changed to render properly in the front-end.
-    return <React.Fragment>{showMedia(media[0])}</React.Fragment>
+    if (caption) {
+        return (
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+            }}>
+                {showMedia(media[0])}
+                <p style={{
+                    fontSize: ".9rem",
+                    textAlign: "center",
+                }}>{caption}</p>
+            </div>
+        )
+    } else {
+        return showMedia(media[0])
+    }
 }

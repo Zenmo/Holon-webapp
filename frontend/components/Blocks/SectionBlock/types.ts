@@ -1,12 +1,14 @@
 import { HolarchyFeedbackImageProps } from "@/components/Blocks/HolarchyFeedbackImage/HolarchyFeedbackImage"
 import { StaticImage } from "@/components/ImageSelector/types"
 
+export type RichTextBlock = {
+    id: string
+    type: "text"
+    value: string
+}
+
 export type Content =
-    | {
-          id: string
-          type: "text"
-          value: string
-      }
+    | RichTextBlock
     | {
           id: string
           type: "static_image"

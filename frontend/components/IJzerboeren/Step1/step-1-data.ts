@@ -1,53 +1,111 @@
-export enum HeatingType {
-    GAS_BURNER = "GAS_BURNER",
-    DISTRICT_HEATING = "DISTRICT_HEATING",
-    HEAT_PUMP = "HEAT_PUMP",
-}
+import {SankeyLink} from "@/components/IJzerboeren/Sankey/link"
+import {IJzerboerenKPIs} from "@/components/IJzerboeren/KPIs/KPIs"
 
-export interface Step1DataType {
-    inputs: Step1Inputs
-    outputs: Step1Outputs
-}
+export const heatPumpSankeyLinks: SankeyLink[] = [
+    /* import E */
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Laden EV's",
+    //     value: 43,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Huishoudverbruik",
+    //     value: 94,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Verwarming",
+    //     value: 102,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Warm water",
+    //     value: 41,
+    // },
+    // {
+    //     source: "Import elektriciteit",
+    //     target: "Koken",
+    //     value: 14,
+    // },
 
-export interface Step1Inputs {
-    heatingType: keyof typeof HeatingType
-}
-
-export interface Step1Outputs {
-    gridLoad_r: number
-    cost_eur: number
-    sustainability_r: number
-}
-
-export const step1Data: Step1DataType[] = [
     {
-        inputs: {
-            heatingType: "GAS_BURNER",
-        },
-        outputs: {
-            gridLoad_r: 0.8,
-            cost_eur: 20000,
-            sustainability_r: 0.2,
-        },
+        source: "Import elektriciteit",
+        target: "Lokaal verbruik",
+        value: 185,
     },
     {
-        inputs: {
-            heatingType: "HEAT_PUMP",
-        },
-        outputs: {
-            gridLoad_r: 1.6,
-            cost_eur: 18000,
-            sustainability_r: 0.8,
-        },
+        source: "Opwek elektriciteit",
+        target: "Lokaal verbruik",
+        value: 72,
     },
     {
-        inputs: {
-            heatingType: "DISTRICT_HEATING",
-        },
-        outputs: {
-            gridLoad_r: 0.7,
-            cost_eur: 22000,
-            sustainability_r: 1,
-        },
+        source: "Opwek elektriciteit",
+        target: "Export",
+        value: 69,
+    },
+
+
+    {
+        source: "Lokaal verbruik",
+        target: "Laden EV's",
+        value: 57,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Huishoudverbruik",
+        value: 129,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Verwarming",
+        value: 24,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Warm water",
+        value: 27,
+    },
+    {
+        source: "Lokaal verbruik",
+        target: "Koken",
+        value: 20,
+    },
+
+
+
+    /* opwek E */
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Laden EV's",
+    //     value: 11,
+    // },
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Huishoudverbruik",
+    //     value: 29,
+    // },
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Koken",
+    //     value: 4,
+    // },
+    // {
+    //     source: "Opwek elektriciteit",
+    //     target: "Verwarming",
+    //     value: 70,
+    // },
+
+
+    {
+        source: "Import benzine",
+        target: "Brandstofauto's",
+        value: 259,
     },
 ]
+
+export const heatPumpKpis: IJzerboerenKPIs = {
+    gelijktijdigheid_kW: 3.0,
+    lcoeVerwarmen_eurocentpkWh: 12,
+    co2emission_t: 117,
+}

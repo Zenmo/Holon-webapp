@@ -1,6 +1,6 @@
 from wagtail.blocks import StructBlock, CharBlock, ChoiceBlock, StreamBlock
 from .button import ButtonBlock
-from main.blocks.rich_text_block import RichtextBlock
+from main.blocks.rich_text_block import RichTextBlock
 
 
 class TitleBlock(StructBlock):
@@ -28,7 +28,7 @@ class TitleBlock(StructBlock):
         required=True,
         default="h2",
     )
-    text = RichtextBlock(required=False)
+    text = RichTextBlock(required=False)
 
     button_block = StreamBlock([("buttons", ButtonBlock(required=False))], required=False)
 

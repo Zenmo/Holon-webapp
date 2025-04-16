@@ -3,7 +3,8 @@ import HeroBlock from "@/components/Blocks/HeroBlock"
 import TitleBlock from "@/components/Blocks/TitleBlock"
 import TextAndMedia from "@/components/Blocks/TextAndMediaBlock"
 import { Background, GridLayout } from "@/components/Blocks/types"
-import { Content } from "@/components/Blocks/SectionBlock/types"
+import {Content, RichTextBlock} from "@/components/Blocks/SectionBlock/types"
+import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock"
 
 export type CardBlockVariant = {
     type: "card_block"
@@ -40,8 +41,30 @@ export type StepAnchorVariant = {
 }
 
 export type NextInletVariant = {
+    id: string
     type: "next_inlet_block"
-    inlet: string,
+    inlet: string
+}
+
+export type RowBlockVariant = {
+    id: string
+    type: "row_block"
+    value: {
+        columns: ColumnBlockVariant[]
+    }
+}
+
+export type ColumnBlockVariant = {
+    id: string
+    type: "column_block"
+    value: {
+        contentItems: Array<
+            RichTextBlock
+            | NextInletVariant
+            | TitleBlockVariant
+            // | React.ComponentProps<typeof HeaderFullImageBlock>["data"]
+        >
+    }
 }
 
 export type TextAndMediaVariant = {
