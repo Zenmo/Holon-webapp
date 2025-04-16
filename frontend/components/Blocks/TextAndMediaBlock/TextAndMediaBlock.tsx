@@ -14,6 +14,7 @@ type Props = {
             text: string
             media: React.ComponentProps<typeof MediaContent>["media"]
             altText: string
+            caption?: string
             buttonBlock: React.ComponentProps<(typeof ButtonBlock)["buttons"]>
         }
         id: string
@@ -50,7 +51,7 @@ export default function TextAndMedia({ data }: Props) {
 
                     <div className="flex flex-col" css={gridValue.right}>
                         <div className="lg:sticky defaultBlockPadding top-0">
-                            <MediaContent media={data.value.media} alt={data.value.altText} />
+                            <MediaContent media={data.value.media} alt={data.value.altText} caption={data.value.caption}/>
                         </div>
                     </div>
                 </div>

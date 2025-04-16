@@ -37,6 +37,11 @@ class TextAndMediaBlock(blocks.StructBlock):
         max_num=1,
     )
 
+    caption = blocks.CharBlock(
+        help_text=("Small text to display under the image"),
+        required=False,
+    )
+
     alt_text = blocks.CharBlock(
         help_text=(
             "Fill in this alt-text only when you want to describe the image (for screenreaders and SEO)"
