@@ -25,6 +25,7 @@ services:
         labels:
             caddy: ${WAGTAIL_HOSTNAME}
             caddy.reverse_proxy: "{{upstreams 8000}}"
+            caddy_ingress_network: caddy_${STACK_NAME}
         networks:
             - caddy
             - postgres_default
@@ -46,6 +47,7 @@ services:
             caddy_0.reverse_proxy: "{{upstreams 3000}}"
             caddy_1: ${NEXT_REDIRECT_HOSTS}
             caddy_1.redir: https://${NEXT_HOSTNAME}{uri} permanent
+            caddy_ingress_network: caddy_${STACK_NAME}
         networks:
             - caddy
             - default
