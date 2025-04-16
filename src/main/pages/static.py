@@ -6,6 +6,7 @@ from wagtail.contrib.table_block.blocks import TableBlock
 
 from .base import BasePage
 from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
+from ..blocks.anylogic_embed import AnyLogicEmbed
 from ..blocks.next_inlet import NextInletBlock
 from ..blocks.row import RowBlock
 from ..blocks.step_indicator import StepIndicator
@@ -32,6 +33,7 @@ class StaticPage(HeadlessPreviewMixin, BasePage):
             ("card_block", CardsBlock()),
             ("next_inlet_block", NextInletBlock()),
             ("step_indicator", StepIndicator()),
+            ("anylogic_embed", AnyLogicEmbed()),
         ],
         verbose_name="Page body",
         blank=True,

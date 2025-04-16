@@ -3,6 +3,7 @@ from wagtail.blocks import StreamBlock, CharBlock
 from django.utils.translation import gettext_lazy as _
 from wagtail.contrib.table_block.blocks import TableBlock
 
+from .anylogic_embed import AnyLogicEmbed
 from ..blocks import TitleBlock, ParagraphBlock, CardsBlock, TextAndMediaBlock, HeaderFullImageBlock
 from ..blocks.next_inlet import NextInletBlock
 from ..pages import new_table_options
@@ -27,6 +28,7 @@ class StepIndicator(StreamBlock):
                 ),
                 ("card_block", CardsBlock()),
                 ("next_inlet_block", NextInletBlock()),
+                ("anylogic_embed", AnyLogicEmbed()),
             ]
             + local_blocks,
             help_text=_(

@@ -1,10 +1,12 @@
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import {
-    CardBlockVariant,
+    AnyLogicEmbedBlock, CardBlockVariant,
     Graphcolor,
-    HeroBlockVariant, NextInletVariant,
-    PageProps, RowBlockVariant,
+    HeroBlockVariant,
+    NextInletVariant,
+    PageProps,
+    RowBlockVariant,
     SectionVariant,
     StepIndicatorVariant,
     TextAndMediaVariant,
@@ -26,6 +28,7 @@ import { StepIndicatorWrapper } from "@/components/Storyline/Steps/StepIndicator
 import {NextInletBlock} from "@/components/Blocks/NextInlet"
 import {RowBlock} from "@/components/Blocks/RowBlock"
 import RawHtml from "@/components/RawHtml"
+import {AnyLogicEmbed} from "@/components/Blocks/AnyLogicEmbed"
 
 type ContentBlockProps = PageProps<
     | TextAndMediaVariant
@@ -37,6 +40,7 @@ type ContentBlockProps = PageProps<
     | NextInletVariant
     | RowBlockVariant
     | RichTextBlock
+    | AnyLogicEmbedBlock
 >
 
 const ContentBlocks = ({
@@ -311,6 +315,8 @@ const ContentBlocks = ({
                         return <CardBlock key={`cardsblock ${contentItem.id}`} data={contentItem} />
                     case "row_block":
                         return <RowBlock key={`rowblock-${contentItem.id}`} {...contentItem} />
+                    case "anylogic_embed":
+                        return <AnyLogicEmbed key={`rowblock-${contentItem.id}`} contentItem={contentItem}  />
                     case "step_indicator":
                         return (
                             <StepIndicatorWrapper
