@@ -31,6 +31,7 @@ export const AnyLogicEmbed: FunctionComponent<Props> = ({
         // anylogic uses absolute positioning.
         // this makes it relative to this parent element
         position: "relative",
+        margin: "0 auto", // center hack
     }} />
 }
 
@@ -52,7 +53,7 @@ function useAnyLogic(divId: string, connectionParams: AnyLogicConnectionParams):
 async function startSimulation(divId: string, {apiKey, modelId, cloudUrl}: AnyLogicConnectionParams): Promise<AnyLogicCloudClient.Animation> {
     const cloudClient = CloudClient.create(apiKey, cloudUrl)
     const model = await cloudClient.getModelById(modelId)
-    const latestVersion = await cloudClient.getModelVersionByNumber(model, model.modelVersions.length)
+    const latestVersion = await cloudClient.getModelVersionById(model, model.modelVersions.at(-1))
     const inputs = cloudClient.createDefaultInputs(latestVersion)
     const animation = await cloudClient.startAnimation(inputs, divId)
 
