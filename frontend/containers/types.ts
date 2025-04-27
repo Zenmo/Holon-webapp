@@ -5,6 +5,8 @@ import TextAndMedia from "@/components/Blocks/TextAndMediaBlock"
 import { Background, GridLayout } from "@/components/Blocks/types"
 import {Content, RichTextBlock} from "@/components/Blocks/SectionBlock/types"
 import HeaderFullImageBlock from "@/components/Blocks/HeaderFullImageBlock/HeaderFullImageBlock"
+import React from "react"
+import {AnyLogicEmbed} from "@/components/Blocks/AnyLogicEmbed"
 
 export type CardBlockVariant = {
     type: "card_block"
@@ -45,6 +47,10 @@ export type NextInletVariant = {
     type: "next_inlet_block"
     inlet: string
 }
+
+export type AnyLogicEmbedBlock = {
+    type: "anylogic_embed"
+} & React.ComponentProps<typeof AnyLogicEmbed>["contentItem"]
 
 export type RowBlockVariant = {
     id: string
