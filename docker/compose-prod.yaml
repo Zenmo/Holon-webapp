@@ -39,6 +39,8 @@ services:
     nextjs:
         image: ghcr.io/zenmo/holon-nextjs:${TAG}
         environment:
+            # Need to set this or it seems to pick a random interface
+            HOSTNAME: 0.0.0.0
             WAGTAIL_API_URL: http://wagtail:8000/wt/api/nextjs
             NEXT_PUBLIC_WAGTAIL_API_URL: https://${WAGTAIL_HOSTNAME}/wt/api/nextjs
             NEXT_PUBLIC_TINY_URL_API_KEY: ${NEXT_PUBLIC_TINY_URL_API_KEY}
