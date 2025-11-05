@@ -19,6 +19,7 @@ COLOR_CHOICES = (
     ("card__bg-purple", "Purple"),
     ("card__bg-pink", "Pink"),
     ("card__bg-orange", "Orange"),
+    ("card__bg-resourcefully-green", "Resourcefully Green"),
 )
 
 

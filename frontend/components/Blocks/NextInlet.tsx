@@ -3,12 +3,15 @@ import {Step1} from "@/components/IJzerboeren/Step1/Step1"
 import {Step2} from "@/components/IJzerboeren/Step2/Step2"
 import {Step3} from "@/components/IJzerboeren/Step3/Step3"
 import {IronPowderProcessSankey} from "@/components/IJzerboeren/Sankey/IronPowderProcessSankey"
+import {HattemEmbed} from "@/components/HattemEmbed"
 
-const inletComponents = new Map<string, FunctionComponent>();
-inletComponents.set("IJzerboerenStep1", Step1)
-inletComponents.set("IJzerboerenStep2", Step2)
-inletComponents.set("IJzerboerenStep3", Step3)
-inletComponents.set("IronPowderProcessSankey", IronPowderProcessSankey)
+const inletComponents = new Map<string, FunctionComponent>([
+    ["IJzerboerenStep1", Step1],
+    ["IJzerboerenStep2", Step2],
+    ["IJzerboerenStep3", Step3],
+    ["IronPowderProcessSankey", IronPowderProcessSankey],
+    ["HattemEmbed", HattemEmbed],
+])
 
 interface Props {
     contentItem: {

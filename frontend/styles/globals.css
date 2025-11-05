@@ -3,6 +3,11 @@
 @import "tailwindcss/utilities";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap");
 
+:root {
+    /* this is set programmatically by the header component */
+    --header-height: 73px;
+}
+
 html,
 body {
     padding: 0;
@@ -82,6 +87,11 @@ body {
 
 .block__bg-purple {
     @apply bg-holon-purple-100;
+}
+
+.card__bg-resourcefully-green {
+    --resourcefully-green: #20A750;
+    background-color: color-mix(in srgb, white 75%, var(--resourcefully-green) 25%);
 }
 
 input::-moz {

@@ -1,6 +1,6 @@
 import { NavItem } from "@/api/types"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import {useEffect, useLayoutEffect, useRef, useState} from "react"
 import Navbar from "./Navbar"
 
 export default function Header({ navigation }: { navigation: NavItem[] }) {
@@ -27,9 +27,23 @@ export default function Header({ navigation }: { navigation: NavItem[] }) {
         return () => window.removeEventListener("scroll", handleScroll)
     })
 
+    const ref = useRef<HTMLElement>(null)
+    useLayoutEffect(() => {
+        setHeaderHeightCssVariable()
+
+        window.addEventListener("resize", setHeaderHeightCssVariable)
+        return () => window.removeEventListener("resize", setHeaderHeightCssVariable)
+    })
+
+    const setHeaderHeightCssVariable = () => {
+        if (!ref.current) return
+        document.documentElement.style.setProperty("--header-height", ref.current.clientHeight + "px")
+    }
+
     return (
         <nav
             className="sticky top-0 z-50 bg-white py-4 rounded dark:bg-gray-900 shadow-sm"
+            ref={ref}
             style={{
                 position: visible ? "sticky" : "static",
             }}
