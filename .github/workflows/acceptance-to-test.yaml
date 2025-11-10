@@ -1,0 +1,49 @@
+name: Acceptance to test, copy CMS content
+
+on:
+    workflow_dispatch:
+
+jobs:
+    copy-db:
+        runs-on: ubuntu-latest
+        container:
+            image: postgres:16
+        steps:
+            -   name: pg_dump
+                env:
+                    PGPASSWORD: ${{ secrets.DB_PASSWORD_ACCEPTANCE }}
+                run: >
+                    pg_dump
+                    --username=holon-acceptance
+                    --dbname=holon-acceptance
+                    --no-privileges
+                    --no-owner
+                    --host=postgres.zenmo.com
+                    --exclude-table=holon_cache
+                    --format=custom
+                    --file=acceptance.pg_dump
+            -   name: pg_restore
+                env:
+                    PGPASSWORD: ${{ secrets.DB_PASSWORD_TEST }}
+                run: >
+                    pg_restore
+                    --username=holon-test
+                    --dbname=holon-test
+                    --clean
+                    --no-owner
+                    --no-privileges
+                    --host=postgres.zenmo.com
+                    acceptance.pg_dump
+
+    copy-pictures:
+        runs-on: ubuntu-latest
+        container:
+            image: rclone/rclone:1.69.3
+        steps:
+            -   name: rclone config
+                run: >
+                    rclone config create holonstorage azureblob
+                    account=holonstorage
+                    key=${{ secrets.AZURE_STORAGE_KEY }}
+            -   name: rclone copy
+                run: rclone copy holonstorage:media-acceptatie holonstorage:media-test
