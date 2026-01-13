@@ -4,6 +4,7 @@ import {Step2} from "@/components/IJzerboeren/Step2/Step2"
 import {Step3} from "@/components/IJzerboeren/Step3/Step3"
 import {IronPowderProcessSankey} from "@/components/IJzerboeren/Sankey/IronPowderProcessSankey"
 import {HattemEmbed} from "@/components/HattemEmbed"
+import {BinnenhavenEmbed} from "@/components/BinnenhavenEmbed"
 
 const inletComponents = new Map<string, FunctionComponent>([
     ["IJzerboerenStep1", Step1],
@@ -11,6 +12,7 @@ const inletComponents = new Map<string, FunctionComponent>([
     ["IJzerboerenStep3", Step3],
     ["IronPowderProcessSankey", IronPowderProcessSankey],
     ["HattemEmbed", HattemEmbed],
+    ["BinnenhavenEmbed", BinnenhavenEmbed],
 ])
 
 interface Props {
