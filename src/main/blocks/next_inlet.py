@@ -14,5 +14,6 @@ class NextInletBlock(StructBlock):
             ("IJzerboerenStep3", "IJzerboerenStep3"),
             ("IronPowderProcessSankey", "IronPowderProcessSankey"),
             ("HattemEmbed", "HattemEmbed"),
+            ("BinnenhavenEmbed", "BinnenhavenEmbed"),
         ]
     )
