@@ -1,4 +1,4 @@
-import React from "react"
+import React, {ComponentProps} from "react"
 import { useRouter } from "next/router"
 import { ArrowSmallRightIcon } from "@heroicons/react/24/outline"
 import RawHtml from "../RawHtml/RawHtml"
@@ -19,7 +19,7 @@ const CardTitle = ({ condition, children, ...linkProps }: CardTitleProps) => {
     return <strong className="block line-clamp-2">{children}</strong>
 }
 
-export default function Card({ cardItem, cardType }: CardProps) {
+export default function Card({ cardItem, cardType, className, ...props }: CardProps & ComponentProps<"span">) {
     const backgroundColor: string = cardItem.cardColor !== "" ? cardItem.cardColor : "bg-white"
     const router = useRouter()
     let link: string
@@ -49,10 +49,10 @@ export default function Card({ cardItem, cardType }: CardProps) {
             })
         } else {
             return (cardStyling = {
-                card: "flex-col  min-h-96  mb-4 h-[360px] xl:h-[400px] overflow-hidden",
-                imgSpan: "h-2/3",
+                card: "flex-col min-h-96 mb-4 overflow-hidden",
+                imgSpan: "",
                 img: "rounded-t-lg duration-300 ease-in group-hover:brightness-100 group-hover:scale-110",
-                text: "flex-col h-1/3 m-4",
+                text: "flex-col m-4",
             })
         }
     }
@@ -76,64 +76,65 @@ export default function Card({ cardItem, cardType }: CardProps) {
     }
 
     return (
-        <React.Fragment>
-            <span
-                className={`group ${cardStyling.card} ${backgroundColor} relative rounded-lg flex `}
-                data-testid={cardItem.title}
-            >
-                <span className={`${cardStyling.imgSpan} overflow-hidden relative`}>
-                    {/* eslint-disable @next/next/no-img-element */}
-                    <img
-                        src={
-                            cardItem.thumbnail ?
-                                cardItem.thumbnail.url
-                            :   cardItem.imageSelector?.img.src
-                        }
-                        alt={
-                            cardItem.thumbnail ?
-                                `storyline ${cardItem.title}`
-                            :   cardItem.imageSelector?.img.alt
-                        }
-                        width="100%"
-                        height="auto"
-                        className={`object-cover object-center h-full w-full ${cardStyling.img}  max-w-none max-h-none brightness-90 overflow-hidden`}
-                    />
-                    {cardItem.informationTypes && (
-                        <span className="max-w-full  mt-auto text-right absolute bottom-1 flex justify-start self-end flex-wrap-reverse">
-                            {cardItem.informationTypes.map((informationtype, index) => (
-                                <span
-                                    key={index}
-                                    className="flex bg-white truncate opacity-80 rounded-3xl items-center py-1 px-2 ml-2 mt-2"
-                                >
-                                    {informationtype.icon && (
-                                        <StorylineIcons icon={informationtype.icon} />
-                                    )}
-                                    {informationtype.name}
-                                </span>
-                            ))}
-                        </span>
-                    )}
-                </span>
-
-                <span className={`flex gap-2 overflow-hidden ${cardStyling.text}`}>
-                    <CardTitle
-                        condition={cardItem.url || cardItem.slug || cardItem.itemLink?.length > 0}
-                        href={createLink(cardItem)}
-                        {...externLinkProps}
-                    >
-                        {cardItem.title}
-                    </CardTitle>
-
-                    {cardType === "buttonCard" ?
-                        <span className="w-10 h-10 flex-[0_0_40px]" data-testid="arrow">
-                            <ArrowSmallRightIcon />
-                        </span>
-                    :   <span className="line-clamp-4">
-                            <RawHtml html={cardItem.description} />
-                        </span>
+        <span
+            className={`group ${cardStyling.card} ${backgroundColor} relative rounded-lg flex ${className}`}
+            data-testid={cardItem.title}
+            {...props}
+        >
+            <span className={`${cardStyling.imgSpan} overflow-hidden relative`}>
+                {/* eslint-disable @next/next/no-img-element */}
+                <img
+                    src={
+                        cardItem.thumbnail ?
+                            cardItem.thumbnail.url
+                        :   cardItem.imageSelector?.img.src
                     }
-                </span>
+                    alt={
+                        cardItem.thumbnail ?
+                            `storyline ${cardItem.title}`
+                        :   cardItem.imageSelector?.img.alt
+                    }
+                    style={{
+                        aspectRatio: "1 / 1",
+                        objectFit: "cover",
+                    }}
+                    className={`object-cover object-center h-full w-full ${cardStyling.img}  max-w-none max-h-none brightness-90 overflow-hidden`}
+                />
+                {cardItem.informationTypes && (
+                    <span className="max-w-full  mt-auto text-right absolute bottom-1 flex justify-start self-end flex-wrap-reverse">
+                        {cardItem.informationTypes.map((informationtype, index) => (
+                            <span
+                                key={index}
+                                className="flex bg-white truncate opacity-80 rounded-3xl items-center py-1 px-2 ml-2 mt-2"
+                            >
+                                {informationtype.icon && (
+                                    <StorylineIcons icon={informationtype.icon} />
+                                )}
+                                {informationtype.name}
+                            </span>
+                        ))}
+                    </span>
+                )}
             </span>
-        </React.Fragment>
+
+            <span className={`flex gap-2 overflow-hidden ${cardStyling.text}`}>
+                <CardTitle
+                    condition={cardItem.url || cardItem.slug || cardItem.itemLink?.length > 0}
+                    href={createLink(cardItem)}
+                    {...externLinkProps}
+                >
+                    {cardItem.title}
+                </CardTitle>
+
+                {cardType === "buttonCard" ?
+                    <span className="w-10 h-10 flex-[0_0_40px]" data-testid="arrow">
+                        <ArrowSmallRightIcon />
+                    </span>
+                :   <span>
+                        <RawHtml html={cardItem.description} />
+                    </span>
+                }
+            </span>
+        </span>
     )
 }
