@@ -27,12 +27,13 @@ export default function CardBlock({
             >
                 {cards.map((cardItem, index) => {
                     return (
-                        <div
-                            className="px-[1rem] flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]"
+                        <Card
+                            className="flex-[0_0_50%] sm:flex-[0_0_33%] lg:flex-[0_0_25%] xl:flex-[0_0_20%]"
                             key={index}
-                        >
-                            <Card cardItem={cardItem} cardType="cardBlockCard"></Card>
-                        </div>
+                            cardItem={cardItem}
+                            cardType="cardBlockCard"
+                            style={{margin: "1rem"}}
+                        />
                     )
                 })}
             </div>
@@ -41,7 +42,7 @@ export default function CardBlock({
                 <ButtonBlock
                     buttons={buttonBlock[0].value.buttons}
                     align={buttonBlock[0].value.buttonsAlign}
-                ></ButtonBlock>
+                />
             )}
         </div>
     )
