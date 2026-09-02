@@ -6,11 +6,18 @@ from wagtail.rich_text import FeatureRegistry
 
 from main.contentstate import term_link_entity
 
-from main.handlers import TermLinkHTMLHandler, TermLinkElementHandler, TermLinkEditorHandler
+from main.handlers import (
+    CMSDocumentLinkHandler,
+    TermLinkHTMLHandler,
+    TermLinkElementHandler,
+    TermLinkEditorHandler,
+)
 
 
 @hooks.register("register_rich_text_features")
 def register_stock_feature(features: FeatureRegistry):
+    # Replace Wagtail's document handler so API rich text links work across domains.
+    features.register_link_type(CMSDocumentLinkHandler)
     features.register_link_type(TermLinkHTMLHandler)
     """
     Registering the `stock` feature, which uses the `STOCK` Draft.js entity type,
