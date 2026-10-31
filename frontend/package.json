@@ -34,7 +34,7 @@
         "es-cookie": "^1.4.0",
         "immutable": "^5.1.1",
         "lodash": "^4.17.21",
-        "next": "^13.4.12",
+        "next": "^16.4.3",
         "plotly.js-dist-min": "^3.0.1",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
