@@ -6,13 +6,19 @@ on:
 jobs:
     copy-db:
         runs-on: ubuntu-latest
-        container:
-            image: postgres:16
         steps:
+            -   name: Install SSH key
+                uses: shimataro/ssh-key-action@v2
+                with:
+                    key: ${{ secrets.SWARM_SSH_PRIVATE_KEY }}
+                    known_hosts: server.zenmo.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ1E4LUG22qgzc8U7oNYGWCn0cyA31+iyX2pck9wcPMS
             -   name: pg_dump
-                env:
-                    PGPASSWORD: ${{ secrets.DB_PASSWORD_ACCEPTANCE }}
                 run: >
+                    ssh root@server.zenmo.com
+                    docker run --rm
+                    -e PGPASSWORD='${{ secrets.DB_PASSWORD_ACCEPTANCE }}'
+                    -v /tmp:/tmp
+                    postgres:16
                     pg_dump
                     --username=holon-acceptance
                     --dbname=holon-acceptance
@@ -21,11 +27,14 @@ jobs:
                     --host=postgres.zenmo.com
                     --exclude-table=holon_cache
                     --format=custom
-                    --file=acceptance.pg_dump
+                    --file=/tmp/acceptance.pg_dump
             -   name: pg_restore
-                env:
-                    PGPASSWORD: ${{ secrets.DB_PASSWORD_PROD }}
                 run: >
+                    ssh root@server.zenmo.com
+                    docker run --rm
+                    -e PGPASSWORD='${{ secrets.DB_PASSWORD_PROD }}'
+                    -v /tmp:/tmp
+                    postgres:16
                     pg_restore
                     --username=holon-production
                     --dbname=holon-production
@@ -33,7 +42,10 @@ jobs:
                     --no-owner
                     --no-privileges
                     --host=postgres.zenmo.com
-                    acceptance.pg_dump
+                    /tmp/acceptance.pg_dump
+            -   name: Remove dump file
+                if: always()
+                run: ssh root@server.zenmo.com rm -f /tmp/acceptance.pg_dump
 
     copy-pictures:
         runs-on: ubuntu-latest
